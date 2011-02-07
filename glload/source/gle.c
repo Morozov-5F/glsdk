@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "gle_gl_ext.h"
-#include "glloader/gle.h"
+#include "glload/gle.h"
 
 #ifdef WIN32
 #include <windows.h>

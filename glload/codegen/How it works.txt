@@ -1,19 +1,32 @@
+== File sturcture ==
+
+The Lua scripts here use standard Lua API calls and no external modules.
+
+All Lua files that start with an "_" are library files. They usually add at least one global function, usually named the same as the filename (sans "_"). Some are just a collection of miscellaneous functions that do certain things.
+
+Lua files that don't start with the underscore are to be executed on the command line. They may take parameters.
+
 == The generation process ==
 
 The code-generation process is 2-stage. The first stage is the conversion of the .spec and .tm files into a .lua file that returns a giant table containing all of this information. The .lua files responsible for this conversion are:
 
-* ConvertAllSpecFilesToLua.lua: Causes generation of all .lua spec files.
-** ExtractSpecsToFile.lua: Generates a single .lua spec file.
-*** ExtractEnums.lua: Processes enumext.spec to retrieve the enums.
-*** ExtractExts.lua: Processes enumext.spec to retrieve the extension list.
-*** ExtractTypes.lua: Processes gl.tm to retrieve the typemap data.
-*** ExtractFuncs.lua: Processes gl.spec to retrieve the function data.
+* ConvertAllSpecFilesToLua.lua: Causes generation of all .lua spec files. It doesn't take parameters.
+** _ExtractSpecsToFile.lua: Generates a single .lua spec file.
+*** _ExtractEnums.lua: Processes enumext.spec to retrieve the enums.
+*** _ExtractExts.lua: Processes enumext.spec to retrieve the extension list.
+*** _ExtractTypes.lua: Processes gl.tm to retrieve the typemap data.
+*** _ExtractFuncs.lua: Processes gl.spec to retrieve the function data.
+*** _TableWriter.lua: Writes a table as a Lua-compileable file. Think LSON.
 
 The second stage uses the .lua file to generate the code. The output from this stage is described above. The files involved are:
 
-* makeAllFiles.lua: Causes the generation of all code-gen files.
-** loadLuaSpec.lua: Loads the spec we created above. However, it does some pre-processing to make the code-generation easier (tables indexed by enum and so forth). It also performs some data fixup that removes some... annoying things that the spec files leave in.
-** makeHeaderFile.lua: Generates an external header from the data from loadLuaSpec.
+* makeAllFiles.lua: Causes the generation of all code-gen files. It doesn't take parameters.
+** LoadLuaSpec.lua: Loads the spec we created above. However, it does some pre-processing to make the code-generation easier (tables indexed by enum and so forth). It also performs some data fixup that removes some... annoying things that the spec files leave in.
+** MakeExtHeaderFile.lua: Generates a header file for a particular OpenGL version. This is used by external code to use OpenGL.
+** MakeMainHeaderFile.lua: Generates an internal header that is used to load extension function pointers.
+** MakeMainSourceFile.lua: Generates an internal source file that does the loading of the extension function pointers.
+** MakeCoreHeaderFile.lua: Generates an internal header file that contains a struct defining all of the internal function pointers.
+** MakeCoreSourceFile.lua: Generates an internal source file that will fill this struct with function pointers from the standard gl.h.
 
 == The gl.h issue ==
 

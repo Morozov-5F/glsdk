@@ -8,11 +8,11 @@
 
 #include <windows.h>		// Header File For Windows
 #include <tchar.h>
-#include "glloader\gl_2_1.h"
-#include "glloader\wgl_exts.h"
+#include "glload\gl_2_1.h"
+#include "glload\wgl_exts.h"
 #include <gl\glu.h>			// Header File For The GLu32 Library
 //#include <gl\glaux.h>		// Header File For The Glaux Library
-#include "glloader\gle.h"
+#include "glload\gle.h"
 
 HDC			hDC=NULL;		// Private GDI Device Context
 HGLRC		hRC=NULL;		// Permanent Rendering Context

@@ -4,8 +4,9 @@ project "Test"
 	language "c++"
 	flags { "WinMain" }
 	defines {"WIN32"}
+	includedirs { "../include" }
 	targetdir "lib"
-	links "opengl"
+	links {"opengl32", "glload"}
 
 	files {
 		"windows.cpp",
