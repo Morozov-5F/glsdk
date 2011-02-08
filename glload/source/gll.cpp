@@ -85,7 +85,7 @@ namespace glload
 
 			for(iLoop = 0; iLoop < iNumExtensions; iLoop++)
 			{
-				const char *strExtensionName = glGetStringi(GL_EXTENSIONS, iLoop);
+				const char *strExtensionName = (const char *)glGetStringi(GL_EXTENSIONS, iLoop);
 				ProcExt(GetExtEntry(strExtensionName, gleIntExtensionMap, gleIntExtensionMapSize));
 			}
 		}
@@ -99,7 +99,7 @@ namespace glload
 			*pOutMinor = 0;
 			*pOutMajor = 0;
 
-			strVersion = glGetString(GL_VERSION);
+			strVersion = (const char *)glGetString(GL_VERSION);
 			strDotPos = strchr(strVersion, '.');
 			if(!strDotPos)
 				return;
@@ -135,7 +135,7 @@ namespace glload
 
 			for(iLoop = 0; iLoop < iNumExtensions; iLoop++)
 			{
-				const char *strExtensionName = glGetStringi(GL_EXTENSIONS, iLoop);
+				const char *strExtensionName = (const char *)glGetStringi(GL_EXTENSIONS, iLoop);
 				if(_stricmp(strExtensionName, "GL_ARB_compatibility") == 0)
 				{
 					return 1;
@@ -151,7 +151,7 @@ namespace glload
 
 	int LoadFunctions()
 	{
-		int eCurrLoadStatus = GLE_LOAD_FUNCTIONS_ALL;
+		int eCurrLoadStatus = LS_LOAD_FUNCTIONS_ALL;
 
 		iMajorVersion = 0;
 		iMinorVersion = 0;
@@ -168,24 +168,24 @@ namespace glload
 		if(iMajorVersion < 3)
 		{
 			//Load the 2.1 core.
-			if(!gleIntLoad_Version_2_1()) eCurrLoadStatus = GLE_LOAD_FUNCTIONS_SOME;
+			if(!gleIntLoad_Version_2_1()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 		}
 		else if(iMajorVersion == 3 && iMinorVersion < 2)
 		{
 			switch(iMinorVersion)
 			{
 			case 0:
-				if(!gleIntLoad_Version_3_0()) eCurrLoadStatus = GLE_LOAD_FUNCTIONS_SOME;
+				if(!gleIntLoad_Version_3_0()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 				break;
 			case 1:
 				//Check the ARB_compatibility extension.
 				if(CheckCompatibilityExt())
 				{
-					if(!gleIntLoad_Version_3_1_Comp()) eCurrLoadStatus = GLE_LOAD_FUNCTIONS_SOME;
+					if(!gleIntLoad_Version_3_1_Comp()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 				}
 				else
 				{
-					if(!gleIntLoad_Version_3_1()) eCurrLoadStatus = GLE_LOAD_FUNCTIONS_SOME;
+					if(!gleIntLoad_Version_3_1()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 				}
 				break;
 			}
@@ -198,11 +198,11 @@ namespace glload
 			{
 				if(iProfileMask & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT)
 				{
-					if(!gleIntLoad_Version_3_2_Comp()) eCurrLoadStatus = GLE_LOAD_FUNCTIONS_SOME;
+					if(!gleIntLoad_Version_3_2_Comp()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 				}
 				else
 				{
-					if(!gleIntLoad_Version_3_2()) eCurrLoadStatus = GLE_LOAD_FUNCTIONS_SOME;
+					if(!gleIntLoad_Version_3_2()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 				}
 			}
 			else
@@ -210,11 +210,11 @@ namespace glload
 				//Hack to fix NVIDIA stupidity.
 				if(CheckCompatibilityExt())
 				{
-					if(!gleIntLoad_Version_3_2_Comp()) eCurrLoadStatus = GLE_LOAD_FUNCTIONS_SOME;
+					if(!gleIntLoad_Version_3_2_Comp()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 				}
 				else
 				{
-					if(!gleIntLoad_Version_3_2()) eCurrLoadStatus = GLE_LOAD_FUNCTIONS_SOME;
+					if(!gleIntLoad_Version_3_2()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 				}
 			}
 		}
@@ -223,7 +223,7 @@ namespace glload
 		//Use different methods if glGetStringi is available.
 		if(iMajorVersion < 3)
 		{
-			ProcExtFromExtString(glGetString(GL_EXTENSIONS), gleIntExtensionMap, gleIntExtensionMapSize);
+			ProcExtFromExtString((const char *)glGetString(GL_EXTENSIONS), gleIntExtensionMap, gleIntExtensionMapSize);
 		}
 		else
 		{
@@ -254,11 +254,11 @@ namespace glload
 
 		gleIntLoadBaseFuncs();
 
-		if(!wglGetExtensionsStringARB) return GLE_LOAD_FAILED;
+		if(!wglGetExtensionsStringARB) return LS_LOAD_FAILED;
 
 		ProcExtFromExtString(wglGetExtensionsStringARB(hDC), wgleIntExtensionMap, wgleIntExtensionMapSize);
 
-		return GLE_LOAD_FUNCTIONS_ALL;
+		return LS_LOAD_FUNCTIONS_ALL;
 	}
 #endif //WIN32
 }
