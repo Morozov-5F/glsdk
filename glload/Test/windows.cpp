@@ -314,8 +314,8 @@ BOOL CreateGLWindow(TCHAR* title, int width, int height, int bits, bool fullscre
 		return FALSE;								// Return FALSE
 	}
 
-	gleLoadWinFunctions(hDC);
-	gleLoadFunctions();
+	LoadWinFunctions(hDC);
+	LoadFunctions();
 
 	ShowWindow(hWnd,SW_SHOW);						// Show The Window
 	SetForegroundWindow(hWnd);						// Slightly Higher Priority

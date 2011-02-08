@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gle_gl_core.h"
+#include "gll_gl_core.h"
 GLeStandardCoreStruct gle_CoreStruct;
 #ifdef WIN32
 #include<windows.h>

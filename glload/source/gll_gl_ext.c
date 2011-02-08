@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
-#include "gle_gl_ext.h"
-#include "gle_gl_core.h"
+#include "gll_gl_ext.h"
+#include "gll_gl_core.h"
 
 #include <stddef.h>	
 	

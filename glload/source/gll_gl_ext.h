@@ -1,5 +1,5 @@
-#ifndef GLE_GL_EXT_H
-#define GLE_GL_EXT_H
+#ifndef GLL_GL_EXT_H
+#define GLL_GL_EXT_H
 
 
 #if defined(__gl_h_) || defined(__GL_H__)
@@ -148,7 +148,7 @@ typedef void (APIENTRY *GLDEBUGPROCAMD)(GLuint id,GLenum category,GLenum severit
 typedef GLintptr GLvdpauSurfaceNV;
 #endif
 
-#include "gle_util.h"
+#include "gll_util.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -205,5 +205,5 @@ void gleIntLoadBaseFuncs();
 	#undef APIENTRY
 #endif //GLE_REMOVE_APIENTRY
 
-#endif //GLE_GL_EXT_H
+#endif //GLL_GL_EXT_H
 

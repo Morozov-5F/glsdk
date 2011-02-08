@@ -4,7 +4,7 @@ the extension functions for this spec data. This header exposes the following:
 
 == Mapping table and size ==
 
-The mapping table structure is defined in "gle_util.h". This variable is an array of these structs, one per extension. The entry structure contains a string name of the extension, a pointer to an int that represents the extension variable, and a function pointer (possibly NULL) to the function loader for that extension.
+The mapping table structure is defined in "gll_util.h". This variable is an array of these structs, one per extension. The entry structure contains a string name of the extension, a pointer to an int that represents the extension variable, and a function pointer (possibly NULL) to the function loader for that extension.
 
 The function loader is a function that takes no parameters and returns an integer. The return value is GL_TRUE if all of the function pointers are loaded, and GL_FALSE otherwise.
 
@@ -112,7 +112,7 @@ function MakeMainHeaderFile(outFilename, specData, funcPrefix, VersionFunc, base
 
 	end
 
-	hFile:write("#include \"gle_util.h\"\n");
+	hFile:write("#include \"gll_util.h\"\n");
 	hFile:write("\n");
 
 	hFile:write(GetExternCStart());

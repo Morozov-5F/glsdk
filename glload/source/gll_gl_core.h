@@ -1,5 +1,5 @@
-#ifndef GLE_GL_CORE_H
-#define GLE_GL_CORE_H
+#ifndef GLL_GL_CORE_H
+#define GLL_GL_CORE_H
 
 
 #ifdef __cplusplus
@@ -911,6 +911,6 @@ void gleIntCoreInit();
 #endif //__cplusplus
 
 
-#endif //GLE_GL_CORE_H
+#endif //GLL_GL_CORE_H
 
 

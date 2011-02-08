@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include "wgle_ext.h"
+#include "wgll_ext.h"
 
 #include <stddef.h>	
 	

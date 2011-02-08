@@ -78,18 +78,18 @@ local baseData = {
 	preceedData = glPreceedData,
 };
 
-MakeMainHeaderFile("gle_gl_ext", specData, "gl", GetVersionProfIterator(), baseData);
+MakeMainHeaderFile("gll_gl_ext", specData, "gl", GetVersionProfIterator(), baseData);
 
-MakeCoreHeaderFile("gle_gl_core", specData, "gl");
+MakeCoreHeaderFile("gll_gl_core", specData, "gl");
 
 --Write the internal source files.
 
 local platformDef = dofile(GetDataFilePath() .. "stdPlatformDef.lua");
 
-MakeMainSourceFile("gle_gl_ext", specData, "GL", "gl", GetVersionProfIterator(), glPreceedData,
-	baseData, {file = "gle_gl_core"});
+MakeMainSourceFile("gll_gl_ext", specData, "GL", "gl", GetVersionProfIterator(), glPreceedData,
+	baseData, {file = "gll_gl_core"});
 
-MakeCoreSourceFile("gle_gl_core", specData, "gl", platformDef);
+MakeCoreSourceFile("gll_gl_core", specData, "gl", platformDef);
 
 ---------------------------
 --Create WGL files.
@@ -112,8 +112,8 @@ local wglbaseData = {
 
 MakeExtHeaderFile("wgl_exts", wglSpecData, "WGL", "wgl", nil, false, wglPreceedData);
 
-MakeMainHeaderFile("wgle_ext", wglSpecData, "wgl", nil, wglbaseData);
+MakeMainHeaderFile("wgll_ext", wglSpecData, "wgl", nil, wglbaseData);
 
-MakeMainSourceFile("wgle_ext", wglSpecData, "WGL", "wgl", nil, wglPreceedData,
+MakeMainSourceFile("wgll_ext", wglSpecData, "WGL", "wgl", nil, wglPreceedData,
 	wglbaseData, nil);
 	

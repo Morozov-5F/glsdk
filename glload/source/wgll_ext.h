@@ -1,5 +1,5 @@
-#ifndef WGLE_EXT_H
-#define WGLE_EXT_H
+#ifndef WGLL_EXT_H
+#define WGLL_EXT_H
 
 
 #ifdef __wglext_h_
@@ -62,7 +62,7 @@ typedef struct _GPU_DEVICE {
 DECLARE_HANDLE(HVIDEOINPUTDEVICENV);
 #endif
 
-#include "gle_util.h"
+#include "gll_util.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -87,5 +87,5 @@ void wgleIntLoadBaseFuncs();
 #endif //__cplusplus
 
 
-#endif //WGLE_EXT_H
+#endif //WGLL_EXT_H
 
