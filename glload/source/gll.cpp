@@ -8,6 +8,7 @@
 #ifdef WIN32
 #include <windows.h>
 #include "wgll_ext.h"
+#include "wgll_ext_base.h"
 #define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
 #endif
 
