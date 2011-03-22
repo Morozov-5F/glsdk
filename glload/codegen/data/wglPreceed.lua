@@ -4,7 +4,7 @@ WGL headers.]]
 
 return [[
 #ifdef __wglext_h_
-#error Attempt to include wgle after including wglext.h
+#error Attempt to include wgl_exts after including wglext.h
 #endif
 
 #define __wglext_h_

@@ -73,16 +73,17 @@ local function WriteExtVarClear(hFile, specData, funcPrefix)
 end
 
 local function WriteFuncPointers(hFile, ext, extName, specData, enumPrefix, funcPrefix)
-	local bHasFuncs = false;
+	if(#ext.funcs == 0) then return; end;
+	
+    local extDefine = string.format("%s_%s", enumPrefix, extName);
+    hFile:write(string.format("#ifndef %s\n", extDefine));
+
 	--Write the typedefs.
 	for i, func in ipairs(ext.funcs) do
-		bHasFuncs = true;
 		hFile:write(Make.GetFuncTypedef(func, funcPrefix, specData.typemap));
 		hFile:write("\n");
 	end
 	
-	if(not bHasFuncs) then return; end;
-
 	hFile:write("\n");
 	
 	--Write the function pointers.
@@ -94,6 +95,8 @@ local function WriteFuncPointers(hFile, ext, extName, specData, enumPrefix, func
 		end
 		hFile:write("\n");
 	end
+
+    hFile:write(string.format("#endif /*%s*/\n", extDefine));
 end
 
 local function WriteFuncLoad(hFile, func, funcPrefix, bIsCoreExt)
@@ -114,7 +117,7 @@ local function WriteFuncLoad(hFile, func, funcPrefix, bIsCoreExt)
 	WriteForm(hFile, "\tif(!TestPointer((const void*)%s)) bIsLoaded = 0;\n", funcPtrName);
 end
 
-local function WriteLoaderFunc(hFile, ext, extName, specData, funcPrefix)
+local function WriteLoaderFunc(hFile, ext, extName, specData, funcPrefix, enumPrefix)
 	if(not ext.funcs or #ext.funcs == 0) then return; end;
 	
 	WriteForm(hFile, "static int %s()\n", GetExtLoaderName(extName, funcPrefix));
@@ -124,10 +127,15 @@ local function WriteLoaderFunc(hFile, ext, extName, specData, funcPrefix)
 
 	local bIsCoreExt = specData.coreexts[extName] ~= nil;
 	
+    local extDefine = string.format("%s_%s", enumPrefix, extName);
+    hFile:write(string.format("#ifndef %s\n", extDefine));
+	
 	for i, func in ipairs(ext.funcs) do
 		WriteFuncLoad(hFile, func, funcPrefix, bIsCoreExt)
 	end
 	
+    hFile:write(string.format("#endif /*%s*/\n", extDefine));
+
 	hFile:write("\treturn bIsLoaded;\n");
 	
 	hFile:write("}\n");
@@ -410,7 +418,7 @@ function MakeMainSourceFile(outFilename, specData, enumPrefix, funcPrefix, Versi
 	for extName, ext in sortPairs(specData.extdefs, CompLess) do
 		WriteFuncPointers(hFile, ext, extName, specData, enumPrefix, funcPrefix);
 		hFile:write("\n");
-		WriteLoaderFunc(hFile, ext, extName, specData, funcPrefix);
+		WriteLoaderFunc(hFile, ext, extName, specData, funcPrefix, enumPrefix);
 	end
 	
 	--Write the mapping table definition.

@@ -3,7 +3,7 @@
 
 
 #ifdef __wglext_h_
-#error Attempt to include wgle after including wglext.h
+#error Attempt to include wgl_exts after including wglext.h
 #endif
 
 #define __wglext_h_
@@ -128,10 +128,13 @@ extern int wglext_EXT_create_context_es2_profile;
 #define WGL_STEREO_POLARITY_INVERT_3DL 0x2058
 
 
+#ifndef WGL_3DL_stereo_control
+#define WGL_3DL_stereo_control 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLSETSTEREOEMITTERSTATE3DLPROC)(HDC hDC, UINT uState);
 
 extern PFNWGLSETSTEREOEMITTERSTATE3DLPROC wglSetStereoEmitterState3DL;
-
+#endif /*WGL_3DL_stereo_control*/
 
 /******************************
 * Extension: WGL_AMD_gpu_association
@@ -148,6 +151,9 @@ extern PFNWGLSETSTEREOEMITTERSTATE3DLPROC wglSetStereoEmitterState3DL;
 #define WGL_GPU_NUM_RB_AMD 0x21A7
 #define WGL_GPU_NUM_SPI_AMD 0x21A8
 
+
+#ifndef WGL_AMD_gpu_association
+#define WGL_AMD_gpu_association 1
 
 typedef UINT (GLE_FUNCPTR * PFNWGLGETGPUIDSAMDPROC)(UINT maxCount, UINT *ids);
 typedef INT (GLE_FUNCPTR * PFNWGLGETGPUINFOAMDPROC)(UINT id, int property, GLenum dataType, UINT size, void *data);
@@ -168,7 +174,7 @@ extern PFNWGLDELETEASSOCIATEDCONTEXTAMDPROC wglDeleteAssociatedContextAMD;
 extern PFNWGLMAKEASSOCIATEDCONTEXTCURRENTAMDPROC wglMakeAssociatedContextCurrentAMD;
 extern PFNWGLGETCURRENTASSOCIATEDCONTEXTAMDPROC wglGetCurrentAssociatedContextAMD;
 extern PFNWGLBLITCONTEXTFRAMEBUFFERAMDPROC wglBlitContextFramebufferAMD;
-
+#endif /*WGL_AMD_gpu_association*/
 
 /******************************
 * Extension: WGL_ARB_buffer_region
@@ -180,6 +186,9 @@ extern PFNWGLBLITCONTEXTFRAMEBUFFERAMDPROC wglBlitContextFramebufferAMD;
 #define WGL_STENCIL_BUFFER_BIT_ARB 0x00000008
 
 
+#ifndef WGL_ARB_buffer_region
+#define WGL_ARB_buffer_region 1
+
 typedef HANDLE (GLE_FUNCPTR * PFNWGLCREATEBUFFERREGIONARBPROC)(HDC hDC, int iLayerPlane, UINT uType);
 typedef VOID (GLE_FUNCPTR * PFNWGLDELETEBUFFERREGIONARBPROC)(HANDLE hRegion);
 typedef BOOL (GLE_FUNCPTR * PFNWGLSAVEBUFFERREGIONARBPROC)(HANDLE hRegion, int x, int y, int width, int height);
@@ -189,7 +198,7 @@ extern PFNWGLCREATEBUFFERREGIONARBPROC wglCreateBufferRegionARB;
 extern PFNWGLDELETEBUFFERREGIONARBPROC wglDeleteBufferRegionARB;
 extern PFNWGLSAVEBUFFERREGIONARBPROC wglSaveBufferRegionARB;
 extern PFNWGLRESTOREBUFFERREGIONARBPROC wglRestoreBufferRegionARB;
-
+#endif /*WGL_ARB_buffer_region*/
 
 /******************************
 * Extension: WGL_ARB_create_context
@@ -204,10 +213,13 @@ extern PFNWGLRESTOREBUFFERREGIONARBPROC wglRestoreBufferRegionARB;
 #define WGL_ERROR_INVALID_VERSION_ARB 0x2095
 
 
+#ifndef WGL_ARB_create_context
+#define WGL_ARB_create_context 1
+
 typedef HGLRC (GLE_FUNCPTR * PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC hDC, HGLRC hShareContext, const int *attribList);
 
 extern PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB;
-
+#endif /*WGL_ARB_create_context*/
 
 /******************************
 * Extension: WGL_ARB_create_context_profile
@@ -233,10 +245,13 @@ extern PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB;
 * Extension: WGL_ARB_extensions_string
 ******************************/
 
+#ifndef WGL_ARB_extensions_string
+#define WGL_ARB_extensions_string 1
+
 typedef const char * (GLE_FUNCPTR * PFNWGLGETEXTENSIONSSTRINGARBPROC)(HDC hdc);
 
 extern PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB;
-
+#endif /*WGL_ARB_extensions_string*/
 
 /******************************
 * Extension: WGL_ARB_framebuffer_sRGB
@@ -253,12 +268,15 @@ extern PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB;
 #define WGL_ERROR_INCOMPATIBLE_DEVICE_CONTEXTS_ARB 0x2054
 
 
+#ifndef WGL_ARB_make_current_read
+#define WGL_ARB_make_current_read 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLMAKECONTEXTCURRENTARBPROC)(HDC hDrawDC, HDC hReadDC, HGLRC hglrc);
 typedef HDC (GLE_FUNCPTR * PFNWGLGETCURRENTREADDCARBPROC)();
 
 extern PFNWGLMAKECONTEXTCURRENTARBPROC wglMakeContextCurrentARB;
 extern PFNWGLGETCURRENTREADDCARBPROC wglGetCurrentReadDCARB;
-
+#endif /*WGL_ARB_make_current_read*/
 
 /******************************
 * Extension: WGL_ARB_multisample
@@ -287,6 +305,9 @@ extern PFNWGLGETCURRENTREADDCARBPROC wglGetCurrentReadDCARB;
 #define WGL_PBUFFER_LOST_ARB 0x2036
 
 
+#ifndef WGL_ARB_pbuffer
+#define WGL_ARB_pbuffer 1
+
 typedef HPBUFFERARB (GLE_FUNCPTR * PFNWGLCREATEPBUFFERARBPROC)(HDC hDC, int iPixelFormat, int iWidth, int iHeight, const int *piAttribList);
 typedef HDC (GLE_FUNCPTR * PFNWGLGETPBUFFERDCARBPROC)(HPBUFFERARB hPbuffer);
 typedef int (GLE_FUNCPTR * PFNWGLRELEASEPBUFFERDCARBPROC)(HPBUFFERARB hPbuffer, HDC hDC);
@@ -298,7 +319,7 @@ extern PFNWGLGETPBUFFERDCARBPROC wglGetPbufferDCARB;
 extern PFNWGLRELEASEPBUFFERDCARBPROC wglReleasePbufferDCARB;
 extern PFNWGLDESTROYPBUFFERARBPROC wglDestroyPbufferARB;
 extern PFNWGLQUERYPBUFFERARBPROC wglQueryPbufferARB;
-
+#endif /*WGL_ARB_pbuffer*/
 
 /******************************
 * Extension: WGL_ARB_pixel_format
@@ -355,6 +376,9 @@ extern PFNWGLQUERYPBUFFERARBPROC wglQueryPbufferARB;
 #define WGL_TYPE_COLORINDEX_ARB 0x202C
 
 
+#ifndef WGL_ARB_pixel_format
+#define WGL_ARB_pixel_format 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETPIXELFORMATATTRIBIVARBPROC)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, int *piValues);
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETPIXELFORMATATTRIBFVARBPROC)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, FLOAT *pfValues);
 typedef BOOL (GLE_FUNCPTR * PFNWGLCHOOSEPIXELFORMATARBPROC)(HDC hdc, const int *piAttribIList, const FLOAT *pfAttribFList, UINT nMaxFormats, int *piFormats, UINT *nNumFormats);
@@ -362,7 +386,7 @@ typedef BOOL (GLE_FUNCPTR * PFNWGLCHOOSEPIXELFORMATARBPROC)(HDC hdc, const int *
 extern PFNWGLGETPIXELFORMATATTRIBIVARBPROC wglGetPixelFormatAttribivARB;
 extern PFNWGLGETPIXELFORMATATTRIBFVARBPROC wglGetPixelFormatAttribfvARB;
 extern PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB;
-
+#endif /*WGL_ARB_pixel_format*/
 
 /******************************
 * Extension: WGL_ARB_pixel_format_float
@@ -410,6 +434,9 @@ extern PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB;
 #define WGL_AUX9_ARB 0x2090
 
 
+#ifndef WGL_ARB_render_texture
+#define WGL_ARB_render_texture 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLBINDTEXIMAGEARBPROC)(HPBUFFERARB hPbuffer, int iBuffer);
 typedef BOOL (GLE_FUNCPTR * PFNWGLRELEASETEXIMAGEARBPROC)(HPBUFFERARB hPbuffer, int iBuffer);
 typedef BOOL (GLE_FUNCPTR * PFNWGLSETPBUFFERATTRIBARBPROC)(HPBUFFERARB hPbuffer, const int *piAttribList);
@@ -417,7 +444,7 @@ typedef BOOL (GLE_FUNCPTR * PFNWGLSETPBUFFERATTRIBARBPROC)(HPBUFFERARB hPbuffer,
 extern PFNWGLBINDTEXIMAGEARBPROC wglBindTexImageARB;
 extern PFNWGLRELEASETEXIMAGEARBPROC wglReleaseTexImageARB;
 extern PFNWGLSETPBUFFERATTRIBARBPROC wglSetPbufferAttribARB;
-
+#endif /*WGL_ARB_render_texture*/
 
 /******************************
 * Extension: WGL_ATI_pixel_format_float
@@ -454,12 +481,15 @@ extern PFNWGLSETPBUFFERATTRIBARBPROC wglSetPbufferAttribARB;
 #define WGL_ERROR_INVALID_PIXEL_TYPE_EXT 0x2043
 
 
+#ifndef WGL_EXT_make_current_read
+#define WGL_EXT_make_current_read 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLMAKECONTEXTCURRENTEXTPROC)(HDC hDrawDC, HDC hReadDC, HGLRC hglrc);
 typedef HDC (GLE_FUNCPTR * PFNWGLGETCURRENTREADDCEXTPROC)();
 
 extern PFNWGLMAKECONTEXTCURRENTEXTPROC wglMakeContextCurrentEXT;
 extern PFNWGLGETCURRENTREADDCEXTPROC wglGetCurrentReadDCEXT;
-
+#endif /*WGL_EXT_make_current_read*/
 
 /******************************
 * Extension: WGL_EXT_multisample
@@ -484,6 +514,9 @@ extern PFNWGLGETCURRENTREADDCEXTPROC wglGetCurrentReadDCEXT;
 #define WGL_PBUFFER_HEIGHT_EXT 0x2035
 
 
+#ifndef WGL_EXT_pbuffer
+#define WGL_EXT_pbuffer 1
+
 typedef HPBUFFEREXT (GLE_FUNCPTR * PFNWGLCREATEPBUFFEREXTPROC)(HDC hDC, int iPixelFormat, int iWidth, int iHeight, const int *piAttribList);
 typedef HDC (GLE_FUNCPTR * PFNWGLGETPBUFFERDCEXTPROC)(HPBUFFEREXT hPbuffer);
 typedef int (GLE_FUNCPTR * PFNWGLRELEASEPBUFFERDCEXTPROC)(HPBUFFEREXT hPbuffer, HDC hDC);
@@ -495,7 +528,7 @@ extern PFNWGLGETPBUFFERDCEXTPROC wglGetPbufferDCEXT;
 extern PFNWGLRELEASEPBUFFERDCEXTPROC wglReleasePbufferDCEXT;
 extern PFNWGLDESTROYPBUFFEREXTPROC wglDestroyPbufferEXT;
 extern PFNWGLQUERYPBUFFEREXTPROC wglQueryPbufferEXT;
-
+#endif /*WGL_EXT_pbuffer*/
 
 /******************************
 * Extension: WGL_EXT_pixel_format
@@ -548,6 +581,9 @@ extern PFNWGLQUERYPBUFFEREXTPROC wglQueryPbufferEXT;
 #define WGL_TYPE_COLORINDEX_EXT 0x202C
 
 
+#ifndef WGL_EXT_pixel_format
+#define WGL_EXT_pixel_format 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETPIXELFORMATATTRIBIVEXTPROC)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, int *piAttributes, int *piValues);
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETPIXELFORMATATTRIBFVEXTPROC)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, int *piAttributes, FLOAT *pfValues);
 typedef BOOL (GLE_FUNCPTR * PFNWGLCHOOSEPIXELFORMATEXTPROC)(HDC hdc, const int *piAttribIList, const FLOAT *pfAttribFList, UINT nMaxFormats, int *piFormats, UINT *nNumFormats);
@@ -555,7 +591,7 @@ typedef BOOL (GLE_FUNCPTR * PFNWGLCHOOSEPIXELFORMATEXTPROC)(HDC hdc, const int *
 extern PFNWGLGETPIXELFORMATATTRIBIVEXTPROC wglGetPixelFormatAttribivEXT;
 extern PFNWGLGETPIXELFORMATATTRIBFVEXTPROC wglGetPixelFormatAttribfvEXT;
 extern PFNWGLCHOOSEPIXELFORMATEXTPROC wglChoosePixelFormatEXT;
-
+#endif /*WGL_EXT_pixel_format*/
 
 /******************************
 * Extension: WGL_EXT_pixel_format_packed_float
@@ -574,12 +610,15 @@ extern PFNWGLCHOOSEPIXELFORMATEXTPROC wglChoosePixelFormatEXT;
 #define WGL_DIGITAL_VIDEO_GAMMA_CORRECTED_I3D 0x2053
 
 
+#ifndef WGL_I3D_digital_video_control
+#define WGL_I3D_digital_video_control 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETDIGITALVIDEOPARAMETERSI3DPROC)(HDC hDC, int iAttribute, int *piValue);
 typedef BOOL (GLE_FUNCPTR * PFNWGLSETDIGITALVIDEOPARAMETERSI3DPROC)(HDC hDC, int iAttribute, const int *piValue);
 
 extern PFNWGLGETDIGITALVIDEOPARAMETERSI3DPROC wglGetDigitalVideoParametersI3D;
 extern PFNWGLSETDIGITALVIDEOPARAMETERSI3DPROC wglSetDigitalVideoParametersI3D;
-
+#endif /*WGL_I3D_digital_video_control*/
 
 /******************************
 * Extension: WGL_I3D_gamma
@@ -588,6 +627,9 @@ extern PFNWGLSETDIGITALVIDEOPARAMETERSI3DPROC wglSetDigitalVideoParametersI3D;
 #define WGL_GAMMA_TABLE_SIZE_I3D 0x204E
 #define WGL_GAMMA_EXCLUDE_DESKTOP_I3D 0x204F
 
+
+#ifndef WGL_I3D_gamma
+#define WGL_I3D_gamma 1
 
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETGAMMATABLEPARAMETERSI3DPROC)(HDC hDC, int iAttribute, int *piValue);
 typedef BOOL (GLE_FUNCPTR * PFNWGLSETGAMMATABLEPARAMETERSI3DPROC)(HDC hDC, int iAttribute, const int *piValue);
@@ -598,7 +640,7 @@ extern PFNWGLGETGAMMATABLEPARAMETERSI3DPROC wglGetGammaTableParametersI3D;
 extern PFNWGLSETGAMMATABLEPARAMETERSI3DPROC wglSetGammaTableParametersI3D;
 extern PFNWGLGETGAMMATABLEI3DPROC wglGetGammaTableI3D;
 extern PFNWGLSETGAMMATABLEI3DPROC wglSetGammaTableI3D;
-
+#endif /*WGL_I3D_gamma*/
 
 /******************************
 * Extension: WGL_I3D_genlock
@@ -614,6 +656,9 @@ extern PFNWGLSETGAMMATABLEI3DPROC wglSetGammaTableI3D;
 #define WGL_GENLOCK_SOURCE_EDGE_RISING_I3D 0x204B
 #define WGL_GENLOCK_SOURCE_EDGE_BOTH_I3D 0x204C
 
+
+#ifndef WGL_I3D_genlock
+#define WGL_I3D_genlock 1
 
 typedef BOOL (GLE_FUNCPTR * PFNWGLENABLEGENLOCKI3DPROC)(HDC hDC);
 typedef BOOL (GLE_FUNCPTR * PFNWGLDISABLEGENLOCKI3DPROC)(HDC hDC);
@@ -640,7 +685,7 @@ extern PFNWGLGETGENLOCKSAMPLERATEI3DPROC wglGetGenlockSampleRateI3D;
 extern PFNWGLGENLOCKSOURCEDELAYI3DPROC wglGenlockSourceDelayI3D;
 extern PFNWGLGETGENLOCKSOURCEDELAYI3DPROC wglGetGenlockSourceDelayI3D;
 extern PFNWGLQUERYGENLOCKMAXSOURCEDELAYI3DPROC wglQueryGenlockMaxSourceDelayI3D;
-
+#endif /*WGL_I3D_genlock*/
 
 /******************************
 * Extension: WGL_I3D_image_buffer
@@ -649,6 +694,9 @@ extern PFNWGLQUERYGENLOCKMAXSOURCEDELAYI3DPROC wglQueryGenlockMaxSourceDelayI3D;
 #define WGL_IMAGE_BUFFER_MIN_ACCESS_I3D 0x00000001
 #define WGL_IMAGE_BUFFER_LOCK_I3D 0x00000002
 
+
+#ifndef WGL_I3D_image_buffer
+#define WGL_I3D_image_buffer 1
 
 typedef LPVOID (GLE_FUNCPTR * PFNWGLCREATEIMAGEBUFFERI3DPROC)(HDC hDC, DWORD dwSize, UINT uFlags);
 typedef BOOL (GLE_FUNCPTR * PFNWGLDESTROYIMAGEBUFFERI3DPROC)(HDC hDC, LPVOID pAddress);
@@ -659,11 +707,14 @@ extern PFNWGLCREATEIMAGEBUFFERI3DPROC wglCreateImageBufferI3D;
 extern PFNWGLDESTROYIMAGEBUFFERI3DPROC wglDestroyImageBufferI3D;
 extern PFNWGLASSOCIATEIMAGEBUFFEREVENTSI3DPROC wglAssociateImageBufferEventsI3D;
 extern PFNWGLRELEASEIMAGEBUFFEREVENTSI3DPROC wglReleaseImageBufferEventsI3D;
-
+#endif /*WGL_I3D_image_buffer*/
 
 /******************************
 * Extension: WGL_I3D_swap_frame_lock
 ******************************/
+
+#ifndef WGL_I3D_swap_frame_lock
+#define WGL_I3D_swap_frame_lock 1
 
 typedef BOOL (GLE_FUNCPTR * PFNWGLENABLEFRAMELOCKI3DPROC)();
 typedef BOOL (GLE_FUNCPTR * PFNWGLDISABLEFRAMELOCKI3DPROC)();
@@ -674,16 +725,19 @@ extern PFNWGLENABLEFRAMELOCKI3DPROC wglEnableFrameLockI3D;
 extern PFNWGLDISABLEFRAMELOCKI3DPROC wglDisableFrameLockI3D;
 extern PFNWGLISENABLEDFRAMELOCKI3DPROC wglIsEnabledFrameLockI3D;
 extern PFNWGLQUERYFRAMELOCKMASTERI3DPROC wglQueryFrameLockMasterI3D;
-
+#endif /*WGL_I3D_swap_frame_lock*/
 
 /******************************
 * Extension: WGL_NV_copy_image
 ******************************/
 
+#ifndef WGL_NV_copy_image
+#define WGL_NV_copy_image 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLCOPYIMAGESUBDATANVPROC)(HGLRC hSrcRC, GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, HGLRC hDstRC, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth);
 
 extern PFNWGLCOPYIMAGESUBDATANVPROC wglCopyImageSubDataNV;
-
+#endif /*WGL_NV_copy_image*/
 
 /******************************
 * Extension: WGL_NV_float_buffer
@@ -708,6 +762,9 @@ extern PFNWGLCOPYIMAGESUBDATANVPROC wglCopyImageSubDataNV;
 #define WGL_ERROR_MISSING_AFFINITY_MASK_NV 0x20D1
 
 
+#ifndef WGL_NV_gpu_affinity
+#define WGL_NV_gpu_affinity 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLENUMGPUSNVPROC)(UINT iGpuIndex, HGPUNV *phGpu);
 typedef BOOL (GLE_FUNCPTR * PFNWGLENUMGPUDEVICESNVPROC)(HGPUNV hGpu, UINT iDeviceIndex, PGPU_DEVICE lpGpuDevice);
 typedef HDC (GLE_FUNCPTR * PFNWGLCREATEAFFINITYDCNVPROC)(const HGPUNV *phGpuList);
@@ -719,7 +776,7 @@ extern PFNWGLENUMGPUDEVICESNVPROC wglEnumGpuDevicesNV;
 extern PFNWGLCREATEAFFINITYDCNVPROC wglCreateAffinityDCNV;
 extern PFNWGLENUMGPUSFROMAFFINITYDCNVPROC wglEnumGpusFromAffinityDCNV;
 extern PFNWGLDELETEDCNVPROC wglDeleteDCNV;
-
+#endif /*WGL_NV_gpu_affinity*/
 
 /******************************
 * Extension: WGL_NV_multisample_coverage
@@ -736,6 +793,9 @@ extern PFNWGLDELETEDCNVPROC wglDeleteDCNV;
 #define WGL_NUM_VIDEO_SLOTS_NV 0x20F0
 
 
+#ifndef WGL_NV_present_video
+#define WGL_NV_present_video 1
+
 typedef int (GLE_FUNCPTR * PFNWGLENUMERATEVIDEODEVICESNVPROC)(HDC hDC, HVIDEOOUTPUTDEVICENV *phDeviceList);
 typedef BOOL (GLE_FUNCPTR * PFNWGLBINDVIDEODEVICENVPROC)(HDC hDC, unsigned int uVideoSlot, HVIDEOOUTPUTDEVICENV hVideoDevice, const int *piAttribList);
 typedef BOOL (GLE_FUNCPTR * PFNWGLQUERYCURRENTCONTEXTNVPROC)(int iAttribute, int *piValue);
@@ -743,7 +803,7 @@ typedef BOOL (GLE_FUNCPTR * PFNWGLQUERYCURRENTCONTEXTNVPROC)(int iAttribute, int
 extern PFNWGLENUMERATEVIDEODEVICESNVPROC wglEnumerateVideoDevicesNV;
 extern PFNWGLBINDVIDEODEVICENVPROC wglBindVideoDeviceNV;
 extern PFNWGLQUERYCURRENTCONTEXTNVPROC wglQueryCurrentContextNV;
-
+#endif /*WGL_NV_present_video*/
 
 /******************************
 * Extension: WGL_NV_render_depth_texture
@@ -769,6 +829,9 @@ extern PFNWGLQUERYCURRENTCONTEXTNVPROC wglQueryCurrentContextNV;
 * Extension: WGL_NV_swap_group
 ******************************/
 
+#ifndef WGL_NV_swap_group
+#define WGL_NV_swap_group 1
+
 typedef BOOL (GLE_FUNCPTR * PFNWGLJOINSWAPGROUPNVPROC)(HDC hDC, GLuint group);
 typedef BOOL (GLE_FUNCPTR * PFNWGLBINDSWAPBARRIERNVPROC)(GLuint group, GLuint barrier);
 typedef BOOL (GLE_FUNCPTR * PFNWGLQUERYSWAPGROUPNVPROC)(HDC hDC, GLuint *group, GLuint *barrier);
@@ -782,7 +845,7 @@ extern PFNWGLQUERYSWAPGROUPNVPROC wglQuerySwapGroupNV;
 extern PFNWGLQUERYMAXSWAPGROUPSNVPROC wglQueryMaxSwapGroupsNV;
 extern PFNWGLQUERYFRAMECOUNTNVPROC wglQueryFrameCountNV;
 extern PFNWGLRESETFRAMECOUNTNVPROC wglResetFrameCountNV;
-
+#endif /*WGL_NV_swap_group*/
 
 /******************************
 * Extension: WGL_NV_video_capture
@@ -791,6 +854,9 @@ extern PFNWGLRESETFRAMECOUNTNVPROC wglResetFrameCountNV;
 #define WGL_UNIQUE_ID_NV 0x20CE
 #define WGL_NUM_VIDEO_CAPTURE_SLOTS_NV 0x20CF
 
+
+#ifndef WGL_NV_video_capture
+#define WGL_NV_video_capture 1
 
 typedef BOOL (GLE_FUNCPTR * PFNWGLBINDVIDEOCAPTUREDEVICENVPROC)(UINT uVideoSlot, HVIDEOINPUTDEVICENV hDevice);
 typedef UINT (GLE_FUNCPTR * PFNWGLENUMERATEVIDEOCAPTUREDEVICESNVPROC)(HDC hDc, HVIDEOINPUTDEVICENV *phDeviceList);
@@ -803,7 +869,7 @@ extern PFNWGLENUMERATEVIDEOCAPTUREDEVICESNVPROC wglEnumerateVideoCaptureDevicesN
 extern PFNWGLLOCKVIDEOCAPTUREDEVICENVPROC wglLockVideoCaptureDeviceNV;
 extern PFNWGLQUERYVIDEOCAPTUREDEVICENVPROC wglQueryVideoCaptureDeviceNV;
 extern PFNWGLRELEASEVIDEOCAPTUREDEVICENVPROC wglReleaseVideoCaptureDeviceNV;
-
+#endif /*WGL_NV_video_capture*/
 
 /******************************
 * Extension: WGL_NV_video_out

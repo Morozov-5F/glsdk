@@ -26,6 +26,7 @@ project("glload")
 			"source/wgll*.h",}
 	
 	configuration "linux"
+	    defines {"LOAD_X11"}
 		files {"include/glload/glx_*.h"}
 		files {"source/glxl*.c",
 			"source/glxl*.cpp",

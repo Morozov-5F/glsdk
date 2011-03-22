@@ -102,6 +102,7 @@ local function ProcessExtension(hFile, ext, extName, specData, enumPrefix, funcP
 		enumPrefix, extName)));
 	hFile:write("\n");
 	
+	--Write the enumerators.
 	local bDidWrite = false;
 	for i, enum in ipairs(ext.enums) do
 		bDidWrite = true;
@@ -117,6 +118,14 @@ local function ProcessExtension(hFile, ext, extName, specData, enumPrefix, funcP
 	bDidWrite = false;
 
 	--Write the typedefs.
+	local extDefine = nil;
+	if(#ext.funcs > 0) then
+	    --Write the #ifdef for the function pointers, so that they are only
+	    --available if something hasn't defined over them.
+	    extDefine = string.format("%s_%s", enumPrefix, extName);
+	    hFile:write(string.format("#ifndef %s\n#define %s 1\n\n",
+	        extDefine, extDefine));
+	end
 	for i, func in ipairs(ext.funcs) do
 		bDidWrite = true;
 		hFile:write(Make.GetFuncTypedef(func, funcPrefix, specData.typemap));
@@ -139,6 +148,10 @@ local function ProcessExtension(hFile, ext, extName, specData, enumPrefix, funcP
 			hFile:write(Make.GetFuncExternPtr(func, funcPrefix, specData.typemap));
 		end
 		hFile:write("\n");
+	end
+	
+	if(extDefine) then
+	    hFile:write(string.format("#endif /*%s*/", extDefine));
 	end
 	
 	bWroteAnything = bDidWrite or bWroteAnything;

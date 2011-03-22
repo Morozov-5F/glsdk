@@ -38,6 +38,13 @@ local listOfNonCoreFixes =
 	"ARB_texture_cube_map_array",
 };
 
+local listOfExtensionsToRemove =
+{
+    "SGIX_video_source",
+    "SGIX_dmbuffer",
+    "SGIX_hyperpipe",
+};
+
 function LoadLuaSpec(luaFilename)
 	local specData = dofile(luaFilename);
 
@@ -73,6 +80,59 @@ function LoadLuaSpec(luaFilename)
 			end
 		end
 	end
+	
+	--HACK! Remove certain offensive extensions.
+	local toRemove = {}
+	for i, ext in ipairs(specData.extensions) do
+	    for j, test in ipairs(listOfExtensionsToRemove) do
+	        if(ext == test) then
+	            table.insert(toRemove, 1, i);
+	            break;
+	        end
+	    end
+	end
+	
+	for i, index in ipairs(toRemove) do
+	    table.remove(specData.extensions, index);
+	end
+	
+	toRemove = {}
+	for i, enum in ipairs(specData.enumerations) do
+		if(enum.extensions) then
+		    for j, enumExt in ipairs(enum.extensions) do
+		        local bBreak = false;
+	            for k, test in ipairs(listOfExtensionsToRemove) do
+	                if(enumExt == test) then
+	                    table.insert(toRemove, 1, i);
+	                    bBreak = true;
+	                    break;
+	                end
+	            end
+	            if(bBreak) then break; end
+		    end
+		end
+	end
+	
+	for i, index in ipairs(toRemove) do
+	    table.remove(specData.enumerations, index);
+	end
+	
+	toRemove = {}
+    for i, func in ipairs(specData.funcData.functions) do
+	    for j, test in ipairs(listOfExtensionsToRemove) do
+	        if(ext == func.category) then
+	            table.insert(toRemove, 1, i);
+	            break;
+	        end
+	    end
+    end
+
+	for i, index in ipairs(toRemove) do
+	    table.remove(specData.funcData.functions, index);
+	end
+	
+	
+	
 	
 	local function GetCore(version)
 		if(not coredefs[version]) then

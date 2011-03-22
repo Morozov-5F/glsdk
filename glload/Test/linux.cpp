@@ -2,15 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #include "glload/gl_2_1.h"
+#include "glload/glx_exts.h"
 #include "glload/gll.h"
-#include <GL/glx.h>
- 
-#define GLX_CONTEXT_MAJOR_VERSION_ARB       0x2091
-#define GLX_CONTEXT_MINOR_VERSION_ARB       0x2092
-typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
  
 // Helper to check for extension string presence.  Adapted from:
 //   http://www.opengl.org/resources/features/OGLextensions/
@@ -172,9 +166,12 @@ int main (int argc, char ** argv)
  
   // NOTE: It is not necessary to create or make current to a context before
   // calling glXGetProcAddressARB
+  glload::LoadGLXFunctions(display, DefaultScreen( display ));
+  /**
   glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
   glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)
            glXGetProcAddressARB( (const GLubyte *) "glXCreateContextAttribsARB" );
+      **/
  
   GLXContext ctx = 0;
  

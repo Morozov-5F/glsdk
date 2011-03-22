@@ -117,3 +117,27 @@ MakeMainHeaderFile("wgll_ext", wglSpecData, "wgl", nil, wglbaseData);
 MakeMainSourceFile("wgll_ext", wglSpecData, "WGL", "wgl", nil, wglPreceedData,
 	wglbaseData, nil);
 	
+	
+---------------------------
+--Create GLX files.
+local glxSpecData = LoadLuaSpec(specFileLoc .. "glxspec.lua");
+
+local glxPreceedData = {
+	dofile(GetDataFilePath() .. "glxPreceed.lua"),
+	dofile(GetDataFilePath() .. "glxHeaderFunc.lua"),
+	dofile(GetDataFilePath() .. "glDefStr.lua"),
+}
+
+MakeExtHeaderFile("glx_exts", glxSpecData, "GLX", "glX", nil, false, glxPreceedData);
+
+MakeMainHeaderFile("glxl_ext", glxSpecData, "glX", nil, glxbaseData);
+
+MakeMainSourceFile("glxl_ext", glxSpecData, "GLX", "glX", nil, glxPreceedData,
+	glxbaseData, nil);
+	
+	
+	
+	
+	
+	
+	

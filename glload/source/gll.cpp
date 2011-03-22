@@ -11,6 +11,13 @@
 #define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
 #endif
 
+#ifdef LOAD_X11
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <GL/glx.h>
+#include "glxl_ext.h"
+#endif
+
 
 namespace glload
 {
@@ -264,6 +271,21 @@ namespace glload
 		return LS_LOAD_FUNCTIONS_ALL;
 	}
 #endif //WIN32
+
+#ifdef LOAD_X11
+   	int LoadGLXFunctions(void *display, int screen)
+   	{
+   	    Display *dpy = (Display*)display;
+   	    
+		glXeIntClear();
+
+        ProcExtFromExtString(glXQueryExtensionsString(dpy, screen),
+            glXeIntExtensionMap, glXeIntExtensionMapSize);
+
+		return LS_LOAD_FUNCTIONS_ALL;
+   	}
+
+#endif //LOAD_X11
 }
 
 

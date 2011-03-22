@@ -36,6 +36,14 @@ namespace glload
 	**/
 	int LoadWinFunctions(void *hdc);
 #endif //WIN32
+#ifdef GLX_H
+	/**
+	\brief Loads all of the function pointers associated with GLX.
+
+	\return Of the type LoadSucceeded.
+	**/
+	int LoadGLXFunctions(void *display, int screen);
+#endif
 
 	/**
 	This function retrieves the major GL version number. Only works after LoadFunctions has been called.
