@@ -2,6 +2,39 @@
 #include <string.h>
 #include "wgll_ext.h"
 
+#ifdef __wglext_h_
+#error Attempt to include wgle after including wglext.h
+#endif
+
+#define __wglext_h_
+
+#ifndef WIN32_LEAN_AND_MEAN
+	#define WIN32_LEAN_AND_MEAN
+#endif //WIN32_LEAN_AND_MEAN
+
+#include <windows.h>
+
+#ifdef GLE_FUNCPTR
+#undef GLE_FUNCPTR
+#endif //GLE_FUNCPTR
+#define GLE_FUNCPTR WINAPI
+
+typedef unsigned int GLenum;
+typedef unsigned char GLboolean;
+typedef unsigned int GLbitfield;
+typedef signed char GLbyte;
+typedef short GLshort;
+typedef int GLint;
+typedef int GLsizei;
+typedef unsigned char GLubyte;
+typedef unsigned short GLushort;
+typedef unsigned int GLuint;
+typedef float GLfloat;
+typedef float GLclampf;
+typedef double GLdouble;
+typedef double GLclampd;
+typedef void GLvoid;
+
 #include <stddef.h>	
 	
 static int TestPointer(const void *pTest)
@@ -14,6 +47,33 @@ static int TestPointer(const void *pTest)
 	
 	return 1;
 }
+
+#ifndef WGL_ARB_pbuffer
+DECLARE_HANDLE(HPBUFFERARB);
+#endif
+#ifndef WGL_EXT_pbuffer
+DECLARE_HANDLE(HPBUFFEREXT);
+#endif
+#ifndef WGL_NV_present_video
+DECLARE_HANDLE(HVIDEOOUTPUTDEVICENV);
+#endif
+#ifndef WGL_NV_video_output
+DECLARE_HANDLE(HPVIDEODEV);
+#endif
+#ifndef WGL_NV_gpu_affinity
+DECLARE_HANDLE(HPGPUNV);
+DECLARE_HANDLE(HGPUNV);
+typedef struct _GPU_DEVICE {
+    DWORD  cb;
+    CHAR   DeviceName[32];
+    CHAR   DeviceString[128];
+    DWORD  Flags;
+    RECT   rcVirtualScreen;
+} GPU_DEVICE, *PGPU_DEVICE;
+#endif
+#ifndef WGL_NV_video_capture
+DECLARE_HANDLE(HVIDEOINPUTDEVICENV);
+#endif
 
 #if defined(__APPLE__)
 #include <mach-o/dyld.h>
@@ -76,6 +136,8 @@ void* SunGetProcAddress (const GLubyte* name)
 		#if defined(__sgi) || defined(__sun)
 			#define gleIntGetProcAddress(name) SunGetProcAddress(name)
 		#else /* GLX */
+		    #include <GL/glx.h>
+
 			#define gleIntGetProcAddress(name) (*glXGetProcAddressARB)(name)
 		#endif
 	#endif

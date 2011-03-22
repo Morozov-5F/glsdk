@@ -24,9 +24,7 @@ int [funcPrefix]eIntLoad_Version_[major]_[minor][profile]();
 
 == Base entrypoints and data ==
 
-If you provide this function with a "baseData" field, then it will write a number of enumerators and function pointers. It will also write a function that will load those pointers.
-
-The function to load them will be called "[funcPrefix]eIntLoad_BaseFuncs".
+If you provide this function with a "baseData" field, then it will generate an additional file called <filename>_base.h. This additional file will contain a number of OpenGL enumerators and function pointers. This file will also have a function called: "[funcPrefix]eIntLoad_BaseFuncs". That function will load only the function pointers for the base functions.
 
 The baseData field should be structured like:
 
@@ -97,18 +95,6 @@ function MakeMainHeaderFile(outFilename, specData, funcPrefix, VersionFunc, base
 	hFile:write("\n");
 
 	if(baseData and baseData.funcs) then
-		if(baseData.preceedData) then
-			for i, preceed in ipairs(baseData.preceedData) do
-				hFile:write(preceed);
-				hFile:write("\n");
-			end
-		end
-		
-		for i, passthru in ipairs(specData.funcData.passthru) do
-			hFile:write(passthru);
-			hFile:write("\n");
-		end
-		hFile:write("\n");
 
 	end
 
@@ -145,22 +131,47 @@ function MakeMainHeaderFile(outFilename, specData, funcPrefix, VersionFunc, base
 	
 	--Write the baseData, if there.
 	if(baseData) then
+    	local hFile = io.open(GetSourcePath() .. outFilename .. "_base.h", "w");
+	    local defineName = string.upper(outFilename) .. "_BASE_H";
+	
+	    hFile:write(GetFileIncludeGuardStart(defineName));
+	    hFile:write("\n");
+	    
+		if(baseData.preceedData) then
+			for i, preceed in ipairs(baseData.preceedData) do
+				hFile:write(preceed);
+				hFile:write("\n");
+			end
+		end
+		
+		for i, passthru in ipairs(specData.funcData.passthru) do
+			hFile:write(passthru);
+			hFile:write("\n");
+		end
+		hFile:write("\n");
+	
 		WriteBaseDataValues(hFile, specData, funcPrefix, baseData);
 		hFile:write("\n");
 		WriteForm(hFile, "void %s();\n", Make.GetBaseLoaderFuncName(funcPrefix));
 		hFile:write("\n");
-	end
-	
-	hFile:write(GetExternCEnd());
-	hFile:write("\n");
-	
-	if(baseData and baseData.funcs) then
+
 		if(baseData.preceedData and baseData.preceedData.footer) then
 			for i, footer in ipairs(baseData.preceedData.footer) do
 				hFile:write(footer);
 				hFile:write("\n");
 			end
 		end
+	    hFile:write("\n");
+    	hFile:write(GetFileIncludeGuardEnd(defineName));
+	    hFile:write("\n");
+
+		hFile:close();
+	end
+	
+	hFile:write(GetExternCEnd());
+	hFile:write("\n");
+	
+	if(baseData and baseData.funcs) then
 	end
 
 	

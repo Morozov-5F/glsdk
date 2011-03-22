@@ -46,4 +46,4 @@ project("glload")
 		targetname "glload"
 
 
-dofile("test/Test4.lua");
+dofile("Test/Test4.lua");

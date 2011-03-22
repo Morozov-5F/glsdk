@@ -4,7 +4,8 @@
 #include <unistd.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <GL/gl.h>
+#include "glload/gl_2_1.h"
+#include "glload/gll.h"
 #include <GL/glx.h>
  
 #define GLX_CONTEXT_MAJOR_VERSION_ARB       0x2091
@@ -15,7 +16,6 @@ typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXC
 //   http://www.opengl.org/resources/features/OGLextensions/
 static bool isExtensionSupported(const char *extList, const char *extension)
 {
- 
   const char *start;
   const char *where, *terminator;
  
@@ -118,7 +118,7 @@ int main (int argc, char ** argv)
  
       printf( "  Matching fbconfig %d, visual ID 0x%2x: SAMPLE_BUFFERS = %d,"
               " SAMPLES = %d\n", 
-              i, vi -> visualid, samp_buf, samples );
+              i, (unsigned int)vi->visualid, samp_buf, samples );
  
       if ( best_fbc < 0 || samp_buf && samples > best_num_samp )
         best_fbc = i, best_num_samp = samples;
@@ -135,7 +135,7 @@ int main (int argc, char ** argv)
  
   // Get a visual
   XVisualInfo *vi = glXGetVisualFromFBConfig( display, bestFbc );
-  printf( "Chosen visual ID = 0x%x\n", vi->visualid );
+  printf( "Chosen visual ID = 0x%x\n", (unsigned int)vi->visualid );
  
   printf( "Creating colormap\n" );
   XSetWindowAttributes swa;

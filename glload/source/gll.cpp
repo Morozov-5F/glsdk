@@ -2,12 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include "gll_gl_ext.h"
+#include "gll_gl_ext_base.h"
 #include "glload/gll.h"
 
 #ifdef WIN32
 #include <windows.h>
 #include "wgll_ext.h"
+#define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
 #endif
+
 
 namespace glload
 {
@@ -19,7 +22,7 @@ namespace glload
 			StrToExtMap *pCurrLoc = pMapArray;
 			for(iLoop = 0; iLoop < iNumEntries; iLoop++, pCurrLoc++)
 			{
-				if(_stricmp(strExtensionName, pCurrLoc->strExtensionName) == 0)
+				if(strcasecmp(strExtensionName, pCurrLoc->strExtensionName) == 0)
 					return pCurrLoc;
 			}
 
@@ -136,7 +139,7 @@ namespace glload
 			for(iLoop = 0; iLoop < iNumExtensions; iLoop++)
 			{
 				const char *strExtensionName = (const char *)glGetStringi(GL_EXTENSIONS, iLoop);
-				if(_stricmp(strExtensionName, "GL_ARB_compatibility") == 0)
+				if(strcasecmp(strExtensionName, "GL_ARB_compatibility") == 0)
 				{
 					return 1;
 				}

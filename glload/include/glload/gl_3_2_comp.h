@@ -35,8 +35,6 @@ typedef double GLdouble;
 typedef double GLclampd;
 typedef void GLvoid;
 
-#ifdef WIN32
-
 #ifndef APIENTRY
 	#define GLE_REMOVE_APIENTRY
 	#if defined(__MINGW32__)
@@ -47,8 +45,6 @@ typedef void GLvoid;
 		#define APIENTRY
 	#endif
 #endif //APIENTRY
-
-#endif //WIN32
 
 #ifdef GLE_FUNCPTR
 #undef GLE_FUNCPTR

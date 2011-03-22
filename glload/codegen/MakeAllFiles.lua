@@ -3,12 +3,12 @@ Calling dofile on this will generate all of the header and source files needed
 for GLE.
 ]]
 
-require "_loadLuaSpec";
-require "_makeExtHeaderFile";
-require "_makeMainHeaderFile";
-require "_makeMainSourceFile";
-require "_makeCoreHeaderFile";
-require "_makeCoreSourceFile";
+require "_LoadLuaSpec";
+require "_MakeExtHeaderFile";
+require "_MakeMainHeaderFile";
+require "_MakeMainSourceFile";
+require "_MakeCoreHeaderFile";
+require "_MakeCoreSourceFile";
 require "_util";
 
 local specFileLoc = GetSpecFilePath();

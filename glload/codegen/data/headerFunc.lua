@@ -5,8 +5,6 @@ Part of it is taken from windows.h, to avoid having to include it everywhere tha
 ]]
 
 return [[
-#ifdef WIN32
-
 #ifndef APIENTRY
 	#define GLE_REMOVE_APIENTRY
 	#if defined(__MINGW32__)
@@ -17,8 +15,6 @@ return [[
 		#define APIENTRY
 	#endif
 #endif //APIENTRY
-
-#endif //WIN32
 
 #ifdef GLE_FUNCPTR
 #undef GLE_FUNCPTR

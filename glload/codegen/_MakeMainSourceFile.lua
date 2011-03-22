@@ -373,8 +373,8 @@ function MakeMainSourceFile(outFilename, specData, enumPrefix, funcPrefix, Versi
 	
 	hFile:write("\n");
 	
-	--If there is baseData, then it was printed in the header.
-	if(preceedData and not baseData) then
+	--Write the preceeding data.
+	if(preceedData) then
 		for i, preceed in ipairs(preceedData) do
 			hFile:write(preceed);
 			hFile:write("\n");
@@ -384,14 +384,12 @@ function MakeMainSourceFile(outFilename, specData, enumPrefix, funcPrefix, Versi
 	--Write a function to test function pointers.
 	WriteTestFunc(hFile);
 	
-	--Write the passthru data, only if it wasn't printed in the header.
-	if(not baseData) then
-		for i, passthru in ipairs(specData.funcData.passthru) do
-			hFile:write(passthru);
-			hFile:write("\n");
-		end
+	--Write the passthru data.
+	for i, passthru in ipairs(specData.funcData.passthru) do
+		hFile:write(passthru);
 		hFile:write("\n");
 	end
+	hFile:write("\n");
 
 	hFile:write(dofile(GetDataFilePath() .. "getProcAddress.lua"));
 	hFile:write("\n");

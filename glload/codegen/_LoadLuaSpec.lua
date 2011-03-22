@@ -29,7 +29,7 @@ Other changes are:
 	have no suffixes as if they were core.
 ]]
 
-local listOfCoreVersions = dofile("data\\listOfCoreVersions.lua");
+local listOfCoreVersions = dofile("data/listOfCoreVersions.lua");
 
 local listOfNonCoreFixes = 
 {

@@ -63,6 +63,8 @@ void* SunGetProcAddress (const GLubyte* name)
 		#if defined(__sgi) || defined(__sun)
 			#define gleIntGetProcAddress(name) SunGetProcAddress(name)
 		#else /* GLX */
+		    #include <GL/glx.h>
+
 			#define gleIntGetProcAddress(name) (*glXGetProcAddressARB)(name)
 		#endif
 	#endif

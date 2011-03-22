@@ -9,7 +9,7 @@ namespace glload
 	\brief The loading status returned by the extension loaders.
 
 	**/
-	typedef enum LoadSucceeded
+	enum LoadSucceeded
 	{
 		LS_LOAD_FUNCTIONS_ALL,		///<All function pointers defined for each extension have been loaded.
 		LS_LOAD_FUNCTIONS_SOME,		///<Only some of the function pointers defined for each extension have been loaded.
