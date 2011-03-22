@@ -111,7 +111,7 @@ local function WriteFuncLoad(hFile, func, funcPrefix, bIsCoreExt)
 		Make.GetFuncPtrNameStr(func, funcPrefix)
 	);
 	
-	WriteForm(hFile, "\tif(!TestPointer(%s)) bIsLoaded = 0;\n", funcPtrName);
+	WriteForm(hFile, "\tif(!TestPointer((const void*)%s)) bIsLoaded = 0;\n", funcPtrName);
 end
 
 local function WriteLoaderFunc(hFile, ext, extName, specData, funcPrefix)
@@ -194,9 +194,10 @@ local function WriteCoreFuncLoad(hFile, func, funcPrefix)
 		Make.GetFuncPtrNameStr(func, funcPrefix)
 	);
 	
-	WriteForm(hFile, "\tif(!TestPointer(%s))\n", funcPtrName);
+	WriteForm(hFile, "\tif(!TestPointer((const void*)%s))\n", funcPtrName);
 	hFile:write("\t{\n");
-	WriteForm(hFile, "\t\t%s = %s.%s;\n", funcPtrName,
+	WriteForm(hFile, "\t\t%s = (%s)%s.%s;\n", funcPtrName,
+		Make.GetFuncTypedefNameStr(func, funcPrefix),
 		Make.GetCoreStructVarName(funcPrefix),
 		Make.GetCoreStructMemberName(func, funcPrefix));
 	WriteForm(hFile, "\t\tif(!%s) bIsLoaded = 0;\n", funcPtrName);

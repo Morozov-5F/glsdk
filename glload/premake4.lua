@@ -9,14 +9,27 @@ project("glload")
 	language "c++"
 	includedirs {"include", "source"}
 	targetdir "lib"
-	defines {"WIN32"}
 
 	files {
-		"include/glload/*.h",
-		"source/*.c",
-		"source/*.cpp",
-		"source/*.h",
+		"include/glload/gl_*.h",
+		"include/glload/gll.h",
+		"source/gll*.c",
+		"source/gll*.cpp",
+		"source/gll*.h",
 	};
+	
+	configuration "windows"
+		defines {"WIN32"}
+		files {"include/glload/wgl_*.h",}
+		files {"source/wgll*.c",
+			"source/wgll*.cpp",
+			"source/wgll*.h",}
+	
+	configuration "linux"
+		files {"include/glload/glx_*.h"}
+		files {"source/glxl*.c",
+			"source/glxl*.cpp",
+			"source/glxl*.h",}
 
 	configuration "Debug"
 		flags "Unicode";

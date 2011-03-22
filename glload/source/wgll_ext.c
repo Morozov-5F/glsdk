@@ -175,7 +175,7 @@ static int wgleIntLoad_3DL_stereo_control()
 {
 	int bIsLoaded = 1;
 	wglSetStereoEmitterState3DL = (PFNWGLSETSTEREOEMITTERSTATE3DLPROC)gleIntGetProcAddress("wglSetStereoEmitterState3DL");
-	if(!TestPointer(wglSetStereoEmitterState3DL)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglSetStereoEmitterState3DL)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef UINT (GLE_FUNCPTR * PFNWGLGETGPUIDSAMDPROC)(UINT maxCount, UINT *ids);
@@ -202,23 +202,23 @@ static int wgleIntLoad_AMD_gpu_association()
 {
 	int bIsLoaded = 1;
 	wglGetGPUIDsAMD = (PFNWGLGETGPUIDSAMDPROC)gleIntGetProcAddress("wglGetGPUIDsAMD");
-	if(!TestPointer(wglGetGPUIDsAMD)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetGPUIDsAMD)) bIsLoaded = 0;
 	wglGetGPUInfoAMD = (PFNWGLGETGPUINFOAMDPROC)gleIntGetProcAddress("wglGetGPUInfoAMD");
-	if(!TestPointer(wglGetGPUInfoAMD)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetGPUInfoAMD)) bIsLoaded = 0;
 	wglGetContextGPUIDAMD = (PFNWGLGETCONTEXTGPUIDAMDPROC)gleIntGetProcAddress("wglGetContextGPUIDAMD");
-	if(!TestPointer(wglGetContextGPUIDAMD)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetContextGPUIDAMD)) bIsLoaded = 0;
 	wglCreateAssociatedContextAMD = (PFNWGLCREATEASSOCIATEDCONTEXTAMDPROC)gleIntGetProcAddress("wglCreateAssociatedContextAMD");
-	if(!TestPointer(wglCreateAssociatedContextAMD)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglCreateAssociatedContextAMD)) bIsLoaded = 0;
 	wglCreateAssociatedContextAttribsAMD = (PFNWGLCREATEASSOCIATEDCONTEXTATTRIBSAMDPROC)gleIntGetProcAddress("wglCreateAssociatedContextAttribsAMD");
-	if(!TestPointer(wglCreateAssociatedContextAttribsAMD)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglCreateAssociatedContextAttribsAMD)) bIsLoaded = 0;
 	wglDeleteAssociatedContextAMD = (PFNWGLDELETEASSOCIATEDCONTEXTAMDPROC)gleIntGetProcAddress("wglDeleteAssociatedContextAMD");
-	if(!TestPointer(wglDeleteAssociatedContextAMD)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglDeleteAssociatedContextAMD)) bIsLoaded = 0;
 	wglMakeAssociatedContextCurrentAMD = (PFNWGLMAKEASSOCIATEDCONTEXTCURRENTAMDPROC)gleIntGetProcAddress("wglMakeAssociatedContextCurrentAMD");
-	if(!TestPointer(wglMakeAssociatedContextCurrentAMD)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglMakeAssociatedContextCurrentAMD)) bIsLoaded = 0;
 	wglGetCurrentAssociatedContextAMD = (PFNWGLGETCURRENTASSOCIATEDCONTEXTAMDPROC)gleIntGetProcAddress("wglGetCurrentAssociatedContextAMD");
-	if(!TestPointer(wglGetCurrentAssociatedContextAMD)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetCurrentAssociatedContextAMD)) bIsLoaded = 0;
 	wglBlitContextFramebufferAMD = (PFNWGLBLITCONTEXTFRAMEBUFFERAMDPROC)gleIntGetProcAddress("wglBlitContextFramebufferAMD");
-	if(!TestPointer(wglBlitContextFramebufferAMD)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglBlitContextFramebufferAMD)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef HANDLE (GLE_FUNCPTR * PFNWGLCREATEBUFFERREGIONARBPROC)(HDC hDC, int iLayerPlane, UINT uType);
@@ -235,13 +235,13 @@ static int wgleIntLoad_ARB_buffer_region()
 {
 	int bIsLoaded = 1;
 	wglCreateBufferRegionARB = (PFNWGLCREATEBUFFERREGIONARBPROC)gleIntGetProcAddress("wglCreateBufferRegionARB");
-	if(!TestPointer(wglCreateBufferRegionARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglCreateBufferRegionARB)) bIsLoaded = 0;
 	wglDeleteBufferRegionARB = (PFNWGLDELETEBUFFERREGIONARBPROC)gleIntGetProcAddress("wglDeleteBufferRegionARB");
-	if(!TestPointer(wglDeleteBufferRegionARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglDeleteBufferRegionARB)) bIsLoaded = 0;
 	wglSaveBufferRegionARB = (PFNWGLSAVEBUFFERREGIONARBPROC)gleIntGetProcAddress("wglSaveBufferRegionARB");
-	if(!TestPointer(wglSaveBufferRegionARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglSaveBufferRegionARB)) bIsLoaded = 0;
 	wglRestoreBufferRegionARB = (PFNWGLRESTOREBUFFERREGIONARBPROC)gleIntGetProcAddress("wglRestoreBufferRegionARB");
-	if(!TestPointer(wglRestoreBufferRegionARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglRestoreBufferRegionARB)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef HGLRC (GLE_FUNCPTR * PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC hDC, HGLRC hShareContext, const int *attribList);
@@ -252,7 +252,7 @@ static int wgleIntLoad_ARB_create_context()
 {
 	int bIsLoaded = 1;
 	wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)gleIntGetProcAddress("wglCreateContextAttribsARB");
-	if(!TestPointer(wglCreateContextAttribsARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglCreateContextAttribsARB)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -265,7 +265,7 @@ static int wgleIntLoad_ARB_extensions_string()
 {
 	int bIsLoaded = 1;
 	wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC)gleIntGetProcAddress("wglGetExtensionsStringARB");
-	if(!TestPointer(wglGetExtensionsStringARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetExtensionsStringARB)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -279,9 +279,9 @@ static int wgleIntLoad_ARB_make_current_read()
 {
 	int bIsLoaded = 1;
 	wglMakeContextCurrentARB = (PFNWGLMAKECONTEXTCURRENTARBPROC)gleIntGetProcAddress("wglMakeContextCurrentARB");
-	if(!TestPointer(wglMakeContextCurrentARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglMakeContextCurrentARB)) bIsLoaded = 0;
 	wglGetCurrentReadDCARB = (PFNWGLGETCURRENTREADDCARBPROC)gleIntGetProcAddress("wglGetCurrentReadDCARB");
-	if(!TestPointer(wglGetCurrentReadDCARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetCurrentReadDCARB)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -301,15 +301,15 @@ static int wgleIntLoad_ARB_pbuffer()
 {
 	int bIsLoaded = 1;
 	wglCreatePbufferARB = (PFNWGLCREATEPBUFFERARBPROC)gleIntGetProcAddress("wglCreatePbufferARB");
-	if(!TestPointer(wglCreatePbufferARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglCreatePbufferARB)) bIsLoaded = 0;
 	wglGetPbufferDCARB = (PFNWGLGETPBUFFERDCARBPROC)gleIntGetProcAddress("wglGetPbufferDCARB");
-	if(!TestPointer(wglGetPbufferDCARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetPbufferDCARB)) bIsLoaded = 0;
 	wglReleasePbufferDCARB = (PFNWGLRELEASEPBUFFERDCARBPROC)gleIntGetProcAddress("wglReleasePbufferDCARB");
-	if(!TestPointer(wglReleasePbufferDCARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglReleasePbufferDCARB)) bIsLoaded = 0;
 	wglDestroyPbufferARB = (PFNWGLDESTROYPBUFFERARBPROC)gleIntGetProcAddress("wglDestroyPbufferARB");
-	if(!TestPointer(wglDestroyPbufferARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglDestroyPbufferARB)) bIsLoaded = 0;
 	wglQueryPbufferARB = (PFNWGLQUERYPBUFFERARBPROC)gleIntGetProcAddress("wglQueryPbufferARB");
-	if(!TestPointer(wglQueryPbufferARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglQueryPbufferARB)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETPIXELFORMATATTRIBIVARBPROC)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, int *piValues);
@@ -324,11 +324,11 @@ static int wgleIntLoad_ARB_pixel_format()
 {
 	int bIsLoaded = 1;
 	wglGetPixelFormatAttribivARB = (PFNWGLGETPIXELFORMATATTRIBIVARBPROC)gleIntGetProcAddress("wglGetPixelFormatAttribivARB");
-	if(!TestPointer(wglGetPixelFormatAttribivARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetPixelFormatAttribivARB)) bIsLoaded = 0;
 	wglGetPixelFormatAttribfvARB = (PFNWGLGETPIXELFORMATATTRIBFVARBPROC)gleIntGetProcAddress("wglGetPixelFormatAttribfvARB");
-	if(!TestPointer(wglGetPixelFormatAttribfvARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetPixelFormatAttribfvARB)) bIsLoaded = 0;
 	wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)gleIntGetProcAddress("wglChoosePixelFormatARB");
-	if(!TestPointer(wglChoosePixelFormatARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglChoosePixelFormatARB)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -344,11 +344,11 @@ static int wgleIntLoad_ARB_render_texture()
 {
 	int bIsLoaded = 1;
 	wglBindTexImageARB = (PFNWGLBINDTEXIMAGEARBPROC)gleIntGetProcAddress("wglBindTexImageARB");
-	if(!TestPointer(wglBindTexImageARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglBindTexImageARB)) bIsLoaded = 0;
 	wglReleaseTexImageARB = (PFNWGLRELEASETEXIMAGEARBPROC)gleIntGetProcAddress("wglReleaseTexImageARB");
-	if(!TestPointer(wglReleaseTexImageARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglReleaseTexImageARB)) bIsLoaded = 0;
 	wglSetPbufferAttribARB = (PFNWGLSETPBUFFERATTRIBARBPROC)gleIntGetProcAddress("wglSetPbufferAttribARB");
-	if(!TestPointer(wglSetPbufferAttribARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglSetPbufferAttribARB)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -365,9 +365,9 @@ static int wgleIntLoad_EXT_make_current_read()
 {
 	int bIsLoaded = 1;
 	wglMakeContextCurrentEXT = (PFNWGLMAKECONTEXTCURRENTEXTPROC)gleIntGetProcAddress("wglMakeContextCurrentEXT");
-	if(!TestPointer(wglMakeContextCurrentEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglMakeContextCurrentEXT)) bIsLoaded = 0;
 	wglGetCurrentReadDCEXT = (PFNWGLGETCURRENTREADDCEXTPROC)gleIntGetProcAddress("wglGetCurrentReadDCEXT");
-	if(!TestPointer(wglGetCurrentReadDCEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetCurrentReadDCEXT)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -387,15 +387,15 @@ static int wgleIntLoad_EXT_pbuffer()
 {
 	int bIsLoaded = 1;
 	wglCreatePbufferEXT = (PFNWGLCREATEPBUFFEREXTPROC)gleIntGetProcAddress("wglCreatePbufferEXT");
-	if(!TestPointer(wglCreatePbufferEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglCreatePbufferEXT)) bIsLoaded = 0;
 	wglGetPbufferDCEXT = (PFNWGLGETPBUFFERDCEXTPROC)gleIntGetProcAddress("wglGetPbufferDCEXT");
-	if(!TestPointer(wglGetPbufferDCEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetPbufferDCEXT)) bIsLoaded = 0;
 	wglReleasePbufferDCEXT = (PFNWGLRELEASEPBUFFERDCEXTPROC)gleIntGetProcAddress("wglReleasePbufferDCEXT");
-	if(!TestPointer(wglReleasePbufferDCEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglReleasePbufferDCEXT)) bIsLoaded = 0;
 	wglDestroyPbufferEXT = (PFNWGLDESTROYPBUFFEREXTPROC)gleIntGetProcAddress("wglDestroyPbufferEXT");
-	if(!TestPointer(wglDestroyPbufferEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglDestroyPbufferEXT)) bIsLoaded = 0;
 	wglQueryPbufferEXT = (PFNWGLQUERYPBUFFEREXTPROC)gleIntGetProcAddress("wglQueryPbufferEXT");
-	if(!TestPointer(wglQueryPbufferEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglQueryPbufferEXT)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETPIXELFORMATATTRIBIVEXTPROC)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, int *piAttributes, int *piValues);
@@ -410,11 +410,11 @@ static int wgleIntLoad_EXT_pixel_format()
 {
 	int bIsLoaded = 1;
 	wglGetPixelFormatAttribivEXT = (PFNWGLGETPIXELFORMATATTRIBIVEXTPROC)gleIntGetProcAddress("wglGetPixelFormatAttribivEXT");
-	if(!TestPointer(wglGetPixelFormatAttribivEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetPixelFormatAttribivEXT)) bIsLoaded = 0;
 	wglGetPixelFormatAttribfvEXT = (PFNWGLGETPIXELFORMATATTRIBFVEXTPROC)gleIntGetProcAddress("wglGetPixelFormatAttribfvEXT");
-	if(!TestPointer(wglGetPixelFormatAttribfvEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetPixelFormatAttribfvEXT)) bIsLoaded = 0;
 	wglChoosePixelFormatEXT = (PFNWGLCHOOSEPIXELFORMATEXTPROC)gleIntGetProcAddress("wglChoosePixelFormatEXT");
-	if(!TestPointer(wglChoosePixelFormatEXT)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglChoosePixelFormatEXT)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -428,9 +428,9 @@ static int wgleIntLoad_I3D_digital_video_control()
 {
 	int bIsLoaded = 1;
 	wglGetDigitalVideoParametersI3D = (PFNWGLGETDIGITALVIDEOPARAMETERSI3DPROC)gleIntGetProcAddress("wglGetDigitalVideoParametersI3D");
-	if(!TestPointer(wglGetDigitalVideoParametersI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetDigitalVideoParametersI3D)) bIsLoaded = 0;
 	wglSetDigitalVideoParametersI3D = (PFNWGLSETDIGITALVIDEOPARAMETERSI3DPROC)gleIntGetProcAddress("wglSetDigitalVideoParametersI3D");
-	if(!TestPointer(wglSetDigitalVideoParametersI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglSetDigitalVideoParametersI3D)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETGAMMATABLEPARAMETERSI3DPROC)(HDC hDC, int iAttribute, int *piValue);
@@ -447,13 +447,13 @@ static int wgleIntLoad_I3D_gamma()
 {
 	int bIsLoaded = 1;
 	wglGetGammaTableParametersI3D = (PFNWGLGETGAMMATABLEPARAMETERSI3DPROC)gleIntGetProcAddress("wglGetGammaTableParametersI3D");
-	if(!TestPointer(wglGetGammaTableParametersI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetGammaTableParametersI3D)) bIsLoaded = 0;
 	wglSetGammaTableParametersI3D = (PFNWGLSETGAMMATABLEPARAMETERSI3DPROC)gleIntGetProcAddress("wglSetGammaTableParametersI3D");
-	if(!TestPointer(wglSetGammaTableParametersI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglSetGammaTableParametersI3D)) bIsLoaded = 0;
 	wglGetGammaTableI3D = (PFNWGLGETGAMMATABLEI3DPROC)gleIntGetProcAddress("wglGetGammaTableI3D");
-	if(!TestPointer(wglGetGammaTableI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetGammaTableI3D)) bIsLoaded = 0;
 	wglSetGammaTableI3D = (PFNWGLSETGAMMATABLEI3DPROC)gleIntGetProcAddress("wglSetGammaTableI3D");
-	if(!TestPointer(wglSetGammaTableI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglSetGammaTableI3D)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef BOOL (GLE_FUNCPTR * PFNWGLENABLEGENLOCKI3DPROC)(HDC hDC);
@@ -486,29 +486,29 @@ static int wgleIntLoad_I3D_genlock()
 {
 	int bIsLoaded = 1;
 	wglEnableGenlockI3D = (PFNWGLENABLEGENLOCKI3DPROC)gleIntGetProcAddress("wglEnableGenlockI3D");
-	if(!TestPointer(wglEnableGenlockI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglEnableGenlockI3D)) bIsLoaded = 0;
 	wglDisableGenlockI3D = (PFNWGLDISABLEGENLOCKI3DPROC)gleIntGetProcAddress("wglDisableGenlockI3D");
-	if(!TestPointer(wglDisableGenlockI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglDisableGenlockI3D)) bIsLoaded = 0;
 	wglIsEnabledGenlockI3D = (PFNWGLISENABLEDGENLOCKI3DPROC)gleIntGetProcAddress("wglIsEnabledGenlockI3D");
-	if(!TestPointer(wglIsEnabledGenlockI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglIsEnabledGenlockI3D)) bIsLoaded = 0;
 	wglGenlockSourceI3D = (PFNWGLGENLOCKSOURCEI3DPROC)gleIntGetProcAddress("wglGenlockSourceI3D");
-	if(!TestPointer(wglGenlockSourceI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGenlockSourceI3D)) bIsLoaded = 0;
 	wglGetGenlockSourceI3D = (PFNWGLGETGENLOCKSOURCEI3DPROC)gleIntGetProcAddress("wglGetGenlockSourceI3D");
-	if(!TestPointer(wglGetGenlockSourceI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetGenlockSourceI3D)) bIsLoaded = 0;
 	wglGenlockSourceEdgeI3D = (PFNWGLGENLOCKSOURCEEDGEI3DPROC)gleIntGetProcAddress("wglGenlockSourceEdgeI3D");
-	if(!TestPointer(wglGenlockSourceEdgeI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGenlockSourceEdgeI3D)) bIsLoaded = 0;
 	wglGetGenlockSourceEdgeI3D = (PFNWGLGETGENLOCKSOURCEEDGEI3DPROC)gleIntGetProcAddress("wglGetGenlockSourceEdgeI3D");
-	if(!TestPointer(wglGetGenlockSourceEdgeI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetGenlockSourceEdgeI3D)) bIsLoaded = 0;
 	wglGenlockSampleRateI3D = (PFNWGLGENLOCKSAMPLERATEI3DPROC)gleIntGetProcAddress("wglGenlockSampleRateI3D");
-	if(!TestPointer(wglGenlockSampleRateI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGenlockSampleRateI3D)) bIsLoaded = 0;
 	wglGetGenlockSampleRateI3D = (PFNWGLGETGENLOCKSAMPLERATEI3DPROC)gleIntGetProcAddress("wglGetGenlockSampleRateI3D");
-	if(!TestPointer(wglGetGenlockSampleRateI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetGenlockSampleRateI3D)) bIsLoaded = 0;
 	wglGenlockSourceDelayI3D = (PFNWGLGENLOCKSOURCEDELAYI3DPROC)gleIntGetProcAddress("wglGenlockSourceDelayI3D");
-	if(!TestPointer(wglGenlockSourceDelayI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGenlockSourceDelayI3D)) bIsLoaded = 0;
 	wglGetGenlockSourceDelayI3D = (PFNWGLGETGENLOCKSOURCEDELAYI3DPROC)gleIntGetProcAddress("wglGetGenlockSourceDelayI3D");
-	if(!TestPointer(wglGetGenlockSourceDelayI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetGenlockSourceDelayI3D)) bIsLoaded = 0;
 	wglQueryGenlockMaxSourceDelayI3D = (PFNWGLQUERYGENLOCKMAXSOURCEDELAYI3DPROC)gleIntGetProcAddress("wglQueryGenlockMaxSourceDelayI3D");
-	if(!TestPointer(wglQueryGenlockMaxSourceDelayI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglQueryGenlockMaxSourceDelayI3D)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef LPVOID (GLE_FUNCPTR * PFNWGLCREATEIMAGEBUFFERI3DPROC)(HDC hDC, DWORD dwSize, UINT uFlags);
@@ -525,13 +525,13 @@ static int wgleIntLoad_I3D_image_buffer()
 {
 	int bIsLoaded = 1;
 	wglCreateImageBufferI3D = (PFNWGLCREATEIMAGEBUFFERI3DPROC)gleIntGetProcAddress("wglCreateImageBufferI3D");
-	if(!TestPointer(wglCreateImageBufferI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglCreateImageBufferI3D)) bIsLoaded = 0;
 	wglDestroyImageBufferI3D = (PFNWGLDESTROYIMAGEBUFFERI3DPROC)gleIntGetProcAddress("wglDestroyImageBufferI3D");
-	if(!TestPointer(wglDestroyImageBufferI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglDestroyImageBufferI3D)) bIsLoaded = 0;
 	wglAssociateImageBufferEventsI3D = (PFNWGLASSOCIATEIMAGEBUFFEREVENTSI3DPROC)gleIntGetProcAddress("wglAssociateImageBufferEventsI3D");
-	if(!TestPointer(wglAssociateImageBufferEventsI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglAssociateImageBufferEventsI3D)) bIsLoaded = 0;
 	wglReleaseImageBufferEventsI3D = (PFNWGLRELEASEIMAGEBUFFEREVENTSI3DPROC)gleIntGetProcAddress("wglReleaseImageBufferEventsI3D");
-	if(!TestPointer(wglReleaseImageBufferEventsI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglReleaseImageBufferEventsI3D)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef BOOL (GLE_FUNCPTR * PFNWGLENABLEFRAMELOCKI3DPROC)();
@@ -548,13 +548,13 @@ static int wgleIntLoad_I3D_swap_frame_lock()
 {
 	int bIsLoaded = 1;
 	wglEnableFrameLockI3D = (PFNWGLENABLEFRAMELOCKI3DPROC)gleIntGetProcAddress("wglEnableFrameLockI3D");
-	if(!TestPointer(wglEnableFrameLockI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglEnableFrameLockI3D)) bIsLoaded = 0;
 	wglDisableFrameLockI3D = (PFNWGLDISABLEFRAMELOCKI3DPROC)gleIntGetProcAddress("wglDisableFrameLockI3D");
-	if(!TestPointer(wglDisableFrameLockI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglDisableFrameLockI3D)) bIsLoaded = 0;
 	wglIsEnabledFrameLockI3D = (PFNWGLISENABLEDFRAMELOCKI3DPROC)gleIntGetProcAddress("wglIsEnabledFrameLockI3D");
-	if(!TestPointer(wglIsEnabledFrameLockI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglIsEnabledFrameLockI3D)) bIsLoaded = 0;
 	wglQueryFrameLockMasterI3D = (PFNWGLQUERYFRAMELOCKMASTERI3DPROC)gleIntGetProcAddress("wglQueryFrameLockMasterI3D");
-	if(!TestPointer(wglQueryFrameLockMasterI3D)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglQueryFrameLockMasterI3D)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef BOOL (GLE_FUNCPTR * PFNWGLCOPYIMAGESUBDATANVPROC)(HGLRC hSrcRC, GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, HGLRC hDstRC, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth);
@@ -565,7 +565,7 @@ static int wgleIntLoad_NV_copy_image()
 {
 	int bIsLoaded = 1;
 	wglCopyImageSubDataNV = (PFNWGLCOPYIMAGESUBDATANVPROC)gleIntGetProcAddress("wglCopyImageSubDataNV");
-	if(!TestPointer(wglCopyImageSubDataNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglCopyImageSubDataNV)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -585,15 +585,15 @@ static int wgleIntLoad_NV_gpu_affinity()
 {
 	int bIsLoaded = 1;
 	wglEnumGpusNV = (PFNWGLENUMGPUSNVPROC)gleIntGetProcAddress("wglEnumGpusNV");
-	if(!TestPointer(wglEnumGpusNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglEnumGpusNV)) bIsLoaded = 0;
 	wglEnumGpuDevicesNV = (PFNWGLENUMGPUDEVICESNVPROC)gleIntGetProcAddress("wglEnumGpuDevicesNV");
-	if(!TestPointer(wglEnumGpuDevicesNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglEnumGpuDevicesNV)) bIsLoaded = 0;
 	wglCreateAffinityDCNV = (PFNWGLCREATEAFFINITYDCNVPROC)gleIntGetProcAddress("wglCreateAffinityDCNV");
-	if(!TestPointer(wglCreateAffinityDCNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglCreateAffinityDCNV)) bIsLoaded = 0;
 	wglEnumGpusFromAffinityDCNV = (PFNWGLENUMGPUSFROMAFFINITYDCNVPROC)gleIntGetProcAddress("wglEnumGpusFromAffinityDCNV");
-	if(!TestPointer(wglEnumGpusFromAffinityDCNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglEnumGpusFromAffinityDCNV)) bIsLoaded = 0;
 	wglDeleteDCNV = (PFNWGLDELETEDCNVPROC)gleIntGetProcAddress("wglDeleteDCNV");
-	if(!TestPointer(wglDeleteDCNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglDeleteDCNV)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -609,11 +609,11 @@ static int wgleIntLoad_NV_present_video()
 {
 	int bIsLoaded = 1;
 	wglEnumerateVideoDevicesNV = (PFNWGLENUMERATEVIDEODEVICESNVPROC)gleIntGetProcAddress("wglEnumerateVideoDevicesNV");
-	if(!TestPointer(wglEnumerateVideoDevicesNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglEnumerateVideoDevicesNV)) bIsLoaded = 0;
 	wglBindVideoDeviceNV = (PFNWGLBINDVIDEODEVICENVPROC)gleIntGetProcAddress("wglBindVideoDeviceNV");
-	if(!TestPointer(wglBindVideoDeviceNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglBindVideoDeviceNV)) bIsLoaded = 0;
 	wglQueryCurrentContextNV = (PFNWGLQUERYCURRENTCONTEXTNVPROC)gleIntGetProcAddress("wglQueryCurrentContextNV");
-	if(!TestPointer(wglQueryCurrentContextNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglQueryCurrentContextNV)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -636,17 +636,17 @@ static int wgleIntLoad_NV_swap_group()
 {
 	int bIsLoaded = 1;
 	wglJoinSwapGroupNV = (PFNWGLJOINSWAPGROUPNVPROC)gleIntGetProcAddress("wglJoinSwapGroupNV");
-	if(!TestPointer(wglJoinSwapGroupNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglJoinSwapGroupNV)) bIsLoaded = 0;
 	wglBindSwapBarrierNV = (PFNWGLBINDSWAPBARRIERNVPROC)gleIntGetProcAddress("wglBindSwapBarrierNV");
-	if(!TestPointer(wglBindSwapBarrierNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglBindSwapBarrierNV)) bIsLoaded = 0;
 	wglQuerySwapGroupNV = (PFNWGLQUERYSWAPGROUPNVPROC)gleIntGetProcAddress("wglQuerySwapGroupNV");
-	if(!TestPointer(wglQuerySwapGroupNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglQuerySwapGroupNV)) bIsLoaded = 0;
 	wglQueryMaxSwapGroupsNV = (PFNWGLQUERYMAXSWAPGROUPSNVPROC)gleIntGetProcAddress("wglQueryMaxSwapGroupsNV");
-	if(!TestPointer(wglQueryMaxSwapGroupsNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglQueryMaxSwapGroupsNV)) bIsLoaded = 0;
 	wglQueryFrameCountNV = (PFNWGLQUERYFRAMECOUNTNVPROC)gleIntGetProcAddress("wglQueryFrameCountNV");
-	if(!TestPointer(wglQueryFrameCountNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglQueryFrameCountNV)) bIsLoaded = 0;
 	wglResetFrameCountNV = (PFNWGLRESETFRAMECOUNTNVPROC)gleIntGetProcAddress("wglResetFrameCountNV");
-	if(!TestPointer(wglResetFrameCountNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglResetFrameCountNV)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 typedef BOOL (GLE_FUNCPTR * PFNWGLBINDVIDEOCAPTUREDEVICENVPROC)(UINT uVideoSlot, HVIDEOINPUTDEVICENV hDevice);
@@ -665,15 +665,15 @@ static int wgleIntLoad_NV_video_capture()
 {
 	int bIsLoaded = 1;
 	wglBindVideoCaptureDeviceNV = (PFNWGLBINDVIDEOCAPTUREDEVICENVPROC)gleIntGetProcAddress("wglBindVideoCaptureDeviceNV");
-	if(!TestPointer(wglBindVideoCaptureDeviceNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglBindVideoCaptureDeviceNV)) bIsLoaded = 0;
 	wglEnumerateVideoCaptureDevicesNV = (PFNWGLENUMERATEVIDEOCAPTUREDEVICESNVPROC)gleIntGetProcAddress("wglEnumerateVideoCaptureDevicesNV");
-	if(!TestPointer(wglEnumerateVideoCaptureDevicesNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglEnumerateVideoCaptureDevicesNV)) bIsLoaded = 0;
 	wglLockVideoCaptureDeviceNV = (PFNWGLLOCKVIDEOCAPTUREDEVICENVPROC)gleIntGetProcAddress("wglLockVideoCaptureDeviceNV");
-	if(!TestPointer(wglLockVideoCaptureDeviceNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglLockVideoCaptureDeviceNV)) bIsLoaded = 0;
 	wglQueryVideoCaptureDeviceNV = (PFNWGLQUERYVIDEOCAPTUREDEVICENVPROC)gleIntGetProcAddress("wglQueryVideoCaptureDeviceNV");
-	if(!TestPointer(wglQueryVideoCaptureDeviceNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglQueryVideoCaptureDeviceNV)) bIsLoaded = 0;
 	wglReleaseVideoCaptureDeviceNV = (PFNWGLRELEASEVIDEOCAPTUREDEVICENVPROC)gleIntGetProcAddress("wglReleaseVideoCaptureDeviceNV");
-	if(!TestPointer(wglReleaseVideoCaptureDeviceNV)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglReleaseVideoCaptureDeviceNV)) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -727,5 +727,5 @@ void wgleIntLoadBaseFuncs()
 {
 	int bIsLoaded = 1; //Unimportant here.
 	wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC)gleIntGetProcAddress("wglGetExtensionsStringARB");
-	if(!TestPointer(wglGetExtensionsStringARB)) bIsLoaded = 0;
+	if(!TestPointer((const void*)wglGetExtensionsStringARB)) bIsLoaded = 0;
 }
