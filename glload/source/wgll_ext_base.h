@@ -2,6 +2,11 @@
 #define WGLL_EXT_BASE_H
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif //__cplusplus
+
+
 #ifdef __wglext_h_
 #error Attempt to include wgle after including wglext.h
 #endif
@@ -67,6 +72,11 @@ typedef const char * (GLE_FUNCPTR * PFNWGLGETEXTENSIONSSTRINGARBPROC)(HDC hdc);
 extern PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB;
 
 void wgleIntLoadBaseFuncs();
+
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 
 #endif //WGLL_EXT_BASE_H

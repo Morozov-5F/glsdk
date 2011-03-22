@@ -94,10 +94,6 @@ function MakeMainHeaderFile(outFilename, specData, funcPrefix, VersionFunc, base
 	hFile:write(GetFileIncludeGuardStart(defineName));
 	hFile:write("\n");
 
-	if(baseData and baseData.funcs) then
-
-	end
-
 	hFile:write("#include \"gll_util.h\"\n");
 	hFile:write("\n");
 
@@ -137,6 +133,9 @@ function MakeMainHeaderFile(outFilename, specData, funcPrefix, VersionFunc, base
 	    hFile:write(GetFileIncludeGuardStart(defineName));
 	    hFile:write("\n");
 	    
+	    hFile:write(GetExternCStart());
+	    hFile:write("\n");
+
 		if(baseData.preceedData) then
 			for i, preceed in ipairs(baseData.preceedData) do
 				hFile:write(preceed);
@@ -161,6 +160,8 @@ function MakeMainHeaderFile(outFilename, specData, funcPrefix, VersionFunc, base
 				hFile:write("\n");
 			end
 		end
+	    hFile:write("\n");
+	    hFile:write(GetExternCEnd());
 	    hFile:write("\n");
     	hFile:write(GetFileIncludeGuardEnd(defineName));
 	    hFile:write("\n");

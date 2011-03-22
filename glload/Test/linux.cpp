@@ -261,6 +261,8 @@ int main (int argc, char ** argv)
  
   printf( "Making context current\n" );
   glXMakeCurrent( display, win, ctx );
+  
+  glload::LoadFunctions();
  
   glClearColor ( 0, 0.5, 1, 1 );
   glClear ( GL_COLOR_BUFFER_BIT );

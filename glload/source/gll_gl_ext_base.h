@@ -2,6 +2,11 @@
 #define GLL_GL_EXT_BASE_H
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif //__cplusplus
+
+
 #if defined(__gl_h_) || defined(__GL_H__)
 #error Attempt to include gle after including gl.h
 #endif
@@ -169,6 +174,11 @@ void gleIntLoadBaseFuncs();
 	#undef GLE_REMOVE_APIENTRY
 	#undef APIENTRY
 #endif //GLE_REMOVE_APIENTRY
+
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 
 #endif //GLL_GL_EXT_BASE_H
