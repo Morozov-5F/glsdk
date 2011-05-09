@@ -48,10 +48,10 @@ namespace glimg
 		FMT_COLOR_RED,					///<Image contains 1 color component, namely red.
 		FMT_COLOR_RG,					///<Image contains 2 color components, red and green.
 		FMT_COLOR_RGB,					///<Image contains 3 color components, red, green, and blue.
-		FMT_COLOR_RGBX,					///<Image contains 3 color components, red, green, and blue. There is a fourth component, which should be discarded.
+		FMT_COLOR_RGBX,					///<Image contains 3 color components, red, green, and blue. There is a fourth component, which takes up space but should be discarded.
 		FMT_COLOR_RGBA,					///<Image contains 4 color components, red, green, blue, and alpha.
 		FMT_COLOR_RGB_sRGB,				///<Image contains 3 color components, which are in the sRGB colorspace.
-		FMT_COLOR_RGBX_sRGB,			///<Image contains 3 color components, which are in the sRGB colorspace. There is a fourth component, which should be discarded.
+		FMT_COLOR_RGBX_sRGB,			///<Image contains 3 color components, which are in the sRGB colorspace. There is a fourth component,  which takes up space but should be discarded.
 		FMT_COLOR_RGBA_sRGB,			///<Image contains 4 color components; the RGB components are in the sRGB colorspace.
 
 		FMT_DEPTH,						///<Image contains a single depth component.
@@ -65,6 +65,8 @@ namespace glimg
 
 	This enumeration specifies the ordering of the components in the image's values. Values that are
 	missing from the BaseDataFormat are ignored.
+
+	Some combinations of order and bitdepth are not allowed.
 	**/
 	enum ComponentOrder
 	{
@@ -127,12 +129,21 @@ namespace glimg
 		Bitdepth eBitdepth;
 	};
 
+	namespace detail
+	{
+		class ImageSetImpl;
+	}
+
+	class ImageSet;
+
 	/**
 	\brief Represents a single image of a certain dimensionality.
 	**/
 	class Image
 	{
 	public:
+		~Image();
+
 		int GetDimensions() const;
 		int GetPixelWidth() const;
 		int GetPixelHeight() const;
@@ -143,6 +154,15 @@ namespace glimg
 		const void *GetImageData() const;
 
 	private:
+		const detail::ImageSetImpl *m_pImpl;
+		int m_arrayIx;
+		int m_faceIx;
+		int m_mipmapLevel;
+
+		friend class ImageSetImpl;
+		friend class ImageSet;
+
+		Image(const detail::ImageSetImpl *pImpl, int arrayIx, int faceIx, int mipmapLevel);
 	};
 
 	/**
@@ -154,6 +174,8 @@ namespace glimg
 	class ImageSet
 	{
 	public:
+		~ImageSet();
+
 		/**
 		\brief Returns the number of dimensions that the images in this image set have.
 		
@@ -166,6 +188,9 @@ namespace glimg
 		\brief Returns the number of array images this image set has.
 
 		This function will return the number of array images in the image set. The minimum is 1.
+
+		The API makes no distinction between an array of length 1 and a non-array texture.
+		If such a distinction needs to be made, it should be made in the uploading, not in the storage.
 		**/
 		int GetArrayCount() const;
 
@@ -224,6 +249,9 @@ namespace glimg
 		const void *GetImageArray(int ixMipmapLevel) const;
 
 	private:
+		detail::ImageSetImpl *m_pImpl;
+
+		explicit ImageSet(detail::ImageSetImpl *pImpl);
 	};
 }
 
