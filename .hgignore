@@ -1,0 +1,16 @@
+syntax: glob
+*.manifest
+*.res
+*.obj
+*.dep
+*.exe
+*.ilk
+*.idb
+*.ncb
+*.pdb
+*.sln
+*.suo
+*.vcproj
+*.user
+BuildLog.htm
+*.lib
