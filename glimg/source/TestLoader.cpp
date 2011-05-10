@@ -16,6 +16,9 @@ namespace
 
 		std::vector<PixelArray> pixelDataArray;
 	};
+
+	const int TEST_WIDTH = 16;
+	const int TEST_HEIGHT = 16;
 }
 
 glimg::ImageSet *glimg::loaders::TestImage()
@@ -24,12 +27,41 @@ glimg::ImageSet *glimg::loaders::TestImage()
 	pMemory->pixelDataArray.resize(1);
 
 	PixelArray &pixelData = pMemory->pixelDataArray[0];
-	pixelData.resize(16*16*4, 255);
+	pixelData.resize(TEST_WIDTH*TEST_HEIGHT*4, 128);
 
 	//Fill in the data.
+	for(int xLoc = 0; xLoc < TEST_WIDTH/2; xLoc++)
+	{
+		for(int yLoc = 0; yLoc < TEST_HEIGHT/2; yLoc++)
+		{
+			int index = (yLoc * TEST_WIDTH + xLoc) * 4;
+			pixelData[index + 0] = 255;
+			pixelData[index + 1] = 0;
+			pixelData[index + 2] = 0;
+			pixelData[index + 3] = 255;
+
+			index = (yLoc * TEST_WIDTH + (xLoc + TEST_WIDTH/2)) * 4;
+			pixelData[index + 0] = 0;
+			pixelData[index + 1] = 128;
+			pixelData[index + 2] = 0;
+			pixelData[index + 3] = 255;
+
+			index = ((yLoc + TEST_HEIGHT/2) * TEST_WIDTH + xLoc) * 4;
+			pixelData[index + 0] = 128;
+			pixelData[index + 1] = 128;
+			pixelData[index + 2] = 255;
+			pixelData[index + 3] = 255;
+
+			index = ((yLoc + TEST_HEIGHT/2) * TEST_WIDTH + (xLoc + TEST_WIDTH/2)) * 4;
+			pixelData[index + 0] = 192;
+			pixelData[index + 1] = 192;
+			pixelData[index + 2] = 192;
+			pixelData[index + 3] = 255;
+		}
+	}
 
 	//Make an image creator and create the image.
-	ImageDimensions dims;
+	Dimensions dims;
 	dims.numDimensions = 2;
 	dims.depth = 0;
 	dims.width = 16;

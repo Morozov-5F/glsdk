@@ -30,13 +30,13 @@ namespace glimg
 	class MemoryObject
 	{
 	public:
-		virtual ~MemoryObject() = 0;
+		virtual ~MemoryObject() {}
 	};
 
 	class ImageCreator
 	{
 	public:
-		ImageCreator(MemoryObject *pObject, ImageDimensions dimensions, int arrayCount, int mipmapCount,
+		ImageCreator(MemoryObject *pObject, Dimensions dimensions, int arrayCount, int mipmapCount,
 			int faceCount, ImageFormat format);
 
 		~ImageCreator();
@@ -51,7 +51,7 @@ namespace glimg
 		ImageSet *CreateImage();
 
 	private:
-		ImageDimensions m_dimensions;
+		Dimensions m_dimensions;
 		ImageFormat m_format;
 		MemoryObject *m_pObject;
 		int m_arrayCount;

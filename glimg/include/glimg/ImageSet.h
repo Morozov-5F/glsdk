@@ -129,7 +129,7 @@ namespace glimg
 		Bitdepth eBitdepth;
 	};
 
-	struct ImageDimensions
+	struct Dimensions
 	{
 		int numDimensions;
 		int width;
@@ -152,7 +152,7 @@ namespace glimg
 	public:
 		~Image();
 
-		ImageDimensions GetDimensions() const;
+		Dimensions GetDimensions() const;
 
 		ImageFormat GetFormat() const;
 
@@ -189,7 +189,7 @@ namespace glimg
 		the base image size will be 0 for the dimensions that aren't present. For example, if
 		the image is 2D, the ImageDimensions::depth will be zero.
 		**/
-		ImageDimensions GetDimensions() const;
+		Dimensions GetDimensions() const;
 
 		/**
 		\brief Returns the number of array images this image set has.
@@ -226,9 +226,9 @@ namespace glimg
 		/**
 		\brief Retrieves the image at the given array index, face index, and mipmap level.
 		
-		\return A pointer to the image. DO NOT DELETE THIS POINTER. Also, do not use it after this object is destroyed.
+		\return A pointer to the image. Do not use it after the ImageSet object is destroyed. This pointer must be deleted manually.
 		**/
-		const Image *GetImage(int ixMipmapLevel, int ixArray = 0, int ixFace = 0) const;
+		Image *GetImage(int ixMipmapLevel, int ixArray = 0, int ixFace = 0) const;
 
 		/**
 		\brief Retrieves a pointer to the full array data for a mipmap level.

@@ -27,13 +27,13 @@ namespace glimg
 		class ImageSetImpl
 		{
 		public:
-			ImageSetImpl(MemoryObject *pObject, ImageDimensions dimensions,
+			ImageSetImpl(MemoryObject *pObject, Dimensions dimensions,
 				int arrayCount, int mipmapCount, int faceCount, ImageFormat format,
 				std::vector<MipmapLevel> &swapThisIn);
 
 			~ImageSetImpl() {delete m_pMemory;}
 
-			ImageDimensions GetDimensions() const {return m_dimensions;}
+			Dimensions GetDimensions() const {return m_dimensions;}
 
 			int GetArrayCount() const {return m_arrayCount;}
 			int GetMipmapCount() const {return m_mipmapCount;}
@@ -41,8 +41,16 @@ namespace glimg
 
 			ImageFormat GetImageFormat() const {return m_format;}
 
+			const MipmapLevel &GetMipmapLevel(int mipmapIx) const {return m_imageData.at(mipmapIx);}
+
+			const void *OffsetPointerForImage(int mipmapIx, int arrayIx, int faceIx) const
+			{
+				//TODO: Implement this properly.
+				return m_imageData.at(mipmapIx).fullPixelData.pPixelData;
+			}
+
 		private:
-			ImageDimensions m_dimensions;
+			Dimensions m_dimensions;
 			ImageFormat m_format;
 			MemoryObject *m_pMemory;
 			int m_arrayCount;

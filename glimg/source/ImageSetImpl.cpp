@@ -2,7 +2,7 @@
 #include "ImageSetImpl.h"
 
 
-glimg::detail::ImageSetImpl::ImageSetImpl( MemoryObject *pObject, ImageDimensions dimensions,
+glimg::detail::ImageSetImpl::ImageSetImpl( MemoryObject *pObject, Dimensions dimensions,
 										  int arrayCount, int mipmapCount, int faceCount,
 										  ImageFormat format, std::vector<MipmapLevel> &swapThisIn )
 										  : m_dimensions(dimensions)

@@ -7,7 +7,7 @@
 
 namespace glimg
 {
-	ImageCreator::ImageCreator( MemoryObject *pObject, ImageDimensions dimensions,
+	ImageCreator::ImageCreator( MemoryObject *pObject, Dimensions dimensions,
 		int arrayCount, int mipmapCount, int faceCount, ImageFormat format )
 		: m_dimensions(dimensions)
 		, m_format(format)
@@ -203,6 +203,9 @@ namespace glimg
 			m_arrayCount, m_mipmapCount, m_faceCount, m_format, mipmapList);
 
 		ImageSet *pImageSet = new ImageSet(pImageData);
+
+		//Transfer ownership.
+		m_pObject = NULL;
 
 		return pImageSet;
 	}

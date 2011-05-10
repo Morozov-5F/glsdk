@@ -21,7 +21,7 @@ namespace glimg
 			return origSize;
 		}
 
-		ImageDimensions ModifySizeForMipmap(ImageDimensions origDim, int mipmapLevel)
+		Dimensions ModifySizeForMipmap(Dimensions origDim, int mipmapLevel)
 		{
 			for(int iLoop = 0; iLoop < mipmapLevel; iLoop++)
 			{
@@ -44,7 +44,7 @@ namespace glimg
 	Image::~Image()
 	{}
 
-	glimg::ImageDimensions Image::GetDimensions() const
+	glimg::Dimensions Image::GetDimensions() const
 	{
 		return ModifySizeForMipmap(m_pImpl->GetDimensions(), m_mipmapLevel);
 	}
@@ -54,6 +54,20 @@ namespace glimg
 		return m_pImpl->GetImageFormat();
 	}
 
+	const void * Image::GetImageData() const
+	{
+		const detail::MipmapLevel &mipmapData = m_pImpl->GetMipmapLevel(m_mipmapLevel);
+
+		if(mipmapData.bFullLayer)
+		{
+			return m_pImpl->OffsetPointerForImage(m_mipmapLevel, m_arrayIx, m_faceIx);
+		}
+		else
+		{
+			int dataIx = m_pImpl->GetArrayCount() * m_arrayIx + m_faceIx;
+			return mipmapData.individualDataList[dataIx].pPixelData;
+		}
+	}
 
 ///////////////////////////////////////////////////////////
 	ImageSet::ImageSet( detail::ImageSetImpl *pImpl )
@@ -65,7 +79,7 @@ namespace glimg
 		delete m_pImpl;
 	}
 
-	glimg::ImageDimensions ImageSet::GetDimensions() const
+	glimg::Dimensions ImageSet::GetDimensions() const
 	{
 		return m_pImpl->GetDimensions();
 	}
@@ -90,7 +104,7 @@ namespace glimg
 		return m_pImpl->GetImageFormat();
 	}
 
-	const Image * ImageSet::GetImage( int ixMipmapLevel, int ixArray, int ixFace ) const
+	Image * ImageSet::GetImage( int ixMipmapLevel, int ixArray, int ixFace ) const
 	{
 		return new Image(m_pImpl, ixArray, ixFace, ixMipmapLevel);
 	}
