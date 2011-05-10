@@ -1,40 +1,57 @@
 
+#ifndef GLIMG_IMAGE_SET_IMPL_H
+#define GLIMG_IMAGE_SET_IMPL_H
+
 #include "glimg/ImageSet.h"
+#include "glimg/ImageCreator.h"
 
 
 namespace glimg
 {
 	namespace detail
 	{
+		struct PixelData
+		{
+			const void *pPixelData;
+		};
+
+		struct MipmapLevel
+		{
+			bool bFullLayer;
+			PixelData fullPixelData;
+			//This array is indexed with an arrayIx and faceIx. It is indexed
+			//as follows: (arrayIx * arrayCount) + faceIx
+			std::vector<PixelData> individualDataList;
+		};
+
 		class ImageSetImpl
 		{
 		public:
-			ImageSetImpl();
+			ImageSetImpl(MemoryObject *pObject, ImageDimensions dimensions,
+				int arrayCount, int mipmapCount, int faceCount, ImageFormat format,
+				std::vector<MipmapLevel> &swapThisIn);
 
-			int GetDimensions() const {return m_numDimensions;}
+			~ImageSetImpl() {delete m_pMemory;}
+
+			ImageDimensions GetDimensions() const {return m_dimensions;}
+
 			int GetArrayCount() const {return m_arrayCount;}
 			int GetMipmapCount() const {return m_mipmapCount;}
 			int GetFaceCount() const {return m_faceCount;}
 
-			int GetWidth() const {return m_width;}
-			int GetHeight() const {return m_height;}
-			int GetDepth() const {return m_depth;}
-
-			glimg::ImageFormat GetImageFormat() const {return m_format;}
+			ImageFormat GetImageFormat() const {return m_format;}
 
 		private:
-			int m_numDimensions;
+			ImageDimensions m_dimensions;
+			ImageFormat m_format;
+			MemoryObject *m_pMemory;
 			int m_arrayCount;
 			int m_mipmapCount;
 			int m_faceCount;
 
-			int m_width;
-			int m_height;
-			int m_depth;
-
-			glimg::ImageFormat m_format;
-
+			std::vector<MipmapLevel> m_imageData;
 		};
 	}
 }
 
+#endif // GLIMG_IMAGE_SET_IMPL_H

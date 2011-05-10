@@ -1,6 +1,6 @@
 
-#ifndef IMAGE_SET_H
-#define IMAGE_SET_H
+#ifndef GLIMG_IMAGE_SET_H
+#define GLIMG_IMAGE_SET_H
 
 namespace glimg
 {
@@ -129,6 +129,14 @@ namespace glimg
 		Bitdepth eBitdepth;
 	};
 
+	struct ImageDimensions
+	{
+		int numDimensions;
+		int width;
+		int height;
+		int depth;
+	};
+
 	namespace detail
 	{
 		class ImageSetImpl;
@@ -144,10 +152,7 @@ namespace glimg
 	public:
 		~Image();
 
-		int GetDimensions() const;
-		int GetPixelWidth() const;
-		int GetPixelHeight() const;
-		int GetPixelDepth() const;
+		ImageDimensions GetDimensions() const;
 
 		ImageFormat GetFormat() const;
 
@@ -159,7 +164,7 @@ namespace glimg
 		int m_faceIx;
 		int m_mipmapLevel;
 
-		friend class ImageSetImpl;
+		friend class detail::ImageSetImpl;
 		friend class ImageSet;
 
 		Image(const detail::ImageSetImpl *pImpl, int arrayIx, int faceIx, int mipmapLevel);
@@ -177,12 +182,14 @@ namespace glimg
 		~ImageSet();
 
 		/**
-		\brief Returns the number of dimensions that the images in this image set have.
+		\brief Returns the number of dimensions in this image set, as well as the size of the base mipmap image.
 		
 		This function will return the number of dimensions that the images in the image set contains.
-		This is a number on the range [1, 3].
+		It also returns the size in pixels of the base image. For dimensions less than 3,
+		the base image size will be 0 for the dimensions that aren't present. For example, if
+		the image is 2D, the ImageDimensions::depth will be zero.
 		**/
-		int GetDimensions() const;
+		ImageDimensions GetDimensions() const;
 
 		/**
 		\brief Returns the number of array images this image set has.
@@ -211,24 +218,6 @@ namespace glimg
 		int GetFaceCount() const;
 
 		/**
-		\brief Returns the width in pixels of the largest mipmap layer.
-		
-		**/
-		int GetPixelWidth() const;
-
-		/**
-		\brief Returns the height in pixels of the largest mipmap layer.
-		
-		**/
-		int GetPixelHeight() const;
-
-		/**
-		\brief Returns the depth in pixels of the largest mipmap layer.
-		
-		**/
-		int GetPixelDepth() const;
-
-		/**
 		\brief Retrieves the image format that describes all images in this ImageSet.
 		
 		**/
@@ -252,8 +241,10 @@ namespace glimg
 		detail::ImageSetImpl *m_pImpl;
 
 		explicit ImageSet(detail::ImageSetImpl *pImpl);
+
+		friend class ImageCreator;
 	};
 }
 
 
-#endif //IMAGE_SET_H
+#endif //GLIMG_IMAGE_SET_H
