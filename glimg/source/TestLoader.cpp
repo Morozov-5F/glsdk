@@ -72,6 +72,7 @@ glimg::ImageSet *glimg::loaders::TestImage()
 	fmt.eFormat = FMT_COLOR_RGBA;
 	fmt.eOrder = ORDER_RGBA;
 	fmt.eBitdepth = BD_PER_COMP_8;
+	fmt.lineAlignment = 1;
 
 	ImageCreator imgCreator(pMemory, dims, 1, 1, 1, fmt);
 
