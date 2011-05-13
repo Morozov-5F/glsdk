@@ -25,10 +25,10 @@ namespace glimg
 		DT_COMPRESSED_BC1 = DT_NUM_UNCOMPRESSED_TYPES,	///<Image data is compressed with DXT1/BC1 compression. Unsigned normalized integers.
 		DT_COMPRESSED_BC2,					///<Image data is compressed with DXT3/BC2 compression. Unsigned normalized integers.
 		DT_COMPRESSED_BC3,					///<Image data is compressed with DXT5/BC3 compression. Unsigned normalized integers.
-		DT_COMPRESSED_UNSIGNED_BC4,			///<Image is compressed with BC4 compression, with unsigned normalized integers.
-		DT_COMPRESSED_SIGNED_BC4,			///<Image is compressed with BC4 compression, with signed normalized integers.
-		DT_COMPRESSED_UNSIGNED_BC5,			///<Image is compressed with BC5 compression, with unsigned normalized integers.
-		DT_COMPRESSED_SIGNED_BC5,			///<Image is compressed with BC5 compression, with signed normalized integers.
+		DT_COMPRESSED_UNSIGNED_BC4,			///<Image is compressed with BC4 compression (1-component), with unsigned normalized integers.
+		DT_COMPRESSED_SIGNED_BC4,			///<Image is compressed with BC4 compression (1-component), with signed normalized integers.
+		DT_COMPRESSED_UNSIGNED_BC5,			///<Image is compressed with BC5 compression (2-component), with unsigned normalized integers.
+		DT_COMPRESSED_SIGNED_BC5,			///<Image is compressed with BC5 compression (2-component), with signed normalized integers.
 		DT_COMPRESSED_UNSIGNED_BC6H,		///<Image is compressed with BC6H compression, with unsigned floats [0, +inf).
 		DT_COMPRESSED_SIGNED_BC6H,			///<Image is compressed with BC6H compression, with floats.
 		DT_COMPRESSED_BC7,					///<Image data is compressed with BC7 compression. Unsigned normalized integers.
@@ -48,10 +48,10 @@ namespace glimg
 		FMT_COLOR_RED,					///<Image contains 1 color component, namely red.
 		FMT_COLOR_RG,					///<Image contains 2 color components, red and green.
 		FMT_COLOR_RGB,					///<Image contains 3 color components, red, green, and blue.
-		FMT_COLOR_RGBX,					///<Image contains 3 color components, red, green, and blue. There is a fourth component, which takes up space but should be discarded.
+		FMT_COLOR_RGBX,					///<Image contains 3 color components, red, green, and blue. There is a fourth component, which takes up space in the data but should be discarded.
 		FMT_COLOR_RGBA,					///<Image contains 4 color components, red, green, blue, and alpha.
 		FMT_COLOR_RGB_sRGB,				///<Image contains 3 color components, which are in the sRGB colorspace.
-		FMT_COLOR_RGBX_sRGB,			///<Image contains 3 color components, which are in the sRGB colorspace. There is a fourth component,  which takes up space but should be discarded.
+		FMT_COLOR_RGBX_sRGB,			///<Image contains 3 color components, which are in the sRGB colorspace. There is a fourth component,  which takes up space in the data but should be discarded.
 		FMT_COLOR_RGBA_sRGB,			///<Image contains 4 color components; the RGB components are in the sRGB colorspace.
 
 		FMT_DEPTH,						///<Image contains a single depth component.
@@ -107,13 +107,12 @@ namespace glimg
 		BD_PER_COMP_8,					///<Each component takes up 8 bits.
 		BD_PER_COMP_16,					///<Each component takes up 16 bits.
 		BD_PER_COMP_32,					///<Each component takes up 32 bits.
+		BD_NUM_PER_COMPONENT,			
 
-		BD_PACKED_16_BIT_565,			///<The first and third components take up 5 bits, while the second takes up 6.
+		BD_PACKED_16_BIT_565 = BD_NUM_PER_COMPONENT,///<The first and third components take up 5 bits, while the second takes up 6.
 		BD_PACKED_16_BIT_5551,			///<The first three components take up 5 bits, and the last takes up 1.
-		BD_PACKED_16_BIT_1555,			///<The first component takes up 1 bit, the last three take up 5.
 
 		BD_PACKED_32_BIT_1010102,		///<The first three components take up 10 bits, and the last takes up 2.
-		BD_PACKED_32_BIT_2101010,		///<The first component takes up 2 bits, and the last three takes up 10 bits.
 		BD_PACKED_32_BIT_5999,			///<The first component takes up 5 bits, and the next three take up 9. Used for DT_SHARED_EXP_FLOAT types. 
 		BD_PACKED_32_BIT_101111,		///<The first component takes up 10 bits, and the next two take up 11 bits.
 		BD_PACKED_32_BIT_248,			///<The first component takes up 24 bits; the second takes up 8 bits.
@@ -127,6 +126,10 @@ namespace glimg
 		BaseDataFormat eFormat;
 		ComponentOrder eOrder;
 		Bitdepth eBitdepth;
+
+		int lineAlignment;
+
+		bool ValidateFormat() const;
 	};
 
 	struct Dimensions

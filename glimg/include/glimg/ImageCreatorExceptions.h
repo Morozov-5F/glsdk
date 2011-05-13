@@ -14,6 +14,15 @@ namespace glimg
 		std::string message;
 	};
 
+	class InvalidImageFormatException : public ImageCreationException
+	{
+	public:
+		InvalidImageFormatException()
+		{
+			message = "ImageCreator was given an invalid image format.";
+		}
+	};
+
 	class MissingImageException : public ImageCreationException
 	{
 	public:

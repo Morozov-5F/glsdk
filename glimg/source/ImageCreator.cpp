@@ -18,6 +18,12 @@ namespace glimg
 	{
 		assert(m_pObject);
 		assert(m_faceCount == 6 || m_faceCount == 1);
+
+		if(!m_format.ValidateFormat())
+		{
+			delete(m_pObject);
+			throw InvalidImageFormatException();
+		}
 	}
 
 	ImageCreator::~ImageCreator()
