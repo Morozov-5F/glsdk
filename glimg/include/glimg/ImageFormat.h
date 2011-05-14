@@ -1,6 +1,8 @@
 #ifndef GLIMG_IMAGE_FORMAT_H
 #define GLIMG_IMAGE_FORMAT_H
 
+#include <string>
+
 namespace glimg
 {
 	/**
@@ -71,9 +73,7 @@ namespace glimg
 	{
 		ORDER_RGBA,
 		ORDER_BGRA,
-		ORDER_ARGB,
-		ORDER_ABGR,
-		ORDER_EBGR,				///<For DT_SHARED_EXP_FLOAT types. The E is the exponent, and it comes first.
+		ORDER_RGBE,				///<For DT_SHARED_EXP_FLOAT types. The E is the exponent, and it comes first.
 
 		ORDER_DEPTH_STENCIL,	///<Ordering for depth and depth-stencil image formats.
 
@@ -102,7 +102,6 @@ namespace glimg
 	{
 		BD_COMPRESSED,					///<Used for compressed data types. They do not have a bitdepth.
 
-		BD_PER_COMP_4,					///<Each component takes up 4 bits.
 		BD_PER_COMP_8,					///<Each component takes up 8 bits.
 		BD_PER_COMP_16,					///<Each component takes up 16 bits.
 		BD_PER_COMP_32,					///<Each component takes up 32 bits.
@@ -110,11 +109,20 @@ namespace glimg
 
 		BD_PACKED_16_BIT_565 = BD_NUM_PER_COMPONENT,///<The first and third components take up 5 bits, while the second takes up 6.
 		BD_PACKED_16_BIT_5551,			///<The first three components take up 5 bits, and the last takes up 1.
+		BD_PACKED_16_BIT_4444,			///<Each component takes up 4 bits.
 
+		BD_PACKED_32_BIT_8888,			///<Each component takes up 8 bits.
 		BD_PACKED_32_BIT_1010102,		///<The first three components take up 10 bits, and the last takes up 2.
-		BD_PACKED_32_BIT_5999,			///<The first component takes up 5 bits, and the next three take up 9. Used for DT_SHARED_EXP_FLOAT types. 
-		BD_PACKED_32_BIT_101111,		///<The first component takes up 10 bits, and the next two take up 11 bits.
 		BD_PACKED_32_BIT_248,			///<The first component takes up 24 bits; the second takes up 8 bits.
+
+		BD_PACKED_16_BIT_565_REV,		///<Reverse order. The first and third components take up 5 bits, while the second takes up 6.
+		BD_PACKED_16_BIT_1555_REV,		///<Reverse order. The first three components take up 5 bits, and the last takes up 1.
+		BD_PACKED_16_BIT_4444_REV,		///<Reverse order. Each component takes up 4 bits.
+
+		BD_PACKED_32_BIT_8888_REV,		///<Reverse order. Each component takes up 8 bits.
+		BD_PACKED_32_BIT_2101010_REV,	///<Reverse order. The first three components take up 10 bits, and the last takes up 2.
+		BD_PACKED_32_BIT_101111_REV,	///<Reverse order. The first two components take 11 bits, and the third takes 10. Used for DT_FLOAT types.
+		BD_PACKED_32_BIT_5999_REV,		///<Reverse order. The first 3 components take 9 bits, and the last takes 5. Used for DT_SHARED_EXP_FLOAT types. 
 
 		BD_NUM_BITDEPTH,
 	};
@@ -129,6 +137,7 @@ namespace glimg
 		int lineAlignment;
 
 		bool ValidateFormat() const;
+		std::string ValidateFormatText() const;
 	};
 
 }

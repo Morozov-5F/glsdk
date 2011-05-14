@@ -19,10 +19,11 @@ namespace glimg
 		assert(m_pObject);
 		assert(m_faceCount == 6 || m_faceCount == 1);
 
-		if(!m_format.ValidateFormat())
+		const std::string &msg = m_format.ValidateFormatText();
+		if(!msg.empty())
 		{
 			delete(m_pObject);
-			throw InvalidImageFormatException();
+			throw InvalidImageFormatException(msg);
 		}
 	}
 
