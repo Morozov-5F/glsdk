@@ -223,6 +223,8 @@ namespace glimg
 			}
 		}
 
+		//TODO: Normalized types cannot use 32-bit per-component.
+
 		return std::string();
 	}
 }

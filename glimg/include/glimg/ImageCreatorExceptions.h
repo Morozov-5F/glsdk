@@ -2,6 +2,8 @@
 #ifndef GLIMG_IMAGE_CREATOR_EXCEPTIONS_H
 #define GLIMG_IMAGE_CREATOR_EXCEPTIONS_H
 
+#include <exception>
+
 namespace glimg
 {
 	class ImageCreationException : public std::exception
