@@ -94,7 +94,6 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		glVertex3f(0.5, 0.5, 0);
 		glVertex3f(0.5, -0.5, 0);
 		glVertex3f(-0.5, -0.5, 0);
-
 	}
 	glEnd();
 
@@ -479,17 +478,15 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
 	TestImageFormats();
 
-	glimg::ImageSet *pImgSet = glimg::loaders::TestImage();
-	glimg::Image *pImg = pImgSet->GetImage(0);
+//	glimg::ImageSet *pImgSet = glimg::loaders::test::TestImage2D();
+	glimg::ImageSet *pImgSet = glimg::loaders::stb::LoadFromFile("bitmap.png");
 
-	glDeleteTextures(1, &texture);
 	texture = glimg::CreateTexture(pImgSet, 0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	delete pImg;
 	delete pImgSet;
 
 	while(!done)									// Loop That Runs While done=FALSE

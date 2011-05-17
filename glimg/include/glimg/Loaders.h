@@ -3,6 +3,7 @@
 
 
 #include "TestLoader.h"
+#include "StbLoader.h"
 
 
 #endif //GLIMG_LOADERS_H

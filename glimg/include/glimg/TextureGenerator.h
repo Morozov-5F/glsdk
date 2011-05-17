@@ -12,6 +12,7 @@ namespace glimg
 		FORCE_BC1_ALPHA_TEXTURE		= 0x0002,	///<When used with a BC1 texture, will force the texture to have an alpha.
 		FORCE_ARRAY_TEXTURE			= 0x0004,	///<The texture will be an array texture even if the depth is one. Ignored for formats that can't be arrays. Will throw if array textures of that type are not supported (ie: cubemap arrays, 2D arrays for lesser hardware, etc).
 		FORCE_LUMINANCE_FORMATS		= 0x0008,	///<Red and RG textures will become luminance and luminance/alpha textures in all cases. Exceptions will be thrown if the GL implementation does not support those luminance/alpha formats.
+
 		FORCE_REQUIRED_FORMATS		= 0x0010,	///<Will only get image formats that are required to exist by OpenGL.
 		FORCE_INTEGRAL_FORMAT		= 0x0020,	///<Integer textures are considered integral.
 		FORCE_SIGNED_FORMAT			= 0x0040,	///<Unsigned integer textures are considered signed integers.

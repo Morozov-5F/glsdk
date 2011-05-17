@@ -21,7 +21,7 @@ namespace
 	const int TEST_HEIGHT = 16;
 }
 
-glimg::ImageSet *glimg::loaders::TestImage()
+glimg::ImageSet *glimg::loaders::test::TestImage2D()
 {
 	TestData *pMemory = new TestData;
 	pMemory->pixelDataArray.resize(1);

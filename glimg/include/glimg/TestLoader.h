@@ -8,7 +8,10 @@ namespace glimg
 {
 	namespace loaders
 	{
-		glimg::ImageSet *TestImage();
+		namespace test
+		{
+			glimg::ImageSet *TestImage2D();
+		}
 	}
 }
 

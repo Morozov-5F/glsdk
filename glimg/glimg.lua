@@ -9,6 +9,7 @@ project("glimg")
 		"include/glimg/*.h",
 		"source/*.h",
 		"source/*.cpp",
+		"source/*.c",
 	};
 
 	configuration "windows"
