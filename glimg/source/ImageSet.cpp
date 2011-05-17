@@ -5,31 +5,6 @@
 
 namespace glimg
 {
-	namespace
-	{
-		int ModifySizeForMipmap(int origSize, int mipmapLevel)
-		{
-			for(int iLoop = 0; iLoop < mipmapLevel; iLoop++)
-			{
-				origSize = origSize / 2;
-			}
-
-			return origSize;
-		}
-
-		Dimensions ModifySizeForMipmap(Dimensions origDim, int mipmapLevel)
-		{
-			for(int iLoop = 0; iLoop < mipmapLevel; iLoop++)
-			{
-				origDim.width /= 2;
-				origDim.height /= 2;
-				origDim.depth /= 2;
-			}
-
-			return origDim;
-		}
-	}
-
 	Image::Image( const detail::ImageSetImpl *pImpl, int arrayIx, int faceIx, int mipmapLevel )
 		: m_pImpl(pImpl)
 		, m_arrayIx(arrayIx)
@@ -42,12 +17,12 @@ namespace glimg
 
 	glimg::Dimensions Image::GetDimensions() const
 	{
-		return ModifySizeForMipmap(m_pImpl->GetDimensions(), m_mipmapLevel);
+		return m_pImpl->GetDimensions(m_mipmapLevel);
 	}
 
 	glimg::ImageFormat Image::GetFormat() const
 	{
-		return m_pImpl->GetImageFormat();
+		return m_pImpl->GetFormat();
 	}
 
 	const void * Image::GetImageData() const
@@ -97,7 +72,7 @@ namespace glimg
 
 	glimg::ImageFormat ImageSet::GetFormat() const
 	{
-		return m_pImpl->GetImageFormat();
+		return m_pImpl->GetFormat();
 	}
 
 	Image * ImageSet::GetImage( int ixMipmapLevel, int ixArray, int ixFace ) const

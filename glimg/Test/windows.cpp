@@ -6,6 +6,11 @@
 *		Visit My Site At nehe.gamedev.net
 */
 
+#include <stdio.h>
+#include <fcntl.h>
+#include <io.h>
+#include <iostream>
+#include <fstream>
 #include <windows.h>
 #include <tchar.h>
 #include <glload/gl_3_3_comp.h>
@@ -13,6 +18,8 @@
 #include <glload/gll.h>
 
 #include <glimg/glimg.h>
+#include <glimg/TextureGenerator.h>
+#include "test.h"
 
 HDC			hDC=NULL;		// Private GDI Device Context
 HGLRC		hRC=NULL;		// Permanent Rendering Context
@@ -407,6 +414,51 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 	return DefWindowProc(hWnd,uMsg,wParam,lParam);
 }
 
+void CreateOurConsoleWindow()
+{
+	int hConHandle;
+	intptr_t lStdHandle;
+	CONSOLE_SCREEN_BUFFER_INFO coninfo;
+	FILE *fp;
+
+	// allocate a console for this app
+	AllocConsole();
+
+	// set the screen buffer to be big enough to let us scroll text
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
+	coninfo.dwSize.Y = 500;
+	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
+
+	// redirect unbuffered STDOUT to the console
+	lStdHandle = (intptr_t)GetStdHandle(STD_OUTPUT_HANDLE);
+	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	fp = _fdopen( hConHandle, "w" );
+	*stdout = *fp;
+	setvbuf( stdout, NULL, _IONBF, 0 );
+
+	// redirect unbuffered STDIN to the console
+	lStdHandle = (intptr_t)GetStdHandle(STD_INPUT_HANDLE);
+	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	fp = _fdopen( hConHandle, "r" );
+	*stdin = *fp;
+	setvbuf( stdin, NULL, _IONBF, 0 );
+
+	// redirect unbuffered STDERR to the console
+	lStdHandle = (intptr_t)GetStdHandle(STD_ERROR_HANDLE);
+	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	fp = _fdopen( hConHandle, "w" );
+	*stderr = *fp;
+	setvbuf( stderr, NULL, _IONBF, 0 );
+
+	// make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog point to console as well
+	std::ios::sync_with_stdio();
+}
+
+void DestroyOurConsoleWindow()
+{
+	FreeConsole();
+}
+
 int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				   HINSTANCE	hPrevInstance,		// Previous Instance
 				   LPSTR		lpCmdLine,			// Command Line Parameters
@@ -417,26 +469,24 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
 	fullscreen = FALSE;							// Windowed Mode
 
+	CreateOurConsoleWindow();
+
 	// Create Our OpenGL Window
 	if (!CreateGLWindow(_T("NeHe's OpenGL Framework"),640,480,32,fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
 
+	TestImageFormats();
+
 	glimg::ImageSet *pImgSet = glimg::loaders::TestImage();
 	glimg::Image *pImg = pImgSet->GetImage(0);
 
-	glimg::Dimensions dim = pImg->GetDimensions();
-
-	glActiveTexture(GL_TEXTURE0);
-	glGenTextures(1, &texture);
+	glDeleteTextures(1, &texture);
+	texture = glimg::CreateTexture(pImgSet, 0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, dim.width, dim.height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-		pImg->GetImageData());
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	delete pImg;

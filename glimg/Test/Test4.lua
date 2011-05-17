@@ -4,6 +4,8 @@ project "Test"
 	language "c++"
 	includedirs { "../include", "../../glload/include" }
 	links {"glload", "glimg"}
+	
+	files {"test.cpp", "test.h"}
 
 	configuration "windows"
 		flags { "WinMain" }

@@ -23,6 +23,42 @@ namespace glimg
 		{
 			message = "The image format is not supported by this OpenGL implementation.";
 		}
+
+		explicit ImageFormatUnsupportedException(const std::string &msg)
+		{
+			message = "The image format is not supported by this OpenGL implementation for this reason:\n";
+			message += msg;
+		}
+	};
+
+	class TextureUnsupportedException : public TextureGenerationException
+	{
+	public:
+		TextureUnsupportedException()
+		{
+			message = "The texture type is not supported by this OpenGL implementation.";
+		}
+
+		explicit TextureUnsupportedException(const std::string &msg)
+		{
+			message = "The texture type is not supported by this OpenGL implementation for this reason:\n";
+			message += msg;
+		}
+	};
+
+	class TextureUnexpectedException : public TextureGenerationException
+	{
+	public:
+		TextureUnexpectedException()
+		{
+			message = "The texture type is not supported by glimg at this time.";
+		}
+
+		explicit TextureUnexpectedException(const std::string &msg)
+		{
+			message = "The texture type is not supported by glimg at this time:\n";
+			message += msg;
+		}
 	};
 
 	class CannotForceRenderTargetException : public TextureGenerationException
@@ -30,7 +66,7 @@ namespace glimg
 	public:
 		CannotForceRenderTargetException()
 		{
-			message = "The image format cannot be forced to be a renderable format without compromizing the data.";
+			message = "The image format cannot be forced to be a renderable format without compromising the data.";
 		}
 	};
 

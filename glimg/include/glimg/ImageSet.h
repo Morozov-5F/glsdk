@@ -120,6 +120,7 @@ namespace glimg
 		explicit ImageSet(detail::ImageSetImpl *pImpl);
 
 		friend class ImageCreator;
+		friend void CreateTexture(unsigned int textureName, const ImageSet *pImage, unsigned int forceConvertBits);
 	};
 }
 

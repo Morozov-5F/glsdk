@@ -34,12 +34,13 @@ namespace glimg
 			~ImageSetImpl() {delete m_pMemory;}
 
 			Dimensions GetDimensions() const {return m_dimensions;}
+			Dimensions GetDimensions(int mipmapLevel) const;
 
 			int GetArrayCount() const {return m_arrayCount;}
 			int GetMipmapCount() const {return m_mipmapCount;}
 			int GetFaceCount() const {return m_faceCount;}
 
-			ImageFormat GetImageFormat() const {return m_format;}
+			ImageFormat GetFormat() const {return m_format;}
 
 			const MipmapLevel &GetMipmapLevel(int mipmapIx) const {return m_imageData.at(mipmapIx);}
 

@@ -211,10 +211,10 @@ namespace glimg
 				return std::string("Single-component formats cannot work with packed bitdepths.");
 			case 2:
 				//Covered previously.
-				break;
+				return std::string("Non-depth two-component formats cannot work with packed bitdepths.");
 			case 3:
 				if(!IsOneOfThese<ARRAY_COUNT(g_threeCompBitdepths)>(eBitdepth, g_threeCompBitdepths))
-					return std::string("Must use 565 or 565_REV with 3-component formats.");
+					return std::string("The only packed formats available to 3-component formats are 565 or 565_REV.");
 				break;
 			case 4:
 				if(IsOneOfThese<ARRAY_COUNT(g_threeCompBitdepths)>(eBitdepth, g_threeCompBitdepths))
@@ -223,7 +223,19 @@ namespace glimg
 			}
 		}
 
-		//TODO: Normalized types cannot use 32-bit per-component.
+		//Normalized types cannot use 32-bit per-component.
+		if(eBitdepth == BD_PER_COMP_32)
+		{
+			if(eType == DT_NORM_UNSIGNED_INTEGER || eType == DT_NORM_SIGNED_INTEGER)
+				return std::string("Normalized integer formats cannot be used with 32-bit per-component data.");
+		}
+
+		//BGRA ordering can only use 3 and 4 component types.
+		if(eOrder == ORDER_BGRA)
+		{
+			if(ComponentCount(eFormat) < 3)
+				return std::string("BGRA ordering can only use 3 or 4 components.");
+		}
 
 		return std::string();
 	}
