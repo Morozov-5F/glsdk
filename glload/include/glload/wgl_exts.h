@@ -33,7 +33,7 @@ typedef float GLfloat;
 typedef float GLclampf;
 typedef double GLdouble;
 typedef double GLclampd;
-typedef void GLvoid;
+#define GLvoid void
 
 #ifndef WGL_ARB_pbuffer
 DECLARE_HANDLE(HPBUFFERARB);

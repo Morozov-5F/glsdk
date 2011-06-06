@@ -33,7 +33,7 @@ typedef float GLfloat;
 typedef float GLclampf;
 typedef double GLdouble;
 typedef double GLclampd;
-typedef void GLvoid;
+#define GLvoid void
 
 #ifndef APIENTRY
 	#define GLE_REMOVE_APIENTRY
@@ -54,6 +54,10 @@ typedef void GLvoid;
 	#define GLE_FUNCPTR APIENTRY
 #else
 	#define GLE_FUNCPTR
+#endif
+
+#ifndef GLAPI
+	#define GLAPI extern
 #endif
 
 #include <stddef.h>

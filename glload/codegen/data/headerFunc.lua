@@ -2,6 +2,8 @@
 definitions work.
 
 Part of it is taken from windows.h, to avoid having to include it everywhere that uses GL.
+
+The GLAPI part is to make glu.h work on certain platforms.
 ]]
 
 return [[
@@ -24,5 +26,9 @@ return [[
 	#define GLE_FUNCPTR APIENTRY
 #else
 	#define GLE_FUNCPTR
+#endif
+
+#ifndef GLAPI
+	#define GLAPI extern
 #endif
 ]]

@@ -33,7 +33,7 @@ typedef float GLfloat;
 typedef float GLclampf;
 typedef double GLdouble;
 typedef double GLclampd;
-typedef void GLvoid;
+#define GLvoid void
 
 #include <stddef.h>	
 	
