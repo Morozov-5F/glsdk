@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
           
-<refentry id="glDetachShader">
+<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glDetachShader">
     <refmeta>
     <refentrytitle>glDetachShader</refentrytitle>
     <manvolnum>3G</manvolnum>

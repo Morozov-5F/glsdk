@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 	      
-<refentry id="glVertexAttrib">
+<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glVertexAttrib">
     <refmeta>
 	<refentrytitle>glVertexAttrib</refentrytitle>
 	<manvolnum>3G</manvolnum>
