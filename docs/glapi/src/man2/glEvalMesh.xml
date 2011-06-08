@@ -127,8 +127,8 @@ for ( i = <parameter>i1</parameter>; i &lt;= <parameter>i2</parameter>; i += 1 )
 		      <mml:mrow>
 		          <mml:mrow>
 		              <mml:mn>i</mml:mn>
-			      <mml:mo>&CenterDot;</mml:mo>
-			      <mml:mo>&Delta;</mml:mo>
+			      <mml:mo>$#x00B7;</mml:mo>
+			      <mml:mo>$#x0394;</mml:mo>
 		              <mml:mi mathvariant="italic">u</mml:mi>
 		          </mml:mrow>
 		          <mml:mo>+</mml:mo>
@@ -147,7 +147,7 @@ glEnd();
                 <!-- eqn: DELTA u  =  (u sub 2  -  u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>&Delta;</mml:mo>
+                        <mml:mo>$#x0394;</mml:mo>
                         <mml:mi mathvariant="italic">u</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -208,9 +208,9 @@ glEnd();
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>&CenterDot;</mml:mo>
+                        <mml:mo>$#x00B7;</mml:mo>
                         <mml:mrow>
-                            <mml:mo>&Delta;</mml:mo>
+                            <mml:mo>$#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">u</mml:mi>
                         </mml:mrow>
                     </mml:mrow>
@@ -235,7 +235,7 @@ glEnd();
                 <!-- eqn: DELTA u  =    ( u sub 2  -  u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>&Delta;</mml:mo>
+                        <mml:mo>$#x0394;</mml:mo>
                         <mml:mi mathvariant="italic">u</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -261,7 +261,7 @@ glEnd();
                 <!-- eqn: DELTA v  =    ( v sub 2  -  v sub 1 )  /  m:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>&Delta;</mml:mo>
+                        <mml:mo>$#x0394;</mml:mo>
                         <mml:mi mathvariant="italic">v</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -326,8 +326,8 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -339,8 +339,8 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 			    <!-- j \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 
 			    </mml:mrow>
@@ -356,8 +356,8 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -377,8 +377,8 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 				        </mml:mrow>
 				    </mml:mfenced>
 				</mml:mrow>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -406,8 +406,8 @@ for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -419,8 +419,8 @@ for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
 			    <!-- i \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -441,8 +441,8 @@ for ( i = <parameter>i1</parameter>;  i &lt;= <parameter>i2</parameter>; i += 1 
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -454,8 +454,8 @@ for ( i = <parameter>i1</parameter>;  i &lt;= <parameter>i2</parameter>; i += 1 
 			    <!-- i \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -483,8 +483,8 @@ for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -496,8 +496,8 @@ for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
 			    <!-- i \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -526,9 +526,9 @@ glEnd();
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>&CenterDot;</mml:mo>
+                        <mml:mo>$#x00B7;</mml:mo>
                         <mml:mrow>
-                            <mml:mo>&Delta;</mml:mo>
+                            <mml:mo>$#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">u</mml:mi>
                         </mml:mrow>
                     </mml:mrow>
@@ -560,9 +560,9 @@ glEnd();
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">j</mml:mi>
-                        <mml:mo>&CenterDot;</mml:mo>
+                        <mml:mo>$#x00B7;</mml:mo>
                         <mml:mrow>
-                            <mml:mo>&Delta;</mml:mo>
+                            <mml:mo>$#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">v</mml:mi>
                         </mml:mrow>
                     </mml:mrow>

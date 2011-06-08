@@ -108,7 +108,7 @@
                 <!-- eqn: 1 times width:-->
                 <mml:mrow>
                     <mml:mn>1</mml:mn>
-                    <mml:mo>&times;</mml:mo>
+                    <mml:mo>$#x00D7;</mml:mo>
                     <mml:mi mathvariant="italic">width</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>

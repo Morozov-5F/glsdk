@@ -60,11 +60,11 @@
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">clamp</mml:mi>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">size</mml:mi>
-                                <mml:mo>&times;</mml:mo>
+                                <mml:mo>$#x00D7;</mml:mo>
                                 <mml:msqrt>
                                     <mml:mfenced open="" close="">
                                         <mml:mfenced open="(" close=")">
@@ -76,13 +76,13 @@
                                                         <mml:mo>+</mml:mo>
                                                         <mml:mrow>
                                                             <mml:mi mathvariant="italic">b</mml:mi>
-                                                            <mml:mo>&times;</mml:mo>
+                                                            <mml:mo>$#x00D7;</mml:mo>
                                                             <mml:mi mathvariant="italic">d</mml:mi>
                                                         </mml:mrow>
                                                         <mml:mo>+</mml:mo>
                                                         <mml:mrow>
                                                             <mml:mi mathvariant="italic">c</mml:mi>
-                                                            <mml:mo>&times;</mml:mo>
+                                                            <mml:mo>$#x00D7;</mml:mo>
                                                             <mml:mfenced open="" close="">
                                                                 <mml:msup><mml:mi mathvariant="italic">d</mml:mi>
                                                                 <mml:mn>2</mml:mn>
@@ -138,7 +138,7 @@
                                     <mml:mi mathvariant="italic">threshold</mml:mi>
                                 </mml:mtd></mml:mtr>
                             </mml:mtable>
-                            <mml:mo>&it;</mml:mo>
+                            <mml:mo>$#xE89E;</mml:mo>
                             <mml:mtable>
                                 <mml:mtr><mml:mtd>
                                     <mml:mrow>
@@ -182,7 +182,7 @@
                                     </mml:msup>
                                 </mml:mtd></mml:mtr>
                             </mml:mtable>
-                            <mml:mo>&it;</mml:mo>
+                            <mml:mo>$#xE89E;</mml:mo>
                             <mml:mtable>
                                 <mml:mtr><mml:mtd>
                                     <mml:mrow>
@@ -221,7 +221,7 @@
                 <!-- eqn: ( \(lf   x sub w   \(rf  +  .5 , \(lf   y sub w   \(rf  +  .5 ):-->
                 <mml:mfenced open="(" close=")">
                     <mml:mrow>
-                        <mml:mfenced open="&LeftFloor;" close="&RightFloor;">
+                        <mml:mfenced open="$#x230A;" close="$#x230B;">
                             <mml:msub><mml:mi mathvariant="italic">x</mml:mi>
                             <mml:mi mathvariant="italic">w</mml:mi>
                             </mml:msub>
@@ -230,7 +230,7 @@
                         <mml:mn>.5</mml:mn>
                     </mml:mrow>
                     <mml:mrow>
-                        <mml:mfenced open="&LeftFloor;" close="&RightFloor;">
+                        <mml:mfenced open="$#x230A;" close="$#x230B;">
                             <mml:msub><mml:mi mathvariant="italic">y</mml:mi>
                             <mml:mi mathvariant="italic">w</mml:mi>
                             </mml:msub>
@@ -261,7 +261,7 @@
             <inlineequation><mml:math>
                 <!-- eqn: ( \(lf   x sub w  +  .5   \(rf , \(lf   y sub w  +  .5   \(rf ):-->
                 <mml:mfenced open="(" close=")">
-                    <mml:mfenced open="&LeftFloor;" close="&RightFloor;">
+                    <mml:mfenced open="$#x230A;" close="$#x230B;">
                         <mml:mrow>
                             <mml:msub><mml:mi mathvariant="italic">x</mml:mi>
                             <mml:mi mathvariant="italic">w</mml:mi>
@@ -270,7 +270,7 @@
                             <mml:mn>.5</mml:mn>
                         </mml:mrow>
                     </mml:mfenced>
-                    <mml:mfenced open="&LeftFloor;" close="&RightFloor;">
+                    <mml:mfenced open="$#x230A;" close="$#x230B;">
                         <mml:mrow>
                             <mml:msub><mml:mi mathvariant="italic">y</mml:mi>
                             <mml:mi mathvariant="italic">w</mml:mi>

@@ -88,7 +88,7 @@
                                         <mml:msup><mml:mi mathvariant="italic">x</mml:mi>
                                         <mml:mn>2</mml:mn>
                                         </mml:msup>
-                                        <mml:mo>&af;</mml:mo>
+                                        <mml:mo>$#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mrow>
                                                 <mml:mn>1</mml:mn>
@@ -104,10 +104,10 @@
                             <mml:mtd>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">x</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">y</mml:mi>
-                                        <mml:mo>&af;</mml:mo>
+                                        <mml:mo>$#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mrow>
                                                 <mml:mn>1</mml:mn>
@@ -118,17 +118,17 @@
                                     </mml:mrow>
                                     <mml:mo>-</mml:mo>
                                     <mml:mi mathvariant="italic">z</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                 </mml:mrow>
                             </mml:mtd>
                             <mml:mtd>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">x</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">z</mml:mi>
-                                        <mml:mo>&af;</mml:mo>
+                                        <mml:mo>$#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mrow>
                                                 <mml:mn>1</mml:mn>
@@ -139,7 +139,7 @@
                                     </mml:mrow>
                                     <mml:mo>+</mml:mo>
                                     <mml:mi mathvariant="italic">y</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                 </mml:mrow>
                             </mml:mtd>
@@ -151,10 +151,10 @@
                             <mml:mtd>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">y</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">x</mml:mi>
-                                        <mml:mo>&af;</mml:mo>
+                                        <mml:mo>$#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mrow>
                                                 <mml:mn>1</mml:mn>
@@ -165,7 +165,7 @@
                                     </mml:mrow>
                                     <mml:mo>+</mml:mo>
                                     <mml:mi mathvariant="italic">z</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                 </mml:mrow>
                             </mml:mtd>
@@ -175,7 +175,7 @@
                                         <mml:msup><mml:mi mathvariant="italic">y</mml:mi>
                                         <mml:mn>2</mml:mn>
                                         </mml:msup>
-                                        <mml:mo>&af;</mml:mo>
+                                        <mml:mo>$#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mrow>
                                                 <mml:mn>1</mml:mn>
@@ -191,10 +191,10 @@
                             <mml:mtd>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">y</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">z</mml:mi>
-                                        <mml:mo>&af;</mml:mo>
+                                        <mml:mo>$#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mrow>
                                                 <mml:mn>1</mml:mn>
@@ -205,7 +205,7 @@
                                     </mml:mrow>
                                     <mml:mo>-</mml:mo>
                                     <mml:mi mathvariant="italic">x</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                 </mml:mrow>
                             </mml:mtd>
@@ -217,10 +217,10 @@
                             <mml:mtd>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">x</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">z</mml:mi>
-                                        <mml:mo>&af;</mml:mo>
+                                        <mml:mo>$#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mrow>
                                                 <mml:mn>1</mml:mn>
@@ -231,17 +231,17 @@
                                     </mml:mrow>
                                     <mml:mo>-</mml:mo>
                                     <mml:mi mathvariant="italic">y</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                 </mml:mrow>
                             </mml:mtd>
                             <mml:mtd>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">y</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">z</mml:mi>
-                                        <mml:mo>&af;</mml:mo>
+                                        <mml:mo>$#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mrow>
                                                 <mml:mn>1</mml:mn>
@@ -252,7 +252,7 @@
                                     </mml:mrow>
                                     <mml:mo>+</mml:mo>
                                     <mml:mi mathvariant="italic">x</mml:mi>
-                                    <mml:mo>&it;</mml:mo>
+                                    <mml:mo>$#xE89E;</mml:mo>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                 </mml:mrow>
                             </mml:mtd>
@@ -262,7 +262,7 @@
                                         <mml:msup><mml:mi mathvariant="italic">z</mml:mi>
                                         <mml:mn>2</mml:mn>
                                         </mml:msup>
-                                        <mml:mo>&af;</mml:mo>
+                                        <mml:mo>$#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mrow>
                                                 <mml:mn>1</mml:mn>
@@ -308,7 +308,7 @@
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">cos</mml:mi>
-                        <mml:mo>&af;</mml:mo>
+                        <mml:mo>$#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">angle</mml:mi>
                         </mml:mfenced>
@@ -322,7 +322,7 @@
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">sin</mml:mi>
-                        <mml:mo>&af;</mml:mo>
+                        <mml:mo>$#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">angle</mml:mi>
                         </mml:mfenced>
@@ -333,7 +333,7 @@
             <inlineequation><mml:math>
                 <!-- eqn: ||( x, y, z )||  =  1:-->
                 <mml:mrow>
-                    <mml:mfenced open="&DoubleVerticalBar;" close="&DoubleVerticalBar;">
+                    <mml:mfenced open="$#x2225;" close="$#x2225;">
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">x</mml:mi>
                             <mml:mi mathvariant="italic">y</mml:mi>

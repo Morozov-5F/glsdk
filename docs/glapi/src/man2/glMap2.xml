@@ -80,7 +80,7 @@
                     to 
                     <inlineequation><mml:math>
                         <!-- eqn: u hat:-->
-                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                     </mml:math></inlineequation>,
                     one of the two variables that are evaluated by the equations specified
                     by this command. Initially, <parameter>u1</parameter> is 0 and <parameter>u2</parameter> is 1.
@@ -112,7 +112,7 @@
                                         <mml:mn>1</mml:mn>
                                     </mml:mrow>
                                 </mml:mfenced>
-                                <mml:mo>&it;</mml:mo>
+                                <mml:mo>$#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">j</mml:mi>
                             </mml:mrow>
                         </mml:mfenced>
@@ -155,7 +155,7 @@
                     to 
                     <inlineequation><mml:math>
                         <!-- eqn: v hat:-->
-                        <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                        <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                     </mml:math></inlineequation>,
                     one of the two variables that are evaluated by the equations specified
                     by this command. Initially, <parameter>v1</parameter> is 0 and <parameter>v2</parameter> is 1.
@@ -181,7 +181,7 @@
                         <mml:mfenced open="" close="">
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">i</mml:mi>
-                                <mml:mo>&af;</mml:mo>
+                                <mml:mo>$#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">j</mml:mi>
@@ -262,10 +262,10 @@
                 <!-- eqn: p(u hat, v hat):-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">p</mml:mi>
-                    <mml:mo>&af;</mml:mo>
+                    <mml:mo>$#xE8A0;</mml:mo>
                     <mml:mfenced open="(" close=")">
-                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
-                        <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                        <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                     </mml:mfenced>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -277,10 +277,10 @@
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">p</mml:mi>
-                        <mml:mo>&af;</mml:mo>
+                        <mml:mo>$#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
-                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
-                            <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                            <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                         </mml:mfenced>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -313,12 +313,12 @@
                                     </mml:mfenced>
                                     <mml:mi mathvariant="italic">n</mml:mi>
                                     </mml:msup>
-                                    <mml:mo>&af;</mml:mo>
+                                    <mml:mo>$#xE8A0;</mml:mo>
                                     <mml:mfenced open="(" close=")">
-                                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                                     </mml:mfenced>
                                 </mml:mrow>
-                                <mml:mo>&it;</mml:mo>
+                                <mml:mo>$#xE89E;</mml:mo>
                                 <mml:mrow>
                                     <mml:msup><mml:mfenced open="" close="">
                                         <mml:msub><mml:mi mathvariant="italic">B</mml:mi>
@@ -327,12 +327,12 @@
                                     </mml:mfenced>
                                     <mml:mi mathvariant="italic">m</mml:mi>
                                     </mml:msup>
-                                    <mml:mo>&af;</mml:mo>
+                                    <mml:mo>$#xE8A0;</mml:mo>
                                     <mml:mfenced open="(" close=")">
-                                        <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                                        <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                                     </mml:mfenced>
                                 </mml:mrow>
-                                <mml:mo>&it;</mml:mo>
+                                <mml:mo>$#xE89E;</mml:mo>
                                 <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
                                 <mml:mi mathvariant="italic">ij</mml:mi>
                                 </mml:msub>
@@ -363,9 +363,9 @@
                     </mml:mfenced>
                     <mml:mi mathvariant="italic">n</mml:mi>
                     </mml:msup>
-                    <mml:mo>&af;</mml:mo>
+                    <mml:mo>$#xE8A0;</mml:mo>
                     <mml:mfenced open="(" close=")">
-                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                     </mml:mfenced>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -395,9 +395,9 @@
                         </mml:mfenced>
                         <mml:mi mathvariant="italic">n</mml:mi>
                         </mml:msup>
-                        <mml:mo>&af;</mml:mo>
+                        <mml:mo>$#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
-                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                         </mml:mfenced>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -414,19 +414,19 @@
                                 </mml:mtable>
                             </mml:mfenced>
                         </mml:mfenced>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:msup><mml:mfenced open="" close="">
-                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                         </mml:mfenced>
                         <mml:mi mathvariant="italic">i</mml:mi>
                         </mml:msup>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:mfenced open="" close="">
                             <mml:msup><mml:mfenced open="(" close=")">
                                 <mml:mrow>
                                     <mml:mn>1</mml:mn>
                                     <mml:mo>-</mml:mo>
-                                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                                 </mml:mrow>
                             </mml:mfenced>
                             <mml:mfenced open="" close="">
@@ -454,9 +454,9 @@
                     </mml:mfenced>
                     <mml:mi mathvariant="italic">m</mml:mi>
                     </mml:msup>
-                    <mml:mo>&af;</mml:mo>
+                    <mml:mo>$#xE8A0;</mml:mo>
                     <mml:mfenced open="(" close=")">
-                        <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                        <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                     </mml:mfenced>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -486,9 +486,9 @@
                         </mml:mfenced>
                         <mml:mi mathvariant="italic">m</mml:mi>
                         </mml:msup>
-                        <mml:mo>&af;</mml:mo>
+                        <mml:mo>$#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
-                            <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                            <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                         </mml:mfenced>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -505,19 +505,19 @@
                                 </mml:mtable>
                             </mml:mfenced>
                         </mml:mfenced>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:msup><mml:mfenced open="" close="">
-                            <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                            <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                         </mml:mfenced>
                         <mml:mi mathvariant="italic">j</mml:mi>
                         </mml:msup>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:mfenced open="" close="">
                             <mml:msup><mml:mfenced open="(" close=")">
                                 <mml:mrow>
                                     <mml:mn>1</mml:mn>
                                     <mml:mo>-</mml:mo>
-                                    <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                                    <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                                 </mml:mrow>
                             </mml:mfenced>
                             <mml:mfenced open="" close="">
@@ -580,12 +580,12 @@
             the bivariate Bernstein polynomials are evaluated using 
             <inlineequation><mml:math>
                 <!-- eqn: u hat:-->
-                <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
             </mml:math></inlineequation>
             and 
             <inlineequation><mml:math>
                 <!-- eqn: v hat:-->
-                <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
             </mml:math></inlineequation>,
             where
         </para>
@@ -593,7 +593,7 @@
             <inlineequation><mml:math>
                 <!-- eqn: u hat   =   {u  -  u1} over {u2  -  u1}:-->
                 <mml:mrow>
-                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                     <mml:mo>=</mml:mo>
                     <mml:mfrac>
                         <mml:mfenced open="" close="">
@@ -618,7 +618,7 @@
             <inlineequation><mml:math>
                 <!-- eqn: v hat   =   {v  -  v1} over {v2  -  v1}:-->
                 <mml:mrow>
-                    <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>&Hat;</mml:mo></mml:mover>
+                    <mml:mover><mml:mi mathvariant="italic">v</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                     <mml:mo>=</mml:mo>
                     <mml:mfrac>
                         <mml:mfenced open="" close="">
@@ -795,7 +795,7 @@
                 <!-- eqn: uorder  times  vorder:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">uorder</mml:mi>
-                    <mml:mo>&times;</mml:mo>
+                    <mml:mo>$#x00D7;</mml:mo>
                     <mml:mi mathvariant="italic">vorder</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -808,7 +808,7 @@
                 <mml:mfenced open="" close="">
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:mi mathvariant="italic">j</mml:mi>
                     </mml:mrow>
                 </mml:mfenced>
@@ -827,7 +827,7 @@
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:mfenced>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:mi mathvariant="italic">j</mml:mi>
                     </mml:mrow>
                 </mml:mfenced>
@@ -841,7 +841,7 @@
                 <mml:mfenced open="" close="">
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:mi mathvariant="italic">j</mml:mi>
                     </mml:mrow>
                 </mml:mfenced>
@@ -854,7 +854,7 @@
                 <mml:mfenced open="" close="">
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>&af;</mml:mo>
+                        <mml:mo>$#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">j</mml:mi>

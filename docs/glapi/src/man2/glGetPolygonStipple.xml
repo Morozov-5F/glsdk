@@ -44,7 +44,7 @@
                 <!-- eqn: 32  times  32:-->
                 <mml:mrow>
                     <mml:mn>32</mml:mn>
-                    <mml:mo>&times;</mml:mo>
+                    <mml:mo>$#x00D7;</mml:mo>
                     <mml:mn>32</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -58,7 +58,7 @@
                 <!-- eqn: 32  times  32:-->
                 <mml:mrow>
                     <mml:mn>32</mml:mn>
-                    <mml:mo>&times;</mml:mo>
+                    <mml:mo>$#x00D7;</mml:mo>
                     <mml:mn>32</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>

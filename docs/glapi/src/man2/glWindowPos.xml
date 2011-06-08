@@ -219,7 +219,7 @@
                                             <mml:mo>+</mml:mo>
                                             <mml:mrow>
                                                 <mml:mi mathvariant="italic">z</mml:mi>
-                                                <mml:mo>&times;</mml:mo>
+                                                <mml:mo>$#x00D7;</mml:mo>
                                                 <mml:mfenced open="(" close=")">
                                                     <mml:mrow>
                                                         <mml:mi mathvariant="italic">f</mml:mi>
@@ -232,13 +232,13 @@
                                     </mml:mfenced>
                                 </mml:mtd></mml:mtr>
                             </mml:mtable>
-                            <mml:mo>&it;</mml:mo>
+                            <mml:mo>$#xE89E;</mml:mo>
                             <mml:mtable>
                                 <mml:mtr><mml:mtd>
                                     <mml:mrow>
                                         <mml:mrow>
                                             <mml:mi mathvariant="italic">if</mml:mi>
-                                            <mml:mo>&it;</mml:mo>
+                                            <mml:mo>$#xE89E;</mml:mo>
                                             <mml:mi mathvariant="italic">z</mml:mi>
                                         </mml:mrow>
                                         <mml:mo>&lt;=</mml:mo>
@@ -249,7 +249,7 @@
                                     <mml:mrow>
                                         <mml:mrow>
                                             <mml:mi mathvariant="italic">if</mml:mi>
-                                            <mml:mo>&it;</mml:mo>
+                                            <mml:mo>$#xE89E;</mml:mo>
                                             <mml:mi mathvariant="italic">z</mml:mi>
                                         </mml:mrow>
                                         <mml:mo>&gt;=</mml:mo>

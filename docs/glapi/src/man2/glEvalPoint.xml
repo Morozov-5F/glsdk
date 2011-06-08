@@ -68,8 +68,8 @@ glEvalCoord1( <mml:math>
      	          <mml:mrow>
      	              <mml:mrow>
      	                  <mml:mn>i</mml:mn>
-     	                  <mml:mo>&CenterDot;</mml:mo>
-     	                  <mml:mo>&Delta;</mml:mo>
+     	                  <mml:mo>$#x00B7;</mml:mo>
+     	                  <mml:mo>$#x0394;</mml:mo>
      	                  <mml:mi mathvariant="italic">u</mml:mi>
      	              </mml:mrow>
      	              <mml:mo>+</mml:mo>
@@ -85,7 +85,7 @@ glEvalCoord1( <mml:math>
                 <!-- eqn: DELTA u  =  ( u sub 2 - u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>&Delta;</mml:mo>
+                        <mml:mo>$#x0394;</mml:mo>
                         <mml:mi mathvariant="italic">u</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -138,9 +138,9 @@ glEvalCoord1( <mml:math>
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>&CenterDot;</mml:mo>
+                        <mml:mo>$#x00B7;</mml:mo>
                         <mml:mrow>
-                            <mml:mo>&Delta;</mml:mo>
+                            <mml:mo>$#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">u</mml:mi>
                         </mml:mrow>
                     </mml:mrow>
@@ -166,7 +166,7 @@ glEvalCoord1( <mml:math>
                 <!-- eqn: DELTA u  =    ( u sub 2 - u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>&Delta;</mml:mo>
+                        <mml:mo>$#x0394;</mml:mo>
                         <mml:mi mathvariant="italic">u</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -191,7 +191,7 @@ glEvalCoord1( <mml:math>
                     <!-- eqn: DELTA v  =    ( v sub 2 - v sub 1 )  /  m:-->
                     <mml:mrow>
                         <mml:mrow>
-                            <mml:mo>&Delta;</mml:mo>
+                            <mml:mo>$#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">v</mml:mi>
                         </mml:mrow>
                         <mml:mo>=</mml:mo>
@@ -250,8 +250,8 @@ glEvalCoord2( <mml:math>
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -263,8 +263,8 @@ glEvalCoord2( <mml:math>
 			    <!-- j \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>&CenterDot;</mml:mo>
-			        <mml:mo>&Delta;</mml:mo>
+				<mml:mo>$#x00B7;</mml:mo>
+			        <mml:mo>$#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 
 			    </mml:mrow>
@@ -291,9 +291,9 @@ glEvalCoord2( <mml:math>
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>&CenterDot;</mml:mo>
+                        <mml:mo>$#x00B7;</mml:mo>
                         <mml:mrow>
-                            <mml:mo>&Delta;</mml:mo>
+                            <mml:mo>$#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">u</mml:mi>
                         </mml:mrow>
                     </mml:mrow>
@@ -325,9 +325,9 @@ glEvalCoord2( <mml:math>
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">j</mml:mi>
-                        <mml:mo>&CenterDot;</mml:mo>
+                        <mml:mo>$#x00B7;</mml:mo>
                         <mml:mrow>
-                            <mml:mo>&Delta;</mml:mo>
+                            <mml:mo>$#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">v</mml:mi>
                         </mml:mrow>
                     </mml:mrow>

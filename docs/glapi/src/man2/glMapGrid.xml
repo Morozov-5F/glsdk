@@ -184,7 +184,7 @@
                         <mml:mfrac>
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">i</mml:mi>
-                                <mml:mo>&af;</mml:mo>
+                                <mml:mo>$#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">u2</mml:mi>
@@ -259,7 +259,7 @@
                         <mml:mfrac>
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">i</mml:mi>
-                                <mml:mo>&af;</mml:mo>
+                                <mml:mo>$#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">u2</mml:mi>
@@ -286,7 +286,7 @@
                         <mml:mfrac>
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">j</mml:mi>
-                                <mml:mo>&af;</mml:mo>
+                                <mml:mo>$#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">v2</mml:mi>

@@ -84,7 +84,7 @@
                                         <mml:mfenced open="" close="">
                                             <mml:mrow>
                                                 <mml:mn>2</mml:mn>
-                                                <mml:mo>&it;</mml:mo>
+                                                <mml:mo>$#xE89E;</mml:mo>
                                                 <mml:mi mathvariant="italic">nearVal</mml:mi>
                                             </mml:mrow>
                                         </mml:mfenced>
@@ -118,7 +118,7 @@
                                         <mml:mfenced open="" close="">
                                             <mml:mrow>
                                                 <mml:mn>2</mml:mn>
-                                                <mml:mo>&it;</mml:mo>
+                                                <mml:mo>$#xE89E;</mml:mo>
                                                 <mml:mi mathvariant="italic">nearVal</mml:mi>
                                             </mml:mrow>
                                         </mml:mfenced>
@@ -264,9 +264,9 @@
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
                                         <mml:mn>2</mml:mn>
-                                        <mml:mo>&it;</mml:mo>
+                                        <mml:mo>$#xE89E;</mml:mo>
                                         <mml:mi mathvariant="italic">farVal</mml:mi>
-                                        <mml:mo>&it;</mml:mo>
+                                        <mml:mo>$#xE89E;</mml:mo>
                                         <mml:mi mathvariant="italic">nearVal</mml:mi>
                                     </mml:mrow>
                                 </mml:mfenced>
@@ -358,7 +358,7 @@
                     <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
                     <mml:mn>2</mml:mn>
                     </mml:msub>
-                    <mml:mo>&af;</mml:mo>
+                    <mml:mo>$#xE8A0;</mml:mo>
                     <mml:mfenced open="(" close=")">
                         <mml:mi mathvariant="italic">r</mml:mi>
                     </mml:mfenced>

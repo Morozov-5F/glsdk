@@ -123,7 +123,7 @@
                             <!-- eqn: uorder  times  vorder:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">uorder</mml:mi>
-                                <mml:mo>&times;</mml:mo>
+                                <mml:mo>$#x00D7;</mml:mo>
                                 <mml:mi mathvariant="italic">vorder</mml:mi>
                             </mml:mrow>
                         </mml:math></inlineequation>

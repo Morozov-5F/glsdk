@@ -159,7 +159,7 @@
                 <!-- eqn: width  times  height:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">width</mml:mi>
-                    <mml:mo>&times;</mml:mo>
+                    <mml:mo>$#x00D7;</mml:mo>
                     <mml:mi mathvariant="italic">height</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -187,7 +187,7 @@
                 <!-- eqn: width  times  height:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">width</mml:mi>
-                    <mml:mo>&times;</mml:mo>
+                    <mml:mo>$#x00D7;</mml:mo>
                     <mml:mi mathvariant="italic">height</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -295,7 +295,7 @@
                                         <mml:mi mathvariant="italic">r</mml:mi>
                                         </mml:msub>
                                         <mml:mo>+</mml:mo>
-                                        <mml:mfenced open="&LeftFloor;" close="&RightFloor;">
+                                        <mml:mfenced open="$#x230A;" close="$#x230B;">
                                             <mml:mfrac>
                                                 <mml:mi mathvariant="italic">n</mml:mi>
                                                 <mml:mi mathvariant="italic">width</mml:mi>
@@ -409,7 +409,7 @@
                                         <mml:mi mathvariant="italic">r</mml:mi>
                                         </mml:msub>
                                         <mml:mo>+</mml:mo>
-                                        <mml:mfenced open="&LeftFloor;" close="&RightFloor;">
+                                        <mml:mfenced open="$#x230A;" close="$#x230B;">
                                             <mml:mfrac>
                                                 <mml:mi mathvariant="italic">n</mml:mi>
                                                 <mml:mi mathvariant="italic">width</mml:mi>
@@ -514,7 +514,7 @@
                                         <mml:mi mathvariant="italic">r</mml:mi>
                                         </mml:msub>
                                         <mml:mo>+</mml:mo>
-                                        <mml:mfenced open="&LeftFloor;" close="&RightFloor;">
+                                        <mml:mfenced open="$#x230A;" close="$#x230B;">
                                             <mml:mfrac>
                                                 <mml:mi mathvariant="italic">n</mml:mi>
                                                 <mml:mi mathvariant="italic">width</mml:mi>
@@ -640,7 +640,7 @@
                                         <mml:mi mathvariant="italic">r</mml:mi>
                                         </mml:msub>
                                         <mml:mo>+</mml:mo>
-                                        <mml:mfenced open="&LeftFloor;" close="&RightFloor;">
+                                        <mml:mfenced open="$#x230A;" close="$#x230B;">
                                             <mml:mfrac>
                                                 <mml:mi mathvariant="italic">n</mml:mi>
                                                 <mml:mi mathvariant="italic">width</mml:mi>
@@ -1017,7 +1017,7 @@
                             <mml:mi mathvariant="italic">x</mml:mi>
                             </mml:msub>
                         </mml:mfenced>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:mi mathvariant="italic">n</mml:mi>
                     </mml:mrow>
                     <mml:mrow>
@@ -1030,7 +1030,7 @@
                             <mml:mi mathvariant="italic">y</mml:mi>
                             </mml:msub>
                         </mml:mfenced>
-                        <mml:mo>&it;</mml:mo>
+                        <mml:mo>$#xE89E;</mml:mo>
                         <mml:mi mathvariant="italic">m</mml:mi>
                     </mml:mrow>
                 </mml:mfenced>
@@ -1050,7 +1050,7 @@
                                     <mml:mi mathvariant="italic">x</mml:mi>
                                     </mml:msub>
                                 </mml:mfenced>
-                                <mml:mo>&af;</mml:mo>
+                                <mml:mo>$#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">n</mml:mi>
@@ -1071,7 +1071,7 @@
                                     <mml:mi mathvariant="italic">y</mml:mi>
                                     </mml:msub>
                                 </mml:mfenced>
-                                <mml:mo>&af;</mml:mo>
+                                <mml:mo>$#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
