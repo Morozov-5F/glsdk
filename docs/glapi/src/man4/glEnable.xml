@@ -188,7 +188,7 @@
                         the
                         <!-- - wc <= zc <= wc -->
                         <inlineequation><mml:math>
-                            <mml:mo>-</mml:mo><mml:msub><mml:mi>w</mml:mi><mml:mi>c</mml:mi></mml:msub><mml:mo>&le;</mml:mo><mml:msub><mml:mi>z</mml:mi><mml:mi>c</mml:mi></mml:msub><mml:mo>&le;</mml:mo><mml:msub><mml:mi>w</mml:mi><mml:mi>c</mml:mi></mml:msub>
+                            <mml:mo>-</mml:mo><mml:msub><mml:mi>w</mml:mi><mml:mi>c</mml:mi></mml:msub><mml:mo>$#x2264;</mml:mo><mml:msub><mml:mi>z</mml:mi><mml:mi>c</mml:mi></mml:msub><mml:mo>$#x2264;</mml:mo><mml:msub><mml:mi>w</mml:mi><mml:mi>c</mml:mi></mml:msub>
                         </mml:math></inlineequation>
                         plane equation is ignored by view volume clipping (effectively, there is no near or
                         far plane clipping).

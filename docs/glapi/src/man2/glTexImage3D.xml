@@ -588,7 +588,7 @@
 						  <mml:mi mathvariant="italic">c</mml:mi>
 						  <mml:mi mathvariant="italic">s</mml:mi>
 						</mml:msub>
-						<mml:mo>&le;</mml:mo>
+						<mml:mo>$#x2264;</mml:mo>
 						<mml:mn>0.04045</mml:mn>
 					  </mml:mtd>
 					</mml:mtr>
