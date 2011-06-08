@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glClipPlane">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glClipPlane">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glClipPlane</refname>
         <refpurpose>specify a plane against which all geometry is clipped</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glClipPlane</function></funcdef>
@@ -26,7 +24,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>plane</parameter></term>
@@ -35,7 +33,7 @@
                     Specifies which clipping plane is being positioned.
                     Symbolic names of the form <constant>GL_CLIP_PLANE</constant><emphasis>i</emphasis>,
                     where <emphasis>i</emphasis> is an integer between 0 and <constant>GL_MAX_CLIP_PLANES</constant>
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: - 1:-->
                         <mml:mn>-1</mml:mn>
                     </mml:math></inlineequation>,
@@ -53,8 +51,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Geometry is always clipped against the boundaries of a six-plane frustum
             in <emphasis>x</emphasis>, <emphasis>y</emphasis>, and <emphasis>z</emphasis>.
@@ -91,16 +89,16 @@
             and are
             disabled.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             It is always the case that <constant>GL_CLIP_PLANE</constant>
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
             = <constant>GL_CLIP_PLANE0</constant> + 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>plane</parameter> is not an accepted value.
         </para>
@@ -109,26 +107,26 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetClipPlane</refentrytitle></citerefentry>
         </para>
         <para>
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument <constant>GL_CLIP_PLANE</constant><emphasis>i</emphasis>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glEnable</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

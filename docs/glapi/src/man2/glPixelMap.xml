@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glPixelMap">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glPixelMap">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glPixelMap</refname>
         <refpurpose>set up pixel transfer maps</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glPixelMapfv</function></funcdef>
@@ -43,7 +41,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>map</parameter></term>
@@ -81,8 +79,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glPixelMap</function> sets up translation tables,
             or <emphasis>maps</emphasis>,
@@ -243,14 +241,14 @@
             The following table shows the initial sizes and values for each of the maps.
             Maps that are indexed by either color or stencil indices must have
             <parameter>mapsize</parameter> = 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 2 sup n:-->
                 <mml:msup><mml:mn>2</mml:mn>
                 <mml:mi mathvariant="italic">n</mml:mi>
                 </mml:msup>
             </mml:math></inlineequation>
             for some 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
             or the results are undefined.
             The maximum allowable size for each map depends on the implementation
             and can be determined by calling <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument
@@ -260,11 +258,11 @@
         </para>
         <informaltable frame="topbot">
             <tgroup cols="5" align="left">
-                <colspec colwidth="4*" />
-                <colspec colwidth="2*"  align="center"/>
-                <colspec colwidth="2*"  align="center"/>
-                <colspec colwidth="1*"  align="center"/>
-                <colspec colwidth="1*"  align="center"/>
+                <colspec colwidth="4*"/>
+                <colspec colwidth="2*" align="center"/>
+                <colspec colwidth="2*" align="center"/>
+                <colspec colwidth="1*" align="center"/>
+                <colspec colwidth="1*" align="center"/>
                 <thead>
                     <row>
                         <entry rowsep="1" align="left"><emphasis role="bold">
@@ -458,8 +456,8 @@
                 </tbody>
             </tgroup>
         </informaltable>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>map</parameter> is not an accepted value.
         </para>
@@ -506,8 +504,8 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetPixelMap</refentrytitle></citerefentry>
         </para>
@@ -547,8 +545,8 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_PIXEL_UNPACK_BUFFER_BINDING</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glColorTable</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColorSubTable</refentrytitle></citerefentry>,
@@ -573,13 +571,13 @@
             <citerefentry><refentrytitle>glTexSubImage2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTexSubImage3D</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glTexGen">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glTexGen">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glTexGen</refname>
         <refpurpose>control the generation of texture coordinates</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glTexGeni</function></funcdef>
@@ -43,7 +41,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>coord</parameter></term>
@@ -74,8 +72,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glTexGeniv</function></funcdef>
@@ -101,7 +99,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>coord</parameter></term>
@@ -145,8 +143,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glTexGen</function> selects a texture-coordinate generation function
             or supplies coefficients for one of the functions.
@@ -177,7 +175,7 @@
             the function
         </para>
         <para>
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: g  =  p sub 1 * x sub o  +  p sub 2 * y sub o  +  p sub 3 * z sub o  +  p sub 4 * w sub o:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">g</mml:mi>
@@ -228,54 +226,54 @@
         </para>
         <para>
             is used, where 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">g</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">g</mml:mi></mml:math></inlineequation>
             is the value computed for the coordinate named in <parameter>coord</parameter>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 1:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>1</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>2</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 3:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>3</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
             and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 4:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>4</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>
             are the four values supplied in <parameter>params</parameter>, and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: x sub o:-->
                 <mml:msub><mml:mi mathvariant="italic">x</mml:mi>
                 <mml:mi mathvariant="italic">o</mml:mi>
                 </mml:msub>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: y sub o:-->
                 <mml:msub><mml:mi mathvariant="italic">y</mml:mi>
                 <mml:mi mathvariant="italic">o</mml:mi>
                 </mml:msub>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: z sub o:-->
                 <mml:msub><mml:mi mathvariant="italic">z</mml:mi>
                 <mml:mi mathvariant="italic">o</mml:mi>
                 </mml:msub>
             </mml:math></inlineequation>,
             and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: w sub o:-->
                 <mml:msub><mml:mi mathvariant="italic">w</mml:mi>
                 <mml:mi mathvariant="italic">o</mml:mi>
@@ -285,26 +283,26 @@
             This function can be used, for example, to texture-map terrain using sea level
             as a reference plane
             (defined by 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 1:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>1</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>2</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 3:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>3</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 4:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>4</mml:mn>
@@ -319,7 +317,7 @@
             If the texture generation function is <constant>GL_EYE_LINEAR</constant>, the function
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: g  =      {p sub 1} sup prime * x sub e  +      {p sub 2} sup prime * y sub e  +      {p sub 3} sup prime * z sub e  +      {p sub 4} sup prime * w sub e:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">g</mml:mi>
@@ -388,7 +386,7 @@
             is used, where
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: left (   {p sub 1} sup prime   {p sub 2} sup prime   {p sub 3} sup prime   {p sub 4} sup prime right )  =  left ( p sub 1   p sub 2   p sub 3   p sub 4 right )  M sup -1:-->
                 <mml:mrow>
                     <mml:mfenced open="(" close=")">
@@ -457,62 +455,62 @@
         </para>
         <para>
             and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: x sub e:-->
                 <mml:msub><mml:mi mathvariant="italic">x</mml:mi>
                 <mml:mi mathvariant="italic">e</mml:mi>
                 </mml:msub>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: y sub e:-->
                 <mml:msub><mml:mi mathvariant="italic">y</mml:mi>
                 <mml:mi mathvariant="italic">e</mml:mi>
                 </mml:msub>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: z sub e:-->
                 <mml:msub><mml:mi mathvariant="italic">z</mml:mi>
                 <mml:mi mathvariant="italic">e</mml:mi>
                 </mml:msub>
             </mml:math></inlineequation>,
             and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: w sub e:-->
                 <mml:msub><mml:mi mathvariant="italic">w</mml:mi>
                 <mml:mi mathvariant="italic">e</mml:mi>
                 </mml:msub>
             </mml:math></inlineequation>
             are the eye coordinates of the vertex,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 1:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>1</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>2</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 3:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>3</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
             and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p sub 4:-->
                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                 <mml:mn>4</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>
             are the values supplied in <parameter>params</parameter>, and
-            <inlineequation><mml:math><mml:mi mathvariant="italic">M</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">M</mml:mi></mml:math></inlineequation>
             is the modelview matrix when <function>glTexGen</function> is invoked.
             If 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">M</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">M</mml:mi></mml:math></inlineequation>
             is poorly conditioned or singular,
             texture coordinates generated by the resulting function may be inaccurate
             or undefined.
@@ -528,9 +526,9 @@
             If the texture generation function is <constant>GL_SPHERE_MAP</constant> and <parameter>coord</parameter> is either
             <constant>GL_S</constant> or
             <constant>GL_T</constant>,
-            <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
             texture coordinates are generated as follows.
             Let <emphasis>u</emphasis> be the unit vector pointing from the origin to the polygon vertex
             (in eye coordinates).
@@ -539,7 +537,7 @@
             Let
         </para>
         <para>
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: f  =  ( f sub x  f sub y  f sub z ) sup T:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">f</mml:mi>
@@ -566,7 +564,7 @@
             be the reflection vector such that
         </para>
         <para>
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: f  =   u  -  2 n sup prime {n sup prime} sup T u:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">f</mml:mi>
@@ -595,7 +593,7 @@
         </para>
         <para>
             Finally, let 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: m  =  2 sqrt ({f sub x} sup 2  +  {f sub y} sup 2  +  (f sub z  +  1) sup 2):-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">m</mml:mi>
@@ -640,13 +638,13 @@
                 </mml:mrow>
             </mml:math></inlineequation>.
             Then the values assigned to the 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
             texture coordinates are
         </para>
         <para>
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: s  =  f sub x over m  +  1 over 2:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">s</mml:mi>
@@ -668,7 +666,7 @@
             </mml:math></inlineequation>
         </para>
         <para>
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: t  =  f sub y over m  +  1 over 2:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">t</mml:mi>
@@ -705,15 +703,15 @@
             from the current set of texture coordinates. Initially, all texture
             generation functions are set to <constant>GL_EYE_LINEAR</constant> and are disabled.
             Both 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
             plane equations are (1, 0, 0, 0),
             both 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
             plane equations are (0, 1, 0, 0),
             and all 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">q</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">q</mml:mi></mml:math></inlineequation>
             plane equations are (0, 0, 0, 0).
         </para>
         <para>
@@ -721,8 +719,8 @@
             texture generation parameters for the currently active texture unit,
             selected with <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated when <parameter>coord</parameter> or <parameter>pname</parameter> is not an
             accepted defined value,
@@ -739,8 +737,8 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetTexGen</refentrytitle></citerefentry>
         </para>
@@ -756,8 +754,8 @@
         <para>
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument <constant>GL_TEXTURE_GEN_Q</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCopyPixels</refentrytitle></citerefentry>,
@@ -774,13 +772,13 @@
             <citerefentry><refentrytitle>glTexSubImage2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTexSubImage3D</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

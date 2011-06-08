@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glRasterPos">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glRasterPos">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glRasterPos</refname>
         <refpurpose>specify the raster position for pixel operations</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glRasterPos2s</function></funcdef>
@@ -115,7 +113,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>x</parameter></term>
@@ -125,11 +123,11 @@
             <listitem>
                 <para>
                     Specify the 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>,
                     and 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
                     object coordinates
                     (if present)
                     for the raster
@@ -138,8 +136,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glRasterPos2sv</function></funcdef>
@@ -213,7 +211,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>v</parameter></term>
@@ -223,18 +221,18 @@
                     three,
                     or four elements,
                     specifying 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>,
                     and 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
                     coordinates, respectively.
                 </para>
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             The GL maintains a 3D position in window coordinates.
             This position,
@@ -245,45 +243,45 @@
         </para>
         <para>
             The current raster position consists of three window coordinates
-            (<inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
-            <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
-            <inlineequation><mml:math><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>),
+            (<inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>),
             a clip coordinate value 
-            (<inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>),
+            (<inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>),
             an eye coordinate distance,
             a valid bit,
             and associated color data and texture coordinates.
             The 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
             coordinate is a clip coordinate,
             because 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
             is not projected to window coordinates.
             <function>glRasterPos4</function> specifies object coordinates 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
-            <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
-            <inlineequation><mml:math><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
             explicitly.
             <function>glRasterPos3</function> specifies object coordinate 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
-            <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>
             explicitly,
             while 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
             is implicitly set to 1.
             <function>glRasterPos2</function> uses the argument values for 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
             while
             implicitly setting 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
             to 0 and 1.
         </para>
         <para>
@@ -343,8 +341,8 @@
             in color index mode,
             the current raster RGBA color always maintains its initial value.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             The raster position is modified by <function>glRasterPos</function>, <citerefentry><refentrytitle>glBitmap</refentrytitle></citerefentry>, and <citerefentry><refentrytitle>glWindowPos</refentrytitle></citerefentry>.
         </para>
@@ -369,15 +367,15 @@
             raster texture coordinates for each texture unit. Each texture unit's
             current raster texture coordinates are updated by <function>glRasterPos</function>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_OPERATION</constant> is generated if <function>glRasterPos</function>
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_CURRENT_RASTER_POSITION</constant>
         </para>
@@ -399,8 +397,8 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_CURRENT_RASTER_TEXTURE_COORDS</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBitmap</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCopyPixels</refentrytitle></citerefentry>,
@@ -414,13 +412,13 @@
             <citerefentry><refentrytitle>glVertex</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glWindowPos</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

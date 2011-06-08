@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glXIntro">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glXIntro">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glXIntro</refname>
         <refpurpose>Introduction to OpenGL in the X window system</refpurpose>
     </refnamediv>
-    <refsect1 id="overview"><title>Overview</title>
+    <refsection xml:id="overview"><info><title>Overview</title></info>
         <para>
         </para>
         <para>
@@ -84,8 +82,8 @@
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="examples"><title>Examples</title>
+    </refsection>
+    <refsection xml:id="examples"><info><title>Examples</title></info>
         <para>
             Below is a minimal example of creating an RGBA-format X window that's
             compatible with OpenGL using GLX 1.3 commands.  The window is cleared to
@@ -200,8 +198,8 @@ int main( int argc, char *argv[] )
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             An X color map must be created and passed to <function>XCreateWindow</function>.
         </para>
@@ -225,8 +223,8 @@ int main( int argc, char *argv[] )
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="usingglxextensions"><title>Using GLX Extensions</title>
+    </refsection>
+    <refsection xml:id="usingglxextensions"><info><title>Using GLX Extensions</title></info>
         <para>
             All supported GLX extensions will have a corresponding definition in glx.h
             and a token in the extension string returned by
@@ -242,8 +240,8 @@ int main( int argc, char *argv[] )
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="glx11glx12andglx13"><title>GLX 1.1, GLX 1.2, and GLX 1.3</title>
+    </refsection>
+    <refsection xml:id="glx11glx12andglx13"><info><title>GLX 1.1, GLX 1.2, and GLX 1.3</title></info>
         <para>
             GLX 1.3 is now supported and is backward compatible with GLX 1.1 and GLX
             1.2.  It introduces new functionality (namely GLXFBConfigs) that supersedes
@@ -280,8 +278,8 @@ int main( int argc, char *argv[] )
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glFinish</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glFlush</refentrytitle></citerefentry>,
@@ -324,13 +322,13 @@ int main( int argc, char *argv[] )
             <function>XCreateWindow</function>,
             <function>XSync</function>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

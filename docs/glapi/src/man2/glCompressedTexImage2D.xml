@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glCompressedTexImage2D">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCompressedTexImage2D">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glCompressedTexImage2D</refname>
         <refpurpose>specify a two-dimensional texture image in a compressed format</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glCompressedTexImage2D</function></funcdef>
@@ -32,7 +30,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -73,7 +71,7 @@
             <listitem>
                 <para>
                     Specifies the width of the texture image including the border if any. If the GL version does not support non-power-of-two sizes, this value must be 
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: 2 sup n + 2 ( border ):-->
                         <mml:mrow>
                             <mml:msup><mml:mn>2</mml:mn>
@@ -90,7 +88,7 @@
                         </mml:mrow>
                     </mml:math></inlineequation>
                     for some integer 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
                     All
                     implementations support 2D texture images that are at least 64 texels
                     wide and cube-mapped texture images that are at least 16 texels wide.
@@ -103,7 +101,7 @@
                 <para>
                     Specifies the height of the texture image including the border if any. If the GL version does not support non-power-of-two sizes, this value must be 
                     Must be 
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: 2 sup n + 2 ( border ):-->
                         <mml:mrow>
                             <mml:msup><mml:mn>2</mml:mn>
@@ -120,7 +118,7 @@
                         </mml:mrow>
                     </mml:math></inlineequation>
                     for some integer 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
                     All
                     implementations support 2D texture images that are at least 64 texels
                     high and cube-mapped texture images that are at least 16 texels high.
@@ -154,8 +152,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Texturing maps a portion of a specified texture image onto each graphical
             primitive for which texturing is enabled.  To enable and disable
@@ -190,16 +188,16 @@
             (see <citerefentry><refentrytitle>glBindBuffer</refentrytitle></citerefentry>) while a texture image is
             specified, <parameter>data</parameter> is treated as a byte offset into the buffer object's data store.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glCompressedTexImage2D</function> is available only if the GL version is 1.3 or greater.
         </para>
         <para>
 			Non-power-of-two textures are supported if the GL version is 2.0 or greater, or if the implementation exports the <constant>GL_ARB_texture_non_power_of_two</constant> extension.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>internalformat</parameter> is one of the generic compressed internal formats: <constant>GL_COMPRESSED_ALPHA</constant>,
             <constant>GL_COMPRESSED_LUMINANCE</constant>, <constant>GL_COMPRESSED_LUMINANCE_ALPHA</constant>,
@@ -235,8 +233,8 @@
             <parameter>data</parameter> is not encoded in a manner consistent with the extension
             specification defining the internal compression format.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetCompressedTexImage</refentrytitle></citerefentry>
         </para>
@@ -254,8 +252,8 @@
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument
             <constant>GL_TEXTURE_2D</constant> or <constant>GL_TEXTURE_CUBE_MAP</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColorTable</refentrytitle></citerefentry>,
@@ -283,13 +281,13 @@
             <citerefentry><refentrytitle>glTexSubImage3D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

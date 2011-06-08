@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glStencilOp">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glStencilOp">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -17,7 +15,7 @@
         <refpurpose>set front and back stencil test actions</refpurpose>
     </refnamediv>
     <!-- eqn: ignoring delim $$ -->
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glStencilOp</function></funcdef>
@@ -27,7 +25,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>sfail</parameter></term>
@@ -70,8 +68,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Stenciling,
             like depth-buffering,
@@ -187,7 +185,7 @@
             Stencil buffer values are treated as unsigned integers.
             When incremented and decremented,
             values are clamped to 0 and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 2 sup n - 1: -->
                 <mml:mrow>
                     <mml:msup><mml:mn>2</mml:mn>
@@ -198,7 +196,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>,
             where 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
             is the value returned by querying <constant>GL_STENCIL_BITS</constant>.
         </para>
         <para>
@@ -213,8 +211,8 @@
             stencil test fails and passes,
             respectively.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             Initially the stencil test is disabled.
             If there is no stencil buffer,
@@ -227,14 +225,14 @@
             calling <citerefentry><refentrytitle>glStencilOpSeparate</refentrytitle></citerefentry>
             with <parameter>face</parameter> set to <constant>GL_FRONT_AND_BACK</constant>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>sfail</parameter>,
             <parameter>dpfail</parameter>, or <parameter>dppass</parameter> is any value other than the defined constant values.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument 
             <constant>GL_STENCIL_FAIL</constant>, <constant>GL_STENCIL_PASS_DEPTH_PASS</constant>, 
@@ -245,8 +243,8 @@
         <para>
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument <constant>GL_STENCIL_TEST</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBlendFunc</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDepthFunc</refentrytitle></citerefentry>,
@@ -258,13 +256,13 @@
             <citerefentry><refentrytitle>glStencilMaskSeparate</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glStencilOpSeparate</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

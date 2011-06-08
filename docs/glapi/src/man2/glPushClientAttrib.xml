@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glPushClientAttrib">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glPushClientAttrib">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glPushClientAttrib</refname>
         <refpurpose>push and pop the client attribute stack</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glPushClientAttrib</function></funcdef>
@@ -24,7 +22,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mask</parameter></term>
@@ -36,8 +34,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glPopClientAttrib</function></funcdef>
@@ -45,7 +43,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="description"><title>Description</title>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glPushClientAttrib</function> takes one argument,
             a mask that indicates which groups of client-state variables
@@ -80,8 +78,8 @@
         <para>
             Initially, the client attribute stack is empty.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glPushClientAttrib</function> is available only if the GL version is 1.1 or greater.
         </para>
@@ -104,8 +102,8 @@
             popping client vertex array state applies to all supported texture units,
             and the active client texture state.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_STACK_OVERFLOW</constant> is generated if <function>glPushClientAttrib</function> is called while
             the attribute stack is full.
@@ -114,16 +112,16 @@
             <constant>GL_STACK_UNDERFLOW</constant> is generated if <citerefentry><refentrytitle>glPopClientAttrib</refentrytitle></citerefentry> is called while
             the attribute stack is empty.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_ATTRIB_STACK_DEPTH</constant>
         </para>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAX_CLIENT_ATTRIB_STACK_DEPTH</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glColorPointer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDisableClientState</refentrytitle></citerefentry>,
@@ -140,13 +138,13 @@
             <citerefentry><refentrytitle>glTexCoordPointer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glVertexPointer</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

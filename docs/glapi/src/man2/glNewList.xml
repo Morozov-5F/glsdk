@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glNewList">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glNewList">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glNewList</refname>
         <refpurpose>create or replace a display list</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glNewList</function></funcdef>
@@ -25,7 +23,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>list</parameter></term>
@@ -47,8 +45,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glEndList</function></funcdef>
@@ -56,7 +54,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="description"><title>Description</title>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Display lists are groups of GL commands that have been stored
             for subsequent execution.
@@ -155,8 +153,8 @@
             If a display list with name <parameter>list</parameter> already exists,
             it is replaced only when <citerefentry><refentrytitle>glEndList</refentrytitle></citerefentry> is called.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <citerefentry><refentrytitle>glCallList</refentrytitle></citerefentry> and <citerefentry><refentrytitle>glCallLists</refentrytitle></citerefentry> can be entered into display lists.
             Commands in the display list or lists executed by <citerefentry><refentrytitle>glCallList</refentrytitle></citerefentry>
@@ -169,8 +167,8 @@
             executed. If the list is created in <constant>GL_COMPILE</constant> mode, errors are
             not generated until the list is executed.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>list</parameter> is 0.
         </para>
@@ -194,8 +192,8 @@
             and no other change is made to the GL state. (It is as if no attempt
             had been made to create the new display list.)
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glIsList</refentrytitle></citerefentry>
         </para>
@@ -205,21 +203,21 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_LIST_MODE</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glCallList</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCallLists</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDeleteLists</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGenLists</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

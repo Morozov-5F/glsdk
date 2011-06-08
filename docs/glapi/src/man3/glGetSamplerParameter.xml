@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glGetSamplerParameter">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetSamplerParameter">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glGetSamplerParameter</refname>
         <refpurpose>return sampler parameter values</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glGetSamplerParameterfv</function></funcdef>
@@ -35,7 +33,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>sampler</parameter></term>
@@ -74,8 +72,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glGetSamplerParameter</function> returns in <parameter>params</parameter> the value or values of the sampler parameter
             specified as <parameter>pname</parameter>.
@@ -109,7 +107,7 @@
                     <para>
                         Returns the single-valued texture minimum level-of-detail value.  The
                         initial value is 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1000: -->
                             <mml:mn>-1000</mml:mn>
                         </mml:math></inlineequation>.
@@ -130,7 +128,7 @@
                 <listitem>
                     <para>
                         Returns the single-valued wrapping function for texture coordinate 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>,
                         a symbolic constant. The initial value is <constant>GL_REPEAT</constant>.
                     </para>
                 </listitem>
@@ -140,7 +138,7 @@
                 <listitem>
                     <para>
                         Returns the single-valued wrapping function for texture coordinate 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>,
                         a symbolic constant. The initial value is <constant>GL_REPEAT</constant>.
                     </para>
                 </listitem>
@@ -150,7 +148,7 @@
                 <listitem>
                     <para>
                         Returns the single-valued wrapping function for texture coordinate 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>,
                         a symbolic constant. The initial value is <constant>GL_REPEAT</constant>.
                     </para>
                 </listitem>
@@ -162,7 +160,7 @@
                         Returns four integer or floating-point numbers that comprise the RGBA color
                         of the texture border.
                         Floating-point values are returned in the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]: -->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -172,7 +170,7 @@
                         Integer values are returned as a linear mapping of the internal floating-point
                         representation such that 1.0 maps to the most positive representable
                         integer and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0: -->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -200,8 +198,8 @@
                 </listitem>
             </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             If an error is generated,
             no change is made to the contents of <parameter>params</parameter>.
@@ -209,8 +207,8 @@
         <para>
             <function>glGetSamplerParameter</function> is available only if the GL version is 3.3 or higher.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>sampler</parameter> is not the name of a sampler object returned from
             a previous call to <citerefentry><refentrytitle>glGenSamplers</refentrytitle></citerefentry>.
@@ -218,21 +216,21 @@
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>pname</parameter> is not an accepted value.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glSamplerParameter</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGenSamplers</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDeleteSamplers</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glSamplerParameter</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

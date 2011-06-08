@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="gluSphere">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluSphere">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>gluSphere</refname>
         <refpurpose>draw a sphere</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>gluSphere</function></funcdef>
@@ -28,7 +26,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>quad</parameter></term>
@@ -66,8 +64,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>gluSphere</function> draws a sphere of the given radius centered around the origin. The
             sphere is subdivided around the <emphasis>z</emphasis> axis into slices and along the 
@@ -84,7 +82,7 @@
             If texturing is turned on (with <citerefentry><refentrytitle>gluQuadricTexture</refentrytitle></citerefentry>), then texture 
             coordinates are 
             generated so that <emphasis>t</emphasis> ranges from 0.0 at 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: z  =  -radius:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">z</mml:mi>
@@ -96,7 +94,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>
             to 1.0 at 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: z  =  radius:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">z</mml:mi>
@@ -111,8 +109,8 @@
             to 0.5 at the \-<emphasis>y</emphasis> axis, to 0.75 at the \-<emphasis>x</emphasis> axis, and back to 1.0 
             at the +<emphasis>y</emphasis> axis.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluCylinder</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluDisk</refentrytitle></citerefentry>,
@@ -121,13 +119,13 @@
             <citerefentry><refentrytitle>gluQuadricOrientation</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluQuadricTexture</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

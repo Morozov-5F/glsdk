@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glEvalPoint">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glEvalPoint">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glEvalPoint</refname>
         <refpurpose>generate and evaluate a single point in a mesh</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glEvalPoint1</function></funcdef>
@@ -32,14 +30,14 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>i</parameter></term>
             <listitem>
                 <para>
                     Specifies the integer value for grid domain variable 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
                 </para>
             </listitem>
         </varlistentry>
@@ -48,14 +46,14 @@
             <listitem>
                 <para>
                     Specifies the integer value for grid domain variable 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
                     (<function>glEvalPoint2</function> only).
                 </para>
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <citerefentry><refentrytitle>glMapGrid</refentrytitle></citerefentry> and <citerefentry><refentrytitle>glEvalMesh</refentrytitle></citerefentry> are used in tandem to efficiently
             generate and evaluate a series of evenly spaced map domain values.
@@ -63,7 +61,7 @@
             that is traversed by <citerefentry><refentrytitle>glEvalMesh</refentrytitle></citerefentry>.
             Calling <function>glEvalPoint1</function> is equivalent to calling
             <programlisting>
-glEvalCoord1( <mml:math>
+glEvalCoord1( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
 	          <!-- eqn: i \cdot DELTA u + u sub 1 :-->
      	          <mml:mrow>
      	              <mml:mrow>
@@ -81,7 +79,7 @@ glEvalCoord1( <mml:math>
               </mml:math> );
          </programlisting>
             where
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: DELTA u  =  ( u sub 2 - u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -108,15 +106,15 @@ glEvalCoord1( <mml:math>
         </para>
         <para>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>, 
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 1:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>1</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>2</mml:mn>
@@ -124,7 +122,7 @@ glEvalCoord1( <mml:math>
             </mml:math></inlineequation>
             are the arguments to the most recent <citerefentry><refentrytitle>glMapGrid1</refentrytitle></citerefentry> command.
             The one absolute numeric requirement is that if 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i = n:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">i</mml:mi>
@@ -133,7 +131,7 @@ glEvalCoord1( <mml:math>
                 </mml:mrow>
             </mml:math></inlineequation>,
             then the value computed from
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i  cdot  DELTA u  +  u sub 1:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -151,7 +149,7 @@ glEvalCoord1( <mml:math>
                 </mml:mrow>
             </mml:math></inlineequation>
             is exactly 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>2</mml:mn>
@@ -162,7 +160,7 @@ glEvalCoord1( <mml:math>
             In the two-dimensional case, <function>glEvalPoint2</function>, let
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: DELTA u  =    ( u sub 2 - u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -187,7 +185,7 @@ glEvalCoord1( <mml:math>
                 </mml:mrow>
             </mml:math></informalequation>
             <para>
-                <informalequation><mml:math>
+                <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <!-- eqn: DELTA v  =    ( v sub 2 - v sub 1 )  /  m:-->
                     <mml:mrow>
                         <mml:mrow>
@@ -215,28 +213,28 @@ glEvalCoord1( <mml:math>
         </para>
         <para>
             where 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>, 
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 1:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>1</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>2</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">m</mml:mi></mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">m</mml:mi></mml:math></inlineequation>, 
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sub 1:-->
                 <mml:msub><mml:mi mathvariant="italic">v</mml:mi>
                 <mml:mn>1</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">v</mml:mi>
                 <mml:mn>2</mml:mn>
@@ -245,7 +243,7 @@ glEvalCoord1( <mml:math>
             are the arguments to the most recent <citerefentry><refentrytitle>glMapGrid2</refentrytitle></citerefentry> command.
             Then the <function>glEvalPoint2</function> command is equivalent to calling
             <programlisting>
-glEvalCoord2( <mml:math>
+glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<!-- i \cdot DELTA u + u sub 1 :-->
 		        <mml:mrow>
 			    <mml:mrow>
@@ -277,7 +275,7 @@ glEvalCoord2( <mml:math>
 		    </mml:math> );
             </programlisting>
             The only absolute numeric requirements are that if 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i = n:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">i</mml:mi>
@@ -286,7 +284,7 @@ glEvalCoord2( <mml:math>
                 </mml:mrow>
             </mml:math></inlineequation>,
             then the value computed from
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i  cdot DELTA u  +  u sub 1:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -304,14 +302,14 @@ glEvalCoord2( <mml:math>
                 </mml:mrow>
             </mml:math></inlineequation>
             is exactly 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>2</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
             and if 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: j = m:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">j</mml:mi>
@@ -320,7 +318,7 @@ glEvalCoord2( <mml:math>
                 </mml:mrow>
             </mml:math></inlineequation>,
             then the value computed from
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: j  cdot DELTA v  +  v sub 1:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -338,15 +336,15 @@ glEvalCoord2( <mml:math>
                 </mml:mrow>
             </mml:math></inlineequation>
             is exactly 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">v</mml:mi>
                 <mml:mn>2</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAP1_GRID_DOMAIN</constant>
         </para>
@@ -359,8 +357,8 @@ glEvalCoord2( <mml:math>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAP2_GRID_SEGMENTS</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glEvalCoord</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glEvalMesh</refentrytitle></citerefentry>,
@@ -368,13 +366,13 @@ glEvalCoord2( <mml:math>
             <citerefentry><refentrytitle>glMap2</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glMapGrid</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

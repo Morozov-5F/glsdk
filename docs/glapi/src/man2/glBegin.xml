@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glBegin">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glBegin">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glBegin</refname>
         <refpurpose>delimit the vertices of a primitive or a group of like primitives</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glBegin</function></funcdef>
@@ -25,7 +23,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mode</parameter></term>
@@ -48,8 +46,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glEnd</function></funcdef>
@@ -57,17 +55,17 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="description"><title>Description</title>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glBegin</function> and <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry> delimit the vertices that define a primitive or
             a group of like primitives.
             <function>glBegin</function> accepts a single argument that specifies in which of ten ways the
             vertices are interpreted.
             Taking 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
             as an integer count starting at one,
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
             as the total number of vertices specified,
             the interpretations are as follows:
         </para>
@@ -78,10 +76,10 @@
                     <para>
                         Treats each vertex as a single point.
                         Vertex 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         defines point 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
                         points are drawn.
                     </para>
                 </listitem>
@@ -92,7 +90,7 @@
                     <para>
                         Treats each pair of vertices as an independent line segment.
                         Vertices 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2n - 1:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
@@ -103,7 +101,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2n:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
@@ -112,8 +110,8 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         define line 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: N/2:-->
                             <mml:mfrac>
                                 <mml:mi mathvariant="italic">N</mml:mi>
@@ -131,9 +129,9 @@
                         Draws a connected group of line segments from the first vertex
                         to the last.
                         Vertices 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: n + 1:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">n</mml:mi>
@@ -142,8 +140,8 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         define line 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: N - 1:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">N</mml:mi>
@@ -163,9 +161,9 @@
                         to the last,
                         then back to the first.
                         Vertices 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: n + 1:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">n</mml:mi>
@@ -174,15 +172,15 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         define line 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
                         The last line, however, is defined by vertices 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 1:-->
                             <mml:mn>1</mml:mn>
                         </mml:math></inlineequation>.
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
                         lines are drawn.
                     </para>
                 </listitem>
@@ -193,7 +191,7 @@
                     <para>
                         Treats each triplet of vertices as an independent triangle.
                         Vertices 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 3n - 2:-->
                             <mml:mrow>
                                 <mml:mn>3</mml:mn>
@@ -203,7 +201,7 @@
                                 <mml:mn>2</mml:mn>
                             </mml:mrow>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 3n - 1:-->
                             <mml:mrow>
                                 <mml:mn>3</mml:mn>
@@ -214,7 +212,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 3n:-->
                             <mml:mrow>
                                 <mml:mn>3</mml:mn>
@@ -223,8 +221,8 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         define triangle 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: N/3:-->
                             <mml:mfrac>
                                 <mml:mi mathvariant="italic">N</mml:mi>
@@ -241,10 +239,10 @@
                     <para>
                         Draws a connected group of triangles.  One triangle is defined for each
                         vertex presented after the first two vertices.  For odd 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
                         vertices
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: n + 1:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">n</mml:mi>
@@ -253,7 +251,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: n + 2:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">n</mml:mi>
@@ -262,11 +260,11 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         define triangle 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
                         For even 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
                         vertices
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: n + 1:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">n</mml:mi>
@@ -274,9 +272,9 @@
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: n + 2:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">n</mml:mi>
@@ -285,8 +283,8 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         define triangle 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: N - 2:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">N</mml:mi>
@@ -306,11 +304,11 @@
                         Draws a connected group of triangles.
                         One triangle is defined for each vertex presented after the first two vertices.
                         Vertices 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 1:-->
                             <mml:mn>1</mml:mn>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: n + 1:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">n</mml:mi>
@@ -319,7 +317,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: n + 2:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">n</mml:mi>
@@ -328,8 +326,8 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         define triangle 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: N - 2:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">N</mml:mi>
@@ -347,7 +345,7 @@
                     <para>
                         Treats each group of four vertices as an independent quadrilateral.
                         Vertices 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 4n - 3:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
@@ -357,7 +355,7 @@
                                 <mml:mn>3</mml:mn>
                             </mml:mrow>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 4n - 2:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
@@ -367,7 +365,7 @@
                                 <mml:mn>2</mml:mn>
                             </mml:mrow>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 4n - 1:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
@@ -378,7 +376,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 4n:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
@@ -387,8 +385,8 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         define quadrilateral 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: N/4:-->
                             <mml:mfrac>
                                 <mml:mi mathvariant="italic">N</mml:mi>
@@ -407,7 +405,7 @@
                         One quadrilateral is defined for each pair of vertices presented
                         after the first pair.
                         Vertices 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2n - 1:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
@@ -417,7 +415,7 @@
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2n:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
@@ -425,7 +423,7 @@
                                 <mml:mi mathvariant="italic">n</mml:mi>
                             </mml:mrow>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2n + 2:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
@@ -436,7 +434,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2n + 1:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
@@ -447,8 +445,8 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         define quadrilateral 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: N/2 - 1:-->
                             <mml:mrow>
                                 <mml:mfrac>
@@ -472,12 +470,12 @@
                         Draws a single,
                         convex polygon.
                         Vertices 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 1:-->
                             <mml:mn>1</mml:mn>
                         </mml:math></inlineequation>
                         through 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
                         define this polygon.
                     </para>
                 </listitem>
@@ -534,8 +532,8 @@
             <constant>GL_QUADS</constant> (4),
             and <constant>GL_QUAD_STRIP</constant> (2).
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>mode</parameter> is set to an unaccepted value.
         </para>
@@ -587,8 +585,8 @@
             the corresponding call to <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>,
             but an error may or may not be generated.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glArrayElement</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCallList</refentrytitle></citerefentry>,
@@ -607,13 +605,13 @@
             <citerefentry><refentrytitle>glVertex</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glVertexAttrib</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

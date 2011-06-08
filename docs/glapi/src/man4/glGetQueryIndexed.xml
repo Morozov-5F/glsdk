@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glGetQueryIndexed">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetQueryIndexed">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glGetQueryIndexediv</refname>
         <refpurpose>return parameters of an indexed query object target</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glGetQueryIndexediv</function></funcdef>
@@ -27,7 +25,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -66,8 +64,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glGetQueryIndexediv</function> returns in <parameter>params</parameter> a selected parameter of the indexed query object target
             specified by <parameter>target</parameter> and <parameter>index</parameter>. <parameter>index</parameter> specifies the index of the
@@ -80,8 +78,8 @@
             If <parameter>pname</parameter> is <constant>GL_QUERY_COUNTER_BITS</constant>, the implementation-dependent number
             of bits used to hold the result of queries for <parameter>target</parameter> is returned in <parameter>params</parameter>.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             If an error is generated,
             no change is made to the contents of <parameter>params</parameter>.
@@ -90,8 +88,8 @@
             Calling <citerefentry><refentrytitle>glGetQueryiv</refentrytitle></citerefentry> is equivalent to calling
             <function>glGetQueryIndexediv</function> with <parameter>index</parameter> set to zero.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> or <parameter>pname</parameter> is not an
             accepted value.
@@ -100,19 +98,19 @@
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>index</parameter> is greater than or equal to the
             <parameter>target</parameter>-specific maximum.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGetQueryObject</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glIsQuery</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

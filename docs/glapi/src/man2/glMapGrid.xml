@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glMapGrid">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glMapGrid">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glMapGrid</refname>
         <refpurpose>define a one- or two-dimensional mesh</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glMapGrid1d</function></funcdef>
@@ -57,7 +55,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>un</parameter></term>
@@ -75,7 +73,7 @@
             <listitem>
                 <para>
                     Specify the mappings for integer grid domain values 
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: i = 0:-->
                         <mml:mrow>
                             <mml:mi mathvariant="italic">i</mml:mi>
@@ -84,7 +82,7 @@
                         </mml:mrow>
                     </mml:math></inlineequation>
                     and 
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: i = un:-->
                         <mml:mrow>
                             <mml:mi mathvariant="italic">i</mml:mi>
@@ -111,7 +109,7 @@
             <listitem>
                 <para>
                     Specify the mappings for integer grid domain values 
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: j = 0:-->
                         <mml:mrow>
                             <mml:mi mathvariant="italic">j</mml:mi>
@@ -120,7 +118,7 @@
                         </mml:mrow>
                     </mml:math></inlineequation>
                     and 
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: j = vn:-->
                         <mml:mrow>
                             <mml:mi mathvariant="italic">j</mml:mi>
@@ -133,8 +131,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glMapGrid</function> and <citerefentry><refentrytitle>glEvalMesh</refentrytitle></citerefentry> are used together to efficiently
             generate and evaluate a series of evenly-spaced map domain values.
@@ -146,23 +144,23 @@
         <para>
             <function>glMapGrid1</function> and <function>glMapGrid2</function> specify the linear grid mappings
             between the 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
             (or 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>)
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>)
             integer grid coordinates,
             to the 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>
             (or 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">v</mml:mi></mml:math></inlineequation>)
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">v</mml:mi></mml:math></inlineequation>)
             floating-point evaluation map coordinates.
             See <citerefentry><refentrytitle>glMap1</refentrytitle></citerefentry> and <citerefentry><refentrytitle>glMap2</refentrytitle></citerefentry> for details of how 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">v</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">v</mml:mi></mml:math></inlineequation>
             coordinates
             are evaluated.
         </para>
@@ -171,11 +169,11 @@
             such that integer grid coordinate 0 maps exactly to <parameter>u1</parameter>,
             and integer grid coordinate <parameter>un</parameter> maps exactly to <parameter>u2</parameter>.
             All other integer grid coordinates 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
             are mapped so that
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u  =  i (u2 - u1) / un  +  u1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">u</mml:mi>
@@ -204,7 +202,7 @@
         <para>
             <function>glMapGrid2</function> specifies two such linear mappings.
             One maps integer grid coordinate 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i = 0:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">i</mml:mi>
@@ -214,7 +212,7 @@
             </mml:math></inlineequation>
             exactly to <parameter>u1</parameter>,
             and integer grid coordinate 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i = un:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">i</mml:mi>
@@ -224,7 +222,7 @@
             </mml:math></inlineequation>
             exactly to <parameter>u2</parameter>.
             The other maps integer grid coordinate 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: j = 0:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">j</mml:mi>
@@ -234,7 +232,7 @@
             </mml:math></inlineequation>
             exactly to <parameter>v1</parameter>,
             and integer grid coordinate 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: j = vn:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">j</mml:mi>
@@ -244,13 +242,13 @@
             </mml:math></inlineequation>
             exactly to <parameter>v2</parameter>.
             Other integer grid coordinates 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
             are mapped such that
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u  =  i (u2 - u1) / un  +  u1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">u</mml:mi>
@@ -277,7 +275,7 @@
             </mml:math></informalequation>
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v  =  j (v2 - v1) / vn  +  v1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">v</mml:mi>
@@ -307,8 +305,8 @@
             The mappings specified by <function>glMapGrid</function> are used identically by
             <citerefentry><refentrytitle>glEvalMesh</refentrytitle></citerefentry> and <citerefentry><refentrytitle>glEvalPoint</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if either <parameter>un</parameter> or <parameter>vn</parameter> is not
             positive.
@@ -318,8 +316,8 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAP1_GRID_DOMAIN</constant>
         </para>
@@ -332,8 +330,8 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAP2_GRID_SEGMENTS</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glEvalCoord</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glEvalMesh</refentrytitle></citerefentry>,
@@ -341,13 +339,13 @@
             <citerefentry><refentrytitle>glMap1</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glMap2</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

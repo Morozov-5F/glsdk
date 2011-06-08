@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glMaterial">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glMaterial">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glMaterial</refname>
         <refpurpose>specify material parameters for the lighting model</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glMaterialf</function></funcdef>
@@ -34,7 +32,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>face</parameter></term>
@@ -67,8 +65,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glMaterialfv</function></funcdef>
@@ -86,7 +84,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>face</parameter></term>
@@ -125,8 +123,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glMaterial</function> assigns values to material parameters.
             There are two matched sets of material parameters.
@@ -177,7 +175,7 @@
                         Integer values are mapped linearly such that the most positive representable
                         value maps to 1.0,
                         and the most negative representable value maps to 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>.
@@ -197,7 +195,7 @@
                         Integer values are mapped linearly such that the most positive representable
                         value maps to 1.0,
                         and the most negative representable value maps to 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>.
@@ -217,7 +215,7 @@
                         Integer values are mapped linearly such that the most positive representable
                         value maps to 1.0,
                         and the most negative representable value maps to 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>.
@@ -237,7 +235,7 @@
                         Integer values are mapped linearly such that the most positive representable
                         value maps to 1.0,
                         and the most negative representable value maps to 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>.
@@ -256,7 +254,7 @@
                         the RGBA specular exponent of the material.
                         Integer and floating-point values are mapped directly.
                         Only values in the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,128]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -295,8 +293,8 @@
                 </listitem>
             </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             The material parameters can be updated at any time.
             In particular,
@@ -312,15 +310,15 @@
             all have alpha components, only the diffuse alpha component is used in
             the lighting computation.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if either <parameter>face</parameter> or <parameter>pname</parameter> is not
             an accepted value.
         </para>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if a specular exponent outside the range
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [0,128]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mn>0</mml:mn>
@@ -329,25 +327,25 @@
             </mml:math></inlineequation>
             is specified.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetMaterial</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glColorMaterial</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glLight</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glLightModel</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glCreateShaderProgram">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCreateShaderProgram">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glCreateShaderProgramv</refname>
         <refpurpose>create a stand-alone program from an array of null-terminated source code strings</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>GLuint <function>glCreateShaderProgramv</function></funcdef>
@@ -26,7 +24,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>type</parameter></term>
@@ -53,8 +51,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glCreateShaderProgram</function> creates a program object containing compiled and linked
             shaders for a single stage specified by <parameter>type</parameter>. <parameter>strings</parameter>
@@ -63,14 +61,14 @@
        <para>
             <function>glCreateShaderProgram</function> is equivalent (assuming no errors are generated) to:
        </para>
-<programlisting><![CDATA[    const GLuint shader = glCreateShader(type);
+<programlisting>    const GLuint shader = glCreateShader(type);
     if (shader) {
         glShaderSource(shader, count, strings, NULL);
         glCompileShader(shader);
         const GLuint program = glCreateProgram();
         if (program) {
             GLint compiled = GL_FALSE;
-            glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &amp;compiled);
             glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
             if (compiled) {
                 glAttachShader(program, shader);
@@ -83,13 +81,13 @@
         return program;
     } else {
         return 0;
-    }]]></programlisting>
+    }</programlisting>
     <para>
         The program object created by <function>glCreateShaderProgram</function> has its <constant>GL_PROGRAM_SEPARABLE</constant>
         status set to <constant>GL_TRUE</constant>.
     </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_OPERATION</constant> is generated if <parameter>pipeline</parameter> is not
             a name previously returned from a call to <citerefentry><refentrytitle>glGenProgramPipelines</refentrytitle></citerefentry>
@@ -100,21 +98,21 @@
             <constant>GL_INVALID_OPERATION</constant> is generated if <parameter>program</parameter> refers
             to a program object that has not been successfully linked.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glCreateShader</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCreateProgram</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCompileShader</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glLinkProgram</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

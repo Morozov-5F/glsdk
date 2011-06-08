@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glGet">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGet">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glGet</refname>
         <refpurpose>return the value or values of a selected parameter</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glGetBooleanv</function></funcdef>
@@ -25,7 +23,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glGetDoublev</function></funcdef>
@@ -34,7 +32,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glGetFloatv</function></funcdef>
@@ -43,7 +41,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glGetIntegerv</function></funcdef>
@@ -53,7 +51,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>pname</parameter></term>
@@ -73,8 +71,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             These four commands return values for simple state variables in GL.
             <parameter>pname</parameter> is a symbolic constant indicating the state variable to be returned,
@@ -95,7 +93,7 @@
             normals, however, are returned with a linear mapping that maps 1.0 to
             the most positive representable integer value
             and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: -1.0:-->
                 <mml:mn>-1.0</mml:mn>
             </mml:math></inlineequation>
@@ -143,7 +141,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -283,7 +281,7 @@
                         is linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -593,7 +591,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -795,7 +793,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -842,7 +840,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -877,7 +875,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -951,7 +949,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -983,7 +981,7 @@
                         current secondary color.  Integer values, if requested, are linearly mapped
                         from the internal floating-point representation such that 1.0 returns the
                         most positive representable integer value, and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -1042,7 +1040,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -1078,7 +1076,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -1349,7 +1347,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -1698,7 +1696,7 @@
                         are linearly mapped from the internal floating-point representation such
                         that 1.0 returns the most positive representable integer value,
                         and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>
@@ -2056,9 +2054,9 @@
                     <para>
                         <parameter>params</parameter> returns four values:
                         the endpoints of the 2D map's 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
                         grid domains. The initial value
                         is (0,1; 0,1).
                         See <citerefentry><refentrytitle>glMapGrid</refentrytitle></citerefentry>.
@@ -2073,9 +2071,9 @@
                     <para>
                         <parameter>params</parameter> returns two values:
                         the number of partitions in the 2D map's 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
                         grid
                         domains. The initial value is (1,1).
                         See <citerefentry><refentrytitle>glMapGrid</refentrytitle></citerefentry>.
@@ -3634,15 +3632,15 @@
                     <para>
                         <parameter>params</parameter> returns four values:
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
                         window coordinates of the scissor box,
                         followed by its width and height.
                         Initially the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
                         window coordinates are both 0 and the
                         width and height are set to the size of the window.
                         See <citerefentry><refentrytitle>glScissor</refentrytitle></citerefentry>.
@@ -4576,15 +4574,15 @@
                     <para>
                         <parameter>params</parameter> returns four values:
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
                         window coordinates of the viewport,
                         followed by its width and height.
                         Initially the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
                         window coordinates are both set to 0,
                         and the width and height are set to the width and height of the window into
                         which the GL will do its rendering.
@@ -4600,7 +4598,7 @@
                     <para>
                         <parameter>params</parameter> returns one value,
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>
                         pixel zoom factor. The initial value is 1.
                         See <citerefentry><refentrytitle>glPixelZoom</refentrytitle></citerefentry>.
                     </para>
@@ -4614,7 +4612,7 @@
                     <para>
                         <parameter>params</parameter> returns one value,
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>
                         pixel zoom factor. The initial value is 1.
                         See <citerefentry><refentrytitle>glPixelZoom</refentrytitle></citerefentry>.
                     </para>
@@ -4625,8 +4623,8 @@
             Many of the boolean parameters can also be queried more easily using
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <constant>GL_COLOR_LOGIC_OP</constant>,
             <constant>GL_COLOR_ARRAY</constant>,
@@ -4826,8 +4824,8 @@
             <constant>GL_TEXTURE_COORD_ARRAY_STRIDE</constant>,
             <constant>GL_TEXTURE_COORD_ARRAY_TYPE</constant>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>pname</parameter> is not an accepted value.
         </para>
@@ -4838,8 +4836,8 @@
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGetActiveAttrib</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGetActiveUniform</refentrytitle></citerefentry>,
@@ -4885,13 +4883,13 @@
             <citerefentry><refentrytitle>glGetVertexAttribPointerv</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

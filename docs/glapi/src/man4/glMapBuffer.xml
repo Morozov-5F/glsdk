@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glMapBuffer">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glMapBuffer">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glMapBuffer</refname>
         <refpurpose>map a buffer object's data store</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void * <function>glMapBuffer</function></funcdef>
@@ -25,7 +23,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -56,8 +54,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>GLboolean <function>glUnmapBuffer</function></funcdef>
@@ -66,7 +64,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -87,8 +85,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glMapBuffer</function> maps to the client's address space the entire data store of the buffer object 
             currently bound to <parameter>target</parameter>. The data can then be directly read and/or written relative to 
@@ -118,8 +116,8 @@
             A buffer object's mapped data store is automatically unmapped when the buffer object is deleted or its data store 
             is recreated with <function>glBufferData</function>.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             If an error is generated, <function>glMapBuffer</function> returns <constant>NULL</constant>, and
             <function>glUnmapBuffer</function> returns <constant>GL_FALSE</constant>.
@@ -128,8 +126,8 @@
             Parameter values passed to GL commands may not be sourced from the returned pointer. No error will be generated,
             but results will be undefined and will likely vary across GL implementations.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not
             <constant>GL_ARRAY_BUFFER</constant>,
@@ -162,16 +160,16 @@
             <constant>GL_INVALID_OPERATION</constant> is generated if <function>glUnmapBuffer</function> is executed for
             a buffer object whose data store is not currently mapped.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetBufferPointerv</refentrytitle></citerefentry> with argument <constant>GL_BUFFER_MAP_POINTER</constant>
         </para>
         <para>
             <citerefentry><refentrytitle>glGetBufferParameter</refentrytitle></citerefentry> with argument <constant>GL_BUFFER_MAPPED</constant>,  <constant>GL_BUFFER_ACCESS</constant>, or <constant>GL_BUFFER_USAGE</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBindBuffer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBindBufferBase</refentrytitle></citerefentry>,
@@ -180,13 +178,13 @@
             <citerefentry><refentrytitle>glBufferSubData</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDeleteBuffers</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2005 Addison-Wesley. 
+            Copyright <trademark class="copyright"/> 2005 Addison-Wesley. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glEvalMesh">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glEvalMesh">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glEvalMesh</refname>
         <refpurpose>compute a one- or two-dimensional grid of points or lines</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glEvalMesh1</function></funcdef>
@@ -27,7 +25,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mode</parameter></term>
@@ -46,13 +44,13 @@
             <listitem>
                 <para>
                     Specify the first and last integer values for grid domain variable 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
                 </para>
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glEvalMesh2</function></funcdef>
@@ -64,7 +62,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mode</parameter></term>
@@ -85,7 +83,7 @@
             <listitem>
                 <para>
                     Specify the first and last integer values for grid domain variable 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
                 </para>
             </listitem>
         </varlistentry>
@@ -95,13 +93,13 @@
             <listitem>
                 <para>
                     Specify the first and last integer values for grid domain variable 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>.
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>.
                 </para>
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <citerefentry><refentrytitle>glMapGrid</refentrytitle></citerefentry> and <function>glEvalMesh</function> are used in tandem to efficiently
             generate and evaluate a series of evenly-spaced map domain values.
@@ -122,7 +120,7 @@
             <programlisting>
 glBegin( <parameter>type</parameter> );
 for ( i = <parameter>i1</parameter>; i &lt;= <parameter>i2</parameter>; i += 1 )
-   glEvalCoord1( <mml:math>
+   glEvalCoord1( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
    		      <!-- eqn: i \cdot DELTA u + u sub 1 :-->
 		      <mml:mrow>
 		          <mml:mrow>
@@ -143,7 +141,7 @@ glEnd();
             where
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: DELTA u  =  (u sub 2  -  u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -172,15 +170,15 @@ glEnd();
         </para>
         <para>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>, 
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 1:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>1</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>2</mml:mn>
@@ -193,7 +191,7 @@ glEnd();
         </para>
         <para>
             The one absolute numeric requirement is that if 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i  =  n:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">i</mml:mi>
@@ -203,7 +201,7 @@ glEnd();
             </mml:math></inlineequation>,
             then the
             value computed from 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i cdot DELTA u  +  u sub 1:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -221,7 +219,7 @@ glEnd();
                 </mml:mrow>
             </mml:math></inlineequation>
             is exactly 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>2</mml:mn>
@@ -231,7 +229,7 @@ glEnd();
         <para>
             In the two-dimensional case, <function>glEvalMesh2</function>, let
             .cp
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: DELTA u  =    ( u sub 2  -  u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -257,7 +255,7 @@ glEnd();
             </mml:math></informalequation>
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: DELTA v  =    ( v sub 2  -  v sub 1 )  /  m:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -284,28 +282,28 @@ glEnd();
         </para>
         <para>
             where 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>, 
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 1:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>1</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>2</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">m</mml:mi></mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">m</mml:mi></mml:math></inlineequation>, 
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sub 1:-->
                 <mml:msub><mml:mi mathvariant="italic">v</mml:mi>
                 <mml:mn>1</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">v</mml:mi>
                 <mml:mn>2</mml:mn>
@@ -321,7 +319,7 @@ glEnd();
 for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) {
    glBegin( GL_QUAD_STRIP );
    for ( i = <parameter>i1</parameter>; i &lt;= <parameter>i2</parameter>; i += 1 ) {
-      glEvalCoord2( <mml:math>
+      glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<!-- i \cdot DELTA u + u sub 1 :-->
 		        <mml:mrow>
 			    <mml:mrow>
@@ -351,7 +349,7 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 		            </mml:msub>
 			</mml:mrow>
 		    </mml:math> );
-      glEvalCoord2( <mml:math>
+      glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<!-- i \cdot DELTA u + u sub 1, :-->
 		        <mml:mrow>
 			    <mml:mrow>
@@ -401,7 +399,7 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 ) {
    glBegin( GL_LINE_STRIP );
    for ( i = <parameter>i1</parameter>; i &lt;= <parameter>i2</parameter>; i += 1 )
-      glEvalCoord2( <mml:math>
+      glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<!-- i \cdot DELTA u + u sub 1 :-->
 		        <mml:mrow>
 			    <mml:mrow>
@@ -436,7 +434,7 @@ for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
 for ( i = <parameter>i1</parameter>;  i &lt;= <parameter>i2</parameter>; i += 1 ) {
    glBegin( GL_LINE_STRIP );
    for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j1</parameter>; j += 1 )
-      glEvalCoord2( <mml:math>
+      glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<!-- i \cdot DELTA u + u sub 1 :-->
 		        <mml:mrow>
 			    <mml:mrow>
@@ -478,7 +476,7 @@ for ( i = <parameter>i1</parameter>;  i &lt;= <parameter>i2</parameter>; i += 1 
 glBegin( GL_POINTS );
 for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
    for ( i = <parameter>i1</parameter>; i &lt;= <parameter>i2</parameter>; i += 1 )
-      glEvalCoord2( <mml:math>
+      glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<!-- i \cdot DELTA u + u sub 1 :-->
 		        <mml:mrow>
 			    <mml:mrow>
@@ -512,7 +510,7 @@ glEnd();
         </para>
         <para>
             In all three cases, the only absolute numeric requirements are that if 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i = n:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">i</mml:mi>
@@ -521,7 +519,7 @@ glEnd();
                 </mml:mrow>
             </mml:math></inlineequation>,
             then the value computed from 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i cdot DELTA u  +  u sub 1:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -539,14 +537,14 @@ glEnd();
                 </mml:mrow>
             </mml:math></inlineequation>
             is exactly
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">u</mml:mi>
                 <mml:mn>2</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>,
             and if 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: j = m:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">j</mml:mi>
@@ -555,7 +553,7 @@ glEnd();
                 </mml:mrow>
             </mml:math></inlineequation>,
             then the value computed from
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: j  cdot  DELTA v  +  v sub 1:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -573,15 +571,15 @@ glEnd();
                 </mml:mrow>
             </mml:math></inlineequation>
             is exactly 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">v</mml:mi>
                 <mml:mn>2</mml:mn>
                 </mml:msub>
             </mml:math></inlineequation>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>mode</parameter> is not an accepted value.
         </para>
@@ -590,8 +588,8 @@ glEnd();
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAP1_GRID_DOMAIN</constant>
         </para>
@@ -604,8 +602,8 @@ glEnd();
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAP2_GRID_SEGMENTS</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glEvalCoord</refentrytitle></citerefentry>,
@@ -614,13 +612,13 @@ glEnd();
             <citerefentry><refentrytitle>glMap2</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glMapGrid</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

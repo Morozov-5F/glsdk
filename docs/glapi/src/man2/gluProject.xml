@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="gluProject">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluProject">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>gluProject</refname>
         <refpurpose>map object coordinates to window coordinates</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>GLint <function>gluProject</function></funcdef>
@@ -33,7 +31,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>objX</parameter></term>
@@ -80,8 +78,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>gluProject</function> transforms the specified object coordinates into window coordinates
             using <parameter>model</parameter>, <parameter>proj</parameter>, and <parameter>view</parameter>. The result is stored 
@@ -92,7 +90,7 @@
         <para>
             To compute the coordinates,
             let 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v  =  (objX, objY, objZ, 1.0):-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">v</mml:mi>
@@ -107,7 +105,7 @@
             </mml:math></inlineequation>
             represented as a matrix with 4 rows and 1 column.
             Then <function>gluProject</function> computes 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sup prime:-->
                 <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
                 <mml:mo>$#x2033;</mml:mo>
@@ -116,7 +114,7 @@
             as follows: 
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sup prime  =  P  times  M  times  v:-->
                 <mml:mrow>
                     <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
@@ -135,12 +133,12 @@
         </para>
         <para>
             where 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">P</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">P</mml:mi></mml:math></inlineequation>
             is the current projection matrix <parameter>proj</parameter> and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">M</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">M</mml:mi></mml:math></inlineequation>
             is the current
             modelview matrix <parameter>model</parameter> (both represented as
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 4 times 4:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
@@ -154,7 +152,7 @@
             The window coordinates are then computed as follows: 
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: winX  =  view (0)  +  view (2)  *    (v sup prime (0)  +  1) / 2:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">winX</mml:mi>
@@ -200,7 +198,7 @@
                 </mml:mrow>
             </mml:math></informalequation>
             <para>
-                <informalequation><mml:math>
+                <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <!-- eqn: winY  =  view (1)  +  view (3)  *    (v sup prime (1)  +  1) / 2:-->
                     <mml:mrow>
                         <mml:mi mathvariant="italic">winY</mml:mi>
@@ -247,7 +245,7 @@
                 </mml:math></informalequation>
             </para>
             <para>
-                <informalequation><mml:math>
+                <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <!-- eqn: winZ  =  (v sup prime (2)   +  1) /  2:-->
                     <mml:mrow>
                         <mml:mi mathvariant="italic">winZ</mml:mi>
@@ -276,19 +274,19 @@
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluUnProject</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

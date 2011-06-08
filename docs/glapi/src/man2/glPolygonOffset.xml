@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glPolygonOffset">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glPolygonOffset">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glPolygonOffset</refname>
         <refpurpose>set the scale and units used to calculate depth values</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glPolygonOffset</function></funcdef>
@@ -26,7 +24,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>factor</parameter></term>
@@ -47,15 +45,15 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             When <constant>GL_POLYGON_OFFSET_FILL</constant>, <constant>GL_POLYGON_OFFSET_LINE</constant>, or
             <constant>GL_POLYGON_OFFSET_POINT</constant> is enabled, each
             fragment's <emphasis>depth</emphasis> value will be offset after it is interpolated
             from the <emphasis>depth</emphasis> values of the appropriate vertices.
             The value of the offset is 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: factor  *  DZ   +   r  *  units:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -72,13 +70,13 @@
                 </mml:mrow>
             </mml:math></inlineequation>,
             where 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: DZ:-->
                 <mml:mi mathvariant="italic">DZ</mml:mi>
             </mml:math></inlineequation>
             is a measurement of the change in depth relative to the screen
             area of the polygon, and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
             is the smallest value that is guaranteed to
             produce a resolvable offset for a given implementation.
             The offset is added before the depth test is performed and before
@@ -88,8 +86,8 @@
             <function>glPolygonOffset</function> is useful for rendering hidden-line images, for applying decals
             to surfaces, and for rendering solids with highlighted edges.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glPolygonOffset</function> is available only if the GL version is 1.1 or greater.
         </para>
@@ -100,15 +98,15 @@
         <para>
             <function>glPolygonOffset</function> has no effect on selection.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_OPERATION</constant> is generated if <function>glPolygonOffset</function> is executed
             between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> and the corresponding
             execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument
             <constant>GL_POLYGON_OFFSET_FILL</constant>,
@@ -119,21 +117,21 @@
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_POLYGON_OFFSET_FACTOR</constant> or
             <constant>GL_POLYGON_OFFSET_UNITS</constant>.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glDepthFunc</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glEnable</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

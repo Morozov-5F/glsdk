@@ -1,7 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glTexImage1D">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glTexImage1D">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glTexImage1D</refname>
         <refpurpose>specify a one-dimensional texture image</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glTexImage1D</function></funcdef>
@@ -34,7 +32,7 @@
     <!-- eqn: ignoring delim $$ -->
     <para>
     </para>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -125,7 +123,7 @@
             <listitem>
                 <para>
                     Specifies the width of the texture image including the border if any. If the GL version does not support non-power-of-two sizes, this value must be 
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: 2 sup n + 2 ( border ):-->
                         <mml:mrow>
                             <mml:msup><mml:mn>2</mml:mn>
@@ -142,7 +140,7 @@
                         </mml:mrow>
                     </mml:math></inlineequation>
                     for some integer 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>.
                     All
                     implementations support texture images that are at least 64 texels
                     wide. The height of the 1D texture image is 1.
@@ -216,8 +214,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Texturing maps a portion of a specified texture image
             onto each graphical primitive for which texturing is enabled.
@@ -485,13 +483,13 @@
 			<constant>GL_SLUMINANCE8</constant>,
 			<constant>GL_SLUMINANCE_ALPHA</constant>, or
 			<constant>GL_SLUMINANCE8_ALPHA8</constant>, the texture is treated as if the red, green, blue, or luminance components are encoded in the sRGB color space.    Any alpha component is left unchanged.  The conversion from the sRGB encoded component 
-			<inlineequation><mml:math>
+			<inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <mml:msub><mml:mi mathvariant="italic">c</mml:mi>
                     <mml:mi mathvariant="italic">s</mml:mi>
                     </mml:msub>
             </mml:math></inlineequation>
 			to a linear component 
-			<inlineequation><mml:math>
+			<inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <mml:msub><mml:mi mathvariant="italic">c</mml:mi>
                     <mml:mi mathvariant="italic">l</mml:mi>
                     </mml:msub>
@@ -499,7 +497,7 @@
             is:
 		</para>
 		<para>
-			<inlineequation><mml:math>
+			<inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<mml:mrow>
 				<mml:msub>
 				  <mml:mi mathvariant="italic">c</mml:mi>
@@ -577,7 +575,7 @@
 		</para>
 		<para>
 			Assume 		
-			<inlineequation><mml:math>
+			<inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
 								<mml:msub><mml:mi mathvariant="italic">c</mml:mi>
 								<mml:mi mathvariant="italic">s</mml:mi>
 								</mml:msub>
@@ -601,8 +599,8 @@
         <para>
 			Depth textures can be treated as LUMINANCE, INTENSITY or ALPHA textures during texture filtering and application. Image-based shadowing can be enabled by comparing texture r coordinates to depth texture values to generate a boolean result.  See <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry> for details on texture comparison.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             Texturing has no effect in color index mode.
         </para>
@@ -610,7 +608,7 @@
             If the <code>ARB_imaging</code> extension is supported, RGBA elements may
             also be processed by the imaging pipeline.  The following stages may be
             applied to an RGBA color before color component clamping to the range
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [0,1]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mn>0</mml:mn>
@@ -637,7 +635,7 @@
                         If a convolution filter changes the <parameter>width</parameter> of the texture (by
                         processing with a <constant>GL_CONVOLUTION_BORDER_MODE</constant> of <constant>GL_REDUCE</constant>, for
                         example), the <parameter>width</parameter> must 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup n + 2 ( border ):-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -655,7 +653,7 @@
                         </mml:math></inlineequation>,
                         for some
                         integer 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>,
                         after filtering.
                     </para>
                 </listitem>
@@ -767,8 +765,8 @@
 			<constant>GL_SLUMINANCE8_ALPHA8</constant>
 			internal formats are only available if the GL version is 2.1 or greater.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not <constant>GL_TEXTURE_1D</constant>
             or <constant>GL_PROXY_TEXTURE_1D</constant>.
@@ -790,7 +788,7 @@
         </para>
         <para>
             <constant>GL_INVALID_VALUE</constant> may be generated if <parameter>level</parameter> is greater than 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: log sub 2 (max):-->
                 <mml:mrow>
                     <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
@@ -814,7 +812,7 @@
         </para>
         <para>
 			<constant>GL_INVALID_VALUE</constant> is generated if non-power-of-two textures are not supported and the <parameter>width</parameter> cannot be represented as
-			<inlineequation><mml:math>
+			<inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 2 sup n  +  2(border):-->
                 <mml:mrow>
                     <mml:msup><mml:mn>2</mml:mn>
@@ -886,8 +884,8 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetTexImage</refentrytitle></citerefentry>
         </para>
@@ -897,8 +895,8 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_PIXEL_UNPACK_BUFFER_BINDING</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColorTable</refentrytitle></citerefentry>,
@@ -922,13 +920,13 @@
             <citerefentry><refentrytitle>glTexSubImage3D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

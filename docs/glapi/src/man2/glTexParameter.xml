@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glTexParameter">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glTexParameter">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glTexParameter</refname>
         <refpurpose>set texture parameters</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glTexParameterf</function></funcdef>
@@ -35,7 +33,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -79,8 +77,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glTexParameterfv</function></funcdef>
@@ -98,7 +96,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -144,15 +142,15 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Texture mapping is a technique that applies an image onto an object's surface
             as if the image were a decal or cellophane shrink-wrap.
             The image is created in texture space,
             with an 
-            (<inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>, 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>)
+            (<inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>, 
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>)
             coordinate system.
             A texture is a one- or two-dimensional image and a set of parameters
             that determine how samples are derived from the image.
@@ -180,7 +178,7 @@
                         A mipmap is an ordered set of arrays representing the same image
                         at progressively lower resolutions.
                         If the texture has dimensions 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup n  times  2 sup m:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -193,7 +191,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         there are
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: max ( n, m ) + 1:-->
                             <mml:mrow>
                                 <mml:mrow>
@@ -211,7 +209,7 @@
                         mipmaps.
                         The first mipmap is the original texture,
                         with dimensions 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup n  times  2 sup m:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -224,7 +222,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>.
                         Each subsequent mipmap has dimensions 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup { k - 1 }  times  2 sup { l - 1 }:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -249,7 +247,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         where 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup k  times  2 sup l:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -263,7 +261,7 @@
                         </mml:math></inlineequation>
                         are the dimensions of the previous mipmap,
                         until either 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: k  =  0:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">k</mml:mi>
@@ -272,7 +270,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         or 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: l = 0:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">l</mml:mi>
@@ -282,7 +280,7 @@
                         </mml:math></inlineequation>.
                         At that point,
                         subsequent mipmaps have dimension 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 1  times  2 sup { l - 1 }:-->
                             <mml:mrow>
                                 <mml:mn>1</mml:mn>
@@ -299,7 +297,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         or 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup { k - 1}  times  1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -317,7 +315,7 @@
                         </mml:math></inlineequation>
                         until the final mipmap,
                         which has dimension 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 1  times  1:-->
                             <mml:mrow>
                                 <mml:mn>1</mml:mn>
@@ -331,7 +329,7 @@
                         with the <emphasis>level</emphasis> argument indicating the order of the mipmaps.
                         Level 0 is the original texture;
                         level 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: max ( n, m ):-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">max</mml:mi>
@@ -343,7 +341,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         is the final 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 1  times  1:-->
                             <mml:mrow>
                                 <mml:mn>1</mml:mn>
@@ -546,17 +544,17 @@
                 <listitem>
                     <para>
                         Sets the wrap parameter for texture coordinate 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         to either <constant>GL_CLAMP</constant>,
                         <constant>GL_CLAMP_TO_BORDER</constant>, <constant>GL_CLAMP_TO_EDGE</constant>, <constant>GL_MIRRORED_REPEAT</constant>, or
                         <constant>GL_REPEAT</constant>.  <constant>GL_CLAMP</constant> causes 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         coordinates to be clamped to the
                         range [0,1] and is useful for preventing wrapping artifacts when mapping a
                         single image onto an object.  <constant>GL_CLAMP_TO_BORDER</constant> causes the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         coordinate to be clamped to the range
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ {-1 over 2N}, 1 + {1 over 2N} right ]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mfenced open="" close="">
@@ -582,13 +580,13 @@
                             </mml:mfenced>
                         </mml:math></inlineequation>,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
                         is the size of the texture in the direction of
                         clamping.<constant>GL_CLAMP_TO_EDGE</constant> causes 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         coordinates to be clamped to the
                         range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ {1 over 2N}, 1 - {1 over 2N} right ]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mfenced open="" close="">
@@ -614,26 +612,26 @@
                             </mml:mfenced>
                         </mml:math></inlineequation>,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">N</mml:mi></mml:math></inlineequation>
                         is the size
                         of the texture in the direction of clamping.  <constant>GL_REPEAT</constant> causes the
                         integer part of the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         coordinate to be ignored; the GL uses only the
                         fractional part, thereby creating a repeating pattern.
                         <constant>GL_MIRRORED_REPEAT</constant> causes the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         coordinate to be set to the
                         fractional part of the texture coordinate if the integer part of 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         is
                         even; if the integer part of 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         is odd, then the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         texture coordinate is
                         set to 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 1 - frac(s):-->
                             <mml:mrow>
                                 <mml:mn>1</mml:mn>
@@ -648,7 +646,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         where 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: frac(s):-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">frac</mml:mi>
@@ -659,7 +657,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         represents the fractional part of
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>.
                         Border texture
                         elements are accessed only if wrapping is set to <constant>GL_CLAMP</constant> or <constant>GL_CLAMP_TO_BORDER</constant>.  Initially,
                         <constant>GL_TEXTURE_WRAP_S</constant> is set to <constant>GL_REPEAT</constant>.
@@ -675,7 +673,7 @@
                 <listitem>
                     <para>
                         Sets the wrap parameter for texture coordinate 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
                         to either <constant>GL_CLAMP</constant>,
                         <constant>GL_CLAMP_TO_BORDER</constant>, <constant>GL_CLAMP_TO_EDGE</constant>, <constant>GL_MIRRORED_REPEAT</constant>, or
                         <constant>GL_REPEAT</constant>.  See the discussion under <constant>GL_TEXTURE_WRAP_S</constant>.
@@ -688,7 +686,7 @@
                 <listitem>
                     <para>
                         Sets the wrap parameter for texture coordinate 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
                         to either <constant>GL_CLAMP</constant>,
                         <constant>GL_CLAMP_TO_BORDER</constant>, <constant>GL_CLAMP_TO_EDGE</constant>, <constant>GL_MIRRORED_REPEAT</constant>, or
                         <constant>GL_REPEAT</constant>.  See the discussion under <constant>GL_TEXTURE_WRAP_S</constant>.
@@ -714,7 +712,7 @@
                     <para>
                         Specifies the texture residence priority of the currently bound texture.
                         Permissible values are in the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -739,7 +737,7 @@
                                 <listitem>
                                     <para>
                                         Specifies that the interpolated and clamped 
-                                        <inlineequation><mml:math><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
+                                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
                                         texture coordinate should
                                         be compared to the value in the currently bound depth texture.  See the
                                         discussion of <constant>GL_TEXTURE_COMPARE_FUNC</constant> for details of how the comparison
@@ -788,7 +786,7 @@
                                         <constant>GL_LEQUAL</constant>
                                         </entry>
                                         <entry align="left">
-                                            <informalequation><mml:math>
+                                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <!-- eqn: result  =  left {   cpile {1.0 above 0.0}        lpile {r <= {D sub t} above r > {D sub t}}:-->
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">result</mml:mi>
@@ -839,7 +837,7 @@
                                         <constant>GL_GEQUAL</constant>
                                         </entry>
                                         <entry align="left">
-                                            <informalequation><mml:math>
+                                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <!-- eqn: result  =  left {   cpile {1.0 above 0.0}        lpile {r <= {D sub t} above r > {D sub t}}:-->
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">result</mml:mi>
@@ -890,7 +888,7 @@
                                         <constant>GL_LESS</constant>
                                         </entry>
                                         <entry align="left">
-                                            <informalequation><mml:math>
+                                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <!-- eqn: result  =  left {   cpile {1.0 above 0.0}        lpile {r <= {D sub t} above r > {D sub t}}:-->
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">result</mml:mi>
@@ -941,7 +939,7 @@
                                         <constant>GL_GREATER</constant>
                                         </entry>
                                         <entry align="left">
-                                            <informalequation><mml:math>
+                                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <!-- eqn: result  =  left {   cpile {1.0 above 0.0}        lpile {r <= {D sub t} above r > {D sub t}}:-->
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">result</mml:mi>
@@ -992,7 +990,7 @@
                                         <constant>GL_EQUAL</constant>
                                         </entry>
                                         <entry align="left">
-                                            <informalequation><mml:math>
+                                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <!-- eqn: result  =  left {   cpile {1.0 above 0.0}        lpile {r <= {D sub t} above r > {D sub t}}:-->
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">result</mml:mi>
@@ -1043,7 +1041,7 @@
                                         <constant>GL_NOTEQUAL</constant>
                                         </entry>
                                         <entry align="left">
-                                            <informalequation><mml:math>
+                                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <!-- eqn: result  =  left {   cpile {1.0 above 0.0}        lpile {r <= {D sub t} above r > {D sub t}}:-->
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">result</mml:mi>
@@ -1095,7 +1093,7 @@
                                         </entry>
                                         <entry align="left">
                                             <informalequation>
-                                                <mml:math>
+                                                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">result</mml:mi>
                                                     <mml:mo>=</mml:mo>
@@ -1111,7 +1109,7 @@
                                         </entry>
                                         <entry align="left">
                                             <informalequation>
-                                                <mml:math>
+                                                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">result</mml:mi>
                                                     <mml:mo>=</mml:mo>
@@ -1124,16 +1122,16 @@
                                 </tbody>
                             </tgroup>
                         </informaltable>
-                        where <inlineequation><mml:math><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
+                        where <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
                         is the current interpolated texture coordinate, and 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: D sub t:-->
                             <mml:msub><mml:mi mathvariant="italic">D</mml:mi>
                             <mml:mi mathvariant="italic">t</mml:mi>
                             </mml:msub>
                         </mml:math></inlineequation>
                         is the depth texture value sampled from the currently bound depth texture.
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">result</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">result</mml:mi></mml:math></inlineequation>
                         is assigned to the either the luminance, intensity, or alpha (as
                         specified by <constant>GL_DEPTH_TEXTURE_MODE</constant>.)
                     </para>
@@ -1161,8 +1159,8 @@
                 </listitem>
             </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <constant>GL_TEXTURE_3D</constant>, <constant>GL_TEXTURE_MIN_LOD</constant>, <constant>GL_TEXTURE_MAX_LOD</constant>,
             <constant>GL_CLAMP_TO_EDGE</constant>, <constant>GL_TEXTURE_BASE_LEVEL</constant>, and <constant>GL_TEXTURE_MAX_LEVEL</constant> are
@@ -1206,8 +1204,8 @@
             specifies the texture parameters for the active texture unit, specified
             by calling <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> or <parameter>pname</parameter> is not
             one of the accepted defined values.
@@ -1220,16 +1218,16 @@
             <constant>GL_INVALID_OPERATION</constant> is generated if <function>glTexParameter</function> is executed between the
             execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetTexParameter</refentrytitle></citerefentry>
         </para>
         <para>
             <citerefentry><refentrytitle>glGetTexLevelParameter</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBindTexture</refentrytitle></citerefentry>,
@@ -1252,13 +1250,13 @@
             <citerefentry><refentrytitle>glTexSubImage2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTexSubImage3D</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

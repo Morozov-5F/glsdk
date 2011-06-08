@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glPixelStore">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glPixelStore">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glPixelStore</refname>
         <refpurpose>set pixel storage modes</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glPixelStoref</function></funcdef>
@@ -33,7 +31,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>pname</parameter></term>
@@ -70,8 +68,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glPixelStore</function> sets pixel storage modes that affect the operation of subsequent
             <citerefentry><refentrytitle>glDrawPixels</refentrytitle></citerefentry> and <citerefentry><refentrytitle>glReadPixels</refentrytitle></citerefentry> as well as the unpacking of
@@ -105,50 +103,50 @@
                         is reversed.
                         That is,
                         if a four-byte component consists of bytes
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 0:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>0</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 1:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>1</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 2:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>2</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 3:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>3</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
                         it is stored in memory as
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 3:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>3</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 2:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>2</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 1:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>1</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 0:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>0</mml:mn>
@@ -186,12 +184,12 @@
                         If greater than 0,
                         <constant>GL_PACK_ROW_LENGTH</constant> defines the number of pixels in a row.
                         If the first pixel of a row is placed at location 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
                         in memory,
                         then the location of the first pixel of the next row is obtained by skipping
                     </para>
                     <para>
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: k  =   left {      lpile { n l above {a over s} left ceiling { s n l } over a right ceiling}         lpile {s  >=  a above s  <  a }:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">k</mml:mi>
@@ -257,20 +255,20 @@
                     <para>
                         components or indices,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         is the number of components or indices in a pixel,
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">l</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">l</mml:mi></mml:math></inlineequation>
                         is the number of pixels in a row
                         (<constant>GL_PACK_ROW_LENGTH</constant> if it is greater than 0,
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
                         argument to the pixel routine otherwise),
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">a</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">a</mml:mi></mml:math></inlineequation>
                         is the value of <constant>GL_PACK_ALIGNMENT</constant>, and
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         is the size, in bytes, of a single component
                         (if 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: a < s:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">a</mml:mi>
@@ -279,7 +277,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         then it is as if 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: a  =  s:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">a</mml:mi>
@@ -291,7 +289,7 @@
                         the location of the next row is obtained by skipping
                     </para>
                     <para>
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: k  =  8 a left ceiling { n l } over { 8 a } right ceiling:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">k</mml:mi>
@@ -351,12 +349,12 @@
                         three-dimensional texture volume, where ``image'' is defined by all pixels
                         sharing the same third dimension index.
                         If the first pixel of a row is placed at location 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
                         in memory,
                         then the location of the first pixel of the next row is obtained by skipping
                     </para>
                     <para>
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: k  =   left {        lpile { n l h above {a over s} left ceiling { s n l h } over a right ceiling}        lpile {s  >=  a above s  <  a }:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">k</mml:mi>
@@ -425,27 +423,27 @@
                     </para>
                     <para>
                         components or indices, where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         is the number of components or indices
                         in a pixel, 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">l</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">l</mml:mi></mml:math></inlineequation>
                         is the number of pixels in a row
                         (<constant>GL_PACK_ROW_LENGTH</constant> if it is greater than 0, the
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
                         argument to <citerefentry><refentrytitle>glTexImage3D</refentrytitle></citerefentry> otherwise), 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">h</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">h</mml:mi></mml:math></inlineequation>
                         is the number of
                         rows in a pixel image (<constant>GL_PACK_IMAGE_HEIGHT</constant> if it is greater than
                         0, the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">height</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">height</mml:mi></mml:math></inlineequation>
                         argument to the <citerefentry><refentrytitle>glTexImage3D</refentrytitle></citerefentry> routine otherwise),
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">a</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">a</mml:mi></mml:math></inlineequation>
                         is the value of
                         <constant>GL_PACK_ALIGNMENT</constant>, and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         is the size, in bytes, of a single
                         component (if 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: a < s:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">a</mml:mi>
@@ -454,7 +452,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         then it is as if 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: a = s:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">a</mml:mi>
@@ -487,10 +485,10 @@
                         they provide no functionality that cannot be duplicated simply by
                         incrementing the pointer passed to <citerefentry><refentrytitle>glReadPixels</refentrytitle></citerefentry>.
                         Setting <constant>GL_PACK_SKIP_PIXELS</constant> to 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
                         is equivalent to incrementing
                         the pointer by 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: i n:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">i</mml:mi>
@@ -500,13 +498,13 @@
                         </mml:math></inlineequation>
                         components or indices,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         is the number of components or indices in each pixel.
                         Setting <constant>GL_PACK_SKIP_ROWS</constant> to 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
                         is equivalent to incrementing
                         the pointer by 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: j m:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">j</mml:mi>
@@ -516,14 +514,14 @@
                         </mml:math></inlineequation>
                         components or indices,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">m</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">m</mml:mi></mml:math></inlineequation>
                         is the number of components or indices per row,
                         as just computed in the <constant>GL_PACK_ROW_LENGTH</constant> section.
                         Setting <constant>GL_PACK_SKIP_IMAGES</constant> to 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
                         is equivalent to incrementing
                         the pointer by 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: k p:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">k</mml:mi>
@@ -532,7 +530,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
                         is the number of components or indices
                         per image, as computed in the <constant>GL_PACK_IMAGE_HEIGHT</constant> section.
                     </para>
@@ -587,50 +585,50 @@
                         is reversed.
                         That is,
                         if a four-byte component consists of bytes
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 0:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>0</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 1:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>1</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 2:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>2</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 3:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>3</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
                         it is taken from memory as
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 3:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>3</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 2:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>2</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 1:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>1</mml:mn>
                             </mml:msub>
                         </mml:math></inlineequation>,
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: b sub 0:-->
                             <mml:msub><mml:mi mathvariant="italic">b</mml:mi>
                             <mml:mn>0</mml:mn>
@@ -668,12 +666,12 @@
                         If greater than 0,
                         <constant>GL_UNPACK_ROW_LENGTH</constant> defines the number of pixels in a row.
                         If the first pixel of a row is placed at location 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
                         in memory,
                         then the location of the first pixel of the next row is obtained by skipping
                     </para>
                     <para>
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: k  =   left {       lpile { n l above {a over s} left ceiling { s n l } over a right ceiling }        lpile { s  >=  a above s  <  a }:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">k</mml:mi>
@@ -739,20 +737,20 @@
                     <para>
                         components or indices,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         is the number of components or indices in a pixel,
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">l</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">l</mml:mi></mml:math></inlineequation>
                         is the number of pixels in a row
                         (<constant>GL_UNPACK_ROW_LENGTH</constant> if it is greater than 0,
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
                         argument to the pixel routine otherwise),
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">a</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">a</mml:mi></mml:math></inlineequation>
                         is the value of <constant>GL_UNPACK_ALIGNMENT</constant>, and
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         is the size, in bytes, of a single component
                         (if 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: a < s:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">a</mml:mi>
@@ -761,7 +759,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         then it is as if 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: a = s:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">a</mml:mi>
@@ -773,7 +771,7 @@
                         the location of the next row is obtained by skipping
                     </para>
                     <para>
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: k  =  8 a left ceiling { n l } over { 8 a } right ceiling:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">k</mml:mi>
@@ -833,12 +831,12 @@
                         a three-dimensional texture volume.  Where ``image'' is defined by all
                         pixel sharing the same third dimension index.
                         If the first pixel of a row is placed at location 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">p</mml:mi></mml:math></inlineequation>
                         in memory,
                         then the location of the first pixel of the next row is obtained by skipping
                     </para>
                     <para>
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: k  =   left {       lpile { n l h above {a over s} left ceiling { s n l h } over a right ceiling }        lpile { s   >=  a above s  <  a }:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">k</mml:mi>
@@ -908,25 +906,25 @@
                     <para>
                         components or indices,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         is the number of components or indices in a pixel,
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">l</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">l</mml:mi></mml:math></inlineequation>
                         is the number of pixels in a row
                         (<constant>GL_UNPACK_ROW_LENGTH</constant> if it is greater than 0,
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
                         argument to <citerefentry><refentrytitle>glTexImage3D</refentrytitle></citerefentry> otherwise),
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">h</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">h</mml:mi></mml:math></inlineequation>
                         is the number of rows in an image (<constant>GL_UNPACK_IMAGE_HEIGHT</constant> if
                         it is greater than 0, the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">height</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">height</mml:mi></mml:math></inlineequation>
                         argument to <citerefentry><refentrytitle>glTexImage3D</refentrytitle></citerefentry> otherwise),
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">a</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">a</mml:mi></mml:math></inlineequation>
                         is the value of <constant>GL_UNPACK_ALIGNMENT</constant>, and
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         is the size, in bytes, of a single component
                         (if 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: a < s:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">a</mml:mi>
@@ -935,7 +933,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         then it is as if 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: a  =  s:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">a</mml:mi>
@@ -975,10 +973,10 @@
                         <citerefentry><refentrytitle>glBitmap</refentrytitle></citerefentry>, or
                         <citerefentry><refentrytitle>glPolygonStipple</refentrytitle></citerefentry>.
                         Setting <constant>GL_UNPACK_SKIP_PIXELS</constant> to 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
                         is equivalent to incrementing
                         the pointer by 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: i n:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">i</mml:mi>
@@ -988,13 +986,13 @@
                         </mml:math></inlineequation>
                         components or indices,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         is the number of components or indices in each pixel.
                         Setting <constant>GL_UNPACK_SKIP_ROWS</constant> to 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>
                         is equivalent to incrementing
                         the pointer by 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: j k:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">j</mml:mi>
@@ -1004,7 +1002,7 @@
                         </mml:math></inlineequation>
                         components or indices,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
                         is the number of components or indices per row,
                         as just computed in the <constant>GL_UNPACK_ROW_LENGTH</constant> section.
                     </para>
@@ -1034,10 +1032,10 @@
         </para>
         <informaltable frame="topbot">
             <tgroup cols="4" align="left">
-                <colspec colwidth="2.5*" />
-                <colspec colwidth="1*"  align="center"/>
-                <colspec colwidth="1*"  align="center"/>
-                <colspec colwidth="2*"  align="center"/>
+                <colspec colwidth="2.5*"/>
+                <colspec colwidth="1*" align="center"/>
+                <colspec colwidth="1*" align="center"/>
+                <colspec colwidth="2*" align="center"/>
                 <thead>
                     <row>
                         <entry rowsep="1" align="left"><emphasis role="bold">
@@ -1094,7 +1092,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0,\(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1114,7 +1112,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0, \(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1134,7 +1132,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0,\(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1154,7 +1152,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0,\(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1174,7 +1172,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0,\(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1236,7 +1234,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0,\(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1256,7 +1254,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0,\(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1276,7 +1274,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0,\(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1296,7 +1294,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0,\(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1316,7 +1314,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left [ 0,\(if right ):-->
                             <mml:mfenced open="[" close=")">
                                 <mml:mn>0</mml:mn>
@@ -1356,8 +1354,8 @@
             pixel store parameters.
             Boolean parameters are set to false if <parameter>param</parameter> is 0 and true otherwise.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             The pixel storage modes in effect when
             <citerefentry><refentrytitle>glDrawPixels</refentrytitle></citerefentry>,
@@ -1387,8 +1385,8 @@
             using
             <citerefentry><refentrytitle>glPushClientAttrib</refentrytitle></citerefentry> and <citerefentry><refentrytitle>glPopClientAttrib</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>pname</parameter> is not an accepted value.
         </para>
@@ -1403,8 +1401,8 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_PACK_SWAP_BYTES</constant>
         </para>
@@ -1453,8 +1451,8 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_UNPACK_ALIGNMENT</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBitmap</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColorTable</refentrytitle></citerefentry>,
@@ -1478,13 +1476,13 @@
             <citerefentry><refentrytitle>glTexSubImage2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTexSubImage3D</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

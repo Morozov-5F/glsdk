@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glMap1">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glMap1">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glMap1</refname>
         <refpurpose>define a one-dimensional evaluator</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glMap1f</function></funcdef>
@@ -41,7 +39,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -67,10 +65,10 @@
             <listitem>
                 <para>
                     Specify a linear mapping of 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>,
                     as presented to <citerefentry><refentrytitle>glEvalCoord1</refentrytitle></citerefentry>,
                     to 
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: u hat:-->
                         <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
                     </mml:math></inlineequation>,
@@ -109,8 +107,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Evaluators provide a way to use polynomial or rational polynomial mapping
             to produce vertices,
@@ -137,7 +135,7 @@
         <para>
             Evaluators define curves based on Bernstein polynomials.
             Define 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p ( u hat):-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">p</mml:mi>
@@ -150,7 +148,7 @@
             as
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: p ( u hat)   =   sum from {i = 0} to {n}   { {B sub i} sup n ( u hat ) R sub i }:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -163,7 +161,7 @@
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:munderover>
-                            <mml:mo>&Sigma;</mml:mo>
+                            <mml:mo>Σ</mml:mo>
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">i</mml:mi>
                                 <mml:mo>=</mml:mo>
@@ -198,14 +196,14 @@
         </para>
         <para>
             where
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: R sub i:-->
                 <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
                 <mml:mi mathvariant="italic">i</mml:mi>
                 </mml:msub>
             </mml:math></inlineequation>
             is a control point and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: {B sub i} sup n ( u hat):-->
                 <mml:mrow>
                     <mml:msup><mml:mfenced open="" close="">
@@ -222,11 +220,11 @@
                 </mml:mrow>
             </mml:math></inlineequation>
             is the 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>th
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>th
             Bernstein polynomial of degree 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
             (<parameter>order</parameter> = 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: n  +  1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">n</mml:mi>
@@ -236,7 +234,7 @@
             </mml:math></inlineequation>):
         </para>
         <para>
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: {B sub i} sup n ( u hat)   =   left ( {cpile { n above i }} right ) {u hat} sup i { ( 1 - u hat) sup { n - i } }:-->
                 <mml:mrow>
                     <mml:mrow>
@@ -298,7 +296,7 @@
             Recall that
         </para>
         <para>
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 0 sup 0  ==  1:-->
                 <mml:mrow>
                     <mml:msup><mml:mn>0</mml:mn>
@@ -309,7 +307,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>
             and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: left ( {cpile { n above 0 }} right )  ==  1:-->
                 <mml:mrow>
                     <mml:mfenced open="(" close=")">
@@ -339,14 +337,14 @@
             <citerefentry><refentrytitle>glEvalCoord1</refentrytitle></citerefentry> evaluates the one-dimensional maps that are enabled.
             When
             <citerefentry><refentrytitle>glEvalCoord1</refentrytitle></citerefentry> presents a value 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>,
             the Bernstein functions are evaluated using 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u hat:-->
                 <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
             </mml:math></inlineequation>,
             where
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u hat   =   {u  -  u1} over {u2  -  u1}:-->
                 <mml:mrow>
                     <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
@@ -382,10 +380,10 @@
                 <listitem>
                     <para>
                         Each control point is three floating-point values representing
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>, 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>, 
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>.
                         Internal <citerefentry><refentrytitle>glVertex3</refentrytitle></citerefentry> commands are generated when the map is evaluated.
                     </para>
                 </listitem>
@@ -395,11 +393,11 @@
                 <listitem>
                     <para>
                         Each control point is four floating-point values representing
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>, 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>, 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>, 
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>, 
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>.
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>.
                         Internal <citerefentry><refentrytitle>glVertex4</refentrytitle></citerefentry> commands are generated when the map is evaluated.
                     </para>
                 </listitem>
@@ -433,10 +431,10 @@
                     <para>
                         Each control point is three floating-point values representing
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>, 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">x</mml:mi></mml:math></inlineequation>, 
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">y</mml:mi></mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">z</mml:mi></mml:math></inlineequation>
                         components of a normal vector.
                         Internal <citerefentry><refentrytitle>glNormal</refentrytitle></citerefentry> commands are generated when the map is
                         evaluated but the current normal is not updated with the value of
@@ -450,7 +448,7 @@
                     <para>
                         Each control point is a single floating-point value representing
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         texture coordinate.
                         Internal
                         <citerefentry><refentrytitle>glTexCoord1</refentrytitle></citerefentry> commands are generated when the map is
@@ -465,9 +463,9 @@
                     <para>
                         Each control point is two floating-point values representing
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>
                         texture coordinates.
                         Internal
                         <citerefentry><refentrytitle>glTexCoord2</refentrytitle></citerefentry> commands are generated when the map is
@@ -482,10 +480,10 @@
                     <para>
                         Each control point is three floating-point values representing
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>, 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>, 
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>
                         texture coordinates.
                         Internal <citerefentry><refentrytitle>glTexCoord3</refentrytitle></citerefentry> commands are generated when the map is
                         evaluated but the current texture coordinates are not updated with the value
@@ -499,11 +497,11 @@
                     <para>
                         Each control point is four floating-point values representing
                         the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>, 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>, 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">s</mml:mi></mml:math></inlineequation>, 
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">t</mml:mi></mml:math></inlineequation>, 
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">r</mml:mi></mml:math></inlineequation>,
                         and 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">q</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">q</mml:mi></mml:math></inlineequation>
                         texture coordinates.
                         Internal
                         <citerefentry><refentrytitle>glTexCoord4</refentrytitle></citerefentry> commands are generated when the map is evaluated but
@@ -524,16 +522,16 @@
             <parameter>stride</parameter> specifies how many float or double locations to advance the internal
             memory pointer to reach the next control point.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             As is the case with all GL commands that accept pointers to data,
             it is as if the contents of <parameter>points</parameter> were copied by <function>glMap1</function> before <function>glMap1</function>
             returns.
             Changes to the contents of <parameter>points</parameter> have no effect after <function>glMap1</function> is called.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not an accepted value.
         </para>
@@ -558,8 +556,8 @@
             <constant>GL_INVALID_OPERATION</constant> is generated if <function>glMap1</function> is called and the value
             of <constant>GL_ACTIVE_TEXTURE</constant> is not <constant>GL_TEXTURE0</constant>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetMap</refentrytitle></citerefentry>
         </para>
@@ -593,8 +591,8 @@
         <para>
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument <constant>GL_MAP1_TEXTURE_COORD_4</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColor</refentrytitle></citerefentry>,
@@ -608,13 +606,13 @@
             <citerefentry><refentrytitle>glTexCoord</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glVertex</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

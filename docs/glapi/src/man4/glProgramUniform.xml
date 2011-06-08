@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-          
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glProgramUniform">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glProgramUniform">
     <refmeta>
     <refentrytitle>glProgramUniform</refentrytitle>
     <manvolnum>3G</manvolnum>
@@ -43,7 +41,7 @@
     <refname>glProgramUniformMatrix4x3fv</refname>
     <refpurpose>Specify the value of a uniform variable for a specified program object</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
     <funcsynopsis>
         <funcprototype>
         <funcdef>void <function>glProgramUniform1f</function></funcdef>
@@ -137,7 +135,7 @@
         </funcprototype>
     </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
     <variablelist>
         <varlistentry>
         <term><parameter>program</parameter></term>
@@ -166,8 +164,8 @@
         </listitem>
         </varlistentry>
     </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
     <funcsynopsis>
         <funcprototype>
         <funcdef>void <function>glProgramUniform1fv</function></funcdef>
@@ -255,7 +253,7 @@
         </funcprototype>
     </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
     <variablelist>
         <varlistentry>
         <term><parameter>program</parameter></term>
@@ -290,8 +288,8 @@
         </listitem>
         </varlistentry>
     </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
     <funcsynopsis>
         <funcprototype>
         <funcdef>void <function>glProgramUniformMatrix2fv</function></funcdef>
@@ -367,7 +365,7 @@
         </funcprototype>
     </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters3"><title>Parameters</title>
+    <refsection xml:id="parameters3"><info><title>Parameters</title></info>
     <variablelist>
         <varlistentry>
         <term><parameter>program</parameter></term>
@@ -410,8 +408,8 @@
         </listitem>
         </varlistentry>
     </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
     <para><function>glProgramUniform</function> modifies the value of a
     uniform variable or a uniform variable array. The location of
     the uniform variable to be modified is specified by
@@ -490,14 +488,14 @@
     <function>glProgramUniformMatrix{2|3|4|2x3|3x2|2x4|4x2|3x4|4x3}fv</function> 
         are used to modify a matrix or an array of matrices. The numbers in the
     command name are interpreted as the dimensionality of the matrix.
-    The number <function>2</function> indicates a 2 &#215; 2 matrix
+    The number <function>2</function> indicates a 2 × 2 matrix
     (i.e., 4 values), the number <function>3</function> indicates a
-    3 &#215; 3 matrix (i.e., 9 values), and the number
-    <function>4</function> indicates a 4 &#215; 4 matrix (i.e., 16
+    3 × 3 matrix (i.e., 9 values), and the number
+    <function>4</function> indicates a 4 × 4 matrix (i.e., 16
     values). Non-square matrix dimensionality is explicit, with the first
         number representing the number of columns and the second number
         representing the number of rows.  For example, 
-        <function>2x4</function> indicates a 2 &#215; 4 matrix with 2 columns
+        <function>2x4</function> indicates a 2 × 4 matrix with 2 columns
         and 4 rows (i.e., 8 values).
         If <parameter>transpose</parameter> is
     <constant>GL_FALSE</constant>, each matrix is assumed to be
@@ -509,8 +507,8 @@
     of 1 should be used if modifying the value of a single matrix,
     and a count greater than 1 can be used to modify an array of
     matrices.</para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
     <para><function>glProgramUniform1i</function> and
     <function>glProgramUniform1iv</function> are the only two functions
     that may be used to load uniform variables defined as sampler
@@ -536,8 +534,8 @@
     <parameter>program</parameter>. If <parameter>location</parameter> is
     equal to -1, the data passed in will be silently ignored and the
     specified uniform variable will not be changed.</para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
     <para><constant>GL_INVALID_OPERATION</constant> is generated if
     <parameter>program</parameter> does not refer to a program object owned
     by the GL.</para>
@@ -582,8 +580,8 @@
     <function>glProgramUniform1i</function> and
     <function>glProgramUniform1iv</function>.</para>
 
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
     <para><citerefentry><refentrytitle>glGetActiveUniform</refentrytitle></citerefentry>
     with the handle of a program object and the index of an active uniform variable</para>
 
@@ -594,18 +592,18 @@
     <para><citerefentry><refentrytitle>glGetUniformLocation</refentrytitle></citerefentry>
     with the handle of a program object and the name of a uniform
     variable</para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
     <para><citerefentry><refentrytitle>glLinkProgram</refentrytitle></citerefentry>,
     <citerefentry><refentrytitle>glUseProgram</refentrytitle></citerefentry></para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2003-2005 3Dlabs Inc. Ltd. 
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group.
+            Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group.
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

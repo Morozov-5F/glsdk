@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glIsQuery">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glIsQuery">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glIsQuery</refname>
         <refpurpose>determine if a name corresponds to a query object</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>GLboolean <function>glIsQuery</function></funcdef>
@@ -24,7 +22,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>id</parameter></term>
@@ -35,8 +33,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glIsQuery</function> returns <constant>GL_TRUE</constant> if <parameter>id</parameter> is currently the name of a query object.
             If <parameter>id</parameter> is zero, or is a non-zero value that is not currently the
@@ -46,33 +44,33 @@
             A name returned by <citerefentry><refentrytitle>glGenQueries</refentrytitle></citerefentry>, but not yet associated with a query object
             by calling <citerefentry><refentrytitle>glBeginQuery</refentrytitle></citerefentry>, is not the name of a query object.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glIsQuery</function> is available only if the GL version is 1.5 or greater.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_OPERATION</constant> is generated if <function>glIsQuery</function> is executed
             between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> and the corresponding
             execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBeginQuery</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDeleteQueries</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glEndQuery</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGenQueries</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2005 Addison-Wesley. 
+            Copyright <trademark class="copyright"/> 2005 Addison-Wesley. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

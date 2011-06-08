@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="gluUnProject4">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluUnProject4">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>gluUnProject4</refname>
         <refpurpose>map window and clip coordinates to object coordinates</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>GLint <function>gluUnProject4</function></funcdef>
@@ -37,7 +35,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>winX</parameter></term>
@@ -102,14 +100,14 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>gluUnProject4</function> maps the specified window coordinatesi: <parameter>winX</parameter>, <parameter>winY</parameter>, and <parameter>winZ</parameter>
             and its clip w coordinate <parameter>clipW</parameter>
             into object 
             coordinates 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: (objX, objY, objZ, objW):-->
                 <mml:mfenced open="(" close=")">
                     <mml:mi mathvariant="italic">objX</mml:mi>
@@ -130,7 +128,7 @@
         </para>
         <para>
             To compute the coordinates 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: (objX, objY, objZ, objW):-->
                 <mml:mfenced open="(" close=")">
                     <mml:mi mathvariant="italic">objX</mml:mi>
@@ -143,7 +141,7 @@
             <parameter>model</parameter> * <parameter>proj</parameter> as follows:
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: left ( cpile {  objX above  objY above  objZ above  objW}    right )  =  INV(P M)  left ( cpile {  {2(winX  -  view[0])} over {view[2]}  -  1 above  {2(winY  -  view[1])} over {view[3]}  -  1 above  {2(winZ  -  nearVal)} over {(farVal  -  nearVal)}  -  1 above  clipW}    right ):-->
                 <mml:mrow>
                     <mml:mfenced open="(" close=")">
@@ -290,33 +288,33 @@
             </mml:math></informalequation>
         </para>
         <para>
-            <inlineequation><mml:math><mml:mi mathvariant="italic">INV</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">INV</mml:mi></mml:math></inlineequation>
             denotes matrix inversion. 
         </para>
         <para>
             <function>gluUnProject4</function> is equivalent to <citerefentry><refentrytitle>gluUnProject</refentrytitle></citerefentry> when <parameter>clipW</parameter> is 1, <parameter>nearVal</parameter> is 0, and
             <parameter>farVal</parameter> is 1.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>gluUnProject4</function> is available only if the GLU version is 1.3 or greater.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluProject</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluUnProject</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glFeedbackBuffer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

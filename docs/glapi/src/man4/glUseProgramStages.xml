@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glUseProgramStages">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glUseProgramStages">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glUseProgramStages</refname>
         <refpurpose>bind stages of a program object to a program pipeline</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glUseProgramStages</function></funcdef>
@@ -26,7 +24,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>pipeline</parameter></term>
@@ -53,8 +51,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glUseProgramStages</function> binds executables from a program object
             associated with a specified set of shader stages to the program pipeline object given
@@ -79,8 +77,8 @@
             for the indicated shader stages. If <parameter>stages</parameter> contains bits other than those
             listed above, and is not equal to <constant>GL_ALL_SHADER_BITS</constant>, an error is generated.
        </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>shaders</parameter> contains
             set bits that are not recognized, and is not the reserved value <constant>GL_ALL_SHADER_BITS</constant>.
@@ -99,20 +97,20 @@
             or if such a name has been deleted by a call to
             <citerefentry><refentrytitle>glDeleteProgramPipelines</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGenProgramPipelines</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDeleteProgramPipelines</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glIsProgramPipeline</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glShadeModel">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glShadeModel">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glShadeModel</refname>
         <refpurpose>select flat or smooth shading</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glShadeModel</function></funcdef>
@@ -25,7 +23,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mode</parameter></term>
@@ -38,8 +36,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             GL primitives can have either flat or smooth shading.
             Smooth shading,
@@ -59,10 +57,10 @@
             Flat and smooth shading are indistinguishable for points.
             Starting when <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> is issued and counting vertices and
             primitives from 1, the GL gives each flat-shaded line segment 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
             the
             computed color of vertex 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: i  +  1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">i</mml:mi>
@@ -88,7 +86,7 @@
                     <row>
                         <entry rowsep="1" align="left"><emphasis role="bold">
                         Primitive Type of Polygon 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
                         </emphasis></entry>
                         <entry rowsep="1" align="center"><emphasis role="bold">
                         Vertex
@@ -99,7 +97,7 @@
                     <row>
                         <entry align="left">
                         Single polygon 
-                        (<inlineequation><mml:math>
+                        (<inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: i  ==  1:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">i</mml:mi>
@@ -117,7 +115,7 @@
                         Triangle strip
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: i  +  2:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">i</mml:mi>
@@ -132,7 +130,7 @@
                         Triangle fan
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: i  +  2:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">i</mml:mi>
@@ -147,7 +145,7 @@
                         Independent triangle
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 3 i:-->
                             <mml:mrow>
                                 <mml:mn>3</mml:mn>
@@ -162,7 +160,7 @@
                         Quad strip
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 i  +  2:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
@@ -179,7 +177,7 @@
                         Independent quad 
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 4 i:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
@@ -196,8 +194,8 @@
             Flat and smooth shading are specified by <function>glShadeModel</function> with <parameter>mode</parameter> set to
             <constant>GL_FLAT</constant> and <constant>GL_SMOOTH</constant>, respectively.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>mode</parameter> is any value other than
             <constant>GL_FLAT</constant> or <constant>GL_SMOOTH</constant>.
@@ -207,26 +205,26 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_SHADE_MODEL</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColor</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glLight</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glLightModel</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glGetSubroutineUniformLocation">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetSubroutineUniformLocation">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glGetSubroutineUniformLocation</refname>
         <refpurpose>retrieve the location of a subroutine uniform of a given shader stage within a program</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>GLint <function>glGetSubroutineUniformLocation</function></funcdef>
@@ -27,7 +25,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>program</parameter></term>
@@ -58,8 +56,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glGetSubroutineUniformLocation</function> returns the location of the subroutine uniform variable
             <parameter>name</parameter> in the shader stage of type <parameter>shadertype</parameter> attached to
@@ -74,8 +72,8 @@
             of <constant>GL_ACTIVE_SUBROUTINE_LOCATIONS</constant> minus one for the shader stage.  For active subroutine uniforms
             declared as arrays, the declared array elements are assigned consecutive locations.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>shadertype</parameter> or <parameter>pname</parameter>
             is not one of the accepted values.
@@ -84,21 +82,21 @@
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>program</parameter> is not the name of an
             existing program object.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGetProgram</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGetActiveSubroutineUniform</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGetActiveSubroutineUniformName</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGetUniformLocation</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

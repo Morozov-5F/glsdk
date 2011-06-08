@@ -1,0 +1,17 @@
+it:					E89E
+af:					E8A0
+times:				00D7
+LeftFloor:			230A
+RightFloor:			230B
+PartialD:			2202
+DoubleVerticalBar:	2225
+CenterDot:			00B7
+Delta:				0394
+Hat:				0302
+LeftCeiling:		2308
+RightCeiling:		2309
+Prime:				2033
+nbsp:				00A0
+ne:					2260
+VerticalBar:		2223
+Sigma:				03A3

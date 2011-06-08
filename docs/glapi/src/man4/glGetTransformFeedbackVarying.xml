@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glGetTransformFeedbackVarying">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetTransformFeedbackVarying">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glGetTransformFeedbackVarying</refname>
         <refpurpose>retrieve information about varying variables selected for transform feedback</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glGetTransformFeedbackVarying</function></funcdef>
@@ -30,7 +28,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>program</parameter></term>
@@ -90,8 +88,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Information about the set of varying variables in a linked program that will be captured
             during transform feedback may be retrieved by calling <function>glGetTransformFeedbackVarying</function>.
@@ -124,8 +122,8 @@
             will be set to zero and <parameter>name</parameter> will be an empty string. This situation could
             arise if <function>glGetTransformFeedbackVarying</function> is called after a failed link.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>program</parameter> is not
             the name of a program object.
@@ -137,25 +135,25 @@
         <para>
             <constant>GL_INVALID_OPERATION</constant> is generated <parameter>program</parameter> has not been linked.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetProgram</refentrytitle></citerefentry> with argument <constant>GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH</constant>.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBeginTransformFeedback</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glEndTransformFeedback</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTransformFeedbackVaryings</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGetProgram</refentrytitle></citerefentry>
         </para>
-    </refsect1>    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

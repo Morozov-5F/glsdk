@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glLoadTransposeMatrix">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glLoadTransposeMatrix">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glLoadTransposeMatrix</refname>
         <refpurpose>replace the current matrix with the specified row-major ordered matrix</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glLoadTransposeMatrixd</function></funcdef>
@@ -31,7 +29,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>m</parameter></term>
@@ -39,7 +37,7 @@
                 <para>
                     Specifies a pointer to 16 consecutive values, which are used as the
                     elements of a 
-                    <inlineequation><mml:math>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: 4  times  4:-->
                         <mml:mrow>
                             <mml:mn>4</mml:mn>
@@ -52,8 +50,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glLoadTransposeMatrix</function> replaces the current matrix with the one whose elements are specified by
             <parameter>m</parameter>.
@@ -67,7 +65,7 @@
             The current matrix, M, defines a transformation of coordinates.
             For instance, assume M refers to the modelview matrix.
             If 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v  =  (v[0], v[1], v[2], v[3]):-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">v</mml:mi>
@@ -107,13 +105,13 @@
             is the set of object coordinates
             of a vertex,
             and <parameter>m</parameter> points to an array of 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 16:-->
                 <mml:mn>16</mml:mn>
             </mml:math></inlineequation>
             single- or double-precision
             floating-point values 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: m  =  left { m[0], m[1], ..., m[15] right }:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">m</mml:mi>
@@ -145,7 +143,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>,
             then the modelview transformation 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: M(v):-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">M</mml:mi>
@@ -158,7 +156,7 @@
             does the following:
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn:  M(v)   =   left (  matrix {    ccol {  m[0] above  m[4] above  m[8] above  m[12] }    ccol { m[1] above m[5] above m[9] above m[13] }    ccol { m[2] above m[6] above m[10] above m[14] }    ccol { m[3]  above m[7]  above m[11]  above m[15]  } } right )    times    left ( matrix {    ccol {  v[0]  above  v[1]  above  v[2]  above  v[3]  } } right ):-->
                 <mml:mrow>
                     <mml:mrow>
@@ -386,21 +384,21 @@
         </para>
         <para>
             Calling <function>glLoadTransposeMatrix</function> with matrix 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">M</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">M</mml:mi></mml:math></inlineequation>
             is identical in operation to
             <citerefentry><refentrytitle>glLoadMatrix</refentrytitle></citerefentry> with 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: M sup T:-->
                 <mml:msup><mml:mi mathvariant="italic">M</mml:mi>
                 <mml:mi mathvariant="italic">T</mml:mi>
                 </mml:msup>
             </mml:math></inlineequation>,
             where 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">T</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">T</mml:mi></mml:math></inlineequation>
             represents the transpose.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glLoadTransposeMatrix</function> is available only if the GL version is 1.3 or greater.
         </para>
@@ -410,15 +408,15 @@
             store or operate on these values in less than single
             precision.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_OPERATION</constant> is generated if <function>glLoadTransposeMatrix</function>
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MATRIX_MODE</constant>
         </para>
@@ -434,8 +432,8 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_TEXTURE_MATRIX</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glLoadIdentity</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glLoadMatrix</refentrytitle></citerefentry>,
@@ -444,13 +442,13 @@
             <citerefentry><refentrytitle>glMultTransposeMatrix</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glPushMatrix</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

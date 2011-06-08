@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glMapBufferRange">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glMapBufferRange">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glMapBufferRange</refname>
         <refpurpose>map a section of a buffer object's data store</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void *<function>glMapBufferRange</function></funcdef>
@@ -27,7 +25,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -62,8 +60,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glMapBufferRange</function> maps all or part of the data store of a buffer object into the client's address
             space. <parameter>target</parameter> specifies the target to which the buffer is bound and must be one of <constant>GL_ARRAY_BUFFER</constant>,
@@ -146,8 +144,8 @@
         <para>
             If an error occurs, <function>glMapBufferRange</function> returns a <code>NULL</code> pointer.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if either of <parameter>offset</parameter> or <parameter>length</parameter> is negative,
             or if <parameter>offset</parameter> + <parameter>length</parameter> is greater than the value of <constant>GL_BUFFER_SIZE</constant>.
@@ -185,20 +183,20 @@
             <constant>GL_OUT_OF_MEMORY</constant> is generated if <function>glMapBufferRange</function> fails because memory for the
             mapping could not be obtained.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glMapBuffer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glFlushMappedBufferRange</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBindBuffer</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

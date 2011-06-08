@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="gluPickMatrix">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluPickMatrix">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>gluPickMatrix</refname>
         <refpurpose>define a picking region</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>gluPickMatrix</function></funcdef>
@@ -29,7 +27,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>x</parameter></term>
@@ -59,8 +57,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>gluPickMatrix</function> creates a projection matrix that can be used to restrict drawing
             to a small region of the viewport.
@@ -90,8 +88,8 @@
             turned off, then any NURBS surface rendered is subdivided differently with
             the pick matrix than the way it was subdivided without the pick matrix.
         </para>
-    </refsect1>
-    <refsect1 id="example"><title>Example</title>
+    </refsection>
+    <refsection xml:id="example"><info><title>Example</title></info>
         <para>
             When rendering a scene as follows:
             <programlisting>
@@ -111,8 +109,8 @@ glMatrixMode(GL_MODELVIEW);
 /* Draw the scene */
             </programlisting>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluPerspective</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>,
@@ -120,13 +118,13 @@ glMatrixMode(GL_MODELVIEW);
             <citerefentry><refentrytitle>glMultMatrix</refentrytitle></citerefentry>, 
             <citerefentry><refentrytitle>glRenderMode</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

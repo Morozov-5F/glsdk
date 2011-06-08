@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glBindBufferBase">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glBindBufferBase">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glBindBufferBase</refname>
         <refpurpose>bind a buffer object to an indexed buffer target</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glBindBufferBase</function></funcdef>
@@ -26,7 +24,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -54,8 +52,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glBindBufferBase</function> binds the buffer object <parameter>buffer</parameter>
             to the binding point at index <parameter>index</parameter> of the array of targets specified
@@ -66,15 +64,15 @@
             <parameter>buffer</parameter> to the indexed buffer binding target, <function>glBindBufferBase</function>
             also binds <parameter>buffer</parameter> to the generic buffer binding point specified by <parameter>target</parameter>.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             Calling <function>glBindBufferBase</function> is equivalent to calling
             <citerefentry><refentrytitle>glBindBufferRange</refentrytitle></citerefentry> with <parameter>offset</parameter>
             zero and <parameter>size</parameter> equal to the size of the buffer.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not
             <constant>GL_TRANSFORM_FEEDBACK_BUFFER</constant> or <constant>GL_UNIFORM_BUFFER</constant>.
@@ -87,8 +85,8 @@
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>buffer</parameter> does
             not have an associated data store, or if the size of that store is zero.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGenBuffers</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDeleteBuffers</refentrytitle></citerefentry>,
@@ -97,12 +95,12 @@
             <citerefentry><refentrytitle>glMapBuffer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glUnmapBuffer</refentrytitle></citerefentry>,
         </para>
-    </refsect1>    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

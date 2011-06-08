@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glDrawRangeElements">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glDrawRangeElements">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glDrawRangeElements</refname>
         <refpurpose>render primitives from array data</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glDrawRangeElements</function></funcdef>
@@ -30,7 +28,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mode</parameter></term>
@@ -94,8 +92,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glDrawRangeElements</function> is a restricted form of <citerefentry><refentrytitle>glDrawElements</refentrytitle></citerefentry>. <parameter>mode</parameter>, <parameter>start</parameter>, <parameter>end</parameter>,
             and <parameter>count</parameter> match the corresponding arguments to <citerefentry><refentrytitle>glDrawElements</refentrytitle></citerefentry>, with
@@ -108,7 +106,7 @@
             which may be queried by calling <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument
             <constant>GL_MAX_ELEMENTS_VERTICES</constant> and <constant>GL_MAX_ELEMENTS_INDICES</constant>.
             If 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: end  -  start  +  1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">end</mml:mi>
@@ -122,7 +120,7 @@
             <constant>GL_MAX_ELEMENTS_VERTICES</constant>, or if <parameter>count</parameter> is greater than the value of
             <constant>GL_MAX_ELEMENTS_INDICES</constant>, then the call may operate at reduced
             performance.  There is no requirement that all vertices in the range
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [start, end]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mi mathvariant="italic">start</mml:mi>
@@ -149,8 +147,8 @@
             undefined after <function>glDrawRangeElements</function> executes. Attributes that aren't
             modified maintain their previous values.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glDrawRangeElements</function> is available only if the GL version is 1.2 or greater.
         </para>
@@ -163,11 +161,11 @@
             enables are client-side state, their values affect display lists
             when the lists are created, not when the lists are executed.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             It is an error for indices to lie outside the range 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [start, end]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mi mathvariant="italic">start</mml:mi>
@@ -185,7 +183,7 @@
         </para>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: end < start:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">end</mml:mi>
@@ -202,16 +200,16 @@
             <constant>GL_INVALID_OPERATION</constant> is generated if <function>glDrawRangeElements</function> is executed between
             the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> and the corresponding <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAX_ELEMENTS_VERTICES</constant>
         </para>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAX_ELEMENTS_INDICES</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glArrayElement</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColorPointer</refentrytitle></citerefentry>,
@@ -226,13 +224,13 @@
             <citerefentry><refentrytitle>glTexCoordPointer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glVertexPointer</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

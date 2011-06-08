@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glSampleMaski">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glSampleMaski">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glSampleMaski</refname>
         <refpurpose>set the value of a sub-word of the sample mask</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glSampleMaski</function></funcdef>
@@ -25,7 +23,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>maskNumber</parameter></term>
@@ -44,8 +42,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glSampleMaski</function> sets one 32-bit sub-word of the multi-word sample mask, <constant>GL_SAMPLE_MASK_VALUE</constant>.
         </para>
@@ -55,20 +53,20 @@
             <constant>GL_MAX_SAMPLE_MASK_WORDS</constant>. Bit <emphasis>B</emphasis> of mask word <emphasis>M</emphasis> corresponds to sample
             32 x <emphasis>M</emphasis> + <emphasis>B</emphasis>.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glSampleMaski</function> is available only if the GL version is 3.2 or greater, or if the <code>ARB_texture_multisample</code>
             extension is supported.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>maskIndex</parameter> is greater than or equal to the value
             of <constant>GL_MAX_SAMPLE_MASK_WORDS</constant>.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGenRenderbuffers</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBindRenderbuffer</refentrytitle></citerefentry>,
@@ -76,13 +74,13 @@
             <citerefentry><refentrytitle>glFramebufferRenderbuffer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDeleteRenderbuffers</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

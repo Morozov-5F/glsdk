@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glDrawElementsInstanced">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glDrawElementsInstanced">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glDrawElementsInstanced</refname>
         <refpurpose>draw multiple instances of a set of elements</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glDrawElementsInstanced</function></funcdef>
@@ -28,7 +26,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mode</parameter></term>
@@ -85,8 +83,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glDrawElementsInstanced</function> behaves identically to <citerefentry><refentrytitle>glDrawElements</refentrytitle></citerefentry>
             except that <parameter>primcount</parameter> instances of the set of elements are executed and the value of the internal counter
@@ -95,18 +93,18 @@
         </para>
         <para>
             <function>glDrawElementsInstanced</function> has the same effect as:
-            <programlisting><![CDATA[    if (mode, count, or type is invalid )
+            <programlisting>    if (mode, count, or type is invalid )
         generate appropriate error
     else {
-        for (int i = 0; i < primcount ; i++) {
+        for (int i = 0; i &lt; primcount ; i++) {
             instanceID = i;
             glDrawElements(mode, count, type, indices);
         }
         instanceID = 0;
-    }]]></programlisting>
+    }</programlisting>
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glDrawElementsInstanced</function> is available only if the GL version is 3.1 or greater.
         </para>
@@ -117,8 +115,8 @@
             <constant>GL_TRIANGLES_ADJACENCY</constant>
             are available only if the GL version is 3.2 or greater.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>mode</parameter> is not one of <constant>GL_POINTS</constant>,
             <constant>GL_LINE_STRIP</constant>, <constant>GL_LINE_LOOP</constant>, <constant>GL_LINES</constant>,
@@ -135,19 +133,19 @@
             <constant>GL_INVALID_OPERATION</constant> is generated if a non-zero buffer object name is bound to an
             enabled array and the buffer object's data store is currently mapped.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glDrawElements</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDrawArraysInstanced</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

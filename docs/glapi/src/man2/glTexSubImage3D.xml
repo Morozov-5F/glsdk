@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glTexSubImage3D">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glTexSubImage3D">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glTexSubImage3D</refname>
         <refpurpose>specify a three-dimensional texture subimage</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glTexSubImage3D</function></funcdef>
@@ -37,7 +35,7 @@
     <!-- eqn: ignoring delim $$ -->
     <para>
     </para>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -164,8 +162,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Texturing maps a portion of a specified texture image
             onto each graphical primitive for which texturing is enabled.
@@ -177,7 +175,7 @@
             texture image.
             The texels referenced by <parameter>data</parameter> replace the portion of the
             existing texture array with x indices <parameter>xoffset</parameter> and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: xoffset  +  width  -  1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">xoffset</mml:mi>
@@ -189,7 +187,7 @@
             </mml:math></inlineequation>,
             inclusive,
             y indices <parameter>yoffset</parameter> and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: yoffset  +  height  -  1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">yoffset</mml:mi>
@@ -201,7 +199,7 @@
             </mml:math></inlineequation>,
             inclusive,
             and z indices <parameter>zoffset</parameter> and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: zoffset  +  depth  -  1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">zoffset</mml:mi>
@@ -222,8 +220,8 @@
             (see <citerefentry><refentrytitle>glBindBuffer</refentrytitle></citerefentry>) while a texture image is
             specified, <parameter>data</parameter> is treated as a byte offset into the buffer object's data store.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glTexSubImage3D</function> is available only if the GL version is 1.2 or greater.
         </para>
@@ -260,8 +258,8 @@
             specified in <parameter>data</parameter> may be processed by the imaging pipeline.  See
             <citerefentry><refentrytitle>glTexImage3D</refentrytitle></citerefentry> for specific details.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if /<parameter>target</parameter> is not <constant>GL_TEXTURE_3D</constant>.
         </para>
@@ -282,7 +280,7 @@
         <para>
             <constant>GL_INVALID_VALUE</constant> may be generated if <parameter>level</parameter> is greater
             than 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: log sub 2:-->
                 <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
                 <mml:mn>2</mml:mn>
@@ -293,7 +291,7 @@
         </para>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: xoffset  <   -b:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">xoffset</mml:mi>
@@ -304,7 +302,7 @@
                     </mml:mrow>
                 </mml:mrow>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: (xoffset  +  width)  >  (w - b):-->
                 <mml:mrow>
                     <mml:mfenced open="(" close=")">
@@ -324,7 +322,7 @@
                     </mml:mfenced>
                 </mml:mrow>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: yoffset  <   -b:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">yoffset</mml:mi>
@@ -336,7 +334,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>,
             or 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: (yoffset  +  height)  >  (h - b):-->
                 <mml:mrow>
                     <mml:mfenced open="(" close=")">
@@ -357,7 +355,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>,
             or 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: zoffset  <   -b:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">zoffset</mml:mi>
@@ -369,7 +367,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>,
             or 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: (zoffset  +  depth)  >  (d - b):-->
                 <mml:mrow>
                     <mml:mfenced open="(" close=")">
@@ -390,20 +388,20 @@
                 </mml:mrow>
             </mml:math></inlineequation>,
             where 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
             is the <constant>GL_TEXTURE_WIDTH</constant>,
-            <inlineequation><mml:math><mml:mi mathvariant="italic">h</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">h</mml:mi></mml:math></inlineequation>
             is the <constant>GL_TEXTURE_HEIGHT</constant>, 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">d</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">d</mml:mi></mml:math></inlineequation>
             is the <constant>GL_TEXTURE_DEPTH</constant>
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">b</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">b</mml:mi></mml:math></inlineequation>
             is the border width of the texture image being modified.
             Note that 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>,
-            <inlineequation><mml:math><mml:mi mathvariant="italic">h</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">h</mml:mi></mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">d</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">d</mml:mi></mml:math></inlineequation>
             include twice the border width.
         </para>
         <para>
@@ -453,8 +451,8 @@
             between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> and the corresponding
             execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetTexImage</refentrytitle></citerefentry>
         </para>
@@ -464,8 +462,8 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_PIXEL_UNPACK_BUFFER_BINDING</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCopyTexImage1D</refentrytitle></citerefentry>,
@@ -485,13 +483,13 @@
             <citerefentry><refentrytitle>glTexSubImage2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

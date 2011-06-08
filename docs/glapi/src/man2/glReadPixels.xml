@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glReadPixels">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glReadPixels">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glReadPixels</refname>
         <refpurpose>read a block of pixels from the frame buffer</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glReadPixels</function></funcdef>
@@ -31,7 +29,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>x</parameter></term>
@@ -114,8 +112,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glReadPixels</function> returns pixel data from the frame buffer,
             starting with the pixel whose lower left corner
@@ -144,7 +142,7 @@
         </para>
         <para>
             <function>glReadPixels</function> returns values from each pixel with lower left corner at
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: (x + i, y + j):-->
                 <mml:mfenced open="(" close=")">
                     <mml:mrow>
@@ -160,7 +158,7 @@
                 </mml:mfenced>
             </mml:math></inlineequation>
             for 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 0 <= i < width:-->
                 <mml:mrow>
                     <mml:mn>0</mml:mn>
@@ -171,7 +169,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>
             and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 0 <= j < height:-->
                 <mml:mrow>
                     <mml:mn>0</mml:mn>
@@ -182,9 +180,9 @@
                 </mml:mrow>
             </mml:math></inlineequation>.
             This pixel is said to be the 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>th
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>th
             pixel in the 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>th
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>th
             row.
             Pixels are returned in row order from the lowest to the highest row,
             left to right in each row.
@@ -231,7 +229,7 @@
                         Each component is then multiplied by <constant>GL_DEPTH_SCALE</constant>,
                         added to <constant>GL_DEPTH_BIAS</constant>,
                         and finally clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -306,26 +304,26 @@
                         <constant>GL_PIXEL_MAP_I_TO_B</constant>, and
                         <constant>GL_PIXEL_MAP_I_TO_A</constant>.
                         Each table must be of size 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup n:-->
                             <mml:msup><mml:mn>2</mml:mn>
                             <mml:mi mathvariant="italic">n</mml:mi>
                             </mml:msup>
                         </mml:math></inlineequation>,
                         but 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         may be different for
                         different tables.
                         Before an index is used to look up a value in a table of
                         size 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup n:-->
                             <mml:msup><mml:mn>2</mml:mn>
                             <mml:mi mathvariant="italic">n</mml:mi>
                             </mml:msup>
                         </mml:math></inlineequation>,
                         it must be masked against 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup n - 1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -347,7 +345,7 @@
                         Finally,
                         if <constant>GL_MAP_COLOR</constant> is <constant>GL_TRUE</constant>,
                         each component is clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -371,7 +369,7 @@
                         and <constant>GL_LUMINANCE_ALPHA</constant> does the same,
                         while keeping alpha as a second value.
                         The final values are clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -443,7 +441,7 @@
                         <constant>GL_UNSIGNED_BYTE</constant>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup 8 - 1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -455,7 +453,7 @@
                         </mml:math></inlineequation>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: (2 sup 8 - 1) c:-->
                             <mml:mrow>
                                 <mml:mfenced open="(" close=")">
@@ -478,7 +476,7 @@
                         <constant>GL_BYTE</constant>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup 7 - 1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -490,7 +488,7 @@
                         </mml:math></inlineequation>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: {(2 sup 8 - 1) c - 1} / 2:-->
                             <mml:mfrac>
                                 <mml:mfenced open="" close="">
@@ -520,13 +518,13 @@
                         <constant>GL_BITMAP</constant>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 1:-->
                             <mml:mn>1</mml:mn>
                         </mml:math></inlineequation>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 1:-->
                             <mml:mn>1</mml:mn>
                         </mml:math></inlineequation>
@@ -537,7 +535,7 @@
                         <constant>GL_UNSIGNED_SHORT</constant>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup 16 - 1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -549,7 +547,7 @@
                         </mml:math></inlineequation>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: (2 sup 16 - 1) c:-->
                             <mml:mrow>
                                 <mml:mfenced open="(" close=")">
@@ -572,7 +570,7 @@
                         <constant>GL_SHORT</constant>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup 15 - 1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -584,7 +582,7 @@
                         </mml:math></inlineequation>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: {(2 sup 16 - 1) c - 1} / 2:-->
                             <mml:mfrac>
                                 <mml:mfenced open="" close="">
@@ -614,7 +612,7 @@
                         <constant>GL_UNSIGNED_INT</constant>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup 32 - 1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -626,7 +624,7 @@
                         </mml:math></inlineequation>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: (2 sup 32 - 1) c:-->
                             <mml:mrow>
                                 <mml:mfenced open="(" close=")">
@@ -649,7 +647,7 @@
                         <constant>GL_INT</constant>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup 31 - 1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -661,7 +659,7 @@
                         </mml:math></inlineequation>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: {(2 sup 32 - 1) c - 1} / 2:-->
                             <mml:mfrac>
                                 <mml:mfenced open="" close="">
@@ -694,7 +692,7 @@
                         none
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">c</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">c</mml:mi></mml:math></inlineequation>
                         </entry>
                     </row>
                 </tbody>
@@ -712,12 +710,12 @@
             <constant>GL_ALPHA</constant>, or
             <constant>GL_LUMINANCE</constant>,
             a single value is returned and the data for the 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>th
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>th
             pixel in the 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>th
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">j</mml:mi></mml:math></inlineequation>th
             row
             is placed in location 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: (j) width + i:-->
                 <mml:mrow>
                     <mml:mfenced open="(" close=")">
@@ -739,8 +737,8 @@
             affect the way that data is written into memory.
             See <citerefentry><refentrytitle>glPixelStore</refentrytitle></citerefentry> for a description.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             Values for pixels that lie outside the window
             connected to the current GL context are undefined.
@@ -749,8 +747,8 @@
             If an error is generated,
             no change is made to the contents of <parameter>data</parameter>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>format</parameter> or <parameter>type</parameter> is not an
             accepted value.
@@ -829,16 +827,16 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_INDEX_MODE</constant>
         </para>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_PIXEL_PACK_BUFFER_BINDING</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glCopyPixels</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDrawPixels</refentrytitle></citerefentry>,
@@ -847,13 +845,13 @@
             <citerefentry><refentrytitle>glPixelTransfer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glReadBuffer</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

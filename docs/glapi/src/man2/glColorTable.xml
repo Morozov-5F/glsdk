@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glColorTable">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glColorTable">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glColorTable</refname>
         <refpurpose>define a color lookup table</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glColorTable</function></funcdef>
@@ -29,7 +27,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -158,8 +156,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glColorTable</function> may be used in two ways:
             to test the actual size and color resolution of a lookup table
@@ -194,7 +192,7 @@
         </para>
         <para>
             Next, the R, G, B, and A values are clamped to the range 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [0,1]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mn>0</mml:mn>
@@ -211,7 +209,7 @@
         </para>
         <informaltable frame="topbot">
             <tgroup cols="7" align="left">
-                <colspec colwidth="3*" />
+                <colspec colwidth="3*"/>
                 <colspec colwidth="1*" align="center"/>
                 <colspec colwidth="1*" align="center"/>
                 <colspec colwidth="1*" align="center"/>
@@ -370,7 +368,7 @@
             Finally, the red, green, blue, alpha, luminance, and/or intensity components of
             the resulting pixels are stored in the color table.
             They form a one-dimensional table with indices in the range
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [0, width-1]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mn>0</mml:mn>
@@ -417,7 +415,7 @@
         <para>
             Each pixel group has color components (R, G, B, A)
             that are in the range 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [0.0, 1.0]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mn>0.0</mml:mn>
@@ -537,7 +535,7 @@
         </para>
         <informaltable frame="topbot">
             <tgroup cols="5" align="left">
-                <colspec colwidth="2*" />
+                <colspec colwidth="2*"/>
                 <colspec colwidth="1*" colname="r"/>
                 <colspec colwidth="1*" colname="g"/>
                 <colspec colwidth="1*" colname="b"/>
@@ -689,8 +687,8 @@
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glColorTable</function> is present only if <code>ARB_imaging</code> is returned when <citerefentry><refentrytitle>glGetString</refentrytitle></citerefentry>
             is called with an argument of <constant>GL_EXTENSIONS</constant>.
@@ -704,8 +702,8 @@
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not one of the allowable
             values.
@@ -749,16 +747,16 @@
             between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> and the corresponding
             execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetColorTableParameter</refentrytitle></citerefentry>
         </para>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_PIXEL_UNPACK_BUFFER_BINDING</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glColorSubTable</refentrytitle></citerefentry>,
             <function>glColorTableParameter</function>,
@@ -766,13 +764,13 @@
             <citerefentry><refentrytitle>glCopyColorSubTable</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGetColorTable</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

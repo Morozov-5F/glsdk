@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glConvolutionParameter">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glConvolutionParameter">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glConvolutionParameter</refname>
         <refpurpose>set convolution parameters</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glConvolutionParameterf</function></funcdef>
@@ -37,7 +35,7 @@
     <!-- eqn: ignoring delim $$ -->
     <para>
     </para>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -74,8 +72,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glConvolutionParameterfv</function></funcdef>
@@ -95,7 +93,7 @@
     </refsynopsisdiv>
     <para>
     </para>
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -139,8 +137,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glConvolutionParameter</function> sets the value of a convolution parameter.
         </para>
@@ -174,15 +172,15 @@
                         The image resulting from convolution is
                         smaller than the source image.
                         If the filter width is 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">Wf</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">Wf</mml:mi></mml:math></inlineequation>
                         and height is 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">Hf</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">Hf</mml:mi></mml:math></inlineequation>,
                         and the source image width is 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">Ws</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">Ws</mml:mi></mml:math></inlineequation>
                         and height is 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">Hs</mml:mi></mml:math></inlineequation>,
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">Hs</mml:mi></mml:math></inlineequation>,
                         then the convolved image width will be 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Ws  -  Wf  +  1:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Ws</mml:mi>
@@ -194,7 +192,7 @@
                         </mml:math></inlineequation>
                         and height
                         will be 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Hs  -  Hf  +  1:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Hs</mml:mi>
@@ -208,7 +206,7 @@
                         and/or height, the output is simply null, with no error generated.)
                         The coordinates of the image resulting from convolution are zero
                         through 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Ws  -  Wf:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Ws</mml:mi>
@@ -217,7 +215,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>
                         in width and zero through 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Hs  -  Hf:-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Hs</mml:mi>
@@ -251,8 +249,8 @@
                 </listitem>
             </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glConvolutionParameter</function> is present only if <code>ARB_imaging</code> is returned when <citerefentry><refentrytitle>glGetString</refentrytitle></citerefentry>
             is called with an argument of <constant>GL_EXTENSIONS</constant>.
@@ -266,8 +264,8 @@
             the source image must be larger than the final power-of-two size
             by one less than the size of the 1D filter kernel.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not one of the allowable
             values.
@@ -286,26 +284,26 @@
             between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> and the corresponding
             execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetConvolutionParameter</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glConvolutionFilter1D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glConvolutionFilter2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glSeparableFilter2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGetConvolutionParameter</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

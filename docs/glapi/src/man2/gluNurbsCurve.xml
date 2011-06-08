@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="gluNurbsCurve">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluNurbsCurve">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>gluNurbsCurve</refname>
         <refpurpose>define the shape of a NURBS curve</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>gluNurbsCurve</function></funcdef>
@@ -31,7 +29,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>nurb</parameter></term>
@@ -99,8 +97,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Use <function>gluNurbsCurve</function> to describe a NURBS curve.
         </para>
@@ -126,8 +124,8 @@
             See the <citerefentry><refentrytitle>gluBeginTrim</refentrytitle></citerefentry> reference page for more discussion about trimming
             curves.
         </para>
-    </refsect1>
-    <refsect1 id="example"><title>Example</title>
+    </refsection>
+    <refsection xml:id="example"><info><title>Example</title></info>
         <para>
             The following commands render a textured NURBS curve with normals:
             <programlisting>
@@ -138,26 +136,26 @@ gluBeginCurve(nobj);
 gluEndCurve(nobj);
             </programlisting>
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             To define trim curves that stitch well, use <citerefentry><refentrytitle>gluPwlCurve</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluBeginCurve</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluBeginTrim</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluNewNurbsRenderer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluPwlCurve</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

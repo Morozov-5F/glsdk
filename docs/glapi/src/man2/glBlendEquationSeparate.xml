@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glBlendEquationSeparate">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glBlendEquationSeparate">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glBlendEquationSeparate</refname>
         <refpurpose>set the RGB blend equation and the alpha blend equation separately</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glBlendEquationSeparate</function></funcdef>
@@ -26,7 +24,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>modeRGB</parameter></term>
@@ -49,8 +47,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             The blend equations determines how a new pixel (the ''source'' color)
             is combined with a pixel already in the framebuffer (the ''destination''
@@ -67,7 +65,7 @@
         <para>
             In the equations that follow, source and destination
             color components are referred to as
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: ( R sub s, G sub s, B sub s, A sub s ):-->
                 <mml:mfenced open="(" close=")">
                     <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
@@ -85,7 +83,7 @@
                 </mml:mfenced>
             </mml:math></inlineequation>
             and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: ( R sub d, G sub d, B sub d, A sub d ):-->
                 <mml:mfenced open="(" close=")">
                     <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
@@ -104,7 +102,7 @@
             </mml:math></inlineequation>,
             respectively.
             The result color is referred to as
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: ( R sub r, G sub r, B sub r, A sub r ):-->
                 <mml:mfenced open="(" close=")">
                     <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
@@ -122,7 +120,7 @@
                 </mml:mfenced>
             </mml:math></inlineequation>.
             The source and destination blend factors are denoted
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: ( s sub R, s sub G, s sub B, s sub A ):-->
                 <mml:mfenced open="(" close=")">
                     <mml:msub><mml:mi mathvariant="italic">s</mml:mi>
@@ -140,7 +138,7 @@
                 </mml:mfenced>
             </mml:math></inlineequation>
             and
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: ( d sub R, d sub G, d sub B, d sub A ):-->
                 <mml:mfenced open="(" close=")">
                     <mml:msub><mml:mi mathvariant="italic">d</mml:mi>
@@ -160,7 +158,7 @@
             respectively.
             For these equations all color components are understood to have values
             in the range 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [0,1]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mn>0</mml:mn>
@@ -170,9 +168,9 @@
 
         <informaltable frame="topbot">
             <tgroup cols="3" align="left">
-                <colspec colwidth="1.1*" />
-                <colspec colwidth="1*" />
-                <colspec colwidth="1*" />
+                <colspec colwidth="1.1*"/>
+                <colspec colwidth="1*"/>
+                <colspec colwidth="1*"/>
                 <thead>
                     <row>
                         <entry rowsep="1" align="left"><emphasis role="bold">
@@ -192,7 +190,7 @@
                         <constant>GL_FUNC_ADD</constant>
                         </entry>
                         <entry align="left">
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Rr  =      R sub s s sub R  +  R sub d d sub R :-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Rr</mml:mi>
@@ -216,7 +214,7 @@
                                 </mml:mrow>
                             </mml:mrow>
                         </mml:math></informalequation>
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Gr  =    G sub s s sub G  +  G sub d d sub G :-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Gr</mml:mi>
@@ -240,7 +238,7 @@
                                 </mml:mrow>
                             </mml:mrow>
                         </mml:math></informalequation>
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Br  =    B sub s s sub B  +  B sub d d sub B :-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Br</mml:mi>
@@ -266,7 +264,7 @@
                         </mml:math></informalequation>
                         </entry>
                         <entry align="left">
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Ar  =    A sub s s sub A  +  A sub d d sub A :-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Ar</mml:mi>
@@ -297,7 +295,7 @@
                         <constant>GL_FUNC_SUBTRACT</constant>
                         </entry>
                         <entry align="left">
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Rr  =      R sub s s sub R  -  R sub d d sub R :-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Rr</mml:mi>
@@ -321,7 +319,7 @@
                                 </mml:mrow>
                             </mml:mrow>
                         </mml:math></informalequation>
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Gr  =    G sub s s sub G  -  G sub d d sub G :-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Gr</mml:mi>
@@ -345,7 +343,7 @@
                                 </mml:mrow>
                             </mml:mrow>
                         </mml:math></informalequation>
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Br  =    B sub s s sub B  -  B sub d d sub B :-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Br</mml:mi>
@@ -371,7 +369,7 @@
                         </mml:math></informalequation>
                         </entry>
                         <entry align="left">
-                        <informalequation><mml:math>
+                        <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: Ar  =    A sub s s sub A  -  A sub d d sub A :-->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">Ar</mml:mi>
@@ -402,7 +400,7 @@
                         <constant>GL_FUNC_REVERSE_SUBTRACT</constant>
                         </entry>
                         <entry align="left">
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Rr  =      R sub d d sub R  -  R sub s s sub R :-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Rr</mml:mi>
@@ -426,7 +424,7 @@
                                     </mml:mrow>
                                 </mml:mrow>
                             </mml:math></informalequation>
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Gr  =    G sub d d sub G  -  G sub s s sub G :-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Gr</mml:mi>
@@ -450,7 +448,7 @@
                                     </mml:mrow>
                                 </mml:mrow>
                             </mml:math></informalequation>
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Br  =    B sub d d sub B  -  B sub s s sub B :-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Br</mml:mi>
@@ -476,7 +474,7 @@
                             </mml:math></informalequation>
                         </entry>
                         <entry align="left">
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Ar  =    A sub d d sub A  -  A sub s s sub A :-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Ar</mml:mi>
@@ -507,7 +505,7 @@
                         <constant>GL_MIN</constant>
                         </entry>
                         <entry align="left">
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Rr  =      min ( R sub s, R sub d):-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Rr</mml:mi>
@@ -530,7 +528,7 @@
                                     </mml:mrow>
                                 </mml:mrow>
                             </mml:math></informalequation>
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Gr  =      min ( G sub s, G sub d):-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Gr</mml:mi>
@@ -553,7 +551,7 @@
                                     </mml:mrow>
                                 </mml:mrow>
                             </mml:math></informalequation>
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Br  =      min ( B sub s, B sub d):-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Br</mml:mi>
@@ -578,7 +576,7 @@
                             </mml:math></informalequation>
                         </entry>
                         <entry align="left">
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Ar  =      min ( A sub s, A sub d):-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Ar</mml:mi>
@@ -608,7 +606,7 @@
                         <constant>GL_MAX</constant>
                         </entry>
                         <entry align="left">
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Rr  =      max ( R sub s, R sub d):-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Rr</mml:mi>
@@ -631,7 +629,7 @@
                                     </mml:mrow>
                                 </mml:mrow>
                             </mml:math></informalequation>
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Gr  =      max ( G sub s, G sub d):-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Gr</mml:mi>
@@ -654,7 +652,7 @@
                                     </mml:mrow>
                                 </mml:mrow>
                             </mml:math></informalequation>
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Br  =      max ( B sub s, B sub d):-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Br</mml:mi>
@@ -679,7 +677,7 @@
                             </mml:math></informalequation>
                         </entry>
                         <entry align="left">
-                            <informalequation><mml:math>
+                            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <!-- eqn: Ar  =      max ( A sub s, A sub d):-->
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">Ar</mml:mi>
@@ -710,7 +708,7 @@
         </para>
         <para>
             The results of these equations are clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -730,8 +728,8 @@
         </para>
         <para>
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glBlendEquationSeparate</function> is available only if the GL version is 2.0 or greater.
         </para>
@@ -739,8 +737,8 @@
             The <constant>GL_MIN</constant>, and <constant>GL_MAX</constant> equations do not use
             the source or destination factors, only the source and destination colors.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if either <parameter>modeRGB</parameter> or <parameter>modeAlpha</parameter> is not one of
             <constant>GL_FUNC_ADD</constant>, <constant>GL_FUNC_SUBTRACT</constant>, <constant>GL_FUNC_REVERSE_SUBTRACT</constant>,
@@ -751,29 +749,29 @@
             between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> and the corresponding
             execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
                 <para>
                     <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with an argument of <constant>GL_BLEND_EQUATION_RGB</constant>
                 </para>
                 <para>
                     <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with an argument of <constant>GL_BLEND_EQUATION_ALPHA</constant>
                 </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGetString</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBlendColor</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBlendFunc</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBlendFuncSeparate</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2006 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2006 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

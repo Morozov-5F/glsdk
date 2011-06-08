@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glLight">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glLight">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glLight</refname>
         <refpurpose>set light source parameters</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glLightf</function></funcdef>
@@ -35,7 +33,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>light</parameter></term>
@@ -45,7 +43,7 @@
                     The number of lights depends on the implementation,
                     but at least eight lights are supported.
                     They are identified by symbolic names of the form <constant>GL_LIGHT</constant>
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>,
                     where i ranges from 0 to the value of <constant>GL_MAX_LIGHTS</constant> - 1.
                 </para>
             </listitem>
@@ -73,8 +71,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glLightfv</function></funcdef>
@@ -92,7 +90,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>light</parameter></term>
@@ -102,7 +100,7 @@
                     The number of lights depends on the implementation, but
                     at least eight lights are supported.
                     They are identified by symbolic names of the form <constant>GL_LIGHT</constant>
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>,
                     where i ranges from 0 to the value of <constant>GL_MAX_LIGHTS</constant> - 1.
                 </para>
             </listitem>
@@ -135,12 +133,12 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glLight</function> sets the values of individual light source parameters.
             <parameter>light</parameter> names the light and is a symbolic name of the form <constant>GL_LIGHT</constant>
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>,
             where i ranges from 0 to the value of <constant>GL_MAX_LIGHTS</constant> - 1.
             <parameter>pname</parameter> specifies one of ten light source parameters,
             again by symbolic name.
@@ -154,10 +152,10 @@
             When it is enabled,
             light sources that are enabled contribute to the lighting calculation.
             Light source 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
             is enabled and disabled using <citerefentry><refentrytitle>glEnable</refentrytitle></citerefentry> and
             <citerefentry><refentrytitle>glDisable</refentrytitle></citerefentry> with argument <constant>GL_LIGHT</constant>
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
         </para>
         <para>
             The ten light parameters are as follows:
@@ -172,7 +170,7 @@
                         Integer values are mapped linearly such that the most positive representable
                         value maps to 1.0,
                         and the most negative representable value maps to 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>.
@@ -191,7 +189,7 @@
                         Integer values are mapped linearly such that the most positive representable
                         value maps to 1.0,
                         and the most negative representable value maps to 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>.
@@ -212,7 +210,7 @@
                         Integer values are mapped linearly such that the most positive representable
                         value maps to 1.0,
                         and the most negative representable value maps to 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -1.0:-->
                             <mml:mn>-1.0</mml:mn>
                         </mml:math></inlineequation>.
@@ -238,7 +236,7 @@
                         <function>glLight</function> is called (just as if it were a point),
                         and it is stored in eye coordinates.
                         If the 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">w</mml:mi></mml:math></inlineequation>
                         component of the position is 0,
                         the light is treated as a directional source.
                         Diffuse and specular lighting calculations take the light's direction,
@@ -252,7 +250,7 @@
                         The initial position is (0, 0, 1, 0);
                         thus, the initial light source is directional,
                         parallel to, and in the direction of the 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -z:-->
                             <mml:mrow>
                                 <mml:mo>-</mml:mo>
@@ -279,7 +277,7 @@
                         It is significant only when <constant>GL_SPOT_CUTOFF</constant> is not 180,
                         which it is initially.
                         The initial direction is 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: (0, 0, -1):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mn>0</mml:mn>
@@ -298,7 +296,7 @@
                         the intensity distribution of the light.
                         Integer and floating-point values are mapped directly.
                         Only values in the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,128]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -327,7 +325,7 @@
                         the maximum spread angle of a light source.
                         Integer and floating-point values are mapped directly.
                         Only values in the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,90]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -376,16 +374,16 @@
                 </listitem>
             </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             It is always the case that <constant>GL_LIGHT</constant>
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>
             = <constant>GL_LIGHT0</constant> + 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if either <parameter>light</parameter> or <parameter>pname</parameter>
             is not an accepted value.
@@ -393,7 +391,7 @@
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if a spot exponent value is specified
             outside the range 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [0,128]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mn>0</mml:mn>
@@ -401,7 +399,7 @@
                 </mml:mfenced>
             </mml:math></inlineequation>,
             or if spot cutoff is specified outside the range 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: [0,90]:-->
                 <mml:mfenced open="[" close="]">
                     <mml:mn>0</mml:mn>
@@ -417,28 +415,28 @@
             the execution of
             <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry> and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetLight</refentrytitle></citerefentry>
         </para>
         <para>
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument <constant>GL_LIGHTING</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glColorMaterial</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glLightModel</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glMaterial</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

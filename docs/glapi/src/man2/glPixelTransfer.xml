@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glPixelTransfer">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glPixelTransfer">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glPixelTransfer</refname>
         <refpurpose>set pixel transfer modes</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glPixelTransferf</function></funcdef>
@@ -33,7 +31,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>pname</parameter></term>
@@ -87,8 +85,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glPixelTransfer</function> sets pixel transfer modes that affect the operation of subsequent
             <citerefentry><refentrytitle>glCopyPixels</refentrytitle></citerefentry>,
@@ -176,7 +174,7 @@
                         then added to <constant>GL_ALPHA_BIAS</constant>.
                         After all four color components are scaled and biased,
                         each is clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -201,7 +199,7 @@
                         the alpha component is scaled by <constant>GL_PIXEL_MAP_A_TO_A_SIZE</constant>,
                         then replaced by the contents of <constant>GL_PIXEL_MAP_A_TO_A</constant> indexed by itself.
                         All components taken from the maps are then clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -226,7 +224,7 @@
                         then added to <constant>GL_POST_COLOR_MATRIX_ALPHA_BIAS</constant>.
                         After all four color components are scaled and biased,
                         each is clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -249,7 +247,7 @@
                         then added to <constant>GL_POST_CONVOLUTION_ALPHA_BIAS</constant>.
                         After all four color components are scaled and biased,
                         each is clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -281,7 +279,7 @@
                         the pixels continue to be treated as indices.
                         If <constant>GL_MAP_COLOR</constant> is true,
                         each index is masked by 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup n  -  1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -292,7 +290,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         is <constant>GL_PIXEL_MAP_I_TO_I_SIZE</constant>,
                         then replaced by the contents of <constant>GL_PIXEL_MAP_I_TO_I</constant> indexed by the
                         masked value.
@@ -311,7 +309,7 @@
                         <constant>GL_PIXEL_MAP_I_TO_A</constant>.
                         Before being dereferenced,
                         the index is masked by 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup n  -  1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -322,14 +320,14 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         is
                         <constant>GL_PIXEL_MAP_I_TO_R_SIZE</constant> for the red map,
                         <constant>GL_PIXEL_MAP_I_TO_G_SIZE</constant> for the green map,
                         <constant>GL_PIXEL_MAP_I_TO_B_SIZE</constant> for the blue map, and
                         <constant>GL_PIXEL_MAP_I_TO_A_SIZE</constant> for the alpha map.
                         All components taken from the maps are then clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -347,7 +345,7 @@
                         Each depth value is multiplied by <constant>GL_DEPTH_SCALE</constant>,
                         added to <constant>GL_DEPTH_BIAS</constant>,
                         then clamped to the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: [0,1]:-->
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
@@ -365,7 +363,7 @@
                         then added to <constant>GL_INDEX_OFFSET</constant>.
                         If <constant>GL_MAP_STENCIL</constant> is true,
                         each index is masked by 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 2 sup n  -  1:-->
                             <mml:mrow>
                                 <mml:msup><mml:mn>2</mml:mn>
@@ -376,7 +374,7 @@
                             </mml:mrow>
                         </mml:math></inlineequation>,
                         where 
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">n</mml:mi></mml:math></inlineequation>
                         is <constant>GL_PIXEL_MAP_S_TO_S_SIZE</constant>,
                         then replaced by the contents of <constant>GL_PIXEL_MAP_S_TO_S</constant> indexed by the
                         masked value.
@@ -394,10 +392,10 @@
         </para>
         <informaltable frame="topbot">
             <tgroup cols="4" align="left">
-                <colspec colwidth="4*" />
-                <colspec colwidth="1*"  align="center"/>
-                <colspec colwidth="1*"  align="center"/>
-                <colspec colwidth="2*"  align="center"/>
+                <colspec colwidth="4*"/>
+                <colspec colwidth="1*" align="center"/>
+                <colspec colwidth="1*" align="center"/>
+                <colspec colwidth="2*" align="center"/>
                 <thead>
                     <row>
                         <entry rowsep="1" align="left"><emphasis role="bold">
@@ -454,7 +452,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -477,7 +475,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -500,7 +498,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -523,7 +521,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -546,7 +544,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -569,7 +567,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -592,7 +590,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -615,7 +613,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -638,7 +636,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -661,7 +659,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -684,7 +682,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -707,7 +705,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -730,7 +728,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -753,7 +751,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -776,7 +774,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -799,7 +797,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -822,7 +820,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -845,7 +843,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -868,7 +866,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -891,7 +889,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -914,7 +912,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -937,7 +935,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -960,7 +958,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -983,7 +981,7 @@
                         1
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -1006,7 +1004,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -1029,7 +1027,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -1052,7 +1050,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -1075,7 +1073,7 @@
                         0
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: left ( -\(if, \(if right ):-->
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -1104,8 +1102,8 @@
             Boolean parameters are set to false if <parameter>param</parameter> is 0 and to true otherwise.
             <parameter>param</parameter> is converted to floating point before being assigned to real-valued parameters.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             If a
             <citerefentry><refentrytitle>glColorTable</refentrytitle></citerefentry>,
@@ -1135,8 +1133,8 @@
             They may be different from the settings when the command was compiled
             into the display list.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>pname</parameter> is not an accepted value.
         </para>
@@ -1145,8 +1143,8 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAP_COLOR</constant>
         </para>
@@ -1237,8 +1235,8 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_POST_CONVOLUTION_ALPHA_BIAS</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glCallList</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColorTable</refentrytitle></citerefentry>,
@@ -1264,13 +1262,13 @@
             <citerefentry><refentrytitle>glTexSubImage2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTexSubImage3D</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

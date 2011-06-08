@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glGenerateMipmap">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGenerateMipmap">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glGenerateMipmap</refname>
         <refpurpose>generate mipmaps for a specified texture target</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glGenerateMipmap</function></funcdef>
@@ -25,7 +23,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -39,8 +37,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glGenerateMipmap</function> generates mipmaps for the texture attached
             to <parameter>target</parameter> of the active texture unit. For cube map textures,
@@ -49,7 +47,7 @@
         </para>
         <para>
             Mipmap generation replaces texel array levels
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: level sub base  +  1: -->
                 <mml:mrow>
                     <mml:msub>
@@ -61,13 +59,13 @@
                 </mml:mrow>
             </mml:math></inlineequation>
             through
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <mml:mrow>
                     <mml:mi mathvariant="italic">q</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>
             with arrays derived from the
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: level sub base  +  1: -->
                 <mml:mrow>
                     <mml:msub>
@@ -78,7 +76,7 @@
             </mml:math></inlineequation>
             array, regardless of their previous contents. All other mimap arrays,
             including the
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: level sub base  +  1: -->
                 <mml:mrow>
                     <mml:msub>
@@ -91,7 +89,7 @@
         </para>
         <para>
             The internal formats of the derived mipmap arrays all match those of the
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: level sub base  +  1: -->
                 <mml:mrow>
                     <mml:msub>
@@ -102,7 +100,7 @@
             </mml:math></inlineequation>
             array. The contents of the derived arrays are computed by repeated, filtered
             reduction of the
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: level sub base  +  1: -->
                 <mml:mrow>
                     <mml:msub>
@@ -114,8 +112,8 @@
             array. For one- and two-dimensional texture arrays, each layer is filtered
             independently.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not
             one of the accepted texture targets.
@@ -125,20 +123,20 @@
             <constant>GL_TEXTURE_CUBE_MAP</constant> and the texture bound to the <constant>GL_TEXTURE_CUBE_MAP</constant>
             target of the active texture unit is not cube complete.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glTexImage2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBindTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGenTextures</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 2010 Khronos Group. 
+            Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
             the Open Publication License, v 1.0, 8 June 1999.
-            <ulink url="http://opencontent.org/openpub/">http://opencontent.org/openpub/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://opencontent.org/openpub/">http://opencontent.org/openpub/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glTexImage2D">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glTexImage2D">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glTexImage2D</refname>
         <refpurpose>specify a two-dimensional texture image</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glTexImage2D</function></funcdef>
@@ -35,7 +33,7 @@
     <!-- eqn: ignoring delim $$ -->
     <para>
     </para>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -190,8 +188,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             Texturing allows elements of an image array to be read by shaders.
         </para>
@@ -352,13 +350,13 @@
             <constant>GL_SRGB8</constant>,
             <constant>GL_SRGB_ALPHA</constant>, or
             <constant>GL_SRGB8_ALPHA8</constant>, the texture is treated as if the red, green, or blue components are encoded in the sRGB color space.    Any alpha component is left unchanged.  The conversion from the sRGB encoded component 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <mml:msub><mml:mi mathvariant="italic">c</mml:mi>
                     <mml:mi mathvariant="italic">s</mml:mi>
                     </mml:msub>
             </mml:math></inlineequation>
             to a linear component 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <mml:msub><mml:mi mathvariant="italic">c</mml:mi>
                     <mml:mi mathvariant="italic">l</mml:mi>
                     </mml:msub>
@@ -366,7 +364,7 @@
             is:
         </para>
         <para>
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
             <mml:mrow>
                 <mml:msub>
                   <mml:mi mathvariant="italic">c</mml:mi>
@@ -444,7 +442,7 @@
         </para>
         <para>
             Assume         
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <mml:msub><mml:mi mathvariant="italic">c</mml:mi>
                                 <mml:mi mathvariant="italic">s</mml:mi>
                                 </mml:msub>
@@ -471,8 +469,8 @@
                   depth texture values to generate a boolean result.
                   See <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry> for details on texture comparison.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             The <citerefentry><refentrytitle>glPixelStore</refentrytitle></citerefentry> mode affects texture images.
         </para>
@@ -489,8 +487,8 @@
             <function>glTexImage2D</function> specifies the two-dimensional texture for the current texture unit,
             specified with <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not
             <constant>GL_TEXTURE_2D</constant>,
@@ -530,7 +528,7 @@
         </para>
         <para>
             <constant>GL_INVALID_VALUE</constant> may be generated if <parameter>level</parameter> is greater than 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: log sub 2 (max): -->
                 <mml:mrow>
                     <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
@@ -554,7 +552,7 @@
         </para>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if non-power-of-two textures are not supported and the <parameter>width</parameter> or <parameter>height</parameter> cannot be represented as 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 2 sup k  +  2(border): -->
                 <mml:mrow>
                     <mml:msup><mml:mn>2</mml:mn>
@@ -636,16 +634,16 @@
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>target</parameter> is <constant>GL_TEXTURE_RECTANGLE</constant>
             or <constant>GL_PROXY_TEXTURE_RECTANGLE</constant> and <parameter>level</parameter> is not 0.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetTexImage</refentrytitle></citerefentry>
         </para>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_PIXEL_UNPACK_BUFFER_BINDING</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCopyTexImage1D</refentrytitle></citerefentry>,
@@ -661,13 +659,13 @@
             <citerefentry><refentrytitle>glTexSubImage3D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glEvalCoord">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glEvalCoord">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -17,7 +15,7 @@
         <refpurpose>evaluate enabled one- and two-dimensional maps</refpurpose>
     </refnamediv>
     <!-- eqn: ignoring delim $$ -->
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glEvalCoord1f</function></funcdef>
@@ -45,14 +43,14 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>u</parameter></term>
             <listitem>
                 <para>
                     Specifies a value that is the domain coordinate 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>
                     to the basis function
                     defined in a previous <citerefentry><refentrytitle>glMap1</refentrytitle></citerefentry> or <citerefentry><refentrytitle>glMap2</refentrytitle></citerefentry> command.
                 </para>
@@ -63,7 +61,7 @@
             <listitem>
                 <para>
                     Specifies a value that is the domain coordinate 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">v</mml:mi></mml:math></inlineequation>
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">v</mml:mi></mml:math></inlineequation>
                     to the basis function
                     defined in a previous <citerefentry><refentrytitle>glMap2</refentrytitle></citerefentry> command.
                     This argument is not present in a <function>glEvalCoord1</function> command.
@@ -71,8 +69,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsynopsisdiv><title>C Specification</title>
+    </refsection>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glEvalCoord1fv</function></funcdef>
@@ -98,7 +96,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters2"><title>Parameters</title>
+    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>u</parameter></term>
@@ -107,16 +105,16 @@
                     Specifies a pointer to an array containing
                     either one or two domain coordinates.
                     The first coordinate is 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>.
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">u</mml:mi></mml:math></inlineequation>.
                     The second coordinate is 
-                    <inlineequation><mml:math><mml:mi mathvariant="italic">v</mml:mi></mml:math></inlineequation>,
+                    <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">v</mml:mi></mml:math></inlineequation>,
                     which is present only in <function>glEvalCoord2</function> versions.
                 </para>
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glEvalCoord1</function> evaluates enabled one-dimensional maps at argument
             <parameter>u</parameter>.
@@ -197,7 +195,7 @@
             Let
         </para>
         <para>
-            <informalequation><mml:math>
+            <informalequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: bold m  =  { {partial bold p} over {partial u} }  times    { {partial bold p} over {partial v} }:-->
                 <mml:mrow>
                     <mml:mi mathvariant="bold">m</mml:mi>
@@ -242,12 +240,12 @@
         </para>
         <para>
             Then the generated normal 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: bold n:-->
                 <mml:mi mathvariant="bold">n</mml:mi>
             </mml:math></inlineequation>
             is
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: bold n  =  bold m over { || bold m || }:-->
                 <mml:mrow>
                     <mml:mi mathvariant="bold">n</mml:mi>
@@ -272,8 +270,8 @@
             no normal is generated for
             <function>glEvalCoord2</function> commands.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument <constant>GL_MAP1_VERTEX_3</constant>
         </para>
@@ -334,8 +332,8 @@
         <para>
             <citerefentry><refentrytitle>glGetMap</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColor</refentrytitle></citerefentry>,
@@ -350,13 +348,13 @@
             <citerefentry><refentrytitle>glTexCoord</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glVertex</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

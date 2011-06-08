@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glXUseXFont">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glXUseXFont">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glXUseXFont</refname>
         <refpurpose>create bitmap display lists from an X font</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glXUseXFont</function></funcdef>
@@ -28,7 +26,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>font</parameter></term>
@@ -63,12 +61,12 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glXUseXFont</function> generates <parameter>count</parameter> display lists,
             named <parameter>listBase</parameter> through 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: listBase + count - 1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">listBase</mml:mi>
@@ -80,7 +78,7 @@
             </mml:math></inlineequation>,
             each containing a single <citerefentry><refentrytitle>glBitmap</refentrytitle></citerefentry> command.
             The parameters of the <citerefentry><refentrytitle>glBitmap</refentrytitle></citerefentry> command of display list 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: listBase + i:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">listBase</mml:mi>
@@ -89,7 +87,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>
             are derived from glyph 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: first + i:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">first</mml:mi>
@@ -98,13 +96,13 @@
                 </mml:mrow>
             </mml:math></inlineequation>.
             Bitmap parameters 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">xorig</mml:mi></mml:math></inlineequation>, 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">yorig</mml:mi></mml:math></inlineequation>, 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>,
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">xorig</mml:mi></mml:math></inlineequation>, 
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">yorig</mml:mi></mml:math></inlineequation>, 
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">height</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">height</mml:mi></mml:math></inlineequation>
             are computed from font metrics as
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: descent-1:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">descent</mml:mi>
@@ -112,14 +110,14 @@
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: -lbearing:-->
                 <mml:mrow>
                     <mml:mo>-</mml:mo>
                     <mml:mi mathvariant="italic">lbearing</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: rbearing - lbearing:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">rbearing</mml:mi>
@@ -128,7 +126,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>,
             and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: ascent+descent:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">ascent</mml:mi>
@@ -137,12 +135,12 @@
                 </mml:mrow>
             </mml:math></inlineequation>,
             respectively.
-            <inlineequation><mml:math><mml:mi mathvariant="italic">xmove</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">xmove</mml:mi></mml:math></inlineequation>
             is taken from the glyph's 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">width</mml:mi></mml:math></inlineequation>
             metric,
             and 
-            <inlineequation><mml:math><mml:mi mathvariant="italic">ymove</mml:mi></mml:math></inlineequation>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">ymove</mml:mi></mml:math></inlineequation>
             is set to zero.
             Finally,
             the glyph's image is converted to the appropriate format for <citerefentry><refentrytitle>glBitmap</refentrytitle></citerefentry>.
@@ -160,8 +158,8 @@
             are not defined in <parameter>font</parameter>.
             <function>glXUseXFont</function> is ignored if there is no current GLX context.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>BadFont</constant> is generated if <parameter>font</parameter> is not a valid font.
         </para>
@@ -174,19 +172,19 @@
             with the current context of the calling thread is a window, and that
             window is no longer valid.
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBitmap</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glXMakeCurrent</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

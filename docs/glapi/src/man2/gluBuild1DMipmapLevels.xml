@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="gluBuild1DMipmapLevels">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluBuild1DMipmapLevels">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>gluBuild1DMipmapLevels</refname>
         <refpurpose>builds a subset of one-dimensional mipmap levels</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>GLint <function>gluBuild1DMipmapLevels</function></funcdef>
@@ -33,7 +31,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -189,8 +187,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>gluBuild1DMipmapLevels</function> builds a subset of prefiltered one-dimensional texture maps of decreasing
             resolutions called a mipmap. This is used for the antialiasing of
@@ -204,7 +202,7 @@
             A series of mipmap levels from <parameter>base</parameter> to <parameter>max</parameter> is built by decimating 
             <parameter>data</parameter> in half 
             until size 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 1  times  1:-->
                 <mml:mrow>
                     <mml:mn>1</mml:mn>
@@ -223,7 +221,7 @@
         <para>
             For example, if <parameter>level</parameter> is 2 and <parameter>width</parameter> is 16, the
             following levels are possible: 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 16  times  1:-->
                 <mml:mrow>
                     <mml:mn>16</mml:mn>
@@ -231,7 +229,7 @@
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 8  times  1:-->
                 <mml:mrow>
                     <mml:mn>8</mml:mn>
@@ -239,7 +237,7 @@
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 4  times  1:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
@@ -247,7 +245,7 @@
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 2  times  1:-->
                 <mml:mrow>
                     <mml:mn>2</mml:mn>
@@ -255,7 +253,7 @@
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>, 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 1  times  1:-->
                 <mml:mrow>
                     <mml:mn>1</mml:mn>
@@ -266,7 +264,7 @@
             These correspond
             to levels 2 through 6 respectively.
             If <parameter>base</parameter> is 3 and <parameter>max</parameter> is 5, then only mipmap levels 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 8  times  1:-->
                 <mml:mrow>
                     <mml:mn>8</mml:mn>
@@ -274,7 +272,7 @@
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>,
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 4  times  1:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
@@ -283,7 +281,7 @@
                 </mml:mrow>
             </mml:math></inlineequation>
             and 
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: 2  times  1:-->
                 <mml:mrow>
                     <mml:mn>2</mml:mn>
@@ -298,7 +296,7 @@
         </para>
         <para>
             The highest mipmap level can be derived from the formula
-            <inlineequation><mml:math>
+            <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: log sub 2 (width * 2 sup level):-->
                 <mml:mrow>
                     <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
@@ -323,8 +321,8 @@
             reference page for a description of the acceptable values 
             for <parameter>level</parameter> parameter.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>gluBuild1DMipmapLevels</function> is only available if the GLU version is 1.3 or greater.
         </para>
@@ -344,8 +342,8 @@
             <constant>GLU_UNSIGNED_INT_2_10_10_10_REV</constant> are only available if the GL version 
             is 1.2 or greater.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GLU_INVALID_VALUE</constant> is returned if <parameter>level</parameter> &gt; <parameter>base</parameter>, <parameter>base</parameter> &lt; 0,
             <parameter>max</parameter> &lt; <parameter>base</parameter> or <parameter>max</parameter> is &gt; the highest mipmap level for <parameter>data</parameter>.
@@ -381,8 +379,8 @@
             <constant>GLU_INVALID_OPERATION</constant> is returned if <parameter>type</parameter> is <constant>GLU_UNSIGNED_INT_10_10_10_2</constant> or <constant>GLU_UNSIGNED_INT_2_10_10_10_REV</constant>
             and <parameter>format</parameter> is neither <constant>GLU_RGBA</constant> nor <constant>GLU_BGRA</constant>. 
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluBuild1DMipmaps</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluBuild2DMipmapLevels</refentrytitle></citerefentry>,
@@ -397,13 +395,13 @@
             <citerefentry><refentrytitle>glTexImage2D</refentrytitle></citerefentry>, 
             <citerefentry><refentrytitle>glTexImage3D</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

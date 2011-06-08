@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glFeedbackBuffer">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glFeedbackBuffer">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glFeedbackBuffer</refname>
         <refpurpose>controls feedback mode</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glFeedbackBuffer</function></funcdef>
@@ -27,7 +25,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>size</parameter></term>
@@ -60,8 +58,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             The <function>glFeedbackBuffer</function> function controls feedback.
             Feedback, like selection, is a GL mode.
@@ -132,61 +130,61 @@
 
         <para>
             <para>
-                feedbackList <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> feedbackItem feedbackList | feedbackItem
+                feedbackList <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> feedbackItem feedbackList | feedbackItem
             </para>
             <para>
-                feedbackItem <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> point | lineSegment | polygon | bitmap | pixelRectangle | passThru
+                feedbackItem <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> point | lineSegment | polygon | bitmap | pixelRectangle | passThru
             </para>
             <para>
-                point <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_POINT_TOKEN</constant> vertex
+                point <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_POINT_TOKEN</constant> vertex
             </para>
             <para>
-                lineSegment <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_LINE_TOKEN</constant> vertex vertex | <constant>GL_LINE_RESET_TOKEN</constant> vertex vertex
+                lineSegment <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_LINE_TOKEN</constant> vertex vertex | <constant>GL_LINE_RESET_TOKEN</constant> vertex vertex
             </para>
             <para>
-                polygon <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_POLYGON_TOKEN</constant> n polySpec
+                polygon <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_POLYGON_TOKEN</constant> n polySpec
             </para>
             <para>
-                polySpec <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> polySpec vertex | vertex vertex vertex
+                polySpec <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> polySpec vertex | vertex vertex vertex
             </para>
             <para>
-                bitmap <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_BITMAP_TOKEN</constant> vertex
+                bitmap <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_BITMAP_TOKEN</constant> vertex
             </para>
             <para>
-                pixelRectangle <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_DRAW_PIXEL_TOKEN</constant> vertex | <constant>GL_COPY_PIXEL_TOKEN</constant> vertex
+                pixelRectangle <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_DRAW_PIXEL_TOKEN</constant> vertex | <constant>GL_COPY_PIXEL_TOKEN</constant> vertex
             </para>
             <para>
-                passThru <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_PASS_THROUGH_TOKEN</constant> value
+                passThru <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> <constant>GL_PASS_THROUGH_TOKEN</constant> value
             </para>
             <para>
-                vertex <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> 2d | 3d | 3dColor | 3dColorTexture | 4dColorTexture
+                vertex <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> 2d | 3d | 3dColor | 3dColorTexture | 4dColorTexture
             </para>
             <para>
-                2d <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> value value
+                2d <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> value value
             </para>
             <para>
-                3d <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> value value value
+                3d <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> value value value
             </para>
             <para>
-                3dColor <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> value value value color
+                3dColor <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> value value value color
             </para>
             <para>
-                3dColorTexture <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> value value value color tex
+                3dColorTexture <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> value value value color tex
             </para>
             <para>
-                4dColorTexture <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> value value value value color tex
+                4dColorTexture <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> value value value value color tex
             </para>
             <para>
-                color <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> rgba | index
+                color <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> rgba | index
             </para>
             <para>
-                rgba <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> value value value value
+                rgba <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> value value value value
             </para>
             <para>
-                index <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> value
+                index <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> value
             </para>
             <para>
-                tex <inlineequation><mml:math><mml:mrow><mml:mn>&#x2190;</mml:mn></mml:mrow></mml:math></inlineequation> value value value value
+                tex <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mrow><mml:mn>←</mml:mn></mml:mrow></mml:math></inlineequation> value value value value
             </para>
             <para>
             </para>
@@ -218,8 +216,8 @@
         </para>
         <informaltable frame="topbot">
             <tgroup cols="5" align="left">
-                <colspec colwidth="2.7*" />
-                <colspec colwidth="1.5*" />
+                <colspec colwidth="2.7*"/>
+                <colspec colwidth="1.5*"/>
                 <colspec colwidth="1*" align="center"/>
                 <colspec colwidth="1*" align="center"/>
                 <colspec colwidth="2.5*" align="center"/>
@@ -281,12 +279,12 @@
                         <emphasis>x</emphasis>, <emphasis>y</emphasis>, <emphasis>z</emphasis>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
                         </entry>
                         <entry align="center">
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 3  +  k:-->
                             <mml:mrow>
                                 <mml:mn>3</mml:mn>
@@ -304,13 +302,13 @@
                         <emphasis>x</emphasis>, <emphasis>y</emphasis>, <emphasis>z</emphasis>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
                         </entry>
                         <entry align="center">
                         4
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 7  +  k:-->
                             <mml:mrow>
                                 <mml:mn>7</mml:mn>
@@ -328,13 +326,13 @@
                         <emphasis>x</emphasis>, <emphasis>y</emphasis>, <emphasis>z</emphasis>, <emphasis>w</emphasis>
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">k</mml:mi></mml:math></inlineequation>
                         </entry>
                         <entry align="center">
                         4
                         </entry>
                         <entry align="center">
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: 8  +  k:-->
                             <mml:mrow>
                                 <mml:mn>8</mml:mn>
@@ -356,8 +354,8 @@
             if texture coordinate generation is enabled.
             They are always transformed by the texture matrix.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glFeedbackBuffer</function>, when used in a display list, is not compiled into the display list
             but is executed immediately.
@@ -365,8 +363,8 @@
         <para>
             <function>glFeedbackBuffer</function> returns only the texture coordinate of texture unit <constant>GL_TEXTURE0</constant>.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>type</parameter> is not an accepted value.
         </para>
@@ -384,8 +382,8 @@
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_RENDER_MODE</constant>
         </para>
@@ -398,8 +396,8 @@
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_FEEDBACK_BUFFER_TYPE</constant>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glLineStipple</refentrytitle></citerefentry>,
@@ -408,13 +406,13 @@
             <citerefentry><refentrytitle>glRenderMode</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glSelectBuffer</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

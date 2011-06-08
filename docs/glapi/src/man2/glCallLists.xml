@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glCallLists">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCallLists">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glCallLists</refname>
         <refpurpose>execute a list of display lists</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>void <function>glCallLists</function></funcdef>
@@ -26,7 +24,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>n</parameter></term>
@@ -69,8 +67,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glCallLists</function> causes each display list in the list of names passed as <parameter>lists</parameter>
             to be executed.
@@ -92,7 +90,7 @@
                     <para>
                         <parameter>lists</parameter> is treated as an array of signed bytes,
                         each in the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -128:-->
                             <mml:mn>-128</mml:mn>
                         </mml:math></inlineequation>
@@ -115,7 +113,7 @@
                     <para>
                         <parameter>lists</parameter> is treated as an array of signed two-byte integers,
                         each in the range 
-                        <inlineequation><mml:math>
+                        <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <!-- eqn: -32768:-->
                             <mml:mn>-32768</mml:mn>
                         </mml:math></inlineequation>
@@ -224,16 +222,16 @@
             <citerefentry><refentrytitle>glPushMatrix</refentrytitle></citerefentry>,
             and <citerefentry><refentrytitle>glPopMatrix</refentrytitle></citerefentry> to preserve GL state across <function>glCallLists</function> calls.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             Display lists can be executed between a call to <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding call to <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>,
             as long as the display list includes only commands that are allowed
             in this interval.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>n</parameter> is negative.
         </para>
@@ -250,8 +248,8 @@
             <constant>GL_3_BYTES</constant>,
             <constant>GL_4_BYTES</constant>.
         </para>
-    </refsect1>
-    <refsect1 id="associatedgets"><title>Associated Gets</title>
+    </refsection>
+    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_LIST_BASE</constant>
         </para>
@@ -261,8 +259,8 @@
         <para>
             <citerefentry><refentrytitle>glIsList</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glCallList</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDeleteLists</refentrytitle></citerefentry>,
@@ -272,13 +270,13 @@
             <citerefentry><refentrytitle>glPushAttrib</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glPushMatrix</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>

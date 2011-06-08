@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-              
-<refentry xmlns:mml="http://www.w3.org/1998/Math/MathML" id="glXCreatePbuffer">
+<!-- Converted by db4-upgrade version 1.0 -->
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glXCreatePbuffer">
     <refmeta>
         <refmetainfo>
             <copyright>
@@ -16,7 +14,7 @@
         <refname>glXCreatePbuffer</refname>
         <refpurpose>create an off-screen rendering area</refpurpose>
     </refnamediv>
-    <refsynopsisdiv><title>C Specification</title>
+    <refsynopsisdiv>
         <funcsynopsis>
             <funcprototype>
                 <funcdef>GLXPbuffer <function>glXCreatePbuffer</function></funcdef>
@@ -27,7 +25,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsect1 id="parameters"><title>Parameters</title>
+    <refsection xml:id="parameters"><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>dpy</parameter></term>
@@ -58,8 +56,8 @@
             </listitem>
         </varlistentry>
         </variablelist>
-    </refsect1>
-    <refsect1 id="description"><title>Description</title>
+    </refsection>
+    <refsection xml:id="description"><info><title>Description</title></info>
         <para>
             <function>glXCreatePbuffer</function> creates an off-screen rendering area and returns its XID.
             Any GLX rendering context that was created with respect to <parameter>config</parameter>
@@ -124,8 +122,8 @@
             <parameter>config</parameter>.  It is possible to create a pixel buffer with back buffers and
             to swap those buffers using <citerefentry><refentrytitle>glXSwapBuffers</refentrytitle></citerefentry>.
         </para>
-    </refsect1>
-    <refsect1 id="notes"><title>Notes</title>
+    </refsection>
+    <refsection xml:id="notes"><info><title>Notes</title></info>
         <para>
             <function>glXCreatePbuffer</function> is available only if the GLX version is 1.3 or greater.
         </para>
@@ -138,8 +136,8 @@
             GLXPbuffers are allocated from frame buffer resources; applications
             should consider deallocating them when they are not in use.
         </para>
-    </refsect1>
-    <refsect1 id="errors"><title>Errors</title>
+    </refsection>
+    <refsection xml:id="errors"><info><title>Errors</title></info>
         <para>
             <constant>BadAlloc</constant> is generated if there are insufficient resources to
             allocate the requested GLXPbuffer.
@@ -153,21 +151,21 @@
             pixel buffers (e.g., <constant>GLX_DRAWABLE_TYPE</constant> does not contain
             <constant>GLX_PBUFFER_BIT</constant>).
         </para>
-    </refsect1>
-    <refsect1 id="seealso"><title>See Also</title>
+    </refsection>
+    <refsection xml:id="seealso"><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glXChooseFBConfig</refentrytitle></citerefentry>,
             <function>glXCreatePbuffer</function>,
             <citerefentry><refentrytitle>glXMakeContextCurrent</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glXSelectEvent</refentrytitle></citerefentry>
         </para>
-    </refsect1>
-    <refsect1 id="Copyright"><title>Copyright</title>
+    </refsection>
+    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
         <para>
-            Copyright <trademark class="copyright"></trademark> 1991-2006
+            Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI
             Free Software B License. For details, see
-            <ulink url="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</ulink>.
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oss.sgi.com/projects/FreeB/">http://oss.sgi.com/projects/FreeB/</link>.
         </para>
-    </refsect1>
+    </refsection>
 </refentry>
