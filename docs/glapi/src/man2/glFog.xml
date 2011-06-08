@@ -284,7 +284,7 @@
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">density</mml:mi>
-                                    <mml:mo>$#x00B7;</mml:mo>
+                                    <mml:mo>&#x00B7;</mml:mo>
                                     <mml:mi mathvariant="italic">c</mml:mi>
                                 </mml:mrow>
                             </mml:mfenced>
@@ -308,7 +308,7 @@
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">density</mml:mi>
-                                    <mml:mo>$#x00B7;</mml:mo>
+                                    <mml:mo>&#x00B7;</mml:mo>
                                     <mml:mi mathvariant="italic">c</mml:mi>
                                 </mml:mrow>
                             </mml:mfenced>
@@ -351,13 +351,13 @@
                         <mml:mi mathvariant="italic">r</mml:mi>
                         </mml:msub>
                     </mml:mfenced>
-                    <mml:mo>$#x2033;</mml:mo>
+                    <mml:mo>&#x2033;</mml:mo>
                     </mml:msup>
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">f</mml:mi>
-                            <mml:mo>$#x00D7;</mml:mo>
+                            <mml:mo>&#x00D7;</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">C</mml:mi>
                             <mml:mi mathvariant="italic">r</mml:mi>
                             </mml:msub>
@@ -371,7 +371,7 @@
                                     <mml:mi mathvariant="italic">f</mml:mi>
                                 </mml:mrow>
                             </mml:mfenced>
-                            <mml:mo>$#x00D7;</mml:mo>
+                            <mml:mo>&#x00D7;</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">C</mml:mi>
                             <mml:mi mathvariant="italic">f</mml:mi>
                             </mml:msub>
@@ -402,7 +402,7 @@
                         <mml:mi mathvariant="italic">r</mml:mi>
                         </mml:msub>
                     </mml:mfenced>
-                    <mml:mo>$#x2033;</mml:mo>
+                    <mml:mo>&#x2033;</mml:mo>
                     </mml:msup>
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
@@ -418,7 +418,7 @@
                                     <mml:mi mathvariant="italic">f</mml:mi>
                                 </mml:mrow>
                             </mml:mfenced>
-                            <mml:mo>$#x00D7;</mml:mo>
+                            <mml:mo>&#x00D7;</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">i</mml:mi>
                             <mml:mi mathvariant="italic">f</mml:mi>
                             </mml:msub>

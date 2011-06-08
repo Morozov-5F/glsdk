@@ -199,7 +199,7 @@
                         <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
                         <mml:mn>2</mml:mn>
                         </mml:msub>
-                        <mml:mo>$#xE8A0;</mml:mo>
+                        <mml:mo>&#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">max</mml:mi>
                         </mml:mfenced>

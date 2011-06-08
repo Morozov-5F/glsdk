@@ -66,8 +66,8 @@ glEvalCoord1( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xli
      	          <mml:mrow>
      	              <mml:mrow>
      	                  <mml:mn>i</mml:mn>
-     	                  <mml:mo>$#x00B7;</mml:mo>
-     	                  <mml:mo>$#x0394;</mml:mo>
+     	                  <mml:mo>&#x00B7;</mml:mo>
+     	                  <mml:mo>&#x0394;</mml:mo>
      	                  <mml:mi mathvariant="italic">u</mml:mi>
      	              </mml:mrow>
      	              <mml:mo>+</mml:mo>
@@ -83,7 +83,7 @@ glEvalCoord1( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xli
                 <!-- eqn: DELTA u  =  ( u sub 2 - u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>$#x0394;</mml:mo>
+                        <mml:mo>&#x0394;</mml:mo>
                         <mml:mi mathvariant="italic">u</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -136,9 +136,9 @@ glEvalCoord1( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xli
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>$#x00B7;</mml:mo>
+                        <mml:mo>&#x00B7;</mml:mo>
                         <mml:mrow>
-                            <mml:mo>$#x0394;</mml:mo>
+                            <mml:mo>&#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">u</mml:mi>
                         </mml:mrow>
                     </mml:mrow>
@@ -164,7 +164,7 @@ glEvalCoord1( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xli
                 <!-- eqn: DELTA u  =    ( u sub 2 - u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>$#x0394;</mml:mo>
+                        <mml:mo>&#x0394;</mml:mo>
                         <mml:mi mathvariant="italic">u</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -189,7 +189,7 @@ glEvalCoord1( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xli
                     <!-- eqn: DELTA v  =    ( v sub 2 - v sub 1 )  /  m:-->
                     <mml:mrow>
                         <mml:mrow>
-                            <mml:mo>$#x0394;</mml:mo>
+                            <mml:mo>&#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">v</mml:mi>
                         </mml:mrow>
                         <mml:mo>=</mml:mo>
@@ -248,8 +248,8 @@ glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xli
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>$#x00B7;</mml:mo>
-			        <mml:mo>$#x0394;</mml:mo>
+				<mml:mo>&#x00B7;</mml:mo>
+			        <mml:mo>&#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -261,8 +261,8 @@ glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xli
 			    <!-- j \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>$#x00B7;</mml:mo>
-			        <mml:mo>$#x0394;</mml:mo>
+				<mml:mo>&#x00B7;</mml:mo>
+			        <mml:mo>&#x0394;</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 
 			    </mml:mrow>
@@ -289,9 +289,9 @@ glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xli
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>$#x00B7;</mml:mo>
+                        <mml:mo>&#x00B7;</mml:mo>
                         <mml:mrow>
-                            <mml:mo>$#x0394;</mml:mo>
+                            <mml:mo>&#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">u</mml:mi>
                         </mml:mrow>
                     </mml:mrow>
@@ -323,9 +323,9 @@ glEvalCoord2( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xli
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">j</mml:mi>
-                        <mml:mo>$#x00B7;</mml:mo>
+                        <mml:mo>&#x00B7;</mml:mo>
                         <mml:mrow>
-                            <mml:mo>$#x0394;</mml:mo>
+                            <mml:mo>&#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">v</mml:mi>
                         </mml:mrow>
                     </mml:mrow>

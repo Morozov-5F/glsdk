@@ -70,7 +70,7 @@
                     to 
                     <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- eqn: u hat:-->
-                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
                     </mml:math></inlineequation>,
                     the variable that is evaluated by the equations specified by this command.
                 </para>
@@ -139,9 +139,9 @@
                 <!-- eqn: p ( u hat):-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">p</mml:mi>
-                    <mml:mo>$#xE8A0;</mml:mo>
+                    <mml:mo>&#xE8A0;</mml:mo>
                     <mml:mfenced open="(" close=")">
-                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
                     </mml:mfenced>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -153,9 +153,9 @@
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">p</mml:mi>
-                        <mml:mo>$#xE8A0;</mml:mo>
+                        <mml:mo>&#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
-                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
                         </mml:mfenced>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -178,12 +178,12 @@
                                 </mml:mfenced>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 </mml:msup>
-                                <mml:mo>$#xE8A0;</mml:mo>
+                                <mml:mo>&#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
-                                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
                                 </mml:mfenced>
                             </mml:mrow>
-                            <mml:mo>$#xE89E;</mml:mo>
+                            <mml:mo>&#xE89E;</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
                             <mml:mi mathvariant="italic">i</mml:mi>
                             </mml:msub>
@@ -213,9 +213,9 @@
                     </mml:mfenced>
                     <mml:mi mathvariant="italic">n</mml:mi>
                     </mml:msup>
-                    <mml:mo>$#xE8A0;</mml:mo>
+                    <mml:mo>&#xE8A0;</mml:mo>
                     <mml:mfenced open="(" close=")">
-                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                        <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
                     </mml:mfenced>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -245,9 +245,9 @@
                         </mml:mfenced>
                         <mml:mi mathvariant="italic">n</mml:mi>
                         </mml:msup>
-                        <mml:mo>$#xE8A0;</mml:mo>
+                        <mml:mo>&#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
-                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
                         </mml:mfenced>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -264,19 +264,19 @@
                                 </mml:mtable>
                             </mml:mfenced>
                         </mml:mfenced>
-                        <mml:mo>$#xE89E;</mml:mo>
+                        <mml:mo>&#xE89E;</mml:mo>
                         <mml:msup><mml:mfenced open="" close="">
-                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                            <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
                         </mml:mfenced>
                         <mml:mi mathvariant="italic">i</mml:mi>
                         </mml:msup>
-                        <mml:mo>$#xE89E;</mml:mo>
+                        <mml:mo>&#xE89E;</mml:mo>
                         <mml:mfenced open="" close="">
                             <mml:msup><mml:mfenced open="(" close=")">
                                 <mml:mrow>
                                     <mml:mn>1</mml:mn>
                                     <mml:mo>-</mml:mo>
-                                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
                                 </mml:mrow>
                             </mml:mfenced>
                             <mml:mfenced open="" close="">
@@ -341,13 +341,13 @@
             the Bernstein functions are evaluated using 
             <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u hat:-->
-                <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
             </mml:math></inlineequation>,
             where
             <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: u hat   =   {u  -  u1} over {u2  -  u1}:-->
                 <mml:mrow>
-                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>$#x0302;</mml:mo></mml:mover>
+                    <mml:mover><mml:mi mathvariant="italic">u</mml:mi><mml:mo>&#x0302;</mml:mo></mml:mover>
                     <mml:mo>=</mml:mo>
                     <mml:mfrac>
                         <mml:mfenced open="" close="">

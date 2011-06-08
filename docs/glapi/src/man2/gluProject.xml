@@ -108,7 +108,7 @@
             <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sup prime:-->
                 <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                <mml:mo>$#x2033;</mml:mo>
+                <mml:mo>&#x2033;</mml:mo>
                 </mml:msup>
             </mml:math></inlineequation>
             as follows: 
@@ -118,14 +118,14 @@
                 <!-- eqn: v sup prime  =  P  times  M  times  v:-->
                 <mml:mrow>
                     <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                    <mml:mo>$#x2033;</mml:mo>
+                    <mml:mo>&#x2033;</mml:mo>
                     </mml:msup>
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">P</mml:mi>
-                        <mml:mo>$#x00D7;</mml:mo>
+                        <mml:mo>&#x00D7;</mml:mo>
                         <mml:mi mathvariant="italic">M</mml:mi>
-                        <mml:mo>$#x00D7;</mml:mo>
+                        <mml:mo>&#x00D7;</mml:mo>
                         <mml:mi mathvariant="italic">v</mml:mi>
                     </mml:mrow>
                 </mml:mrow>
@@ -142,7 +142,7 @@
                 <!-- eqn: 4 times 4:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>4</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -160,7 +160,7 @@
                     <mml:mrow>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">view</mml:mi>
-                            <mml:mo>$#xE8A0;</mml:mo>
+                            <mml:mo>&#xE8A0;</mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:mn>0</mml:mn>
                             </mml:mfenced>
@@ -170,19 +170,19 @@
                             <mml:mrow>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">view</mml:mi>
-                                    <mml:mo>$#xE8A0;</mml:mo>
+                                    <mml:mo>&#xE8A0;</mml:mo>
                                     <mml:mfenced open="(" close=")">
                                         <mml:mn>2</mml:mn>
                                     </mml:mfenced>
                                 </mml:mrow>
-                                <mml:mo>$#x00D7;</mml:mo>
+                                <mml:mo>&#x00D7;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mrow>
                                         <mml:mrow>
                                             <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                                            <mml:mo>$#x2033;</mml:mo>
+                                            <mml:mo>&#x2033;</mml:mo>
                                             </mml:msup>
-                                            <mml:mo>$#xE8A0;</mml:mo>
+                                            <mml:mo>&#xE8A0;</mml:mo>
                                             <mml:mfenced open="(" close=")">
                                                 <mml:mn>0</mml:mn>
                                             </mml:mfenced>
@@ -206,7 +206,7 @@
                         <mml:mrow>
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">view</mml:mi>
-                                <mml:mo>$#xE8A0;</mml:mo>
+                                <mml:mo>&#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mn>1</mml:mn>
                                 </mml:mfenced>
@@ -216,19 +216,19 @@
                                 <mml:mrow>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">view</mml:mi>
-                                        <mml:mo>$#xE8A0;</mml:mo>
+                                        <mml:mo>&#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mn>3</mml:mn>
                                         </mml:mfenced>
                                     </mml:mrow>
-                                    <mml:mo>$#x00D7;</mml:mo>
+                                    <mml:mo>&#x00D7;</mml:mo>
                                     <mml:mfenced open="(" close=")">
                                         <mml:mrow>
                                             <mml:mrow>
                                                 <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                                                <mml:mo>$#x2033;</mml:mo>
+                                                <mml:mo>&#x2033;</mml:mo>
                                                 </mml:msup>
-                                                <mml:mo>$#xE8A0;</mml:mo>
+                                                <mml:mo>&#xE8A0;</mml:mo>
                                                 <mml:mfenced open="(" close=")">
                                                     <mml:mn>1</mml:mn>
                                                 </mml:mfenced>
@@ -255,9 +255,9 @@
                                 <mml:mrow>
                                     <mml:mrow>
                                         <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>$#x2033;</mml:mo>
+                                        <mml:mo>&#x2033;</mml:mo>
                                         </mml:msup>
-                                        <mml:mo>$#xE8A0;</mml:mo>
+                                        <mml:mo>&#xE8A0;</mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mn>2</mml:mn>
                                         </mml:mfenced>

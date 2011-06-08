@@ -106,7 +106,7 @@
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:mfenced>
-                        <mml:mo>$#xE89E;</mml:mo>
+                        <mml:mo>&#xE89E;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mfrac>
                                 <mml:mi mathvariant="italic">width</mml:mi>
@@ -137,7 +137,7 @@
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:mfenced>
-                        <mml:mo>$#xE89E;</mml:mo>
+                        <mml:mo>&#xE89E;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mfrac>
                                 <mml:mi mathvariant="italic">height</mml:mi>

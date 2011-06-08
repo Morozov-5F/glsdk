@@ -123,7 +123,7 @@
                             <mml:mo>+</mml:mo>
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>$#xE8A0;</mml:mo>
+                                <mml:mo>&#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mi mathvariant="italic">border</mml:mi>
                                 </mml:mfenced>
@@ -150,7 +150,7 @@
                             <mml:mo>+</mml:mo>
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>$#xE8A0;</mml:mo>
+                                <mml:mo>&#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mi mathvariant="italic">border</mml:mi>
                                 </mml:mfenced>
@@ -189,7 +189,7 @@
                     <mml:mo>+</mml:mo>
                     <mml:mrow>
                         <mml:mn>2</mml:mn>
-                        <mml:mo>$#xE8A0;</mml:mo>
+                        <mml:mo>&#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">border</mml:mi>
                         </mml:mfenced>
@@ -204,7 +204,7 @@
                     <mml:mo>+</mml:mo>
                     <mml:mrow>
                         <mml:mn>2</mml:mn>
-                        <mml:mo>$#xE8A0;</mml:mo>
+                        <mml:mo>&#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">border</mml:mi>
                         </mml:mfenced>
@@ -281,7 +281,7 @@
                     <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
                     <mml:mn>2</mml:mn>
                     </mml:msub>
-                    <mml:mo>$#xE89E;</mml:mo>
+                    <mml:mo>&#xE89E;</mml:mo>
                     <mml:mi mathvariant="italic">max</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -305,7 +305,7 @@
                     <mml:mo>+</mml:mo>
                     <mml:mrow>
                         <mml:mn>2</mml:mn>
-                        <mml:mo>$#xE8A0;</mml:mo>
+                        <mml:mo>&#xE8A0;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">border</mml:mi>
                         </mml:mfenced>

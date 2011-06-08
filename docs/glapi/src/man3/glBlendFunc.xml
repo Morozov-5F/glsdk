@@ -1100,7 +1100,7 @@
                         <mml:mfrac>
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">min</mml:mi>
-                                <mml:mo>$#xE8A0;</mml:mo>
+                                <mml:mo>&#xE8A0;</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:msub><mml:mi mathvariant="italic">A</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
@@ -1139,7 +1139,7 @@
                         <mml:mo>=</mml:mo>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">min</mml:mi>
-                            <mml:mo>$#xE8A0;</mml:mo>
+                            <mml:mo>&#xE8A0;</mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:msub><mml:mi mathvariant="italic">k</mml:mi>
                                 <mml:mi mathvariant="italic">R</mml:mi>
@@ -1148,7 +1148,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>$#xE89E;</mml:mo>
+                                    <mml:mo>&#xE89E;</mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">s</mml:mi>
                                     <mml:mi mathvariant="italic">R</mml:mi>
                                     </mml:msub>
@@ -1156,7 +1156,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
                                     <mml:mi mathvariant="italic">d</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>$#xE89E;</mml:mo>
+                                    <mml:mo>&#xE89E;</mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">d</mml:mi>
                                     <mml:mi mathvariant="italic">R</mml:mi>
                                     </mml:msub>
@@ -1174,7 +1174,7 @@
                         <mml:mo>=</mml:mo>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">min</mml:mi>
-                            <mml:mo>$#xE8A0;</mml:mo>
+                            <mml:mo>&#xE8A0;</mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:msub><mml:mi mathvariant="italic">k</mml:mi>
                                 <mml:mi mathvariant="italic">G</mml:mi>
@@ -1183,7 +1183,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">G</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>$#xE89E;</mml:mo>
+                                    <mml:mo>&#xE89E;</mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">s</mml:mi>
                                     <mml:mi mathvariant="italic">G</mml:mi>
                                     </mml:msub>
@@ -1191,7 +1191,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">G</mml:mi>
                                     <mml:mi mathvariant="italic">d</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>$#xE89E;</mml:mo>
+                                    <mml:mo>&#xE89E;</mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">d</mml:mi>
                                     <mml:mi mathvariant="italic">G</mml:mi>
                                     </mml:msub>
@@ -1209,7 +1209,7 @@
                         <mml:mo>=</mml:mo>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">min</mml:mi>
-                            <mml:mo>$#xE8A0;</mml:mo>
+                            <mml:mo>&#xE8A0;</mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:msub><mml:mi mathvariant="italic">k</mml:mi>
                                 <mml:mi mathvariant="italic">B</mml:mi>
@@ -1218,7 +1218,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">B</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>$#xE89E;</mml:mo>
+                                    <mml:mo>&#xE89E;</mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">s</mml:mi>
                                     <mml:mi mathvariant="italic">B</mml:mi>
                                     </mml:msub>
@@ -1226,7 +1226,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">B</mml:mi>
                                     <mml:mi mathvariant="italic">d</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>$#xE89E;</mml:mo>
+                                    <mml:mo>&#xE89E;</mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">d</mml:mi>
                                     <mml:mi mathvariant="italic">B</mml:mi>
                                     </mml:msub>
@@ -1244,7 +1244,7 @@
                         <mml:mo>=</mml:mo>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">min</mml:mi>
-                            <mml:mo>$#xE8A0;</mml:mo>
+                            <mml:mo>&#xE8A0;</mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:msub><mml:mi mathvariant="italic">k</mml:mi>
                                 <mml:mi mathvariant="italic">A</mml:mi>
@@ -1253,7 +1253,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">A</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>$#xE89E;</mml:mo>
+                                    <mml:mo>&#xE89E;</mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">s</mml:mi>
                                     <mml:mi mathvariant="italic">A</mml:mi>
                                     </mml:msub>
@@ -1261,7 +1261,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">A</mml:mi>
                                     <mml:mi mathvariant="italic">d</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>$#xE89E;</mml:mo>
+                                    <mml:mo>&#xE89E;</mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">d</mml:mi>
                                     <mml:mi mathvariant="italic">A</mml:mi>
                                     </mml:msub>

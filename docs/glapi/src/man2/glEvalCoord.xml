@@ -205,30 +205,30 @@
                             <mml:mfrac>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
-                                        <mml:mo>$#x2202;</mml:mo>
+                                        <mml:mo>&#x2202;</mml:mo>
                                         <mml:mi mathvariant="bold">p</mml:mi>
                                     </mml:mrow>
                                 </mml:mfenced>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
-                                        <mml:mo>$#x2202;</mml:mo>
+                                        <mml:mo>&#x2202;</mml:mo>
                                         <mml:mi mathvariant="italic">u</mml:mi>
                                     </mml:mrow>
                                 </mml:mfenced>
                             </mml:mfrac>
                         </mml:mfenced>
-                        <mml:mo>$#x00D7;</mml:mo>
+                        <mml:mo>&#x00D7;</mml:mo>
                         <mml:mfenced open="" close="">
                             <mml:mfrac>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
-                                        <mml:mo>$#x2202;</mml:mo>
+                                        <mml:mo>&#x2202;</mml:mo>
                                         <mml:mi mathvariant="bold">p</mml:mi>
                                     </mml:mrow>
                                 </mml:mfenced>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
-                                        <mml:mo>$#x2202;</mml:mo>
+                                        <mml:mo>&#x2202;</mml:mo>
                                         <mml:mi mathvariant="italic">v</mml:mi>
                                     </mml:mrow>
                                 </mml:mfenced>
@@ -253,7 +253,7 @@
                     <mml:mfrac>
                         <mml:mi mathvariant="bold">m</mml:mi>
                         <mml:mfenced open="" close="">
-                            <mml:mfenced open="$#x2225;" close="$#x2225;">
+                            <mml:mfenced open="&#x2225;" close="&#x2225;">
                                 <mml:mi mathvariant="bold">m</mml:mi>
                             </mml:mfenced>
                         </mml:mfenced>

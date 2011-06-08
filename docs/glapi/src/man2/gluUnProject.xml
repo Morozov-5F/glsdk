@@ -124,16 +124,16 @@
                     <mml:mrow>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">INV</mml:mi>
-                            <mml:mo>$#xE8A0;</mml:mo>
+                            <mml:mo>&#xE8A0;</mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">P</mml:mi>
-                                    <mml:mo>$#xE89E;</mml:mo>
+                                    <mml:mo>&#xE89E;</mml:mo>
                                     <mml:mi mathvariant="italic">M</mml:mi>
                                 </mml:mrow>
                             </mml:mfenced>
                         </mml:mrow>
-                        <mml:mo>$#xE89E;</mml:mo>
+                        <mml:mo>&#xE89E;</mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mtable>
                                 <mml:mtr><mml:mtd>
@@ -142,14 +142,14 @@
                                             <mml:mfenced open="" close="">
                                                 <mml:mrow>
                                                     <mml:mn>2</mml:mn>
-                                                    <mml:mo>$#xE8A0;</mml:mo>
+                                                    <mml:mo>&#xE8A0;</mml:mo>
                                                     <mml:mfenced open="(" close=")">
                                                         <mml:mrow>
                                                             <mml:mi mathvariant="italic">winX</mml:mi>
                                                             <mml:mo>-</mml:mo>
                                                             <mml:mrow>
                                                                 <mml:mi mathvariant="italic">view</mml:mi>
-                                                                <mml:mo>$#xE8A0;</mml:mo>
+                                                                <mml:mo>&#xE8A0;</mml:mo>
                                                                 <mml:mfenced open="[" close="]">
                                                                     <mml:mn>0</mml:mn>
                                                                 </mml:mfenced>
@@ -161,7 +161,7 @@
                                             <mml:mfenced open="" close="">
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">view</mml:mi>
-                                                    <mml:mo>$#xE8A0;</mml:mo>
+                                                    <mml:mo>&#xE8A0;</mml:mo>
                                                     <mml:mfenced open="[" close="]">
                                                         <mml:mn>2</mml:mn>
                                                     </mml:mfenced>
@@ -178,14 +178,14 @@
                                             <mml:mfenced open="" close="">
                                                 <mml:mrow>
                                                     <mml:mn>2</mml:mn>
-                                                    <mml:mo>$#xE8A0;</mml:mo>
+                                                    <mml:mo>&#xE8A0;</mml:mo>
                                                     <mml:mfenced open="(" close=")">
                                                         <mml:mrow>
                                                             <mml:mi mathvariant="italic">winY</mml:mi>
                                                             <mml:mo>-</mml:mo>
                                                             <mml:mrow>
                                                                 <mml:mi mathvariant="italic">view</mml:mi>
-                                                                <mml:mo>$#xE8A0;</mml:mo>
+                                                                <mml:mo>&#xE8A0;</mml:mo>
                                                                 <mml:mfenced open="[" close="]">
                                                                     <mml:mn>1</mml:mn>
                                                                 </mml:mfenced>
@@ -197,7 +197,7 @@
                                             <mml:mfenced open="" close="">
                                                 <mml:mrow>
                                                     <mml:mi mathvariant="italic">view</mml:mi>
-                                                    <mml:mo>$#xE8A0;</mml:mo>
+                                                    <mml:mo>&#xE8A0;</mml:mo>
                                                     <mml:mfenced open="[" close="]">
                                                         <mml:mn>3</mml:mn>
                                                     </mml:mfenced>
@@ -212,7 +212,7 @@
                                     <mml:mrow>
                                         <mml:mrow>
                                             <mml:mn>2</mml:mn>
-                                            <mml:mo>$#xE8A0;</mml:mo>
+                                            <mml:mo>&#xE8A0;</mml:mo>
                                             <mml:mfenced open="(" close=")">
                                                 <mml:mi mathvariant="italic">winZ</mml:mi>
                                             </mml:mfenced>

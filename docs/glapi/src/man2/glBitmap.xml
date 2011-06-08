@@ -118,7 +118,7 @@
                     <mml:mi mathvariant="italic">w</mml:mi>
                     </mml:msub>
                     <mml:mo>=</mml:mo>
-                    <mml:mfenced open="$#x230A;" close="$#x230B;">
+                    <mml:mfenced open="&#x230A;" close="&#x230B;">
                         <mml:mrow>
                             <mml:msub><mml:mi mathvariant="italic">x</mml:mi>
                             <mml:mi mathvariant="italic">r</mml:mi>
@@ -140,7 +140,7 @@
                     <mml:mi mathvariant="italic">w</mml:mi>
                     </mml:msub>
                     <mml:mo>=</mml:mo>
-                    <mml:mfenced open="$#x230A;" close="$#x230B;">
+                    <mml:mfenced open="&#x230A;" close="&#x230B;">
                         <mml:mrow>
                             <mml:msub><mml:mi mathvariant="italic">y</mml:mi>
                             <mml:mi mathvariant="italic">r</mml:mi>

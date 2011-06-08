@@ -58,13 +58,13 @@
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">factor</mml:mi>
-                        <mml:mo>$#x00D7;</mml:mo>
+                        <mml:mo>&#x00D7;</mml:mo>
                         <mml:mi mathvariant="italic">DZ</mml:mi>
                     </mml:mrow>
                     <mml:mo>+</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">r</mml:mi>
-                        <mml:mo>$#x00D7;</mml:mo>
+                        <mml:mo>&#x00D7;</mml:mo>
                         <mml:mi mathvariant="italic">units</mml:mi>
                     </mml:mrow>
                 </mml:mrow>

@@ -57,16 +57,16 @@
             <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: | DELTA x |  >=  | DELTA y |:-->
                 <mml:mrow>
-                    <mml:mfenced open="$#x2223;" close="$#x2223;">
+                    <mml:mfenced open="&#x2223;" close="&#x2223;">
                         <mml:mrow>
-                            <mml:mo>$#x0394;</mml:mo>
+                            <mml:mo>&#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">x</mml:mi>
                         </mml:mrow>
                     </mml:mfenced>
                     <mml:mo>&gt;=</mml:mo>
-                    <mml:mfenced open="$#x2223;" close="$#x2223;">
+                    <mml:mfenced open="&#x2223;" close="&#x2223;">
                         <mml:mrow>
-                            <mml:mo>$#x0394;</mml:mo>
+                            <mml:mo>&#x0394;</mml:mo>
                             <mml:mi mathvariant="italic">y</mml:mi>
                         </mml:mrow>
                     </mml:mfenced>

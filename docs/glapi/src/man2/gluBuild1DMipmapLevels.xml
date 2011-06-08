@@ -206,7 +206,7 @@
                 <!-- eqn: 1  times  1:-->
                 <mml:mrow>
                     <mml:mn>1</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -225,7 +225,7 @@
                 <!-- eqn: 16  times  1:-->
                 <mml:mrow>
                     <mml:mn>16</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>, 
@@ -233,7 +233,7 @@
                 <!-- eqn: 8  times  1:-->
                 <mml:mrow>
                     <mml:mn>8</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>, 
@@ -241,7 +241,7 @@
                 <!-- eqn: 4  times  1:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -249,7 +249,7 @@
                 <!-- eqn: 2  times  1:-->
                 <mml:mrow>
                     <mml:mn>2</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>, 
@@ -257,7 +257,7 @@
                 <!-- eqn: 1  times  1:-->
                 <mml:mrow>
                     <mml:mn>1</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>.
@@ -268,7 +268,7 @@
                 <!-- eqn: 8  times  1:-->
                 <mml:mrow>
                     <mml:mn>8</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -276,7 +276,7 @@
                 <!-- eqn: 4  times  1:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -285,7 +285,7 @@
                 <!-- eqn: 2  times  1:-->
                 <mml:mrow>
                     <mml:mn>2</mml:mn>
-                    <mml:mo>$#x00D7;</mml:mo>
+                    <mml:mo>&#x00D7;</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -302,11 +302,11 @@
                     <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
                     <mml:mn>2</mml:mn>
                     </mml:msub>
-                    <mml:mo>$#xE8A0;</mml:mo>
+                    <mml:mo>&#xE8A0;</mml:mo>
                     <mml:mfenced open="(" close=")">
                         <mml:mrow>
                             <mml:mi mathvariant="italic">width</mml:mi>
-                            <mml:mo>$#x00D7;</mml:mo>
+                            <mml:mo>&#x00D7;</mml:mo>
                             <mml:msup><mml:mn>2</mml:mn>
                             <mml:mi mathvariant="italic">level</mml:mi>
                             </mml:msup>

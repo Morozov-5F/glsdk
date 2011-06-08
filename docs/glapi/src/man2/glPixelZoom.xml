@@ -74,7 +74,7 @@
                     <mml:mo>+</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">n</mml:mi>
-                        <mml:mo>$#x00B7;</mml:mo>
+                        <mml:mo>&#x00B7;</mml:mo>
                         <mml:mi mathvariant="italic">xfactor</mml:mi>
                     </mml:mrow>
                 </mml:mrow>
@@ -86,7 +86,7 @@
                     <mml:mo>+</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">m</mml:mi>
-                        <mml:mo>$#x00B7;</mml:mo>
+                        <mml:mo>&#x00B7;</mml:mo>
                         <mml:mi mathvariant="italic">yfactor</mml:mi>
                     </mml:mrow>
                 </mml:mrow>
@@ -106,7 +106,7 @@
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:mfenced>
-                        <mml:mo>$#x00B7;</mml:mo>
+                        <mml:mo>&#x00B7;</mml:mo>
                         <mml:mi mathvariant="italic">xfactor</mml:mi>
                     </mml:mrow>
                 </mml:mrow>
@@ -124,7 +124,7 @@
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:mfenced>
-                        <mml:mo>$#x00B7;</mml:mo>
+                        <mml:mo>&#x00B7;</mml:mo>
                         <mml:mi mathvariant="italic">yfactor</mml:mi>
                     </mml:mrow>
                 </mml:mrow>

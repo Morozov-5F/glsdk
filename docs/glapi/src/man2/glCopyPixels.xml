@@ -439,7 +439,7 @@
                             <mml:mi mathvariant="italic">x</mml:mi>
                             </mml:msub>
                         </mml:mfenced>
-                        <mml:mo>$#xE89E;</mml:mo>
+                        <mml:mo>&#xE89E;</mml:mo>
                         <mml:mi mathvariant="italic">i</mml:mi>
                     </mml:mrow>
                     <mml:mrow>
@@ -452,7 +452,7 @@
                             <mml:mi mathvariant="italic">y</mml:mi>
                             </mml:msub>
                         </mml:mfenced>
-                        <mml:mo>$#xE89E;</mml:mo>
+                        <mml:mo>&#xE89E;</mml:mo>
                         <mml:mi mathvariant="italic">j</mml:mi>
                     </mml:mrow>
                 </mml:mfenced>
@@ -476,7 +476,7 @@
                                 <mml:mi mathvariant="italic">x</mml:mi>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>$#xE8A0;</mml:mo>
+                            <mml:mo>&#xE8A0;</mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">i</mml:mi>
@@ -497,7 +497,7 @@
                                 <mml:mi mathvariant="italic">y</mml:mi>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>$#xE8A0;</mml:mo>
+                            <mml:mo>&#xE8A0;</mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">j</mml:mi>

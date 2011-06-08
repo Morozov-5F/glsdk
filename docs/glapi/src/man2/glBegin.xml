@@ -94,7 +94,7 @@
                             <!-- eqn: 2n - 1:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 <mml:mo>-</mml:mo>
                                 <mml:mn>1</mml:mn>
@@ -105,7 +105,7 @@
                             <!-- eqn: 2n:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                             </mml:mrow>
                         </mml:math></inlineequation>
@@ -195,7 +195,7 @@
                             <!-- eqn: 3n - 2:-->
                             <mml:mrow>
                                 <mml:mn>3</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 <mml:mo>-</mml:mo>
                                 <mml:mn>2</mml:mn>
@@ -205,7 +205,7 @@
                             <!-- eqn: 3n - 1:-->
                             <mml:mrow>
                                 <mml:mn>3</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 <mml:mo>-</mml:mo>
                                 <mml:mn>1</mml:mn>
@@ -216,7 +216,7 @@
                             <!-- eqn: 3n:-->
                             <mml:mrow>
                                 <mml:mn>3</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                             </mml:mrow>
                         </mml:math></inlineequation>
@@ -349,7 +349,7 @@
                             <!-- eqn: 4n - 3:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 <mml:mo>-</mml:mo>
                                 <mml:mn>3</mml:mn>
@@ -359,7 +359,7 @@
                             <!-- eqn: 4n - 2:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 <mml:mo>-</mml:mo>
                                 <mml:mn>2</mml:mn>
@@ -369,7 +369,7 @@
                             <!-- eqn: 4n - 1:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 <mml:mo>-</mml:mo>
                                 <mml:mn>1</mml:mn>
@@ -380,7 +380,7 @@
                             <!-- eqn: 4n:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                             </mml:mrow>
                         </mml:math></inlineequation>
@@ -409,7 +409,7 @@
                             <!-- eqn: 2n - 1:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 <mml:mo>-</mml:mo>
                                 <mml:mn>1</mml:mn>
@@ -419,7 +419,7 @@
                             <!-- eqn: 2n:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                             </mml:mrow>
                         </mml:math></inlineequation>,
@@ -427,7 +427,7 @@
                             <!-- eqn: 2n + 2:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 <mml:mo>+</mml:mo>
                                 <mml:mn>2</mml:mn>
@@ -438,7 +438,7 @@
                             <!-- eqn: 2n + 1:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>$#xE89E;</mml:mo>
+                                <mml:mo>&#xE89E;</mml:mo>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 <mml:mo>+</mml:mo>
                                 <mml:mn>1</mml:mn>
