@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glIsBuffer">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glIsBuffer"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>2005</year>
                 <holder>Sams Publishing</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glIsBuffer</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -22,7 +19,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>buffer</parameter></term>
@@ -34,7 +31,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glIsBuffer</function> returns <constant>GL_TRUE</constant> if <parameter>buffer</parameter> is currently the name of a buffer object.
             If <parameter>buffer</parameter> is zero, or is a non-zero value that is not currently the
@@ -45,7 +42,7 @@
             by calling <citerefentry><refentrytitle>glBindBuffer</refentrytitle></citerefentry>, is not the name of a buffer object.
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBindBuffer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDeleteBuffers</refentrytitle></citerefentry>,
@@ -53,7 +50,7 @@
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2005 Addison-Wesley. 
             This material may be distributed subject to the terms and conditions set forth in 

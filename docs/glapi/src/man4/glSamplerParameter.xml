@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glSamplerParameter">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glSamplerParameter"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>2010</year>
                 <holder>KhronosGroup</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glSamplerParameter</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -33,7 +30,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>sampler</parameter></term>
@@ -90,7 +87,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>sampler</parameter></term>
@@ -131,7 +128,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glSamplerParameter</function> assigns the value or values in <parameter>params</parameter> to the sampler parameter
             specified as <parameter>pname</parameter>.
@@ -161,7 +158,7 @@
                                 <mml:msup><mml:mn>2</mml:mn>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 </mml:msup>
-                                <mml:mo>&#x00D7;</mml:mo>
+                                <mml:mo>×</mml:mo>
                                 <mml:msup><mml:mn>2</mml:mn>
                                 <mml:mi mathvariant="italic">m</mml:mi>
                                 </mml:msup>
@@ -173,7 +170,7 @@
                             <mml:mrow>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">max</mml:mi>
-                                    <mml:mo>&#xE8A0;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:mfenced open="(" close=")">
                                         <mml:mi mathvariant="italic">n</mml:mi>
                                         <mml:mi mathvariant="italic">m</mml:mi>
@@ -192,7 +189,7 @@
                                 <mml:msup><mml:mn>2</mml:mn>
                                 <mml:mi mathvariant="italic">n</mml:mi>
                                 </mml:msup>
-                                <mml:mo>&#x00D7;</mml:mo>
+                                <mml:mo>×</mml:mo>
                                 <mml:msup><mml:mn>2</mml:mn>
                                 <mml:mi mathvariant="italic">m</mml:mi>
                                 </mml:msup>
@@ -211,7 +208,7 @@
                                     </mml:mrow>
                                 </mml:mfenced>
                                 </mml:msup>
-                                <mml:mo>&#x00D7;</mml:mo>
+                                <mml:mo>×</mml:mo>
                                 <mml:msup><mml:mn>2</mml:mn>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
@@ -230,7 +227,7 @@
                                 <mml:msup><mml:mn>2</mml:mn>
                                 <mml:mi mathvariant="italic">k</mml:mi>
                                 </mml:msup>
-                                <mml:mo>&#x00D7;</mml:mo>
+                                <mml:mo>×</mml:mo>
                                 <mml:msup><mml:mn>2</mml:mn>
                                 <mml:mi mathvariant="italic">l</mml:mi>
                                 </mml:msup>
@@ -261,7 +258,7 @@
                             <!-- eqn: 1  times  2 sup { l - 1 }: -->
                             <mml:mrow>
                                 <mml:mn>1</mml:mn>
-                                <mml:mo>&#x00D7;</mml:mo>
+                                <mml:mo>×</mml:mo>
                                 <mml:msup><mml:mn>2</mml:mn>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
@@ -286,7 +283,7 @@
                                     </mml:mrow>
                                 </mml:mfenced>
                                 </mml:msup>
-                                <mml:mo>&#x00D7;</mml:mo>
+                                <mml:mo>×</mml:mo>
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:math></inlineequation>
@@ -296,7 +293,7 @@
                             <!-- eqn: 1  times  1: -->
                             <mml:mrow>
                                 <mml:mn>1</mml:mn>
-                                <mml:mo>&#x00D7;</mml:mo>
+                                <mml:mo>×</mml:mo>
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:math></inlineequation>.
@@ -310,7 +307,7 @@
                             <!-- eqn: max ( n, m ): -->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">max</mml:mi>
-                                <mml:mo>&#xE8A0;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mi mathvariant="italic">n</mml:mi>
                                     <mml:mi mathvariant="italic">m</mml:mi>
@@ -322,7 +319,7 @@
                             <!-- eqn: 1  times  1: -->
                             <mml:mrow>
                                 <mml:mn>1</mml:mn>
-                                <mml:mo>&#x00D7;</mml:mo>
+                                <mml:mo>×</mml:mo>
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:math></inlineequation>
@@ -584,7 +581,7 @@
                                 <mml:mo>-</mml:mo>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">frac</mml:mi>
-                                    <mml:mo>&#xE8A0;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:mfenced open="(" close=")">
                                         <mml:mi mathvariant="italic">s</mml:mi>
                                     </mml:mfenced>
@@ -596,7 +593,7 @@
                             <!-- eqn: frac(s): -->
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">frac</mml:mi>
-                                <mml:mo>&#xE8A0;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                 </mml:mfenced>
@@ -734,7 +731,7 @@
                                                                     <mml:mn>0.0</mml:mn>
                                                                 </mml:mtd></mml:mtr>
                                                             </mml:mtable>
-                                                            <mml:mo>&#xE89E;&#x00A0;&#x00A0;</mml:mo>
+                                                            <mml:mo>  </mml:mo>
                                                             <mml:mtable>
                                                                 <mml:mtr><mml:mtd>
                                                                     <mml:mrow>
@@ -785,7 +782,7 @@
                                                                     <mml:mn>0.0</mml:mn>
                                                                 </mml:mtd></mml:mtr>
                                                             </mml:mtable>
-                                                            <mml:mo>&#xE89E;&#x00A0;&#x00A0;</mml:mo>
+                                                            <mml:mo>  </mml:mo>
                                                             <mml:mtable>
                                                                 <mml:mtr><mml:mtd>
                                                                     <mml:mrow>
@@ -836,7 +833,7 @@
                                                                     <mml:mn>0.0</mml:mn>
                                                                 </mml:mtd></mml:mtr>
                                                             </mml:mtable>
-                                                            <mml:mo>&#xE89E;&#x00A0;&#x00A0;</mml:mo>
+                                                            <mml:mo>  </mml:mo>
                                                             <mml:mtable>
                                                                 <mml:mtr><mml:mtd>
                                                                     <mml:mrow>
@@ -887,7 +884,7 @@
                                                                     <mml:mn>0.0</mml:mn>
                                                                 </mml:mtd></mml:mtr>
                                                             </mml:mtable>
-                                                            <mml:mo>&#xE89E;&#x00A0;&#x00A0;</mml:mo>
+                                                            <mml:mo>  </mml:mo>
                                                             <mml:mtable>
                                                                 <mml:mtr><mml:mtd>
                                                                     <mml:mrow>
@@ -938,7 +935,7 @@
                                                                     <mml:mn>0.0</mml:mn>
                                                                 </mml:mtd></mml:mtr>
                                                             </mml:mtable>
-                                                            <mml:mo>&#xE89E;&#x00A0;&#x00A0;</mml:mo>
+                                                            <mml:mo>  </mml:mo>
                                                             <mml:mtable>
                                                                 <mml:mtr><mml:mtd>
                                                                     <mml:mrow>
@@ -954,7 +951,7 @@
                                                                 <mml:mtr><mml:mtd>
                                                                     <mml:mrow>
                                                                         <mml:mi mathvariant="italic">r</mml:mi>
-                                                                        <mml:mo>&#x2260;</mml:mo>
+                                                                        <mml:mo>≠</mml:mo>
                                                                         <mml:mfenced open="" close="">
                                                                             <mml:msub><mml:mi mathvariant="italic">D</mml:mi>
                                                                             <mml:mi mathvariant="italic">t</mml:mi>
@@ -989,12 +986,12 @@
                                                                     <mml:mn>0.0</mml:mn>
                                                                 </mml:mtd></mml:mtr>
                                                             </mml:mtable>
-                                                            <mml:mo>&#xE89E;&#x00A0;&#x00A0;</mml:mo>
+                                                            <mml:mo>  </mml:mo>
                                                             <mml:mtable>
                                                                 <mml:mtr><mml:mtd>
                                                                     <mml:mrow>
                                                                         <mml:mi mathvariant="italic">r</mml:mi>
-                                                                        <mml:mo>&#x2260;</mml:mo>
+                                                                        <mml:mo>≠</mml:mo>
                                                                         <mml:mfenced open="" close="">
                                                                             <mml:msub><mml:mi mathvariant="italic">D</mml:mi>
                                                                             <mml:mi mathvariant="italic">t</mml:mi>
@@ -1077,7 +1074,7 @@
             </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             <function>glSamplerParameter</function> is available only if the GL version is 3.3 or higher.
         </para>
@@ -1090,7 +1087,7 @@
             texture unit, rather than a property of the texture object itself.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>sampler</parameter> is not the name of a sampler object previously
             returned from a call to <citerefentry><refentrytitle>glGenSamplers</refentrytitle></citerefentry>.
@@ -1100,12 +1097,12 @@
             constant value (based on the value of <parameter>pname</parameter>) and does not.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetSamplerParameter</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGenSamplers</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBindSampler</refentrytitle></citerefentry>,
@@ -1115,7 +1112,7 @@
             <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 

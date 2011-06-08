@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glClear">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glClear"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glClear</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -22,7 +19,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mask</parameter></term>
@@ -38,7 +35,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glClear</function> sets the bitplane area of the window to values previously selected
             by <function>glClearColor</function>, <function>glClearDepth</function>, and
@@ -97,19 +94,19 @@
             clear value for that buffer.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             If a buffer is not present,
             then a <function>glClear</function> directed at that buffer has no effect.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if any bit other than the three defined
             bits is set in <parameter>mask</parameter>.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_DEPTH_CLEAR_VALUE</constant>
         </para>
@@ -120,7 +117,7 @@
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_STENCIL_CLEAR_VALUE</constant>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <function>glClearColor</function>,
             <function>glClearDepth</function>,
@@ -132,7 +129,7 @@
             <citerefentry><refentrytitle>glStencilMask</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

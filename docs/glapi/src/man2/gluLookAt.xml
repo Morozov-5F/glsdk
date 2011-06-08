@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluLookAt">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluLookAt"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>gluLookAt</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -31,7 +28,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>eyeX</parameter></term>
@@ -65,7 +62,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>gluLookAt</function> creates a viewing matrix derived from an eye point, a reference
             point indicating the center of the scene, and an <emphasis>UP</emphasis> vector.  
@@ -148,7 +145,7 @@
                     <mml:mfrac>
                         <mml:mi mathvariant="italic">F</mml:mi>
                         <mml:mfenced open="" close="">
-                            <mml:mfenced open="&#x2225;" close="&#x2225;">
+                            <mml:mfenced open="∥" close="∥">
                                 <mml:mi mathvariant="italic">F</mml:mi>
                             </mml:mfenced>
                         </mml:mfenced>
@@ -161,13 +158,13 @@
                 <!-- eqn: UP sup prime  =  UP over {|| UP ||}:-->
                 <mml:mrow>
                     <mml:msup><mml:mi mathvariant="italic">UP</mml:mi>
-                    <mml:mo>&#x2033;</mml:mo>
+                    <mml:mo>″</mml:mo>
                     </mml:msup>
                     <mml:mo>=</mml:mo>
                     <mml:mfrac>
                         <mml:mi mathvariant="italic">UP</mml:mi>
                         <mml:mfenced open="" close="">
-                            <mml:mfenced open="&#x2225;" close="&#x2225;">
+                            <mml:mfenced open="∥" close="∥">
                                 <mml:mi mathvariant="italic">UP</mml:mi>
                             </mml:mfenced>
                         </mml:mfenced>
@@ -186,9 +183,9 @@
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">f</mml:mi>
-                        <mml:mo>&#x00D7;</mml:mo>
+                        <mml:mo>×</mml:mo>
                         <mml:msup><mml:mi mathvariant="italic">UP</mml:mi>
-                        <mml:mo>&#x2033;</mml:mo>
+                        <mml:mo>″</mml:mo>
                         </mml:msup>
                     </mml:mrow>
                 </mml:mrow>
@@ -201,7 +198,7 @@
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">s</mml:mi>
-                        <mml:mo>&#x00D7;</mml:mo>
+                        <mml:mo>×</mml:mo>
                         <mml:mi mathvariant="italic">f</mml:mi>
                     </mml:mrow>
                 </mml:mrow>
@@ -222,7 +219,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">s</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>0</mml:mn>
                                         </mml:mfenced>
@@ -231,7 +228,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">s</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>1</mml:mn>
                                         </mml:mfenced>
@@ -240,7 +237,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">s</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>2</mml:mn>
                                         </mml:mfenced>
@@ -254,7 +251,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">u</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>0</mml:mn>
                                         </mml:mfenced>
@@ -263,7 +260,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">u</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>1</mml:mn>
                                         </mml:mfenced>
@@ -272,7 +269,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">u</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>2</mml:mn>
                                         </mml:mfenced>
@@ -288,7 +285,7 @@
                                         <mml:mo>-</mml:mo>
                                         <mml:mrow>
                                             <mml:mi mathvariant="italic">f</mml:mi>
-                                            <mml:mo>&#xE8A0;</mml:mo>
+                                            <mml:mo></mml:mo>
                                             <mml:mfenced open="[" close="]">
                                                 <mml:mn>0</mml:mn>
                                             </mml:mfenced>
@@ -300,7 +297,7 @@
                                         <mml:mo>-</mml:mo>
                                         <mml:mrow>
                                             <mml:mi mathvariant="italic">f</mml:mi>
-                                            <mml:mo>&#xE8A0;</mml:mo>
+                                            <mml:mo></mml:mo>
                                             <mml:mfenced open="[" close="]">
                                                 <mml:mn>1</mml:mn>
                                             </mml:mfenced>
@@ -312,7 +309,7 @@
                                         <mml:mo>-</mml:mo>
                                         <mml:mrow>
                                             <mml:mi mathvariant="italic">f</mml:mi>
-                                            <mml:mo>&#xE8A0;</mml:mo>
+                                            <mml:mo></mml:mo>
                                             <mml:mfenced open="[" close="]">
                                                 <mml:mn>2</mml:mn>
                                             </mml:mfenced>
@@ -350,13 +347,13 @@ glTranslated(-eyex, -eyey, -eyez);
             </programlisting>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluPerspective</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glFrustum</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

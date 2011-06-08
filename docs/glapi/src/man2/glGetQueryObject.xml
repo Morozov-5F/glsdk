@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetQueryObject">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetQueryObject"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>2005</year>
                 <holder>Sams Publishing</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glGetQueryObject</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -32,7 +29,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>id</parameter></term>
@@ -61,7 +58,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glGetQueryObject</function> returns in <parameter>params</parameter> a selected parameter of the query object
             specified by <parameter>id</parameter>.
@@ -92,7 +89,7 @@
             </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             If an error is generated,
             no change is made to the contents of <parameter>params</parameter>.
@@ -110,7 +107,7 @@
             <function>glGetQueryObject</function> is available only if the GL version is 1.5 or greater.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>pname</parameter> is not an accepted value.
         </para>
@@ -127,7 +124,7 @@
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBeginQuery</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glEndQuery</refentrytitle></citerefentry>,
@@ -135,7 +132,7 @@
             <citerefentry><refentrytitle>glIsQuery</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2005 Addison-Wesley. 
             This material may be distributed subject to the terms and conditions set forth in 

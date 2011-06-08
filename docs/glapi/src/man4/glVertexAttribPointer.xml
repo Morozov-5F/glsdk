@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glVertexAttribPointer">
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glVertexAttribPointer">
     <refmeta>
     <refentrytitle>glVertexAttribPointer</refentrytitle>
     <manvolnum>3G</manvolnum>
@@ -37,7 +36,7 @@
         </funcprototype>
     </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
     <variablelist>
         <varlistentry>
         <term><parameter>index</parameter></term>
@@ -104,7 +103,7 @@
         </varlistentry>
     </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glVertexAttribPointer</function>, <function>glVertexAttribIPointer</function> and <function>glVertexAttribLPointer</function>
             specify the
@@ -158,7 +157,7 @@
             is called.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             Each generic vertex attribute array is initially disabled and isn't accessed when
             <citerefentry><refentrytitle>glDrawElements</refentrytitle></citerefentry>, <citerefentry><refentrytitle>glDrawRangeElements</refentrytitle></citerefentry>,
@@ -167,7 +166,7 @@
         </para>
 
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
     <para><constant>GL_INVALID_VALUE</constant> is generated if
     <parameter>index</parameter> is greater than or equal to
     <constant>GL_MAX_VERTEX_ATTRIBS</constant>.</para>
@@ -198,7 +197,7 @@
     <constant>GL_ARRAY_BUFFER</constant> buffer object binding point and the
     <parameter>pointer</parameter> argument is not <constant>NULL</constant>.</para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
     <para><citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
     with argument <constant>GL_MAX_VERTEX_ATTRIBS</constant></para>
 
@@ -227,7 +226,7 @@
     with arguments <parameter>index</parameter> and
     <constant>GL_VERTEX_ATTRIB_ARRAY_POINTER</constant></para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
         <citerefentry><refentrytitle>glBindAttribLocation</refentrytitle></citerefentry>,
         <citerefentry><refentrytitle>glBindBuffer</refentrytitle></citerefentry>,
@@ -241,7 +240,7 @@
         <citerefentry><refentrytitle>glVertexAttrib</refentrytitle></citerefentry>
     </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
             This material may be distributed subject to the terms and conditions set forth in 

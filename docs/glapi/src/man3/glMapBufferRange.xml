@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glMapBufferRange">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glMapBufferRange"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>2010</year>
                 <holder>Khronos Group</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glMapBufferRange</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -25,7 +22,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -61,7 +58,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glMapBufferRange</function> maps all or part of the data store of a buffer object into the client's address
             space. <parameter>target</parameter> specifies the target to which the buffer is bound and must be one of <constant>GL_ARRAY_BUFFER</constant>,
@@ -145,7 +142,7 @@
             If an error occurs, <function>glMapBufferRange</function> returns a <code>NULL</code> pointer.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if either of <parameter>offset</parameter> or <parameter>length</parameter> is negative,
             or if <parameter>offset</parameter> + <parameter>length</parameter> is greater than the value of <constant>GL_BUFFER_SIZE</constant>.
@@ -184,14 +181,14 @@
             mapping could not be obtained.
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glMapBuffer</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glFlushMappedBufferRange</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBindBuffer</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 

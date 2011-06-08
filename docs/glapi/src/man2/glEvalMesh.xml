@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glEvalMesh">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glEvalMesh"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glEvalMesh</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -25,7 +22,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mode</parameter></term>
@@ -62,7 +59,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mode</parameter></term>
@@ -99,7 +96,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <citerefentry><refentrytitle>glMapGrid</refentrytitle></citerefentry> and <function>glEvalMesh</function> are used in tandem to efficiently
             generate and evaluate a series of evenly-spaced map domain values.
@@ -125,8 +122,8 @@ for ( i = <parameter>i1</parameter>; i &lt;= <parameter>i2</parameter>; i += 1 )
 		      <mml:mrow>
 		          <mml:mrow>
 		              <mml:mn>i</mml:mn>
-			      <mml:mo>&#x00B7;</mml:mo>
-			      <mml:mo>&#x0394;</mml:mo>
+			      <mml:mo>·</mml:mo>
+			      <mml:mo>Δ</mml:mo>
 		              <mml:mi mathvariant="italic">u</mml:mi>
 		          </mml:mrow>
 		          <mml:mo>+</mml:mo>
@@ -145,7 +142,7 @@ glEnd();
                 <!-- eqn: DELTA u  =  (u sub 2  -  u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>&#x0394;</mml:mo>
+                        <mml:mo>Δ</mml:mo>
                         <mml:mi mathvariant="italic">u</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -206,9 +203,9 @@ glEnd();
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>&#x00B7;</mml:mo>
+                        <mml:mo>·</mml:mo>
                         <mml:mrow>
-                            <mml:mo>&#x0394;</mml:mo>
+                            <mml:mo>Δ</mml:mo>
                             <mml:mi mathvariant="italic">u</mml:mi>
                         </mml:mrow>
                     </mml:mrow>
@@ -233,7 +230,7 @@ glEnd();
                 <!-- eqn: DELTA u  =    ( u sub 2  -  u sub 1 )  /  n:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>&#x0394;</mml:mo>
+                        <mml:mo>Δ</mml:mo>
                         <mml:mi mathvariant="italic">u</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -259,7 +256,7 @@ glEnd();
                 <!-- eqn: DELTA v  =    ( v sub 2  -  v sub 1 )  /  m:-->
                 <mml:mrow>
                     <mml:mrow>
-                        <mml:mo>&#x0394;</mml:mo>
+                        <mml:mo>Δ</mml:mo>
                         <mml:mi mathvariant="italic">v</mml:mi>
                     </mml:mrow>
                     <mml:mo>=</mml:mo>
@@ -324,8 +321,8 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -337,8 +334,8 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 			    <!-- j \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 
 			    </mml:mrow>
@@ -354,8 +351,8 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -375,8 +372,8 @@ for ( j = <parameter>j1</parameter>; j &lt; <parameter>j2</parameter>; j += 1 ) 
 				        </mml:mrow>
 				    </mml:mfenced>
 				</mml:mrow>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -404,8 +401,8 @@ for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -417,8 +414,8 @@ for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
 			    <!-- i \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -439,8 +436,8 @@ for ( i = <parameter>i1</parameter>;  i &lt;= <parameter>i2</parameter>; i += 1 
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -452,8 +449,8 @@ for ( i = <parameter>i1</parameter>;  i &lt;= <parameter>i2</parameter>; i += 1 
 			    <!-- i \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -481,8 +478,8 @@ for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
 		        <mml:mrow>
 			    <mml:mrow>
 			        <mml:mn>i</mml:mn>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">u</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -494,8 +491,8 @@ for ( j = <parameter>j1</parameter>; j &lt;= <parameter>j2</parameter>; j += 1 )
 			    <!-- i \cdot DELTA v + v sub 1 :-->
 			    <mml:mrow>
 			        <mml:mn>j</mml:mn>
-				<mml:mo>&#x00B7;</mml:mo>
-			        <mml:mo>&#x0394;</mml:mo>
+				<mml:mo>·</mml:mo>
+			        <mml:mo>Δ</mml:mo>
 		                <mml:mi mathvariant="italic">v</mml:mi>
 			    </mml:mrow>
 		            <mml:mo>+</mml:mo>
@@ -524,9 +521,9 @@ glEnd();
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">i</mml:mi>
-                        <mml:mo>&#x00B7;</mml:mo>
+                        <mml:mo>·</mml:mo>
                         <mml:mrow>
-                            <mml:mo>&#x0394;</mml:mo>
+                            <mml:mo>Δ</mml:mo>
                             <mml:mi mathvariant="italic">u</mml:mi>
                         </mml:mrow>
                     </mml:mrow>
@@ -558,9 +555,9 @@ glEnd();
                 <mml:mrow>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">j</mml:mi>
-                        <mml:mo>&#x00B7;</mml:mo>
+                        <mml:mo>·</mml:mo>
                         <mml:mrow>
-                            <mml:mo>&#x0394;</mml:mo>
+                            <mml:mo>Δ</mml:mo>
                             <mml:mi mathvariant="italic">v</mml:mi>
                         </mml:mrow>
                     </mml:mrow>
@@ -579,7 +576,7 @@ glEnd();
             </mml:math></inlineequation>.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>mode</parameter> is not an accepted value.
         </para>
@@ -589,7 +586,7 @@ glEnd();
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAP1_GRID_DOMAIN</constant>
         </para>
@@ -603,7 +600,7 @@ glEnd();
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAP2_GRID_SEGMENTS</constant>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glEvalCoord</refentrytitle></citerefentry>,
@@ -613,7 +610,7 @@ glEnd();
             <citerefentry><refentrytitle>glMapGrid</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

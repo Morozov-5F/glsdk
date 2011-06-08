@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetProgramBinary">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetProgramBinary"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>2010</year>
                 <holder>Khronos Group</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glGetProgramBinary</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -26,7 +23,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>program</parameter></term>
@@ -70,7 +67,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glGetProgramBinary</function> returns a binary representation of the compiled
             and linked executable for <parameter>program</parameter> into the array of bytes whose
@@ -90,7 +87,7 @@
             in the <parameter>binary</parameter> parameter.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_OPERATION</constant> is generated if <parameter>bufSize</parameter> is less than
             the size of <constant>GL_PROGRAM_BINARY_LENGTH</constant> for <parameter>program</parameter>.
@@ -100,18 +97,18 @@
             program object is false.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetProgram</refentrytitle></citerefentry> with argument <constant>GL_PROGRAM_BINARY_LENGTH</constant>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGetProgram</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glProgramBinary</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 

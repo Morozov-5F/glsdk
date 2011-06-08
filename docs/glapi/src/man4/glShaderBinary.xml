@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glShaderBinary">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glShaderBinary"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>2010</year>
                 <holder>Khronos Group</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glShaderBinary</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -26,7 +23,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>count</parameter></term>
@@ -70,7 +67,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glShaderBinary</function> loads pre-compiled shader binary code into the <parameter>count</parameter>
             shader objects whose handles are given in <parameter>shaders</parameter>. <parameter>binary</parameter>
@@ -89,7 +86,7 @@
             pair of vertex and fragment shaders stored in the same binary.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_OPERATION</constant> is generated if more than one of the handles in
             <parameter>shaders</parameter> refers to the same shader object.
@@ -103,7 +100,7 @@
             does not match the format specified by <parameter>binaryFormat</parameter>.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with parameter <constant>GL_NUM_SHADER_BINARY_FORMATS</constant>.
         </para>
@@ -111,14 +108,14 @@
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with parameter <constant>GL_SHADER_BINARY_FORMATS</constant>.
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glGetProgram</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGetProgramBinary</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glProgramBinary</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 

@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glTexGen">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glTexGen"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glTexGen</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -41,7 +38,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>coord</parameter></term>
@@ -99,7 +96,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>coord</parameter></term>
@@ -144,7 +141,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glTexGen</function> selects a texture-coordinate generation function
             or supplies coefficients for one of the functions.
@@ -185,7 +182,7 @@
                             <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                             <mml:mn>1</mml:mn>
                             </mml:msub>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">x</mml:mi>
                             <mml:mi mathvariant="italic">o</mml:mi>
                             </mml:msub>
@@ -195,7 +192,7 @@
                             <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                             <mml:mn>2</mml:mn>
                             </mml:msub>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">y</mml:mi>
                             <mml:mi mathvariant="italic">o</mml:mi>
                             </mml:msub>
@@ -205,7 +202,7 @@
                             <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                             <mml:mn>3</mml:mn>
                             </mml:msub>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">z</mml:mi>
                             <mml:mi mathvariant="italic">o</mml:mi>
                             </mml:msub>
@@ -215,7 +212,7 @@
                             <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                             <mml:mn>4</mml:mn>
                             </mml:msub>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">w</mml:mi>
                             <mml:mi mathvariant="italic">o</mml:mi>
                             </mml:msub>
@@ -329,9 +326,9 @@
                                 <mml:mn>1</mml:mn>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>&#x2033;</mml:mo>
+                            <mml:mo>″</mml:mo>
                             </mml:msup>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">x</mml:mi>
                             <mml:mi mathvariant="italic">e</mml:mi>
                             </mml:msub>
@@ -343,9 +340,9 @@
                                 <mml:mn>2</mml:mn>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>&#x2033;</mml:mo>
+                            <mml:mo>″</mml:mo>
                             </mml:msup>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">y</mml:mi>
                             <mml:mi mathvariant="italic">e</mml:mi>
                             </mml:msub>
@@ -357,9 +354,9 @@
                                 <mml:mn>3</mml:mn>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>&#x2033;</mml:mo>
+                            <mml:mo>″</mml:mo>
                             </mml:msup>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">z</mml:mi>
                             <mml:mi mathvariant="italic">e</mml:mi>
                             </mml:msub>
@@ -371,9 +368,9 @@
                                 <mml:mn>4</mml:mn>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>&#x2033;</mml:mo>
+                            <mml:mo>″</mml:mo>
                             </mml:msup>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">w</mml:mi>
                             <mml:mi mathvariant="italic">e</mml:mi>
                             </mml:msub>
@@ -396,31 +393,31 @@
                                 <mml:mn>1</mml:mn>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>&#x2033;</mml:mo>
+                            <mml:mo>″</mml:mo>
                             </mml:msup>
-                            <mml:mo>&#xE89E;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:msup><mml:mfenced open="" close="">
                                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                                 <mml:mn>2</mml:mn>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>&#x2033;</mml:mo>
+                            <mml:mo>″</mml:mo>
                             </mml:msup>
-                            <mml:mo>&#xE89E;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:msup><mml:mfenced open="" close="">
                                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                                 <mml:mn>3</mml:mn>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>&#x2033;</mml:mo>
+                            <mml:mo>″</mml:mo>
                             </mml:msup>
-                            <mml:mo>&#xE89E;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:msup><mml:mfenced open="" close="">
                                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                                 <mml:mn>4</mml:mn>
                                 </mml:msub>
                             </mml:mfenced>
-                            <mml:mo>&#x2033;</mml:mo>
+                            <mml:mo>″</mml:mo>
                             </mml:msup>
                         </mml:mrow>
                     </mml:mfenced>
@@ -431,21 +428,21 @@
                                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                                 <mml:mn>1</mml:mn>
                                 </mml:msub>
-                                <mml:mo>&#xE89E;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                                 <mml:mn>2</mml:mn>
                                 </mml:msub>
-                                <mml:mo>&#xE89E;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                                 <mml:mn>3</mml:mn>
                                 </mml:msub>
-                                <mml:mo>&#xE89E;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:msub><mml:mi mathvariant="italic">p</mml:mi>
                                 <mml:mn>4</mml:mn>
                                 </mml:msub>
                             </mml:mrow>
                         </mml:mfenced>
-                        <mml:mo>&#xE89E;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:msup><mml:mi mathvariant="italic">M</mml:mi>
                         <mml:mn>-1</mml:mn>
                         </mml:msup>
@@ -547,11 +544,11 @@
                             <mml:msub><mml:mi mathvariant="italic">f</mml:mi>
                             <mml:mi mathvariant="italic">x</mml:mi>
                             </mml:msub>
-                            <mml:mo>&#xE89E;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">f</mml:mi>
                             <mml:mi mathvariant="italic">y</mml:mi>
                             </mml:msub>
-                            <mml:mo>&#xE89E;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:msub><mml:mi mathvariant="italic">f</mml:mi>
                             <mml:mi mathvariant="italic">z</mml:mi>
                             </mml:msub>
@@ -573,19 +570,19 @@
                         <mml:mi mathvariant="italic">u</mml:mi>
                         <mml:mo>-</mml:mo>
                         <mml:mn>2</mml:mn>
-                        <mml:mo>&#xE89E;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:msup><mml:mi mathvariant="italic">n</mml:mi>
-                        <mml:mo>&#x2033;</mml:mo>
+                        <mml:mo>″</mml:mo>
                         </mml:msup>
-                        <mml:mo>&#xE89E;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:msup><mml:mfenced open="" close="">
                             <mml:msup><mml:mi mathvariant="italic">n</mml:mi>
-                            <mml:mo>&#x2033;</mml:mo>
+                            <mml:mo>″</mml:mo>
                             </mml:msup>
                         </mml:mfenced>
                         <mml:mi mathvariant="italic">T</mml:mi>
                         </mml:msup>
-                        <mml:mo>&#xE89E;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:mi mathvariant="italic">u</mml:mi>
                     </mml:mrow>
                 </mml:mrow>
@@ -600,7 +597,7 @@
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:mn>2</mml:mn>
-                        <mml:mo>&#xE89E;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:msqrt>
                             <mml:mfenced open="(" close=")">
                                 <mml:mrow>
@@ -720,7 +717,7 @@
             selected with <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated when <parameter>coord</parameter> or <parameter>pname</parameter> is not an
             accepted defined value,
@@ -738,7 +735,7 @@
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetTexGen</refentrytitle></citerefentry>
         </para>
@@ -755,7 +752,7 @@
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument <constant>GL_TEXTURE_GEN_Q</constant>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCopyPixels</refentrytitle></citerefentry>,
@@ -773,7 +770,7 @@
             <citerefentry><refentrytitle>glTexSubImage3D</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

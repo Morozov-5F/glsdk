@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluBuild3DMipmaps">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluBuild3DMipmaps"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>gluBuild3DMipmaps</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -30,7 +27,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -166,7 +163,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>gluBuild3DMipmaps</function> builds a series of prefiltered three-dimensional texture maps of
             decreasing resolutions called a mipmap. This is used for the antialiasing of
@@ -199,9 +196,9 @@
                 <!-- eqn: 1  times  1  times  1:-->
                 <mml:mrow>
                     <mml:mn>1</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>1</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -222,11 +219,11 @@
                         <mml:mn>2</mml:mn>
                         </mml:msub>
                     </mml:mfenced>
-                    <mml:mo>&#xE8A0;</mml:mo>
+                    <mml:mo></mml:mo>
                     <mml:mfenced open="(" close=")">
                         <mml:mrow>
                             <mml:mi mathvariant="italic">max</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:mi mathvariant="italic">width</mml:mi>
                                 <mml:mi mathvariant="italic">height</mml:mi>
@@ -243,9 +240,9 @@
                 <!-- eqn: 64  times  16  times  32:-->
                 <mml:mrow>
                     <mml:mn>64</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>16</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>32</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -253,9 +250,9 @@
                 <!-- eqn: 32  times  8  times  16:-->
                 <mml:mrow>
                     <mml:mn>32</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>8</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>16</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>, 
@@ -263,9 +260,9 @@
                 <!-- eqn: 16  times  4  times  8:-->
                 <mml:mrow>
                     <mml:mn>16</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>4</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>8</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -273,9 +270,9 @@
                 <!-- eqn: 8  times  2  times  4:-->
                 <mml:mrow>
                     <mml:mn>8</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>2</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>4</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>, 
@@ -283,9 +280,9 @@
                 <!-- eqn: 4  times  1  times  2:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>1</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>2</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -293,9 +290,9 @@
                 <!-- eqn: 2  times  1  times  1:-->
                 <mml:mrow>
                     <mml:mn>2</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>1</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -304,9 +301,9 @@
                 <!-- eqn: 1  times  1  times  1:-->
                 <mml:mrow>
                     <mml:mn>1</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>1</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>.
@@ -320,7 +317,7 @@
             for <parameter>type</parameter> parameter.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             Note that there is no direct way of querying the maximum level. This can
             be derived indirectly via <citerefentry><refentrytitle>glGetTexLevelParameter</refentrytitle></citerefentry>. First, query
@@ -336,11 +333,11 @@
                         <mml:mn>2</mml:mn>
                         </mml:msub>
                     </mml:mfenced>
-                    <mml:mo>&#xE8A0;</mml:mo>
+                    <mml:mo></mml:mo>
                     <mml:mfenced open="(" close=")">
                         <mml:mrow>
                             <mml:mi mathvariant="italic">max</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:mi mathvariant="italic">width</mml:mi>
                                 <mml:mi mathvariant="italic">height</mml:mi>
@@ -371,7 +368,7 @@
             is 1.2 or greater.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GLU_INVALID_VALUE</constant> is returned if <parameter>width</parameter>, <parameter>height</parameter>, or <parameter>depth</parameter> is &lt; 1.
         </para>
@@ -404,7 +401,7 @@
             and <parameter>format</parameter> is neither <constant>GLU_RGBA</constant> nor <constant>GLU_BGRA</constant>.
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluBuild1DMipmapLevels</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluBuild1DMipmaps</refentrytitle></citerefentry>,
@@ -420,7 +417,7 @@
             <citerefentry><refentrytitle>glTexImage3D</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

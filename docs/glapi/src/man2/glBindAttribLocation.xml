@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glBindAttribLocation">
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glBindAttribLocation">
     <refmeta>
 	<refentrytitle>glBindAttribLocation</refentrytitle>
 	<manvolnum>3G</manvolnum>
@@ -18,7 +17,7 @@
 	    </funcprototype>
 	</funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
 	<variablelist>
 	    <varlistentry>
 		<term><parameter>program</parameter></term>
@@ -45,7 +44,7 @@
 	    </varlistentry>
 	</variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
 	<para><function>glBindAttribLocation</function> is used to
 	associate a user-defined attribute variable in the program
 	object specified by <parameter>program</parameter> with a
@@ -99,7 +98,7 @@
 	after the program object has been linked will not take effect
 	until the next time the program object is linked.</para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
 	<para><function>glBindAttribLocation</function> is available
 	only if the GL version is 2.0 or greater.</para>
 
@@ -140,7 +139,7 @@
 	application may free its copy of the <parameter>name</parameter>
 	string immediately after the function returns.</para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
 	<para><constant>GL_INVALID_VALUE</constant> is generated if
 	<parameter>index</parameter> is greater than or equal to
 	<constant>GL_MAX_VERTEX_ATTRIBS</constant>.</para>
@@ -163,7 +162,7 @@
 	and the corresponding execution of
 	<citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.</para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
 	<para><citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
 	with argument <constant>GL_MAX_VERTEX_ATTRIBS</constant></para>
 
@@ -176,14 +175,14 @@
 
 	<para><citerefentry><refentrytitle>glIsProgram</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
 	<para><citerefentry><refentrytitle>glDisableVertexAttribArray</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glEnableVertexAttribArray</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glUseProgram</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glVertexAttrib</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glVertexAttribPointer</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
             This material may be distributed subject to the terms and conditions set forth in 

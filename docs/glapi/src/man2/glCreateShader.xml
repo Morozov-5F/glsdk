@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCreateShader">
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCreateShader">
     <refmeta>
 	<refentrytitle>glCreateShader</refentrytitle>
 	<manvolnum>3G</manvolnum>
@@ -16,7 +15,7 @@
 	    </funcprototype>
 	</funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
 	<variablelist>
 	    <varlistentry>
 		<term><parameter>shaderType</parameter></term>
@@ -28,7 +27,7 @@
 	    </varlistentry>
 	</variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
 	<para><function>glCreateShader</function> creates an empty
 	shader object and returns a non-zero value by which it can be
 	referenced. A shader object is used to maintain the source code
@@ -49,7 +48,7 @@
 	<constant>GL_FRAGMENT_SHADER</constant>, depending on the value
 	of <parameter>shaderType</parameter>.</para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
 	<para><function>glCreateShader</function> is available only if
 	the GL version is 2.0 or greater.</para>
 
@@ -64,7 +63,7 @@
 	synchronization across API calls when objects are accessed from
 	different execution threads.</para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
 	<para>This function returns 0 if an error occurs creating the
 	shader object.</para>
 
@@ -78,7 +77,7 @@
 	and the corresponding execution of
 	<citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.</para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
 	<para><citerefentry><refentrytitle>glGetShader</refentrytitle></citerefentry>
 	with a valid shader object and the parameter to be queried</para>
 
@@ -90,7 +89,7 @@
 
 	<para><citerefentry><refentrytitle>glIsShader</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
 	<para><citerefentry><refentrytitle>glAttachShader</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glCompileShader</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glDeleteShader</refentrytitle></citerefentry>,
@@ -98,7 +97,7 @@
 	<citerefentry><refentrytitle>glShaderSource</refentrytitle></citerefentry>
 	</para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
             This material may be distributed subject to the terms and conditions set forth in 

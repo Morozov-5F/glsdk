@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glVertexAttrib">
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glVertexAttrib">
     <refmeta>
 	<refentrytitle>glVertexAttrib</refentrytitle>
 	<manvolnum>3G</manvolnum>
@@ -98,7 +97,7 @@
 	    </funcprototype>
 	</funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
 	<variablelist>
 	    <varlistentry>
 		<term><parameter>index</parameter></term>
@@ -240,7 +239,7 @@
 	    </funcprototype>
 	</funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
 	<variablelist>
 	    <varlistentry>
 		<term><parameter>index</parameter></term>
@@ -258,7 +257,7 @@
 	    </varlistentry>
 	</variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
 	<para>OpenGL defines a number of standard vertex attributes that
 	applications can modify with standard API entry points (color,
 	normal, texture coordinates, etc.). The
@@ -357,7 +356,7 @@
 	attributes can be freely mixed with calls to set any of the
 	other generic vertex attributes.</para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
 	<para><function>glVertexAttrib</function> is available only if
 	the GL version is 2.0 or greater.</para>
 
@@ -383,12 +382,12 @@
 	attributes; therefore, it is not possible to alias generic
 	attributes with standard attributes.</para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
 	<para><constant>GL_INVALID_VALUE</constant> is generated if
 	<parameter>index</parameter> is greater than or equal to
 	<constant>GL_MAX_VERTEX_ATTRIBS</constant>.</para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
 	<para><citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
 	with the argument <constant>GL_CURRENT_PROGRAM</constant></para>
 
@@ -404,12 +403,12 @@
 	with arguments <constant>GL_CURRENT_VERTEX_ATTRIB</constant> and
 	<parameter>index</parameter></para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
 	<para><citerefentry><refentrytitle>glBindAttribLocation</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glVertex</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glVertexAttribPointer</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
             This material may be distributed subject to the terms and conditions set forth in 

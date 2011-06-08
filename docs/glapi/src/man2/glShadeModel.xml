@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glShadeModel">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glShadeModel"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glShadeModel</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -23,7 +20,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>mode</parameter></term>
@@ -37,7 +34,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             GL primitives can have either flat or smooth shading.
             Smooth shading,
@@ -149,7 +146,7 @@
                             <!-- eqn: 3 i:-->
                             <mml:mrow>
                                 <mml:mn>3</mml:mn>
-                                <mml:mo>&#xE89E;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mi mathvariant="italic">i</mml:mi>
                             </mml:mrow>
                         </mml:math></inlineequation>
@@ -164,7 +161,7 @@
                             <!-- eqn: 2 i  +  2:-->
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>&#xE89E;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mi mathvariant="italic">i</mml:mi>
                                 <mml:mo>+</mml:mo>
                                 <mml:mn>2</mml:mn>
@@ -181,7 +178,7 @@
                             <!-- eqn: 4 i:-->
                             <mml:mrow>
                                 <mml:mn>4</mml:mn>
-                                <mml:mo>&#xE89E;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mi mathvariant="italic">i</mml:mi>
                             </mml:mrow>
                         </mml:math></inlineequation>
@@ -195,7 +192,7 @@
             <constant>GL_FLAT</constant> and <constant>GL_SMOOTH</constant>, respectively.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>mode</parameter> is any value other than
             <constant>GL_FLAT</constant> or <constant>GL_SMOOTH</constant>.
@@ -206,12 +203,12 @@
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_SHADE_MODEL</constant>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColor</refentrytitle></citerefentry>,
@@ -219,7 +216,7 @@
             <citerefentry><refentrytitle>glLightModel</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

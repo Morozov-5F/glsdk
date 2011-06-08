@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluProject">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluProject"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>gluProject</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -31,7 +28,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>objX</parameter></term>
@@ -79,7 +76,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>gluProject</function> transforms the specified object coordinates into window coordinates
             using <parameter>model</parameter>, <parameter>proj</parameter>, and <parameter>view</parameter>. The result is stored 
@@ -108,7 +105,7 @@
             <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- eqn: v sup prime:-->
                 <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                <mml:mo>&#x2033;</mml:mo>
+                <mml:mo>″</mml:mo>
                 </mml:msup>
             </mml:math></inlineequation>
             as follows: 
@@ -118,14 +115,14 @@
                 <!-- eqn: v sup prime  =  P  times  M  times  v:-->
                 <mml:mrow>
                     <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                    <mml:mo>&#x2033;</mml:mo>
+                    <mml:mo>″</mml:mo>
                     </mml:msup>
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                         <mml:mi mathvariant="italic">P</mml:mi>
-                        <mml:mo>&#x00D7;</mml:mo>
+                        <mml:mo>×</mml:mo>
                         <mml:mi mathvariant="italic">M</mml:mi>
-                        <mml:mo>&#x00D7;</mml:mo>
+                        <mml:mo>×</mml:mo>
                         <mml:mi mathvariant="italic">v</mml:mi>
                     </mml:mrow>
                 </mml:mrow>
@@ -142,7 +139,7 @@
                 <!-- eqn: 4 times 4:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>4</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -160,7 +157,7 @@
                     <mml:mrow>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">view</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:mn>0</mml:mn>
                             </mml:mfenced>
@@ -170,19 +167,19 @@
                             <mml:mrow>
                                 <mml:mrow>
                                     <mml:mi mathvariant="italic">view</mml:mi>
-                                    <mml:mo>&#xE8A0;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:mfenced open="(" close=")">
                                         <mml:mn>2</mml:mn>
                                     </mml:mfenced>
                                 </mml:mrow>
-                                <mml:mo>&#x00D7;</mml:mo>
+                                <mml:mo>×</mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mrow>
                                         <mml:mrow>
                                             <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                                            <mml:mo>&#x2033;</mml:mo>
+                                            <mml:mo>″</mml:mo>
                                             </mml:msup>
-                                            <mml:mo>&#xE8A0;</mml:mo>
+                                            <mml:mo></mml:mo>
                                             <mml:mfenced open="(" close=")">
                                                 <mml:mn>0</mml:mn>
                                             </mml:mfenced>
@@ -206,7 +203,7 @@
                         <mml:mrow>
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">view</mml:mi>
-                                <mml:mo>&#xE8A0;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mn>1</mml:mn>
                                 </mml:mfenced>
@@ -216,19 +213,19 @@
                                 <mml:mrow>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">view</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mn>3</mml:mn>
                                         </mml:mfenced>
                                     </mml:mrow>
-                                    <mml:mo>&#x00D7;</mml:mo>
+                                    <mml:mo>×</mml:mo>
                                     <mml:mfenced open="(" close=")">
                                         <mml:mrow>
                                             <mml:mrow>
                                                 <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                                                <mml:mo>&#x2033;</mml:mo>
+                                                <mml:mo>″</mml:mo>
                                                 </mml:msup>
-                                                <mml:mo>&#xE8A0;</mml:mo>
+                                                <mml:mo></mml:mo>
                                                 <mml:mfenced open="(" close=")">
                                                     <mml:mn>1</mml:mn>
                                                 </mml:mfenced>
@@ -255,9 +252,9 @@
                                 <mml:mrow>
                                     <mml:mrow>
                                         <mml:msup><mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>&#x2033;</mml:mo>
+                                        <mml:mo>″</mml:mo>
                                         </mml:msup>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="(" close=")">
                                             <mml:mn>2</mml:mn>
                                         </mml:mfenced>
@@ -275,13 +272,13 @@
         <para>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluUnProject</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

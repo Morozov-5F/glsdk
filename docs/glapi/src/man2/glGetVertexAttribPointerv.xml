@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetVertexAttribPointerv">
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetVertexAttribPointerv">
     <refmeta>
 	<refentrytitle>glGetVertexAttribPointerv</refentrytitle>
 	<manvolnum>3G</manvolnum>
@@ -18,7 +17,7 @@
 	    </funcprototype>
 	</funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
 	<variablelist>
 	    <varlistentry>
 		<term><parameter>index</parameter></term>
@@ -43,7 +42,7 @@
 	    </varlistentry>
 	</variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
 	<para><function>glGetVertexAttribPointerv</function> returns
 	pointer information. <parameter>index</parameter> is the generic
 	vertex attribute to be queried, <parameter>pname</parameter> is
@@ -56,7 +55,7 @@
         specified, the <parameter>pointer</parameter> returned is a byte offset into the buffer object's data store.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
 	<para><function>glGetVertexAttribPointerv</function>
 	is available only if the GL version is 2.0 or greater.</para>
 
@@ -64,7 +63,7 @@
 
 	<para>The initial value for each pointer is 0.</para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
 	<para><constant>GL_INVALID_VALUE</constant>
 	is generated if <parameter>index</parameter>
 	is greater than or equal to <constant>GL_MAX_VERTEX_ATTRIBS</constant>.</para>
@@ -73,15 +72,15 @@
 	is generated if <parameter>pname</parameter>
 	is not an accepted value.</para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
 	<para><citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
 	with argument <constant>GL_MAX_VERTEX_ATTRIBS</constant></para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
 	<para><citerefentry><refentrytitle>glGetVertexAttrib</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glVertexAttribPointer</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
             This material may be distributed subject to the terms and conditions set forth in 

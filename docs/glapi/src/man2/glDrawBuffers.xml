@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glDrawBuffers">
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glDrawBuffers">
     <refmeta>
 	<refentrytitle>glDrawBuffers</refentrytitle>
 	<manvolnum>3G</manvolnum>
@@ -17,7 +16,7 @@
 	    </funcprototype>
 	</funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
 	<variablelist>
 	    <varlistentry>
 		<term><parameter>n</parameter></term>
@@ -36,7 +35,7 @@
 	    </varlistentry>
 	</variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
 	<para><function>glDrawBuffers</function> defines an array of
 	buffers into which fragment color values or fragment data will
 	be written. If no fragment shader is active, rendering
@@ -116,7 +115,7 @@
 	<citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
 	with the argument <constant>GL_AUX_BUFFERS</constant>.</para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
 	<para><function>glDrawBuffers</function> is available only if
 	the GL version is 2.0 or greater.</para>
 
@@ -138,7 +137,7 @@
 	written into each of the buffers specified by
 	<parameter>bufs</parameter>.</para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
 	<para><constant>GL_INVALID_ENUM</constant> is generated if one of the
 	values in <parameter>bufs</parameter> is not an accepted
 	value.</para>
@@ -166,7 +165,7 @@
 	and the corresponding execution of
 	<citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.</para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
 	<para><citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
 	with argument <constant>GL_MAX_DRAW_BUFFERS</constant></para>
 
@@ -175,7 +174,7 @@
 	<code>i</code> indicates the number of the draw buffer
 	whose value is to be queried</para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
 	<para> <citerefentry><refentrytitle>glBlendFunc</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glColorMask</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glDrawBuffers</refentrytitle></citerefentry>,
@@ -183,7 +182,7 @@
 	<citerefentry><refentrytitle>glLogicOp</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glReadBuffer</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
             This material may be distributed subject to the terms and conditions set forth in 

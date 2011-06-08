@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCallList">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCallList"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glCallList</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -22,7 +19,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>list</parameter></term>
@@ -34,7 +31,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glCallList</function> causes the named display list to be executed.
             The commands saved in the display list are executed in order,
@@ -61,7 +58,7 @@
             and <citerefentry><refentrytitle>glPopMatrix</refentrytitle></citerefentry> to preserve GL state across <function>glCallList</function> calls.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             Display lists can be executed between a call to <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding call to <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>,
@@ -69,7 +66,7 @@
             in this interval.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MAX_LIST_NESTING</constant>
         </para>
@@ -77,7 +74,7 @@
             <citerefentry><refentrytitle>glIsList</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <function>glCallLists</function>,
             <citerefentry><refentrytitle>glDeleteLists</refentrytitle></citerefentry>,
@@ -87,7 +84,7 @@
             <citerefentry><refentrytitle>glPushMatrix</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

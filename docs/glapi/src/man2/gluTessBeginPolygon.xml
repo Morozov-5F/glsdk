@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluTessBeginPolygon">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluTessBeginPolygon"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>gluTessBeginPolygon</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -24,7 +21,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>tess</parameter></term>
@@ -44,7 +41,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>gluTessBeginPolygon</function> and <citerefentry><refentrytitle>gluTessEndPolygon</refentrytitle></citerefentry> delimit the definition of a
             convex, concave or self-intersecting polygon. Within each <function>gluTessBeginPolygon</function>/<citerefentry><refentrytitle>gluTessEndPolygon</refentrytitle></citerefentry>
@@ -65,7 +62,7 @@
             See <citerefentry><refentrytitle>gluTessCallback</refentrytitle></citerefentry> for descriptions of the callback functions.
         </para>
     </refsection>
-    <refsection xml:id="example"><info><title>Example</title></info>
+    <refsection><info><title>Example</title></info>
         <para>
             A quadrilateral with a triangular hole in it can be described as follows:
             <programlisting>
@@ -87,7 +84,7 @@ gluTessEndPolygon(tobj);
         <para>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluNewTess</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluTessBeginContour</refentrytitle></citerefentry>,
@@ -98,7 +95,7 @@ gluTessEndPolygon(tobj);
             <citerefentry><refentrytitle>gluTessVertex</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

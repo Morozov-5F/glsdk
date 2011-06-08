@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetVertexAttrib">
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glGetVertexAttrib">
     <refmeta>
     <refentrytitle>glGetVertexAttrib</refentrytitle>
     <manvolnum>3G</manvolnum>
@@ -54,7 +53,7 @@
         </funcprototype>
     </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
     <variablelist>
         <varlistentry>
         <term><parameter>index</parameter></term>
@@ -87,7 +86,7 @@
         </varlistentry>
     </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
     <para><function>glGetVertexAttrib</function> returns in
     <parameter>params</parameter> the value of a generic vertex
     attribute parameter. The generic vertex attribute to be queried
@@ -243,11 +242,11 @@
     represent state stored in the currently bound vertex array object.</para>
 
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
     <para>If an error is generated, no change is made to the
     contents of <parameter>params</parameter>.</para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
     <para><constant>GL_INVALID_OPERATION</constant> is generated if <parameter>pname</parameter>
     is not <constant>GL_CURRENT_VERTEX_ATTRIB</constant> and there is no
     currently bound vertex array object.</para>
@@ -264,7 +263,7 @@
     <parameter>pname</parameter> is
     <constant>GL_CURRENT_VERTEX_ATTRIB</constant>.</para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
     <para><citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
     with argument <constant>GL_MAX_VERTEX_ATTRIBS</constant></para>
 
@@ -272,7 +271,7 @@
     with arguments <parameter>index</parameter> and
     <constant>GL_VERTEX_ATTRIB_ARRAY_POINTER</constant></para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
     <para><citerefentry><refentrytitle>glBindAttribLocation</refentrytitle></citerefentry>,
     <citerefentry><refentrytitle>glBindBuffer</refentrytitle></citerefentry>,
     <citerefentry><refentrytitle>glDisableVertexAttribArray</refentrytitle></citerefentry>,
@@ -281,7 +280,7 @@
     <citerefentry><refentrytitle>glVertexAttribDivisor</refentrytitle></citerefentry>,
     <citerefentry><refentrytitle>glVertexAttribPointer</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
             Copyright <trademark class="copyright"/> 2010 Khronos Group. 

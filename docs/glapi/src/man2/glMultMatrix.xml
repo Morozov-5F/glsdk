@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glMultMatrix">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glMultMatrix"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glMultMatrix</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -29,7 +26,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>m</parameter></term>
@@ -41,7 +38,7 @@
                         <!-- eqn: 4  times  4:-->
                         <mml:mrow>
                             <mml:mn>4</mml:mn>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:mn>4</mml:mn>
                         </mml:mrow>
                     </mml:math></inlineequation>
@@ -51,7 +48,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glMultMatrix</function> multiplies the current matrix with the one specified using <parameter>m</parameter>, and
             replaces the current matrix with the product.
@@ -62,7 +59,7 @@
             or the texture matrix.
         </para>
     </refsection>
-    <refsection xml:id="examples"><info><title>Examples</title></info>
+    <refsection><info><title>Examples</title></info>
         <para>
             If the current matrix is 
             <inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">C</mml:mi></mml:math></inlineequation>
@@ -76,28 +73,28 @@
                     <mml:mfenced open="(" close=")">
                         <mml:mrow>
                             <mml:mi mathvariant="italic">v</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
                             </mml:mfenced>
                         </mml:mrow>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">v</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>1</mml:mn>
                             </mml:mfenced>
                         </mml:mrow>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">v</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>2</mml:mn>
                             </mml:mfenced>
                         </mml:mrow>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">v</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>3</mml:mn>
                             </mml:mfenced>
@@ -110,7 +107,7 @@
                 <!-- eqn: C  times  v:-->
                 <mml:mrow>
                     <mml:mi mathvariant="italic">C</mml:mi>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mi mathvariant="italic">v</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -126,7 +123,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>0</mml:mn>
                                         </mml:mfenced>
@@ -135,7 +132,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>4</mml:mn>
                                         </mml:mfenced>
@@ -144,7 +141,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>8</mml:mn>
                                         </mml:mfenced>
@@ -153,7 +150,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>12</mml:mn>
                                         </mml:mfenced>
@@ -164,7 +161,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>1</mml:mn>
                                         </mml:mfenced>
@@ -173,7 +170,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>5</mml:mn>
                                         </mml:mfenced>
@@ -182,7 +179,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>9</mml:mn>
                                         </mml:mfenced>
@@ -191,7 +188,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>13</mml:mn>
                                         </mml:mfenced>
@@ -202,7 +199,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>2</mml:mn>
                                         </mml:mfenced>
@@ -211,7 +208,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>6</mml:mn>
                                         </mml:mfenced>
@@ -220,7 +217,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>10</mml:mn>
                                         </mml:mfenced>
@@ -229,7 +226,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>14</mml:mn>
                                         </mml:mfenced>
@@ -240,7 +237,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>3</mml:mn>
                                         </mml:mfenced>
@@ -249,7 +246,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>7</mml:mn>
                                         </mml:mfenced>
@@ -258,7 +255,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>11</mml:mn>
                                         </mml:mfenced>
@@ -267,7 +264,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>15</mml:mn>
                                         </mml:mfenced>
@@ -276,14 +273,14 @@
                             </mml:mtr>
                         </mml:mtable>
                     </mml:mfenced>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mfenced open="(" close=")">
                         <mml:mtable>
                             <mml:mtr>
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>0</mml:mn>
                                         </mml:mfenced>
@@ -294,7 +291,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>1</mml:mn>
                                         </mml:mfenced>
@@ -305,7 +302,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>2</mml:mn>
                                         </mml:mfenced>
@@ -316,7 +313,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>3</mml:mn>
                                         </mml:mfenced>
@@ -340,14 +337,14 @@
                     <mml:mfenced open="{" close="}">
                         <mml:mrow>
                             <mml:mi mathvariant="italic">m</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>0</mml:mn>
                             </mml:mfenced>
                         </mml:mrow>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">m</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>1</mml:mn>
                             </mml:mfenced>
@@ -355,7 +352,7 @@
                         <mml:mi mathvariant="italic">...</mml:mi>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">m</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="[" close="]">
                                 <mml:mn>15</mml:mn>
                             </mml:mfenced>
@@ -370,11 +367,11 @@
                     <mml:mfenced open="(" close=")">
                         <mml:mrow>
                             <mml:mi mathvariant="italic">C</mml:mi>
-                            <mml:mo>&#x00D7;</mml:mo>
+                            <mml:mo>×</mml:mo>
                             <mml:mi mathvariant="italic">M</mml:mi>
                         </mml:mrow>
                     </mml:mfenced>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mi mathvariant="italic">v</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -390,7 +387,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>0</mml:mn>
                                         </mml:mfenced>
@@ -399,7 +396,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>4</mml:mn>
                                         </mml:mfenced>
@@ -408,7 +405,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>8</mml:mn>
                                         </mml:mfenced>
@@ -417,7 +414,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>12</mml:mn>
                                         </mml:mfenced>
@@ -428,7 +425,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>1</mml:mn>
                                         </mml:mfenced>
@@ -437,7 +434,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>5</mml:mn>
                                         </mml:mfenced>
@@ -446,7 +443,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>9</mml:mn>
                                         </mml:mfenced>
@@ -455,7 +452,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>13</mml:mn>
                                         </mml:mfenced>
@@ -466,7 +463,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>2</mml:mn>
                                         </mml:mfenced>
@@ -475,7 +472,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>6</mml:mn>
                                         </mml:mfenced>
@@ -484,7 +481,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>10</mml:mn>
                                         </mml:mfenced>
@@ -493,7 +490,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>14</mml:mn>
                                         </mml:mfenced>
@@ -504,7 +501,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>3</mml:mn>
                                         </mml:mfenced>
@@ -513,7 +510,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>7</mml:mn>
                                         </mml:mfenced>
@@ -522,7 +519,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>11</mml:mn>
                                         </mml:mfenced>
@@ -531,7 +528,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">c</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>15</mml:mn>
                                         </mml:mfenced>
@@ -540,14 +537,14 @@
                             </mml:mtr>
                         </mml:mtable>
                     </mml:mfenced>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mfenced open="(" close=")">
                         <mml:mtable>
                             <mml:mtr>
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>0</mml:mn>
                                         </mml:mfenced>
@@ -556,7 +553,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>4</mml:mn>
                                         </mml:mfenced>
@@ -565,7 +562,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>8</mml:mn>
                                         </mml:mfenced>
@@ -574,7 +571,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>12</mml:mn>
                                         </mml:mfenced>
@@ -585,7 +582,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>1</mml:mn>
                                         </mml:mfenced>
@@ -594,7 +591,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>5</mml:mn>
                                         </mml:mfenced>
@@ -603,7 +600,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>9</mml:mn>
                                         </mml:mfenced>
@@ -612,7 +609,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>13</mml:mn>
                                         </mml:mfenced>
@@ -623,7 +620,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>2</mml:mn>
                                         </mml:mfenced>
@@ -632,7 +629,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>6</mml:mn>
                                         </mml:mfenced>
@@ -641,7 +638,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>10</mml:mn>
                                         </mml:mfenced>
@@ -650,7 +647,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>14</mml:mn>
                                         </mml:mfenced>
@@ -661,7 +658,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>3</mml:mn>
                                         </mml:mfenced>
@@ -670,7 +667,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>7</mml:mn>
                                         </mml:mfenced>
@@ -679,7 +676,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>11</mml:mn>
                                         </mml:mfenced>
@@ -688,7 +685,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">m</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>15</mml:mn>
                                         </mml:mfenced>
@@ -697,14 +694,14 @@
                             </mml:mtr>
                         </mml:mtable>
                     </mml:mfenced>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mfenced open="(" close=")">
                         <mml:mtable>
                             <mml:mtr>
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>0</mml:mn>
                                         </mml:mfenced>
@@ -715,7 +712,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>1</mml:mn>
                                         </mml:mfenced>
@@ -726,7 +723,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>2</mml:mn>
                                         </mml:mfenced>
@@ -737,7 +734,7 @@
                                 <mml:mtd>
                                     <mml:mrow>
                                         <mml:mi mathvariant="italic">v</mml:mi>
-                                        <mml:mo>&#xE8A0;</mml:mo>
+                                        <mml:mo></mml:mo>
                                         <mml:mfenced open="[" close="]">
                                             <mml:mn>3</mml:mn>
                                         </mml:mfenced>
@@ -759,14 +756,14 @@
                 <!-- eqn: 4  times  1:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>1</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>
             matrix.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             While the elements of the matrix may be specified with
             single or double precision, the GL may store or operate on these
@@ -778,7 +775,7 @@
                 <!-- eqn: 4  times  4:-->
                 <mml:mrow>
                     <mml:mn>4</mml:mn>
-                    <mml:mo>&#x00D7;</mml:mo>
+                    <mml:mo>×</mml:mo>
                     <mml:mn>4</mml:mn>
                 </mml:mrow>
             </mml:math></inlineequation>
@@ -791,14 +788,14 @@
             while the rotation is done on the results of that translation.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_OPERATION</constant> is generated if <function>glMultMatrix</function>
             is executed between the execution of <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_MATRIX_MODE</constant>
         </para>
@@ -815,7 +812,7 @@
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_TEXTURE_MATRIX</constant>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glLoadIdentity</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glLoadMatrix</refentrytitle></citerefentry>,
@@ -825,7 +822,7 @@
             <citerefentry><refentrytitle>glPushMatrix</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCreateProgram">
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCreateProgram">
     <refmeta>
 	<refentrytitle>glCreateProgram</refentrytitle>
 	<manvolnum>3G</manvolnum>
@@ -16,7 +15,7 @@
 	    </funcprototype>
 	</funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
 	<para><function>glCreateProgram</function> creates an empty
 	program object and returns a non-zero value by which it can be
 	referenced. A program object is an object to which shader
@@ -43,7 +42,7 @@
 	when it is no longer part of current rendering state for any
 	context.</para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
 	<para><function>glCreateProgram</function> is available only if
 	the GL version is 2.0 or greater.</para>
 
@@ -58,7 +57,7 @@
 	synchronization across API calls when objects are accessed from
 	different execution threads.</para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
 	<para>This function returns 0 if an error occurs creating the program object.</para>
 
 	<para><constant>GL_INVALID_OPERATION</constant> is generated if
@@ -68,7 +67,7 @@
 	and the corresponding execution of
 	<citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.</para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
 	<para><citerefentry><refentrytitle>glGet</refentrytitle></citerefentry>
 	with the argument <constant>GL_CURRENT_PROGRAM</constant></para>
 
@@ -103,7 +102,7 @@
 
 	<para><citerefentry><refentrytitle>glIsProgram</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
 	<para><citerefentry><refentrytitle>glAttachShader</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glBindAttribLocation</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glCreateShader</refentrytitle></citerefentry>,
@@ -114,7 +113,7 @@
 	<citerefentry><refentrytitle>glUseProgram</refentrytitle></citerefentry>,
 	<citerefentry><refentrytitle>glValidateProgram</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
             This material may be distributed subject to the terms and conditions set forth in 

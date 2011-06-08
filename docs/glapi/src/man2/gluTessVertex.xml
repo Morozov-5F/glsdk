@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluTessVertex">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="gluTessVertex"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>gluTessVertex</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -25,7 +22,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>tess</parameter></term>
@@ -54,7 +51,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>gluTessVertex</function> describes a vertex on a polygon that the program defines. Successive
             <function>gluTessVertex</function> calls describe a closed contour. For example, 
@@ -70,7 +67,7 @@
             (see the <citerefentry><refentrytitle>gluTessCallback</refentrytitle></citerefentry> reference page).
         </para>
     </refsection>
-    <refsection xml:id="example"><info><title>Example</title></info>
+    <refsection><info><title>Example</title></info>
         <para>
             A quadrilateral with a triangular hole in it can be described as follows:
             <programlisting>
@@ -90,7 +87,7 @@ gluTessEndPolygon(tobj);
             </programlisting>
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             It is a common error to use a local variable for <parameter>location</parameter> or <parameter>data</parameter> and store
             values into it as part of a loop.
@@ -119,7 +116,7 @@ for (i = 0; i &lt; NVERTICES; ++i) {
             used for <parameter>location</parameter>).
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>gluNewTess</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>gluTessBeginContour</refentrytitle></citerefentry>,
@@ -130,7 +127,7 @@ for (i = 0; i &lt; NVERTICES; ++i) {
             <citerefentry><refentrytitle>gluTessProperty</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

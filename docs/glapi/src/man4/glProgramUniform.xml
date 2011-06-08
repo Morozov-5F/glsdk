@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glProgramUniform">
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glProgramUniform">
     <refmeta>
     <refentrytitle>glProgramUniform</refentrytitle>
     <manvolnum>3G</manvolnum>
@@ -135,7 +134,7 @@
         </funcprototype>
     </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
     <variablelist>
         <varlistentry>
         <term><parameter>program</parameter></term>
@@ -253,7 +252,7 @@
         </funcprototype>
     </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
     <variablelist>
         <varlistentry>
         <term><parameter>program</parameter></term>
@@ -365,7 +364,7 @@
         </funcprototype>
     </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters3"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
     <variablelist>
         <varlistentry>
         <term><parameter>program</parameter></term>
@@ -409,7 +408,7 @@
         </varlistentry>
     </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
     <para><function>glProgramUniform</function> modifies the value of a
     uniform variable or a uniform variable array. The location of
     the uniform variable to be modified is specified by
@@ -508,7 +507,7 @@
     and a count greater than 1 can be used to modify an array of
     matrices.</para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
     <para><function>glProgramUniform1i</function> and
     <function>glProgramUniform1iv</function> are the only two functions
     that may be used to load uniform variables defined as sampler
@@ -535,7 +534,7 @@
     equal to -1, the data passed in will be silently ignored and the
     specified uniform variable will not be changed.</para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
     <para><constant>GL_INVALID_OPERATION</constant> is generated if
     <parameter>program</parameter> does not refer to a program object owned
     by the GL.</para>
@@ -581,7 +580,7 @@
     <function>glProgramUniform1iv</function>.</para>
 
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
     <para><citerefentry><refentrytitle>glGetActiveUniform</refentrytitle></citerefentry>
     with the handle of a program object and the index of an active uniform variable</para>
 
@@ -593,11 +592,11 @@
     with the handle of a program object and the name of a uniform
     variable</para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
     <para><citerefentry><refentrytitle>glLinkProgram</refentrytitle></citerefentry>,
     <citerefentry><refentrytitle>glUseProgram</refentrytitle></citerefentry></para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2003-2005 3Dlabs Inc. Ltd. 
             Copyright <trademark class="copyright"/> 2010 Khronos Group.

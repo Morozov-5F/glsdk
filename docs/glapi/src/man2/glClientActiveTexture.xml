@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glClientActiveTexture">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glClientActiveTexture"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glClientActiveTexture</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -23,7 +20,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>texture</parameter></term>
@@ -41,7 +38,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glClientActiveTexture</function> selects the vertex array client state parameters to be modified by
             <citerefentry><refentrytitle>glTexCoordPointer</refentrytitle></citerefentry>, and enabled or disabled with
@@ -49,14 +46,14 @@
             when called with a parameter of <constant>GL_TEXTURE_COORD_ARRAY</constant>.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             <function>glClientActiveTexture</function> is supported only if the GL version is 1.3 or greater, or
             <code>ARB_multitexture</code> is included in the string returned by
             <citerefentry><refentrytitle>glGetString</refentrytitle></citerefentry> when called with the argument <constant>GL_EXTENSIONS</constant>.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>texture</parameter> is not one of
             <constant>GL_TEXTURE</constant><inlineequation><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mml:mi mathvariant="italic">i</mml:mi></mml:math></inlineequation>,
@@ -64,12 +61,12 @@
             i ranges from 0 to the value of <constant>GL_MAX_TEXTURE_COORDS</constant> - 1.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_CLIENT_ACTIVE_TEXTURE</constant> or <constant>GL_MAX_TEXTURE_COORDS</constant>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glDisableClientState</refentrytitle></citerefentry>,
@@ -78,7 +75,7 @@
             <citerefentry><refentrytitle>glTexCoordPointer</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

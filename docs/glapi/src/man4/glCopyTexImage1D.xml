@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCopyTexImage1D">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glCopyTexImage1D"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glCopyTexImage1D</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -29,7 +26,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -116,7 +113,7 @@
                             <mml:mo>+</mml:mo>
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>&#xE8A0;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mi mathvariant="italic">border</mml:mi>
                                 </mml:mfenced>
@@ -140,7 +137,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glCopyTexImage1D</function> defines a one-dimensional texture image with pixels from the current
             <constant>GL_READ_BUFFER</constant>.
@@ -162,7 +159,7 @@
                     <mml:mo>+</mml:mo>
                     <mml:mrow>
                         <mml:mn>2</mml:mn>
-                        <mml:mo>&#xE8A0;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">border</mml:mi>
                         </mml:mfenced>
@@ -207,7 +204,7 @@
             When <parameter>internalformat</parameter> is one of the sRGB  types, the GL does not automatically convert the source pixels to the sRGB color space.  In this case, the <function>glPixelMap</function> function can be used to accomplish the conversion.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             1, 2, 3, and 4 are not accepted values for <parameter>internalformat</parameter>.
         </para>
@@ -215,7 +212,7 @@
             An image with 0 width indicates a NULL texture.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not one of the allowable values.
         </para>
@@ -231,7 +228,7 @@
                     <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
                     <mml:mn>2</mml:mn>
                     </mml:msub>
-                    <mml:mo>&#xE89E;</mml:mo>
+                    <mml:mo></mml:mo>
                     <mml:mi mathvariant="italic">max</mml:mi>
                 </mml:mrow>
             </mml:math></inlineequation>,
@@ -257,7 +254,7 @@
                     <mml:mo>+</mml:mo>
                     <mml:mrow>
                         <mml:mn>2</mml:mn>
-                        <mml:mo>&#xE8A0;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">border</mml:mi>
                         </mml:mfenced>
@@ -276,12 +273,12 @@
             buffer.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetTexImage</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glCopyTexImage2D</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glCopyTexSubImage1D</refentrytitle></citerefentry>,
@@ -294,7 +291,7 @@
             <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

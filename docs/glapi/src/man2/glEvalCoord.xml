@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glEvalCoord">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glEvalCoord"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glEvalCoord</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -43,7 +40,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>u</parameter></term>
@@ -96,7 +93,7 @@
             </funcprototype>
         </funcsynopsis>
     </refsynopsisdiv>
-    <refsection xml:id="parameters2"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>u</parameter></term>
@@ -114,7 +111,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glEvalCoord1</function> evaluates enabled one-dimensional maps at argument
             <parameter>u</parameter>.
@@ -205,30 +202,30 @@
                             <mml:mfrac>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
-                                        <mml:mo>&#x2202;</mml:mo>
+                                        <mml:mo>∂</mml:mo>
                                         <mml:mi mathvariant="bold">p</mml:mi>
                                     </mml:mrow>
                                 </mml:mfenced>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
-                                        <mml:mo>&#x2202;</mml:mo>
+                                        <mml:mo>∂</mml:mo>
                                         <mml:mi mathvariant="italic">u</mml:mi>
                                     </mml:mrow>
                                 </mml:mfenced>
                             </mml:mfrac>
                         </mml:mfenced>
-                        <mml:mo>&#x00D7;</mml:mo>
+                        <mml:mo>×</mml:mo>
                         <mml:mfenced open="" close="">
                             <mml:mfrac>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
-                                        <mml:mo>&#x2202;</mml:mo>
+                                        <mml:mo>∂</mml:mo>
                                         <mml:mi mathvariant="bold">p</mml:mi>
                                     </mml:mrow>
                                 </mml:mfenced>
                                 <mml:mfenced open="" close="">
                                     <mml:mrow>
-                                        <mml:mo>&#x2202;</mml:mo>
+                                        <mml:mo>∂</mml:mo>
                                         <mml:mi mathvariant="italic">v</mml:mi>
                                     </mml:mrow>
                                 </mml:mfenced>
@@ -253,7 +250,7 @@
                     <mml:mfrac>
                         <mml:mi mathvariant="bold">m</mml:mi>
                         <mml:mfenced open="" close="">
-                            <mml:mfenced open="&#x2225;" close="&#x2225;">
+                            <mml:mfenced open="∥" close="∥">
                                 <mml:mi mathvariant="bold">m</mml:mi>
                             </mml:mfenced>
                         </mml:mfenced>
@@ -271,7 +268,7 @@
             <function>glEvalCoord2</function> commands.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glIsEnabled</refentrytitle></citerefentry> with argument <constant>GL_MAP1_VERTEX_3</constant>
         </para>
@@ -333,7 +330,7 @@
             <citerefentry><refentrytitle>glGetMap</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBegin</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColor</refentrytitle></citerefentry>,
@@ -349,7 +346,7 @@
             <citerefentry><refentrytitle>glVertex</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

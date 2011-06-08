@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glTexImage2D">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glTexImage2D"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glTexImage2D</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -33,7 +30,7 @@
     <!-- eqn: ignoring delim $$ -->
     <para>
     </para>
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>target</parameter></term>
@@ -140,7 +137,7 @@
                             <mml:mo>+</mml:mo>
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>&#xE8A0;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mi mathvariant="italic">border</mml:mi>
                                 </mml:mfenced>
@@ -169,7 +166,7 @@
                             <mml:mo>+</mml:mo>
                             <mml:mrow>
                                 <mml:mn>2</mml:mn>
-                                <mml:mo>&#xE8A0;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:mi mathvariant="italic">border</mml:mi>
                                 </mml:mfenced>
@@ -252,7 +249,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             Texturing maps a portion of a specified texture image onto each graphical primitive for which texturing is enabled.  To enable and disable two-dimensional texturing, call <citerefentry><refentrytitle>glEnable</refentrytitle></citerefentry> and <citerefentry><refentrytitle>glDisable</refentrytitle></citerefentry> with argument <constant>GL_TEXTURE_2D</constant>.  To enable and disable texturing using cube-mapped texture, call <citerefentry><refentrytitle>glEnable</refentrytitle></citerefentry> and <citerefentry><refentrytitle>glDisable</refentrytitle></citerefentry> with argument <constant>GL_TEXTURE_CUBE_MAP</constant>.
         </para>
@@ -558,7 +555,7 @@
 						  <mml:mi mathvariant="italic">c</mml:mi>
 						  <mml:mi mathvariant="italic">s</mml:mi>
 						</mml:msub>
-						<mml:mo>&#x2264;</mml:mo>
+						<mml:mo>≤</mml:mo>
 						<mml:mn>0.04045</mml:mn>
 					  </mml:mtd>
 					</mml:mtr>
@@ -630,7 +627,7 @@
 			Depth textures can be treated as LUMINANCE, INTENSITY or ALPHA textures during texture filtering and application. Image-based shadowing can be enabled by comparing texture r coordinates to depth texture values to generate a boolean result.  See <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry> for details on texture comparison.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             Texturing has no effect in color index mode.
         </para>
@@ -674,7 +671,7 @@
                                 <mml:mo>+</mml:mo>
                                 <mml:mrow>
                                     <mml:mn>2</mml:mn>
-                                    <mml:mo>&#xE8A0;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:mfenced open="(" close=")">
                                         <mml:mi mathvariant="italic">border</mml:mi>
                                     </mml:mfenced>
@@ -694,7 +691,7 @@
                                 <mml:mo>+</mml:mo>
                                 <mml:mrow>
                                     <mml:mn>2</mml:mn>
-                                    <mml:mo>&#xE8A0;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:mfenced open="(" close=")">
                                         <mml:mi mathvariant="italic">border</mml:mi>
                                     </mml:mfenced>
@@ -822,7 +819,7 @@
 			internal formats are only available if the GL version is 2.1 or greater.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if <parameter>target</parameter> is not <constant>GL_TEXTURE_2D</constant>,
             <constant>GL_PROXY_TEXTURE_2D</constant>,
@@ -859,7 +856,7 @@
                     <mml:msub><mml:mi mathvariant="italic">log</mml:mi>
                     <mml:mn>2</mml:mn>
                     </mml:msub>
-                    <mml:mo>&#xE8A0;</mml:mo>
+                    <mml:mo></mml:mo>
                     <mml:mfenced open="(" close=")">
                         <mml:mi mathvariant="italic">max</mml:mi>
                     </mml:mfenced>
@@ -886,7 +883,7 @@
                     <mml:mo>+</mml:mo>
                     <mml:mrow>
                         <mml:mn>2</mml:mn>
-                        <mml:mo>&#xE8A0;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mi mathvariant="italic">border</mml:mi>
                         </mml:mfenced>
@@ -957,7 +954,7 @@
             and the corresponding execution of <citerefentry><refentrytitle>glEnd</refentrytitle></citerefentry>.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGetTexImage</refentrytitle></citerefentry>
         </para>
@@ -968,7 +965,7 @@
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_PIXEL_UNPACK_BUFFER_BINDING</constant>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glActiveTexture</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glColorTable</refentrytitle></citerefentry>,
@@ -994,7 +991,7 @@
             <citerefentry><refentrytitle>glTexParameter</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

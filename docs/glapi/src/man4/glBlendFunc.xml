@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glBlendFunc">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glBlendFunc"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>1991-2006</year>
                 <holder>Silicon Graphics, Inc.</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glBlendFunc</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -30,7 +27,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>buf</parameter></term>
@@ -78,7 +75,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             Pixels can be drawn using a function that blends
             the incoming (source) RGBA values with the RGBA values
@@ -1117,7 +1114,7 @@
                         <mml:mfrac>
                             <mml:mrow>
                                 <mml:mi mathvariant="italic">min</mml:mi>
-                                <mml:mo>&#xE8A0;</mml:mo>
+                                <mml:mo></mml:mo>
                                 <mml:mfenced open="(" close=")">
                                     <mml:msub><mml:mi mathvariant="italic">A</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
@@ -1156,7 +1153,7 @@
                         <mml:mo>=</mml:mo>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">min</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:msub><mml:mi mathvariant="italic">k</mml:mi>
                                 <mml:mi mathvariant="italic">R</mml:mi>
@@ -1165,7 +1162,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>&#xE89E;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">s</mml:mi>
                                     <mml:mi mathvariant="italic">R</mml:mi>
                                     </mml:msub>
@@ -1173,7 +1170,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">R</mml:mi>
                                     <mml:mi mathvariant="italic">d</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>&#xE89E;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">d</mml:mi>
                                     <mml:mi mathvariant="italic">R</mml:mi>
                                     </mml:msub>
@@ -1191,7 +1188,7 @@
                         <mml:mo>=</mml:mo>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">min</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:msub><mml:mi mathvariant="italic">k</mml:mi>
                                 <mml:mi mathvariant="italic">G</mml:mi>
@@ -1200,7 +1197,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">G</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>&#xE89E;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">s</mml:mi>
                                     <mml:mi mathvariant="italic">G</mml:mi>
                                     </mml:msub>
@@ -1208,7 +1205,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">G</mml:mi>
                                     <mml:mi mathvariant="italic">d</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>&#xE89E;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">d</mml:mi>
                                     <mml:mi mathvariant="italic">G</mml:mi>
                                     </mml:msub>
@@ -1226,7 +1223,7 @@
                         <mml:mo>=</mml:mo>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">min</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:msub><mml:mi mathvariant="italic">k</mml:mi>
                                 <mml:mi mathvariant="italic">B</mml:mi>
@@ -1235,7 +1232,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">B</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>&#xE89E;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">s</mml:mi>
                                     <mml:mi mathvariant="italic">B</mml:mi>
                                     </mml:msub>
@@ -1243,7 +1240,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">B</mml:mi>
                                     <mml:mi mathvariant="italic">d</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>&#xE89E;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">d</mml:mi>
                                     <mml:mi mathvariant="italic">B</mml:mi>
                                     </mml:msub>
@@ -1261,7 +1258,7 @@
                         <mml:mo>=</mml:mo>
                         <mml:mrow>
                             <mml:mi mathvariant="italic">min</mml:mi>
-                            <mml:mo>&#xE8A0;</mml:mo>
+                            <mml:mo></mml:mo>
                             <mml:mfenced open="(" close=")">
                                 <mml:msub><mml:mi mathvariant="italic">k</mml:mi>
                                 <mml:mi mathvariant="italic">A</mml:mi>
@@ -1270,7 +1267,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">A</mml:mi>
                                     <mml:mi mathvariant="italic">s</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>&#xE89E;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">s</mml:mi>
                                     <mml:mi mathvariant="italic">A</mml:mi>
                                     </mml:msub>
@@ -1278,7 +1275,7 @@
                                     <mml:msub><mml:mi mathvariant="italic">A</mml:mi>
                                     <mml:mi mathvariant="italic">d</mml:mi>
                                     </mml:msub>
-                                    <mml:mo>&#xE89E;</mml:mo>
+                                    <mml:mo></mml:mo>
                                     <mml:msub><mml:mi mathvariant="italic">d</mml:mi>
                                     <mml:mi mathvariant="italic">A</mml:mi>
                                     </mml:msub>
@@ -1371,7 +1368,7 @@
         <para>
         </para>
     </refsection>
-    <refsection xml:id="examples"><info><title>Examples</title></info>
+    <refsection><info><title>Examples</title></info>
         <para>
         </para>
         <para>
@@ -1398,7 +1395,7 @@
             store the accumulated coverage.
         </para>
     </refsection>
-    <refsection xml:id="notes"><info><title>Notes</title></info>
+    <refsection><info><title>Notes</title></info>
         <para>
             Incoming (source) alpha is correctly thought of as a material opacity,
             ranging from 1.0 
@@ -1425,7 +1422,7 @@
             be lower than <constant>GL_MAX_DRAW_BUFFERS</constant>.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_ENUM</constant> is generated if either <parameter>sfactor</parameter>
             or <parameter>dfactor</parameter> is not an accepted value.
@@ -1435,7 +1432,7 @@
             than or equal to the value of <constant>GL_MAX_DRAW_BUFFERS</constant>.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_BLEND_SRC</constant>
         </para>
@@ -1448,7 +1445,7 @@
         <para>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glBlendColor</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glBlendEquation</refentrytitle></citerefentry>,
@@ -1460,7 +1457,7 @@
             <citerefentry><refentrytitle>glStencilFunc</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 1991-2006
             Silicon Graphics, Inc. This document is licensed under the SGI

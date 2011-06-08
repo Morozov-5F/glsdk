@@ -1,12 +1,9 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glViewportArray">
-    <refmeta>
-        <refmetainfo>
-            <copyright>
+<?xml version="1.0" encoding="utf-8"?><!-- Converted by db4-upgrade version 1.0 --><refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="glViewportArray"><db:info xmlns:db="http://docbook.org/ns/docbook"><copyright>
                 <year>2010</year>
                 <holder>Khronos Group</holder>
-            </copyright>
-        </refmetainfo>
+            </copyright></db:info>
+    <refmeta>
+        
         <refentrytitle>glViewportArray</refentrytitle>
         <manvolnum>3G</manvolnum>
     </refmeta>
@@ -25,7 +22,7 @@
         </funcsynopsis>
     </refsynopsisdiv>
     <!-- eqn: ignoring delim $$ -->
-    <refsection xml:id="parameters"><info><title>Parameters</title></info>
+    <refsection><info><title>Parameters</title></info>
         <variablelist>
         <varlistentry>
             <term><parameter>first</parameter></term>
@@ -53,7 +50,7 @@
         </varlistentry>
         </variablelist>
     </refsection>
-    <refsection xml:id="description"><info><title>Description</title></info>
+    <refsection><info><title>Description</title></info>
         <para>
             <function>glViewportArrayv</function> specifies the parameters for multiple viewports
             simulataneously. <parameter>first</parameter> specifies the index of the first viewport
@@ -125,7 +122,7 @@
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:mfenced>
-                        <mml:mo>&#xE89E;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mfrac>
                                 <mml:mi mathvariant="italic">width</mml:mi>
@@ -156,7 +153,7 @@
                                 <mml:mn>1</mml:mn>
                             </mml:mrow>
                         </mml:mfenced>
-                        <mml:mo>&#xE89E;</mml:mo>
+                        <mml:mo></mml:mo>
                         <mml:mfenced open="(" close=")">
                             <mml:mfrac>
                                 <mml:mi mathvariant="italic">height</mml:mi>
@@ -186,7 +183,7 @@
             and may be determined by querying the impementation-defined constant <constant>GL_VIEWPORT_SUBPIXEL_BITS</constant>.
         </para>
     </refsection>
-    <refsection xml:id="errors"><info><title>Errors</title></info>
+    <refsection><info><title>Errors</title></info>
         <para>
             <constant>GL_INVALID_VALUE</constant> is generated if <parameter>first</parameter> is greater than or equal to
             the value of <constant>GL_MAX_VIEWPORTS</constant>.
@@ -199,7 +196,7 @@
             <constant>GL_INVALID_VALUE</constant> is generated if either <parameter>width</parameter> or <parameter>height</parameter> is negative.
         </para>
     </refsection>
-    <refsection xml:id="associatedgets"><info><title>Associated Gets</title></info>
+    <refsection><info><title>Associated Gets</title></info>
         <para>
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_VIEWPORT</constant>
         </para>
@@ -213,14 +210,14 @@
             <citerefentry><refentrytitle>glGet</refentrytitle></citerefentry> with argument <constant>GL_VIEWPORT_SUBPIXEL_BITS</constant>
         </para>
     </refsection>
-    <refsection xml:id="seealso"><info><title>See Also</title></info>
+    <refsection><info><title>See Also</title></info>
         <para>
             <citerefentry><refentrytitle>glDepthRange</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glViewport</refentrytitle></citerefentry>,
             <citerefentry><refentrytitle>glViewportIndexed</refentrytitle></citerefentry>
         </para>
     </refsection>
-    <refsection xml:id="Copyright"><info><title>Copyright</title></info>
+    <refsection><info><title>Copyright</title></info>
         <para>
             Copyright <trademark class="copyright"/> 2010 Khronos Group. 
             This material may be distributed subject to the terms and conditions set forth in 
