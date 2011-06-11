@@ -27,7 +27,7 @@ typedef float GLfloat;
 typedef float GLclampf;
 typedef double GLdouble;
 typedef double GLclampd;
-typedef void GLvoid;
+#define GLvoid void
 
 #ifndef GLX_ARB_get_proc_address
 typedef void (*__GLXextFuncPtr)(void);

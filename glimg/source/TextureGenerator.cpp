@@ -1170,7 +1170,15 @@ namespace glimg
 		GLuint textureName = 0;
 		glGenTextures(1, &textureName);
 
-		CreateTexture(textureName, pImage, forceConvertBits);
+		try
+		{
+			CreateTexture(textureName, pImage, forceConvertBits);
+		}
+		catch(...)
+		{
+			glDeleteTextures(1, &textureName);
+			throw;
+		}
 
 		return textureName;
 	}
