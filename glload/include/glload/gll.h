@@ -3,6 +3,7 @@
 #define GLE_FILE_H
 
 ///The core namespace for all of the extension loading functions.
+///@ingroup module_glload
 namespace glload
 {
 	/**
@@ -40,7 +41,7 @@ namespace glload
 	/**
 	\brief Loads all of the function pointers associated with GLX.
 
-	\return Of the type LoadSucceeded.
+	\return Of the type glload::LoadSucceeded.
 	**/
 	int LoadGLXFunctions(void *display, int screen);
 #endif

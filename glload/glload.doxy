@@ -1,0 +1,55 @@
+/**
+\defgroup module_glload GL Load
+
+The OpenGL Loading Library (GLload) is used to initialize OpenGL's functions.
+Because of the nature of how OpenGL is implemented, it is necessary to fetch
+function pointers from OpenGL implementations, rather than simply statically linking
+to a library. The GLload library exists to automate this process and make it simple.
+
+The GLload library provides a number of header files. To include them, simply put the
+glload/include directory in your build system's include path. It also comes with
+a static library which needs to be built. Build the static library as part of the
+SDK's build process, and link to them as is normal for your build system.
+
+All header files except <tt>glload/gll.h</tt> exist to expose OpenGL functions, or functions in WGL/GLX. For regular OpenGL functions, you need to include one of the headers of the form <tt>glload/gl_*.h</tt>, where * is the version of OpenGL that you are coding against. For example, <tt>glload/gl_3_3.h</tt> represents the header for OpenGL version 3.3. There are also <tt>_comp</tt> verisons, such as <tt>glload/gl_3_3_comp.h</tt>. These provide functions for the compatibility version of OpenGL, version 3.3.
+
+Regardless of version number or core/compatibility issues, all OpenGL headers contain
+function for every extension.
+
+The header <tt>glload/gl_all.h</tt> contains every function and enum definition for everything that has ever been in OpenGL.
+
+You should @em never use <tt>GL/gl.h</tt> in conjunction with these headers. Nor should it be used in conjunction with @em any other OpenGL headers (<tt>gl3.h</tt>, <tt>gl_ext.h</tt>, etc). Also, for each source file, you should pick @em one OpenGL header and include that. You may include different versions in different source files, but each source file should only include one of the headers.
+
+For WGL or GLX extensions, there are <tt>glload/wgl_exts.h</tt> and <tt>glload/glx_exts.h</tt>. These provide the extensions for these APIs, but not the non-extension functions. So unlike regular OpenGL, you will still need to include <tt>GL/glx.h</tt> and <tt>wgl.h</tt>
+
+@section glload_initialization Initialization
+
+The headers themselves are not useful unless GLload has been initialized. That is, you @em cannot call any function or use any variable in these headers until GLload has been initialized.
+
+GLload relies on mechanisms that are part of OpenGL to function. Therefore, you must have a valid OpenGL context that has been made current before you can initialize GLload.
+
+The header that contains the functions to initialize GLload is <tt>glload/gll.h</tt>. This header only needs to be included in your initialization code; you don't need to include it everywhere that you use OpenGL.
+
+To initialize the OpenGL functions, call glload::LoadFunctions. This function will respect the context's version number as well as its core/compatibility flags (for contexts that make such a distinction). If you create a core 3.3 context, then GLload will only load functions that are available in that context. And similarly for compatibility.
+
+The function glload::LoadWinFunctions/glload::LoadGLXFunctions will load the WGL or GLX extensions, respectively.
+
+There are also some convenience functions, to make dealing with versions slightly easier. The glload::GetMajorVersion and glload::GetMinorVersion functions retrieve the major and minor OpenGL functions. These can @em only be called after glload::LoadFunctions.
+
+The function glload::IsVersionGEQ can be used to test if the current OpenGL version is at least the given version. This is useful for testing to see if functionality from a particular version is available.
+
+@section glload_extensions Extensions
+
+GLload has support for OpenGL extensions. The initialization routines will initialize OpenGL extensions just as it includes the core functions. The OpenGL (and WGL/GLX) headers have some additional, extension-specific functionality.
+
+Integer variables are provided to query whether an extension is available. These variables are of the form:
+
+<code>
+glext_<em>extension_name</em>
+</code>
+
+For WGL/GLX, this becomes wglext/glxext_*. If the variable's value is 0, then the extension is not present. If it is non-zero, then it is present.
+
+These variables only gain valid values @em after GLload has been initialized.
+
+**/

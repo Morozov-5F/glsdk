@@ -19,3 +19,4 @@ BuildLog.htm
 Makefile
 *.a
 *.make
+docs/html
