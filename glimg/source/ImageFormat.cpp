@@ -1,5 +1,6 @@
 
 #include "glimg/ImageFormat.h"
+#include "Util.h"
 
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
@@ -27,24 +28,6 @@ namespace glimg
 			FMT_COLOR_RGBX, FMT_COLOR_RGBA, FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
 		BaseDataFormat g_srgbFormats[] = {FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
 
-		BaseDataFormat g_twoCompFormats[] = {FMT_COLOR_RG, FMT_DEPTH_X};
-		BaseDataFormat g_threeCompFormats[] = {FMT_COLOR_RGB, FMT_COLOR_RGB_sRGB};
-		BaseDataFormat g_fourCompFormats[] = {FMT_COLOR_RGBX, FMT_COLOR_RGBA,
-			FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
-
-		int ComponentCount(BaseDataFormat eFormat)
-		{
-			if(IsOneOfThese<ARRAY_COUNT(g_twoCompFormats)>(eFormat, g_twoCompFormats))
-				return 2;
-
-			if(IsOneOfThese<ARRAY_COUNT(g_threeCompFormats)>(eFormat, g_threeCompFormats))
-				return 3;
-
-			if(IsOneOfThese<ARRAY_COUNT(g_fourCompFormats)>(eFormat, g_fourCompFormats))
-				return 4;
-
-			return 1;
-		}
 	}
 
 	bool ImageFormat::ValidateFormat() const
