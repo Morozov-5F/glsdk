@@ -8,5 +8,5 @@ namespace glimg
 	//Does not work for compressed textures.
 	size_t CalcBytesPerPixel(const ImageFormat &fmt);
 
-	int ComponentCount(BaseDataFormat eFormat);
+	int ComponentCount(PixelComponents eFormat);
 }

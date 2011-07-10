@@ -2,8 +2,16 @@
 #ifndef GLE_FILE_H
 #define GLE_FILE_H
 
-///The core namespace for all of the extension loading functions.
-///@ingroup module_glload
+/**
+\file
+\brief The header to include if you want to initialize the OpenGL functions.
+
+**/
+
+///\addtogroup module_glload
+///@{
+
+///The core namespace for all of the OpenGL initialization functions.
 namespace glload
 {
 	/**
@@ -59,7 +67,7 @@ namespace glload
 	///Returns non-zero if the current GL version is greater than or equal to the given version.
 	int IsVersionGEQ(int iMajorVersion, int iMinorVersion);
 }
-
+///@}
 
 #endif //GLE_FILE_H
 

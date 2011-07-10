@@ -20,13 +20,13 @@ namespace glimg
 			return false;
 		}
 
-		BaseDataFormat g_alphaFormats[] = {FMT_COLOR_RGBA, FMT_COLOR_RGBA_sRGB};
-		BaseDataFormat g_rgbFormats[] = {FMT_COLOR_RGB, FMT_COLOR_RGB_sRGB};
+		PixelComponents g_alphaFormats[] = {FMT_COLOR_RGBA, FMT_COLOR_RGBA_sRGB};
+		PixelComponents g_rgbFormats[] = {FMT_COLOR_RGB, FMT_COLOR_RGB_sRGB};
 		Bitdepth g_floatBitdepths[] = {BD_PER_COMP_16, BD_PER_COMP_32, BD_PACKED_32_BIT_101111_REV};
 		Bitdepth g_threeCompBitdepths[] = {BD_PACKED_16_BIT_565, BD_PACKED_16_BIT_565_REV};
-		BaseDataFormat g_colorFormats[] = {FMT_COLOR_RED, FMT_COLOR_RG, FMT_COLOR_RGB,
+		PixelComponents g_colorFormats[] = {FMT_COLOR_RED, FMT_COLOR_RG, FMT_COLOR_RGB,
 			FMT_COLOR_RGBX, FMT_COLOR_RGBA, FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
-		BaseDataFormat g_srgbFormats[] = {FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
+		PixelComponents g_srgbFormats[] = {FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
 
 	}
 

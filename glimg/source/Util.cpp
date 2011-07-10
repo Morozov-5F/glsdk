@@ -20,13 +20,13 @@ namespace glimg
 			return false;
 		}
 
-		BaseDataFormat g_twoCompFormats[] = {FMT_COLOR_RG, FMT_DEPTH_X};
-		BaseDataFormat g_threeCompFormats[] = {FMT_COLOR_RGB, FMT_COLOR_RGB_sRGB};
-		BaseDataFormat g_fourCompFormats[] = {FMT_COLOR_RGBX, FMT_COLOR_RGBA,
+		PixelComponents g_twoCompFormats[] = {FMT_COLOR_RG, FMT_DEPTH_X};
+		PixelComponents g_threeCompFormats[] = {FMT_COLOR_RGB, FMT_COLOR_RGB_sRGB};
+		PixelComponents g_fourCompFormats[] = {FMT_COLOR_RGBX, FMT_COLOR_RGBA,
 			FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
 	}
 
-	int ComponentCount(BaseDataFormat eFormat)
+	int ComponentCount(PixelComponents eFormat)
 	{
 		if(IsOneOfThese<ARRAY_COUNT(g_twoCompFormats)>(eFormat, g_twoCompFormats))
 			return 2;
