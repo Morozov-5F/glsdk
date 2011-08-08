@@ -66,6 +66,20 @@ local coreExts4_1 = {
 	"ARB_viewport_array",
 };
 
+local coreExts4_2 = {
+	"ARB_base_instance",
+	"ARB_shading_language_420pack",
+	"ARB_transform_feedback_instanced",
+	"ARB_compressed_texture_pixel_storage",
+	"ARB_conservative_depth",
+	"ARB_internalformat_query",
+	"ARB_map_buffer_alignment",
+	"ARB_shader_atomic_counters",
+	"ARB_shader_image_load_store",
+	"ARB_shading_language_packing",
+	"ARB_texture_storage",
+};
+
 local masterTable = {
 	["3.0"] = coreExts3_0,
 	["3.1"] = coreExts3_1,
@@ -73,6 +87,7 @@ local masterTable = {
 	["3.3"] = coreExts3_3,
 	["4.0"] = coreExts4_0,
 	["4.1"] = coreExts4_1,
+	["4.2"] = coreExts4_2,
 };
 
 

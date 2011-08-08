@@ -33,9 +33,9 @@ local listOfCoreVersions = dofile("data/listOfCoreVersions.lua");
 
 local listOfNonCoreFixes = 
 {
-	"ARB_sample_shading",
-	"ARB_draw_buffers_blend",
-	"ARB_texture_cube_map_array",
+--	"ARB_sample_shading",
+--	"ARB_draw_buffers_blend",
+--	"ARB_texture_cube_map_array",
 };
 
 local listOfExtensionsToRemove =

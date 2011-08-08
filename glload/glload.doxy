@@ -50,6 +50,6 @@ glext_<em>extension_name</em>
 
 For WGL/GLX, this becomes wglext/glxext_*. If the variable's value is 0, then the extension is not present. If it is non-zero, then it is present.
 
-These variables only gain valid values @em after GLload has been initialized.
+These variables only gain valid values @em after GLload has been properly initialized.
 
 **/

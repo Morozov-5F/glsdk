@@ -27,6 +27,8 @@ int gleIntLoad_Version_4_0();
 int gleIntLoad_Version_4_0_Comp();
 int gleIntLoad_Version_4_1();
 int gleIntLoad_Version_4_1_Comp();
+int gleIntLoad_Version_4_2();
+int gleIntLoad_Version_4_2_Comp();
 
 #ifdef __cplusplus
 }

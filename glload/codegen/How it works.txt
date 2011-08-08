@@ -178,3 +178,25 @@ This function is hand-written, for now.
 To initialize the OpenGL core function pointers, the user calls "gleLoadFunctions". This function takes no parameters, and it will load all available extensions and core functions for the [i]actual[/i] version of the OpenGL implementation. This is guaranteed to be greater than or equal to the version the user asked to be created.
 
 The "gleLoadFunctions" will return GL_FALSE if the loading failed.
+
+== Adding new spec files ==
+
+Adding spec files uses the following procedure:
+
+## Update the repo to the "latest-spec" tag. Change to the "glspec" branch.
+## Drop the new spec files in the glload/codegen/glspecs directory.
+## Commit these into the "glspec" branch.
+## Update the "latest-spec" tag to point to this newest commit.
+## Merge with the head of the "glspec" branch. This may involve conflicts, if spec bugs have been fixed.
+## Merge the "glspec" head with the "default" branch.
+## In the glload/codegen directory, run 'lua ConvertAllSpecFilesToLua.lua'
+## In the glload/codegen directory, run 'lua MakeAllFiles.lua'
+## Verify that everything works.
+## Check this into the "default" branch.
+
+Any .spec file bugs that we need to fix should be checked into the "glspec" branch.
+
+If the spec files include a new OpenGL version, do the following steps ''before'' running the code generation process.
+
+## In codegen/MakeAllFiles.lua, add lines to the `glOutputs` function to handle the new OpenGL version.
+## In codegen/data/coreExtList.lua, add a new table to contain the core ARB extensions for the new version. Then add an entry into the `masterTable` table to reference it. Make sure to take the `GL_` prefixes out.

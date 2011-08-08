@@ -106,6 +106,7 @@ extern int wglext_NV_video_capture;
 extern int wglext_NV_copy_image;
 extern int wglext_NV_multisample_coverage;
 extern int wglext_EXT_create_context_es2_profile;
+extern int wglext_NV_DX_interop;
 
 
 
@@ -726,6 +727,37 @@ extern PFNWGLDISABLEFRAMELOCKI3DPROC wglDisableFrameLockI3D;
 extern PFNWGLISENABLEDFRAMELOCKI3DPROC wglIsEnabledFrameLockI3D;
 extern PFNWGLQUERYFRAMELOCKMASTERI3DPROC wglQueryFrameLockMasterI3D;
 #endif /*WGL_I3D_swap_frame_lock*/
+
+/******************************
+* Extension: WGL_NV_DX_interop
+******************************/
+
+#define WGL_ACCESS_READ_ONLY_NV 0x00000000
+#define WGL_ACCESS_READ_WRITE_NV 0x00000001
+#define WGL_ACCESS_WRITE_DISCARD_NV 0x00000002
+
+
+#ifndef WGL_NV_DX_interop
+#define WGL_NV_DX_interop 1
+
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXSETRESOURCESHAREHANDLENVPROC)(void *dxObject, HANDLE shareHandle);
+typedef HANDLE (GLE_FUNCPTR * PFNWGLDXOPENDEVICENVPROC)(void *dxDevice);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXCLOSEDEVICENVPROC)(HANDLE hDevice);
+typedef HANDLE (GLE_FUNCPTR * PFNWGLDXREGISTEROBJECTNVPROC)(HANDLE hDevice, void *dxObject, GLuint name, GLenum type, GLenum access);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXUNREGISTEROBJECTNVPROC)(HANDLE hDevice, HANDLE hObject);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXOBJECTACCESSNVPROC)(HANDLE hObject, GLenum access);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXLOCKOBJECTSNVPROC)(HANDLE hDevice, GLint count, HANDLE *hObjects);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXUNLOCKOBJECTSNVPROC)(HANDLE hDevice, GLint count, HANDLE *hObjects);
+
+extern PFNWGLDXSETRESOURCESHAREHANDLENVPROC wglDXSetResourceShareHandleNV;
+extern PFNWGLDXOPENDEVICENVPROC wglDXOpenDeviceNV;
+extern PFNWGLDXCLOSEDEVICENVPROC wglDXCloseDeviceNV;
+extern PFNWGLDXREGISTEROBJECTNVPROC wglDXRegisterObjectNV;
+extern PFNWGLDXUNREGISTEROBJECTNVPROC wglDXUnregisterObjectNV;
+extern PFNWGLDXOBJECTACCESSNVPROC wglDXObjectAccessNV;
+extern PFNWGLDXLOCKOBJECTSNVPROC wglDXLockObjectsNV;
+extern PFNWGLDXUNLOCKOBJECTSNVPROC wglDXUnlockObjectsNV;
+#endif /*WGL_NV_DX_interop*/
 
 /******************************
 * Extension: WGL_NV_copy_image

@@ -182,6 +182,7 @@ int wglext_NV_video_capture = 0;
 int wglext_NV_copy_image = 0;
 int wglext_NV_multisample_coverage = 0;
 int wglext_EXT_create_context_es2_profile = 0;
+int wglext_NV_DX_interop = 0;
 
 
 void wgleIntClear()
@@ -225,6 +226,7 @@ void wgleIntClear()
 	wglext_NV_copy_image = 0;
 	wglext_NV_multisample_coverage = 0;
 	wglext_EXT_create_context_es2_profile = 0;
+	wglext_NV_DX_interop = 0;
 }
 
 
@@ -687,6 +689,49 @@ static int wgleIntLoad_I3D_swap_frame_lock()
 #endif /*WGL_I3D_swap_frame_lock*/
 	return bIsLoaded;
 }
+#ifndef WGL_NV_DX_interop
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXSETRESOURCESHAREHANDLENVPROC)(void *dxObject, HANDLE shareHandle);
+typedef HANDLE (GLE_FUNCPTR * PFNWGLDXOPENDEVICENVPROC)(void *dxDevice);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXCLOSEDEVICENVPROC)(HANDLE hDevice);
+typedef HANDLE (GLE_FUNCPTR * PFNWGLDXREGISTEROBJECTNVPROC)(HANDLE hDevice, void *dxObject, GLuint name, GLenum type, GLenum access);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXUNREGISTEROBJECTNVPROC)(HANDLE hDevice, HANDLE hObject);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXOBJECTACCESSNVPROC)(HANDLE hObject, GLenum access);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXLOCKOBJECTSNVPROC)(HANDLE hDevice, GLint count, HANDLE *hObjects);
+typedef BOOL (GLE_FUNCPTR * PFNWGLDXUNLOCKOBJECTSNVPROC)(HANDLE hDevice, GLint count, HANDLE *hObjects);
+
+PFNWGLDXSETRESOURCESHAREHANDLENVPROC wglDXSetResourceShareHandleNV;
+PFNWGLDXOPENDEVICENVPROC wglDXOpenDeviceNV;
+PFNWGLDXCLOSEDEVICENVPROC wglDXCloseDeviceNV;
+PFNWGLDXREGISTEROBJECTNVPROC wglDXRegisterObjectNV;
+PFNWGLDXUNREGISTEROBJECTNVPROC wglDXUnregisterObjectNV;
+PFNWGLDXOBJECTACCESSNVPROC wglDXObjectAccessNV;
+PFNWGLDXLOCKOBJECTSNVPROC wglDXLockObjectsNV;
+PFNWGLDXUNLOCKOBJECTSNVPROC wglDXUnlockObjectsNV;
+#endif /*WGL_NV_DX_interop*/
+
+static int wgleIntLoad_NV_DX_interop()
+{
+	int bIsLoaded = 1;
+#ifndef WGL_NV_DX_interop
+	wglDXSetResourceShareHandleNV = (PFNWGLDXSETRESOURCESHAREHANDLENVPROC)gleIntGetProcAddress("wglDXSetResourceShareHandleNV");
+	if(!TestPointer((const void*)wglDXSetResourceShareHandleNV)) bIsLoaded = 0;
+	wglDXOpenDeviceNV = (PFNWGLDXOPENDEVICENVPROC)gleIntGetProcAddress("wglDXOpenDeviceNV");
+	if(!TestPointer((const void*)wglDXOpenDeviceNV)) bIsLoaded = 0;
+	wglDXCloseDeviceNV = (PFNWGLDXCLOSEDEVICENVPROC)gleIntGetProcAddress("wglDXCloseDeviceNV");
+	if(!TestPointer((const void*)wglDXCloseDeviceNV)) bIsLoaded = 0;
+	wglDXRegisterObjectNV = (PFNWGLDXREGISTEROBJECTNVPROC)gleIntGetProcAddress("wglDXRegisterObjectNV");
+	if(!TestPointer((const void*)wglDXRegisterObjectNV)) bIsLoaded = 0;
+	wglDXUnregisterObjectNV = (PFNWGLDXUNREGISTEROBJECTNVPROC)gleIntGetProcAddress("wglDXUnregisterObjectNV");
+	if(!TestPointer((const void*)wglDXUnregisterObjectNV)) bIsLoaded = 0;
+	wglDXObjectAccessNV = (PFNWGLDXOBJECTACCESSNVPROC)gleIntGetProcAddress("wglDXObjectAccessNV");
+	if(!TestPointer((const void*)wglDXObjectAccessNV)) bIsLoaded = 0;
+	wglDXLockObjectsNV = (PFNWGLDXLOCKOBJECTSNVPROC)gleIntGetProcAddress("wglDXLockObjectsNV");
+	if(!TestPointer((const void*)wglDXLockObjectsNV)) bIsLoaded = 0;
+	wglDXUnlockObjectsNV = (PFNWGLDXUNLOCKOBJECTSNVPROC)gleIntGetProcAddress("wglDXUnlockObjectsNV");
+	if(!TestPointer((const void*)wglDXUnlockObjectsNV)) bIsLoaded = 0;
+#endif /*WGL_NV_DX_interop*/
+	return bIsLoaded;
+}
 #ifndef WGL_NV_copy_image
 typedef BOOL (GLE_FUNCPTR * PFNWGLCOPYIMAGESUBDATANVPROC)(HGLRC hSrcRC, GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, HGLRC hDstRC, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth);
 
@@ -857,6 +902,7 @@ StrToExtMap wgleIntExtensionMap[] = {
 	{"WGL_I3D_genlock", &wglext_I3D_genlock, wgleIntLoad_I3D_genlock},
 	{"WGL_I3D_image_buffer", &wglext_I3D_image_buffer, wgleIntLoad_I3D_image_buffer},
 	{"WGL_I3D_swap_frame_lock", &wglext_I3D_swap_frame_lock, wgleIntLoad_I3D_swap_frame_lock},
+	{"WGL_NV_DX_interop", &wglext_NV_DX_interop, wgleIntLoad_NV_DX_interop},
 	{"WGL_NV_copy_image", &wglext_NV_copy_image, wgleIntLoad_NV_copy_image},
 	{"WGL_NV_float_buffer", &wglext_NV_float_buffer, NULL},
 	{"WGL_NV_gpu_affinity", &wglext_NV_gpu_affinity, wgleIntLoad_NV_gpu_affinity},
@@ -869,7 +915,7 @@ StrToExtMap wgleIntExtensionMap[] = {
 	{"WGL_NV_video_out", &wglext_NV_video_out, NULL},
 };
 
-int wgleIntExtensionMapSize = 39;
+int wgleIntExtensionMapSize = 40;
 
 
 

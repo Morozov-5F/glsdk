@@ -72,6 +72,7 @@ return {
 				[==[NV_video_capture]==],
 				[==[NV_copy_image]==],
 				[==[ARB_framebuffer_sRGB]==],
+				[==[NV_DX_interop]==],
 			},
 			["required-props"] = {
 			},
@@ -2821,6 +2822,189 @@ return {
 					},
 				},
 			},
+			{
+				["name"] = [==[DXSetResourceShareHandleNV]==],
+				["return"] = [==[BOOL]==],
+				["category"] = [==[NV_DX_interop]==],
+				["param"] = [==[shareHandle]==],
+				["params"] = {
+					{
+						["other"] = [==[[1]]==],
+						["type"] = [==[void]==],
+						["name"] = [==[dxObject]==],
+						["input"] = false,
+						["kind"] = [==[array]==],
+					},
+					{
+						["input"] = true,
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[shareHandle]==],
+						["kind"] = [==[value]==],
+					},
+				},
+			},
+			{
+				["name"] = [==[DXOpenDeviceNV]==],
+				["return"] = [==[HANDLE]==],
+				["category"] = [==[NV_DX_interop]==],
+				["param"] = [==[dxDevice]==],
+				["params"] = {
+					{
+						["other"] = [==[[1]]==],
+						["type"] = [==[void]==],
+						["name"] = [==[dxDevice]==],
+						["input"] = false,
+						["kind"] = [==[array]==],
+					},
+				},
+			},
+			{
+				["name"] = [==[DXCloseDeviceNV]==],
+				["return"] = [==[BOOL]==],
+				["category"] = [==[NV_DX_interop]==],
+				["param"] = [==[hDevice]==],
+				["params"] = {
+					{
+						["input"] = true,
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[hDevice]==],
+						["kind"] = [==[value]==],
+					},
+				},
+			},
+			{
+				["name"] = [==[DXRegisterObjectNV]==],
+				["return"] = [==[HANDLE]==],
+				["category"] = [==[NV_DX_interop]==],
+				["param"] = [==[access]==],
+				["params"] = {
+					{
+						["input"] = true,
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[hDevice]==],
+						["kind"] = [==[value]==],
+					},
+					{
+						["other"] = [==[[1]]==],
+						["type"] = [==[void]==],
+						["name"] = [==[dxObject]==],
+						["input"] = false,
+						["kind"] = [==[array]==],
+					},
+					{
+						["input"] = true,
+						["type"] = [==[GLuint]==],
+						["name"] = [==[name]==],
+						["kind"] = [==[value]==],
+					},
+					{
+						["input"] = true,
+						["type"] = [==[GLenum]==],
+						["name"] = [==[type]==],
+						["kind"] = [==[value]==],
+					},
+					{
+						["input"] = true,
+						["type"] = [==[GLenum]==],
+						["name"] = [==[access]==],
+						["kind"] = [==[value]==],
+					},
+				},
+			},
+			{
+				["name"] = [==[DXUnregisterObjectNV]==],
+				["return"] = [==[BOOL]==],
+				["category"] = [==[NV_DX_interop]==],
+				["param"] = [==[hObject]==],
+				["params"] = {
+					{
+						["input"] = true,
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[hDevice]==],
+						["kind"] = [==[value]==],
+					},
+					{
+						["input"] = true,
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[hObject]==],
+						["kind"] = [==[value]==],
+					},
+				},
+			},
+			{
+				["name"] = [==[DXObjectAccessNV]==],
+				["return"] = [==[BOOL]==],
+				["category"] = [==[NV_DX_interop]==],
+				["param"] = [==[access]==],
+				["params"] = {
+					{
+						["input"] = true,
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[hObject]==],
+						["kind"] = [==[value]==],
+					},
+					{
+						["input"] = true,
+						["type"] = [==[GLenum]==],
+						["name"] = [==[access]==],
+						["kind"] = [==[value]==],
+					},
+				},
+			},
+			{
+				["name"] = [==[DXLockObjectsNV]==],
+				["return"] = [==[BOOL]==],
+				["category"] = [==[NV_DX_interop]==],
+				["param"] = [==[hObjects]==],
+				["params"] = {
+					{
+						["input"] = true,
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[hDevice]==],
+						["kind"] = [==[value]==],
+					},
+					{
+						["input"] = true,
+						["type"] = [==[GLint]==],
+						["name"] = [==[count]==],
+						["kind"] = [==[value]==],
+					},
+					{
+						["other"] = [==[[count]]==],
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[hObjects]==],
+						["input"] = false,
+						["kind"] = [==[array]==],
+					},
+				},
+			},
+			{
+				["name"] = [==[DXUnlockObjectsNV]==],
+				["return"] = [==[BOOL]==],
+				["category"] = [==[NV_DX_interop]==],
+				["param"] = [==[hObjects]==],
+				["params"] = {
+					{
+						["input"] = true,
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[hDevice]==],
+						["kind"] = [==[value]==],
+					},
+					{
+						["input"] = true,
+						["type"] = [==[GLint]==],
+						["name"] = [==[count]==],
+						["kind"] = [==[value]==],
+					},
+					{
+						["other"] = [==[[count]]==],
+						["type"] = [==[HANDLE]==],
+						["name"] = [==[hObjects]==],
+						["input"] = false,
+						["kind"] = [==[array]==],
+					},
+				},
+			},
 		},
 	},
 	["extensions"] = {
@@ -2863,6 +3047,7 @@ return {
 		[==[NV_copy_image]==],
 		[==[NV_multisample_coverage]==],
 		[==[EXT_create_context_es2_profile]==],
+		[==[NV_DX_interop]==],
 	},
 	["enumerations"] = {
 		{
@@ -4845,6 +5030,30 @@ return {
 				[==[EXT_create_context_es2_profile]==],
 			},
 			["name"] = [==[CONTEXT_ES2_PROFILE_BIT_EXT]==],
+		},
+		{
+			["value"] = [==[0x00000000]==],
+			["copy"] = false,
+			["extensions"] = {
+				[==[NV_DX_interop]==],
+			},
+			["name"] = [==[ACCESS_READ_ONLY_NV]==],
+		},
+		{
+			["value"] = [==[0x00000001]==],
+			["copy"] = false,
+			["extensions"] = {
+				[==[NV_DX_interop]==],
+			},
+			["name"] = [==[ACCESS_READ_WRITE_NV]==],
+		},
+		{
+			["value"] = [==[0x00000002]==],
+			["copy"] = false,
+			["extensions"] = {
+				[==[NV_DX_interop]==],
+			},
+			["name"] = [==[ACCESS_WRITE_DISCARD_NV]==],
 		},
 	},
 };

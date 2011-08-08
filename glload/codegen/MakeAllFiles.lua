@@ -42,6 +42,8 @@ local glOutputs = {
 	{"gl_4_0_comp", "4.0", false},
 	{"gl_4_1", "4.1", true},
 	{"gl_4_1_comp", "4.1", false},
+	{"gl_4_2", "4.2", true},
+	{"gl_4_2_comp", "4.2", false},
 };
 
 for i, output in ipairs(glOutputs) do
