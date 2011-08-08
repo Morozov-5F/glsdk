@@ -4,7 +4,7 @@
 # This document is licensed under the SGI Free Software B License Version
 # 2.0. For details, see http://oss.sgi.com/projects/FreeB/ .
 #
-# $Revision: 12183 $ on $Date: 2010-08-06 02:53:05 -0700 (Fri, 06 Aug 2010) $
+# $Revision: 14504 $ on $Date: 2011-04-13 21:31:13 -0700 (Wed, 13 Apr 2011) $
 
 # This is the master WGL enumerant registry.
 #
@@ -22,6 +22,12 @@
 # extensions.
 
 ###############################################################################
+
+# Not a bitfield but not from an assigned range, either
+WGL_NV_DX_interop enum:
+	WGL_ACCESS_READ_ONLY_NV				= 0x00000000
+	WGL_ACCESS_READ_WRITE_NV			= 0x00000001
+	WGL_ACCESS_WRITE_DISCARD_NV			= 0x00000002
 
 # Bitmasks - not consumed by the registry
 WGL_ARB_buffer_region enum:
