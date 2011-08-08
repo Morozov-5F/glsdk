@@ -44,16 +44,31 @@ namespace glimg
 	\brief Retrieves the OpenGL internal format for the given image format and bits.
 
 	This function should be used when you want to do the uploading of the texture data
-	yourself.
+	yourself. It uses GL Load, so the GL Load must have been initialized. Also,
+	an OpenGL context must be current.
+	
+	Note that this function will only return formats that the current OpenGL context
+	supports. It will use version numbers, core vs. compatibility, and so forth to
+	detect this.
+	
+	Format mapping is done as follows. One and two channel PixelComponents
+	(RED and RG) will be mapped to luminance and luminance alpha \em only if
+	the OpenGL context doesn't support GL_RED and GL_RG textures. Both the
+	EXT extension and the version number will be checked to verify the
+	availability of the feature.
+	
+	Similarly, if you use FORCE_LUMINANCE_FMT on a core context, this function will
+	throw.
 
 	\param format The image format of the image data to have a texture created for it.
-	\param forceConvertBits A bitfield containing values from ForcedConvertFlags. These affect how the format is generated.
+	\param forceConvertBits A bitfield containing values from ForcedConvertFlags.
+	These affect how the format is generated.
 
 	\return A GLenum representing the internal OpenGL format.
 
 	\throws TextureGenerationException If the format is invalid, or if the format cannot be used.
 	Also thrown if the format isn't supported yet. This is a base class; the various derived
-	classes of this type are thrown for specific errors.
+	classes of this type define the specific errors that are thrown.
 	**/
 	unsigned int GetInternalFormat(const ImageFormat &format, unsigned int forceConvertBits);
 
@@ -93,7 +108,7 @@ namespace glimg
 	If an exception is not thrown, then the following OpenGL context state will be changed:
 
 	\li All GL_UNPACK state.
-	\li The texture target of the returned texture will have no texture object bound to it.
+	\li The texture target of the returned texture will have texture object 0 bound to it.
 
 	\param pImage The image to upload to OpenGL.
 	\param forceConvertBits A bitfield containing values from ForcedConvertFlags.
