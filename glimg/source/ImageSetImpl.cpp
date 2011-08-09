@@ -6,7 +6,7 @@ namespace glimg
 {
 	detail::ImageSetImpl::ImageSetImpl( MemoryObject *pObject, Dimensions dimensions,
 		int arrayCount, int mipmapCount, int faceCount,
-		ImageFormat format, std::vector<MipmapLevel> &swapThisIn )
+		ValidFormat format, std::vector<MipmapLevel> &swapThisIn )
 		: m_dimensions(dimensions)
 		, m_format(format)
 		, m_pMemory(pObject)

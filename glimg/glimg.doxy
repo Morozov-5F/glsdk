@@ -17,14 +17,23 @@ The images within an ImageSet can be directly loaded into an OpenGL texture by u
 
 \ingroup module_glimg
 
+Image loaders are functions that create ImageSet objects by load from files or memory buffers. They are generally defined to work for certain specific file formats. You are expected to delete the ImageSet object returned by the loader functions.
 
-
+All image loaders live in the glimg::loaders namespace. Each kind of loader has its own subnamespace.
 **/
 
 /**
 \defgroup module_glimg_imageset ImageSet
 
 \ingroup module_glimg
+
+The ImageSet class represents a set of images that can be bundled together into a texture. Once loaded, an ImageSet is \em immutable; it cannot be changed.
+
+ImageSet objects also have a dimensionality. This can be 1D, 2D, or 3D. They also have a size within each of .
+
+Each ImageSet has a specific image format. The format defines the arrangement of pixel data in all of the ImageSet's images.
+
+Indidivual images can be queried from an ImageSet; these images have the type SingleImage. These objects share the same ImageFormat as the owning ImageSet object. These objects must be deleted \em before the deletion of the ImageSet from which they originate.
 **/
 
 /**

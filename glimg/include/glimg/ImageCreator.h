@@ -44,11 +44,11 @@ namespace glimg
 	{
 	public:
 		ImageCreator(MemoryObject *pObject, Dimensions dimensions, int arrayCount, int mipmapCount,
-			int faceCount, ImageFormat format);
+			int faceCount, ValidFormat format);
 
 		~ImageCreator();
 
-		void AddImage(const void *pixelData, int arrayIx, int mipmapIx, int faceIx);
+		void AddImage(const void *pixelData, int mipmapIx, int arrayIx, int faceIx);
 
 		//Adds an array of image data in a single go, specifying an entire mipmap layer.
 		//The expected order of the image data is as follows. Each array in the image
@@ -59,7 +59,7 @@ namespace glimg
 
 	private:
 		Dimensions m_dimensions;
-		ImageFormat m_format;
+		ValidFormat m_format;
 		MemoryObject *m_pObject;
 		int m_arrayCount;
 		int m_mipmapCount;

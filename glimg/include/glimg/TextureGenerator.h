@@ -70,7 +70,7 @@ namespace glimg
 	Also thrown if the format isn't supported yet. This is a base class; the various derived
 	classes of this type define the specific errors that are thrown.
 	**/
-	unsigned int GetInternalFormat(const ImageFormat &format, unsigned int forceConvertBits);
+	unsigned int GetInternalFormat(const ValidFormat &format, unsigned int forceConvertBits);
 
 	/**
 	\brief Contains the pixel transfer parameters for OpenGL texture upload functions.
@@ -96,7 +96,7 @@ namespace glimg
 	Also thrown if the format isn't supported yet. This is a base class; the various derived
 	classes of this type are thrown for specific errors.
 	**/
-	OpenGLPixelTransferParams GetUploadFormatType(const ImageFormat &format, unsigned int forceConvertBits);
+	OpenGLPixelTransferParams GetUploadFormatType(const ValidFormat &format, unsigned int forceConvertBits);
 
 	/**
 	\brief Creates a texture object from the given ImageSet, with flags.

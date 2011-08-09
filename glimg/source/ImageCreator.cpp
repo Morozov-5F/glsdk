@@ -8,7 +8,7 @@
 namespace glimg
 {
 	ImageCreator::ImageCreator( MemoryObject *pObject, Dimensions dimensions,
-		int arrayCount, int mipmapCount, int faceCount, ImageFormat format )
+		int arrayCount, int mipmapCount, int faceCount, ValidFormat format )
 		: m_dimensions(dimensions)
 		, m_format(format)
 		, m_pObject(pObject)
@@ -18,13 +18,6 @@ namespace glimg
 	{
 		assert(m_pObject);
 		assert(m_faceCount == 6 || m_faceCount == 1);
-
-		const std::string &msg = m_format.ValidateFormatText();
-		if(!msg.empty())
-		{
-			delete(m_pObject);
-			throw InvalidImageFormatException(msg);
-		}
 	}
 
 	ImageCreator::~ImageCreator()
@@ -72,7 +65,7 @@ namespace glimg
 		};
 	}
 
-	void ImageCreator::AddImage( const void *pixelData, int arrayIx, int mipmapIx, int faceIx )
+	void ImageCreator::AddImage( const void *pixelData, int mipmapIx, int arrayIx, int faceIx )
 	{
 		if(!m_pObject)
 			throw ImageSetAlreadyCreatedException();

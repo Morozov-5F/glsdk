@@ -5,7 +5,7 @@
 
 namespace glimg
 {
-	SingleImage::SingleImage( const detail::ImageSetImpl *pImpl, int arrayIx, int faceIx, int mipmapLevel )
+	SingleImage::SingleImage( const detail::ImageSetImpl *pImpl, int mipmapLevel, int arrayIx, int faceIx )
 		: m_pImpl(pImpl)
 		, m_arrayIx(arrayIx)
 		, m_faceIx(faceIx)
@@ -22,7 +22,7 @@ namespace glimg
 
 	glimg::ImageFormat SingleImage::GetFormat() const
 	{
-		return m_pImpl->GetFormat();
+		return m_pImpl->GetFormat().GetFormat();
 	}
 
 	const void * SingleImage::GetImageData() const
@@ -72,12 +72,12 @@ namespace glimg
 
 	glimg::ImageFormat ImageSet::GetFormat() const
 	{
-		return m_pImpl->GetFormat();
+		return m_pImpl->GetFormat().GetFormat();
 	}
 
 	SingleImage * ImageSet::GetImage( int ixMipmapLevel, int ixArray, int ixFace ) const
 	{
-		return new SingleImage(m_pImpl, ixArray, ixFace, ixMipmapLevel);
+		return new SingleImage(m_pImpl, ixMipmapLevel, ixArray, ixFace);
 	}
 }
 

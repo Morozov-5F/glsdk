@@ -36,6 +36,8 @@ namespace glimg
 
 	/**
 	\brief Represents a single image of a certain dimensionality.
+
+	The internal data of the image can be retrieved.
 	**/
 	class SingleImage
 	{
@@ -64,7 +66,7 @@ namespace glimg
 		friend class detail::ImageSetImpl;
 		friend class ImageSet;
 
-		SingleImage(const detail::ImageSetImpl *pImpl, int arrayIx, int faceIx, int mipmapLevel);
+		SingleImage(const detail::ImageSetImpl *pImpl, int mipmapLevel, int arrayIx, int faceIx);
 	};
 
 	/**
@@ -72,6 +74,9 @@ namespace glimg
 
 	This class represents the full range of possible image layouts with regard to texture objects. All
 	images in the ImageSet use the same format.
+
+	The images in an ImageSet are named by a triple of numbers: mipmap level, array index, and face index.
+	The maximum number of each of these is queriable.
 	**/
 	class ImageSet
 	{
@@ -84,6 +89,13 @@ namespace glimg
 		Dimensions GetDimensions() const;
 
 		/**
+		\brief Returns the number of mipmap levels the image set contains.
+
+		\return The number of mipmap levels in the image set. The minimum is 1.
+		**/
+		int GetMipmapCount() const;
+
+		/**
 		\brief Returns the number of array images this image set has.
 
 		This function will return the number of array images in the image set. The minimum is 1.
@@ -93,13 +105,6 @@ namespace glimg
 		not in the ImageSet.
 		**/
 		int GetArrayCount() const;
-
-		/**
-		\brief Returns the number of mipmap levels the image set contains.
-
-		\return The number of mipmap levels in the image set. The minimum is 1.
-		**/
-		int GetMipmapCount() const;
 
 		/**
 		\brief Returns the number of faces in the image set.
@@ -118,7 +123,7 @@ namespace glimg
 		\brief Retrieves the image at the given mipmap level, array index, and face index.
 		
 		\return A pointer to the image. Do not use it after the ImageSet object is destroyed.
-		This pointer must be deleted manually.
+		This pointer must be deleted manually, and it must be deleted before the deletion of this object.
 		**/
 		SingleImage *GetImage(int ixMipmapLevel, int ixArray = 0, int ixFace = 0) const;
 

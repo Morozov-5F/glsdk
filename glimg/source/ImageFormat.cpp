@@ -27,7 +27,6 @@ namespace glimg
 		PixelComponents g_colorFormats[] = {FMT_COLOR_RED, FMT_COLOR_RG, FMT_COLOR_RGB,
 			FMT_COLOR_RGBX, FMT_COLOR_RGBA, FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
 		PixelComponents g_srgbFormats[] = {FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
-
 	}
 
 	bool ImageFormat::ValidateFormat() const
@@ -221,5 +220,27 @@ namespace glimg
 		}
 
 		return std::string();
+	}
+
+	ValidFormat::ValidFormat( PixelDataType _eType, PixelComponents _eFormat,
+		ComponentOrder _eOrder, Bitdepth _eBitdepth, int _lineAlignment )
+	{
+		fmt.eType = _eType;
+		fmt.eFormat = _eFormat;
+		fmt.eOrder = _eOrder;
+		fmt.eBitdepth = _eBitdepth;
+		fmt.lineAlignment = _lineAlignment;
+
+		const std::string msg = fmt.ValidateFormatText();
+		if(!msg.empty())
+			throw std::runtime_error(msg);
+	}
+
+	ValidFormat::ValidFormat( ImageFormat _fmt )
+		: fmt(_fmt)
+	{
+		const std::string msg = fmt.ValidateFormatText();
+		if(!msg.empty())
+			throw std::runtime_error(msg);
 	}
 }

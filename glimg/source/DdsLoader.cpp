@@ -323,7 +323,7 @@ namespace dds
 				{
 					for(int mipmapLevel = 0; mipmapLevel < numMipmaps; mipmapLevel++)
 					{
-						imgCreator.AddImage(pMemory->Data() + *it, arrayIx, mipmapLevel, faceIx);
+						imgCreator.AddImage(pMemory->Data() + *it, mipmapLevel, arrayIx, faceIx);
 						++it;
 					}
 				}

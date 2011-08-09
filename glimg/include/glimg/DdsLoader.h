@@ -84,6 +84,7 @@ namespace glimg
 			\throws DdsLoaderException The image could not be loaded.  There are derived classes from this type that could be thrown.
 			\return An ImageSet that represents the loaded image data.
 
+			\todo Flip the textures, or allow the user to decide not to.
 			\todo Get 3D textures working.
 			\todo Get cubemap textures working. With mipmaps.
 			\todo Implement the D3D10 format.

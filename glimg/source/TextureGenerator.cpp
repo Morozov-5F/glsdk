@@ -200,7 +200,7 @@ namespace glimg
 			return false;
 		}
 
-		int ComponentCount(const ImageFormat &format, unsigned int forceConvertBits)
+		int ComponentCount(const ValidFormat &format, unsigned int forceConvertBits)
 		{
 			//TODO: Forceconv.
 			PixelComponents twoCompFormats[] = {FMT_COLOR_RG, FMT_DEPTH_X};
@@ -208,22 +208,22 @@ namespace glimg
 			PixelComponents fourCompFormats[] = {FMT_COLOR_RGBX, FMT_COLOR_RGBA,
 				FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
 
-			if(IsOneOfThese<ARRAY_COUNT(twoCompFormats)>(format.eFormat, twoCompFormats))
+			if(IsOneOfThese<ARRAY_COUNT(twoCompFormats)>(format.Components(), twoCompFormats))
 				return 2;
 
-			if(IsOneOfThese<ARRAY_COUNT(threeCompFormats)>(format.eFormat, threeCompFormats))
+			if(IsOneOfThese<ARRAY_COUNT(threeCompFormats)>(format.Components(), threeCompFormats))
 				return 3;
 
-			if(IsOneOfThese<ARRAY_COUNT(fourCompFormats)>(format.eFormat, fourCompFormats))
+			if(IsOneOfThese<ARRAY_COUNT(fourCompFormats)>(format.Components(), fourCompFormats))
 				return 4;
 
 			return 1;
 		}
 
-		int PerComponentSize(const ImageFormat &format, unsigned int forceConvertBits)
+		int PerComponentSize(const ValidFormat &format, unsigned int forceConvertBits)
 		{
 			//TODO: Forceconv.
-			switch(format.eBitdepth)
+			switch(format.Depth())
 			{
 			case BD_PER_COMP_8: return 8;
 			case BD_PER_COMP_16: return 16;
@@ -233,10 +233,10 @@ namespace glimg
 			}
 		}
 
-		bool IsSRGBFormat(const ImageFormat &format, unsigned int forceConvertBits)
+		bool IsSRGBFormat(const ValidFormat &format, unsigned int forceConvertBits)
 		{
 			PixelComponents srgbFormats[] = {FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
-			if(IsOneOfThese<ARRAY_COUNT(srgbFormats)>(format.eFormat, srgbFormats))
+			if(IsOneOfThese<ARRAY_COUNT(srgbFormats)>(format.Components(), srgbFormats))
 				return true;
 
 			if(!(forceConvertBits & FORCE_SRGB_COLORSPACE_FMT))
@@ -245,9 +245,9 @@ namespace glimg
 			PixelDataType srgbTypes[] = {DT_NORM_UNSIGNED_INTEGER,
 				DT_COMPRESSED_BC1, DT_COMPRESSED_BC2, DT_COMPRESSED_BC3, DT_COMPRESSED_BC7};
 
-			if(IsOneOfThese<ARRAY_COUNT(srgbTypes)>(format.eType, srgbTypes))
+			if(IsOneOfThese<ARRAY_COUNT(srgbTypes)>(format.Type(), srgbTypes))
 			{
-				if(format.eType != DT_NORM_UNSIGNED_INTEGER)
+				if(format.Type() != DT_NORM_UNSIGNED_INTEGER)
 					return true;
 			}
 			else
@@ -255,17 +255,17 @@ namespace glimg
 
 			//unsigned normalized integers. Check for RGB or RGBA components.
 			PixelComponents convertableFormats[] = {FMT_COLOR_RGB, FMT_COLOR_RGBX, FMT_COLOR_RGBA};
-			if(IsOneOfThese<ARRAY_COUNT(convertableFormats)>(format.eFormat, convertableFormats))
+			if(IsOneOfThese<ARRAY_COUNT(convertableFormats)>(format.Components(), convertableFormats))
 				return true;
 
 			return false;
 		}
 
-		bool FormatHasAlpha(const ImageFormat &format, unsigned int forceConvertBits)
+		bool FormatHasAlpha(const ValidFormat &format, unsigned int forceConvertBits)
 		{
 			//TODO: Forceconv. Check for color renderable.
 			PixelComponents alphaFormats[] = {FMT_COLOR_RGBA, FMT_COLOR_RGBA_sRGB};
-			if(IsOneOfThese<ARRAY_COUNT(alphaFormats)>(format.eFormat, alphaFormats))
+			if(IsOneOfThese<ARRAY_COUNT(alphaFormats)>(format.Components(), alphaFormats))
 				return true;
 
 			return false;
@@ -288,14 +288,14 @@ namespace glimg
 			return false;
 		}
 
-		PixelDataType GetDataType(const ImageFormat &format, unsigned int forceConvertBits)
+		PixelDataType GetDataType(const ValidFormat &format, unsigned int forceConvertBits)
 		{
 			bool bForceIntegral = (forceConvertBits & FORCE_INTEGRAL_FMT) != 0;
 			bool bForceSigned = (forceConvertBits & FORCE_SIGNED_FMT) != 0;
 			if(!bForceIntegral && !bForceSigned)
-				return format.eType;
+				return format.Type();
 
-			switch(format.eType)
+			switch(format.Type())
 			{
 			case DT_NORM_UNSIGNED_INTEGER:
 				if(bForceIntegral)
@@ -321,7 +321,7 @@ namespace glimg
 				break;
 			}
 
-			return format.eType;
+			return format.Type();
 		}
 
 		//Ordered by BaseDataFormat*2. The first is 16-bit, the second is 32-bit.
@@ -378,12 +378,12 @@ namespace glimg
 		GLenum ThrowInvalidFormatIfZero(GLenum input)
 		{
 			if(!input)
-				throw ImageFormatUnexpectedException();
+				throw ImageFormatUnsupportedException();
 
 			return input;
 		}
 
-		unsigned int GetStandardOpenGLFormat( const ImageFormat &format, unsigned int forceConvertBits )
+		unsigned int GetStandardOpenGLFormat( const ValidFormat &format, unsigned int forceConvertBits )
 		{
 			PixelDataType eType = GetDataType(format, forceConvertBits);
 
@@ -391,14 +391,14 @@ namespace glimg
 			{
 			case DT_NORM_UNSIGNED_INTEGER:
 				//Only 16-bit for non Depth_x.
-				if(format.eFormat == FMT_DEPTH)
+				if(format.Components() == FMT_DEPTH)
 				{
 					ThrowIfDepthNotSupported();
 					return GL_DEPTH_COMPONENT16;
 				}
 
 				//Only 24x8 for this.
-				if(format.eFormat == FMT_DEPTH_X)
+				if(format.Components() == FMT_DEPTH_X)
 				{
 					ThrowIfDepthStencilNotSupported();
 					return GL_DEPTH24_STENCIL8;
@@ -414,7 +414,7 @@ namespace glimg
 						return GL_SRGB8_ALPHA8;
 				}
 
-				switch(format.eBitdepth)
+				switch(format.Depth())
 				{
 				case BD_PER_COMP_8:
 					{
@@ -452,7 +452,7 @@ namespace glimg
 					return GL_RGB10_A2;
 				}
 
-				throw ImageFormatUnexpectedException("Unisgned normalize integer doesn't match accepted bitdepths.");
+				throw ImageFormatUnsupportedException("Unisgned normalize integer doesn't match accepted bitdepths.");
 
 			case DT_NORM_SIGNED_INTEGER:
 				ThrowIfSnormNotSupported();
@@ -485,18 +485,18 @@ namespace glimg
 
 			case DT_FLOAT:
 				ThrowIfFloatNotSupported();
-				if(format.eBitdepth < BD_NUM_PER_COMPONENT)
+				if(format.Depth() < BD_NUM_PER_COMPONENT)
 				{
 					int offset = 0;
-					if(format.eBitdepth == BD_PER_COMP_32)
+					if(format.Depth() == BD_PER_COMP_32)
 						offset = 1;
 					else
 						ThrowIfHalfFloatNotSupported();
 
-					if(format.eFormat == FMT_DEPTH)
+					if(format.Components() == FMT_DEPTH)
 						ThrowIfDepthFloatNotSupported();
 
-					return ThrowInvalidFormatIfZero(g_floatFormats[(2 * format.eFormat) + offset]);
+					return ThrowInvalidFormatIfZero(g_floatFormats[(2 * format.Components()) + offset]);
 				}
 				else
 				{
@@ -584,7 +584,7 @@ namespace glimg
 					return GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
 			}
 
-			throw ImageFormatUnexpectedException("???");
+			throw ImageFormatUnsupportedException("???");
 		}
 	}
 
@@ -654,15 +654,9 @@ namespace glimg
 #define ONE_SNORM_LA(size, suffix) GL_LUMINANCE ## size ## suffix
 #define TWO_SNORM_LA(size, suffix) GL_LUMINANCE ## size ## _ALPHA ## size ## suffix
 
-	unsigned int GetOpenGLType( const ImageFormat &format, OpenGLPixelTransferParams &ret, PixelDataType eType, GLenum g_packedTypes );
-	unsigned int GetInternalFormat( const ImageFormat &format, unsigned int forceConvertBits )
+	unsigned int GetOpenGLType( const ValidFormat &format, OpenGLPixelTransferParams &ret, PixelDataType eType, GLenum g_packedTypes );
+	unsigned int GetInternalFormat( const ValidFormat &format, unsigned int forceConvertBits )
 	{
-		{
-			const std::string & msg = format.ValidateFormatText();
-			if(!msg.empty())
-				throw ImageFormatUnexpectedException(msg);
-		}
-
 		unsigned int internalFormat = GetStandardOpenGLFormat(format, forceConvertBits);
 
 		bool bConvertToLA = UseLAInsteadOfRG(forceConvertBits);
@@ -744,9 +738,9 @@ namespace glimg
 			GL_UNSIGNED_INT_5_9_9_9_REV,		//BD_PACKED_32_BIT_5999_REV
 		};
 
-		GLenum GetOpenGLType( const ImageFormat &format, PixelDataType eType, unsigned int forceConvertBits )
+		GLenum GetOpenGLType( const ValidFormat &format, PixelDataType eType, unsigned int forceConvertBits )
 		{
-			switch(format.eBitdepth)
+			switch(format.Depth())
 			{
 			case BD_COMPRESSED:
 				return 0xFFFFFFFF;
@@ -786,9 +780,9 @@ namespace glimg
 				break;
 			default:
 				{
-					int typeIndex = format.eBitdepth - BD_NUM_PER_COMPONENT;
+					int typeIndex = format.Depth() - BD_NUM_PER_COMPONENT;
 					if(!((0 <= typeIndex) && (typeIndex < ARRAY_COUNT(g_packedTypes))))
-						throw ImageFormatUnexpectedException("Couldn't get the GL type field, due to the bitdepth being outside the packed type array.");
+						throw ImageFormatUnsupportedException("Couldn't get the GL type field, due to the bitdepth being outside the packed type array.");
 
 					GLenum testType = g_packedTypes[typeIndex];
 
@@ -845,15 +839,15 @@ namespace glimg
 			GL_RGBA,				GL_RGBA_INTEGER,	//FMT_COLOR_RGBA_sRGB
 		};
 
-		GLenum GetOpenGLFormat(const ImageFormat &format, PixelDataType eType, unsigned int forceConvertBits)
+		GLenum GetOpenGLFormat(const ValidFormat &format, PixelDataType eType, unsigned int forceConvertBits)
 		{
-			if(format.eFormat == FMT_DEPTH)
+			if(format.Components() == FMT_DEPTH)
 			{
 				ThrowIfDepthNotSupported();
 				return GL_DEPTH_COMPONENT;
 			}
 
-			if(format.eFormat == FMT_DEPTH_X)
+			if(format.Components() == FMT_DEPTH_X)
 			{
 				ThrowIfDepthStencilNotSupported();
 				return GL_DEPTH_STENCIL;
@@ -866,21 +860,21 @@ namespace glimg
 
 			int arrayOffset = IsTypeIntegral(eType) ? 1 : 0;
 
-			if(format.eOrder == ORDER_BGRA)
+			if(format.Order() == ORDER_BGRA)
 			{
-				int formatIndex = format.eFormat - FMT_COLOR_RGB;
+				int formatIndex = format.Components() - FMT_COLOR_RGB;
 				formatIndex *= 2;
 				if(!((0 <= formatIndex) && (formatIndex < ARRAY_COUNT(g_bgraFormats))))
-					throw ImageFormatUnexpectedException("Couldn't get the GL format field with ORDER_BGRA, due to the order being outside the bgraFormats array.");
+					throw ImageFormatUnsupportedException("Couldn't get the GL format field with ORDER_BGRA, due to the order being outside the bgraFormats array.");
 
 				return g_bgraFormats[formatIndex];
 			}
 			else
 			{
-				int formatIndex = format.eFormat;
+				int formatIndex = format.Components();
 				formatIndex *= 2;
 				if(!((0 <= formatIndex) && (formatIndex < ARRAY_COUNT(g_rgbaFormats))))
-					throw ImageFormatUnexpectedException("Couldn't get the GL format field with ORDER_RGBA, due to the order being outside the rgbaFormats array.");
+					throw ImageFormatUnsupportedException("Couldn't get the GL format field with ORDER_RGBA, due to the order being outside the rgbaFormats array.");
 
 				bool isRGChannel = ComponentCount(format, forceConvertBits) < 3;
 				
@@ -905,14 +899,8 @@ namespace glimg
 		}
 	}
 
-	OpenGLPixelTransferParams GetUploadFormatType( const ImageFormat &format, unsigned int forceConvertBits )
+	OpenGLPixelTransferParams GetUploadFormatType( const ValidFormat &format, unsigned int forceConvertBits )
 	{
-		{
-			const std::string & msg = format.ValidateFormatText();
-			if(!msg.empty())
-				throw ImageFormatUnexpectedException(msg);
-		}
-
 		OpenGLPixelTransferParams ret;
 		ret.type = 0xFFFFFFFF;
 		ret.format = 0xFFFFFFFF;
@@ -945,7 +933,7 @@ namespace glimg
 	/// TEXTURE CREATION
 	namespace
 	{
-		void SetupUploadState(const ImageFormat &format, unsigned int forceConvertBits)
+		void SetupUploadState(const ValidFormat &format, unsigned int forceConvertBits)
 		{
 			glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
 			glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
@@ -954,7 +942,7 @@ namespace glimg
 			glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
 			glPixelStorei(GL_UNPACK_IMAGE_HEIGHT, 0);
 			glPixelStorei(GL_UNPACK_SKIP_IMAGES, 0);
-			glPixelStorei(GL_UNPACK_ALIGNMENT, format.lineAlignment);
+			glPixelStorei(GL_UNPACK_ALIGNMENT, format.LineAlign());
 		}
 
 		void FinalizeTexture(GLenum texTarget, const detail::ImageSetImpl *pImage)
@@ -964,8 +952,8 @@ namespace glimg
 			glTexParameteri(texTarget, GL_TEXTURE_MAX_LEVEL, numMipmaps - 1);
 
 			//Ensure the texture is texture-complete.
-			const ImageFormat &format = pImage->GetFormat();
-			if(IsTypeIntegral(format.eType))
+			const ValidFormat &format = pImage->GetFormat();
+			if(IsTypeIntegral(format.Type()))
 			{
 				glTexParameteri(texTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				glTexParameteri(texTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -1185,7 +1173,7 @@ namespace glimg
 
 	void CreateTexture(unsigned int textureName, const ImageSet *pImage, unsigned int forceConvertBits)
 	{
-		const ImageFormat &format = pImage->GetFormat();
+		const ValidFormat &format = pImage->GetFormat();
 		GLuint internalFormat = GetInternalFormat(format, forceConvertBits);
 		OpenGLPixelTransferParams upload = GetUploadFormatType(format, forceConvertBits);
 

@@ -172,7 +172,38 @@ namespace glimg
 
 		///As ValidateFormatText, only returns true if valid and false otherwise.
 		bool ValidateFormat() const;
+
+		PixelDataType		Type() const	{return eType;}
+		PixelComponents		Format() const	{return eFormat;}
+		ComponentOrder		Order() const	{return eOrder;}
+		Bitdepth			Depth() const	{return eBitdepth;}
 	};
+
+	class ValidFormat
+	{
+	public:
+		ValidFormat(PixelDataType _eType,
+					PixelComponents _eFormat,
+					ComponentOrder _eOrder,
+					Bitdepth _eBitdepth,
+					int _lineAlignment);
+
+		//Allow implicit conversion.
+		ValidFormat(ImageFormat _fmt);
+
+		ImageFormat GetFormat() const {return fmt;}
+
+		PixelDataType		Type() const		{return fmt.eType;}
+		PixelComponents		Components() const	{return fmt.eFormat;}
+		ComponentOrder		Order() const		{return fmt.eOrder;}
+		Bitdepth			Depth() const		{return fmt.eBitdepth;}
+		int					LineAlign() const	{return fmt.lineAlignment;}
+
+	private:
+		ImageFormat fmt;
+	};
+
+
 
 	///@}
 }
