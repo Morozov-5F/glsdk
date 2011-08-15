@@ -2,6 +2,7 @@
 #ifndef GLIMG_IMAGE_CREATOR_EXCEPTIONS_H
 #define GLIMG_IMAGE_CREATOR_EXCEPTIONS_H
 
+#include <string>
 #include <exception>
 
 namespace glimg
@@ -30,7 +31,7 @@ namespace glimg
 
 		explicit InvalidImageFormatException(const std::string &msg)
 		{
-			message = "ImageCreator was given an invalid image format.";
+			message = "ImageCreator was given an invalid image format.\n";
 			message += msg;
 		}
 	};

@@ -233,7 +233,7 @@ namespace glimg
 
 		const std::string msg = fmt.ValidateFormatText();
 		if(!msg.empty())
-			throw std::runtime_error(msg);
+			throw InvalidFormatException(msg);
 	}
 
 	ValidFormat::ValidFormat( ImageFormat _fmt )
@@ -241,6 +241,6 @@ namespace glimg
 	{
 		const std::string msg = fmt.ValidateFormatText();
 		if(!msg.empty())
-			throw std::runtime_error(msg);
+			throw InvalidFormatException(msg);
 	}
 }

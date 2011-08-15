@@ -46,7 +46,7 @@ namespace glimg
 
 		Dimensions GetDimensions() const;
 
-		ImageFormat GetFormat() const;
+		ValidFormat GetFormat() const;
 
 		/**
 		\brief Retrieves a pointer to this image's pixel data.
@@ -117,7 +117,7 @@ namespace glimg
 		/**
 		\brief Retrieves the image format that describes all images in this ImageSet.
 		**/
-		ImageFormat GetFormat() const;
+		ValidFormat GetFormat() const;
 
 		/**
 		\brief Retrieves the image at the given mipmap level, array index, and face index.

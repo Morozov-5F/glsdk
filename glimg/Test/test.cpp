@@ -223,7 +223,7 @@ void TestImageFormats()
 		{
 			printf("---->Format %i failed:\n%s\n", loop, e.what());
 		}
-		catch(std::runtime_error &e)
+		catch(InvalidFormatException &e)
 		{
 			printf("---->Format %i failed:\n%s\n", loop, e.what());
 		}

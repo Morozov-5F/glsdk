@@ -52,10 +52,10 @@ namespace glimg
 		return origDim;
 	}
 
-	size_t CalcBytesPerPixel( const ImageFormat &fmt )
+	size_t CalcBytesPerPixel( const ValidFormat &fmt )
 	{
 		size_t bytesPerPixel = 0;
-		switch(fmt.eBitdepth)
+		switch(fmt.Depth())
 		{
 		case BD_COMPRESSED:			return 0;
 		case BD_PER_COMP_8:					bytesPerPixel = 1;		break;
@@ -76,8 +76,8 @@ namespace glimg
 		case BD_PACKED_32_BIT_5999_REV:		bytesPerPixel = 4;		break;
 		}
 
-		if(fmt.eBitdepth < BD_NUM_PER_COMPONENT)
-			bytesPerPixel *= ComponentCount(fmt.eFormat);
+		if(fmt.Depth() < BD_NUM_PER_COMPONENT)
+			bytesPerPixel *= ComponentCount(fmt.Components());
 
 		return bytesPerPixel;
 	}

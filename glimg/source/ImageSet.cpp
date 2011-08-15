@@ -20,9 +20,9 @@ namespace glimg
 		return m_pImpl->GetDimensions(m_mipmapLevel);
 	}
 
-	glimg::ImageFormat SingleImage::GetFormat() const
+	glimg::ValidFormat SingleImage::GetFormat() const
 	{
-		return m_pImpl->GetFormat().GetFormat();
+		return m_pImpl->GetFormat();
 	}
 
 	const void * SingleImage::GetImageData() const
@@ -70,9 +70,9 @@ namespace glimg
 		return m_pImpl->GetFaceCount();
 	}
 
-	glimg::ImageFormat ImageSet::GetFormat() const
+	glimg::ValidFormat ImageSet::GetFormat() const
 	{
-		return m_pImpl->GetFormat().GetFormat();
+		return m_pImpl->GetFormat();
 	}
 
 	SingleImage * ImageSet::GetImage( int ixMipmapLevel, int ixArray, int ixFace ) const

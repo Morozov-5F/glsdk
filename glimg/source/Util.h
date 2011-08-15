@@ -6,7 +6,7 @@ namespace glimg
 	Dimensions ModifySizeForMipmap(Dimensions origDim, int mipmapLevel);
 
 	//Does not work for compressed textures.
-	size_t CalcBytesPerPixel(const ImageFormat &fmt);
+	size_t CalcBytesPerPixel(const ValidFormat &fmt);
 
 	int ComponentCount(PixelComponents eFormat);
 }

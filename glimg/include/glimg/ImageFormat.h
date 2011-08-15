@@ -2,6 +2,7 @@
 #define GLIMG_IMAGE_FORMAT_H
 
 #include <string>
+#include <exception>
 
 
 /**
@@ -177,6 +178,27 @@ namespace glimg
 		PixelComponents		Format() const	{return eFormat;}
 		ComponentOrder		Order() const	{return eOrder;}
 		Bitdepth			Depth() const	{return eBitdepth;}
+	};
+
+	class InvalidFormatException : public std::exception
+	{
+	public:
+		InvalidFormatException()
+			: message("Invalid Image Format")
+		{}
+
+		InvalidFormatException(const std::string &msg)
+			: message("Invalid Image Format:\n")
+		{
+			message += msg;
+		}
+
+		virtual ~InvalidFormatException() throw() {}
+
+		virtual const char *what() {return message.c_str();}
+
+	protected:
+		std::string message;
 	};
 
 	class ValidFormat
