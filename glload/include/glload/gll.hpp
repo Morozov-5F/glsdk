@@ -4,14 +4,14 @@
 
 /**
 \file
-\brief The header to include if you want to initialize the OpenGL functions.
+\brief The C++ header to include if you want to initialize the OpenGL functions.
 
 **/
 
-///\addtogroup module_glload
+///\addtogroup module_glload_cppinter
 ///@{
 
-///The core namespace for all of the OpenGL initialization functions.
+///The core namespace for the C++ interface for the OpenGL initialization functions.
 namespace glload
 {
 	/**
@@ -64,8 +64,8 @@ namespace glload
 	**/
 	int GetMinorVersion();
 
-	///Returns non-zero if the current GL version is greater than or equal to the given version.
-	int IsVersionGEQ(int iMajorVersion, int iMinorVersion);
+	///Returns true if the current GL version is greater than or equal to the given version.
+	bool IsVersionGEQ(int iMajorVersion, int iMinorVersion);
 }
 ///@}
 

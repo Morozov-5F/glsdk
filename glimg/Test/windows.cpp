@@ -15,7 +15,7 @@
 #include <tchar.h>
 #include <glload/gl_3_3_comp.h>
 #include <glload/wgl_exts.h>
-#include <glload/gll.h>
+#include <glload/gll.hpp>
 
 #include <glimg/glimg.h>
 #include <glimg/TextureGenerator.h>

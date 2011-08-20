@@ -39,9 +39,9 @@ namespace glload
 		return ::GetMinorVersion();
 	}
 
-	int IsVersionGEQ( int iMajorVersion, int iMinorVersion )
+	bool IsVersionGEQ( int iMajorVersion, int iMinorVersion )
 	{
-		return ::IsVersionGEQ(iMajorVersion, iMinorVersion);
+		return ::IsVersionGEQ(iMajorVersion, iMinorVersion) != 0;
 	}
 
 #ifdef WIN32

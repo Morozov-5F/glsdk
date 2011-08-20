@@ -8,7 +8,7 @@
 
 **/
 
-///\addtogroup module_glload
+///\addtogroup module_glload_cinter
 ///@{
 
 ///The core namespace for all of the OpenGL initialization functions.

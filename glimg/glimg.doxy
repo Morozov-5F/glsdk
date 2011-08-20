@@ -19,6 +19,8 @@ The images within an ImageSet can be directly loaded into an OpenGL texture by u
 
 Image loaders are functions that create ImageSet objects by load from files or memory buffers. They are generally defined to work for certain specific file formats. You are expected to delete the ImageSet object returned by the loader functions.
 
+If the image loader fails, then it will throw some form of exception that is ultimately derived from std::exception. Each particular loader will have a set of exceptions that it can throw.
+
 All image loaders live in the glimg::loaders namespace. Each kind of loader has its own subnamespace.
 **/
 

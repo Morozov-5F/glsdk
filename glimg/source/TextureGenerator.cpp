@@ -1,7 +1,7 @@
 
 #include <assert.h>
 #include <glload/gl_all.h>
-#include <glload/gll.h>
+#include <glload/gll.hpp>
 #include "glimg/TextureGeneratorExceptions.h"
 #include "glimg/TextureGenerator.h"
 #include "ImageSetImpl.h"
