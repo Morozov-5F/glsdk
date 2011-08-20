@@ -8,6 +8,7 @@ project("glload")
 	files {
 		"include/glload/gl_*.h",
 		"include/glload/gll.h",
+		"include/glload/gll.hpp",
 		"source/gll*.c",
 		"source/gll*.cpp",
 		"source/gll*.h",

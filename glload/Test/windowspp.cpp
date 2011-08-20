@@ -11,7 +11,7 @@
 #include "glload\gl_2_1.h"
 #include "glload\wgl_exts.h"
 #include <gl\glu.h>			// Header File For The GLu32 Library
-#include "glload\gll.h"
+#include "glload\gll.hpp"
 
 HDC			hDC=NULL;		// Private GDI Device Context
 HGLRC		hRC=NULL;		// Permanent Rendering Context
@@ -313,8 +313,8 @@ BOOL CreateGLWindow(TCHAR* title, int width, int height, int bits, bool fullscre
 		return FALSE;								// Return FALSE
 	}
 
-	LoadWinFunctions(hDC);
-	LoadFunctions();
+	glload::LoadWinFunctions(hDC);
+	glload::LoadFunctions();
 
 	ShowWindow(hWnd,SW_SHOW);						// Show The Window
 	SetForegroundWindow(hWnd);						// Slightly Higher Priority
