@@ -8,7 +8,7 @@
 
 #include <windows.h>		// Header File For Windows
 #include <tchar.h>
-#include "glload\gl_2_1.h"
+#include "glload\gl_2_1.hpp"
 #include "glload\wgl_exts.h"
 #include <gl\glu.h>			// Header File For The GLu32 Library
 #include "glload\gll.hpp"
@@ -31,26 +31,26 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 		height=1;										// Making Height Equal One
 	}
 
-	glViewport(width / 4, height / 4, width / 2, height / 2);						// Reset The Current Viewport
+	gl::Viewport(width / 4, height / 4, width / 2, height / 2);						// Reset The Current Viewport
 
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix
+	gl::MatrixMode(gl::GL_PROJECTION);						// Select The Projection Matrix
+	gl::LoadIdentity();									// Reset The Projection Matrix
 
 	//Give me an orthographic projection.
-	glOrtho(-1, 1, -1, 1, -1, 1);
+	gl::Ortho(-1, 1, -1, 1, -1, 1);
 
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The Modelview Matrix
+	gl::MatrixMode(gl::GL_MODELVIEW);							// Select The Modelview Matrix
+	gl::LoadIdentity();									// Reset The Modelview Matrix
 }
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
-	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(1.0f, 1.0f, 1.0f, 0.5f);				// White Background
-	glClearDepth(1.0f);									// Depth Buffer Setup
-	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
-	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
+	gl::ShadeModel(gl::GL_SMOOTH);							// Enable Smooth Shading
+	gl::ClearColor(1.0f, 1.0f, 1.0f, 0.5f);				// White Background
+	gl::ClearDepth(1.0f);									// Depth Buffer Setup
+	gl::Enable(gl::GL_DEPTH_TEST);							// Enables Depth Testing
+	gl::DepthFunc(gl::GL_LEQUAL);								// The Type Of Depth Testing To Do
+	gl::Hint(gl::GL_PERSPECTIVE_CORRECTION_HINT, gl::GL_NICEST);	// Really Nice Perspective Calculations
 	return TRUE;										// Initialization Went OK
 }
 
@@ -63,44 +63,44 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		bFirstTime = false;
 
-		glGenBuffers(1, &bufferName);
+		gl::GenBuffers(1, &bufferName);
 
 		static int iVal1 = wglext_ARB_multisample;
 
 		iVal1++;
 	}
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
-	glLoadIdentity();									// Reset The Current Modelview Matrix
+	gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
+	gl::LoadIdentity();									// Reset The Current Modelview Matrix
 
-	glDepthRange(0.0f, 0.5f);
-	glBegin(GL_QUADS);
+	gl::DepthRange(0.0f, 0.5f);
+	gl::Begin(gl::GL_QUADS);
 	{
 		//Define the color (blue)
-		glColor3ub(0, 0, 255);
+		gl::Color3ub(0, 0, 255);
 
 		//Draw our four points, clockwise.
-		glVertex3f(-0.5, 0.5, 0);
-		glVertex3f(0.5, 0.5, 0);
-		glVertex3f(0.5, -0.5, 0);
-		glVertex3f(-0.5, -0.5, 0);
+		gl::Vertex3f(-0.5, 0.5, 0);
+		gl::Vertex3f(0.5, 0.5, 0);
+		gl::Vertex3f(0.5, -0.5, 0);
+		gl::Vertex3f(-0.5, -0.5, 0);
 
 	}
-	glEnd();
+	gl::End();
 
-	glDepthRange(0.5f, 1.0f);
-	glBegin(GL_QUADS);
+	gl::DepthRange(0.5f, 1.0f);
+	gl::Begin(gl::GL_QUADS);
 	{
 		//Gray square.
-		glColor3ub(128, 128, 128);
+		gl::Color3ub(128, 128, 128);
 
 		//Draw our four points, clockwise.
-		glVertex3f(-1, 1, -0.5);
-		glVertex3f(1, 1, -0.5);
-		glVertex3f(1, -1, 0.5);
-		glVertex3f(-1, -1, 0.5);
+		gl::Vertex3f(-1, 1, -0.5);
+		gl::Vertex3f(1, 1, -0.5);
+		gl::Vertex3f(1, -1, 0.5);
+		gl::Vertex3f(-1, -1, 0.5);
 	}
-	glEnd();
+	gl::End();
 
 
 	return TRUE;										// Everything Went OK

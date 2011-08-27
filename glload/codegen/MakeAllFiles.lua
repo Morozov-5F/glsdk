@@ -5,6 +5,7 @@ for GLE.
 
 require "_LoadLuaSpec";
 require "_MakeExtHeaderFile";
+require "_MakeExtCppHeaderFile";
 require "_MakeMainHeaderFile";
 require "_MakeMainSourceFile";
 require "_MakeCoreHeaderFile";
@@ -49,7 +50,9 @@ local glOutputs = {
 for i, output in ipairs(glOutputs) do
 	MakeExtHeaderFile(output[1], specData, "GL", "gl",
 		output[2], output[3], glPreceedData);
+	MakeExtCppHeaderFile(output[1], specData, output[2], output[3], glPreceedData);
 end
+
 
 local function GetVersionProfIterator()
 	local currIx = 1;

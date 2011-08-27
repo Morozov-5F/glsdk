@@ -162,13 +162,13 @@ typedef GLintptr GLvdpauSurfaceNV;
 #define GL_TRUE 1
 #define GL_FALSE 0
 
-typedef const GLubyte * (GLE_FUNCPTR * PFNGLGETSTRINGPROC)(GLenum name);
+typedef const GLubyte * (GLE_FUNCPTR * PFNGLGETSTRINGPROC)(GLenum );
 extern PFNGLGETSTRINGPROC __gleGetString;
 #define glGetString __gleGetString
-typedef const GLubyte * (GLE_FUNCPTR * PFNGLGETSTRINGIPROC)(GLenum name, GLuint index);
+typedef const GLubyte * (GLE_FUNCPTR * PFNGLGETSTRINGIPROC)(GLenum , GLuint );
 extern PFNGLGETSTRINGIPROC __gleGetStringi;
 #define glGetStringi __gleGetStringi
-typedef void (GLE_FUNCPTR * PFNGLGETINTEGERVPROC)(GLenum pname, GLint *params);
+typedef void (GLE_FUNCPTR * PFNGLGETINTEGERVPROC)(GLenum , GLint *);
 extern PFNGLGETINTEGERVPROC __gleGetIntegerv;
 #define glGetIntegerv __gleGetIntegerv
 

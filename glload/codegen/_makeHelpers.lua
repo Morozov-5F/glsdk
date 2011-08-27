@@ -23,21 +23,30 @@ local bIsKindPtr ={
 	reference = true,
 };
 
-function Make.GetParameterListStr(func, typemap)
+local paramNameRemap = {
+	near = "ren_near",
+	far = "ren_far",
+	array = "ren_array",
+};
+
+function Make.GetParameterListStr(func, typemap, named)
 	local strParamList = "";
 	for i, param in ipairs(func.params) do
 		local paramType = typemap[param.type] or param.type;
-
+		local paramName = "";
+		if(named) then paramName = param.name end
+		if(paramNameRemap[paramName]) then paramName = paramNameRemap[paramName] end
+		
 		if(bIsKindPtr[param.kind]) then
 			if(param.input) then
 				--Input arrays are ALWAYS const.
 				strParamList = strParamList .. "const ";
 			end
 			strParamList = strParamList .. string.format("%s *%s",
-				paramType, param.name);
+				paramType, paramName);
 		else
 			strParamList = strParamList .. string.format("%s %s",
-				paramType, param.name);
+				paramType, paramName);
 		end
 
 		if(i ~= #func.params) then
@@ -47,6 +56,18 @@ function Make.GetParameterListStr(func, typemap)
 	
 	return strParamList;
 end
+
+function Make.GetCallParameterList(func, typemap)
+	local paramNameList = {}
+	for i, param in ipairs(func.params) do
+		local paramName = param.name;
+		if(paramNameRemap[paramName]) then paramName = paramNameRemap[paramName] end
+		paramNameList[#paramNameList + 1] = paramName;
+	end
+	
+	return table.concat(paramNameList, ", ");
+end
+
 
 function Make.GetFuncTypedefNameStr(func, funcPrefix)
 	return string.upper(string.format("PFN%s%sPROC",
@@ -69,6 +90,54 @@ function Make.GetFuncDef(func, funcPrefix, typemap)
 	
 	return string.format(strDefFormat, typemap[func["return"]] or func["return"],
 		funcTypedefName, strParamList);
+end
+
+function Make.GetCoreFuncPtrDecl(func, funcPrefix, typemap)
+	local strDefFormat = "extern %s (GLE_FUNCPTR *%s)(%s);";
+
+	local funcTypedefName = Make.GetCoreFuncPtrNameStr(func, funcPrefix);
+	local strParamList = Make.GetParameterListStr(func, typemap);
+	
+	return string.format(strDefFormat, typemap[func["return"]] or func["return"],
+		funcTypedefName, strParamList);
+end
+
+function Make.GetFuncPtrDecl(func, funcPrefix, typemap)
+	local strDefFormat = "extern %s (GLE_FUNCPTR *%s)(%s);";
+
+	local funcTypedefName = Make.GetFuncPtrNameStr(func, funcPrefix);
+	local strParamList = Make.GetParameterListStr(func, typemap);
+	
+	return string.format(strDefFormat, typemap[func["return"]] or func["return"],
+		funcTypedefName, strParamList);
+end
+
+function Make.GetFuncDefCpp(func, funcPrefix, typemap, isCore)
+	local strProtoFormat = "inline %s %s(%s)";
+	
+	local funcName = func.name;
+	local strParamList = Make.GetParameterListStr(func, typemap, true);
+	
+	local funcHeader = string.format(strProtoFormat,
+		typemap[func["return"]] or func["return"], funcName, strParamList);
+	
+	local funcFormat = "%s { %s::%s(%s); }";
+	
+	local returnStmt = "";
+	if(typemap[func["return"]] ~= "void") then
+		returnStmt = "return "
+	end
+	
+	local funcPtrName;
+	if(isCore) then
+		funcPtrName = Make.GetCoreFuncPtrNameStr(func, funcPrefix)
+	else
+		funcPtrName = Make.GetFuncPtrNameStr(func, funcPrefix)
+	end
+	
+	return string.format(funcFormat, funcHeader, returnStmt,
+		funcPtrName,
+		Make.GetCallParameterList(func, typemap))
 end
 
 function Make.GetFuncTypedef(func, funcPrefix, typemap)
@@ -124,6 +193,29 @@ function Make.GetEnumerator(enum, enumTable, enumPrefix)
 	else
 		return string.format("#define %s_%s %s",
 			enumPrefix, enum.name, enumValue);
+	end
+end
+
+local tabIndent = 30;
+
+function Make.GetEnumeratorCpp(enum, enumTable, enumPrefix)
+	local enumValue, copiedFrom = GetEnumValue(enum, enumTable);
+	
+	local numSpaces = tabIndent - #enum.name;
+	local spacing = " ";
+	if(numSpaces > 0) then
+		spacing = string.rep(" ", numSpaces);
+	end
+	
+	local enumName = enumPrefix or "";
+	enumName = enumName .. enum.name;
+	
+	if(copiedFrom) then
+		return string.format("%s%s= %s, /* %s */",
+			enumName, spacing, enumValue, copiedFrom);
+	else
+		return string.format("%s%s= %s,",
+			enumName, spacing, enumValue);
 	end
 end
 

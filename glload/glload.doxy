@@ -60,15 +60,17 @@ These variables only gain valid values @em after GLload has been properly initia
 
 As previously stated, there are two interfaces: C and C++. The C interface looks identical to the OpenGL definitions. All of the functions and enums are at global scope, as are all of the various internal declarations that are needed to make GLload work.
 
-C++ programs may freely use the C interface; this makes them more compatible with source code you would find online. However, they may use the C++ interface as well. This pushes as much of OpenGL as possible into the <tt>gl</tt> namespace. All OpenGL enumerators are actual members of an enumeration in the <tt>gl::e</tt> namespace. All of the OpenGL functions are in the <tt>gl</tt> namespace.
+The C interface defines function pointers as extern variables prefixed by __glext.
 
-The function and enumerator names are different as well. Since they are in the gl namespace, there is no need to prefix everything with "gl" or "GL_". Therefore, this interface does not. Therefore, the function that is usually seen as <tt>glVertexAttribPointer</tt> becomes <tt>gl::VertexAttribPointer</tt>.
+C++ programs may freely use the C interface; this makes them more compatible with source code you would find online. However, they may use the C++ interface as well. This pushes as much of OpenGL as possible into the <tt>gl</tt> namespace. All OpenGL enumerators are actual members of an enumeration in the <tt>gl</tt> namespace. All of the OpenGL functions are in the <tt>gl</tt> namespace.
 
-Note that this is purely for convenience. OpenGL is still exposed directly, at a low level, to the user. There are no C++ classes or other types, nor does this interface provide overloaded functions for things like glVertex3f, glVertex4f, etc. It does not change the actual OpenGL interface; it just makes OpenGL clutter the global namespace much less, as well as make tool parsing a bit easier due to not having to use #defines.
+The function names are different as well. Since they are in the gl namespace, the function names are not prefixed with "gl" Therefore, this interface does not. Therefore, the function that is usually seen as <tt>glVertexAttribPointer</tt> becomes <tt>gl::VertexAttribPointer</tt>.
+
+Note that this is purely for convenience. OpenGL is still exposed directly, at a low level, to the user. There are no C++ classes or other types, nor does this interface provide overloaded functions for functions like <tt>glVertex3f</tt>, <tt>glVertex4f</tt>, etc. It does not change the actual OpenGL interface; it just makes OpenGL clutter the global namespace much less, as well as make tool parsing a bit easier due to not having to use #defines.
 
 There are some declarations that cannot be moved to a namespace. The glext_ variables cannot be moved to the <tt>gl</tt> namespace. The OpenGL defined types (GLfloat, GLint, etc) also are not placed in the namespace.
 
-Note that the two interfaces all ultimately call the same functions. So you can use them interchangeably (though this is not suggested).
+Note that the two interfaces all ultimately call the same functions. So you can use them interchangeably (though this is not suggested). You could use the C interface to glload to initialize GLload, and use C++ headers to access the functions. Or vice-versa.
 **/
 
 /**
