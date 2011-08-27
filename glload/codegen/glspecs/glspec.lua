@@ -83390,7 +83390,6 @@ return {
 			["value"] = [==[0x884F]==],
 			["extensions"] = {
 				[==[ARB_seamless_cube_map]==],
-				[==[AMD_seamless_cubemap_per_texture]==],
 			},
 			["version"] = [==[3.2]==],
 		},
