@@ -13,7 +13,7 @@ namespace
 {
 	struct TestData
 	{
-		ImageFormat format;
+		UncheckedImageFormat format;
 		unsigned int forceConvertBits;
 	};
 

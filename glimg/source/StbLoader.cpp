@@ -30,7 +30,7 @@ namespace glimg
 			dims.width = width;
 			dims.height = height;
 
-			ImageFormat fmt;
+			UncheckedImageFormat fmt;
 			fmt.eType = DT_NORM_UNSIGNED_INTEGER;
 			switch(numComp)
 			{

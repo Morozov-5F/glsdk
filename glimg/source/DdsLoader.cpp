@@ -118,7 +118,7 @@ namespace dds
 
 		struct OldDdsFormatConv
 		{
-			ImageFormat fmt;
+			UncheckedImageFormat fmt;
 			OldDdsFmtMatch ddsFmt;
 		};
 
@@ -156,12 +156,12 @@ namespace dds
 #include "OldDdsFmtConv.inc"
 		};
 
-		ImageFormat GetImageFormat(const ddsHeader &header, const dds10Header &header10)
+		UncheckedImageFormat GetImageFormat(const ddsHeader &header, const dds10Header &header10)
 		{
 			if(header10.dxgiFormat != DXGI_FORMAT_UNKNOWN)
 			{
 				//TODO: implement.
-				return ImageFormat();
+				return UncheckedImageFormat();
 			}
 
 			for(int convIx = 0; convIx < ARRAY_COUNT(g_oldFmtConvert); convIx++)
@@ -204,14 +204,14 @@ namespace dds
 			return byteOffset;
 		}
 
-		size_t GetImageByteSize(const ImageFormat &fmt, const glimg::Dimensions &dims,
+		size_t GetImageByteSize(const UncheckedImageFormat &fmt, const glimg::Dimensions &dims,
 			int mipmapLevel);
 
 		//Computes the bytesize of a single scanline of an image of the given format,
 		//with the given line width.
 		//For compressed textures, the value returned is the number of bytes for every
 		//4 scanlines.
-		size_t CalcLineSize(const ImageFormat &fmt, int lineWidth)
+		size_t CalcLineSize(const UncheckedImageFormat &fmt, int lineWidth)
 		{
 			//This is from the DDS suggestions for line size computations.
 			if(fmt.eBitdepth == BD_COMPRESSED)
@@ -230,7 +230,7 @@ namespace dds
 		}
 
 		//Computes the offset from the first image.
-		size_t CalcByteOffsetToImage(const ImageFormat &fmt, const glimg::Dimensions &dims,
+		size_t CalcByteOffsetToImage(const UncheckedImageFormat &fmt, const glimg::Dimensions &dims,
 			int mipmapLevel, int faceIx, int arrayIx)
 		{
 			//TODO: remove
@@ -289,7 +289,7 @@ namespace dds
 			//Collect info from the DDS file.
 			dds10Header header10 = GetDDS10Header(header, ddsData);
 			glimg::Dimensions dims = GetDimensions(header, header10);
-			ImageFormat fmt = GetImageFormat(header, header10);
+			UncheckedImageFormat fmt = GetImageFormat(header, header10);
 
 			int numMipmaps = 0;
 			int numArrays = 0;

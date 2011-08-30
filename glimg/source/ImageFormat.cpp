@@ -29,7 +29,7 @@ namespace glimg
 		PixelComponents g_srgbFormats[] = {FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
 	}
 
-	bool ImageFormat::ValidateFormat() const
+	bool UncheckedImageFormat::ValidateFormat() const
 	{
 		const std::string &theMsg = ValidateFormatText();
 
@@ -39,7 +39,7 @@ namespace glimg
 		return false;
 	}
 
-	std::string ImageFormat::ValidateFormatText() const
+	std::string UncheckedImageFormat::ValidateFormatText() const
 	{
 		//Alignment only matters for uncompressed types.
 		if(eType < DT_NUM_UNCOMPRESSED_TYPES)
@@ -222,7 +222,7 @@ namespace glimg
 		return std::string();
 	}
 
-	ValidFormat::ValidFormat( PixelDataType _eType, PixelComponents _eFormat,
+	ImageFormat::ImageFormat( PixelDataType _eType, PixelComponents _eFormat,
 		ComponentOrder _eOrder, Bitdepth _eBitdepth, int _lineAlignment )
 	{
 		fmt.eType = _eType;
@@ -236,7 +236,7 @@ namespace glimg
 			throw InvalidFormatException(msg);
 	}
 
-	ValidFormat::ValidFormat( ImageFormat _fmt )
+	ImageFormat::ImageFormat( UncheckedImageFormat _fmt )
 		: fmt(_fmt)
 	{
 		const std::string msg = fmt.ValidateFormatText();

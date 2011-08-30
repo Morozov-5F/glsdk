@@ -44,7 +44,7 @@ namespace glimg
 	{
 	public:
 		ImageCreator(MemoryObject *pObject, Dimensions dimensions, int arrayCount, int mipmapCount,
-			int faceCount, ValidFormat format);
+			int faceCount, ImageFormat format);
 
 		~ImageCreator();
 
@@ -59,7 +59,7 @@ namespace glimg
 
 	private:
 		Dimensions m_dimensions;
-		ValidFormat m_format;
+		ImageFormat m_format;
 		MemoryObject *m_pObject;
 		int m_arrayCount;
 		int m_mipmapCount;

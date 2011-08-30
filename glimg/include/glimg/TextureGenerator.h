@@ -44,12 +44,12 @@ namespace glimg
 	\brief Retrieves the OpenGL internal format for the given image format and bits.
 
 	This function should be used when you want to do the uploading of the texture data
-	yourself. It uses GL Load, so the GL Load must have been initialized. Also,
-	an OpenGL context must be current.
+	yourself.
 	
-	Note that this function will only return formats that the current OpenGL context
-	supports. It will use version numbers, core vs. compatibility, and so forth to
-	detect this.
+	\note This function requires an active OpenGL context, and it requires
+	that \ref module_glload "GLLoad" has been initialized. It will only return internal formats
+	supported by the current OpenGL context. It will use version numbers, core vs. compatibility,
+	and so forth to detect this.
 	
 	Format mapping is done as follows. One and two channel PixelComponents
 	(RED and RG) will be mapped to luminance and luminance alpha \em only if
@@ -66,11 +66,11 @@ namespace glimg
 
 	\return A GLenum representing the internal OpenGL format.
 
-	\throws TextureGenerationException If the format is invalid, or if the format cannot be used.
+	\throws TextureGenerationException If the format cannot be used.
 	Also thrown if the format isn't supported yet. This is a base class; the various derived
 	classes of this type define the specific errors that are thrown.
 	**/
-	unsigned int GetInternalFormat(const ValidFormat &format, unsigned int forceConvertBits);
+	unsigned int GetInternalFormat(const ImageFormat &format, unsigned int forceConvertBits);
 
 	/**
 	\brief Contains the pixel transfer parameters for OpenGL texture upload functions.
@@ -85,18 +85,36 @@ namespace glimg
 	/**
 	\brief Retrieves the pixel transfer parameters for the given image format.
 
-	This function should be used if you wish to manually upload image data to OpenGL.
-	
+	This function should be used if you wish to manually upload image data to OpenGL. It returns the
+	pixel transfer parameters for uploading the data.
+
+	\note This function requires an active OpenGL context, and it requires
+	that \ref module_glload "GLLoad" has been initialized. It will only return pixel transfer
+	parameters supported by the current OpenGL context.
+
+	Here is an example of how to use this function:
+
+	\code
+glimg::ImageSet *pImgSet = ...;
+glimg::SingleImage *pImage = pImgSet->GetImage(0);
+OpenGLPixelTransferParams params = GetUploadFormatType(pImage->GetFormat(), 0);
+glimg::Dimensions dims = pImage->GetDimensions();
+glPixelStorei(GL_UNPACK_ALIGNMENT, pImage->GetFormat().LineAlign());
+glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
+	params.format, params.height, pImage->GetImageData());
+	\endcode
+
 	\param format The image format of the image data to have a texture created for it.
-	\param forceConvertBits A bitfield containing values from ForcedConvertFlags. These affect how the format is generated.
+	\param forceConvertBits A bitfield containing values from ForcedConvertFlags. These
+	affect how the format is generated.
 
 	\return The OpenGL pixel transfer parameters, and a compressed block size field.
 
-	\throws TextureGenerationException If the format is invalid, or if the format cannot be used.
-	Also thrown if the format isn't supported yet. This is a base class; the various derived
-	classes of this type are thrown for specific errors.
+	\throws TextureGenerationException If the \a format cannot be used.
+	Also thrown if the format isn't supported on the currently active OpenGL implementation.
+	This is a base class; the various derived classes of this type are thrown for specific errors.
 	**/
-	OpenGLPixelTransferParams GetUploadFormatType(const ValidFormat &format, unsigned int forceConvertBits);
+	OpenGLPixelTransferParams GetUploadFormatType(const ImageFormat &format, unsigned int forceConvertBits);
 
 	/**
 	\brief Creates a texture object from the given ImageSet, with flags.
@@ -104,10 +122,13 @@ namespace glimg
 	If an exception is thrown, no OpenGL state will be changed. If a texture was created with
 	glGenTextures before the exception was thrown, it will be deleted with glDeleteTextures
 	after. So this function should be completely exception safe.
-	
+
+	\note This function requires an active OpenGL context, and it requires
+	that \ref module_glload "GLLoad" has been initialized.
+
 	If an exception is not thrown, then the following OpenGL context state will be changed:
 
-	\li All GL_UNPACK state.
+	\li All GL_UNPACK_* state.
 	\li The texture target of the returned texture will have texture object 0 bound to it.
 
 	\param pImage The image to upload to OpenGL.

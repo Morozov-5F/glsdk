@@ -84,22 +84,6 @@ namespace glimg
 			message = "The image format cannot be forced to be a renderable format without compromising the data.";
 		}
 	};
-
-	///Thrown if the image format given to a texture conversion routine is invalid.
-	class ImageFormatUnexpectedException : public TextureGenerationException
-	{
-	public:
-		ImageFormatUnexpectedException()
-		{
-			message = "This image format is not supported by glimg.\nNo idea how we got here.";
-		}
-
-		explicit ImageFormatUnexpectedException(const std::string &msg)
-		{
-			message = "This image format is not supported by glimg.\n";
-			message += msg;
-		}
-	};
 	///@}
 }
 

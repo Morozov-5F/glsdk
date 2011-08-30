@@ -44,9 +44,11 @@ namespace glimg
 	public:
 		~SingleImage();
 
+		///Get the dimensions of the image.
 		Dimensions GetDimensions() const;
 
-		ValidFormat GetFormat() const;
+		///Get the format of the image.
+		ImageFormat GetFormat() const;
 
 		/**
 		\brief Retrieves a pointer to this image's pixel data.
@@ -117,7 +119,7 @@ namespace glimg
 		/**
 		\brief Retrieves the image format that describes all images in this ImageSet.
 		**/
-		ValidFormat GetFormat() const;
+		ImageFormat GetFormat() const;
 
 		/**
 		\brief Retrieves the image at the given mipmap level, array index, and face index.

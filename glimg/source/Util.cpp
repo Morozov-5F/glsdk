@@ -52,7 +52,7 @@ namespace glimg
 		return origDim;
 	}
 
-	size_t CalcBytesPerPixel( const ValidFormat &fmt )
+	size_t CalcBytesPerPixel( const ImageFormat &fmt )
 	{
 		size_t bytesPerPixel = 0;
 		switch(fmt.Depth())

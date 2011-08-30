@@ -132,11 +132,10 @@
     <groupgraph visible="$GROUP_GRAPHS"/>
     <detaileddescription title=" "/>
     <memberdecl>
+      <nestedgroups visible="yes" title=""/>
       <classes visible="yes" title=""/>
       <namespaces visible="yes" title=""/>
       <dirs visible="yes" title=""/>
-      <nestedgroups visible="yes" title=""/>
-      <files visible="yes" title=""/>
       <defines title=""/>
       <typedefs title=""/>
       <enums title=""/>
@@ -150,6 +149,7 @@
       <events title=""/>
       <properties title=""/>
       <friends title=""/>
+      <files visible="yes" title=""/>
       <membergroups visible="yes"/>
     </memberdecl>
     <memberdef>

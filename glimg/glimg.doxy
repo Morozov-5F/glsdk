@@ -1,6 +1,5 @@
 /**
 \defgroup module_glimg GL Image
-
 \brief The GLSDK library for loading images into OpenGL textures.
 
 GL Image is used for two things: loading images into memory and converting those memory images into OpenGL texture objects. This creates three basic divisions in GL Image.
@@ -10,11 +9,12 @@ The functions responsible for loading image formats from disk (or from memory) a
 The loaded representation of an image file is the ImageSet object. An ImageSet, as the name implies, represents multiple images. This allows support for file formats like DDS or KTX that store mipmaps, texture arrays, and/or cubemap faces all within the same file. The \ref module_glimg_imageset "image set object and its associated types" are used to query information about each image within the set.
 
 The images within an ImageSet can be directly loaded into an OpenGL texture by using the various \ref module_glimg_texture "texture creation functions". Note that use of these functions requires that you use GL Load to initialize your OpenGL context. They also require that a valid OpenGL context is bound.
+
+Basic use of the library is quite simple. #include the <tt><glimg/glimg.h></tt> header to get all of the important components of the library. To load an image, select a \ref module_glimg_loaders "loader" and use its loading function to load the texture into an ImageSet object. Then pass this ImageSet along to glimg::CreateTexture to create the OpenGL texture object for the file.
 **/
 
 /**
 \defgroup module_glimg_loaders Image Loaders
-
 \ingroup module_glimg
 
 Image loaders are functions that create ImageSet objects by load from files or memory buffers. They are generally defined to work for certain specific file formats. You are expected to delete the ImageSet object returned by the loader functions.
@@ -26,12 +26,11 @@ All image loaders live in the glimg::loaders namespace. Each kind of loader has 
 
 /**
 \defgroup module_glimg_imageset ImageSet
-
 \ingroup module_glimg
 
 The ImageSet class represents a set of images that can be bundled together into a texture. Once loaded, an ImageSet is \em immutable; it cannot be changed.
 
-ImageSet objects also have a dimensionality. This can be 1D, 2D, or 3D. They also have a size within each of .
+ImageSet objects also have a dimensionality. This can be 1D, 2D, or 3D. They also have a size for each dimension.
 
 Each ImageSet has a specific image format. The format defines the arrangement of pixel data in all of the ImageSet's images.
 
@@ -40,8 +39,11 @@ Indidivual images can be queried from an ImageSet; these images have the type Si
 
 /**
 \defgroup module_glimg_format Image Format
-
 \ingroup module_glimg_imageset
+
+The ImageFormat class describes a particular arrangement of pixel data within an image. There are four enumerations that specify the different facets of an image format. The ImageFormat also includes the byte alignment of each row of the pixel data, regardless of how wide they are.
+
+Not all combinations of image format parameters are valid. To prevent accidental use of invalid combinations, ImageFormat objects are verified upon creation. Invalid combinations of parameters will result in throwing an InvalidImageFormat exception, which contains a message describing the problem.
 **/
 
 /**
@@ -51,18 +53,21 @@ Indidivual images can be queried from an ImageSet; these images have the type Si
 
 /**
 \defgroup module_glimg_texture Texture Creation
-
 \ingroup module_glimg
+
+These functions are used to create OpenGL textures from ImageSet objects. There are also query functions that convert an ImageFormat into an OpenGL internal format, as well as provide the pixel transfer format parameters for upload operations.
+
+There are a number of flags that the user can provide which affect the selection of the OpenGL parameters.
 **/
 
 /**
 \defgroup module_glimg_creation Image Creation
-
 \ingroup module_glimg
+
+Do not use this API yet. It is unstable and not ready to be used.
 **/
 
 /**
 \defgroup module_glimg_exceptions Exceptions
-
 \ingroup module_glimg
 **/

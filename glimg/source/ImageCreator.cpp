@@ -8,7 +8,7 @@
 namespace glimg
 {
 	ImageCreator::ImageCreator( MemoryObject *pObject, Dimensions dimensions,
-		int arrayCount, int mipmapCount, int faceCount, ValidFormat format )
+		int arrayCount, int mipmapCount, int faceCount, ImageFormat format )
 		: m_dimensions(dimensions)
 		, m_format(format)
 		, m_pObject(pObject)

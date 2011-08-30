@@ -15,8 +15,9 @@ namespace glimg
 	namespace loaders
 	{
 		/**
-		\brief Contains the STB loaders.
+		\brief Contains the loader for PNG, JPEG, TGA, BMP, and GIF formats
 		
+		\ingroup module_glimg_loaders
 		**/
 		namespace stb
 		{
@@ -55,8 +56,8 @@ namespace glimg
 			/**
 			\brief Loads a file from the disk, given an ASCII filename.
 
-			This loader uses the STB library to process the files. It therefore can load the
-			following image formats:
+			This loader uses the public domain STB library to process the files. It therefore
+			can load the following image formats:
 
 			\li PNG
 			\li JPEG (non-progressive)

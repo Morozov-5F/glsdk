@@ -28,8 +28,8 @@ namespace glimg
 	**/
 	enum PixelDataType
 	{
-		DT_NORM_UNSIGNED_INTEGER,			///<Image data are unsigned integers that is mapped to floats on the range [0, 1].
-		DT_NORM_SIGNED_INTEGER,				///<Image data are signed integers that is mapped to floats on the range [-1, 1].
+		DT_NORM_UNSIGNED_INTEGER,			///<Image data are unsigned integers that are mapped to floats on the range [0, 1].
+		DT_NORM_SIGNED_INTEGER,				///<Image data are signed integers that are mapped to floats on the range [-1, 1].
 		DT_UNSIGNED_INTEGRAL,				///<Image data are unsigned integers.
 		DT_SIGNED_INTEGRAL,					///<Image data are signed integers.
 		DT_FLOAT,							///<Image data are individual floating-point numbers.
@@ -146,9 +146,15 @@ namespace glimg
 	};
 
 	/**
-	\brief Stores the enums and data that describes the format of an image.
+	\brief Represents a potentially valid image format.
+
+	This struct stores the component information and other data that defines an image format.
+	Not all combinations are valid image formats; there are functions to test validity.
+	All of the APIs explicitly use ImageFormat instead of this type; that class's constructors
+	will thrown an InvalidFormatException if the combination of values is not valid. So you are
+	strongly encouraged to use that class directly.
 	**/
-	struct ImageFormat
+	struct UncheckedImageFormat
 	{
 		PixelDataType eType;		///<The type of pixel data.
 		PixelComponents eFormat;	///<The components stored by a pixel.
@@ -173,13 +179,9 @@ namespace glimg
 
 		///As ValidateFormatText, only returns true if valid and false otherwise.
 		bool ValidateFormat() const;
-
-		PixelDataType		Type() const	{return eType;}
-		PixelComponents		Format() const	{return eFormat;}
-		ComponentOrder		Order() const	{return eOrder;}
-		Bitdepth			Depth() const	{return eBitdepth;}
 	};
 
+	///Thrown if an invalid format is used by any API. Usually contains an explanation of the problem.
 	class InvalidFormatException : public std::exception
 	{
 	public:
@@ -201,28 +203,55 @@ namespace glimg
 		std::string message;
 	};
 
-	class ValidFormat
+	/**
+	\brief An immutable combination of image format parameters.
+
+	The image format object will throw if the given format parameters are impossible or inconsistent.
+	The \ref page_glimg_format_validation "rules for format validation are available."
+	
+	These objects are immutable once created.
+	**/
+	class ImageFormat
 	{
 	public:
-		ValidFormat(PixelDataType _eType,
+		/**
+		\brief Constructs an image format from individual image data.
+		
+		\throws InvalidFormatException If the combinations of parameters is
+		\ref page_glimg_format_validation "not valid". The exception
+		will have a string explaining the problem.
+		**/
+		ImageFormat(PixelDataType _eType,
 					PixelComponents _eFormat,
 					ComponentOrder _eOrder,
 					Bitdepth _eBitdepth,
 					int _lineAlignment);
 
-		//Allow implicit conversion.
-		ValidFormat(ImageFormat _fmt);
+		/**
+		\brief Implicitly constructs an ImageFormat from an UncheckedImageFormat.
+		
+		\throws InvalidFormatException If \a _fmt does
+		\ref page_glimg_format_validation "not contain valid data". The exception
+		will have a string explaining the problem.
+		**/
+		ImageFormat(UncheckedImageFormat _fmt);
 
-		ImageFormat GetFormat() const {return fmt;}
+		///Retrieves the contents as an UncheckedImageFormat.
+		UncheckedImageFormat GetUncheckedFormat() const {return fmt;}
 
+		/**
+		\name Accessors
+		**/
+		/**@{**/
 		PixelDataType		Type() const		{return fmt.eType;}
 		PixelComponents		Components() const	{return fmt.eFormat;}
 		ComponentOrder		Order() const		{return fmt.eOrder;}
 		Bitdepth			Depth() const		{return fmt.eBitdepth;}
 		int					LineAlign() const	{return fmt.lineAlignment;}
+		/**@}**/
 
 	private:
-		ImageFormat fmt;
+		UncheckedImageFormat fmt;
 	};
 
 

@@ -67,7 +67,7 @@ glimg::ImageSet *glimg::loaders::test::TestImage2D()
 	dims.width = 16;
 	dims.height = 16;
 
-	ImageFormat fmt;
+	UncheckedImageFormat fmt;
 	fmt.eType = DT_NORM_UNSIGNED_INTEGER;
 	fmt.eFormat = FMT_COLOR_RGBA;
 	fmt.eOrder = ORDER_RGBA;

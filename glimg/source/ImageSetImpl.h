@@ -28,7 +28,7 @@ namespace glimg
 		{
 		public:
 			ImageSetImpl(MemoryObject *pObject, Dimensions dimensions,
-				int arrayCount, int mipmapCount, int faceCount, ValidFormat format,
+				int arrayCount, int mipmapCount, int faceCount, ImageFormat format,
 				std::vector<MipmapLevel> &swapThisIn);
 
 			~ImageSetImpl() {delete m_pMemory;}
@@ -40,7 +40,7 @@ namespace glimg
 			int GetMipmapCount() const {return m_mipmapCount;}
 			int GetFaceCount() const {return m_faceCount;}
 
-			ValidFormat GetFormat() const {return m_format;}
+			ImageFormat GetFormat() const {return m_format;}
 
 			const MipmapLevel &GetMipmapLevel(int mipmapIx) const {return m_imageData.at(mipmapIx);}
 
@@ -52,7 +52,7 @@ namespace glimg
 
 		private:
 			Dimensions m_dimensions;
-			ValidFormat m_format;
+			ImageFormat m_format;
 			MemoryObject *m_pMemory;
 			int m_arrayCount;
 			int m_mipmapCount;

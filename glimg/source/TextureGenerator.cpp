@@ -200,7 +200,7 @@ namespace glimg
 			return false;
 		}
 
-		int ComponentCount(const ValidFormat &format, unsigned int forceConvertBits)
+		int ComponentCount(const ImageFormat &format, unsigned int forceConvertBits)
 		{
 			//TODO: Forceconv.
 			PixelComponents twoCompFormats[] = {FMT_COLOR_RG, FMT_DEPTH_X};
@@ -220,7 +220,7 @@ namespace glimg
 			return 1;
 		}
 
-		int PerComponentSize(const ValidFormat &format, unsigned int forceConvertBits)
+		int PerComponentSize(const ImageFormat &format, unsigned int forceConvertBits)
 		{
 			//TODO: Forceconv.
 			switch(format.Depth())
@@ -233,7 +233,7 @@ namespace glimg
 			}
 		}
 
-		bool IsSRGBFormat(const ValidFormat &format, unsigned int forceConvertBits)
+		bool IsSRGBFormat(const ImageFormat &format, unsigned int forceConvertBits)
 		{
 			PixelComponents srgbFormats[] = {FMT_COLOR_RGB_sRGB, FMT_COLOR_RGBX_sRGB, FMT_COLOR_RGBA_sRGB};
 			if(IsOneOfThese<ARRAY_COUNT(srgbFormats)>(format.Components(), srgbFormats))
@@ -261,7 +261,7 @@ namespace glimg
 			return false;
 		}
 
-		bool FormatHasAlpha(const ValidFormat &format, unsigned int forceConvertBits)
+		bool FormatHasAlpha(const ImageFormat &format, unsigned int forceConvertBits)
 		{
 			//TODO: Forceconv. Check for color renderable.
 			PixelComponents alphaFormats[] = {FMT_COLOR_RGBA, FMT_COLOR_RGBA_sRGB};
@@ -288,7 +288,7 @@ namespace glimg
 			return false;
 		}
 
-		PixelDataType GetDataType(const ValidFormat &format, unsigned int forceConvertBits)
+		PixelDataType GetDataType(const ImageFormat &format, unsigned int forceConvertBits)
 		{
 			bool bForceIntegral = (forceConvertBits & FORCE_INTEGRAL_FMT) != 0;
 			bool bForceSigned = (forceConvertBits & FORCE_SIGNED_FMT) != 0;
@@ -383,7 +383,7 @@ namespace glimg
 			return input;
 		}
 
-		unsigned int GetStandardOpenGLFormat( const ValidFormat &format, unsigned int forceConvertBits )
+		unsigned int GetStandardOpenGLFormat( const ImageFormat &format, unsigned int forceConvertBits )
 		{
 			PixelDataType eType = GetDataType(format, forceConvertBits);
 
@@ -654,8 +654,8 @@ namespace glimg
 #define ONE_SNORM_LA(size, suffix) GL_LUMINANCE ## size ## suffix
 #define TWO_SNORM_LA(size, suffix) GL_LUMINANCE ## size ## _ALPHA ## size ## suffix
 
-	unsigned int GetOpenGLType( const ValidFormat &format, OpenGLPixelTransferParams &ret, PixelDataType eType, GLenum g_packedTypes );
-	unsigned int GetInternalFormat( const ValidFormat &format, unsigned int forceConvertBits )
+	unsigned int GetOpenGLType( const ImageFormat &format, OpenGLPixelTransferParams &ret, PixelDataType eType, GLenum g_packedTypes );
+	unsigned int GetInternalFormat( const ImageFormat &format, unsigned int forceConvertBits )
 	{
 		unsigned int internalFormat = GetStandardOpenGLFormat(format, forceConvertBits);
 
@@ -738,7 +738,7 @@ namespace glimg
 			GL_UNSIGNED_INT_5_9_9_9_REV,		//BD_PACKED_32_BIT_5999_REV
 		};
 
-		GLenum GetOpenGLType( const ValidFormat &format, PixelDataType eType, unsigned int forceConvertBits )
+		GLenum GetOpenGLType( const ImageFormat &format, PixelDataType eType, unsigned int forceConvertBits )
 		{
 			switch(format.Depth())
 			{
@@ -839,7 +839,7 @@ namespace glimg
 			GL_RGBA,				GL_RGBA_INTEGER,	//FMT_COLOR_RGBA_sRGB
 		};
 
-		GLenum GetOpenGLFormat(const ValidFormat &format, PixelDataType eType, unsigned int forceConvertBits)
+		GLenum GetOpenGLFormat(const ImageFormat &format, PixelDataType eType, unsigned int forceConvertBits)
 		{
 			if(format.Components() == FMT_DEPTH)
 			{
@@ -899,7 +899,7 @@ namespace glimg
 		}
 	}
 
-	OpenGLPixelTransferParams GetUploadFormatType( const ValidFormat &format, unsigned int forceConvertBits )
+	OpenGLPixelTransferParams GetUploadFormatType( const ImageFormat &format, unsigned int forceConvertBits )
 	{
 		OpenGLPixelTransferParams ret;
 		ret.type = 0xFFFFFFFF;
@@ -933,7 +933,7 @@ namespace glimg
 	/// TEXTURE CREATION
 	namespace
 	{
-		void SetupUploadState(const ValidFormat &format, unsigned int forceConvertBits)
+		void SetupUploadState(const ImageFormat &format, unsigned int forceConvertBits)
 		{
 			glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
 			glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
@@ -952,7 +952,7 @@ namespace glimg
 			glTexParameteri(texTarget, GL_TEXTURE_MAX_LEVEL, numMipmaps - 1);
 
 			//Ensure the texture is texture-complete.
-			const ValidFormat &format = pImage->GetFormat();
+			const ImageFormat &format = pImage->GetFormat();
 			if(IsTypeIntegral(format.Type()))
 			{
 				glTexParameteri(texTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -1173,7 +1173,7 @@ namespace glimg
 
 	void CreateTexture(unsigned int textureName, const ImageSet *pImage, unsigned int forceConvertBits)
 	{
-		const ValidFormat &format = pImage->GetFormat();
+		const ImageFormat &format = pImage->GetFormat();
 		GLuint internalFormat = GetInternalFormat(format, forceConvertBits);
 		OpenGLPixelTransferParams upload = GetUploadFormatType(format, forceConvertBits);
 

@@ -15,7 +15,11 @@ namespace glimg
 {
 	namespace loaders
 	{
-		///Contains the DDS loaders.
+		/**
+		\brief Contains the DDS loader functions and exceptions
+		
+		\ingroup module_glimg_loaders
+		**/
 		namespace dds
 		{
 			///\addtogroup module_glimg_exceptions
