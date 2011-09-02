@@ -3,14 +3,16 @@ Calling dofile on this will generate all of the header and source files needed
 for GLE.
 ]]
 
-require "_LoadLuaSpec";
-require "_MakeExtHeaderFile";
-require "_MakeExtCppHeaderFile";
-require "_MakeMainHeaderFile";
-require "_MakeMainSourceFile";
-require "_MakeCoreHeaderFile";
-require "_MakeCoreSourceFile";
-require "_util";
+require "_LoadLuaSpec"
+require "_MakeExtHeaderFile"
+require "_MakeExtCppHeaderFile"
+require "_MakeMainHeaderFile"
+require "_MakeMainSourceFile"
+require "_MakeCoreHeaderFile"
+require "_MakeCoreSourceFile"
+require "_MakeInclTypeFile"
+require "_MakeInclCoreFile"
+require "_util"
 
 local specFileLoc = GetSpecFilePath();
 
@@ -48,10 +50,47 @@ local glOutputs = {
 };
 
 for i, output in ipairs(glOutputs) do
-	MakeExtHeaderFile(output[1], specData, "GL", "gl",
-		output[2], output[3], glPreceedData);
-	MakeExtCppHeaderFile(output[1], specData, output[2], output[3], glPreceedData);
+--	MakeExtHeaderFile(output[1], specData, "GL", "gl",
+--		output[2], output[3], glPreceedData);
+--	MakeExtCppHeaderFile(output[1], specData, output[2], output[3], glPreceedData);
 end
+
+----------------------------------
+-- Create new-style headers.
+local glTruncPreceedData = {
+	dofile(GetDataFilePath() .. "headerFunc.lua"),
+	footer = {
+		dofile(GetDataFilePath() .. "footerFunc.lua"),
+	},
+}
+
+local removalVersions = { "3.1" }
+local listOfCoreVersions = dofile(GetDataFilePath() .. "listOfCoreVersions.lua");
+local newGlOutputs = {};
+
+for i, coreVersion in ipairs(listOfCoreVersions) do
+	local baseFilename = "_int_gl_" .. coreVersion:gsub("%.", "_");
+	local output = {};
+	output[1] = baseFilename;
+	output[2] = coreVersion;
+	output[3] = nil;
+	newGlOutputs[#newGlOutputs + 1] = output;
+	for i, removalVersion in ipairs(removalVersions) do
+		output = {};
+		output[1] = baseFilename .. "_rem_" .. removalVersion:gsub("%.", "_");
+		output[2] = coreVersion;
+		output[3] = removalVersion;
+		newGlOutputs[#newGlOutputs + 1] = output;
+	end
+end
+
+MakeInclTypeFile("_gl_type", specData, glPreceedData);
+
+for i, output in ipairs(newGlOutputs) do
+	output[#output + 1] = MakeInclCoreFile(output[1], specData, "GL", "gl",
+		output[2], output[3], glTruncPreceedData);
+end
+
 
 
 local function GetVersionProfIterator()

@@ -12899,6 +12899,126 @@ static int gleIntLoadCore_3_0_Version_3_1()
 		__gleGetVertexAttribIuiv = (PFNGLGETVERTEXATTRIBIUIVPROC)gle_CoreStruct.gleVarGetVertexAttribIuiv;
 		if(!__gleGetVertexAttribIuiv) bIsLoaded = 0;
 	}
+	__gleVertexAttribI1i = (PFNGLVERTEXATTRIBI1IPROC)gleIntGetProcAddress("glVertexAttribI1i");
+	if(!TestPointer((const void*)__gleVertexAttribI1i))
+	{
+		__gleVertexAttribI1i = (PFNGLVERTEXATTRIBI1IPROC)gle_CoreStruct.gleVarVertexAttribI1i;
+		if(!__gleVertexAttribI1i) bIsLoaded = 0;
+	}
+	__gleVertexAttribI2i = (PFNGLVERTEXATTRIBI2IPROC)gleIntGetProcAddress("glVertexAttribI2i");
+	if(!TestPointer((const void*)__gleVertexAttribI2i))
+	{
+		__gleVertexAttribI2i = (PFNGLVERTEXATTRIBI2IPROC)gle_CoreStruct.gleVarVertexAttribI2i;
+		if(!__gleVertexAttribI2i) bIsLoaded = 0;
+	}
+	__gleVertexAttribI3i = (PFNGLVERTEXATTRIBI3IPROC)gleIntGetProcAddress("glVertexAttribI3i");
+	if(!TestPointer((const void*)__gleVertexAttribI3i))
+	{
+		__gleVertexAttribI3i = (PFNGLVERTEXATTRIBI3IPROC)gle_CoreStruct.gleVarVertexAttribI3i;
+		if(!__gleVertexAttribI3i) bIsLoaded = 0;
+	}
+	__gleVertexAttribI4i = (PFNGLVERTEXATTRIBI4IPROC)gleIntGetProcAddress("glVertexAttribI4i");
+	if(!TestPointer((const void*)__gleVertexAttribI4i))
+	{
+		__gleVertexAttribI4i = (PFNGLVERTEXATTRIBI4IPROC)gle_CoreStruct.gleVarVertexAttribI4i;
+		if(!__gleVertexAttribI4i) bIsLoaded = 0;
+	}
+	__gleVertexAttribI1ui = (PFNGLVERTEXATTRIBI1UIPROC)gleIntGetProcAddress("glVertexAttribI1ui");
+	if(!TestPointer((const void*)__gleVertexAttribI1ui))
+	{
+		__gleVertexAttribI1ui = (PFNGLVERTEXATTRIBI1UIPROC)gle_CoreStruct.gleVarVertexAttribI1ui;
+		if(!__gleVertexAttribI1ui) bIsLoaded = 0;
+	}
+	__gleVertexAttribI2ui = (PFNGLVERTEXATTRIBI2UIPROC)gleIntGetProcAddress("glVertexAttribI2ui");
+	if(!TestPointer((const void*)__gleVertexAttribI2ui))
+	{
+		__gleVertexAttribI2ui = (PFNGLVERTEXATTRIBI2UIPROC)gle_CoreStruct.gleVarVertexAttribI2ui;
+		if(!__gleVertexAttribI2ui) bIsLoaded = 0;
+	}
+	__gleVertexAttribI3ui = (PFNGLVERTEXATTRIBI3UIPROC)gleIntGetProcAddress("glVertexAttribI3ui");
+	if(!TestPointer((const void*)__gleVertexAttribI3ui))
+	{
+		__gleVertexAttribI3ui = (PFNGLVERTEXATTRIBI3UIPROC)gle_CoreStruct.gleVarVertexAttribI3ui;
+		if(!__gleVertexAttribI3ui) bIsLoaded = 0;
+	}
+	__gleVertexAttribI4ui = (PFNGLVERTEXATTRIBI4UIPROC)gleIntGetProcAddress("glVertexAttribI4ui");
+	if(!TestPointer((const void*)__gleVertexAttribI4ui))
+	{
+		__gleVertexAttribI4ui = (PFNGLVERTEXATTRIBI4UIPROC)gle_CoreStruct.gleVarVertexAttribI4ui;
+		if(!__gleVertexAttribI4ui) bIsLoaded = 0;
+	}
+	__gleVertexAttribI1iv = (PFNGLVERTEXATTRIBI1IVPROC)gleIntGetProcAddress("glVertexAttribI1iv");
+	if(!TestPointer((const void*)__gleVertexAttribI1iv))
+	{
+		__gleVertexAttribI1iv = (PFNGLVERTEXATTRIBI1IVPROC)gle_CoreStruct.gleVarVertexAttribI1iv;
+		if(!__gleVertexAttribI1iv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI2iv = (PFNGLVERTEXATTRIBI2IVPROC)gleIntGetProcAddress("glVertexAttribI2iv");
+	if(!TestPointer((const void*)__gleVertexAttribI2iv))
+	{
+		__gleVertexAttribI2iv = (PFNGLVERTEXATTRIBI2IVPROC)gle_CoreStruct.gleVarVertexAttribI2iv;
+		if(!__gleVertexAttribI2iv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI3iv = (PFNGLVERTEXATTRIBI3IVPROC)gleIntGetProcAddress("glVertexAttribI3iv");
+	if(!TestPointer((const void*)__gleVertexAttribI3iv))
+	{
+		__gleVertexAttribI3iv = (PFNGLVERTEXATTRIBI3IVPROC)gle_CoreStruct.gleVarVertexAttribI3iv;
+		if(!__gleVertexAttribI3iv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI4iv = (PFNGLVERTEXATTRIBI4IVPROC)gleIntGetProcAddress("glVertexAttribI4iv");
+	if(!TestPointer((const void*)__gleVertexAttribI4iv))
+	{
+		__gleVertexAttribI4iv = (PFNGLVERTEXATTRIBI4IVPROC)gle_CoreStruct.gleVarVertexAttribI4iv;
+		if(!__gleVertexAttribI4iv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI1uiv = (PFNGLVERTEXATTRIBI1UIVPROC)gleIntGetProcAddress("glVertexAttribI1uiv");
+	if(!TestPointer((const void*)__gleVertexAttribI1uiv))
+	{
+		__gleVertexAttribI1uiv = (PFNGLVERTEXATTRIBI1UIVPROC)gle_CoreStruct.gleVarVertexAttribI1uiv;
+		if(!__gleVertexAttribI1uiv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI2uiv = (PFNGLVERTEXATTRIBI2UIVPROC)gleIntGetProcAddress("glVertexAttribI2uiv");
+	if(!TestPointer((const void*)__gleVertexAttribI2uiv))
+	{
+		__gleVertexAttribI2uiv = (PFNGLVERTEXATTRIBI2UIVPROC)gle_CoreStruct.gleVarVertexAttribI2uiv;
+		if(!__gleVertexAttribI2uiv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI3uiv = (PFNGLVERTEXATTRIBI3UIVPROC)gleIntGetProcAddress("glVertexAttribI3uiv");
+	if(!TestPointer((const void*)__gleVertexAttribI3uiv))
+	{
+		__gleVertexAttribI3uiv = (PFNGLVERTEXATTRIBI3UIVPROC)gle_CoreStruct.gleVarVertexAttribI3uiv;
+		if(!__gleVertexAttribI3uiv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI4uiv = (PFNGLVERTEXATTRIBI4UIVPROC)gleIntGetProcAddress("glVertexAttribI4uiv");
+	if(!TestPointer((const void*)__gleVertexAttribI4uiv))
+	{
+		__gleVertexAttribI4uiv = (PFNGLVERTEXATTRIBI4UIVPROC)gle_CoreStruct.gleVarVertexAttribI4uiv;
+		if(!__gleVertexAttribI4uiv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI4bv = (PFNGLVERTEXATTRIBI4BVPROC)gleIntGetProcAddress("glVertexAttribI4bv");
+	if(!TestPointer((const void*)__gleVertexAttribI4bv))
+	{
+		__gleVertexAttribI4bv = (PFNGLVERTEXATTRIBI4BVPROC)gle_CoreStruct.gleVarVertexAttribI4bv;
+		if(!__gleVertexAttribI4bv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI4sv = (PFNGLVERTEXATTRIBI4SVPROC)gleIntGetProcAddress("glVertexAttribI4sv");
+	if(!TestPointer((const void*)__gleVertexAttribI4sv))
+	{
+		__gleVertexAttribI4sv = (PFNGLVERTEXATTRIBI4SVPROC)gle_CoreStruct.gleVarVertexAttribI4sv;
+		if(!__gleVertexAttribI4sv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI4ubv = (PFNGLVERTEXATTRIBI4UBVPROC)gleIntGetProcAddress("glVertexAttribI4ubv");
+	if(!TestPointer((const void*)__gleVertexAttribI4ubv))
+	{
+		__gleVertexAttribI4ubv = (PFNGLVERTEXATTRIBI4UBVPROC)gle_CoreStruct.gleVarVertexAttribI4ubv;
+		if(!__gleVertexAttribI4ubv) bIsLoaded = 0;
+	}
+	__gleVertexAttribI4usv = (PFNGLVERTEXATTRIBI4USVPROC)gleIntGetProcAddress("glVertexAttribI4usv");
+	if(!TestPointer((const void*)__gleVertexAttribI4usv))
+	{
+		__gleVertexAttribI4usv = (PFNGLVERTEXATTRIBI4USVPROC)gle_CoreStruct.gleVarVertexAttribI4usv;
+		if(!__gleVertexAttribI4usv) bIsLoaded = 0;
+	}
 	__gleGetUniformuiv = (PFNGLGETUNIFORMUIVPROC)gleIntGetProcAddress("glGetUniformuiv");
 	if(!TestPointer((const void*)__gleGetUniformuiv))
 	{
@@ -15716,126 +15836,6 @@ static int gleIntLoadCore_2_1_Base()
 static int gleIntLoadCore_3_0_Base()
 {
 	int bIsLoaded = gleIntLoadCore_3_0_Version_3_1();
-	__gleVertexAttribI1i = (PFNGLVERTEXATTRIBI1IPROC)gleIntGetProcAddress("glVertexAttribI1i");
-	if(!TestPointer((const void*)__gleVertexAttribI1i))
-	{
-		__gleVertexAttribI1i = (PFNGLVERTEXATTRIBI1IPROC)gle_CoreStruct.gleVarVertexAttribI1i;
-		if(!__gleVertexAttribI1i) bIsLoaded = 0;
-	}
-	__gleVertexAttribI2i = (PFNGLVERTEXATTRIBI2IPROC)gleIntGetProcAddress("glVertexAttribI2i");
-	if(!TestPointer((const void*)__gleVertexAttribI2i))
-	{
-		__gleVertexAttribI2i = (PFNGLVERTEXATTRIBI2IPROC)gle_CoreStruct.gleVarVertexAttribI2i;
-		if(!__gleVertexAttribI2i) bIsLoaded = 0;
-	}
-	__gleVertexAttribI3i = (PFNGLVERTEXATTRIBI3IPROC)gleIntGetProcAddress("glVertexAttribI3i");
-	if(!TestPointer((const void*)__gleVertexAttribI3i))
-	{
-		__gleVertexAttribI3i = (PFNGLVERTEXATTRIBI3IPROC)gle_CoreStruct.gleVarVertexAttribI3i;
-		if(!__gleVertexAttribI3i) bIsLoaded = 0;
-	}
-	__gleVertexAttribI4i = (PFNGLVERTEXATTRIBI4IPROC)gleIntGetProcAddress("glVertexAttribI4i");
-	if(!TestPointer((const void*)__gleVertexAttribI4i))
-	{
-		__gleVertexAttribI4i = (PFNGLVERTEXATTRIBI4IPROC)gle_CoreStruct.gleVarVertexAttribI4i;
-		if(!__gleVertexAttribI4i) bIsLoaded = 0;
-	}
-	__gleVertexAttribI1ui = (PFNGLVERTEXATTRIBI1UIPROC)gleIntGetProcAddress("glVertexAttribI1ui");
-	if(!TestPointer((const void*)__gleVertexAttribI1ui))
-	{
-		__gleVertexAttribI1ui = (PFNGLVERTEXATTRIBI1UIPROC)gle_CoreStruct.gleVarVertexAttribI1ui;
-		if(!__gleVertexAttribI1ui) bIsLoaded = 0;
-	}
-	__gleVertexAttribI2ui = (PFNGLVERTEXATTRIBI2UIPROC)gleIntGetProcAddress("glVertexAttribI2ui");
-	if(!TestPointer((const void*)__gleVertexAttribI2ui))
-	{
-		__gleVertexAttribI2ui = (PFNGLVERTEXATTRIBI2UIPROC)gle_CoreStruct.gleVarVertexAttribI2ui;
-		if(!__gleVertexAttribI2ui) bIsLoaded = 0;
-	}
-	__gleVertexAttribI3ui = (PFNGLVERTEXATTRIBI3UIPROC)gleIntGetProcAddress("glVertexAttribI3ui");
-	if(!TestPointer((const void*)__gleVertexAttribI3ui))
-	{
-		__gleVertexAttribI3ui = (PFNGLVERTEXATTRIBI3UIPROC)gle_CoreStruct.gleVarVertexAttribI3ui;
-		if(!__gleVertexAttribI3ui) bIsLoaded = 0;
-	}
-	__gleVertexAttribI4ui = (PFNGLVERTEXATTRIBI4UIPROC)gleIntGetProcAddress("glVertexAttribI4ui");
-	if(!TestPointer((const void*)__gleVertexAttribI4ui))
-	{
-		__gleVertexAttribI4ui = (PFNGLVERTEXATTRIBI4UIPROC)gle_CoreStruct.gleVarVertexAttribI4ui;
-		if(!__gleVertexAttribI4ui) bIsLoaded = 0;
-	}
-	__gleVertexAttribI1iv = (PFNGLVERTEXATTRIBI1IVPROC)gleIntGetProcAddress("glVertexAttribI1iv");
-	if(!TestPointer((const void*)__gleVertexAttribI1iv))
-	{
-		__gleVertexAttribI1iv = (PFNGLVERTEXATTRIBI1IVPROC)gle_CoreStruct.gleVarVertexAttribI1iv;
-		if(!__gleVertexAttribI1iv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI2iv = (PFNGLVERTEXATTRIBI2IVPROC)gleIntGetProcAddress("glVertexAttribI2iv");
-	if(!TestPointer((const void*)__gleVertexAttribI2iv))
-	{
-		__gleVertexAttribI2iv = (PFNGLVERTEXATTRIBI2IVPROC)gle_CoreStruct.gleVarVertexAttribI2iv;
-		if(!__gleVertexAttribI2iv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI3iv = (PFNGLVERTEXATTRIBI3IVPROC)gleIntGetProcAddress("glVertexAttribI3iv");
-	if(!TestPointer((const void*)__gleVertexAttribI3iv))
-	{
-		__gleVertexAttribI3iv = (PFNGLVERTEXATTRIBI3IVPROC)gle_CoreStruct.gleVarVertexAttribI3iv;
-		if(!__gleVertexAttribI3iv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI4iv = (PFNGLVERTEXATTRIBI4IVPROC)gleIntGetProcAddress("glVertexAttribI4iv");
-	if(!TestPointer((const void*)__gleVertexAttribI4iv))
-	{
-		__gleVertexAttribI4iv = (PFNGLVERTEXATTRIBI4IVPROC)gle_CoreStruct.gleVarVertexAttribI4iv;
-		if(!__gleVertexAttribI4iv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI1uiv = (PFNGLVERTEXATTRIBI1UIVPROC)gleIntGetProcAddress("glVertexAttribI1uiv");
-	if(!TestPointer((const void*)__gleVertexAttribI1uiv))
-	{
-		__gleVertexAttribI1uiv = (PFNGLVERTEXATTRIBI1UIVPROC)gle_CoreStruct.gleVarVertexAttribI1uiv;
-		if(!__gleVertexAttribI1uiv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI2uiv = (PFNGLVERTEXATTRIBI2UIVPROC)gleIntGetProcAddress("glVertexAttribI2uiv");
-	if(!TestPointer((const void*)__gleVertexAttribI2uiv))
-	{
-		__gleVertexAttribI2uiv = (PFNGLVERTEXATTRIBI2UIVPROC)gle_CoreStruct.gleVarVertexAttribI2uiv;
-		if(!__gleVertexAttribI2uiv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI3uiv = (PFNGLVERTEXATTRIBI3UIVPROC)gleIntGetProcAddress("glVertexAttribI3uiv");
-	if(!TestPointer((const void*)__gleVertexAttribI3uiv))
-	{
-		__gleVertexAttribI3uiv = (PFNGLVERTEXATTRIBI3UIVPROC)gle_CoreStruct.gleVarVertexAttribI3uiv;
-		if(!__gleVertexAttribI3uiv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI4uiv = (PFNGLVERTEXATTRIBI4UIVPROC)gleIntGetProcAddress("glVertexAttribI4uiv");
-	if(!TestPointer((const void*)__gleVertexAttribI4uiv))
-	{
-		__gleVertexAttribI4uiv = (PFNGLVERTEXATTRIBI4UIVPROC)gle_CoreStruct.gleVarVertexAttribI4uiv;
-		if(!__gleVertexAttribI4uiv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI4bv = (PFNGLVERTEXATTRIBI4BVPROC)gleIntGetProcAddress("glVertexAttribI4bv");
-	if(!TestPointer((const void*)__gleVertexAttribI4bv))
-	{
-		__gleVertexAttribI4bv = (PFNGLVERTEXATTRIBI4BVPROC)gle_CoreStruct.gleVarVertexAttribI4bv;
-		if(!__gleVertexAttribI4bv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI4sv = (PFNGLVERTEXATTRIBI4SVPROC)gleIntGetProcAddress("glVertexAttribI4sv");
-	if(!TestPointer((const void*)__gleVertexAttribI4sv))
-	{
-		__gleVertexAttribI4sv = (PFNGLVERTEXATTRIBI4SVPROC)gle_CoreStruct.gleVarVertexAttribI4sv;
-		if(!__gleVertexAttribI4sv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI4ubv = (PFNGLVERTEXATTRIBI4UBVPROC)gleIntGetProcAddress("glVertexAttribI4ubv");
-	if(!TestPointer((const void*)__gleVertexAttribI4ubv))
-	{
-		__gleVertexAttribI4ubv = (PFNGLVERTEXATTRIBI4UBVPROC)gle_CoreStruct.gleVarVertexAttribI4ubv;
-		if(!__gleVertexAttribI4ubv) bIsLoaded = 0;
-	}
-	__gleVertexAttribI4usv = (PFNGLVERTEXATTRIBI4USVPROC)gleIntGetProcAddress("glVertexAttribI4usv");
-	if(!TestPointer((const void*)__gleVertexAttribI4usv))
-	{
-		__gleVertexAttribI4usv = (PFNGLVERTEXATTRIBI4USVPROC)gle_CoreStruct.gleVarVertexAttribI4usv;
-		if(!__gleVertexAttribI4usv) bIsLoaded = 0;
-	}
 	return bIsLoaded;
 }
 

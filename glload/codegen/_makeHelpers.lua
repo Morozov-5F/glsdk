@@ -92,8 +92,8 @@ function Make.GetFuncDef(func, funcPrefix, typemap)
 		funcTypedefName, strParamList);
 end
 
-function Make.GetCoreFuncPtrDecl(func, funcPrefix, typemap)
-	local strDefFormat = "extern %s (GLE_FUNCPTR *%s)(%s);";
+function Make.GetCoreFuncPtrDef(func, funcPrefix, typemap)
+	local strDefFormat = "%s (GLE_FUNCPTR *%s)(%s);";
 
 	local funcTypedefName = Make.GetCoreFuncPtrNameStr(func, funcPrefix);
 	local strParamList = Make.GetParameterListStr(func, typemap);
@@ -102,14 +102,22 @@ function Make.GetCoreFuncPtrDecl(func, funcPrefix, typemap)
 		funcTypedefName, strParamList);
 end
 
-function Make.GetFuncPtrDecl(func, funcPrefix, typemap)
-	local strDefFormat = "extern %s (GLE_FUNCPTR *%s)(%s);";
+function Make.GetFuncPtrDef(func, funcPrefix, typemap)
+	local strDefFormat = "%s (GLE_FUNCPTR *%s)(%s);";
 
 	local funcTypedefName = Make.GetFuncPtrNameStr(func, funcPrefix);
 	local strParamList = Make.GetParameterListStr(func, typemap);
 	
 	return string.format(strDefFormat, typemap[func["return"]] or func["return"],
 		funcTypedefName, strParamList);
+end
+
+function Make.GetCoreFuncPtrDecl(func, funcPrefix, typemap)
+	return "extern " .. Make.GetCoreFuncPtrDef(func, funcPrefix, typemap);
+end
+
+function Make.GetFuncPtrDecl(func, funcPrefix, typemap)
+	return "extern " .. Make.GetFuncPtrDef(func, funcPrefix, typemap);
 end
 
 function Make.GetFuncDefCpp(func, funcPrefix, typemap, isCore)
@@ -207,8 +215,13 @@ function Make.GetEnumeratorCpp(enum, enumTable, enumPrefix)
 		spacing = string.rep(" ", numSpaces);
 	end
 	
-	local enumName = enumPrefix or "";
-	enumName = enumName .. enum.name;
+	if(enumPrefix ~= nil) then
+		enumPrefix = enumPrefix .. "_"
+	else
+		enumPrefix = ""
+	end
+	
+	local enumName = enumPrefix .. enum.name;
 	
 	if(copiedFrom) then
 		return string.format("%s%s= %s, /* %s */",

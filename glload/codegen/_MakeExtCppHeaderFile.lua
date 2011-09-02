@@ -77,7 +77,7 @@ local function WriteCoreEnums(hFile, core, specData, version, targetVersion,
 		if(writtenEnum[enum.name]) then
 			bShouldWrite = false;
 			hFile:write("\t\t//", 
-				Make.GetEnumeratorCpp(enum, specData.enumtable, "GL_"),
+				Make.GetEnumeratorCpp(enum, specData.enumtable, "GL"),
 				" From: ",
 				writtenEnum[enum.name],
 				"\n");
@@ -86,7 +86,7 @@ local function WriteCoreEnums(hFile, core, specData, version, targetVersion,
 		
 		if(bShouldWrite) then
 			hFile:write("\t\t",
-				Make.GetEnumeratorCpp(enum, specData.enumtable, "GL_"),
+				Make.GetEnumeratorCpp(enum, specData.enumtable, "GL"),
 				"\n");
 			writtenEnum[enum.name] = version;
 			bDidWrite = true;
@@ -106,13 +106,13 @@ local function WriteExtEnums(hFile, ext, extName, specData, writtenEnum)
 		--Was previously written
 		if(writtenEnum[enum.name]) then
 			hFile:write("\t\t//",
-				Make.GetEnumeratorCpp(enum, specData.enumtable, "GL_"),
+				Make.GetEnumeratorCpp(enum, specData.enumtable, "GL"),
 				" From: ",
 				writtenEnum[enum.name],
 				"\n");
 		else
 			hFile:write("\t\t",
-				Make.GetEnumeratorCpp(enum, specData.enumtable, "GL_"),
+				Make.GetEnumeratorCpp(enum, specData.enumtable, "GL"),
 				"\n");
 			writtenEnum[enum.name] = extName;
 		end
