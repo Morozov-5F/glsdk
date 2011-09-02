@@ -7219,7 +7219,6 @@ VertexAttribI1i(index, x)
 	param		x		Int32 in value
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	vectorequiv	VertexAttribI1iv
 	glxvectorequiv	VertexAttribI1iv
@@ -7234,7 +7233,6 @@ VertexAttribI2i(index, x, y)
 	param		y		Int32 in value
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	vectorequiv	VertexAttribI2iv
 	glxvectorequiv	VertexAttribI2iv
@@ -7250,7 +7248,6 @@ VertexAttribI3i(index, x, y, z)
 	param		z		Int32 in value
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	vectorequiv	VertexAttribI3iv
 	glxvectorequiv	VertexAttribI3iv
@@ -7267,7 +7264,6 @@ VertexAttribI4i(index, x, y, z, w)
 	param		w		Int32 in value
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	vectorequiv	VertexAttribI4iv
 	glxvectorequiv	VertexAttribI4iv
@@ -7281,7 +7277,6 @@ VertexAttribI1ui(index, x)
 	param		x		UInt32 in value
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	vectorequiv	VertexAttribI1uiv
 	glxvectorequiv	VertexAttribI1uiv
@@ -7296,7 +7291,6 @@ VertexAttribI2ui(index, x, y)
 	param		y		UInt32 in value
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	vectorequiv	VertexAttribI2uiv
 	glxvectorequiv	VertexAttribI2uiv
@@ -7312,7 +7306,6 @@ VertexAttribI3ui(index, x, y, z)
 	param		z		UInt32 in value
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	vectorequiv	VertexAttribI3uiv
 	glxvectorequiv	VertexAttribI3uiv
@@ -7329,7 +7322,6 @@ VertexAttribI4ui(index, x, y, z, w)
 	param		w		UInt32 in value
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	vectorequiv	VertexAttribI4uiv
 	glxvectorequiv	VertexAttribI4uiv
@@ -7343,7 +7335,6 @@ VertexAttribI1iv(index, v)
 	param		v		Int32 in array [1]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7355,7 +7346,6 @@ VertexAttribI2iv(index, v)
 	param		v		Int32 in array [2]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7367,7 +7357,6 @@ VertexAttribI3iv(index, v)
 	param		v		Int32 in array [3]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7379,7 +7368,6 @@ VertexAttribI4iv(index, v)
 	param		v		Int32 in array [4]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7391,7 +7379,6 @@ VertexAttribI1uiv(index, v)
 	param		v		UInt32 in array [1]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7403,7 +7390,6 @@ VertexAttribI2uiv(index, v)
 	param		v		UInt32 in array [2]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7415,7 +7401,6 @@ VertexAttribI3uiv(index, v)
 	param		v		UInt32 in array [3]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7427,7 +7412,6 @@ VertexAttribI4uiv(index, v)
 	param		v		UInt32 in array [4]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7439,7 +7423,6 @@ VertexAttribI4bv(index, v)
 	param		v		Int8 in array [4]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7451,7 +7434,6 @@ VertexAttribI4sv(index, v)
 	param		v		Int16 in array [4]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7463,7 +7445,6 @@ VertexAttribI4ubv(index, v)
 	param		v		UInt8 in array [4]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore
@@ -7475,7 +7456,6 @@ VertexAttribI4usv(index, v)
 	param		v		UInt16 in array [4]
 	category	VERSION_3_0
 	version		3.0
-	deprecated	3.1
 	beginend	allow-inside
 	extension
 	glfflags	ignore

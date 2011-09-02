@@ -18033,7 +18033,6 @@ return {
 			{
 				["vectorequiv"] = [==[VertexAttribI1iv]==],
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[x]==],
 				["version"] = [==[3.0]==],
@@ -18060,7 +18059,6 @@ return {
 			{
 				["vectorequiv"] = [==[VertexAttribI2iv]==],
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[y]==],
 				["version"] = [==[3.0]==],
@@ -18093,7 +18091,6 @@ return {
 			{
 				["vectorequiv"] = [==[VertexAttribI3iv]==],
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[z]==],
 				["version"] = [==[3.0]==],
@@ -18132,7 +18129,6 @@ return {
 			{
 				["vectorequiv"] = [==[VertexAttribI4iv]==],
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[w]==],
 				["version"] = [==[3.0]==],
@@ -18177,7 +18173,6 @@ return {
 			{
 				["vectorequiv"] = [==[VertexAttribI1uiv]==],
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[x]==],
 				["version"] = [==[3.0]==],
@@ -18204,7 +18199,6 @@ return {
 			{
 				["vectorequiv"] = [==[VertexAttribI2uiv]==],
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[y]==],
 				["version"] = [==[3.0]==],
@@ -18237,7 +18231,6 @@ return {
 			{
 				["vectorequiv"] = [==[VertexAttribI3uiv]==],
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[z]==],
 				["version"] = [==[3.0]==],
@@ -18276,7 +18269,6 @@ return {
 			{
 				["vectorequiv"] = [==[VertexAttribI4uiv]==],
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[w]==],
 				["version"] = [==[3.0]==],
@@ -18320,7 +18312,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI1iv]==],
@@ -18346,7 +18337,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI2iv]==],
@@ -18372,7 +18362,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI3iv]==],
@@ -18398,7 +18387,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI4iv]==],
@@ -18424,7 +18412,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI1uiv]==],
@@ -18450,7 +18437,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI2uiv]==],
@@ -18476,7 +18462,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI3uiv]==],
@@ -18502,7 +18487,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI4uiv]==],
@@ -18528,7 +18512,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI4bv]==],
@@ -18554,7 +18537,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI4sv]==],
@@ -18580,7 +18562,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI4ubv]==],
@@ -18606,7 +18587,6 @@ return {
 			},
 			{
 				["return"] = [==[void]==],
-				["deprecated"] = [==[3.1]==],
 				["glfflags"] = [==[ignore]==],
 				["param"] = [==[v]==],
 				["name"] = [==[VertexAttribI4usv]==],
