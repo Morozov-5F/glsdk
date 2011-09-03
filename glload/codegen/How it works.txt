@@ -185,20 +185,18 @@ The "gleLoadFunctions" will return GL_FALSE if the loading failed.
 
 == Adding new spec files ==
 
-Adding spec files uses the following procedure.
+Adding spec files uses the following procedure. The gl-xml-spec project is where the specification and conversion utilities are maintained. Once the gl-xml-spec project has generated new .lua spec files:
 
 # Update the repo to the "latest-spec" tag. Change to the "glspec" branch.
 # Drop the new spec files in the glload/codegen/glspecs directory.
-# Commit these into the "glspec" branch.
+# Commit these into the "glspec" branch. Include the changelist of the data from gl-xml-spec.
 # Update the "latest-spec" tag to point to this newest commit.
-# Merge with the head of the "glspec" branch. This may involve conflicts, if spec bugs have been fixed.
 # Merge the "glspec" head with the "default" branch.
-# In the glload/codegen directory, run 'lua ConvertAllSpecFilesToLua.lua'
 # In the glload/codegen directory, run 'lua MakeAllFiles.lua'
-# Verify that everything works.
+# Verify that the tests and examples work.
 # Check this into the "default" branch.
 
-Any .spec file bugs that we need to fix should be checked into the "glspec" branch.
+Any .spec file bugs that we need to fix should be fixed in gl-xml-spec project. That is where the .spec files are maintained.
 
 If the spec files include a new OpenGL version, do the following steps ''before'' running the code generation process.
 
