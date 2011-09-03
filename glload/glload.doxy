@@ -18,7 +18,7 @@ All header files except <tt>glload/gll.h</tt> and <tt>glload/gll.hpp</tt> expose
 Regardless of version number or core/compatibility issues, all OpenGL headers contain
 function for every extension.
 
-The headers <tt>glload/gl_all.h</tt> and <tt>glload/gl_all.hpp</tt> contain every function and enum definition for everything that has ever been in OpenGL, core or compatibility.
+The headers <tt>glload/gl_all.h</tt> and <tt>glload/gl_all.hpp</tt> contain every function and enum definition for everything that has ever been in OpenGL, core or compatibility. The headers <tt>glload/gl_core.h</tt> and <tt>glload/gl_core.hpp</tt> contain all core functions and enums for the most recent version of OpenGL, as well as those for extensions. These will be updated as OpenGL is updated.
 
 You should @em never use <tt>GL/gl.h</tt> in conjunction with these headers. Nor should it be used in conjunction with @em any other OpenGL headers (<tt>gl3.h</tt>, <tt>gl_ext.h</tt>, etc). Also, for each source file, you should pick @em one OpenGL header and include that. You may include different versions in different source files, but each source file should only include one of the headers.
 
@@ -52,7 +52,7 @@ Integer variables are provided to query whether an extension is available. These
 glext_<em>extension_name</em>
 </code>
 
-For WGL/GLX, this becomes wglext/glxext_*. If the variable's value is 0, then the extension is not present. If it is non-zero, then it is present.
+For example, if you wish to check to see if the GL_ARB_vertex_array_object extension is defined, you would test <tt>glext_ARB_vertex_array_object</tt> after initializing GLload. If it is non-zero, then the extension is present. If it is 0, then it is not. This works the same between C and C++. For WGL/GLX extensions, this becomes wglext/glxext_*.
 
 These variables only gain valid values @em after GLload has been properly initialized.
 
@@ -60,7 +60,7 @@ These variables only gain valid values @em after GLload has been properly initia
 
 As previously stated, there are two interfaces: C and C++. The C interface looks identical to the OpenGL definitions. All of the functions and enums are at global scope, as are all of the various internal declarations that are needed to make GLload work.
 
-The C interface defines function pointers as extern variables prefixed by __glext.
+The C interface defines function pointers as extern variables prefixed by <tt>__glext</tt> or <tt>glext</tt>.
 
 C++ programs may freely use the C interface; this makes them more compatible with source code you would find online. However, they may use the C++ interface as well. This pushes as much of OpenGL as possible into the <tt>gl</tt> namespace. All OpenGL enumerators are actual members of an enumeration in the <tt>gl</tt> namespace. All of the OpenGL functions are in the <tt>gl</tt> namespace.
 

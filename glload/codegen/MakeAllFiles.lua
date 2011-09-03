@@ -5,13 +5,14 @@ for GLE.
 
 require "_LoadLuaSpec"
 require "_MakeExtHeaderFile"
-require "_MakeExtCppHeaderFile"
 require "_MakeMainHeaderFile"
 require "_MakeMainSourceFile"
 require "_MakeCoreHeaderFile"
 require "_MakeCoreSourceFile"
 require "_MakeInclTypeFile"
 require "_MakeInclCoreFile"
+require "_MakeInclExtFile"
+require "_MakeInclVersionFile"
 require "_util"
 
 local specFileLoc = GetSpecFilePath();
@@ -49,14 +50,6 @@ local glOutputs = {
 	{"gl_4_2_comp", "4.2", false},
 };
 
-for i, output in ipairs(glOutputs) do
---	MakeExtHeaderFile(output[1], specData, "GL", "gl",
---		output[2], output[3], glPreceedData);
---	MakeExtCppHeaderFile(output[1], specData, output[2], output[3], glPreceedData);
-end
-
-----------------------------------
--- Create new-style headers.
 local glTruncPreceedData = {
 	dofile(GetDataFilePath() .. "headerFunc.lua"),
 	footer = {
@@ -68,27 +61,82 @@ local removalVersions = { "3.1" }
 local listOfCoreVersions = dofile(GetDataFilePath() .. "listOfCoreVersions.lua");
 local newGlOutputs = {};
 
+local function GetCoreInclBasename(coreVersion, removalVersion)
+	local baseName = "_int_gl_" .. coreVersion:gsub("%.", "_");
+	if(removalVersion) then
+		baseName = baseName .. "_rem_" .. removalVersion:gsub("%.", "_");
+	end
+	return baseName;
+end
+
 for i, coreVersion in ipairs(listOfCoreVersions) do
-	local baseFilename = "_int_gl_" .. coreVersion:gsub("%.", "_");
+	local baseFilename = GetCoreInclBasename(coreVersion);
 	local output = {};
 	output[1] = baseFilename;
 	output[2] = coreVersion;
 	output[3] = nil;
-	newGlOutputs[#newGlOutputs + 1] = output;
+	newGlOutputs[baseFilename] = output;
 	for i, removalVersion in ipairs(removalVersions) do
 		output = {};
-		output[1] = baseFilename .. "_rem_" .. removalVersion:gsub("%.", "_");
+		local newFilename = GetCoreInclBasename(coreVersion, removalVersion);
+		output[1] = newFilename;
 		output[2] = coreVersion;
 		output[3] = removalVersion;
-		newGlOutputs[#newGlOutputs + 1] = output;
+		newGlOutputs[newFilename] = output;
 	end
 end
 
-MakeInclTypeFile("_gl_type", specData, glPreceedData);
+local typeHeaderName = "_int_gl_type";
+local extHeaderName = "_int_gl_exts";
 
-for i, output in ipairs(newGlOutputs) do
-	output[#output + 1] = MakeInclCoreFile(output[1], specData, "GL", "gl",
+MakeInclTypeFile(typeHeaderName, specData, glPreceedData);
+
+for baseFilename, output in pairs(newGlOutputs) do
+	output[4] = MakeInclCoreFile(output[1], specData, "GL", "gl",
 		output[2], output[3], glTruncPreceedData);
+end
+
+MakeInclExtFile(extHeaderName, specData, "GL", "gl", glTruncPreceedData);
+
+----------------------------------
+-- Write include files for the new headers.
+for i, output in ipairs(glOutputs) do
+	local outVersion = output[2];
+	local numOutVersion = tonumber(outVersion);
+	local includeList = {typeHeaderName, extHeaderName};
+	
+	for i, version in ipairs(listOfCoreVersions) do
+		local numVersion = tonumber(version);
+		if(numVersion > numOutVersion) then
+			break;
+		end
+		
+		local coreName = GetCoreInclBasename(version);
+		if(newGlOutputs[coreName][4]) then
+			includeList[#includeList + 1] = coreName;
+		end
+		
+		if(not output[3]) then
+			for i, removalVersion in ipairs(removalVersions) do
+				local baseName = GetCoreInclBasename(version, removalVersion)
+				if(newGlOutputs[baseName][4]) then
+					includeList[#includeList + 1] = baseName;
+				end
+			end
+		else
+			for i, removalVersion in ipairs(removalVersions) do
+				if(tonumber(removalVersion) > numOutVersion) then
+					--Has been removed from core, but not this version.
+					local baseName = GetCoreInclBasename(version, removalVersion)
+					if(newGlOutputs[baseName][4]) then
+						includeList[#includeList + 1] = baseName;
+					end
+				end
+			end
+		end
+	end
+
+	MakeInclVersionFile(output[1], includeList);
 end
 
 

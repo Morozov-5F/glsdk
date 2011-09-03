@@ -1,4 +1,8 @@
---[[The function, MakeInclCoreFile, will create a C header file containing the enums and function pointers for a given core version. But not the core extensions. It will also make a C++ header containing the same things, C++-style.
+--[[The function, MakeInclCoreFile, will create a C and C++ header file containing the enums and function pointers for a given core version. It will only put those definitions which were added to that particular core version. So definitions that were added to OpenGL in past versions are not included. Core extensions are also not included.
+
+If it is given a removal version, then it will only output the enums and functions that were both a part of the given core version *and* removed in the given removal version. If no removal version is given, then it will only output the definitions that are still core in the most recent OpenGL version.
+
+If the function returns false, then there are no enums and functions for the given core and removal versions. Otherwise, it will return true.
 
 It takes these parameters:
 - the name of the output file. Without the path.
@@ -91,8 +95,8 @@ local function WriteFileC(outFilename, enumList, funcList, specData, enumPrefix,
 		return false;
 	end
 	
+	--Write the basic starting data.
 	local defineName = string.upper(outFilename) .. "_H";
-	
 	hFile:write(GetFileIncludeGuardStart(defineName));
 	hFile:write("\n");
 	
@@ -131,6 +135,7 @@ local function WriteFileC(outFilename, enumList, funcList, specData, enumPrefix,
 	
 	hFile:write("\n\n");
 	
+	--End the file.
 	hFile:write(GetExternCEnd());
 	hFile:write("\n");
 	
@@ -155,8 +160,8 @@ local function WriteFileCpp(outFilename, enumList, funcList, specData,
 		return false;
 	end
 	
+	--Write the basic starting data.
 	local defineName = string.upper(outFilename) .. "_HPP";
-	
 	hFile:write(GetFileIncludeGuardStart(defineName));
 	hFile:write("\n");
 	
@@ -199,7 +204,7 @@ local function WriteFileCpp(outFilename, enumList, funcList, specData,
 
 	hFile:write("\n}\n\n");
 	
-	
+	--End the file.
 	if(preceedData and preceedData.footer) then
 		for i, footer in ipairs(preceedData.footer) do
 			hFile:write(footer);

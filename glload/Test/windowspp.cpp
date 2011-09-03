@@ -8,7 +8,7 @@
 
 #include <windows.h>		// Header File For Windows
 #include <tchar.h>
-#include "glload\gl_2_1.hpp"
+#include "glload\gl_3_3_comp.hpp"
 #include "glload\wgl_exts.h"
 #include <gl\glu.h>			// Header File For The GLu32 Library
 #include "glload\gll.hpp"
