@@ -187,23 +187,23 @@ The "gleLoadFunctions" will return GL_FALSE if the loading failed.
 
 Adding spec files uses the following procedure.
 
-## Update the repo to the "latest-spec" tag. Change to the "glspec" branch.
-## Drop the new spec files in the glload/codegen/glspecs directory.
-## Commit these into the "glspec" branch.
-## Update the "latest-spec" tag to point to this newest commit.
-## Merge with the head of the "glspec" branch. This may involve conflicts, if spec bugs have been fixed.
-## Merge the "glspec" head with the "default" branch.
-## In the glload/codegen directory, run 'lua ConvertAllSpecFilesToLua.lua'
-## In the glload/codegen directory, run 'lua MakeAllFiles.lua'
-## Verify that everything works.
-## Check this into the "default" branch.
+# Update the repo to the "latest-spec" tag. Change to the "glspec" branch.
+# Drop the new spec files in the glload/codegen/glspecs directory.
+# Commit these into the "glspec" branch.
+# Update the "latest-spec" tag to point to this newest commit.
+# Merge with the head of the "glspec" branch. This may involve conflicts, if spec bugs have been fixed.
+# Merge the "glspec" head with the "default" branch.
+# In the glload/codegen directory, run 'lua ConvertAllSpecFilesToLua.lua'
+# In the glload/codegen directory, run 'lua MakeAllFiles.lua'
+# Verify that everything works.
+# Check this into the "default" branch.
 
 Any .spec file bugs that we need to fix should be checked into the "glspec" branch.
 
 If the spec files include a new OpenGL version, do the following steps ''before'' running the code generation process.
 
-## In codegen/MakeAllFiles.lua, add lines to the `glOutputs` function to handle the new OpenGL version.
-## In codegen/data/coreExtList.lua, add a new table to contain the core ARB extensions for the new version. Then add an entry into the `masterTable` table to reference it. Make sure to take the `GL_` prefixes out.
-## In codegen/data/listOfCoreVersions.lua, add a new core version.
-## If the new version removed (not just deprecated) functionality:
-### In codegen/MakeAllFiles, add the version to the list `removalVersions`.
+# In codegen/MakeAllFiles.lua, add lines to the `glOutputs` function to handle the new OpenGL version.
+# In codegen/data/coreExtList.lua, add a new table to contain the core ARB extensions for the new version. Then add an entry into the `masterTable` table to reference it. Make sure to take the `GL_` prefixes out.
+# In codegen/data/listOfCoreVersions.lua, add a new core version.
+# If the new version removed (not just deprecated) functionality:
+## In codegen/MakeAllFiles, add the version to the list `removalVersions`.
