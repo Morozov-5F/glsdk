@@ -319,6 +319,13 @@ namespace glimg
 				if(bForceSigned)
 					return DT_SIGNED_INTEGRAL;
 				break;
+			case DT_COMPRESSED_UNSIGNED_BC4:
+				if(bForceSigned)
+					return DT_COMPRESSED_SIGNED_BC4;
+			case DT_COMPRESSED_UNSIGNED_BC5:
+				if(bForceSigned)
+					return DT_COMPRESSED_SIGNED_BC5;
+				break;
 			}
 
 			return format.Type();

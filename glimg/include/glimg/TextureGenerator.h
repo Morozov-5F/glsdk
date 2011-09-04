@@ -35,8 +35,8 @@ namespace glimg
 
 //Not supported yet.
 //		FORCE_REQUIRED_FMT			= 0x0010,	///<Will only get image formats that are required to exist by OpenGL.
-		FORCE_INTEGRAL_FMT			= 0x0020,	///<Image formats that contain normalized integers will be uploaded as non-normalized integers.
-		FORCE_SIGNED_FMT			= 0x0040,	///<Image formats that contain unsigned integers will be uploaded as signed integers.
+		FORCE_INTEGRAL_FMT			= 0x0020,	///<Image formats that contain normalized integers will be uploaded as non-normalized integers. Ignored for floating-point or compressed formats.
+		FORCE_SIGNED_FMT			= 0x0040,	///<Image formats that contain unsigned integers will be uploaded as signed integers. Ignored if the format is not an integer/integral format, or if it isn't BC4 or BC5 compressed.
 		FORCE_COLOR_RENDERABLE_FMT	= 0x0080,	///<NOT YET SUPPORTED! Will force the use of formats that are required to be valid render targets. This will add components if necessary, but it will throw if conversion would require fundamentally changing the basic format (from signed to unsigned, compressed textures, etc).
 	};
 
