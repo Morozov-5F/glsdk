@@ -4,3 +4,5 @@ solution "glsdk"
 
 dofile("glload/glload.lua");
 dofile("glimg/glimg.lua");
+dofile("glfw/glfw.lua");
+dofile("freeglut/freeglut.lua");
