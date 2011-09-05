@@ -18,6 +18,7 @@ project("glload")
 
 	files {
 		"include/glload/gl_*.h",
+		"include/glload/gl_*.hpp",
 		"include/glload/gll.h",
 		"include/glload/gll.hpp",
 		"source/gll*.c",
@@ -26,7 +27,11 @@ project("glload")
 	};
 	
 	configuration "plainc"
-		excludes {"source/gll*.cpp", "include/glload/gll.hpp"}
+		excludes {
+			"source/gll*.cpp",
+			"include/glload/gll.hpp",
+			"include/glload/gl_*.hpp"
+		}
 	
 	configuration "windows"
 		defines {"WIN32"}

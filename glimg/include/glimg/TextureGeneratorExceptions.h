@@ -84,6 +84,16 @@ namespace glimg
 			message = "The image format cannot be forced to be a renderable format without compromising the data.";
 		}
 	};
+
+	///Thrown when using the FORCE_TEXTURE_STORAGE flag and the OpenGL implementation doesn't support it.
+	class CannotForceTextureStorage : public TextureGenerationException
+	{
+	public:
+		CannotForceTextureStorage()
+		{
+			message = "The current OpenGL implementation does not support ARB_texture_storage or GL 4.2 or above.";
+		}
+	};
 	///@}
 }
 

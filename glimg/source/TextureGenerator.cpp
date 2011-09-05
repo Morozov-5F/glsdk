@@ -992,6 +992,17 @@ namespace glimg
 			}
 		}
 
+		bool IsTextureStorageSupported()
+		{
+			if(!glload::IsVersionGEQ(4, 2))
+			{
+				if(!glext_ARB_texture_storage)
+					return false;
+			}
+
+			return true;
+		}
+
 		void ThrowIfCubeTextureNotSupported()
 		{
 			//Too old to bother checking.
@@ -1020,6 +1031,22 @@ namespace glimg
 			}
 		}
 
+		void TexSubImage1D(GLenum texTarget, GLuint mipmap, GLuint internalFormat,
+			GLuint width, const OpenGLPixelTransferParams &upload, const void *pPixelData)
+		{
+			if(upload.blockByteCount)
+			{
+				GLuint byteCount = CalcCompressedImageSize(width, 1, upload);
+				gl::CompressedTexSubImage1D(texTarget, mipmap, 0, width,
+					internalFormat, byteCount, pPixelData);
+			}
+			else
+			{
+				gl::TexSubImage1D(texTarget, mipmap, 0, width,
+					upload.format, upload.type, pPixelData);
+			}
+		}
+
 		void TexImage2D(GLenum texTarget, GLuint mipmap, GLuint internalFormat,
 			GLuint width, GLuint height, const OpenGLPixelTransferParams &upload, const void *pPixelData)
 		{
@@ -1033,6 +1060,22 @@ namespace glimg
 			{
 				gl::TexImage2D(texTarget, mipmap, internalFormat, width, height, 0,
 					upload.format, upload.type, pPixelData);
+			}
+		}
+
+		void TexSubImage2D(GLenum texTarget, GLuint mipmap, GLuint internalFormat,
+			GLuint width, GLuint height, const OpenGLPixelTransferParams &upload, const void *pPixelData)
+		{
+			if(upload.blockByteCount)
+			{
+				GLuint byteCount = CalcCompressedImageSize(width, height, upload);
+				gl::CompressedTexSubImage2D(texTarget, mipmap, 0, 0, width, height,
+					internalFormat, byteCount, pPixelData);
+			}
+			else
+			{
+				gl::TexSubImage2D(texTarget, mipmap, 0, 0, width, height, upload.format,
+					upload.type, pPixelData);
 			}
 		}
 
@@ -1054,6 +1097,24 @@ namespace glimg
 			}
 		}
 
+		void TexSubImage3D(GLenum texTarget, GLuint mipmap, GLuint internalFormat,
+			GLuint width, GLuint height, GLuint depth, const OpenGLPixelTransferParams &upload,
+			const void *pPixelData)
+		{
+			if(upload.blockByteCount)
+			{
+				//compressed array textures are stored as 4x4x1 sheets.
+				GLuint byteCount = CalcCompressedImageSize(width, height, upload) * depth;
+				gl::CompressedTexSubImage3D(texTarget, mipmap, 0, 0, 0, width, height, depth,
+					internalFormat, byteCount, pPixelData);
+			}
+			else
+			{
+				gl::TexSubImage3D(texTarget, mipmap, 0, 0, 0, width, height, depth,
+					upload.format, upload.type, pPixelData);
+			}
+		}
+
 		void Build1DArrayTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
@@ -1068,6 +1129,9 @@ namespace glimg
 			gl::BindTexture(gl::GL_TEXTURE_1D, textureName);
 
 			const int numMipmaps = pImage->GetMipmapCount();
+			if(forceConvertBits & USE_TEXTURE_STORAGE)
+				gl::TexStorage1D(gl::GL_TEXTURE_1D, numMipmaps, internalFormat, pImage->GetDimensions().width);
+
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
 			{
 				const detail::MipmapLevel &mipData = pImage->GetMipmapLevel(mipmap);
@@ -1076,8 +1140,12 @@ namespace glimg
 				const void *pPixelData = mipData.bFullLayer ?
 					mipData.fullPixelData.pPixelData : mipData.individualDataList[0].pPixelData;
 
-				TexImage1D(gl::GL_TEXTURE_1D, mipmap, internalFormat, dims.width,
-					upload, pPixelData);
+				if(forceConvertBits & USE_TEXTURE_STORAGE)
+					TexSubImage1D(gl::GL_TEXTURE_1D, mipmap, internalFormat, dims.width,
+						upload, pPixelData);
+				else
+					TexImage1D(gl::GL_TEXTURE_1D, mipmap, internalFormat, dims.width,
+						upload, pPixelData);
 			}
 
 			FinalizeTexture(gl::GL_TEXTURE_1D, pImage);
@@ -1112,6 +1180,12 @@ namespace glimg
 			gl::BindTexture(gl::GL_TEXTURE_2D, textureName);
 
 			const int numMipmaps = pImage->GetMipmapCount();
+			if(forceConvertBits & USE_TEXTURE_STORAGE)
+			{
+				Dimensions dims = pImage->GetDimensions();
+				gl::TexStorage2D(gl::GL_TEXTURE_2D, numMipmaps, internalFormat, dims.width, dims.height);
+			}
+
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
 			{
 				const detail::MipmapLevel &mipData = pImage->GetMipmapLevel(mipmap);
@@ -1119,8 +1193,12 @@ namespace glimg
 				const void *pPixelData = mipData.bFullLayer ?
 					mipData.fullPixelData.pPixelData : mipData.individualDataList[0].pPixelData;
 
-				TexImage2D(gl::GL_TEXTURE_2D, mipmap, internalFormat, dims.width, dims.height,
-					upload, pPixelData);
+				if(forceConvertBits & USE_TEXTURE_STORAGE)
+					TexSubImage2D(gl::GL_TEXTURE_2D, mipmap, internalFormat, dims.width, dims.height,
+						upload, pPixelData);
+				else
+					TexImage2D(gl::GL_TEXTURE_2D, mipmap, internalFormat, dims.width, dims.height,
+						upload, pPixelData);
 			}
 
 			FinalizeTexture(gl::GL_TEXTURE_2D, pImage);
@@ -1133,6 +1211,13 @@ namespace glimg
 			gl::BindTexture(gl::GL_TEXTURE_3D, textureName);
 
 			const int numMipmaps = pImage->GetMipmapCount();
+			if(forceConvertBits & USE_TEXTURE_STORAGE)
+			{
+				Dimensions dims = pImage->GetDimensions();
+				gl::TexStorage3D(gl::GL_TEXTURE_3D, numMipmaps, internalFormat, dims.width, dims.height,
+					dims.depth);
+			}
+
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
 			{
 				const detail::MipmapLevel &mipData = pImage->GetMipmapLevel(mipmap);
@@ -1140,8 +1225,16 @@ namespace glimg
 				const void *pPixelData = mipData.bFullLayer ?
 					mipData.fullPixelData.pPixelData : mipData.individualDataList[0].pPixelData;
 
-				TexImage3D(gl::GL_TEXTURE_3D, mipmap, internalFormat, dims.width, dims.height, dims.depth,
-					upload, pPixelData);
+				if(forceConvertBits & USE_TEXTURE_STORAGE)
+				{
+					TexSubImage3D(gl::GL_TEXTURE_3D, mipmap, internalFormat, dims.width, dims.height,
+						dims.depth, upload, pPixelData);
+				}
+				else
+				{
+					TexImage3D(gl::GL_TEXTURE_3D, mipmap, internalFormat, dims.width, dims.height,
+						dims.depth, upload, pPixelData);
+				}
 			}
 
 			FinalizeTexture(gl::GL_TEXTURE_3D, pImage);
@@ -1180,6 +1273,19 @@ namespace glimg
 
 	void CreateTexture(unsigned int textureName, const ImageSet *pImage, unsigned int forceConvertBits)
 	{
+		if(forceConvertBits & FORCE_TEXTURE_STORAGE)
+		{
+			if(!IsTextureStorageSupported())
+				throw CannotForceTextureStorage();
+			forceConvertBits |= USE_TEXTURE_STORAGE;
+		}
+
+		if(forceConvertBits & USE_TEXTURE_STORAGE)
+		{
+			if(!IsTextureStorageSupported())
+				forceConvertBits &= ~USE_TEXTURE_STORAGE;
+		}
+
 		const ImageFormat &format = pImage->GetFormat();
 		GLuint internalFormat = GetInternalFormat(format, forceConvertBits);
 		OpenGLPixelTransferParams upload = GetUploadFormatType(format, forceConvertBits);

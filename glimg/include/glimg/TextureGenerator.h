@@ -38,6 +38,9 @@ namespace glimg
 		FORCE_INTEGRAL_FMT			= 0x0020,	///<Image formats that contain normalized integers will be uploaded as non-normalized integers. Ignored for floating-point or compressed formats.
 		FORCE_SIGNED_FMT			= 0x0040,	///<Image formats that contain unsigned integers will be uploaded as signed integers. Ignored if the format is not an integer/integral format, or if it isn't BC4 or BC5 compressed.
 		FORCE_COLOR_RENDERABLE_FMT	= 0x0080,	///<NOT YET SUPPORTED! Will force the use of formats that are required to be valid render targets. This will add components if necessary, but it will throw if conversion would require fundamentally changing the basic format (from signed to unsigned, compressed textures, etc).
+
+		USE_TEXTURE_STORAGE			= 0x0100,	///<If ARB_texture_storage or GL 4.2 is available, then texture storage functions will be used to create the textures. Otherwise regular glTex* functions will be used.
+		FORCE_TEXTURE_STORAGE		= 0x0200,	///<If ARB_texture_storage or GL 4.2 is available, then texture storage functions will be used to create the textures. Otherwise, an exception will be thrown.
 	};
 
 	/**
