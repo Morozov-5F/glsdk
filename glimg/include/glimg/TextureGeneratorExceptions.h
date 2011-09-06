@@ -94,6 +94,16 @@ namespace glimg
 			message = "The current OpenGL implementation does not support ARB_texture_storage or GL 4.2 or above.";
 		}
 	};
+
+	///Thrown when using the FORCE_DSA flag and the OpenGL implementation doesn't support it.
+	class CannotForceDSAUsage : public TextureGenerationException
+	{
+	public:
+		CannotForceDSAUsage()
+		{
+			message = "The current OpenGL implementation does not support EXT_direct_state_access";
+		}
+	};
 	///@}
 }
 

@@ -1003,6 +1003,11 @@ namespace glimg
 			return true;
 		}
 
+		bool IsDSASupported()
+		{
+			return glext_ARB_texture_storage != 0;
+		}
+
 		void ThrowIfCubeTextureNotSupported()
 		{
 			//Too old to bother checking.
@@ -1284,6 +1289,19 @@ namespace glimg
 		{
 			if(!IsTextureStorageSupported())
 				forceConvertBits &= ~USE_TEXTURE_STORAGE;
+		}
+
+		if(forceConvertBits & FORCE_DSA)
+		{
+			if(!IsDSASupported())
+				throw CannotForceDSAUsage();
+			forceConvertBits |= USE_DSA;
+		}
+
+		if(forceConvertBits & USE_DSA)
+		{
+			if(!IsDSASupported())
+				forceConvertBits &= ~USE_DSA;
 		}
 
 		const ImageFormat &format = pImage->GetFormat();

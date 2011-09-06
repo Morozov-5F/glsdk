@@ -40,7 +40,9 @@ namespace glimg
 		FORCE_COLOR_RENDERABLE_FMT	= 0x0080,	///<NOT YET SUPPORTED! Will force the use of formats that are required to be valid render targets. This will add components if necessary, but it will throw if conversion would require fundamentally changing the basic format (from signed to unsigned, compressed textures, etc).
 
 		USE_TEXTURE_STORAGE			= 0x0100,	///<If ARB_texture_storage or GL 4.2 is available, then texture storage functions will be used to create the textures. Otherwise regular glTex* functions will be used.
-		FORCE_TEXTURE_STORAGE		= 0x0200,	///<If ARB_texture_storage or GL 4.2 is available, then texture storage functions will be used to create the textures. Otherwise, an exception will be thrown.
+		FORCE_TEXTURE_STORAGE		= 0x0200,	///<If ARB_texture_storage or GL 4.2 is available, then texture storage functions will be used to create the textures. Otherwise, a CannotForceTextureStorage exception will be thrown.
+		USE_DSA						= 0x0400,	///<If EXT_direct_state_access is available, then DSA functions will be used. Otherwise, regular ones will be used.
+		FORCE_DSA					= 0x0800,	///<If EXT_direct_state_access is available, then DSA functions will be used. Otherwise, 
 	};
 
 	/**
@@ -132,7 +134,8 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	If an exception is not thrown, then the following OpenGL context state will be changed:
 
 	\li All GL_UNPACK_* state.
-	\li The texture target of the returned texture will have texture object 0 bound to it.
+	\li If EXT_direct_state_access is not explicitly used with USE_DSA or FORCE_DSA, the texture target
+	of the returned texture will have texture object 0 bound to it.
 
 	\param pImage The image to upload to OpenGL.
 	\param forceConvertBits A bitfield containing values from ForcedConvertFlags.
