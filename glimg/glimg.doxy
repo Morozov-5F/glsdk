@@ -19,7 +19,7 @@ The GL Image library is distributed under the <a href="http://www.opensource.org
 \defgroup module_glimg_loaders Image Loaders
 \ingroup module_glimg
 
-Image loaders are functions that create ImageSet objects by load from files or memory buffers. They are generally defined to work for certain specific file formats. You are expected to delete the ImageSet object returned by the loader functions.
+Image loaders are functions that create ImageSet objects by loading images from files or memory buffers. They are generally defined to work for certain specific file formats. You are expected to delete the ImageSet object returned by the loader functions.
 
 If the image loader fails, then it will throw some form of exception that is ultimately derived from std::exception. Each particular loader will have a set of exceptions that it can throw.
 
@@ -49,11 +49,6 @@ Not all combinations of image format parameters are valid. To prevent accidental
 **/
 
 /**
-\page page_glimg_format_validation Image Format Validation Rules
-
-**/
-
-/**
 \defgroup module_glimg_texture Texture Creation
 \ingroup module_glimg
 
@@ -73,3 +68,12 @@ Do not use this API yet. It is unstable and not ready to be used.
 \defgroup module_glimg_exceptions Exceptions
 \ingroup module_glimg
 **/
+
+/**
+\page page_glimg_format_validation Image Format Validation Rules
+
+Not every combination of image format parameters is considered valid. Some are functionally meaningless or inconsistent, while others are simply not allowed.
+
+
+**/
+
