@@ -21,7 +21,7 @@ for i, currDir in ipairs(dirs) do
 			files {"*.hpp"}
 			files {"*.h"}
 
-			UseLibs {"glload", "glimage", "freeglut"}
+			UseLibs {"glload", "glimage", "freeglut", "glfw"}
 			
 			configuration "windows"
 				defines "WIN32"

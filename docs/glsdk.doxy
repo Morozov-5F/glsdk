@@ -175,6 +175,10 @@ The include path you need to add to your build system for this library is <tt>"g
 
 GLM does not have a compiled library; it is header only. To include the GLM headers, just add the <tt>"glm"</tt> directory to your include path.
 
+\subsection page_use_native_glfw GLFW Linking
+
+The include path you need to add to your build system for this library is <tt>"glfw/include"</tt>. The libraries are in the <tt>"glfw/library"</tt> directory. The debug and release libraries are called <tt>"glfwD"</tt> and <tt>"glfw"</tt>, respectively.
+
 \subsection page_use_native_freeglut FreeGLUT Linking
 
 The include path you need to add to your build system for this library is <tt>"freeglut/include"</tt>. The libraries are in the <tt>"freeglut/lib"</tt> directory. The debug and release libraries are called <tt>"freeglutD"</tt> and <tt>"freeglut"</tt>, respectively.

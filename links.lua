@@ -36,7 +36,16 @@ local LinkFuncs =
 		configuration "Release"
 			links {"freeglut"}
 	end,
-	--TODO: Link to GLFW.
+	glfw = function()
+		includedirs "glfw/include"
+		libdirs "glfw/library"
+		
+		configuration "Debug"
+			links {"glfwD"}
+		
+		configuration "Release"
+			links {"glfw"}
+	end,
 }
 
 local function ProcTable(tbl)
