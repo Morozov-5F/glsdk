@@ -1,56 +1,67 @@
 local thisDirectory = os.getcwd();
 
-function LinkToGLLoad()
-	local prevDir = os.getcwd();
-	os.chdir(thisDirectory);
-	configuration {}
+local LinkFuncs =
+{
+	glload = function()
+		includedirs "glload/include"
+		libdirs "glload/lib"
 
-	includedirs "glload/include"
-	libdirs "glload/lib"
-	
-	configuration "Debug"
-		links {"glloadD"}
-	
-	configuration "Release"
-		links {"glload"}
-	
-	configuration {}
-	os.chdir(prevDir)
+		configuration "Debug"
+			links {"glloadD"}
+
+		configuration "Release"
+			links {"glload"}
+	end,
+	glimage = function()
+		includedirs "glimg/include"
+		libdirs "glimg/lib"
+
+		configuration "Debug"
+			links {"glimgD"}
+
+		configuration "Release"
+			links {"glimg"}
+	end,
+	glm = function()
+		includedirs "glm"
+	end,
+	freeglut = function()
+		includedirs "freeglut/include"
+		libdirs "freeglut/lib"
+		defines {"FREEGLUT_STATIC", "_LIB", "FREEGLUT_LIB_PRAGMAS=0"}
+		
+		configuration "Debug"
+			links {"freeglutD"}
+		
+		configuration "Release"
+			links {"freeglut"}
+	end,
+	--TODO: Link to GLFW.
+}
+
+local function ProcTable(tbl)
+	for i, lib in ipairs(tbl) do
+		if(type(lib) == "string") then
+			if(not LinkFuncs[lib]) then
+				print("Bad library named ", lib);
+			else
+				local prevDir = os.getcwd()
+				os.chdir(thisDirectory)
+				configuration {}
+
+				LinkFuncs[lib]()
+				
+				configuration {}
+				os.chdir(prevDir)
+			end
+		elseif(type(lib) == "table") then
+			print("here!")
+			ProcTable(lib);
+		end
+	end
 end
 
-function LinkToGLImage()
-	local prevDir = os.getcwd();
-	os.chdir(thisDirectory);
-	configuration {}
-
-	includedirs "glimg/include"
-	libdirs "glimg/lib"
-	
-	configuration "Debug"
-		links {"glimgD"}
-	
-	configuration "Release"
-		links {"glimg"}
-	
-	configuration {}
-	os.chdir(prevDir)
-end
-
-function LinkToFreeGLUT()
-	local prevDir = os.getcwd();
-	os.chdir(thisDirectory);
-	configuration {}
-
-	includedirs "freeglut/include"
-	libdirs "freeglut/lib"
-	defines {"FREEGLUT_STATIC", "_LIB", "FREEGLUT_LIB_PRAGMAS=0"}
-	
-	configuration "Debug"
-		links {"freeglutD"}
-	
-	configuration "Release"
-		links {"freeglut"}
-	
-	configuration {}
-	os.chdir(prevDir)
+function UseLibs(...)
+	local libList = {...}
+	ProcTable(libList)
 end

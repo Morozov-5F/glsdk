@@ -1,0 +1,163 @@
+
+
+/**
+\mainpage Unofficial OpenGL Software Development Kit
+
+The Unofficial OpenGL Software Development Kit is a collection of libraries and utilities that will help you get started working with OpenGL. 
+ 
+\li @ref module_glload "GL Load": Used to gain access to OpenGL's functions.
+\li @ref module_glimg "GL Image": Used for loading image files into OpenGL textures.
+\li <a href="../../glm/doc/html/index.html">GL Mathematics</a>: Provides useful math classes and functions for OpenGL, using a GLSL-like syntax.
+\li <a href="../../freeglut/doc/index.html">FreeGLUT</a>: A tool for creating and managing an OpenGL window. It can be used to handle input, as well as render a few basic shapes.
+\li GLFW <a href="../../glfw/docs/UsersGuide.pdf">(pdf)</a>: A tool for creating and managing an OpenGL window. It can be used to handle input.
+**/
+
+/**
+\page page_build Building the SDK
+
+In order to build the SDK, you must first have installed your development environment of choice. Please ensure that your development environment is functional and up to date.
+
+Supported development environments are:
+
+\li Visual Studio 2008 and 2010, including express editions
+\li GNU Make, including Cygwin and MinGW
+\li Code::Blocks
+\li CodeLite
+
+\note At present, the OpenGL SDK has not been tested under any form of Mac OS.
+
+Outside of the Premake utility, the Unofficial OpenGL SDK is completely self-contained. It has no external dependencies. Simply download the distribution and unzip the package into a directory of your choice.
+
+\section page_build_premake Premake
+
+To simply the build process for the SDK across platforms, the build system used for the SDK is the <a href="http://industriousone.com/premake">Premake utility</a>, version 4.3 or later.
+
+Premake is a utility for generating build files; it does not do the building itself. The general idea is this: you run the Premake program on Premake scripts. This will generate the build files for your development environment of choice. Then you use those build files in that environment to build your project.
+
+For each build tool, Premake has a command to generate the build files for that tool. For example, to execute Premake for Visual Studio 2008, the following command line would be used:
+
+<tt>premake4 vs2008</tt>
+
+To build a GNU Makefile, one would use
+
+<tt>premake4 gmake</tt>
+
+Each build tool that Premake supports has its own command; the <a href="http://industriousone.com/premake-quick-start">Premake documentation</a> explains how they work.
+
+\section page_build_libs Building the Libraries
+
+To compile the libraries that are part of the SDK, perform the following steps:
+
+<ol>
+<li>Ensure that <tt>premake4.exe</tt> is in your path.</li>
+<li>Open a command line and go to the directory where you have unpacked the SDK.</li>
+<li>Run the command <tt>premake4 \a plat</tt>, where \a plat is the Premake4 command for your build system of choice.</li>
+<li>Use the generated build files, using your preferred build environment.</li>
+</ol>
+
+This process will generate the static libraries for all of the libraries that need compiling (some libraries, like GLM, are pure header libraries).
+
+\note Neither the GNU Makefiles nor the Premake scripts contain an "install" action. The SDK is intended to be used where it is; it is not intended to make any modifications to your system.
+
+\section page_build_examples Building the Examples
+
+To compile the examples, perform the following steps:
+
+<ol>
+<li>Ensure that all of the libraries are compiled.</li>
+<li>Open a command line and go to the directory where you have unpacked the SDK.</li>
+<li>Go to the <tt>examples</tt> directory.</li>
+<li>Run the command <tt>premake4 \a plat</tt>, where \a plat is the Premake4 command for your build system of choice.</li>
+<li>Use the generated build files, using your preferred build environment.</li>
+</ol>
+
+The examples are all intended to be executed in the directories where the executables are generated. Any paths they use are relative to that directory.
+**/
+
+/**
+\page page_use Using the SDK
+
+Once you have @ref page_build_libs "built the SDK's libraries", you may use them with your own projects. There are two ways to use the SDK's libraries. You can use them as part of a project that uses Premake, or you can use them in a project that directly uses native build systems.
+
+The SDK is built around Premake, so you will find that it is much easier to make applications using the SDK if you generate your build files with a Premake script.
+
+\section page_use_premake With Premake
+
+Usually when using Premake 4, you will have a file called <tt>premake4.lua</tt> in your directory. This file may call other files to generate the solutions and projects, or it may not.
+
+Regardless of whether the main <tt>premake4.lua</tt> file does all the work, the first thing you should do is execute this instruction:
+
+<tt>dofile("path/to/GLSDK/links.lua")</tt>
+
+The <tt>path/to/GLSDK</tt> is a path, relative or absolute, to the location where the SDK resides. The <tt>links.lua</tt> file is a file in the root of the SDK. You should only execute the file one (it is not a proper Lua module, so you should not use <tt>require</tt> on it), but executing it multiple times will not be harmful.
+
+This file defines a number of global functions. These functions are to be used when defining a project with Premake's <tt>project</tt> command. They will alter the project so that it links with one or more libraries.
+
+For example, in a Premake script, you might have a project defined like this:
+
+<pre>
+project "MyProject"
+	kind "ConsoleApp"
+	language "c++"
+	files {"*.cpp", "*.h"}
+	
+	configuration "Debug"
+		targetsuffix "D"
+		defines "_DEBUG"
+		flags "Symbols"
+
+	configuration "Release"
+		defines "NDEBUG"
+		flags {"OptimizeSpeed", "NoFramePointer", "ExtraWarnings", "NoEditAndContinue"};
+</pre>
+
+To link to the SDK libraries, you use the <tt>UseLibs</tt> function. This is done quite simply:
+
+<pre>
+project "MyProject"
+	kind "ConsoleApp"
+	language "c++"
+	files {"*.cpp", "*.h"}
+
+	UseLibs {"glload", "freeglut"}
+
+	configuration "Debug"
+		targetsuffix "D"
+		defines "_DEBUG"
+		flags "Symbols"
+
+	configuration "Release"
+		defines "NDEBUG"
+		flags {"OptimizeSpeed", "NoFramePointer", "ExtraWarnings", "NoEditAndContinue"};
+</pre>
+
+The line <tt>UseLibs {"glload", "freeglut"}</tt> will bring in the GL Load and FreeGLUT libraries. The project will have the include paths added to the per-project include paths. The project will link to the debug and release libraries as appropriate. And any special <tt>#define</tt>s or other settings will also be provided.
+
+The names of the libraries used with <tt>UseLibs</tt> are as follows:
+
+\li \a glload: GL Load
+\li \a glimage: GL Image
+\li \a glfw: GLFW
+\li \a freeglut: FreeGLUT
+\li \a glm: GLM
+
+\section page_use_native Native Build
+
+If you wish to natively link to the SDK libraries, but do not use Premake to generate your build files, you will have to do a bit of extra work. Each library has its own include paths and so forth.
+
+\section page_use_other Other Includes
+
+While the Unofficial OpenGL SDK is intended to be stand-alone, there is one dependency that is unavoidable, by the very nature of its purpose: OpenGL itself.
+
+Each platform has its own ways of dealing with OpenGL. In most cases, you will only need to download and install recent graphics drivers. Exactly what you must link to and what include paths you need is system-dependent.
+
+For Windows, you will need to link to some of the following libraries. All of them come with your build tools (or you need to download the Windows Platform SDK):
+
+\li <tt>opengl32.lib</tt>: The basic Windows interface to OpenGL. If you are building a 64-bit application, it still links to <tt>opengl32.lib</tt>
+\li <tt>glu32.lib</tt>: An old utility library for OpenGL. Needed by FreeGLUT or older OpenGL applications.
+\li <tt>gdi32.lib</tt>: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
+\li <tt>winmm.lib</tt>: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
+\li <tt>user32.lib</tt>: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
+
+**/
+

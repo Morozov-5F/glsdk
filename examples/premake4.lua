@@ -5,25 +5,23 @@ solution "examples"
 	defines {"_CRT_SECURE_NO_WARNINGS", "_SCL_SECURE_NO_WARNINGS"}
 
 local dirs = os.matchdirs("*")
+local cwd = os.getcwd();
 for i, currDir in ipairs(dirs) do
 	local basename = path.getname(currDir)
 	
 	local filelist = os.matchfiles(currDir .. "/*.cpp");
 	
 	if(#filelist ~= 0) then
+		os.chdir(currDir);
 		project(basename)
-			location(currDir)
 			kind "ConsoleApp"
 			language "c++"
-			targetdir(currDir)
-			objdir(currDir .. "/obj")
-			files {currDir .. "/*.cpp"}
-			files {currDir .. "/*.hpp"}
-			files {currDir .. "/*.h"}
+			objdir("obj")
+			files {"*.cpp"}
+			files {"*.hpp"}
+			files {"*.h"}
 
-			LinkToGLLoad()
-			LinkToGLImage()
-			LinkToFreeGLUT()
+			UseLibs {"glload", "glimage", "freeglut"}
 			
 			configuration "windows"
 				defines "WIN32"
@@ -37,5 +35,7 @@ for i, currDir in ipairs(dirs) do
 			configuration "Release"
 				defines "NDEBUG"
 				flags {"OptimizeSpeed", "NoFramePointer", "ExtraWarnings", "NoEditAndContinue"};
+				
+		os.chdir(cwd);
 	end
 end
