@@ -11,6 +11,8 @@ The loaded representation of an image file is the ImageSet object. An ImageSet, 
 The images within an ImageSet can be directly loaded into an OpenGL texture by using the various \ref module_glimg_texture "texture creation functions". Note that use of these functions requires that you use GL Load to initialize your OpenGL context. They also require that a valid OpenGL context is bound.
 
 Basic use of the library is quite simple. #include the <tt><glimg/glimg.h></tt> header to get all of the important components of the library. To load an image, select a \ref module_glimg_loaders "loader" and use its loading function to load the texture into an ImageSet object. Then pass this ImageSet along to glimg::CreateTexture to create the OpenGL texture object for the file.
+
+The GL Image library is distributed under the <a href="http://www.opensource.org/licenses/MIT">MIT License</a>.
 **/
 
 /**

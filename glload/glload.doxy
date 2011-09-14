@@ -6,6 +6,8 @@ Because of the nature of how OpenGL is implemented, it is necessary to fetch
 function pointers from OpenGL implementations, rather than simply statically linking
 to a library. The GLload library exists to automate this process and make it simple.
 
+The GLload library is distributed under the <a href="http://www.opensource.org/licenses/MIT">MIT License</a>.
+
 The GLload library provides a number of header files. To include them, simply put the
 glload/include directory in your build system's include path. It also comes with
 a static library which needs to be built. Build the static library as part of the
@@ -71,6 +73,54 @@ Note that this is purely for convenience. OpenGL is still exposed directly, at a
 There are some declarations that cannot be moved to a namespace. The glext_ variables cannot be moved to the <tt>gl</tt> namespace. The OpenGL defined types (GLfloat, GLint, etc) also are not placed in the namespace.
 
 Note that the two interfaces all ultimately call the same functions. So you can use them interchangeably (though this is not suggested). You could use the C interface to glload to initialize GLload, and use C++ headers to access the functions. Or vice-versa.
+
+@section glload_example Example
+
+Here is an example of using the C interface.
+
+\code
+#include <glload/gl_3_3.h>
+#include <glload/gll.h>
+
+int main(int argc, char *argv[])
+{
+  //Initialize OpenGL and bind the context
+  
+  if(LoadFunctions() == LS_LOAD_FAILED)
+    //exit in some way
+	
+  //Loading succeeded. Now use OpenGL functions.
+  
+  //Render stuff
+  GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
+  GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+  ...
+}
+\endcode
+	
+Here is the same code, but written for the C++ interface.
+
+\code
+#include <glload/gl_3_3.hpp>
+#include <glload/gll.hpp>
+
+int main(int argc, char *argv[])
+{
+  //Initialize OpenGL and bind the context
+  
+  if(glload::LoadFunctions() == glload::LS_LOAD_FAILED)
+    //exit in some way
+	
+  //Loading succeeded. Now use OpenGL functions.
+  
+  //Render stuff
+  GLuint vertShader = gl::CreateShader(gl::GL_VERTEX_SHADER);
+  GLuint fragShader = gl::CreateShader(gl::GL_FRAGMENT_SHADER);
+  ...
+}
+\endcode
+
+
 **/
 
 /**
