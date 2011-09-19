@@ -1134,11 +1134,9 @@ namespace glimg
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
 			{
-				const detail::MipmapLevel &mipData = pImage->GetMipmapLevel(mipmap);
 				Dimensions dims = pImage->GetDimensions(mipmap);
 
-				const void *pPixelData = mipData.bFullLayer ?
-					mipData.fullPixelData.pPixelData : mipData.individualDataList[0].pPixelData;
+				const void *pPixelData = pImage->GetImageData(mipmap, 0, 0);
 
 				if(forceConvertBits & USE_TEXTURE_STORAGE)
 					TexSubImage1D(gl::GL_TEXTURE_1D, mipmap, internalFormat, dims.width,
@@ -1188,10 +1186,8 @@ namespace glimg
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
 			{
-				const detail::MipmapLevel &mipData = pImage->GetMipmapLevel(mipmap);
 				Dimensions dims = pImage->GetDimensions(mipmap);
-				const void *pPixelData = mipData.bFullLayer ?
-					mipData.fullPixelData.pPixelData : mipData.individualDataList[0].pPixelData;
+				const void *pPixelData = pImage->GetImageData(mipmap);
 
 				if(forceConvertBits & USE_TEXTURE_STORAGE)
 					TexSubImage2D(gl::GL_TEXTURE_2D, mipmap, internalFormat, dims.width, dims.height,
@@ -1220,10 +1216,8 @@ namespace glimg
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
 			{
-				const detail::MipmapLevel &mipData = pImage->GetMipmapLevel(mipmap);
 				Dimensions dims = pImage->GetDimensions(mipmap);
-				const void *pPixelData = mipData.bFullLayer ?
-					mipData.fullPixelData.pPixelData : mipData.individualDataList[0].pPixelData;
+				const void *pPixelData = pImage->GetImageData(mipmap);
 
 				if(forceConvertBits & USE_TEXTURE_STORAGE)
 				{

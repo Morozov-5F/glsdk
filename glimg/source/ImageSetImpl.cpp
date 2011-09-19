@@ -4,22 +4,29 @@
 
 namespace glimg
 {
-	detail::ImageSetImpl::ImageSetImpl( MemoryObject *pObject, Dimensions dimensions,
-		int arrayCount, int mipmapCount, int faceCount,
-		ImageFormat format, std::vector<MipmapLevel> &swapThisIn )
-		: m_dimensions(dimensions)
-		, m_format(format)
-		, m_pMemory(pObject)
-		, m_arrayCount(arrayCount)
+	detail::ImageSetImpl::ImageSetImpl( ImageFormat format, Dimensions dimensions,
+		int mipmapCount, int arrayCount, int faceCount,
+		std::vector<ImageBuffer> &imageData,
+		std::vector<size_t> &imageSizes )
+		: m_format(format)
+		, m_dimensions(dimensions)
 		, m_mipmapCount(mipmapCount)
+		, m_arrayCount(arrayCount)
 		, m_faceCount(faceCount)
 	{
-		std::swap(m_imageData, swapThisIn);
+		m_imageData.swap(imageData);
+		m_imageSizes.swap(imageSizes);
 	}
 
 	Dimensions detail::ImageSetImpl::GetDimensions( int mipmapLevel ) const
 	{
 		return ModifySizeForMipmap(m_dimensions, mipmapLevel);
+	}
+
+	const void * detail::ImageSetImpl::GetImageData( int mipmapLevel, int arrayIx, int faceIx ) const
+	{
+		size_t imageOffset = arrayIx * faceIx * m_imageSizes[mipmapLevel];
+		return &m_imageData[mipmapLevel][0] + imageOffset;
 	}
 }
 

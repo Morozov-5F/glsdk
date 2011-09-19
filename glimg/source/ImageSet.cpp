@@ -27,17 +27,7 @@ namespace glimg
 
 	const void * SingleImage::GetImageData() const
 	{
-		const detail::MipmapLevel &mipmapData = m_pImpl->GetMipmapLevel(m_mipmapLevel);
-
-		if(mipmapData.bFullLayer)
-		{
-			return m_pImpl->OffsetPointerForImage(m_mipmapLevel, m_arrayIx, m_faceIx);
-		}
-		else
-		{
-			int dataIx = m_pImpl->GetArrayCount() * m_arrayIx + m_faceIx;
-			return mipmapData.individualDataList[dataIx].pPixelData;
-		}
+		return m_pImpl->GetImageData(m_mipmapLevel, m_arrayIx, m_faceIx);
 	}
 
 ///////////////////////////////////////////////////////////
@@ -75,9 +65,14 @@ namespace glimg
 		return m_pImpl->GetFormat();
 	}
 
-	SingleImage * ImageSet::GetImage( int ixMipmapLevel, int ixArray, int ixFace ) const
+	SingleImage * ImageSet::GetImage( int mipmapLevel, int arrayIx, int faceIx ) const
 	{
-		return new SingleImage(m_pImpl, ixMipmapLevel, ixArray, ixFace);
+		return new SingleImage(m_pImpl, mipmapLevel, arrayIx, faceIx);
+	}
+
+	const void * ImageSet::GetImageArray( int mipmapLevel ) const
+	{
+		return m_pImpl->GetImageData(mipmapLevel, 0, 0);
 	}
 }
 

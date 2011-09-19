@@ -243,4 +243,9 @@ namespace glimg
 		if(!msg.empty())
 			throw InvalidFormatException(msg);
 	}
+
+	size_t ImageFormat::AlignByteCount( size_t byteCount ) const
+	{
+		return (byteCount + (fmt.lineAlignment - 1)) / fmt.lineAlignment;
+	}
 }

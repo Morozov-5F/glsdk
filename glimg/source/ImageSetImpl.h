@@ -10,28 +10,11 @@ namespace glimg
 {
 	namespace detail
 	{
-		struct PixelData
-		{
-			const void *pPixelData;
-		};
-
-		struct MipmapLevel
-		{
-			bool bFullLayer;
-			PixelData fullPixelData;
-			//This array is indexed with an arrayIx and faceIx. It is indexed
-			//as follows: (arrayIx * arrayCount) + faceIx
-			std::vector<PixelData> individualDataList;
-		};
-
 		class ImageSetImpl
 		{
 		public:
-			ImageSetImpl(MemoryObject *pObject, Dimensions dimensions,
-				int arrayCount, int mipmapCount, int faceCount, ImageFormat format,
-				std::vector<MipmapLevel> &swapThisIn);
-
-			~ImageSetImpl() {delete m_pMemory;}
+			ImageSetImpl(ImageFormat format, Dimensions dimensions, int mipmapCount, int arrayCount,
+				int faceCount, std::vector<ImageBuffer> &imageData, std::vector<size_t> &imageSizes);
 
 			Dimensions GetDimensions() const {return m_dimensions;}
 			Dimensions GetDimensions(int mipmapLevel) const;
@@ -42,23 +25,17 @@ namespace glimg
 
 			ImageFormat GetFormat() const {return m_format;}
 
-			const MipmapLevel &GetMipmapLevel(int mipmapIx) const {return m_imageData.at(mipmapIx);}
-
-			const void *OffsetPointerForImage(int mipmapIx, int arrayIx, int faceIx) const
-			{
-				//TODO: Implement this properly.
-				return m_imageData.at(mipmapIx).fullPixelData.pPixelData;
-			}
+			const void *GetImageData(int mipmapLevel, int arrayIx = 0, int faceIx = 0) const;
 
 		private:
-			Dimensions m_dimensions;
 			ImageFormat m_format;
-			MemoryObject *m_pMemory;
-			int m_arrayCount;
+			Dimensions m_dimensions;
 			int m_mipmapCount;
+			int m_arrayCount;
 			int m_faceCount;
 
-			std::vector<MipmapLevel> m_imageData;
+			std::vector<ImageBuffer> m_imageData;
+			std::vector<size_t> m_imageSizes;
 		};
 	}
 }

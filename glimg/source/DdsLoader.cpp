@@ -21,21 +21,6 @@ namespace dds
 	{
 		typedef std::vector<unsigned char> FileBuffer;
 
-		class DDSStorage : public glimg::MemoryObject
-		{
-		public:
-			explicit DDSStorage(FileBuffer &transferOwnership)
-			{
-				pixelData.swap(transferOwnership);
-			}
-
-			virtual ~DDSStorage() {}
-
-			FileBuffer pixelData;
-
-			const unsigned char *Data() const {return &pixelData[0];}
-		};
-
 		void ThrowIfHeaderInvalid(const ddsHeader &header)
 		{
 			//TODO: Implement;
@@ -313,9 +298,7 @@ namespace dds
 
 			//Build the image creator. No more exceptions, except for those thrown by.
 			//the ImageCreator.
-			DDSStorage *pMemory = new DDSStorage(ddsData);
-
-			ImageCreator imgCreator(pMemory, dims, numArrays, numMipmaps, numFaces, fmt);
+			ImageCreator imgCreator(fmt, dims, numMipmaps, numArrays, numFaces);
 			std::vector<size_t>::const_iterator it = imageOffsets.begin();
 			for(int arrayIx = 0; arrayIx < numArrays; arrayIx++)
 			{
@@ -323,7 +306,7 @@ namespace dds
 				{
 					for(int mipmapLevel = 0; mipmapLevel < numMipmaps; mipmapLevel++)
 					{
-						imgCreator.AddImage(pMemory->Data() + *it, mipmapLevel, arrayIx, faceIx);
+						imgCreator.SetImageData(&ddsData[0] + *it, true, mipmapLevel, arrayIx, faceIx);
 						++it;
 					}
 				}

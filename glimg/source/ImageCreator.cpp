@@ -4,208 +4,70 @@
 #include "glimg/ImageSet.h"
 #include "glimg/ImageCreator.h"
 #include "ImageSetImpl.h"
+#include "Util.h"
 
 namespace glimg
 {
-	ImageCreator::ImageCreator( MemoryObject *pObject, Dimensions dimensions,
-		int arrayCount, int mipmapCount, int faceCount, ImageFormat format )
-		: m_dimensions(dimensions)
-		, m_format(format)
-		, m_pObject(pObject)
-		, m_arrayCount(arrayCount)
+	ImageCreator::ImageCreator( ImageFormat format, Dimensions dimensions,
+		int mipmapCount, int arrayCount, int faceCount )
+		: m_format(format)
+		, m_dimensions(dimensions)
 		, m_mipmapCount(mipmapCount)
+		, m_arrayCount(arrayCount)
 		, m_faceCount(faceCount)
+		, m_imageData(mipmapCount)
+		, m_imageSizes(mipmapCount)
 	{
-		assert(m_pObject);
 		assert(m_faceCount == 6 || m_faceCount == 1);
-	}
+		if(m_dimensions.numDimensions == 3)
+			assert(m_arrayCount == 1);
 
-	ImageCreator::~ImageCreator()
-	{
-		if(m_pObject)
-			delete m_pObject;
-	}
-
-	namespace
-	{
-		struct MipmapPred
+		//Allocate the memory for our data.
+		int bpp = CalcBytesPerPixel(m_format);
+		for(int level = 0; level < mipmapCount; ++level)
 		{
-			MipmapPred(int _mipmapIx) : mipmapIx(_mipmapIx) {}
-
-			bool operator()(const detail::SimpleImage &img)
-			{
-				return img.mipmapIx == mipmapIx;
-			}
-
-			bool operator()(const detail::FullLayerImage &img)
-			{
-				return img.mipmapIx == mipmapIx;
-			}
-
-			int mipmapIx;
-		};
-
-		struct ImagePred
-		{
-			ImagePred(int _arrayIx, int _mipmapIx, int _faceIx)
-				: arrayIx(_arrayIx), mipmapIx(_mipmapIx), faceIx(_faceIx)
-			{}
-			
-			bool operator()(const detail::SimpleImage &img)
-			{
-				return
-					(img.arrayIx == arrayIx) && 
-					(img.mipmapIx == mipmapIx) && 
-					(img.faceIx == faceIx);
-			}
-
-			int arrayIx;
-			int mipmapIx;
-			int faceIx;
-		};
+			Dimensions mipmapDims = ModifySizeForMipmap(m_dimensions, level);
+			size_t imageSize = CalcImageByteSize(m_format, mipmapDims);
+			m_imageData[level].resize(imageSize * m_faceCount * m_arrayCount);
+			m_imageSizes[level] = imageSize;
+		}
 	}
 
-	void ImageCreator::AddImage( const void *pixelData, int mipmapIx, int arrayIx, int faceIx )
+	void ImageCreator::SetImageData( const void *pixelData, bool isTopLeft,
+		int mipmapLevel, int arrayIx, int faceIx )
 	{
-		if(!m_pObject)
-			throw ImageSetAlreadyCreatedException();
-
 		//Check inputs.
 		if((arrayIx < 0) || (m_arrayCount <= arrayIx))
 			throw ArrayOutOfBoundsException();
 
-		if((mipmapIx < 0) || (m_mipmapCount <= mipmapIx))
+		if((mipmapLevel < 0) || (m_mipmapCount <= mipmapLevel))
 			throw MipmapLayerOutOfBoundsException();
 
-		if((faceIx < 0) || (m_mipmapCount <= faceIx))
-			throw MipmapLayerOutOfBoundsException();
+		if((faceIx < 0) || (m_faceCount <= faceIx))
+			throw FaceIndexOutOfBoundsException();
 
-		//Check to see if this image exists.
-		{
-			std::vector<detail::FullLayerImage>::iterator found =
-				std::find_if(m_fullLayerImages.begin(), m_fullLayerImages.end(), MipmapPred(mipmapIx));
+		size_t imageOffset = arrayIx * faceIx * m_imageSizes[mipmapLevel];
 
-			if(found != m_fullLayerImages.end())
-				throw ImageAlreadySpecifiedException();
-		}
-
-		{
-			std::vector<detail::SimpleImage>::iterator found =
-				std::find_if(m_simpleImages.begin(), m_simpleImages.end(),
-				ImagePred(arrayIx, mipmapIx, faceIx));
-
-			if(found != m_simpleImages.end())
-				throw ImageAlreadySpecifiedException();
-		}
-
-		//The image can now be added.
-		detail::SimpleImage newData;
-		newData.arrayIx = arrayIx;
-		newData.mipmapIx = mipmapIx;
-		newData.faceIx = faceIx;
-		newData.pData = pixelData;
-
-		m_simpleImages.push_back(newData);
+		unsigned char *pMipmapData = &m_imageData[mipmapLevel][0];
+		memcpy(pMipmapData + imageOffset, pixelData, m_imageSizes[mipmapLevel]);
 	}
 
-	void ImageCreator::AddImage( const void *pixelData, int mipmapIx )
+	void ImageCreator::SetFullMipmapLevel( const void *pixelData, bool isTopLeft, int mipmapLevel )
 	{
-		if(!m_pObject)
-			throw ImageSetAlreadyCreatedException();
-
 		//Check inputs.
-		if((mipmapIx < 0) || (m_mipmapCount <= mipmapIx))
+		if((mipmapLevel < 0) || (m_mipmapCount <= mipmapLevel))
 			throw MipmapLayerOutOfBoundsException();
 
-		//Check to see if this image exists.
-		{
-			std::vector<detail::FullLayerImage>::iterator found =
-				std::find_if(m_fullLayerImages.begin(), m_fullLayerImages.end(), MipmapPred(mipmapIx));
-
-			if(found != m_fullLayerImages.end())
-				throw ImageAlreadySpecifiedException();
-		}
-
-		{
-			std::vector<detail::SimpleImage>::iterator found =
-				std::find_if(m_simpleImages.begin(), m_simpleImages.end(),
-				MipmapPred(mipmapIx));
-
-			if(found != m_simpleImages.end())
-				throw ImageAlreadySpecifiedException();
-		}
-
-		//The image can now be added.
-		detail::FullLayerImage newData;
-		newData.mipmapIx = mipmapIx;
-		newData.pData = pixelData;
-
-		m_fullLayerImages.push_back(newData);
+		unsigned char *pMipmapData = &m_imageData[mipmapLevel][0];
+		memcpy(pMipmapData, pixelData, m_imageSizes[mipmapLevel] * m_arrayCount * m_faceCount);
 	}
 
 	ImageSet * ImageCreator::CreateImage()
 	{
-		std::vector<detail::MipmapLevel> mipmapList;
-		mipmapList.resize(m_mipmapCount);
-
-		//Make sure that we have all of the images we should.
-		//Also, build the mipmap data pointer list.
-		for(int mipmapIx = 0; mipmapIx < m_mipmapCount; mipmapIx++)
-		{
-			detail::MipmapLevel &mipmap = mipmapList[mipmapIx];
-
-			std::vector<detail::FullLayerImage>::iterator found =
-				std::find_if(m_fullLayerImages.begin(), m_fullLayerImages.end(), MipmapPred(mipmapIx));
-
-			if(found != m_fullLayerImages.end())
-			{
-				//Add this to the list.
-				mipmap.bFullLayer = true;
-				detail::PixelData pixelData;
-				pixelData.pPixelData = found->pData;
-				mipmap.fullPixelData = pixelData;
-			}
-			else
-			{
-				mipmap.bFullLayer = false;
-				detail::PixelData pixelData;
-				pixelData.pPixelData = NULL;
-				mipmap.fullPixelData = pixelData;
-				mipmap.individualDataList.reserve(m_arrayCount * m_faceCount);
-
-				//Find all of the faces and arrays with this mipmap level in the simple images.
-				int iSubIx = 0;
-				for(int arrayIx = 0; arrayIx < m_arrayCount; arrayIx++)
-				{
-					for(int faceIx = 0; faceIx < m_faceCount; faceIx++)
-					{
-						std::vector<detail::SimpleImage>::iterator found =
-							std::find_if(m_simpleImages.begin(), m_simpleImages.end(),
-							ImagePred(arrayIx, mipmapIx, faceIx));
-
-						if(found != m_simpleImages.end())
-						{
-							detail::PixelData pixelData;
-							pixelData.pPixelData = found->pData;
-							mipmap.individualDataList.push_back(pixelData);
-						}
-						else
-						{
-							throw MissingImageException();
-						}
-					}
-				}
-			}
-		}
-
-		//Create the ImageSetImpl object.
-		detail::ImageSetImpl *pImageData = new detail::ImageSetImpl(m_pObject, m_dimensions,
-			m_arrayCount, m_mipmapCount, m_faceCount, m_format, mipmapList);
+		detail::ImageSetImpl *pImageData = new detail::ImageSetImpl(m_format, m_dimensions,
+			m_mipmapCount, m_arrayCount, m_faceCount, m_imageData, m_imageSizes);
 
 		ImageSet *pImageSet = new ImageSet(pImageData);
-
-		//Transfer ownership.
-		m_pObject = NULL;
 
 		return pImageSet;
 	}

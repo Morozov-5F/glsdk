@@ -250,6 +250,9 @@ namespace glimg
 		int					LineAlign() const	{return fmt.lineAlignment;}
 		/**@}**/
 
+		///Computes the aligned byte count from the line alignment.
+		size_t AlignByteCount(size_t byteCount) const;
+
 	private:
 		UncheckedImageFormat fmt;
 	};

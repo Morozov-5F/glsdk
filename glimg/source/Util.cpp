@@ -1,4 +1,5 @@
 
+#include <assert.h>
 #include "ImageSetImpl.h"
 #include "Util.h"
 
@@ -80,5 +81,63 @@ namespace glimg
 			bytesPerPixel *= ComponentCount(fmt.Components());
 
 		return bytesPerPixel;
+	}
+
+	CompressedBlockData GetBlockCompressionData( PixelDataType eType )
+	{
+		assert(eType >= DT_NUM_UNCOMPRESSED_TYPES);
+
+		CompressedBlockData ret;
+		ret.dims.numDimensions = 2;
+		ret.dims.width = 4;
+		ret.dims.height = 4;
+
+		switch(eType)
+		{
+		case DT_COMPRESSED_BC1:
+		case DT_COMPRESSED_UNSIGNED_BC4:
+		case DT_COMPRESSED_SIGNED_BC4:
+			ret.byteCount = 8;
+			break;
+		default:
+			ret.byteCount = 16;
+			break;
+		}
+		return ret;
+	}
+
+	size_t CalcImageByteSize( const ImageFormat &fmt, const Dimensions &dims )
+	{
+		if(fmt.Type() >= DT_NUM_UNCOMPRESSED_TYPES)
+		{
+			//No support for 3D compressed formats.
+			assert(dims.numDimensions != 3);
+
+			//Compressed texture.
+			CompressedBlockData cdata = GetBlockCompressionData(fmt.Type());
+			size_t width = (dims.width + (cdata.dims.width - 1)) / cdata.dims.width;
+			size_t height = 0;
+			if(dims.numDimensions > 1)
+				height = (dims.height + (cdata.dims.height - 1)) / cdata.dims.height;
+			else
+			{
+				assert(cdata.dims.numDimensions >= 2);
+				height = cdata.dims.height;
+			}
+
+			return width * height * cdata.byteCount;
+		}
+		else
+		{
+			size_t bpp = CalcBytesPerPixel(fmt);
+			size_t lineByteSize = fmt.AlignByteCount(bpp * dims.width);
+
+			if(dims.numDimensions > 1)
+				lineByteSize *= dims.height;
+			if(dims.numDimensions == 3)
+				lineByteSize *= dims.depth;
+
+			return lineByteSize;
+		}
 	}
 }

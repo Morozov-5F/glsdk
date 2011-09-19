@@ -11,16 +11,6 @@ namespace glimg
 {
 	namespace
 	{
-		class ImageStorageInteger : public glimg::MemoryObject
-		{
-		public:
-			virtual ~ImageStorageInteger() {}
-
-			std::vector<unsigned char> pixelData;
-
-			const void *Data() const {return &pixelData[0];}
-		};
-
 		ImageSet *BuildImageSetFromIntegerData(const unsigned char *pixelData,
 			int width, int height, int numComp)
 		{
@@ -51,24 +41,8 @@ namespace glimg
 			fmt.eBitdepth = BD_PER_COMP_8;
 			fmt.lineAlignment = 1;
 
-			ImageStorageInteger *pMemory = new ImageStorageInteger;
-			size_t bufLen = numComp * width * height;
-
-			//Invert for proper OpenGL row ordering.
-			std::vector<unsigned char> &pixelBuffer = pMemory->pixelData;
-			pixelBuffer.reserve(bufLen);
-
-			size_t rowLen = numComp * width;
-			const unsigned char *pFinalRow = pixelData + bufLen;
-			for(int row = 0; row < height; row++)
-			{
-				pixelBuffer.insert(pixelBuffer.end(), pFinalRow - rowLen, pFinalRow);
-
-				pFinalRow -= rowLen;
-			}
-
-			ImageCreator imgCreator(pMemory, dims, 1, 1, 1, fmt);
-			imgCreator.AddImage(pMemory->Data(), 0);
+			ImageCreator imgCreator(fmt, dims, 1, 1, 1);
+			imgCreator.SetFullMipmapLevel(pixelData, true, 0);
 			return imgCreator.CreateImage();
 		}
 	}

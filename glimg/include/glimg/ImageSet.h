@@ -127,7 +127,7 @@ namespace glimg
 		\return A pointer to the image. Do not use it after the ImageSet object is destroyed.
 		This pointer must be deleted manually, and it must be deleted before the deletion of this object.
 		**/
-		SingleImage *GetImage(int ixMipmapLevel, int ixArray = 0, int ixFace = 0) const;
+		SingleImage *GetImage(int mipmapLevel, int arrayIx = 0, int faceIx = 0) const;
 
 		/**
 		\brief Retrieves a pointer to the full array data for a mipmap level.
@@ -135,7 +135,7 @@ namespace glimg
 		\return A pointer to the image data. DO NOT DELETE THIS POINTER. Also, do not use this
 		pointer after this object is destroyed.
 		**/
-		const void *GetImageArray(int ixMipmapLevel) const;
+		const void *GetImageArray(int mipmapLevel) const;
 
 	private:
 		detail::ImageSetImpl *m_pImpl;
