@@ -84,6 +84,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glLoadIdentity();									// Reset The Current Modelview Matrix
 
 	glDepthRange(0.0f, 0.5f);
+/*
 	glBegin(GL_QUADS);
 	{
 		//Define the color (blue)
@@ -96,12 +97,17 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		glVertex3f(-0.5, -0.5, 0);
 	}
 	glEnd();
+*/
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glEnable(GL_TEXTURE_2D);
 
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_ADD);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glDepthRange(0.5f, 1.0f);
 	glBegin(GL_QUADS);
@@ -120,6 +126,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		glVertex3f(-1, -1, 0.5);
 	}
 	glEnd();
+
+	glDisable(GL_BLEND);
+
 
 	glDisable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -479,10 +488,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	TestImageFormats();
 
 //	glimg::ImageSet *pImgSet = glimg::loaders::test::TestImage2D();
-	glimg::ImageSet *pImgSet = glimg::loaders::dds::LoadFromFile("pics/bitmapDXT1_mip.dds");
-//	glimg::ImageSet *pImgSet = glimg::loaders::stb::LoadFromFile("pics/bitmap.png");
+	glimg::ImageSet *pImgSet = glimg::loaders::dds::LoadFromFile("pics/transTestDXT5.dds");
+//	glimg::ImageSet *pImgSet = glimg::loaders::dds::LoadFromFile("pics/bitmapXBGR.dds");
+//	glimg::ImageSet *pImgSet = glimg::loaders::stb::LoadFromFile("pics/transTest.png");
 
-	texture = glimg::CreateTexture(pImgSet, 0);
+	texture = glimg::CreateTexture(pImgSet, glimg::FORCE_BC1_ALPHA_FMT);
 
 	printf("%i\n", pImgSet->GetMipmapCount());
 	glBindTexture(GL_TEXTURE_2D, texture);

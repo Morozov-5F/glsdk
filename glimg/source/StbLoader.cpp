@@ -42,7 +42,7 @@ namespace glimg
 			fmt.lineAlignment = 1;
 
 			ImageCreator imgCreator(fmt, dims, 1, 1, 1);
-			imgCreator.SetFullMipmapLevel(pixelData, true, 0);
+			imgCreator.SetImageData(pixelData, true, 0, 0, 0);
 			return imgCreator.CreateImage();
 		}
 	}

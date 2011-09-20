@@ -87,7 +87,7 @@ for_each(array)
 
 	private:
 		const ImageFormat m_format;
-		const Dimensions m_dimensions;
+		const Dimensions m_dims;
 		const int m_mipmapCount;
 		const int m_arrayCount;
 		const int m_faceCount;

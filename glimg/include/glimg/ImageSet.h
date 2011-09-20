@@ -25,6 +25,23 @@ namespace glimg
 		int width;			///<The width of the image. Always valid.
 		int height;			///<The height of the image. Only valid if numDimensions is 2 or 3.
 		int depth;			///<The depth of the image. Only valid if numDimensions is 3.
+
+		///Computes the number of rows of pixel data in the image.
+		int NumLines() const
+		{
+			switch(numDimensions)
+			{
+			case 1:
+				return 1;
+			case 2:
+				return height;
+			case 3:
+				return depth * height;
+			}
+
+			//Should not be possible.
+			return -1;
+		}
 	};
 
 	namespace detail
