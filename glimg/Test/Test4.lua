@@ -1,3 +1,4 @@
+dofile "../../links.lua"
 
 project "Test"
 	kind "WindowedApp"
@@ -5,16 +6,15 @@ project "Test"
 	includedirs { "../include", "../../glload/include" }
 	links {"glload", "glimg"}
 	
-	files {"test.cpp", "test.h"}
+	UseLibs "freeglut"
+
+	files {"test.cpp", "test.h", "main.cpp"}
 
 	configuration "windows"
-		flags { "WinMain" }
 		defines {"WIN32"}
-		files { "windows.cpp", }
-		links { "OpenGL32" }
+		links {"glu32", "opengl32", "gdi32", "winmm", "user32"}
 
 	configuration "linux"
-		files { "linux.cpp", }
 		links { "GL" }
 	
 	configuration "Debug"
