@@ -84,8 +84,8 @@ namespace glimg
 	**/
 	enum ComponentOrder
 	{
-		ORDER_RGBA,
-		ORDER_BGRA,
+		ORDER_RGBA,				///<Standard RGBA ordering.
+		ORDER_BGRA,				///<Often used in conjunction with _REV Bitdepths.
 		ORDER_RGBE,				///<For DT_SHARED_EXP_FLOAT types. The E is the exponent, and it comes first.
 
 		ORDER_DEPTH_STENCIL,	///<Ordering for depth and depth-stencil image formats.

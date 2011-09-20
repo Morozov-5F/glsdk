@@ -26,6 +26,7 @@ namespace glimg
 			ImageFormat GetFormat() const {return m_format;}
 
 			const void *GetImageData(int mipmapLevel, int arrayIx = 0, int faceIx = 0) const;
+			size_t GetImageByteSize(int mipmapLevel) const;
 
 		private:
 			ImageFormat m_format;

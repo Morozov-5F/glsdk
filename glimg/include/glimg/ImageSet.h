@@ -76,6 +76,9 @@ namespace glimg
 		**/
 		const void *GetImageData() const;
 
+		///Returns the size in bytes of the image's pixel data.
+		size_t GetImageByteSize() const;
+
 	private:
 		const detail::ImageSetImpl *m_pImpl;
 		int m_arrayIx;

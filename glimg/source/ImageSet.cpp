@@ -30,6 +30,11 @@ namespace glimg
 		return m_pImpl->GetImageData(m_mipmapLevel, m_arrayIx, m_faceIx);
 	}
 
+	size_t SingleImage::GetImageByteSize() const
+	{
+		return m_pImpl->GetImageByteSize(m_mipmapLevel);
+	}
+
 ///////////////////////////////////////////////////////////
 	ImageSet::ImageSet( detail::ImageSetImpl *pImpl )
 		: m_pImpl(pImpl)

@@ -28,5 +28,10 @@ namespace glimg
 		size_t imageOffset = arrayIx * faceIx * m_imageSizes[mipmapLevel];
 		return &m_imageData[mipmapLevel][0] + imageOffset;
 	}
+
+	size_t detail::ImageSetImpl::GetImageByteSize( int mipmapLevel ) const
+	{
+		return m_imageSizes[mipmapLevel];
+	}
 }
 

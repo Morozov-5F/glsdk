@@ -11,9 +11,8 @@
 ///\addtogroup module_glload_cinter
 ///@{
 
-///The core namespace for all of the OpenGL initialization functions.
 /**
-\brief The loading status returned by the extension loaders.
+\brief The loading status returned by the GL loading functions.
 
 **/
 enum LoadSucceeded
@@ -35,7 +34,7 @@ This function will respect the core/compatibility flags that the context was cre
 is defined for a 3.1 context, it will load the compatibility profile; otherwise, it will load the core.
 For 3.0 and below, it loads everything available.
 
-\return Of the type LoadSucceeded.
+\return Of the type ::LoadSucceeded.
 **/
 int LoadFunctions();
 
@@ -43,7 +42,7 @@ int LoadFunctions();
 /**
 \brief Loads all of the function pointers associated with WGL.
 
-\return Of the type LoadSucceeded.
+\return Of the type ::LoadSucceeded.
 **/
 int LoadWinFunctions(void *hdc);
 #endif //WIN32
@@ -51,7 +50,7 @@ int LoadWinFunctions(void *hdc);
 /**
 \brief Loads all of the function pointers associated with GLX.
 
-\return Of the type glload::LoadSucceeded.
+\return Of the type ::LoadSucceeded.
 **/
 int LoadGLXFunctions(void *display, int screen);
 #endif

@@ -33,7 +33,7 @@ namespace glload
 	is defined for a 3.1 context, it will load the compatibility profile; otherwise, it will load the core.
 	For 3.0 and below, it loads everything available.
 
-	\return Of the type LoadSucceeded.
+	\return Of the type glload::LoadSucceeded.
 	**/
 	int LoadFunctions();
 
@@ -41,7 +41,7 @@ namespace glload
 	/**
 	\brief Loads all of the function pointers associated with WGL.
 
-	\return Of the type LoadSucceeded.
+	\return Of the type glload::LoadSucceeded.
 	**/
 	int LoadWinFunctions(void *hdc);
 #endif //WIN32

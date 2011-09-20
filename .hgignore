@@ -23,3 +23,6 @@ docs/html
 glfw
 freeglut
 glm
+gliConfig.ini
+gliInterceptLog.txt
+gliLog.txt
