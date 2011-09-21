@@ -35,6 +35,7 @@ namespace glimg
 			int m_arrayCount;
 			int m_faceCount;
 
+			//Indexed by mipmap.
 			std::vector<ImageBuffer> m_imageData;
 			std::vector<size_t> m_imageSizes;
 		};

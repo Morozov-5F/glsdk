@@ -54,13 +54,12 @@ namespace glimg
 	/**
 	\brief Represents a single image of a certain dimensionality.
 
-	The internal data of the image can be retrieved.
+	The internal data of the image can be retrieved. Objects of this type can be retrieved from an ImageSet,
+	via ImageSet::GetImage.
 	**/
 	class SingleImage
 	{
 	public:
-		~SingleImage();
-
 		///Get the dimensions of the image.
 		Dimensions GetDimensions() const;
 
@@ -98,7 +97,18 @@ namespace glimg
 	images in the ImageSet use the same format.
 
 	The images in an ImageSet are named by a triple of numbers: mipmap level, array index, and face index.
-	The maximum number of each of these is queriable.
+	The maximum number of each of these is queriable. The size of the ImageSet is the size of all images from
+	mipmap level 0. Each mipmap will have the same number of array indices and faces.
+
+	Faces represent the faces of a cubemap. So for non-cubemap textures, GetFaceCount will return 1. The order
+	of the faces in the cubemap is the same as the order of the faces for ARB_texture_cube_map_array extension.
+	That is, the order of the GL_TEXTURE_CUBE_MAP_* enumerators.
+	
+	Array indices represent images that go into an array texture. Array-cubemap textures are arranged in memory
+	as specified in the ARB_texture_cube_map_array extension.
+
+	This object should always be used by reference. You cannot copy it; attempting to do so will yield a compler
+	or linker error.
 	**/
 	class ImageSet
 	{
@@ -144,13 +154,14 @@ namespace glimg
 		/**
 		\brief Retrieves the image at the given mipmap level, array index, and face index.
 		
-		\return A pointer to the image. Do not use it after the ImageSet object is destroyed.
-		This pointer must be deleted manually, and it must be deleted before the deletion of this object.
+		\return A reference to the image. Do not use it after the ImageSet object that created it is destroyed.
 		**/
-		SingleImage *GetImage(int mipmapLevel, int arrayIx = 0, int faceIx = 0) const;
+		SingleImage GetImage(int mipmapLevel, int arrayIx = 0, int faceIx = 0) const;
 
 		/**
-		\brief Retrieves a pointer to the full array data for a mipmap level.
+		\brief Retrieves a pointer to the full array data for the entire mipmap level.
+
+		This data is formatted explicitly for use with array textures and cubemap-array textures.
 		
 		\return A pointer to the image data. DO NOT DELETE THIS POINTER. Also, do not use this
 		pointer after this object is destroyed.
@@ -164,6 +175,10 @@ namespace glimg
 
 		friend class ImageCreator;
 		friend void CreateTexture(unsigned int textureName, const ImageSet *pImage, unsigned int forceConvertBits);
+
+		//Prevent copying.
+		ImageSet(const ImageSet &);
+		ImageSet &operator=(const ImageSet &);
 	};
 
 	///@}

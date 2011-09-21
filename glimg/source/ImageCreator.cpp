@@ -18,9 +18,17 @@ namespace glimg
 		, m_imageData(mipmapCount)
 		, m_imageSizes(mipmapCount)
 	{
-		assert(m_faceCount == 6 || m_faceCount == 1);
-		if(m_dims.numDimensions == 3)
-			assert(m_arrayCount == 1);
+		if(m_faceCount != 6 && m_faceCount != 1)
+			throw BadFaceCountException();
+
+		if(m_faceCount == 6 && m_dims.numDimensions != 2)
+			throw CubemapsMustBe2DException();
+
+		if(m_dims.numDimensions == 3 && m_arrayCount != 1)
+			throw No3DTextureArrayException();
+
+		if(m_mipmapCount <= 0 || m_arrayCount <= 0)
+			throw NoImagesSpecifiedException();
 
 		//Allocate the memory for our data.
 		int bpp = CalcBytesPerPixel(m_format);
@@ -201,6 +209,9 @@ namespace glimg
 	void ImageCreator::SetImageData( const void *pixelData, bool isTopLeft,
 		int mipmapLevel, int arrayIx, int faceIx )
 	{
+		if(m_imageData.empty())
+			throw ImageSetAlreadyCreatedException();
+
 		//Check inputs.
 		if((arrayIx < 0) || (m_arrayCount <= arrayIx))
 			throw ArrayOutOfBoundsException();
@@ -221,64 +232,88 @@ namespace glimg
 		}
 		else
 		{
-			Dimensions dims = ModifySizeForMipmap(m_dims, mipmapLevel);
-			if(m_format.Type() < DT_NUM_UNCOMPRESSED_TYPES)
-			{
-				CopyPixelsFlipped(pMipmapData, dims, m_format, mipmapLevel, pixelData,
-					m_imageSizes[mipmapLevel]);
-			}
-			else
-			{
-				//Have to decode the pixel data and flip it manually.
-				switch(m_format.Type())
-				{
-				case DT_COMPRESSED_BC1:
-					CopyBCFlipped(pMipmapData, dims, m_format, mipmapLevel, pixelData,
-						m_imageSizes[mipmapLevel], CopyBlockBC1Flipped);
-					break;
-				case DT_COMPRESSED_BC2:
-					CopyBCFlipped(pMipmapData, dims, m_format, mipmapLevel, pixelData,
-						m_imageSizes[mipmapLevel], CopyBlockBC2Flipped);
-					break;
-				case DT_COMPRESSED_BC3:
-					CopyBCFlipped(pMipmapData, dims, m_format, mipmapLevel, pixelData,
-						m_imageSizes[mipmapLevel], CopyBlockBC3Flipped);
-					break;
-				case DT_COMPRESSED_UNSIGNED_BC4:
-				case DT_COMPRESSED_SIGNED_BC4:
-					CopyBCFlipped(pMipmapData, dims, m_format, mipmapLevel, pixelData,
-						m_imageSizes[mipmapLevel], CopyBlockBC4Flipped);
-					break;
-				case DT_COMPRESSED_UNSIGNED_BC5:
-				case DT_COMPRESSED_SIGNED_BC5:
-					CopyBCFlipped(pMipmapData, dims, m_format, mipmapLevel, pixelData,
-						m_imageSizes[mipmapLevel], CopyBlockBC5Flipped);
-					break;
-				default:
-					memcpy(pMipmapData, pixelData, m_imageSizes[mipmapLevel]);
-					break;
-				}
-			}
+			CopyImageFlipped(pixelData, pMipmapData, mipmapLevel);
 		}
 	}
 
 	void ImageCreator::SetFullMipmapLevel( const void *pixelData, bool isTopLeft, int mipmapLevel )
 	{
+		if(m_imageData.empty())
+			throw ImageSetAlreadyCreatedException();
+
 		//Check inputs.
 		if((mipmapLevel < 0) || (m_mipmapCount <= mipmapLevel))
 			throw MipmapLayerOutOfBoundsException();
 
 		unsigned char *pMipmapData = &m_imageData[mipmapLevel][0];
-		memcpy(pMipmapData, pixelData, m_imageSizes[mipmapLevel] * m_arrayCount * m_faceCount);
+		const unsigned char *pSrcData = static_cast<const unsigned char *>(pixelData);
+		if(!isTopLeft)
+		{
+			memcpy(pMipmapData, pixelData, m_imageSizes[mipmapLevel] * m_arrayCount * m_faceCount);
+		}
+		else
+		{
+			for(int image = 0; image < m_arrayCount * m_faceCount; ++image)
+			{
+				CopyImageFlipped(pSrcData, pMipmapData, mipmapLevel);
+				pSrcData += m_imageSizes[mipmapLevel];
+				pMipmapData += m_imageSizes[mipmapLevel];
+			}
+		}
 	}
 
 	ImageSet * ImageCreator::CreateImage()
 	{
+		if(m_imageData.empty())
+			throw ImageSetAlreadyCreatedException();
+
 		detail::ImageSetImpl *pImageData = new detail::ImageSetImpl(m_format, m_dims,
 			m_mipmapCount, m_arrayCount, m_faceCount, m_imageData, m_imageSizes);
 
 		ImageSet *pImageSet = new ImageSet(pImageData);
 
 		return pImageSet;
+	}
+
+	void ImageCreator::CopyImageFlipped(const void * pixelData, unsigned char *pDstData, int mipmapLevel)
+	{
+		Dimensions dims = ModifySizeForMipmap(m_dims, mipmapLevel);
+		if(m_format.Type() < DT_NUM_UNCOMPRESSED_TYPES)
+		{
+			CopyPixelsFlipped(pDstData, dims, m_format, mipmapLevel, pixelData,
+				m_imageSizes[mipmapLevel]);
+		}
+		else
+		{
+			//Have to decode the pixel data and flip it manually.
+			switch(m_format.Type())
+			{
+			case DT_COMPRESSED_BC1:
+				CopyBCFlipped(pDstData, dims, m_format, mipmapLevel, pixelData,
+					m_imageSizes[mipmapLevel], CopyBlockBC1Flipped);
+				break;
+			case DT_COMPRESSED_BC2:
+				CopyBCFlipped(pDstData, dims, m_format, mipmapLevel, pixelData,
+					m_imageSizes[mipmapLevel], CopyBlockBC2Flipped);
+				break;
+			case DT_COMPRESSED_BC3:
+				CopyBCFlipped(pDstData, dims, m_format, mipmapLevel, pixelData,
+					m_imageSizes[mipmapLevel], CopyBlockBC3Flipped);
+				break;
+			case DT_COMPRESSED_UNSIGNED_BC4:
+			case DT_COMPRESSED_SIGNED_BC4:
+				CopyBCFlipped(pDstData, dims, m_format, mipmapLevel, pixelData,
+					m_imageSizes[mipmapLevel], CopyBlockBC4Flipped);
+				break;
+			case DT_COMPRESSED_UNSIGNED_BC5:
+			case DT_COMPRESSED_SIGNED_BC5:
+				CopyBCFlipped(pDstData, dims, m_format, mipmapLevel, pixelData,
+					m_imageSizes[mipmapLevel], CopyBlockBC5Flipped);
+				break;
+			default:
+				memcpy(pDstData, pixelData, m_imageSizes[mipmapLevel]);
+				break;
+			}
+		}
 	}
 }

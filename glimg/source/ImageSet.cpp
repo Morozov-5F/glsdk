@@ -12,9 +12,6 @@ namespace glimg
 		, m_mipmapLevel(mipmapLevel)
 	{}
 
-	SingleImage::~SingleImage()
-	{}
-
 	glimg::Dimensions SingleImage::GetDimensions() const
 	{
 		return m_pImpl->GetDimensions(m_mipmapLevel);
@@ -70,9 +67,9 @@ namespace glimg
 		return m_pImpl->GetFormat();
 	}
 
-	SingleImage * ImageSet::GetImage( int mipmapLevel, int arrayIx, int faceIx ) const
+	SingleImage ImageSet::GetImage( int mipmapLevel, int arrayIx, int faceIx ) const
 	{
-		return new SingleImage(m_pImpl, mipmapLevel, arrayIx, faceIx);
+		return SingleImage(m_pImpl, mipmapLevel, arrayIx, faceIx);
 	}
 
 	const void * ImageSet::GetImageArray( int mipmapLevel ) const

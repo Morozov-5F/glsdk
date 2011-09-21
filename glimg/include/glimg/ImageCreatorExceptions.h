@@ -21,27 +21,39 @@ namespace glimg
 		std::string message;
 	};
 
-	class InvalidImageFormatException : public ImageCreationException
+	class BadFaceCountException : public ImageCreationException
 	{
 	public:
-		InvalidImageFormatException()
+		BadFaceCountException()
 		{
-			message = "ImageCreator was given an invalid image format.";
-		}
-
-		explicit InvalidImageFormatException(const std::string &msg)
-		{
-			message = "ImageCreator was given an invalid image format.\n";
-			message += msg;
+			message = "Must pass 1 or 6 as the face count.";
 		}
 	};
 
-	class MissingImageException : public ImageCreationException
+	class CubemapsMustBe2DException : public ImageCreationException
 	{
 	public:
-		MissingImageException()
+		CubemapsMustBe2DException()
 		{
-			message = "ImageCreator is missing one or more images.";
+			message = "Textures with a face count of 6 MUST be 2D textures.";
+		}
+	};
+
+	class No3DTextureArrayException : public ImageCreationException
+	{
+	public:
+		No3DTextureArrayException()
+		{
+			message = "Images cannot be 3D arrays.";
+		}
+	};
+
+	class NoImagesSpecifiedException : public ImageCreationException
+	{
+	public:
+		NoImagesSpecifiedException()
+		{
+			message = "Mipmap and array count must be >= 1.";
 		}
 	};
 
@@ -72,21 +84,12 @@ namespace glimg
 		}
 	};
 
-	class ImageAlreadySpecifiedException : public ImageCreationException
-	{
-	public:
-		ImageAlreadySpecifiedException()
-		{
-			message = "Attempted to add an image that already has been added.";
-		}
-	};
-
 	class ImageSetAlreadyCreatedException : public ImageCreationException
 	{
 	public:
 		ImageSetAlreadyCreatedException()
 		{
-			message = "Attempted to add an image to an ImageCreator that has already been used to create an image set.";
+			message = "Attempted to use an ImageCreator that has already been used to create an ImageSet.";
 		}
 	};
 	///@}
