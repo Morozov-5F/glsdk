@@ -28,7 +28,7 @@ void init()
 	//	std::auto_ptr<glimg::ImageSet> pImgSet(glimg::loaders::dds::LoadFromFile("pics/bitmapXBGR.dds"));
 	//	std::auto_ptr<glimg::ImageSet> pImgSet(glimg::loaders::stb::LoadFromFile("pics/transTest.png"));
 
-	g_texture = glimg::CreateTexture(pImgSet.get(), glimg::FORCE_BC1_ALPHA_FMT);
+	g_texture = glimg::CreateTexture(pImgSet.get(), glimg::FORCE_BC1_ALPHA_FMT | glimg::USE_DSA);
 
 	printf("%i\n", pImgSet->GetMipmapCount());
 	glBindTexture(GL_TEXTURE_2D, g_texture);
@@ -68,7 +68,7 @@ void display()
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	glEnable(GL_BLEND);
-	glBlendEquation(GL_ADD);
+	glBlendEquation(GL_FUNC_ADD);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glDepthRange(0.5f, 1.0f);

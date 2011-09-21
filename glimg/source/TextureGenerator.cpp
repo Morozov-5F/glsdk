@@ -963,27 +963,6 @@ namespace glimg
 			gl::PixelStorei(gl::GL_UNPACK_ALIGNMENT, format.LineAlign());
 		}
 
-		//DSA-style
-		void FinalizeTexture(GLuint texture, GLenum texTarget, const detail::ImageSetImpl *pImage)
-		{
-			int numMipmaps = pImage->GetMipmapCount();
-			gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_BASE_LEVEL, 0);
-			gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MAX_LEVEL, numMipmaps - 1);
-
-			//Ensure the texture is texture-complete.
-			const ImageFormat &format = pImage->GetFormat();
-			if(IsTypeIntegral(format.Type()))
-			{
-				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MAG_FILTER, gl::GL_NEAREST);
-				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MIN_FILTER, gl::GL_NEAREST);
-			}
-			else
-			{
-				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MAG_FILTER, gl::GL_LINEAR);
-				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MIN_FILTER, gl::GL_LINEAR);
-			}
-		}
-
 		//Texture must be bound to the target.
 		void FinalizeTexture(GLenum texTarget, const detail::ImageSetImpl *pImage)
 		{
@@ -1002,6 +981,33 @@ namespace glimg
 			{
 				gl::TexParameteri(texTarget, gl::GL_TEXTURE_MAG_FILTER, gl::GL_LINEAR);
 				gl::TexParameteri(texTarget, gl::GL_TEXTURE_MIN_FILTER, gl::GL_LINEAR);
+			}
+		}
+
+		void FinalizeTexture(GLuint texture, GLenum texTarget, const detail::ImageSetImpl *pImage)
+		{
+			//Zero means bound, so no DSA.
+			if(texture == 0)
+			{
+				FinalizeTexture(texTarget, pImage);
+				return;
+			}
+
+			int numMipmaps = pImage->GetMipmapCount();
+			gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_BASE_LEVEL, 0);
+			gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MAX_LEVEL, numMipmaps - 1);
+
+			//Ensure the texture is texture-complete.
+			const ImageFormat &format = pImage->GetFormat();
+			if(IsTypeIntegral(format.Type()))
+			{
+				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MAG_FILTER, gl::GL_NEAREST);
+				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MIN_FILTER, gl::GL_NEAREST);
+			}
+			else
+			{
+				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MAG_FILTER, gl::GL_LINEAR);
+				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MIN_FILTER, gl::GL_LINEAR);
 			}
 		}
 
@@ -1054,25 +1060,6 @@ namespace glimg
 			return columnCount * upload.blockByteCount * rowCount;
 		}
 
-		//DSA-style
-		void TexStorage( GLuint texture, GLenum texTarget, Dimensions dims, GLuint numMipmaps,
-			GLenum internalFormat )
-		{
-			switch(dims.numDimensions)
-			{
-			case 1:
-				gl::TextureStorage1DEXT(texture, texTarget, numMipmaps, internalFormat, dims.width);
-				break;
-			case 2:
-				gl::TextureStorage2DEXT(texture, texTarget, numMipmaps, internalFormat, dims.width, dims.height);
-				break;
-			case 3:
-				gl::TextureStorage3DEXT(texture, texTarget, numMipmaps, internalFormat,
-					dims.width, dims.height, dims.depth);
-				break;
-			}
-		}
-
 		//Texture must be bound to the target.
 		void TexStorage( GLenum texTarget, Dimensions dims, GLuint numMipmaps, GLenum internalFormat )
 		{
@@ -1090,74 +1077,28 @@ namespace glimg
 			}
 		}
 
-		//Only works for TEXTURE_1D, 2D, and 3D.
-		//DSA-style
-		void ManTexStorageBase(GLuint texture, GLenum texTarget, Dimensions dims, GLuint numMipmaps,
-			GLenum internalFormat, const OpenGLPixelTransferParams &upload)
+		void TexStorage( GLuint texture, GLenum texTarget, Dimensions dims, GLuint numMipmaps,
+			GLenum internalFormat )
 		{
-			for(GLuint mipmap = 0; mipmap < numMipmaps; ++mipmap)
+			//Zero means bound, so no DSA.
+			if(texture == 0)
 			{
-				Dimensions levelDims = ModifySizeForMipmap(dims, mipmap);
-				switch(dims.numDimensions)
-				{
-				case 1:
-					gl::TextureImage1DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width, 0,
-						upload.format, upload.type, NULL);
-					break;
-				case 2:
-					gl::TextureImage2DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width, levelDims.height, 0,
-						upload.format, upload.type, NULL);
-					break;
-				case 3:
-					gl::TextureImage1DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width, 0,
-						upload.format, upload.type, NULL);
-					break;
-				}
+				TexStorage(texTarget, dims, numMipmaps, internalFormat);
+				return;
 			}
-		}
 
-		//For 1D, 2D arrays, and array/cubemap
-		//DSA-style
-		void ManTexStorageArray(GLuint texture, GLenum texTarget, Dimensions dims, GLuint numMipmaps,
-			GLuint arrayCount, GLenum internalFormat, const OpenGLPixelTransferParams &upload)
-		{
-			for(GLuint mipmap = 0; mipmap < numMipmaps; ++mipmap)
+			switch(dims.numDimensions)
 			{
-				Dimensions levelDims = ModifySizeForMipmap(dims, mipmap);
-				switch(dims.numDimensions)
-				{
-				case 1:
-					gl::TextureImage2DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width, arrayCount, 0,
-						upload.format, upload.type, NULL);
-					break;
-				case 2:
-					gl::TextureImage3DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width,
-						levelDims.height, arrayCount, 0, upload.format, upload.type, NULL);
-					break;
-				}
-			}
-		}
-
-		//For non-array cubemap
-		//DSA-style
-		void ManTexStorageCube(GLuint texture, GLenum texTarget, Dimensions dims, GLuint numMipmaps,
-			GLenum internalFormat, const OpenGLPixelTransferParams &upload)
-		{
-			for(GLuint mipmap = 0; mipmap < numMipmaps; ++mipmap)
-			{
-				Dimensions levelDims = ModifySizeForMipmap(dims, mipmap);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X, mipmap, internalFormat,
-					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X, mipmap, internalFormat,
-					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Y, mipmap, internalFormat,
-					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, mipmap, internalFormat,
-					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z, mipmap, internalFormat,
-					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, mipmap, internalFormat,
-					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
+			case 1:
+				gl::TextureStorage1DEXT(texture, texTarget, numMipmaps, internalFormat, dims.width);
+				break;
+			case 2:
+				gl::TextureStorage2DEXT(texture, texTarget, numMipmaps, internalFormat, dims.width, dims.height);
+				break;
+			case 3:
+				gl::TextureStorage3DEXT(texture, texTarget, numMipmaps, internalFormat,
+					dims.width, dims.height, dims.depth);
+				break;
 			}
 		}
 
@@ -1232,6 +1173,98 @@ namespace glimg
 			}
 		}
 
+		//Only works for TEXTURE_1D, 2D, and 3D.
+		//DSA-style
+		void ManTexStorageBase(GLuint texture, GLenum texTarget, Dimensions dims, GLuint numMipmaps,
+			GLenum internalFormat, const OpenGLPixelTransferParams &upload)
+		{
+			//Zero means bound, so no DSA.
+			if(texture == 0)
+			{
+				ManTexStorageBase(texTarget, dims, numMipmaps, internalFormat, upload);
+				return;
+			}
+
+			for(GLuint mipmap = 0; mipmap < numMipmaps; ++mipmap)
+			{
+				Dimensions levelDims = ModifySizeForMipmap(dims, mipmap);
+				switch(dims.numDimensions)
+				{
+				case 1:
+					gl::TextureImage1DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width, 0,
+						upload.format, upload.type, NULL);
+					break;
+				case 2:
+					gl::TextureImage2DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width, levelDims.height, 0,
+						upload.format, upload.type, NULL);
+					break;
+				case 3:
+					gl::TextureImage1DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width, 0,
+						upload.format, upload.type, NULL);
+					break;
+				}
+			}
+		}
+
+		//For 1D, 2D arrays, and array/cubemap
+		//DSA-style
+		void ManTexStorageArray(GLuint texture, GLenum texTarget, Dimensions dims, GLuint numMipmaps,
+			GLuint arrayCount, GLenum internalFormat, const OpenGLPixelTransferParams &upload)
+		{
+			//Zero means bound, so no DSA.
+			if(texture == 0)
+			{
+				ManTexStorageArray(texTarget, dims, numMipmaps, arrayCount, internalFormat, upload);
+				return;
+			}
+
+			for(GLuint mipmap = 0; mipmap < numMipmaps; ++mipmap)
+			{
+				Dimensions levelDims = ModifySizeForMipmap(dims, mipmap);
+				switch(dims.numDimensions)
+				{
+				case 1:
+					gl::TextureImage2DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width, arrayCount, 0,
+						upload.format, upload.type, NULL);
+					break;
+				case 2:
+					gl::TextureImage3DEXT(texture, texTarget, mipmap, internalFormat, levelDims.width,
+						levelDims.height, arrayCount, 0, upload.format, upload.type, NULL);
+					break;
+				}
+			}
+		}
+
+		//For non-array cubemap
+		//DSA-style
+		void ManTexStorageCube(GLuint texture, GLenum texTarget, Dimensions dims, GLuint numMipmaps,
+			GLenum internalFormat, const OpenGLPixelTransferParams &upload)
+		{
+			//Zero means bound, so no DSA.
+			if(texture == 0)
+			{
+				ManTexStorageCube(texTarget, dims, numMipmaps, internalFormat, upload);
+				return;
+			}
+
+			for(GLuint mipmap = 0; mipmap < numMipmaps; ++mipmap)
+			{
+				Dimensions levelDims = ModifySizeForMipmap(dims, mipmap);
+				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X, mipmap, internalFormat,
+					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
+				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X, mipmap, internalFormat,
+					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
+				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Y, mipmap, internalFormat,
+					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
+				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, mipmap, internalFormat,
+					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
+				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z, mipmap, internalFormat,
+					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
+				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, mipmap, internalFormat,
+					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
+			}
+		}
+
 		//Texture must be bound to the target.
 		void TexSubImage(GLenum texTarget, GLuint mipmap, GLuint internalFormat,
 			Dimensions dims, const OpenGLPixelTransferParams &upload,
@@ -1272,11 +1305,17 @@ namespace glimg
 			}
 		}
 
-		//DSA-style
 		void TexSubImage(GLuint texture, GLenum texTarget, GLuint mipmap, GLuint internalFormat,
 			Dimensions dims, const OpenGLPixelTransferParams &upload,
 			const void *pPixelData, size_t pixelByteSize)
 		{
+			//Zero means bound, so no DSA.
+			if(texture == 0)
+			{
+				TexSubImage(texTarget, mipmap, internalFormat, dims, upload, pPixelData, pixelByteSize);
+				return;
+			}
+
 			switch(dims.numDimensions)
 			{
 			case 1:
@@ -1311,6 +1350,52 @@ namespace glimg
 				break;
 			}
 		}
+
+		enum
+		{
+			NO_DSA_NO_STORAGE,
+			NO_DSA_YES_STORAGE,
+			YES_DSA_NO_STORAGE,
+			YES_DSA_YES_STORAGE,
+		};
+
+		int GetUploadClass(unsigned int forceConvertBits)
+		{
+			int ret = 0;
+			if(forceConvertBits & USE_TEXTURE_STORAGE)
+				ret |= 0x1;
+			if(forceConvertBits & USE_DSA)
+				ret |= 0x2;
+			return ret;
+		}
+
+		void TexStorageBase( GLenum texTarget, unsigned int forceConvertBits, Dimensions dims,
+			const int numMipmaps, GLuint internalFormat, const OpenGLPixelTransferParams & upload,
+			GLuint textureName )
+		{
+			if(forceConvertBits & USE_TEXTURE_STORAGE)
+				TexStorage(textureName, texTarget, dims, numMipmaps, internalFormat);
+			else
+				ManTexStorageBase(textureName, texTarget, dims, numMipmaps,
+				internalFormat, upload);
+		}
+
+		class TextureBinder
+		{
+		public:
+			TextureBinder() : texture(0), texTarget(0) {}
+			void Bind(GLenum _texTarget, GLuint _texture)
+			{
+				texture = _texture;
+				texTarget = _texTarget;
+				gl::BindTexture(texTarget, texture);
+			}
+			~TextureBinder() {if(texture) gl::BindTexture(texTarget, 0);}
+		private:
+			GLuint texture;
+			GLenum texTarget;
+		};
+
 		void Build1DArrayTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
@@ -1322,26 +1407,27 @@ namespace glimg
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			SetupUploadState(pImage->GetFormat(), forceConvertBits);
-			gl::BindTexture(gl::GL_TEXTURE_1D, textureName);
+			TextureBinder bind;
+			if(!(forceConvertBits & USE_DSA))
+			{
+				bind.Bind(gl::GL_TEXTURE_1D, textureName);
+				textureName = 0;
+			}
 
 			const int numMipmaps = pImage->GetMipmapCount();
-			if(forceConvertBits & USE_TEXTURE_STORAGE)
-				TexStorage(gl::GL_TEXTURE_1D, pImage->GetDimensions(), numMipmaps, internalFormat);
-			else
-				ManTexStorageBase(gl::GL_TEXTURE_1D, pImage->GetDimensions(), numMipmaps, internalFormat,
-				upload);
+			TexStorageBase(gl::GL_TEXTURE_1D, forceConvertBits, pImage->GetDimensions(),
+				numMipmaps, internalFormat, upload, textureName);
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
 			{
 				Dimensions dims = pImage->GetDimensions(mipmap);
 				const void *pPixelData = pImage->GetImageData(mipmap, 0, 0);
 
-				TexSubImage(gl::GL_TEXTURE_1D, mipmap, internalFormat, dims, upload, pPixelData,
-					pImage->GetImageByteSize(mipmap));
+				TexSubImage(textureName, gl::GL_TEXTURE_1D, mipmap, internalFormat, dims, upload,
+					pPixelData, pImage->GetImageByteSize(mipmap));
 			}
 
-			FinalizeTexture(gl::GL_TEXTURE_1D, pImage);
-			gl::BindTexture(gl::GL_TEXTURE_1D, 0);
+			FinalizeTexture(textureName, gl::GL_TEXTURE_1D, pImage);
 		}
 
 		void Build2DCubeArrayTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
@@ -1370,52 +1456,54 @@ namespace glimg
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			SetupUploadState(pImage->GetFormat(), forceConvertBits);
-			gl::BindTexture(gl::GL_TEXTURE_2D, textureName);
+			TextureBinder bind;
+			if(!(forceConvertBits & USE_DSA))
+			{
+				bind.Bind(gl::GL_TEXTURE_2D, textureName);
+				textureName = 0;
+			}
 
 			const int numMipmaps = pImage->GetMipmapCount();
-			if(forceConvertBits & USE_TEXTURE_STORAGE)
-				TexStorage(gl::GL_TEXTURE_2D, pImage->GetDimensions(), numMipmaps, internalFormat);
-			else
-				ManTexStorageBase(gl::GL_TEXTURE_2D, pImage->GetDimensions(), numMipmaps, internalFormat,
-				upload);
+			TexStorageBase(gl::GL_TEXTURE_2D, forceConvertBits, pImage->GetDimensions(),
+				numMipmaps, internalFormat, upload, textureName);
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
 			{
 				Dimensions dims = pImage->GetDimensions(mipmap);
 				const void *pPixelData = pImage->GetImageData(mipmap);
 
-				TexSubImage(gl::GL_TEXTURE_2D, mipmap, internalFormat, dims, upload, pPixelData,
-					pImage->GetImageByteSize(mipmap));
+				TexSubImage(textureName, gl::GL_TEXTURE_2D, mipmap, internalFormat, dims, upload,
+					pPixelData, pImage->GetImageByteSize(mipmap));
 			}
 
-			FinalizeTexture(gl::GL_TEXTURE_2D, pImage);
-			gl::BindTexture(gl::GL_TEXTURE_2D, 0);
+			FinalizeTexture(textureName, gl::GL_TEXTURE_2D, pImage);
 		}
 
 		void Build3DTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			SetupUploadState(pImage->GetFormat(), forceConvertBits);
-			gl::BindTexture(gl::GL_TEXTURE_3D, textureName);
+			TextureBinder bind;
+			if(!(forceConvertBits & USE_DSA))
+			{
+				bind.Bind(gl::GL_TEXTURE_3D, textureName);
+				textureName = 0;
+			}
 
 			const int numMipmaps = pImage->GetMipmapCount();
-			if(forceConvertBits & USE_TEXTURE_STORAGE)
-				TexStorage(gl::GL_TEXTURE_3D, pImage->GetDimensions(), numMipmaps, internalFormat);
-			else
-				ManTexStorageBase(gl::GL_TEXTURE_3D, pImage->GetDimensions(), numMipmaps, internalFormat,
-				upload);
+			TexStorageBase(gl::GL_TEXTURE_3D, forceConvertBits, pImage->GetDimensions(),
+				numMipmaps, internalFormat, upload, textureName);
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
 			{
 				Dimensions dims = pImage->GetDimensions(mipmap);
 				const void *pPixelData = pImage->GetImageData(mipmap);
 
-				TexSubImage(gl::GL_TEXTURE_3D, mipmap, internalFormat, dims, upload, pPixelData,
+				TexSubImage(textureName, gl::GL_TEXTURE_3D, mipmap, internalFormat, dims, upload, pPixelData,
 					pImage->GetImageByteSize(mipmap));
 			}
 
-			FinalizeTexture(gl::GL_TEXTURE_3D, pImage);
-			gl::BindTexture(gl::GL_TEXTURE_3D, 0);
+			FinalizeTexture(textureName, gl::GL_TEXTURE_3D, pImage);
 		}
 
 		bool IsArrayTexture(const ImageSet *pImage, unsigned int forceConvertBits)

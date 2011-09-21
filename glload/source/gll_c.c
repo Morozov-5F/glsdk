@@ -41,9 +41,9 @@ static void ProcExt(StrToExtMap *pMapLoc)
 		if(!(*pMapLoc->pExtensionVariable))
 		{
 			if(pMapLoc->LoadExtension)
-				*pMapLoc->pExtensionVariable = pMapLoc->LoadExtension();
-			else
-				*pMapLoc->pExtensionVariable = 1;
+				pMapLoc->LoadExtension();
+
+			*pMapLoc->pExtensionVariable = 1;
 		}
 	}
 }
