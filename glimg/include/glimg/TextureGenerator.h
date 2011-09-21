@@ -41,6 +41,8 @@ namespace glimg
 
 		USE_TEXTURE_STORAGE			= 0x0100,	///<If ARB_texture_storage or GL 4.2 is available, then texture storage functions will be used to create the textures. Otherwise regular glTex* functions will be used.
 		FORCE_TEXTURE_STORAGE		= 0x0200,	///<If ARB_texture_storage or GL 4.2 is available, then texture storage functions will be used to create the textures. Otherwise, an exception will be thrown.
+		USE_DSA						= 0x0400,	///<If EXT_direct_state_access is available, then DSA functions will be used to create the texture. Otherwise, regular ones will be used.
+		FORCE_DSA					= 0x0800,	///<If EXT_direct_state_access is available, then DSA functions will be used to create the texture. Otherwise, an exception will be thrown.
 	};
 
 	/**
@@ -133,6 +135,10 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 
 	\li All GL_UNPACK_* state.
 	\li The texture target of the returned texture will have texture object 0 bound to it.
+
+	If you pass the USE_DSA or FORCE_DSA flags, and your implementation supports
+	GL_EXT_direct_state_access, then the only state that will be changed is the GL_UNPACK_*
+	state.
 
 	\param pImage The image to upload to OpenGL.
 	\param forceConvertBits A bitfield containing values from ForcedConvertFlags.

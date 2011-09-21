@@ -26,6 +26,9 @@ namespace glimg
 			ImageFormat GetFormat() const {return m_format;}
 
 			const void *GetImageData(int mipmapLevel, int arrayIx = 0, int faceIx = 0) const;
+
+			//Returns the byte size for a single image of that mipmap's data.
+			//This is for a single array layer/cube face, not the data for the entire mipmap.
 			size_t GetImageByteSize(int mipmapLevel) const;
 
 		private:

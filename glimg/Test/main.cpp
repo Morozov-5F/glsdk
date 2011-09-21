@@ -24,7 +24,7 @@ void init()
 	TestImageFormats();
 
 	//	std::auto_ptr<glimg::ImageSet> pImgSet(glimg::loaders::test::TestImage2D());
-	std::auto_ptr<glimg::ImageSet> pImgSet(glimg::loaders::dds::LoadFromFile("pics/transTestDXT5.dds"));
+	std::auto_ptr<glimg::ImageSet> pImgSet(glimg::loaders::dds::LoadFromFile("pics/bitmapDXT1_mip.dds"));
 	//	std::auto_ptr<glimg::ImageSet> pImgSet(glimg::loaders::dds::LoadFromFile("pics/bitmapXBGR.dds"));
 	//	std::auto_ptr<glimg::ImageSet> pImgSet(glimg::loaders::stb::LoadFromFile("pics/transTest.png"));
 
