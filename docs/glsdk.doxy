@@ -16,6 +16,15 @@ Many of the components of the SDK are C++ libraries.
 \li \subpage pg_build 
 \li \subpage pg_use
 
+\note The Unofficial GL SDK is still in Alpha at present. Currently, the SDK is missing the following libraries:
+
+\li Font rendering: A library for rendering glyphs from fonts and doing the most basic of text layout.
+\li Mesh rendering: A library for loading and rendering meshes.
+
+The main issue is finding good, well-maintained libraries that can do these. Libraries that rely on compatibility profiles are not acceptable for the SDK, yet most of the available libraries that perform these tasks do.
+
+They do not have to be C++, but they should have no additional dependencies outside of the <em>absolutely necessary</em>. For instance, FreeType2 would be essential for any font library, as there's no way anyone should be expected to reinvent that wheel. But outside of that, there should be no extra dependencies.
+
 **/
 
 /**
