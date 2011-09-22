@@ -3,7 +3,7 @@
 /**
 \mainpage Unofficial OpenGL Software Development Kit
 
-The Unofficial OpenGL Software Development Kit is a collection of libraries and utilities that will help you get started working with OpenGL. It provides a unified build system to make compiling the disparate libraries easier.
+The Unofficial OpenGL Software Development Kit is a collection of libraries and utilities that will help you get started working with OpenGL. It provides a unified, cross-platform build system to make compiling the disparate libraries easier.
 
 Many of the components of the SDK are C++ libraries.
  
@@ -15,6 +15,8 @@ Many of the components of the SDK are C++ libraries.
 
 \li \subpage pg_build 
 \li \subpage pg_use
+
+Example code can be found in the <tt>examples</tt> directory. The most recent download package can be found <a href="https://sourceforge.net/projects/glsdk/files/">on SourceForge</a>. The preferred location for filing bug reports is <a href="https://bitbucket.org/alfonse/unofficial-opengl-sdk/issues?status=new&status=open">on Bitbucket</a>, but bugs can be filed on the SourceForge issue tracker as well.
 
 \note The Unofficial GL SDK is still in Alpha at present. Currently, the SDK is missing the following libraries:
 
@@ -41,13 +43,15 @@ Supported development environments are:
 
 \note At present, the OpenGL SDK has not been tested under any form of Mac OS.
 
-Outside of the Premake utility, the Unofficial OpenGL SDK is completely self-contained. It has no external dependencies. Simply download the distribution and unzip the package into a directory of your choice.
+Outside of the Premake utility, the Unofficial OpenGL SDK is completely self-contained. It has no external dependencies. Simply <a href="https://sourceforge.net/projects/glsdk/files/">download the distribution</a> and unzip the package into a directory of your choice.
 
 \section page_build_premake Premake
 
-To simply the build process for the SDK across platforms, the build system used for the SDK is the <a href="http://industriousone.com/premake">Premake utility</a>, version 4.3 or later.
+To simplify the build process for the SDK across platforms, the build system used for the SDK is the <a href="http://industriousone.com/premake">Premake utility</a>, version 4.3 or later.
 
-Premake is a utility for generating build files; it does not do the building itself. The general idea is this: you run the Premake program on Premake scripts. This will generate the build files for your development environment of choice. Then you use those build files in that environment to build your project.
+Premake is a utility for generating build files; it does not do the building itself. The general idea is this: you run the Premake program on Premake scripts. This will generate the build files for your development environment of choice. Then you use those build files in that development environment to build your project.
+
+For example, if you are using GCC and the standard GNU tools, Premake would generate a <tt>Makefile</tt>, which you would then use GNU Make on as normal. If you use Visual Studio, Premake generates <tt>.sln</tt> and <tt>.vcproj</tt> files for the VS version of your choice.
 
 For each build tool, Premake has a command to generate the build files for that tool. For example, to execute Premake for Visual Studio 2008, the following command line would be used:
 
@@ -68,17 +72,19 @@ Each build tool that Premake supports has its own command; the <a href="http://i
 To compile the libraries that are part of the SDK, perform the following steps:
 
 <ol>
-<li>Ensure that <tt>premake4.exe</tt> is in your path.</li>
+<li>Ensure that the Premake4 executable is in your path.</li>
 <li>Open a command line and go to the directory where you have unpacked the SDK.</li>
 <li>Run the command <tt>premake4 \a plat</tt>, where \a plat is the Premake4 command for your build system of choice.</li>
-<li>Use the generated build files, using your preferred build environment.</li>
+<li>Use the generated build files, using your preferred build environment, to build the libraries.</li>
 </ol>
 
 This process will generate the static libraries for all of the libraries that need compiling (some libraries, like GLM, are pure header libraries).
 
-\note Neither the GNU Makefiles nor the Premake scripts contain an "install" action. The SDK is intended to be used where it is; it is not intended to make any modifications to your system.
+\note Neither the GNU Makefiles nor the Premake scripts contain an "install" action. The SDK is intended to be used where it is; it is not intended to make any modifications to your system outside of the directory where you placed it.
 
 \section page_build_examples Building the Examples
+
+The SDK comes with a number of pieces of example code. These are useful as reference material when getting started with OpenGL.
 
 To compile the examples, perform the following steps:
 
@@ -200,7 +206,7 @@ You will also need to add some #defines to your command line. These are:
 
 \section page_use_other Other Includes
 
-While the Unofficial OpenGL SDK is intended to be stand-alone, there is one dependency that is unavoidable, by the very nature of its purpose: OpenGL itself.
+While the Unofficial OpenGL SDK is intended to be self-contained, there is one external dependency that is unavoidable, by the very nature of its purpose: OpenGL itself.
 
 Each platform has its own ways of dealing with OpenGL. In most cases, you will only need to download and install recent graphics drivers. Exactly what you must link to and what include paths you need is system-dependent.
 

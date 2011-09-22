@@ -30,7 +30,6 @@ namespace glimg
 	{
 		FORCE_SRGB_COLORSPACE_FMT	= 0x0001,	///<When possible, will force the format to use the sRGB colorspace. Does not cause erroring for formats that can't be sRGB, unless your GL implementation doesn't support sRGB.
 		FORCE_BC1_ALPHA_FMT			= 0x0002,	///<When used with a BC1 texture, will force the texture to have an alpha. Ignored otherwise.
-		FORCE_ARRAY_TEXTURE			= 0x0004,	///<NOT YET SUPPORTED! The texture will be an array texture even if the depth is not present. Ignored for formats that can't be arrays. Will throw if array textures of that type are not supported (ie: cubemap arrays, 2D arrays for lesser hardware, etc).
 		FORCE_LUMINANCE_FMT			= 0x0008,	///<Red and RG textures will become luminance and luminance/alpha textures in all cases. Exceptions will be thrown if the GL implementation does not support those luminance/alpha formats (ie: is core).
 
 //Not supported yet.
@@ -39,6 +38,7 @@ namespace glimg
 		FORCE_SIGNED_FMT			= 0x0040,	///<Image formats that contain unsigned integers will be uploaded as signed integers. Ignored if the format is not an integer/integral format, or if it isn't BC4 or BC5 compressed.
 		FORCE_COLOR_RENDERABLE_FMT	= 0x0080,	///<NOT YET SUPPORTED! Will force the use of formats that are required to be valid render targets. This will add components if necessary, but it will throw if conversion would require fundamentally changing the basic format (from signed to unsigned, compressed textures, etc).
 
+		FORCE_ARRAY_TEXTURE			= 0x0004,	///<NOT YET SUPPORTED! The texture will be an array texture even if the depth is not present. Ignored for formats that can't be arrays. Will throw if array textures of that type are not supported (ie: cubemap arrays, 2D arrays for lesser hardware, etc).
 		USE_TEXTURE_STORAGE			= 0x0100,	///<If ARB_texture_storage or GL 4.2 is available, then texture storage functions will be used to create the textures. Otherwise regular glTex* functions will be used.
 		FORCE_TEXTURE_STORAGE		= 0x0200,	///<If ARB_texture_storage or GL 4.2 is available, then texture storage functions will be used to create the textures. Otherwise, an exception will be thrown.
 		USE_DSA						= 0x0400,	///<If EXT_direct_state_access is available, then DSA functions will be used to create the texture. Otherwise, regular ones will be used.
@@ -71,9 +71,10 @@ namespace glimg
 
 	\return A GLenum representing the internal OpenGL format.
 
-	\throws TextureGenerationException If the format cannot be used.
-	Also thrown if the format isn't supported yet. This is a base class; the various derived
-	classes of this type define the specific errors that are thrown.
+	\throws TextureUnsupportedException The type of texture that was asked to be created cannot be created
+	because the OpenGL implementation doesn't support that kind of texture.
+	\throws CannotForceRenderTargetException Only given if FORCE_COLOR_RENDERABLE_FMT is set and
+	a color renderable format cannot be found that is appropriate.
 	**/
 	unsigned int GetInternalFormat(const ImageFormat &format, unsigned int forceConvertBits);
 
@@ -115,9 +116,10 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 
 	\return The OpenGL pixel transfer parameters, and a compressed block size field.
 
-	\throws TextureGenerationException If the \a format cannot be used.
-	Also thrown if the format isn't supported on the currently active OpenGL implementation.
-	This is a base class; the various derived classes of this type are thrown for specific errors.
+	\throws TextureUnsupportedException The type of texture that was asked to be created cannot be created
+	because the OpenGL implementation doesn't support that kind of texture.
+	\throws CannotForceRenderTargetException Only given if FORCE_COLOR_RENDERABLE_FMT is set and
+	a color renderable format cannot be found that is appropriate.
 	**/
 	OpenGLPixelTransferParams GetUploadFormatType(const ImageFormat &format, unsigned int forceConvertBits);
 
@@ -147,9 +149,18 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	with the proper base and max mipmap level set, and reasonable filtering parameters
 	set on it.
 
-	\throws TextureGenerationException If the format is invalid, or if the format cannot be used.
-	Also thrown if the format isn't supported yet. This is a base class; the various derived
-	classes of this type are thrown for specific errors.
+	\throws ImageFormatUnsupportedException The given ImageFormat cannot be used because the OpenGL
+	implementation doesn't support the functionality necessary to use it.
+	\throws TextureUnsupportedException The type of texture that was asked to be created cannot be created
+	because the OpenGL implementation doesn't support that kind of texture.
+	\throws TextureUnexpectedException The type of texture has not been implemented in GL Image.
+	Appologies for that.
+	\throws CannotForceRenderTargetException Only given if FORCE_COLOR_RENDERABLE_FMT is set and
+	a color renderable format cannot be found that is appropriate.
+	\throws CannotForceTextureStorage Only given if FORCE_TEXTURE_STORAGE is set and the OpenGL
+	implementation does not implement GL 4.2 or the GL_ARB_texture_storage extension.
+	\throws CannotForceDSAUsage Only given if FORCE_DSA is set, and the OpenGL implementation
+	does not implement GL_EXT_direct_state_access.
 	**/
 	unsigned int CreateTexture(const ImageSet *pImage, unsigned int forceConvertBits);
 
@@ -159,9 +170,7 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	The given texture object \em must not have been used at all. You cannot even have
 	bound it to the OpenGL context once. It should be fresh from glGenTextures.
 
-	\throws TextureGenerationException If the format is invalid, or if the format cannot be used.
-	Also thrown if the format isn't supported yet. This is a base class; the various derived
-	classes of this type are thrown for specific errors.
+	\throws ... Everything that CreateTexture(const ImageSet *, unsigned int) throws.
 	**/
 	void CreateTexture(unsigned int textureName, const ImageSet *pImage, unsigned int forceConvertBits);
 	///@}

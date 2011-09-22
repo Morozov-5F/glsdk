@@ -10,6 +10,7 @@ namespace glimg
 	///\addtogroup module_glimg_exceptions
 	///@{
 
+	///Base class for all exceptions thrown by ImageCreator.
 	class ImageCreationException : public std::exception
 	{
 	public:
@@ -21,6 +22,7 @@ namespace glimg
 		std::string message;
 	};
 
+	///Thrown if the ImageCreator is given a face count other than 1 or 6.
 	class BadFaceCountException : public ImageCreationException
 	{
 	public:
@@ -30,6 +32,7 @@ namespace glimg
 		}
 	};
 
+	///Thrown if the user attempts to provide a cubemap that isn't two-dimensional.
 	class CubemapsMustBe2DException : public ImageCreationException
 	{
 	public:
@@ -39,6 +42,7 @@ namespace glimg
 		}
 	};
 
+	///Thrown if the user attempts to have 3D array images, which are not allowed.
 	class No3DTextureArrayException : public ImageCreationException
 	{
 	public:
@@ -48,15 +52,17 @@ namespace glimg
 		}
 	};
 
+	///Thrown if the mipmap or array count is not greater than zero.
 	class NoImagesSpecifiedException : public ImageCreationException
 	{
 	public:
 		NoImagesSpecifiedException()
 		{
-			message = "Mipmap and array count must be >= 1.";
+			message = "Mipmap and array count must be > 0.";
 		}
 	};
 
+	///Thrown if the ImageCreator is asked to insert an image outside of the \a arrayCount.
 	class ArrayOutOfBoundsException : public ImageCreationException
 	{
 	public:
@@ -66,6 +72,7 @@ namespace glimg
 		}
 	};
 
+	///Thrown if the ImageCreator is asked to insert an image outside of the \a mipmapCount
 	class MipmapLayerOutOfBoundsException : public ImageCreationException
 	{
 	public:
@@ -75,6 +82,7 @@ namespace glimg
 		}
 	};
 
+	///Thrown if the ImageCreator is asked to insert an image outside of the \a faceCount
 	class FaceIndexOutOfBoundsException : public ImageCreationException
 	{
 	public:
@@ -84,6 +92,7 @@ namespace glimg
 		}
 	};
 
+	///Thrown when attempting to do anything except destroy an ImageCreator object after calling ImageCreator::CreateImage.
 	class ImageSetAlreadyCreatedException : public ImageCreationException
 	{
 	public:
