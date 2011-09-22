@@ -114,7 +114,7 @@ local function WriteFuncLoad(hFile, func, funcPrefix, bIsCoreExt)
 		Make.GetFuncPtrNameStr(func, funcPrefix)
 	);
 	
-	WriteForm(hFile, "\tif(!TestPointer((const void*)%s)) bIsLoaded = 0;\n", funcPtrName);
+	WriteForm(hFile, "\tif(!%s) bIsLoaded = 0;\n", funcPtrName);
 end
 
 local function WriteLoaderFunc(hFile, ext, extName, specData, funcPrefix, enumPrefix)
@@ -189,8 +189,6 @@ local function GetStaticCoreName(version, funcPrefix, removedVersion)
 end
 
 
-local bHasCoreStruct = false;
-
 local function WriteCoreFuncLoad(hFile, func, funcPrefix)
 	local funcPtrName = nil;
 	
@@ -202,14 +200,7 @@ local function WriteCoreFuncLoad(hFile, func, funcPrefix)
 		Make.GetFuncPtrNameStr(func, funcPrefix)
 	);
 	
-	WriteForm(hFile, "\tif(!TestPointer((const void*)%s))\n", funcPtrName);
-	hFile:write("\t{\n");
-	WriteForm(hFile, "\t\t%s = (%s)%s.%s;\n", funcPtrName,
-		Make.GetFuncTypedefNameStr(func, funcPrefix),
-		Make.GetCoreStructVarName(funcPrefix),
-		Make.GetCoreStructMemberName(func, funcPrefix));
-	WriteForm(hFile, "\t\tif(!%s) bIsLoaded = 0;\n", funcPtrName);
-	hFile:write("\t}\n");
+	WriteForm(hFile, "\tif(!%s) bIsLoaded = 0;\n", funcPtrName);
 end
 
 --If there is a nextVersion, then we should write functions
@@ -294,7 +285,6 @@ local function WriteCoreLoaderFunc(hFile, specData, funcPrefix, removedVersionLi
 	hFile:write("\tint bIsLoaded = 1;\n");
 	
 	WriteForm(hFile, "\t%s();\n", Make.GetClearFunctionName(funcPrefix));
-	WriteForm(hFile, "\t%s();\n", Make.GetCoreInitFuncName(funcPrefix));
 	
 	local lastVersion = removedVersionList[#removedVersionList];
 	
@@ -334,10 +324,6 @@ local function WriteBaseLoaders(hFile, specData, funcPrefix, baseData)
 	hFile:write("{\n");
 	hFile:write("\tint bIsLoaded = 1; //Unimportant here.\n");
 	
-	if(bHasCoreStruct) then
-		WriteForm(hFile, "\t%s();\n", Make.GetCoreInitFuncName(funcPrefix));
-	end
-
 	for i, funcName in ipairs(baseData.funcs) do
 		--find the function.
 		local func = nil;
@@ -363,7 +349,6 @@ end
 
 function MakeMainSourceFile(outFilename, specData, enumPrefix, funcPrefix, VersionFunc,
 							preceedData, baseData, coreData)
-	if(coreData) then bHasCoreStruct = true; else bHasCoreStruct = false; end;
 							
 	local hFile = io.open(GetSourcePath() .. outFilename .. ".c", "w");
 	if(not hFile) then

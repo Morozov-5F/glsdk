@@ -5,7 +5,7 @@ return [====[
 #if defined(__APPLE__)
 #include <mach-o/dyld.h>
 
-void* AppleGLGetProcAddress (const GLubyte *name)
+static void* AppleGLGetProcAddress (const GLubyte *name)
 {
   static const struct mach_header* image = NULL;
   NSSymbol symbol;
@@ -31,7 +31,7 @@ void* AppleGLGetProcAddress (const GLubyte *name)
 #include <dlfcn.h>
 #include <stdio.h>
 
-void* SunGetProcAddress (const GLubyte* name)
+static void* SunGetProcAddress (const GLubyte* name)
 {
   static void* h = NULL;
   static void* gpa;
@@ -58,9 +58,23 @@ void* SunGetProcAddress (const GLubyte* name)
 		#undef APIENTRY
 	#endif //GLE_REMOVE_APIENTRY
 
-	#include <windows.h>
+#include <windows.h>
+
+#pragma warning(disable: 4055)
+#pragma warning(disable: 4054)
+static void *WinGetProcAddress(const char *name)
+{
+	HMODULE glMod = NULL;
+	void *pFunc = (void*)wglGetProcAddress((LPCSTR)name);
+	if(TestPointer(pFunc))
+	{
+		return pFunc;
+	}
+	glMod = GetModuleHandleA("OpenGL32.dll");
+	return (void*)GetProcAddress(glMod, (LPCSTR)name);
+}
 	
-	#define gleIntGetProcAddress(name) wglGetProcAddress((LPCSTR)name)
+#define gleIntGetProcAddress(name) WinGetProcAddress(name)
 #else
 	#if defined(__APPLE__)
 		#define gleIntGetProcAddress(name) AppleGLGetProcAddress(name)

@@ -59,7 +59,6 @@ static void ProcExtFromExtString(const char *strExtList, StrToExtMap *pMapArray,
 	{
 		//Get the extension at our position.
 		int iStrLen = 0;
-		StrToExtMap *pMapLoc = NULL;
 		const char *strEndStr = strchr(strCurrPos, ' ');
 		int iStop = 0;
 		if(strEndStr == NULL)

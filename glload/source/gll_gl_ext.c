@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "gll_gl_ext.h"
-#include "gll_gl_core.h"
 
 #if defined(__gl_h_) || defined(__GL_H__)
 #error Attempt to include gle after including gl.h
@@ -165,7 +164,7 @@ typedef GLintptr GLvdpauSurfaceNV;
 #if defined(__APPLE__)
 #include <mach-o/dyld.h>
 
-void* AppleGLGetProcAddress (const GLubyte *name)
+static void* AppleGLGetProcAddress (const GLubyte *name)
 {
   static const struct mach_header* image = NULL;
   NSSymbol symbol;
@@ -191,7 +190,7 @@ void* AppleGLGetProcAddress (const GLubyte *name)
 #include <dlfcn.h>
 #include <stdio.h>
 
-void* SunGetProcAddress (const GLubyte* name)
+static void* SunGetProcAddress (const GLubyte* name)
 {
   static void* h = NULL;
   static void* gpa;
@@ -218,9 +217,23 @@ void* SunGetProcAddress (const GLubyte* name)
 		#undef APIENTRY
 	#endif //GLE_REMOVE_APIENTRY
 
-	#include <windows.h>
+#include <windows.h>
+
+#pragma warning(disable: 4055)
+#pragma warning(disable: 4054)
+static void *WinGetProcAddress(const char *name)
+{
+	HMODULE glMod = NULL;
+	void *pFunc = (void*)wglGetProcAddress((LPCSTR)name);
+	if(TestPointer(pFunc))
+	{
+		return pFunc;
+	}
+	glMod = GetModuleHandleA("OpenGL32.dll");
+	return (void*)GetProcAddress(glMod, (LPCSTR)name);
+}
 	
-	#define gleIntGetProcAddress(name) wglGetProcAddress((LPCSTR)name)
+#define gleIntGetProcAddress(name) WinGetProcAddress(name)
 #else
 	#if defined(__APPLE__)
 		#define gleIntGetProcAddress(name) AppleGLGetProcAddress(name)
@@ -1064,7 +1077,7 @@ static int gleIntLoad_3DFX_tbuffer()
 	int bIsLoaded = 1;
 #ifndef GL_3DFX_tbuffer
 	glTbufferMask3DFX = (PFNGLTBUFFERMASK3DFXPROC)gleIntGetProcAddress("glTbufferMask3DFX");
-	if(!TestPointer((const void*)glTbufferMask3DFX)) bIsLoaded = 0;
+	if(!glTbufferMask3DFX) bIsLoaded = 0;
 #endif /*GL_3DFX_tbuffer*/
 	return bIsLoaded;
 }
@@ -1088,13 +1101,13 @@ static int gleIntLoad_AMD_debug_output()
 	int bIsLoaded = 1;
 #ifndef GL_AMD_debug_output
 	glDebugMessageEnableAMD = (PFNGLDEBUGMESSAGEENABLEAMDPROC)gleIntGetProcAddress("glDebugMessageEnableAMD");
-	if(!TestPointer((const void*)glDebugMessageEnableAMD)) bIsLoaded = 0;
+	if(!glDebugMessageEnableAMD) bIsLoaded = 0;
 	glDebugMessageInsertAMD = (PFNGLDEBUGMESSAGEINSERTAMDPROC)gleIntGetProcAddress("glDebugMessageInsertAMD");
-	if(!TestPointer((const void*)glDebugMessageInsertAMD)) bIsLoaded = 0;
+	if(!glDebugMessageInsertAMD) bIsLoaded = 0;
 	glDebugMessageCallbackAMD = (PFNGLDEBUGMESSAGECALLBACKAMDPROC)gleIntGetProcAddress("glDebugMessageCallbackAMD");
-	if(!TestPointer((const void*)glDebugMessageCallbackAMD)) bIsLoaded = 0;
+	if(!glDebugMessageCallbackAMD) bIsLoaded = 0;
 	glGetDebugMessageLogAMD = (PFNGLGETDEBUGMESSAGELOGAMDPROC)gleIntGetProcAddress("glGetDebugMessageLogAMD");
-	if(!TestPointer((const void*)glGetDebugMessageLogAMD)) bIsLoaded = 0;
+	if(!glGetDebugMessageLogAMD) bIsLoaded = 0;
 #endif /*GL_AMD_debug_output*/
 	return bIsLoaded;
 }
@@ -1116,13 +1129,13 @@ static int gleIntLoad_AMD_draw_buffers_blend()
 	int bIsLoaded = 1;
 #ifndef GL_AMD_draw_buffers_blend
 	glBlendFuncIndexedAMD = (PFNGLBLENDFUNCINDEXEDAMDPROC)gleIntGetProcAddress("glBlendFuncIndexedAMD");
-	if(!TestPointer((const void*)glBlendFuncIndexedAMD)) bIsLoaded = 0;
+	if(!glBlendFuncIndexedAMD) bIsLoaded = 0;
 	glBlendFuncSeparateIndexedAMD = (PFNGLBLENDFUNCSEPARATEINDEXEDAMDPROC)gleIntGetProcAddress("glBlendFuncSeparateIndexedAMD");
-	if(!TestPointer((const void*)glBlendFuncSeparateIndexedAMD)) bIsLoaded = 0;
+	if(!glBlendFuncSeparateIndexedAMD) bIsLoaded = 0;
 	glBlendEquationIndexedAMD = (PFNGLBLENDEQUATIONINDEXEDAMDPROC)gleIntGetProcAddress("glBlendEquationIndexedAMD");
-	if(!TestPointer((const void*)glBlendEquationIndexedAMD)) bIsLoaded = 0;
+	if(!glBlendEquationIndexedAMD) bIsLoaded = 0;
 	glBlendEquationSeparateIndexedAMD = (PFNGLBLENDEQUATIONSEPARATEINDEXEDAMDPROC)gleIntGetProcAddress("glBlendEquationSeparateIndexedAMD");
-	if(!TestPointer((const void*)glBlendEquationSeparateIndexedAMD)) bIsLoaded = 0;
+	if(!glBlendEquationSeparateIndexedAMD) bIsLoaded = 0;
 #endif /*GL_AMD_draw_buffers_blend*/
 	return bIsLoaded;
 }
@@ -1139,9 +1152,9 @@ static int gleIntLoad_AMD_multi_draw_indirect()
 	int bIsLoaded = 1;
 #ifndef GL_AMD_multi_draw_indirect
 	glMultiDrawArraysIndirectAMD = (PFNGLMULTIDRAWARRAYSINDIRECTAMDPROC)gleIntGetProcAddress("glMultiDrawArraysIndirectAMD");
-	if(!TestPointer((const void*)glMultiDrawArraysIndirectAMD)) bIsLoaded = 0;
+	if(!glMultiDrawArraysIndirectAMD) bIsLoaded = 0;
 	glMultiDrawElementsIndirectAMD = (PFNGLMULTIDRAWELEMENTSINDIRECTAMDPROC)gleIntGetProcAddress("glMultiDrawElementsIndirectAMD");
-	if(!TestPointer((const void*)glMultiDrawElementsIndirectAMD)) bIsLoaded = 0;
+	if(!glMultiDrawElementsIndirectAMD) bIsLoaded = 0;
 #endif /*GL_AMD_multi_draw_indirect*/
 	return bIsLoaded;
 }
@@ -1160,11 +1173,11 @@ static int gleIntLoad_AMD_name_gen_delete()
 	int bIsLoaded = 1;
 #ifndef GL_AMD_name_gen_delete
 	glGenNamesAMD = (PFNGLGENNAMESAMDPROC)gleIntGetProcAddress("glGenNamesAMD");
-	if(!TestPointer((const void*)glGenNamesAMD)) bIsLoaded = 0;
+	if(!glGenNamesAMD) bIsLoaded = 0;
 	glDeleteNamesAMD = (PFNGLDELETENAMESAMDPROC)gleIntGetProcAddress("glDeleteNamesAMD");
-	if(!TestPointer((const void*)glDeleteNamesAMD)) bIsLoaded = 0;
+	if(!glDeleteNamesAMD) bIsLoaded = 0;
 	glIsNameAMD = (PFNGLISNAMEAMDPROC)gleIntGetProcAddress("glIsNameAMD");
-	if(!TestPointer((const void*)glIsNameAMD)) bIsLoaded = 0;
+	if(!glIsNameAMD) bIsLoaded = 0;
 #endif /*GL_AMD_name_gen_delete*/
 	return bIsLoaded;
 }
@@ -1199,27 +1212,27 @@ static int gleIntLoad_AMD_performance_monitor()
 	int bIsLoaded = 1;
 #ifndef GL_AMD_performance_monitor
 	glGetPerfMonitorGroupsAMD = (PFNGLGETPERFMONITORGROUPSAMDPROC)gleIntGetProcAddress("glGetPerfMonitorGroupsAMD");
-	if(!TestPointer((const void*)glGetPerfMonitorGroupsAMD)) bIsLoaded = 0;
+	if(!glGetPerfMonitorGroupsAMD) bIsLoaded = 0;
 	glGetPerfMonitorCountersAMD = (PFNGLGETPERFMONITORCOUNTERSAMDPROC)gleIntGetProcAddress("glGetPerfMonitorCountersAMD");
-	if(!TestPointer((const void*)glGetPerfMonitorCountersAMD)) bIsLoaded = 0;
+	if(!glGetPerfMonitorCountersAMD) bIsLoaded = 0;
 	glGetPerfMonitorGroupStringAMD = (PFNGLGETPERFMONITORGROUPSTRINGAMDPROC)gleIntGetProcAddress("glGetPerfMonitorGroupStringAMD");
-	if(!TestPointer((const void*)glGetPerfMonitorGroupStringAMD)) bIsLoaded = 0;
+	if(!glGetPerfMonitorGroupStringAMD) bIsLoaded = 0;
 	glGetPerfMonitorCounterStringAMD = (PFNGLGETPERFMONITORCOUNTERSTRINGAMDPROC)gleIntGetProcAddress("glGetPerfMonitorCounterStringAMD");
-	if(!TestPointer((const void*)glGetPerfMonitorCounterStringAMD)) bIsLoaded = 0;
+	if(!glGetPerfMonitorCounterStringAMD) bIsLoaded = 0;
 	glGetPerfMonitorCounterInfoAMD = (PFNGLGETPERFMONITORCOUNTERINFOAMDPROC)gleIntGetProcAddress("glGetPerfMonitorCounterInfoAMD");
-	if(!TestPointer((const void*)glGetPerfMonitorCounterInfoAMD)) bIsLoaded = 0;
+	if(!glGetPerfMonitorCounterInfoAMD) bIsLoaded = 0;
 	glGenPerfMonitorsAMD = (PFNGLGENPERFMONITORSAMDPROC)gleIntGetProcAddress("glGenPerfMonitorsAMD");
-	if(!TestPointer((const void*)glGenPerfMonitorsAMD)) bIsLoaded = 0;
+	if(!glGenPerfMonitorsAMD) bIsLoaded = 0;
 	glDeletePerfMonitorsAMD = (PFNGLDELETEPERFMONITORSAMDPROC)gleIntGetProcAddress("glDeletePerfMonitorsAMD");
-	if(!TestPointer((const void*)glDeletePerfMonitorsAMD)) bIsLoaded = 0;
+	if(!glDeletePerfMonitorsAMD) bIsLoaded = 0;
 	glSelectPerfMonitorCountersAMD = (PFNGLSELECTPERFMONITORCOUNTERSAMDPROC)gleIntGetProcAddress("glSelectPerfMonitorCountersAMD");
-	if(!TestPointer((const void*)glSelectPerfMonitorCountersAMD)) bIsLoaded = 0;
+	if(!glSelectPerfMonitorCountersAMD) bIsLoaded = 0;
 	glBeginPerfMonitorAMD = (PFNGLBEGINPERFMONITORAMDPROC)gleIntGetProcAddress("glBeginPerfMonitorAMD");
-	if(!TestPointer((const void*)glBeginPerfMonitorAMD)) bIsLoaded = 0;
+	if(!glBeginPerfMonitorAMD) bIsLoaded = 0;
 	glEndPerfMonitorAMD = (PFNGLENDPERFMONITORAMDPROC)gleIntGetProcAddress("glEndPerfMonitorAMD");
-	if(!TestPointer((const void*)glEndPerfMonitorAMD)) bIsLoaded = 0;
+	if(!glEndPerfMonitorAMD) bIsLoaded = 0;
 	glGetPerfMonitorCounterDataAMD = (PFNGLGETPERFMONITORCOUNTERDATAAMDPROC)gleIntGetProcAddress("glGetPerfMonitorCounterDataAMD");
-	if(!TestPointer((const void*)glGetPerfMonitorCounterDataAMD)) bIsLoaded = 0;
+	if(!glGetPerfMonitorCounterDataAMD) bIsLoaded = 0;
 #endif /*GL_AMD_performance_monitor*/
 	return bIsLoaded;
 }
@@ -1234,7 +1247,7 @@ static int gleIntLoad_AMD_sample_positions()
 	int bIsLoaded = 1;
 #ifndef GL_AMD_sample_positions
 	glSetMultisamplefvAMD = (PFNGLSETMULTISAMPLEFVAMDPROC)gleIntGetProcAddress("glSetMultisamplefvAMD");
-	if(!TestPointer((const void*)glSetMultisamplefvAMD)) bIsLoaded = 0;
+	if(!glSetMultisamplefvAMD) bIsLoaded = 0;
 #endif /*GL_AMD_sample_positions*/
 	return bIsLoaded;
 }
@@ -1255,9 +1268,9 @@ static int gleIntLoad_AMD_vertex_shader_tesselator()
 	int bIsLoaded = 1;
 #ifndef GL_AMD_vertex_shader_tesselator
 	glTessellationFactorAMD = (PFNGLTESSELLATIONFACTORAMDPROC)gleIntGetProcAddress("glTessellationFactorAMD");
-	if(!TestPointer((const void*)glTessellationFactorAMD)) bIsLoaded = 0;
+	if(!glTessellationFactorAMD) bIsLoaded = 0;
 	glTessellationModeAMD = (PFNGLTESSELLATIONMODEAMDPROC)gleIntGetProcAddress("glTessellationModeAMD");
-	if(!TestPointer((const void*)glTessellationModeAMD)) bIsLoaded = 0;
+	if(!glTessellationModeAMD) bIsLoaded = 0;
 #endif /*GL_AMD_vertex_shader_tesselator*/
 	return bIsLoaded;
 }
@@ -1282,15 +1295,15 @@ static int gleIntLoad_APPLE_element_array()
 	int bIsLoaded = 1;
 #ifndef GL_APPLE_element_array
 	glElementPointerAPPLE = (PFNGLELEMENTPOINTERAPPLEPROC)gleIntGetProcAddress("glElementPointerAPPLE");
-	if(!TestPointer((const void*)glElementPointerAPPLE)) bIsLoaded = 0;
+	if(!glElementPointerAPPLE) bIsLoaded = 0;
 	glDrawElementArrayAPPLE = (PFNGLDRAWELEMENTARRAYAPPLEPROC)gleIntGetProcAddress("glDrawElementArrayAPPLE");
-	if(!TestPointer((const void*)glDrawElementArrayAPPLE)) bIsLoaded = 0;
+	if(!glDrawElementArrayAPPLE) bIsLoaded = 0;
 	glDrawRangeElementArrayAPPLE = (PFNGLDRAWRANGEELEMENTARRAYAPPLEPROC)gleIntGetProcAddress("glDrawRangeElementArrayAPPLE");
-	if(!TestPointer((const void*)glDrawRangeElementArrayAPPLE)) bIsLoaded = 0;
+	if(!glDrawRangeElementArrayAPPLE) bIsLoaded = 0;
 	glMultiDrawElementArrayAPPLE = (PFNGLMULTIDRAWELEMENTARRAYAPPLEPROC)gleIntGetProcAddress("glMultiDrawElementArrayAPPLE");
-	if(!TestPointer((const void*)glMultiDrawElementArrayAPPLE)) bIsLoaded = 0;
+	if(!glMultiDrawElementArrayAPPLE) bIsLoaded = 0;
 	glMultiDrawRangeElementArrayAPPLE = (PFNGLMULTIDRAWRANGEELEMENTARRAYAPPLEPROC)gleIntGetProcAddress("glMultiDrawRangeElementArrayAPPLE");
-	if(!TestPointer((const void*)glMultiDrawRangeElementArrayAPPLE)) bIsLoaded = 0;
+	if(!glMultiDrawRangeElementArrayAPPLE) bIsLoaded = 0;
 #endif /*GL_APPLE_element_array*/
 	return bIsLoaded;
 }
@@ -1319,21 +1332,21 @@ static int gleIntLoad_APPLE_fence()
 	int bIsLoaded = 1;
 #ifndef GL_APPLE_fence
 	glGenFencesAPPLE = (PFNGLGENFENCESAPPLEPROC)gleIntGetProcAddress("glGenFencesAPPLE");
-	if(!TestPointer((const void*)glGenFencesAPPLE)) bIsLoaded = 0;
+	if(!glGenFencesAPPLE) bIsLoaded = 0;
 	glDeleteFencesAPPLE = (PFNGLDELETEFENCESAPPLEPROC)gleIntGetProcAddress("glDeleteFencesAPPLE");
-	if(!TestPointer((const void*)glDeleteFencesAPPLE)) bIsLoaded = 0;
+	if(!glDeleteFencesAPPLE) bIsLoaded = 0;
 	glSetFenceAPPLE = (PFNGLSETFENCEAPPLEPROC)gleIntGetProcAddress("glSetFenceAPPLE");
-	if(!TestPointer((const void*)glSetFenceAPPLE)) bIsLoaded = 0;
+	if(!glSetFenceAPPLE) bIsLoaded = 0;
 	glIsFenceAPPLE = (PFNGLISFENCEAPPLEPROC)gleIntGetProcAddress("glIsFenceAPPLE");
-	if(!TestPointer((const void*)glIsFenceAPPLE)) bIsLoaded = 0;
+	if(!glIsFenceAPPLE) bIsLoaded = 0;
 	glTestFenceAPPLE = (PFNGLTESTFENCEAPPLEPROC)gleIntGetProcAddress("glTestFenceAPPLE");
-	if(!TestPointer((const void*)glTestFenceAPPLE)) bIsLoaded = 0;
+	if(!glTestFenceAPPLE) bIsLoaded = 0;
 	glFinishFenceAPPLE = (PFNGLFINISHFENCEAPPLEPROC)gleIntGetProcAddress("glFinishFenceAPPLE");
-	if(!TestPointer((const void*)glFinishFenceAPPLE)) bIsLoaded = 0;
+	if(!glFinishFenceAPPLE) bIsLoaded = 0;
 	glTestObjectAPPLE = (PFNGLTESTOBJECTAPPLEPROC)gleIntGetProcAddress("glTestObjectAPPLE");
-	if(!TestPointer((const void*)glTestObjectAPPLE)) bIsLoaded = 0;
+	if(!glTestObjectAPPLE) bIsLoaded = 0;
 	glFinishObjectAPPLE = (PFNGLFINISHOBJECTAPPLEPROC)gleIntGetProcAddress("glFinishObjectAPPLE");
-	if(!TestPointer((const void*)glFinishObjectAPPLE)) bIsLoaded = 0;
+	if(!glFinishObjectAPPLE) bIsLoaded = 0;
 #endif /*GL_APPLE_fence*/
 	return bIsLoaded;
 }
@@ -1351,9 +1364,9 @@ static int gleIntLoad_APPLE_flush_buffer_range()
 	int bIsLoaded = 1;
 #ifndef GL_APPLE_flush_buffer_range
 	glBufferParameteriAPPLE = (PFNGLBUFFERPARAMETERIAPPLEPROC)gleIntGetProcAddress("glBufferParameteriAPPLE");
-	if(!TestPointer((const void*)glBufferParameteriAPPLE)) bIsLoaded = 0;
+	if(!glBufferParameteriAPPLE) bIsLoaded = 0;
 	glFlushMappedBufferRangeAPPLE = (PFNGLFLUSHMAPPEDBUFFERRANGEAPPLEPROC)gleIntGetProcAddress("glFlushMappedBufferRangeAPPLE");
-	if(!TestPointer((const void*)glFlushMappedBufferRangeAPPLE)) bIsLoaded = 0;
+	if(!glFlushMappedBufferRangeAPPLE) bIsLoaded = 0;
 #endif /*GL_APPLE_flush_buffer_range*/
 	return bIsLoaded;
 }
@@ -1372,11 +1385,11 @@ static int gleIntLoad_APPLE_object_purgeable()
 	int bIsLoaded = 1;
 #ifndef GL_APPLE_object_purgeable
 	glObjectPurgeableAPPLE = (PFNGLOBJECTPURGEABLEAPPLEPROC)gleIntGetProcAddress("glObjectPurgeableAPPLE");
-	if(!TestPointer((const void*)glObjectPurgeableAPPLE)) bIsLoaded = 0;
+	if(!glObjectPurgeableAPPLE) bIsLoaded = 0;
 	glObjectUnpurgeableAPPLE = (PFNGLOBJECTUNPURGEABLEAPPLEPROC)gleIntGetProcAddress("glObjectUnpurgeableAPPLE");
-	if(!TestPointer((const void*)glObjectUnpurgeableAPPLE)) bIsLoaded = 0;
+	if(!glObjectUnpurgeableAPPLE) bIsLoaded = 0;
 	glGetObjectParameterivAPPLE = (PFNGLGETOBJECTPARAMETERIVAPPLEPROC)gleIntGetProcAddress("glGetObjectParameterivAPPLE");
-	if(!TestPointer((const void*)glGetObjectParameterivAPPLE)) bIsLoaded = 0;
+	if(!glGetObjectParameterivAPPLE) bIsLoaded = 0;
 #endif /*GL_APPLE_object_purgeable*/
 	return bIsLoaded;
 }
@@ -1396,9 +1409,9 @@ static int gleIntLoad_APPLE_texture_range()
 	int bIsLoaded = 1;
 #ifndef GL_APPLE_texture_range
 	glTextureRangeAPPLE = (PFNGLTEXTURERANGEAPPLEPROC)gleIntGetProcAddress("glTextureRangeAPPLE");
-	if(!TestPointer((const void*)glTextureRangeAPPLE)) bIsLoaded = 0;
+	if(!glTextureRangeAPPLE) bIsLoaded = 0;
 	glGetTexParameterPointervAPPLE = (PFNGLGETTEXPARAMETERPOINTERVAPPLEPROC)gleIntGetProcAddress("glGetTexParameterPointervAPPLE");
-	if(!TestPointer((const void*)glGetTexParameterPointervAPPLE)) bIsLoaded = 0;
+	if(!glGetTexParameterPointervAPPLE) bIsLoaded = 0;
 #endif /*GL_APPLE_texture_range*/
 	return bIsLoaded;
 }
@@ -1420,13 +1433,13 @@ static int gleIntLoad_APPLE_vertex_array_object()
 	int bIsLoaded = 1;
 #ifndef GL_APPLE_vertex_array_object
 	glBindVertexArrayAPPLE = (PFNGLBINDVERTEXARRAYAPPLEPROC)gleIntGetProcAddress("glBindVertexArrayAPPLE");
-	if(!TestPointer((const void*)glBindVertexArrayAPPLE)) bIsLoaded = 0;
+	if(!glBindVertexArrayAPPLE) bIsLoaded = 0;
 	glDeleteVertexArraysAPPLE = (PFNGLDELETEVERTEXARRAYSAPPLEPROC)gleIntGetProcAddress("glDeleteVertexArraysAPPLE");
-	if(!TestPointer((const void*)glDeleteVertexArraysAPPLE)) bIsLoaded = 0;
+	if(!glDeleteVertexArraysAPPLE) bIsLoaded = 0;
 	glGenVertexArraysAPPLE = (PFNGLGENVERTEXARRAYSAPPLEPROC)gleIntGetProcAddress("glGenVertexArraysAPPLE");
-	if(!TestPointer((const void*)glGenVertexArraysAPPLE)) bIsLoaded = 0;
+	if(!glGenVertexArraysAPPLE) bIsLoaded = 0;
 	glIsVertexArrayAPPLE = (PFNGLISVERTEXARRAYAPPLEPROC)gleIntGetProcAddress("glIsVertexArrayAPPLE");
-	if(!TestPointer((const void*)glIsVertexArrayAPPLE)) bIsLoaded = 0;
+	if(!glIsVertexArrayAPPLE) bIsLoaded = 0;
 #endif /*GL_APPLE_vertex_array_object*/
 	return bIsLoaded;
 }
@@ -1445,11 +1458,11 @@ static int gleIntLoad_APPLE_vertex_array_range()
 	int bIsLoaded = 1;
 #ifndef GL_APPLE_vertex_array_range
 	glVertexArrayRangeAPPLE = (PFNGLVERTEXARRAYRANGEAPPLEPROC)gleIntGetProcAddress("glVertexArrayRangeAPPLE");
-	if(!TestPointer((const void*)glVertexArrayRangeAPPLE)) bIsLoaded = 0;
+	if(!glVertexArrayRangeAPPLE) bIsLoaded = 0;
 	glFlushVertexArrayRangeAPPLE = (PFNGLFLUSHVERTEXARRAYRANGEAPPLEPROC)gleIntGetProcAddress("glFlushVertexArrayRangeAPPLE");
-	if(!TestPointer((const void*)glFlushVertexArrayRangeAPPLE)) bIsLoaded = 0;
+	if(!glFlushVertexArrayRangeAPPLE) bIsLoaded = 0;
 	glVertexArrayParameteriAPPLE = (PFNGLVERTEXARRAYPARAMETERIAPPLEPROC)gleIntGetProcAddress("glVertexArrayParameteriAPPLE");
-	if(!TestPointer((const void*)glVertexArrayParameteriAPPLE)) bIsLoaded = 0;
+	if(!glVertexArrayParameteriAPPLE) bIsLoaded = 0;
 #endif /*GL_APPLE_vertex_array_range*/
 	return bIsLoaded;
 }
@@ -1476,19 +1489,19 @@ static int gleIntLoad_APPLE_vertex_program_evaluators()
 	int bIsLoaded = 1;
 #ifndef GL_APPLE_vertex_program_evaluators
 	glEnableVertexAttribAPPLE = (PFNGLENABLEVERTEXATTRIBAPPLEPROC)gleIntGetProcAddress("glEnableVertexAttribAPPLE");
-	if(!TestPointer((const void*)glEnableVertexAttribAPPLE)) bIsLoaded = 0;
+	if(!glEnableVertexAttribAPPLE) bIsLoaded = 0;
 	glDisableVertexAttribAPPLE = (PFNGLDISABLEVERTEXATTRIBAPPLEPROC)gleIntGetProcAddress("glDisableVertexAttribAPPLE");
-	if(!TestPointer((const void*)glDisableVertexAttribAPPLE)) bIsLoaded = 0;
+	if(!glDisableVertexAttribAPPLE) bIsLoaded = 0;
 	glIsVertexAttribEnabledAPPLE = (PFNGLISVERTEXATTRIBENABLEDAPPLEPROC)gleIntGetProcAddress("glIsVertexAttribEnabledAPPLE");
-	if(!TestPointer((const void*)glIsVertexAttribEnabledAPPLE)) bIsLoaded = 0;
+	if(!glIsVertexAttribEnabledAPPLE) bIsLoaded = 0;
 	glMapVertexAttrib1dAPPLE = (PFNGLMAPVERTEXATTRIB1DAPPLEPROC)gleIntGetProcAddress("glMapVertexAttrib1dAPPLE");
-	if(!TestPointer((const void*)glMapVertexAttrib1dAPPLE)) bIsLoaded = 0;
+	if(!glMapVertexAttrib1dAPPLE) bIsLoaded = 0;
 	glMapVertexAttrib1fAPPLE = (PFNGLMAPVERTEXATTRIB1FAPPLEPROC)gleIntGetProcAddress("glMapVertexAttrib1fAPPLE");
-	if(!TestPointer((const void*)glMapVertexAttrib1fAPPLE)) bIsLoaded = 0;
+	if(!glMapVertexAttrib1fAPPLE) bIsLoaded = 0;
 	glMapVertexAttrib2dAPPLE = (PFNGLMAPVERTEXATTRIB2DAPPLEPROC)gleIntGetProcAddress("glMapVertexAttrib2dAPPLE");
-	if(!TestPointer((const void*)glMapVertexAttrib2dAPPLE)) bIsLoaded = 0;
+	if(!glMapVertexAttrib2dAPPLE) bIsLoaded = 0;
 	glMapVertexAttrib2fAPPLE = (PFNGLMAPVERTEXATTRIB2FAPPLEPROC)gleIntGetProcAddress("glMapVertexAttrib2fAPPLE");
-	if(!TestPointer((const void*)glMapVertexAttrib2fAPPLE)) bIsLoaded = 0;
+	if(!glMapVertexAttrib2fAPPLE) bIsLoaded = 0;
 #endif /*GL_APPLE_vertex_program_evaluators*/
 	return bIsLoaded;
 }
@@ -1512,15 +1525,15 @@ static int gleIntLoad_ARB_ES2_compatibility()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_ES2_compatibility
 	__gleReleaseShaderCompiler = (PFNGLRELEASESHADERCOMPILERPROC)gleIntGetProcAddress("glReleaseShaderCompiler");
-	if(!TestPointer((const void*)__gleReleaseShaderCompiler)) bIsLoaded = 0;
+	if(!__gleReleaseShaderCompiler) bIsLoaded = 0;
 	__gleShaderBinary = (PFNGLSHADERBINARYPROC)gleIntGetProcAddress("glShaderBinary");
-	if(!TestPointer((const void*)__gleShaderBinary)) bIsLoaded = 0;
+	if(!__gleShaderBinary) bIsLoaded = 0;
 	__gleGetShaderPrecisionFormat = (PFNGLGETSHADERPRECISIONFORMATPROC)gleIntGetProcAddress("glGetShaderPrecisionFormat");
-	if(!TestPointer((const void*)__gleGetShaderPrecisionFormat)) bIsLoaded = 0;
+	if(!__gleGetShaderPrecisionFormat) bIsLoaded = 0;
 	__gleDepthRangef = (PFNGLDEPTHRANGEFPROC)gleIntGetProcAddress("glDepthRangef");
-	if(!TestPointer((const void*)__gleDepthRangef)) bIsLoaded = 0;
+	if(!__gleDepthRangef) bIsLoaded = 0;
 	__gleClearDepthf = (PFNGLCLEARDEPTHFPROC)gleIntGetProcAddress("glClearDepthf");
-	if(!TestPointer((const void*)__gleClearDepthf)) bIsLoaded = 0;
+	if(!__gleClearDepthf) bIsLoaded = 0;
 #endif /*GL_ARB_ES2_compatibility*/
 	return bIsLoaded;
 }
@@ -1539,11 +1552,11 @@ static int gleIntLoad_ARB_base_instance()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_base_instance
 	__gleDrawArraysInstancedBaseInstance = (PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC)gleIntGetProcAddress("glDrawArraysInstancedBaseInstance");
-	if(!TestPointer((const void*)__gleDrawArraysInstancedBaseInstance)) bIsLoaded = 0;
+	if(!__gleDrawArraysInstancedBaseInstance) bIsLoaded = 0;
 	__gleDrawElementsInstancedBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseInstance");
-	if(!TestPointer((const void*)__gleDrawElementsInstancedBaseInstance)) bIsLoaded = 0;
+	if(!__gleDrawElementsInstancedBaseInstance) bIsLoaded = 0;
 	__gleDrawElementsInstancedBaseVertexBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseVertexBaseInstance");
-	if(!TestPointer((const void*)__gleDrawElementsInstancedBaseVertexBaseInstance)) bIsLoaded = 0;
+	if(!__gleDrawElementsInstancedBaseVertexBaseInstance) bIsLoaded = 0;
 #endif /*GL_ARB_base_instance*/
 	return bIsLoaded;
 }
@@ -1560,9 +1573,9 @@ static int gleIntLoad_ARB_blend_func_extended()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_blend_func_extended
 	__gleBindFragDataLocationIndexed = (PFNGLBINDFRAGDATALOCATIONINDEXEDPROC)gleIntGetProcAddress("glBindFragDataLocationIndexed");
-	if(!TestPointer((const void*)__gleBindFragDataLocationIndexed)) bIsLoaded = 0;
+	if(!__gleBindFragDataLocationIndexed) bIsLoaded = 0;
 	__gleGetFragDataIndex = (PFNGLGETFRAGDATAINDEXPROC)gleIntGetProcAddress("glGetFragDataIndex");
-	if(!TestPointer((const void*)__gleGetFragDataIndex)) bIsLoaded = 0;
+	if(!__gleGetFragDataIndex) bIsLoaded = 0;
 #endif /*GL_ARB_blend_func_extended*/
 	return bIsLoaded;
 }
@@ -1577,7 +1590,7 @@ static int gleIntLoad_ARB_cl_event()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_cl_event
 	glCreateSyncFromCLeventARB = (PFNGLCREATESYNCFROMCLEVENTARBPROC)gleIntGetProcAddress("glCreateSyncFromCLeventARB");
-	if(!TestPointer((const void*)glCreateSyncFromCLeventARB)) bIsLoaded = 0;
+	if(!glCreateSyncFromCLeventARB) bIsLoaded = 0;
 #endif /*GL_ARB_cl_event*/
 	return bIsLoaded;
 }
@@ -1592,7 +1605,7 @@ static int gleIntLoad_ARB_color_buffer_float()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_color_buffer_float
 	glClampColorARB = (PFNGLCLAMPCOLORARBPROC)gleIntGetProcAddress("glClampColorARB");
-	if(!TestPointer((const void*)glClampColorARB)) bIsLoaded = 0;
+	if(!glClampColorARB) bIsLoaded = 0;
 #endif /*GL_ARB_color_buffer_float*/
 	return bIsLoaded;
 }
@@ -1610,7 +1623,7 @@ static int gleIntLoad_ARB_copy_buffer()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_copy_buffer
 	__gleCopyBufferSubData = (PFNGLCOPYBUFFERSUBDATAPROC)gleIntGetProcAddress("glCopyBufferSubData");
-	if(!TestPointer((const void*)__gleCopyBufferSubData)) bIsLoaded = 0;
+	if(!__gleCopyBufferSubData) bIsLoaded = 0;
 #endif /*GL_ARB_copy_buffer*/
 	return bIsLoaded;
 }
@@ -1631,13 +1644,13 @@ static int gleIntLoad_ARB_debug_output()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_debug_output
 	glDebugMessageControlARB = (PFNGLDEBUGMESSAGECONTROLARBPROC)gleIntGetProcAddress("glDebugMessageControlARB");
-	if(!TestPointer((const void*)glDebugMessageControlARB)) bIsLoaded = 0;
+	if(!glDebugMessageControlARB) bIsLoaded = 0;
 	glDebugMessageInsertARB = (PFNGLDEBUGMESSAGEINSERTARBPROC)gleIntGetProcAddress("glDebugMessageInsertARB");
-	if(!TestPointer((const void*)glDebugMessageInsertARB)) bIsLoaded = 0;
+	if(!glDebugMessageInsertARB) bIsLoaded = 0;
 	glDebugMessageCallbackARB = (PFNGLDEBUGMESSAGECALLBACKARBPROC)gleIntGetProcAddress("glDebugMessageCallbackARB");
-	if(!TestPointer((const void*)glDebugMessageCallbackARB)) bIsLoaded = 0;
+	if(!glDebugMessageCallbackARB) bIsLoaded = 0;
 	glGetDebugMessageLogARB = (PFNGLGETDEBUGMESSAGELOGARBPROC)gleIntGetProcAddress("glGetDebugMessageLogARB");
-	if(!TestPointer((const void*)glGetDebugMessageLogARB)) bIsLoaded = 0;
+	if(!glGetDebugMessageLogARB) bIsLoaded = 0;
 #endif /*GL_ARB_debug_output*/
 	return bIsLoaded;
 }
@@ -1655,7 +1668,7 @@ static int gleIntLoad_ARB_draw_buffers()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_draw_buffers
 	glDrawBuffersARB = (PFNGLDRAWBUFFERSARBPROC)gleIntGetProcAddress("glDrawBuffersARB");
-	if(!TestPointer((const void*)glDrawBuffersARB)) bIsLoaded = 0;
+	if(!glDrawBuffersARB) bIsLoaded = 0;
 #endif /*GL_ARB_draw_buffers*/
 	return bIsLoaded;
 }
@@ -1676,13 +1689,13 @@ static int gleIntLoad_ARB_draw_buffers_blend()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_draw_buffers_blend
 	glBlendEquationiARB = (PFNGLBLENDEQUATIONIARBPROC)gleIntGetProcAddress("glBlendEquationiARB");
-	if(!TestPointer((const void*)glBlendEquationiARB)) bIsLoaded = 0;
+	if(!glBlendEquationiARB) bIsLoaded = 0;
 	glBlendEquationSeparateiARB = (PFNGLBLENDEQUATIONSEPARATEIARBPROC)gleIntGetProcAddress("glBlendEquationSeparateiARB");
-	if(!TestPointer((const void*)glBlendEquationSeparateiARB)) bIsLoaded = 0;
+	if(!glBlendEquationSeparateiARB) bIsLoaded = 0;
 	glBlendFunciARB = (PFNGLBLENDFUNCIARBPROC)gleIntGetProcAddress("glBlendFunciARB");
-	if(!TestPointer((const void*)glBlendFunciARB)) bIsLoaded = 0;
+	if(!glBlendFunciARB) bIsLoaded = 0;
 	glBlendFuncSeparateiARB = (PFNGLBLENDFUNCSEPARATEIARBPROC)gleIntGetProcAddress("glBlendFuncSeparateiARB");
-	if(!TestPointer((const void*)glBlendFuncSeparateiARB)) bIsLoaded = 0;
+	if(!glBlendFuncSeparateiARB) bIsLoaded = 0;
 #endif /*GL_ARB_draw_buffers_blend*/
 	return bIsLoaded;
 }
@@ -1703,13 +1716,13 @@ static int gleIntLoad_ARB_draw_elements_base_vertex()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_draw_elements_base_vertex
 	__gleDrawElementsBaseVertex = (PFNGLDRAWELEMENTSBASEVERTEXPROC)gleIntGetProcAddress("glDrawElementsBaseVertex");
-	if(!TestPointer((const void*)__gleDrawElementsBaseVertex)) bIsLoaded = 0;
+	if(!__gleDrawElementsBaseVertex) bIsLoaded = 0;
 	__gleDrawRangeElementsBaseVertex = (PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC)gleIntGetProcAddress("glDrawRangeElementsBaseVertex");
-	if(!TestPointer((const void*)__gleDrawRangeElementsBaseVertex)) bIsLoaded = 0;
+	if(!__gleDrawRangeElementsBaseVertex) bIsLoaded = 0;
 	__gleDrawElementsInstancedBaseVertex = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseVertex");
-	if(!TestPointer((const void*)__gleDrawElementsInstancedBaseVertex)) bIsLoaded = 0;
+	if(!__gleDrawElementsInstancedBaseVertex) bIsLoaded = 0;
 	__gleMultiDrawElementsBaseVertex = (PFNGLMULTIDRAWELEMENTSBASEVERTEXPROC)gleIntGetProcAddress("glMultiDrawElementsBaseVertex");
-	if(!TestPointer((const void*)__gleMultiDrawElementsBaseVertex)) bIsLoaded = 0;
+	if(!__gleMultiDrawElementsBaseVertex) bIsLoaded = 0;
 #endif /*GL_ARB_draw_elements_base_vertex*/
 	return bIsLoaded;
 }
@@ -1726,9 +1739,9 @@ static int gleIntLoad_ARB_draw_indirect()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_draw_indirect
 	__gleDrawArraysIndirect = (PFNGLDRAWARRAYSINDIRECTPROC)gleIntGetProcAddress("glDrawArraysIndirect");
-	if(!TestPointer((const void*)__gleDrawArraysIndirect)) bIsLoaded = 0;
+	if(!__gleDrawArraysIndirect) bIsLoaded = 0;
 	__gleDrawElementsIndirect = (PFNGLDRAWELEMENTSINDIRECTPROC)gleIntGetProcAddress("glDrawElementsIndirect");
-	if(!TestPointer((const void*)__gleDrawElementsIndirect)) bIsLoaded = 0;
+	if(!__gleDrawElementsIndirect) bIsLoaded = 0;
 #endif /*GL_ARB_draw_indirect*/
 	return bIsLoaded;
 }
@@ -1745,9 +1758,9 @@ static int gleIntLoad_ARB_draw_instanced()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_draw_instanced
 	glDrawArraysInstancedARB = (PFNGLDRAWARRAYSINSTANCEDARBPROC)gleIntGetProcAddress("glDrawArraysInstancedARB");
-	if(!TestPointer((const void*)glDrawArraysInstancedARB)) bIsLoaded = 0;
+	if(!glDrawArraysInstancedARB) bIsLoaded = 0;
 	glDrawElementsInstancedARB = (PFNGLDRAWELEMENTSINSTANCEDARBPROC)gleIntGetProcAddress("glDrawElementsInstancedARB");
-	if(!TestPointer((const void*)glDrawElementsInstancedARB)) bIsLoaded = 0;
+	if(!glDrawElementsInstancedARB) bIsLoaded = 0;
 #endif /*GL_ARB_draw_instanced*/
 	return bIsLoaded;
 }
@@ -1805,45 +1818,45 @@ static int gleIntLoad_ARB_framebuffer_object()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_framebuffer_object
 	__gleIsRenderbuffer = (PFNGLISRENDERBUFFERPROC)gleIntGetProcAddress("glIsRenderbuffer");
-	if(!TestPointer((const void*)__gleIsRenderbuffer)) bIsLoaded = 0;
+	if(!__gleIsRenderbuffer) bIsLoaded = 0;
 	__gleBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC)gleIntGetProcAddress("glBindRenderbuffer");
-	if(!TestPointer((const void*)__gleBindRenderbuffer)) bIsLoaded = 0;
+	if(!__gleBindRenderbuffer) bIsLoaded = 0;
 	__gleDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)gleIntGetProcAddress("glDeleteRenderbuffers");
-	if(!TestPointer((const void*)__gleDeleteRenderbuffers)) bIsLoaded = 0;
+	if(!__gleDeleteRenderbuffers) bIsLoaded = 0;
 	__gleGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC)gleIntGetProcAddress("glGenRenderbuffers");
-	if(!TestPointer((const void*)__gleGenRenderbuffers)) bIsLoaded = 0;
+	if(!__gleGenRenderbuffers) bIsLoaded = 0;
 	__gleRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)gleIntGetProcAddress("glRenderbufferStorage");
-	if(!TestPointer((const void*)__gleRenderbufferStorage)) bIsLoaded = 0;
+	if(!__gleRenderbufferStorage) bIsLoaded = 0;
 	__gleGetRenderbufferParameteriv = (PFNGLGETRENDERBUFFERPARAMETERIVPROC)gleIntGetProcAddress("glGetRenderbufferParameteriv");
-	if(!TestPointer((const void*)__gleGetRenderbufferParameteriv)) bIsLoaded = 0;
+	if(!__gleGetRenderbufferParameteriv) bIsLoaded = 0;
 	__gleIsFramebuffer = (PFNGLISFRAMEBUFFERPROC)gleIntGetProcAddress("glIsFramebuffer");
-	if(!TestPointer((const void*)__gleIsFramebuffer)) bIsLoaded = 0;
+	if(!__gleIsFramebuffer) bIsLoaded = 0;
 	__gleBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC)gleIntGetProcAddress("glBindFramebuffer");
-	if(!TestPointer((const void*)__gleBindFramebuffer)) bIsLoaded = 0;
+	if(!__gleBindFramebuffer) bIsLoaded = 0;
 	__gleDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)gleIntGetProcAddress("glDeleteFramebuffers");
-	if(!TestPointer((const void*)__gleDeleteFramebuffers)) bIsLoaded = 0;
+	if(!__gleDeleteFramebuffers) bIsLoaded = 0;
 	__gleGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC)gleIntGetProcAddress("glGenFramebuffers");
-	if(!TestPointer((const void*)__gleGenFramebuffers)) bIsLoaded = 0;
+	if(!__gleGenFramebuffers) bIsLoaded = 0;
 	__gleCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC)gleIntGetProcAddress("glCheckFramebufferStatus");
-	if(!TestPointer((const void*)__gleCheckFramebufferStatus)) bIsLoaded = 0;
+	if(!__gleCheckFramebufferStatus) bIsLoaded = 0;
 	__gleFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC)gleIntGetProcAddress("glFramebufferTexture1D");
-	if(!TestPointer((const void*)__gleFramebufferTexture1D)) bIsLoaded = 0;
+	if(!__gleFramebufferTexture1D) bIsLoaded = 0;
 	__gleFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)gleIntGetProcAddress("glFramebufferTexture2D");
-	if(!TestPointer((const void*)__gleFramebufferTexture2D)) bIsLoaded = 0;
+	if(!__gleFramebufferTexture2D) bIsLoaded = 0;
 	__gleFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC)gleIntGetProcAddress("glFramebufferTexture3D");
-	if(!TestPointer((const void*)__gleFramebufferTexture3D)) bIsLoaded = 0;
+	if(!__gleFramebufferTexture3D) bIsLoaded = 0;
 	__gleFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC)gleIntGetProcAddress("glFramebufferRenderbuffer");
-	if(!TestPointer((const void*)__gleFramebufferRenderbuffer)) bIsLoaded = 0;
+	if(!__gleFramebufferRenderbuffer) bIsLoaded = 0;
 	__gleGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)gleIntGetProcAddress("glGetFramebufferAttachmentParameteriv");
-	if(!TestPointer((const void*)__gleGetFramebufferAttachmentParameteriv)) bIsLoaded = 0;
+	if(!__gleGetFramebufferAttachmentParameteriv) bIsLoaded = 0;
 	__gleGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)gleIntGetProcAddress("glGenerateMipmap");
-	if(!TestPointer((const void*)__gleGenerateMipmap)) bIsLoaded = 0;
+	if(!__gleGenerateMipmap) bIsLoaded = 0;
 	__gleBlitFramebuffer = (PFNGLBLITFRAMEBUFFERPROC)gleIntGetProcAddress("glBlitFramebuffer");
-	if(!TestPointer((const void*)__gleBlitFramebuffer)) bIsLoaded = 0;
+	if(!__gleBlitFramebuffer) bIsLoaded = 0;
 	__gleRenderbufferStorageMultisample = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC)gleIntGetProcAddress("glRenderbufferStorageMultisample");
-	if(!TestPointer((const void*)__gleRenderbufferStorageMultisample)) bIsLoaded = 0;
+	if(!__gleRenderbufferStorageMultisample) bIsLoaded = 0;
 	__gleFramebufferTextureLayer = (PFNGLFRAMEBUFFERTEXTURELAYERPROC)gleIntGetProcAddress("glFramebufferTextureLayer");
-	if(!TestPointer((const void*)__gleFramebufferTextureLayer)) bIsLoaded = 0;
+	if(!__gleFramebufferTextureLayer) bIsLoaded = 0;
 #endif /*GL_ARB_framebuffer_object*/
 	return bIsLoaded;
 }
@@ -1865,13 +1878,13 @@ static int gleIntLoad_ARB_geometry_shader4()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_geometry_shader4
 	glProgramParameteriARB = (PFNGLPROGRAMPARAMETERIARBPROC)gleIntGetProcAddress("glProgramParameteriARB");
-	if(!TestPointer((const void*)glProgramParameteriARB)) bIsLoaded = 0;
+	if(!glProgramParameteriARB) bIsLoaded = 0;
 	glFramebufferTextureARB = (PFNGLFRAMEBUFFERTEXTUREARBPROC)gleIntGetProcAddress("glFramebufferTextureARB");
-	if(!TestPointer((const void*)glFramebufferTextureARB)) bIsLoaded = 0;
+	if(!glFramebufferTextureARB) bIsLoaded = 0;
 	glFramebufferTextureLayerARB = (PFNGLFRAMEBUFFERTEXTURELAYERARBPROC)gleIntGetProcAddress("glFramebufferTextureLayerARB");
-	if(!TestPointer((const void*)glFramebufferTextureLayerARB)) bIsLoaded = 0;
+	if(!glFramebufferTextureLayerARB) bIsLoaded = 0;
 	glFramebufferTextureFaceARB = (PFNGLFRAMEBUFFERTEXTUREFACEARBPROC)gleIntGetProcAddress("glFramebufferTextureFaceARB");
-	if(!TestPointer((const void*)glFramebufferTextureFaceARB)) bIsLoaded = 0;
+	if(!glFramebufferTextureFaceARB) bIsLoaded = 0;
 #endif /*GL_ARB_geometry_shader4*/
 	return bIsLoaded;
 }
@@ -1890,11 +1903,11 @@ static int gleIntLoad_ARB_get_program_binary()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_get_program_binary
 	__gleGetProgramBinary = (PFNGLGETPROGRAMBINARYPROC)gleIntGetProcAddress("glGetProgramBinary");
-	if(!TestPointer((const void*)__gleGetProgramBinary)) bIsLoaded = 0;
+	if(!__gleGetProgramBinary) bIsLoaded = 0;
 	__gleProgramBinary = (PFNGLPROGRAMBINARYPROC)gleIntGetProcAddress("glProgramBinary");
-	if(!TestPointer((const void*)__gleProgramBinary)) bIsLoaded = 0;
+	if(!__gleProgramBinary) bIsLoaded = 0;
 	__gleProgramParameteri = (PFNGLPROGRAMPARAMETERIPROC)gleIntGetProcAddress("glProgramParameteri");
-	if(!TestPointer((const void*)__gleProgramParameteri)) bIsLoaded = 0;
+	if(!__gleProgramParameteri) bIsLoaded = 0;
 #endif /*GL_ARB_get_program_binary*/
 	return bIsLoaded;
 }
@@ -1944,41 +1957,41 @@ static int gleIntLoad_ARB_gpu_shader_fp64()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_gpu_shader_fp64
 	__gleUniform1d = (PFNGLUNIFORM1DPROC)gleIntGetProcAddress("glUniform1d");
-	if(!TestPointer((const void*)__gleUniform1d)) bIsLoaded = 0;
+	if(!__gleUniform1d) bIsLoaded = 0;
 	__gleUniform2d = (PFNGLUNIFORM2DPROC)gleIntGetProcAddress("glUniform2d");
-	if(!TestPointer((const void*)__gleUniform2d)) bIsLoaded = 0;
+	if(!__gleUniform2d) bIsLoaded = 0;
 	__gleUniform3d = (PFNGLUNIFORM3DPROC)gleIntGetProcAddress("glUniform3d");
-	if(!TestPointer((const void*)__gleUniform3d)) bIsLoaded = 0;
+	if(!__gleUniform3d) bIsLoaded = 0;
 	__gleUniform4d = (PFNGLUNIFORM4DPROC)gleIntGetProcAddress("glUniform4d");
-	if(!TestPointer((const void*)__gleUniform4d)) bIsLoaded = 0;
+	if(!__gleUniform4d) bIsLoaded = 0;
 	__gleUniform1dv = (PFNGLUNIFORM1DVPROC)gleIntGetProcAddress("glUniform1dv");
-	if(!TestPointer((const void*)__gleUniform1dv)) bIsLoaded = 0;
+	if(!__gleUniform1dv) bIsLoaded = 0;
 	__gleUniform2dv = (PFNGLUNIFORM2DVPROC)gleIntGetProcAddress("glUniform2dv");
-	if(!TestPointer((const void*)__gleUniform2dv)) bIsLoaded = 0;
+	if(!__gleUniform2dv) bIsLoaded = 0;
 	__gleUniform3dv = (PFNGLUNIFORM3DVPROC)gleIntGetProcAddress("glUniform3dv");
-	if(!TestPointer((const void*)__gleUniform3dv)) bIsLoaded = 0;
+	if(!__gleUniform3dv) bIsLoaded = 0;
 	__gleUniform4dv = (PFNGLUNIFORM4DVPROC)gleIntGetProcAddress("glUniform4dv");
-	if(!TestPointer((const void*)__gleUniform4dv)) bIsLoaded = 0;
+	if(!__gleUniform4dv) bIsLoaded = 0;
 	__gleUniformMatrix2dv = (PFNGLUNIFORMMATRIX2DVPROC)gleIntGetProcAddress("glUniformMatrix2dv");
-	if(!TestPointer((const void*)__gleUniformMatrix2dv)) bIsLoaded = 0;
+	if(!__gleUniformMatrix2dv) bIsLoaded = 0;
 	__gleUniformMatrix3dv = (PFNGLUNIFORMMATRIX3DVPROC)gleIntGetProcAddress("glUniformMatrix3dv");
-	if(!TestPointer((const void*)__gleUniformMatrix3dv)) bIsLoaded = 0;
+	if(!__gleUniformMatrix3dv) bIsLoaded = 0;
 	__gleUniformMatrix4dv = (PFNGLUNIFORMMATRIX4DVPROC)gleIntGetProcAddress("glUniformMatrix4dv");
-	if(!TestPointer((const void*)__gleUniformMatrix4dv)) bIsLoaded = 0;
+	if(!__gleUniformMatrix4dv) bIsLoaded = 0;
 	__gleUniformMatrix2x3dv = (PFNGLUNIFORMMATRIX2X3DVPROC)gleIntGetProcAddress("glUniformMatrix2x3dv");
-	if(!TestPointer((const void*)__gleUniformMatrix2x3dv)) bIsLoaded = 0;
+	if(!__gleUniformMatrix2x3dv) bIsLoaded = 0;
 	__gleUniformMatrix2x4dv = (PFNGLUNIFORMMATRIX2X4DVPROC)gleIntGetProcAddress("glUniformMatrix2x4dv");
-	if(!TestPointer((const void*)__gleUniformMatrix2x4dv)) bIsLoaded = 0;
+	if(!__gleUniformMatrix2x4dv) bIsLoaded = 0;
 	__gleUniformMatrix3x2dv = (PFNGLUNIFORMMATRIX3X2DVPROC)gleIntGetProcAddress("glUniformMatrix3x2dv");
-	if(!TestPointer((const void*)__gleUniformMatrix3x2dv)) bIsLoaded = 0;
+	if(!__gleUniformMatrix3x2dv) bIsLoaded = 0;
 	__gleUniformMatrix3x4dv = (PFNGLUNIFORMMATRIX3X4DVPROC)gleIntGetProcAddress("glUniformMatrix3x4dv");
-	if(!TestPointer((const void*)__gleUniformMatrix3x4dv)) bIsLoaded = 0;
+	if(!__gleUniformMatrix3x4dv) bIsLoaded = 0;
 	__gleUniformMatrix4x2dv = (PFNGLUNIFORMMATRIX4X2DVPROC)gleIntGetProcAddress("glUniformMatrix4x2dv");
-	if(!TestPointer((const void*)__gleUniformMatrix4x2dv)) bIsLoaded = 0;
+	if(!__gleUniformMatrix4x2dv) bIsLoaded = 0;
 	__gleUniformMatrix4x3dv = (PFNGLUNIFORMMATRIX4X3DVPROC)gleIntGetProcAddress("glUniformMatrix4x3dv");
-	if(!TestPointer((const void*)__gleUniformMatrix4x3dv)) bIsLoaded = 0;
+	if(!__gleUniformMatrix4x3dv) bIsLoaded = 0;
 	__gleGetUniformdv = (PFNGLGETUNIFORMDVPROC)gleIntGetProcAddress("glGetUniformdv");
-	if(!TestPointer((const void*)__gleGetUniformdv)) bIsLoaded = 0;
+	if(!__gleGetUniformdv) bIsLoaded = 0;
 #endif /*GL_ARB_gpu_shader_fp64*/
 	return bIsLoaded;
 }
@@ -1996,7 +2009,7 @@ static int gleIntLoad_ARB_instanced_arrays()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_instanced_arrays
 	glVertexAttribDivisorARB = (PFNGLVERTEXATTRIBDIVISORARBPROC)gleIntGetProcAddress("glVertexAttribDivisorARB");
-	if(!TestPointer((const void*)glVertexAttribDivisorARB)) bIsLoaded = 0;
+	if(!glVertexAttribDivisorARB) bIsLoaded = 0;
 #endif /*GL_ARB_instanced_arrays*/
 	return bIsLoaded;
 }
@@ -2011,7 +2024,7 @@ static int gleIntLoad_ARB_internalformat_query()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_internalformat_query
 	__gleGetInternalformativ = (PFNGLGETINTERNALFORMATIVPROC)gleIntGetProcAddress("glGetInternalformativ");
-	if(!TestPointer((const void*)__gleGetInternalformativ)) bIsLoaded = 0;
+	if(!__gleGetInternalformativ) bIsLoaded = 0;
 #endif /*GL_ARB_internalformat_query*/
 	return bIsLoaded;
 }
@@ -2029,9 +2042,9 @@ static int gleIntLoad_ARB_map_buffer_range()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_map_buffer_range
 	__gleMapBufferRange = (PFNGLMAPBUFFERRANGEPROC)gleIntGetProcAddress("glMapBufferRange");
-	if(!TestPointer((const void*)__gleMapBufferRange)) bIsLoaded = 0;
+	if(!__gleMapBufferRange) bIsLoaded = 0;
 	__gleFlushMappedBufferRange = (PFNGLFLUSHMAPPEDBUFFERRANGEPROC)gleIntGetProcAddress("glFlushMappedBufferRange");
-	if(!TestPointer((const void*)__gleFlushMappedBufferRange)) bIsLoaded = 0;
+	if(!__gleFlushMappedBufferRange) bIsLoaded = 0;
 #endif /*GL_ARB_map_buffer_range*/
 	return bIsLoaded;
 }
@@ -2054,15 +2067,15 @@ static int gleIntLoad_ARB_matrix_palette()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_matrix_palette
 	glCurrentPaletteMatrixARB = (PFNGLCURRENTPALETTEMATRIXARBPROC)gleIntGetProcAddress("glCurrentPaletteMatrixARB");
-	if(!TestPointer((const void*)glCurrentPaletteMatrixARB)) bIsLoaded = 0;
+	if(!glCurrentPaletteMatrixARB) bIsLoaded = 0;
 	glMatrixIndexubvARB = (PFNGLMATRIXINDEXUBVARBPROC)gleIntGetProcAddress("glMatrixIndexubvARB");
-	if(!TestPointer((const void*)glMatrixIndexubvARB)) bIsLoaded = 0;
+	if(!glMatrixIndexubvARB) bIsLoaded = 0;
 	glMatrixIndexusvARB = (PFNGLMATRIXINDEXUSVARBPROC)gleIntGetProcAddress("glMatrixIndexusvARB");
-	if(!TestPointer((const void*)glMatrixIndexusvARB)) bIsLoaded = 0;
+	if(!glMatrixIndexusvARB) bIsLoaded = 0;
 	glMatrixIndexuivARB = (PFNGLMATRIXINDEXUIVARBPROC)gleIntGetProcAddress("glMatrixIndexuivARB");
-	if(!TestPointer((const void*)glMatrixIndexuivARB)) bIsLoaded = 0;
+	if(!glMatrixIndexuivARB) bIsLoaded = 0;
 	glMatrixIndexPointerARB = (PFNGLMATRIXINDEXPOINTERARBPROC)gleIntGetProcAddress("glMatrixIndexPointerARB");
-	if(!TestPointer((const void*)glMatrixIndexPointerARB)) bIsLoaded = 0;
+	if(!glMatrixIndexPointerARB) bIsLoaded = 0;
 #endif /*GL_ARB_matrix_palette*/
 	return bIsLoaded;
 }
@@ -2077,7 +2090,7 @@ static int gleIntLoad_ARB_multisample()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_multisample
 	glSampleCoverageARB = (PFNGLSAMPLECOVERAGEARBPROC)gleIntGetProcAddress("glSampleCoverageARB");
-	if(!TestPointer((const void*)glSampleCoverageARB)) bIsLoaded = 0;
+	if(!glSampleCoverageARB) bIsLoaded = 0;
 #endif /*GL_ARB_multisample*/
 	return bIsLoaded;
 }
@@ -2158,73 +2171,73 @@ static int gleIntLoad_ARB_multitexture()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_multitexture
 	glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)gleIntGetProcAddress("glActiveTextureARB");
-	if(!TestPointer((const void*)glActiveTextureARB)) bIsLoaded = 0;
+	if(!glActiveTextureARB) bIsLoaded = 0;
 	glClientActiveTextureARB = (PFNGLCLIENTACTIVETEXTUREARBPROC)gleIntGetProcAddress("glClientActiveTextureARB");
-	if(!TestPointer((const void*)glClientActiveTextureARB)) bIsLoaded = 0;
+	if(!glClientActiveTextureARB) bIsLoaded = 0;
 	glMultiTexCoord1dARB = (PFNGLMULTITEXCOORD1DARBPROC)gleIntGetProcAddress("glMultiTexCoord1dARB");
-	if(!TestPointer((const void*)glMultiTexCoord1dARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord1dARB) bIsLoaded = 0;
 	glMultiTexCoord1dvARB = (PFNGLMULTITEXCOORD1DVARBPROC)gleIntGetProcAddress("glMultiTexCoord1dvARB");
-	if(!TestPointer((const void*)glMultiTexCoord1dvARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord1dvARB) bIsLoaded = 0;
 	glMultiTexCoord1fARB = (PFNGLMULTITEXCOORD1FARBPROC)gleIntGetProcAddress("glMultiTexCoord1fARB");
-	if(!TestPointer((const void*)glMultiTexCoord1fARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord1fARB) bIsLoaded = 0;
 	glMultiTexCoord1fvARB = (PFNGLMULTITEXCOORD1FVARBPROC)gleIntGetProcAddress("glMultiTexCoord1fvARB");
-	if(!TestPointer((const void*)glMultiTexCoord1fvARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord1fvARB) bIsLoaded = 0;
 	glMultiTexCoord1iARB = (PFNGLMULTITEXCOORD1IARBPROC)gleIntGetProcAddress("glMultiTexCoord1iARB");
-	if(!TestPointer((const void*)glMultiTexCoord1iARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord1iARB) bIsLoaded = 0;
 	glMultiTexCoord1ivARB = (PFNGLMULTITEXCOORD1IVARBPROC)gleIntGetProcAddress("glMultiTexCoord1ivARB");
-	if(!TestPointer((const void*)glMultiTexCoord1ivARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord1ivARB) bIsLoaded = 0;
 	glMultiTexCoord1sARB = (PFNGLMULTITEXCOORD1SARBPROC)gleIntGetProcAddress("glMultiTexCoord1sARB");
-	if(!TestPointer((const void*)glMultiTexCoord1sARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord1sARB) bIsLoaded = 0;
 	glMultiTexCoord1svARB = (PFNGLMULTITEXCOORD1SVARBPROC)gleIntGetProcAddress("glMultiTexCoord1svARB");
-	if(!TestPointer((const void*)glMultiTexCoord1svARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord1svARB) bIsLoaded = 0;
 	glMultiTexCoord2dARB = (PFNGLMULTITEXCOORD2DARBPROC)gleIntGetProcAddress("glMultiTexCoord2dARB");
-	if(!TestPointer((const void*)glMultiTexCoord2dARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord2dARB) bIsLoaded = 0;
 	glMultiTexCoord2dvARB = (PFNGLMULTITEXCOORD2DVARBPROC)gleIntGetProcAddress("glMultiTexCoord2dvARB");
-	if(!TestPointer((const void*)glMultiTexCoord2dvARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord2dvARB) bIsLoaded = 0;
 	glMultiTexCoord2fARB = (PFNGLMULTITEXCOORD2FARBPROC)gleIntGetProcAddress("glMultiTexCoord2fARB");
-	if(!TestPointer((const void*)glMultiTexCoord2fARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord2fARB) bIsLoaded = 0;
 	glMultiTexCoord2fvARB = (PFNGLMULTITEXCOORD2FVARBPROC)gleIntGetProcAddress("glMultiTexCoord2fvARB");
-	if(!TestPointer((const void*)glMultiTexCoord2fvARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord2fvARB) bIsLoaded = 0;
 	glMultiTexCoord2iARB = (PFNGLMULTITEXCOORD2IARBPROC)gleIntGetProcAddress("glMultiTexCoord2iARB");
-	if(!TestPointer((const void*)glMultiTexCoord2iARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord2iARB) bIsLoaded = 0;
 	glMultiTexCoord2ivARB = (PFNGLMULTITEXCOORD2IVARBPROC)gleIntGetProcAddress("glMultiTexCoord2ivARB");
-	if(!TestPointer((const void*)glMultiTexCoord2ivARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord2ivARB) bIsLoaded = 0;
 	glMultiTexCoord2sARB = (PFNGLMULTITEXCOORD2SARBPROC)gleIntGetProcAddress("glMultiTexCoord2sARB");
-	if(!TestPointer((const void*)glMultiTexCoord2sARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord2sARB) bIsLoaded = 0;
 	glMultiTexCoord2svARB = (PFNGLMULTITEXCOORD2SVARBPROC)gleIntGetProcAddress("glMultiTexCoord2svARB");
-	if(!TestPointer((const void*)glMultiTexCoord2svARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord2svARB) bIsLoaded = 0;
 	glMultiTexCoord3dARB = (PFNGLMULTITEXCOORD3DARBPROC)gleIntGetProcAddress("glMultiTexCoord3dARB");
-	if(!TestPointer((const void*)glMultiTexCoord3dARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord3dARB) bIsLoaded = 0;
 	glMultiTexCoord3dvARB = (PFNGLMULTITEXCOORD3DVARBPROC)gleIntGetProcAddress("glMultiTexCoord3dvARB");
-	if(!TestPointer((const void*)glMultiTexCoord3dvARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord3dvARB) bIsLoaded = 0;
 	glMultiTexCoord3fARB = (PFNGLMULTITEXCOORD3FARBPROC)gleIntGetProcAddress("glMultiTexCoord3fARB");
-	if(!TestPointer((const void*)glMultiTexCoord3fARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord3fARB) bIsLoaded = 0;
 	glMultiTexCoord3fvARB = (PFNGLMULTITEXCOORD3FVARBPROC)gleIntGetProcAddress("glMultiTexCoord3fvARB");
-	if(!TestPointer((const void*)glMultiTexCoord3fvARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord3fvARB) bIsLoaded = 0;
 	glMultiTexCoord3iARB = (PFNGLMULTITEXCOORD3IARBPROC)gleIntGetProcAddress("glMultiTexCoord3iARB");
-	if(!TestPointer((const void*)glMultiTexCoord3iARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord3iARB) bIsLoaded = 0;
 	glMultiTexCoord3ivARB = (PFNGLMULTITEXCOORD3IVARBPROC)gleIntGetProcAddress("glMultiTexCoord3ivARB");
-	if(!TestPointer((const void*)glMultiTexCoord3ivARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord3ivARB) bIsLoaded = 0;
 	glMultiTexCoord3sARB = (PFNGLMULTITEXCOORD3SARBPROC)gleIntGetProcAddress("glMultiTexCoord3sARB");
-	if(!TestPointer((const void*)glMultiTexCoord3sARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord3sARB) bIsLoaded = 0;
 	glMultiTexCoord3svARB = (PFNGLMULTITEXCOORD3SVARBPROC)gleIntGetProcAddress("glMultiTexCoord3svARB");
-	if(!TestPointer((const void*)glMultiTexCoord3svARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord3svARB) bIsLoaded = 0;
 	glMultiTexCoord4dARB = (PFNGLMULTITEXCOORD4DARBPROC)gleIntGetProcAddress("glMultiTexCoord4dARB");
-	if(!TestPointer((const void*)glMultiTexCoord4dARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord4dARB) bIsLoaded = 0;
 	glMultiTexCoord4dvARB = (PFNGLMULTITEXCOORD4DVARBPROC)gleIntGetProcAddress("glMultiTexCoord4dvARB");
-	if(!TestPointer((const void*)glMultiTexCoord4dvARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord4dvARB) bIsLoaded = 0;
 	glMultiTexCoord4fARB = (PFNGLMULTITEXCOORD4FARBPROC)gleIntGetProcAddress("glMultiTexCoord4fARB");
-	if(!TestPointer((const void*)glMultiTexCoord4fARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord4fARB) bIsLoaded = 0;
 	glMultiTexCoord4fvARB = (PFNGLMULTITEXCOORD4FVARBPROC)gleIntGetProcAddress("glMultiTexCoord4fvARB");
-	if(!TestPointer((const void*)glMultiTexCoord4fvARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord4fvARB) bIsLoaded = 0;
 	glMultiTexCoord4iARB = (PFNGLMULTITEXCOORD4IARBPROC)gleIntGetProcAddress("glMultiTexCoord4iARB");
-	if(!TestPointer((const void*)glMultiTexCoord4iARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord4iARB) bIsLoaded = 0;
 	glMultiTexCoord4ivARB = (PFNGLMULTITEXCOORD4IVARBPROC)gleIntGetProcAddress("glMultiTexCoord4ivARB");
-	if(!TestPointer((const void*)glMultiTexCoord4ivARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord4ivARB) bIsLoaded = 0;
 	glMultiTexCoord4sARB = (PFNGLMULTITEXCOORD4SARBPROC)gleIntGetProcAddress("glMultiTexCoord4sARB");
-	if(!TestPointer((const void*)glMultiTexCoord4sARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord4sARB) bIsLoaded = 0;
 	glMultiTexCoord4svARB = (PFNGLMULTITEXCOORD4SVARBPROC)gleIntGetProcAddress("glMultiTexCoord4svARB");
-	if(!TestPointer((const void*)glMultiTexCoord4svARB)) bIsLoaded = 0;
+	if(!glMultiTexCoord4svARB) bIsLoaded = 0;
 #endif /*GL_ARB_multitexture*/
 	return bIsLoaded;
 }
@@ -2253,21 +2266,21 @@ static int gleIntLoad_ARB_occlusion_query()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_occlusion_query
 	glGenQueriesARB = (PFNGLGENQUERIESARBPROC)gleIntGetProcAddress("glGenQueriesARB");
-	if(!TestPointer((const void*)glGenQueriesARB)) bIsLoaded = 0;
+	if(!glGenQueriesARB) bIsLoaded = 0;
 	glDeleteQueriesARB = (PFNGLDELETEQUERIESARBPROC)gleIntGetProcAddress("glDeleteQueriesARB");
-	if(!TestPointer((const void*)glDeleteQueriesARB)) bIsLoaded = 0;
+	if(!glDeleteQueriesARB) bIsLoaded = 0;
 	glIsQueryARB = (PFNGLISQUERYARBPROC)gleIntGetProcAddress("glIsQueryARB");
-	if(!TestPointer((const void*)glIsQueryARB)) bIsLoaded = 0;
+	if(!glIsQueryARB) bIsLoaded = 0;
 	glBeginQueryARB = (PFNGLBEGINQUERYARBPROC)gleIntGetProcAddress("glBeginQueryARB");
-	if(!TestPointer((const void*)glBeginQueryARB)) bIsLoaded = 0;
+	if(!glBeginQueryARB) bIsLoaded = 0;
 	glEndQueryARB = (PFNGLENDQUERYARBPROC)gleIntGetProcAddress("glEndQueryARB");
-	if(!TestPointer((const void*)glEndQueryARB)) bIsLoaded = 0;
+	if(!glEndQueryARB) bIsLoaded = 0;
 	glGetQueryivARB = (PFNGLGETQUERYIVARBPROC)gleIntGetProcAddress("glGetQueryivARB");
-	if(!TestPointer((const void*)glGetQueryivARB)) bIsLoaded = 0;
+	if(!glGetQueryivARB) bIsLoaded = 0;
 	glGetQueryObjectivARB = (PFNGLGETQUERYOBJECTIVARBPROC)gleIntGetProcAddress("glGetQueryObjectivARB");
-	if(!TestPointer((const void*)glGetQueryObjectivARB)) bIsLoaded = 0;
+	if(!glGetQueryObjectivARB) bIsLoaded = 0;
 	glGetQueryObjectuivARB = (PFNGLGETQUERYOBJECTUIVARBPROC)gleIntGetProcAddress("glGetQueryObjectuivARB");
-	if(!TestPointer((const void*)glGetQueryObjectuivARB)) bIsLoaded = 0;
+	if(!glGetQueryObjectuivARB) bIsLoaded = 0;
 #endif /*GL_ARB_occlusion_query*/
 	return bIsLoaded;
 }
@@ -2286,9 +2299,9 @@ static int gleIntLoad_ARB_point_parameters()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_point_parameters
 	glPointParameterfARB = (PFNGLPOINTPARAMETERFARBPROC)gleIntGetProcAddress("glPointParameterfARB");
-	if(!TestPointer((const void*)glPointParameterfARB)) bIsLoaded = 0;
+	if(!glPointParameterfARB) bIsLoaded = 0;
 	glPointParameterfvARB = (PFNGLPOINTPARAMETERFVARBPROC)gleIntGetProcAddress("glPointParameterfvARB");
-	if(!TestPointer((const void*)glPointParameterfvARB)) bIsLoaded = 0;
+	if(!glPointParameterfvARB) bIsLoaded = 0;
 #endif /*GL_ARB_point_parameters*/
 	return bIsLoaded;
 }
@@ -2304,7 +2317,7 @@ static int gleIntLoad_ARB_provoking_vertex()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_provoking_vertex
 	__gleProvokingVertex = (PFNGLPROVOKINGVERTEXPROC)gleIntGetProcAddress("glProvokingVertex");
-	if(!TestPointer((const void*)__gleProvokingVertex)) bIsLoaded = 0;
+	if(!__gleProvokingVertex) bIsLoaded = 0;
 #endif /*GL_ARB_provoking_vertex*/
 	return bIsLoaded;
 }
@@ -2357,45 +2370,45 @@ static int gleIntLoad_ARB_robustness()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_robustness
 	glGetGraphicsResetStatusARB = (PFNGLGETGRAPHICSRESETSTATUSARBPROC)gleIntGetProcAddress("glGetGraphicsResetStatusARB");
-	if(!TestPointer((const void*)glGetGraphicsResetStatusARB)) bIsLoaded = 0;
+	if(!glGetGraphicsResetStatusARB) bIsLoaded = 0;
 	glGetnMapdvARB = (PFNGLGETNMAPDVARBPROC)gleIntGetProcAddress("glGetnMapdvARB");
-	if(!TestPointer((const void*)glGetnMapdvARB)) bIsLoaded = 0;
+	if(!glGetnMapdvARB) bIsLoaded = 0;
 	glGetnMapfvARB = (PFNGLGETNMAPFVARBPROC)gleIntGetProcAddress("glGetnMapfvARB");
-	if(!TestPointer((const void*)glGetnMapfvARB)) bIsLoaded = 0;
+	if(!glGetnMapfvARB) bIsLoaded = 0;
 	glGetnMapivARB = (PFNGLGETNMAPIVARBPROC)gleIntGetProcAddress("glGetnMapivARB");
-	if(!TestPointer((const void*)glGetnMapivARB)) bIsLoaded = 0;
+	if(!glGetnMapivARB) bIsLoaded = 0;
 	glGetnPixelMapfvARB = (PFNGLGETNPIXELMAPFVARBPROC)gleIntGetProcAddress("glGetnPixelMapfvARB");
-	if(!TestPointer((const void*)glGetnPixelMapfvARB)) bIsLoaded = 0;
+	if(!glGetnPixelMapfvARB) bIsLoaded = 0;
 	glGetnPixelMapuivARB = (PFNGLGETNPIXELMAPUIVARBPROC)gleIntGetProcAddress("glGetnPixelMapuivARB");
-	if(!TestPointer((const void*)glGetnPixelMapuivARB)) bIsLoaded = 0;
+	if(!glGetnPixelMapuivARB) bIsLoaded = 0;
 	glGetnPixelMapusvARB = (PFNGLGETNPIXELMAPUSVARBPROC)gleIntGetProcAddress("glGetnPixelMapusvARB");
-	if(!TestPointer((const void*)glGetnPixelMapusvARB)) bIsLoaded = 0;
+	if(!glGetnPixelMapusvARB) bIsLoaded = 0;
 	glGetnPolygonStippleARB = (PFNGLGETNPOLYGONSTIPPLEARBPROC)gleIntGetProcAddress("glGetnPolygonStippleARB");
-	if(!TestPointer((const void*)glGetnPolygonStippleARB)) bIsLoaded = 0;
+	if(!glGetnPolygonStippleARB) bIsLoaded = 0;
 	glGetnColorTableARB = (PFNGLGETNCOLORTABLEARBPROC)gleIntGetProcAddress("glGetnColorTableARB");
-	if(!TestPointer((const void*)glGetnColorTableARB)) bIsLoaded = 0;
+	if(!glGetnColorTableARB) bIsLoaded = 0;
 	glGetnConvolutionFilterARB = (PFNGLGETNCONVOLUTIONFILTERARBPROC)gleIntGetProcAddress("glGetnConvolutionFilterARB");
-	if(!TestPointer((const void*)glGetnConvolutionFilterARB)) bIsLoaded = 0;
+	if(!glGetnConvolutionFilterARB) bIsLoaded = 0;
 	glGetnSeparableFilterARB = (PFNGLGETNSEPARABLEFILTERARBPROC)gleIntGetProcAddress("glGetnSeparableFilterARB");
-	if(!TestPointer((const void*)glGetnSeparableFilterARB)) bIsLoaded = 0;
+	if(!glGetnSeparableFilterARB) bIsLoaded = 0;
 	glGetnHistogramARB = (PFNGLGETNHISTOGRAMARBPROC)gleIntGetProcAddress("glGetnHistogramARB");
-	if(!TestPointer((const void*)glGetnHistogramARB)) bIsLoaded = 0;
+	if(!glGetnHistogramARB) bIsLoaded = 0;
 	glGetnMinmaxARB = (PFNGLGETNMINMAXARBPROC)gleIntGetProcAddress("glGetnMinmaxARB");
-	if(!TestPointer((const void*)glGetnMinmaxARB)) bIsLoaded = 0;
+	if(!glGetnMinmaxARB) bIsLoaded = 0;
 	glGetnTexImageARB = (PFNGLGETNTEXIMAGEARBPROC)gleIntGetProcAddress("glGetnTexImageARB");
-	if(!TestPointer((const void*)glGetnTexImageARB)) bIsLoaded = 0;
+	if(!glGetnTexImageARB) bIsLoaded = 0;
 	glReadnPixelsARB = (PFNGLREADNPIXELSARBPROC)gleIntGetProcAddress("glReadnPixelsARB");
-	if(!TestPointer((const void*)glReadnPixelsARB)) bIsLoaded = 0;
+	if(!glReadnPixelsARB) bIsLoaded = 0;
 	glGetnCompressedTexImageARB = (PFNGLGETNCOMPRESSEDTEXIMAGEARBPROC)gleIntGetProcAddress("glGetnCompressedTexImageARB");
-	if(!TestPointer((const void*)glGetnCompressedTexImageARB)) bIsLoaded = 0;
+	if(!glGetnCompressedTexImageARB) bIsLoaded = 0;
 	glGetnUniformfvARB = (PFNGLGETNUNIFORMFVARBPROC)gleIntGetProcAddress("glGetnUniformfvARB");
-	if(!TestPointer((const void*)glGetnUniformfvARB)) bIsLoaded = 0;
+	if(!glGetnUniformfvARB) bIsLoaded = 0;
 	glGetnUniformivARB = (PFNGLGETNUNIFORMIVARBPROC)gleIntGetProcAddress("glGetnUniformivARB");
-	if(!TestPointer((const void*)glGetnUniformivARB)) bIsLoaded = 0;
+	if(!glGetnUniformivARB) bIsLoaded = 0;
 	glGetnUniformuivARB = (PFNGLGETNUNIFORMUIVARBPROC)gleIntGetProcAddress("glGetnUniformuivARB");
-	if(!TestPointer((const void*)glGetnUniformuivARB)) bIsLoaded = 0;
+	if(!glGetnUniformuivARB) bIsLoaded = 0;
 	glGetnUniformdvARB = (PFNGLGETNUNIFORMDVARBPROC)gleIntGetProcAddress("glGetnUniformdvARB");
-	if(!TestPointer((const void*)glGetnUniformdvARB)) bIsLoaded = 0;
+	if(!glGetnUniformdvARB) bIsLoaded = 0;
 #endif /*GL_ARB_robustness*/
 	return bIsLoaded;
 }
@@ -2410,7 +2423,7 @@ static int gleIntLoad_ARB_sample_shading()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_sample_shading
 	glMinSampleShadingARB = (PFNGLMINSAMPLESHADINGARBPROC)gleIntGetProcAddress("glMinSampleShadingARB");
-	if(!TestPointer((const void*)glMinSampleShadingARB)) bIsLoaded = 0;
+	if(!glMinSampleShadingARB) bIsLoaded = 0;
 #endif /*GL_ARB_sample_shading*/
 	return bIsLoaded;
 }
@@ -2451,33 +2464,33 @@ static int gleIntLoad_ARB_sampler_objects()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_sampler_objects
 	__gleGenSamplers = (PFNGLGENSAMPLERSPROC)gleIntGetProcAddress("glGenSamplers");
-	if(!TestPointer((const void*)__gleGenSamplers)) bIsLoaded = 0;
+	if(!__gleGenSamplers) bIsLoaded = 0;
 	__gleDeleteSamplers = (PFNGLDELETESAMPLERSPROC)gleIntGetProcAddress("glDeleteSamplers");
-	if(!TestPointer((const void*)__gleDeleteSamplers)) bIsLoaded = 0;
+	if(!__gleDeleteSamplers) bIsLoaded = 0;
 	__gleIsSampler = (PFNGLISSAMPLERPROC)gleIntGetProcAddress("glIsSampler");
-	if(!TestPointer((const void*)__gleIsSampler)) bIsLoaded = 0;
+	if(!__gleIsSampler) bIsLoaded = 0;
 	__gleBindSampler = (PFNGLBINDSAMPLERPROC)gleIntGetProcAddress("glBindSampler");
-	if(!TestPointer((const void*)__gleBindSampler)) bIsLoaded = 0;
+	if(!__gleBindSampler) bIsLoaded = 0;
 	__gleSamplerParameteri = (PFNGLSAMPLERPARAMETERIPROC)gleIntGetProcAddress("glSamplerParameteri");
-	if(!TestPointer((const void*)__gleSamplerParameteri)) bIsLoaded = 0;
+	if(!__gleSamplerParameteri) bIsLoaded = 0;
 	__gleSamplerParameteriv = (PFNGLSAMPLERPARAMETERIVPROC)gleIntGetProcAddress("glSamplerParameteriv");
-	if(!TestPointer((const void*)__gleSamplerParameteriv)) bIsLoaded = 0;
+	if(!__gleSamplerParameteriv) bIsLoaded = 0;
 	__gleSamplerParameterf = (PFNGLSAMPLERPARAMETERFPROC)gleIntGetProcAddress("glSamplerParameterf");
-	if(!TestPointer((const void*)__gleSamplerParameterf)) bIsLoaded = 0;
+	if(!__gleSamplerParameterf) bIsLoaded = 0;
 	__gleSamplerParameterfv = (PFNGLSAMPLERPARAMETERFVPROC)gleIntGetProcAddress("glSamplerParameterfv");
-	if(!TestPointer((const void*)__gleSamplerParameterfv)) bIsLoaded = 0;
+	if(!__gleSamplerParameterfv) bIsLoaded = 0;
 	__gleSamplerParameterIiv = (PFNGLSAMPLERPARAMETERIIVPROC)gleIntGetProcAddress("glSamplerParameterIiv");
-	if(!TestPointer((const void*)__gleSamplerParameterIiv)) bIsLoaded = 0;
+	if(!__gleSamplerParameterIiv) bIsLoaded = 0;
 	__gleSamplerParameterIuiv = (PFNGLSAMPLERPARAMETERIUIVPROC)gleIntGetProcAddress("glSamplerParameterIuiv");
-	if(!TestPointer((const void*)__gleSamplerParameterIuiv)) bIsLoaded = 0;
+	if(!__gleSamplerParameterIuiv) bIsLoaded = 0;
 	__gleGetSamplerParameteriv = (PFNGLGETSAMPLERPARAMETERIVPROC)gleIntGetProcAddress("glGetSamplerParameteriv");
-	if(!TestPointer((const void*)__gleGetSamplerParameteriv)) bIsLoaded = 0;
+	if(!__gleGetSamplerParameteriv) bIsLoaded = 0;
 	__gleGetSamplerParameterIiv = (PFNGLGETSAMPLERPARAMETERIIVPROC)gleIntGetProcAddress("glGetSamplerParameterIiv");
-	if(!TestPointer((const void*)__gleGetSamplerParameterIiv)) bIsLoaded = 0;
+	if(!__gleGetSamplerParameterIiv) bIsLoaded = 0;
 	__gleGetSamplerParameterfv = (PFNGLGETSAMPLERPARAMETERFVPROC)gleIntGetProcAddress("glGetSamplerParameterfv");
-	if(!TestPointer((const void*)__gleGetSamplerParameterfv)) bIsLoaded = 0;
+	if(!__gleGetSamplerParameterfv) bIsLoaded = 0;
 	__gleGetSamplerParameterIuiv = (PFNGLGETSAMPLERPARAMETERIUIVPROC)gleIntGetProcAddress("glGetSamplerParameterIuiv");
-	if(!TestPointer((const void*)__gleGetSamplerParameterIuiv)) bIsLoaded = 0;
+	if(!__gleGetSamplerParameterIuiv) bIsLoaded = 0;
 #endif /*GL_ARB_sampler_objects*/
 	return bIsLoaded;
 }
@@ -2611,125 +2624,125 @@ static int gleIntLoad_ARB_separate_shader_objects()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_separate_shader_objects
 	__gleUseProgramStages = (PFNGLUSEPROGRAMSTAGESPROC)gleIntGetProcAddress("glUseProgramStages");
-	if(!TestPointer((const void*)__gleUseProgramStages)) bIsLoaded = 0;
+	if(!__gleUseProgramStages) bIsLoaded = 0;
 	__gleActiveShaderProgram = (PFNGLACTIVESHADERPROGRAMPROC)gleIntGetProcAddress("glActiveShaderProgram");
-	if(!TestPointer((const void*)__gleActiveShaderProgram)) bIsLoaded = 0;
+	if(!__gleActiveShaderProgram) bIsLoaded = 0;
 	__gleCreateShaderProgramv = (PFNGLCREATESHADERPROGRAMVPROC)gleIntGetProcAddress("glCreateShaderProgramv");
-	if(!TestPointer((const void*)__gleCreateShaderProgramv)) bIsLoaded = 0;
+	if(!__gleCreateShaderProgramv) bIsLoaded = 0;
 	__gleBindProgramPipeline = (PFNGLBINDPROGRAMPIPELINEPROC)gleIntGetProcAddress("glBindProgramPipeline");
-	if(!TestPointer((const void*)__gleBindProgramPipeline)) bIsLoaded = 0;
+	if(!__gleBindProgramPipeline) bIsLoaded = 0;
 	__gleDeleteProgramPipelines = (PFNGLDELETEPROGRAMPIPELINESPROC)gleIntGetProcAddress("glDeleteProgramPipelines");
-	if(!TestPointer((const void*)__gleDeleteProgramPipelines)) bIsLoaded = 0;
+	if(!__gleDeleteProgramPipelines) bIsLoaded = 0;
 	__gleGenProgramPipelines = (PFNGLGENPROGRAMPIPELINESPROC)gleIntGetProcAddress("glGenProgramPipelines");
-	if(!TestPointer((const void*)__gleGenProgramPipelines)) bIsLoaded = 0;
+	if(!__gleGenProgramPipelines) bIsLoaded = 0;
 	__gleIsProgramPipeline = (PFNGLISPROGRAMPIPELINEPROC)gleIntGetProcAddress("glIsProgramPipeline");
-	if(!TestPointer((const void*)__gleIsProgramPipeline)) bIsLoaded = 0;
+	if(!__gleIsProgramPipeline) bIsLoaded = 0;
 	__gleGetProgramPipelineiv = (PFNGLGETPROGRAMPIPELINEIVPROC)gleIntGetProcAddress("glGetProgramPipelineiv");
-	if(!TestPointer((const void*)__gleGetProgramPipelineiv)) bIsLoaded = 0;
+	if(!__gleGetProgramPipelineiv) bIsLoaded = 0;
 	__gleProgramUniform1i = (PFNGLPROGRAMUNIFORM1IPROC)gleIntGetProcAddress("glProgramUniform1i");
-	if(!TestPointer((const void*)__gleProgramUniform1i)) bIsLoaded = 0;
+	if(!__gleProgramUniform1i) bIsLoaded = 0;
 	__gleProgramUniform1iv = (PFNGLPROGRAMUNIFORM1IVPROC)gleIntGetProcAddress("glProgramUniform1iv");
-	if(!TestPointer((const void*)__gleProgramUniform1iv)) bIsLoaded = 0;
+	if(!__gleProgramUniform1iv) bIsLoaded = 0;
 	__gleProgramUniform1f = (PFNGLPROGRAMUNIFORM1FPROC)gleIntGetProcAddress("glProgramUniform1f");
-	if(!TestPointer((const void*)__gleProgramUniform1f)) bIsLoaded = 0;
+	if(!__gleProgramUniform1f) bIsLoaded = 0;
 	__gleProgramUniform1fv = (PFNGLPROGRAMUNIFORM1FVPROC)gleIntGetProcAddress("glProgramUniform1fv");
-	if(!TestPointer((const void*)__gleProgramUniform1fv)) bIsLoaded = 0;
+	if(!__gleProgramUniform1fv) bIsLoaded = 0;
 	__gleProgramUniform1d = (PFNGLPROGRAMUNIFORM1DPROC)gleIntGetProcAddress("glProgramUniform1d");
-	if(!TestPointer((const void*)__gleProgramUniform1d)) bIsLoaded = 0;
+	if(!__gleProgramUniform1d) bIsLoaded = 0;
 	__gleProgramUniform1dv = (PFNGLPROGRAMUNIFORM1DVPROC)gleIntGetProcAddress("glProgramUniform1dv");
-	if(!TestPointer((const void*)__gleProgramUniform1dv)) bIsLoaded = 0;
+	if(!__gleProgramUniform1dv) bIsLoaded = 0;
 	__gleProgramUniform1ui = (PFNGLPROGRAMUNIFORM1UIPROC)gleIntGetProcAddress("glProgramUniform1ui");
-	if(!TestPointer((const void*)__gleProgramUniform1ui)) bIsLoaded = 0;
+	if(!__gleProgramUniform1ui) bIsLoaded = 0;
 	__gleProgramUniform1uiv = (PFNGLPROGRAMUNIFORM1UIVPROC)gleIntGetProcAddress("glProgramUniform1uiv");
-	if(!TestPointer((const void*)__gleProgramUniform1uiv)) bIsLoaded = 0;
+	if(!__gleProgramUniform1uiv) bIsLoaded = 0;
 	__gleProgramUniform2i = (PFNGLPROGRAMUNIFORM2IPROC)gleIntGetProcAddress("glProgramUniform2i");
-	if(!TestPointer((const void*)__gleProgramUniform2i)) bIsLoaded = 0;
+	if(!__gleProgramUniform2i) bIsLoaded = 0;
 	__gleProgramUniform2iv = (PFNGLPROGRAMUNIFORM2IVPROC)gleIntGetProcAddress("glProgramUniform2iv");
-	if(!TestPointer((const void*)__gleProgramUniform2iv)) bIsLoaded = 0;
+	if(!__gleProgramUniform2iv) bIsLoaded = 0;
 	__gleProgramUniform2f = (PFNGLPROGRAMUNIFORM2FPROC)gleIntGetProcAddress("glProgramUniform2f");
-	if(!TestPointer((const void*)__gleProgramUniform2f)) bIsLoaded = 0;
+	if(!__gleProgramUniform2f) bIsLoaded = 0;
 	__gleProgramUniform2fv = (PFNGLPROGRAMUNIFORM2FVPROC)gleIntGetProcAddress("glProgramUniform2fv");
-	if(!TestPointer((const void*)__gleProgramUniform2fv)) bIsLoaded = 0;
+	if(!__gleProgramUniform2fv) bIsLoaded = 0;
 	__gleProgramUniform2d = (PFNGLPROGRAMUNIFORM2DPROC)gleIntGetProcAddress("glProgramUniform2d");
-	if(!TestPointer((const void*)__gleProgramUniform2d)) bIsLoaded = 0;
+	if(!__gleProgramUniform2d) bIsLoaded = 0;
 	__gleProgramUniform2dv = (PFNGLPROGRAMUNIFORM2DVPROC)gleIntGetProcAddress("glProgramUniform2dv");
-	if(!TestPointer((const void*)__gleProgramUniform2dv)) bIsLoaded = 0;
+	if(!__gleProgramUniform2dv) bIsLoaded = 0;
 	__gleProgramUniform2ui = (PFNGLPROGRAMUNIFORM2UIPROC)gleIntGetProcAddress("glProgramUniform2ui");
-	if(!TestPointer((const void*)__gleProgramUniform2ui)) bIsLoaded = 0;
+	if(!__gleProgramUniform2ui) bIsLoaded = 0;
 	__gleProgramUniform2uiv = (PFNGLPROGRAMUNIFORM2UIVPROC)gleIntGetProcAddress("glProgramUniform2uiv");
-	if(!TestPointer((const void*)__gleProgramUniform2uiv)) bIsLoaded = 0;
+	if(!__gleProgramUniform2uiv) bIsLoaded = 0;
 	__gleProgramUniform3i = (PFNGLPROGRAMUNIFORM3IPROC)gleIntGetProcAddress("glProgramUniform3i");
-	if(!TestPointer((const void*)__gleProgramUniform3i)) bIsLoaded = 0;
+	if(!__gleProgramUniform3i) bIsLoaded = 0;
 	__gleProgramUniform3iv = (PFNGLPROGRAMUNIFORM3IVPROC)gleIntGetProcAddress("glProgramUniform3iv");
-	if(!TestPointer((const void*)__gleProgramUniform3iv)) bIsLoaded = 0;
+	if(!__gleProgramUniform3iv) bIsLoaded = 0;
 	__gleProgramUniform3f = (PFNGLPROGRAMUNIFORM3FPROC)gleIntGetProcAddress("glProgramUniform3f");
-	if(!TestPointer((const void*)__gleProgramUniform3f)) bIsLoaded = 0;
+	if(!__gleProgramUniform3f) bIsLoaded = 0;
 	__gleProgramUniform3fv = (PFNGLPROGRAMUNIFORM3FVPROC)gleIntGetProcAddress("glProgramUniform3fv");
-	if(!TestPointer((const void*)__gleProgramUniform3fv)) bIsLoaded = 0;
+	if(!__gleProgramUniform3fv) bIsLoaded = 0;
 	__gleProgramUniform3d = (PFNGLPROGRAMUNIFORM3DPROC)gleIntGetProcAddress("glProgramUniform3d");
-	if(!TestPointer((const void*)__gleProgramUniform3d)) bIsLoaded = 0;
+	if(!__gleProgramUniform3d) bIsLoaded = 0;
 	__gleProgramUniform3dv = (PFNGLPROGRAMUNIFORM3DVPROC)gleIntGetProcAddress("glProgramUniform3dv");
-	if(!TestPointer((const void*)__gleProgramUniform3dv)) bIsLoaded = 0;
+	if(!__gleProgramUniform3dv) bIsLoaded = 0;
 	__gleProgramUniform3ui = (PFNGLPROGRAMUNIFORM3UIPROC)gleIntGetProcAddress("glProgramUniform3ui");
-	if(!TestPointer((const void*)__gleProgramUniform3ui)) bIsLoaded = 0;
+	if(!__gleProgramUniform3ui) bIsLoaded = 0;
 	__gleProgramUniform3uiv = (PFNGLPROGRAMUNIFORM3UIVPROC)gleIntGetProcAddress("glProgramUniform3uiv");
-	if(!TestPointer((const void*)__gleProgramUniform3uiv)) bIsLoaded = 0;
+	if(!__gleProgramUniform3uiv) bIsLoaded = 0;
 	__gleProgramUniform4i = (PFNGLPROGRAMUNIFORM4IPROC)gleIntGetProcAddress("glProgramUniform4i");
-	if(!TestPointer((const void*)__gleProgramUniform4i)) bIsLoaded = 0;
+	if(!__gleProgramUniform4i) bIsLoaded = 0;
 	__gleProgramUniform4iv = (PFNGLPROGRAMUNIFORM4IVPROC)gleIntGetProcAddress("glProgramUniform4iv");
-	if(!TestPointer((const void*)__gleProgramUniform4iv)) bIsLoaded = 0;
+	if(!__gleProgramUniform4iv) bIsLoaded = 0;
 	__gleProgramUniform4f = (PFNGLPROGRAMUNIFORM4FPROC)gleIntGetProcAddress("glProgramUniform4f");
-	if(!TestPointer((const void*)__gleProgramUniform4f)) bIsLoaded = 0;
+	if(!__gleProgramUniform4f) bIsLoaded = 0;
 	__gleProgramUniform4fv = (PFNGLPROGRAMUNIFORM4FVPROC)gleIntGetProcAddress("glProgramUniform4fv");
-	if(!TestPointer((const void*)__gleProgramUniform4fv)) bIsLoaded = 0;
+	if(!__gleProgramUniform4fv) bIsLoaded = 0;
 	__gleProgramUniform4d = (PFNGLPROGRAMUNIFORM4DPROC)gleIntGetProcAddress("glProgramUniform4d");
-	if(!TestPointer((const void*)__gleProgramUniform4d)) bIsLoaded = 0;
+	if(!__gleProgramUniform4d) bIsLoaded = 0;
 	__gleProgramUniform4dv = (PFNGLPROGRAMUNIFORM4DVPROC)gleIntGetProcAddress("glProgramUniform4dv");
-	if(!TestPointer((const void*)__gleProgramUniform4dv)) bIsLoaded = 0;
+	if(!__gleProgramUniform4dv) bIsLoaded = 0;
 	__gleProgramUniform4ui = (PFNGLPROGRAMUNIFORM4UIPROC)gleIntGetProcAddress("glProgramUniform4ui");
-	if(!TestPointer((const void*)__gleProgramUniform4ui)) bIsLoaded = 0;
+	if(!__gleProgramUniform4ui) bIsLoaded = 0;
 	__gleProgramUniform4uiv = (PFNGLPROGRAMUNIFORM4UIVPROC)gleIntGetProcAddress("glProgramUniform4uiv");
-	if(!TestPointer((const void*)__gleProgramUniform4uiv)) bIsLoaded = 0;
+	if(!__gleProgramUniform4uiv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2fv = (PFNGLPROGRAMUNIFORMMATRIX2FVPROC)gleIntGetProcAddress("glProgramUniformMatrix2fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2fv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix2fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3fv = (PFNGLPROGRAMUNIFORMMATRIX3FVPROC)gleIntGetProcAddress("glProgramUniformMatrix3fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3fv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix3fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4fv = (PFNGLPROGRAMUNIFORMMATRIX4FVPROC)gleIntGetProcAddress("glProgramUniformMatrix4fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4fv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix4fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2dv = (PFNGLPROGRAMUNIFORMMATRIX2DVPROC)gleIntGetProcAddress("glProgramUniformMatrix2dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2dv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix2dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3dv = (PFNGLPROGRAMUNIFORMMATRIX3DVPROC)gleIntGetProcAddress("glProgramUniformMatrix3dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3dv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix3dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4dv = (PFNGLPROGRAMUNIFORMMATRIX4DVPROC)gleIntGetProcAddress("glProgramUniformMatrix4dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4dv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix4dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2x3fv = (PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC)gleIntGetProcAddress("glProgramUniformMatrix2x3fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2x3fv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix2x3fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3x2fv = (PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC)gleIntGetProcAddress("glProgramUniformMatrix3x2fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3x2fv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix3x2fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2x4fv = (PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC)gleIntGetProcAddress("glProgramUniformMatrix2x4fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2x4fv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix2x4fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4x2fv = (PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC)gleIntGetProcAddress("glProgramUniformMatrix4x2fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4x2fv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix4x2fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3x4fv = (PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC)gleIntGetProcAddress("glProgramUniformMatrix3x4fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3x4fv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix3x4fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4x3fv = (PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC)gleIntGetProcAddress("glProgramUniformMatrix4x3fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4x3fv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix4x3fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2x3dv = (PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC)gleIntGetProcAddress("glProgramUniformMatrix2x3dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2x3dv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix2x3dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3x2dv = (PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC)gleIntGetProcAddress("glProgramUniformMatrix3x2dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3x2dv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix3x2dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2x4dv = (PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC)gleIntGetProcAddress("glProgramUniformMatrix2x4dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2x4dv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix2x4dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4x2dv = (PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC)gleIntGetProcAddress("glProgramUniformMatrix4x2dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4x2dv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix4x2dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3x4dv = (PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC)gleIntGetProcAddress("glProgramUniformMatrix3x4dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3x4dv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix3x4dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4x3dv = (PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC)gleIntGetProcAddress("glProgramUniformMatrix4x3dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4x3dv)) bIsLoaded = 0;
+	if(!__gleProgramUniformMatrix4x3dv) bIsLoaded = 0;
 	__gleValidateProgramPipeline = (PFNGLVALIDATEPROGRAMPIPELINEPROC)gleIntGetProcAddress("glValidateProgramPipeline");
-	if(!TestPointer((const void*)__gleValidateProgramPipeline)) bIsLoaded = 0;
+	if(!__gleValidateProgramPipeline) bIsLoaded = 0;
 	__gleGetProgramPipelineInfoLog = (PFNGLGETPROGRAMPIPELINEINFOLOGPROC)gleIntGetProcAddress("glGetProgramPipelineInfoLog");
-	if(!TestPointer((const void*)__gleGetProgramPipelineInfoLog)) bIsLoaded = 0;
+	if(!__gleGetProgramPipelineInfoLog) bIsLoaded = 0;
 #endif /*GL_ARB_separate_shader_objects*/
 	return bIsLoaded;
 }
@@ -2744,7 +2757,7 @@ static int gleIntLoad_ARB_shader_atomic_counters()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_shader_atomic_counters
 	__gleGetActiveAtomicCounterBufferiv = (PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC)gleIntGetProcAddress("glGetActiveAtomicCounterBufferiv");
-	if(!TestPointer((const void*)__gleGetActiveAtomicCounterBufferiv)) bIsLoaded = 0;
+	if(!__gleGetActiveAtomicCounterBufferiv) bIsLoaded = 0;
 #endif /*GL_ARB_shader_atomic_counters*/
 	return bIsLoaded;
 }
@@ -2762,9 +2775,9 @@ static int gleIntLoad_ARB_shader_image_load_store()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_shader_image_load_store
 	__gleBindImageTexture = (PFNGLBINDIMAGETEXTUREPROC)gleIntGetProcAddress("glBindImageTexture");
-	if(!TestPointer((const void*)__gleBindImageTexture)) bIsLoaded = 0;
+	if(!__gleBindImageTexture) bIsLoaded = 0;
 	__gleMemoryBarrier = (PFNGLMEMORYBARRIERPROC)gleIntGetProcAddress("glMemoryBarrier");
-	if(!TestPointer((const void*)__gleMemoryBarrier)) bIsLoaded = 0;
+	if(!__gleMemoryBarrier) bIsLoaded = 0;
 #endif /*GL_ARB_shader_image_load_store*/
 	return bIsLoaded;
 }
@@ -2855,83 +2868,83 @@ static int gleIntLoad_ARB_shader_objects()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_shader_objects
 	glDeleteObjectARB = (PFNGLDELETEOBJECTARBPROC)gleIntGetProcAddress("glDeleteObjectARB");
-	if(!TestPointer((const void*)glDeleteObjectARB)) bIsLoaded = 0;
+	if(!glDeleteObjectARB) bIsLoaded = 0;
 	glGetHandleARB = (PFNGLGETHANDLEARBPROC)gleIntGetProcAddress("glGetHandleARB");
-	if(!TestPointer((const void*)glGetHandleARB)) bIsLoaded = 0;
+	if(!glGetHandleARB) bIsLoaded = 0;
 	glDetachObjectARB = (PFNGLDETACHOBJECTARBPROC)gleIntGetProcAddress("glDetachObjectARB");
-	if(!TestPointer((const void*)glDetachObjectARB)) bIsLoaded = 0;
+	if(!glDetachObjectARB) bIsLoaded = 0;
 	glCreateShaderObjectARB = (PFNGLCREATESHADEROBJECTARBPROC)gleIntGetProcAddress("glCreateShaderObjectARB");
-	if(!TestPointer((const void*)glCreateShaderObjectARB)) bIsLoaded = 0;
+	if(!glCreateShaderObjectARB) bIsLoaded = 0;
 	glShaderSourceARB = (PFNGLSHADERSOURCEARBPROC)gleIntGetProcAddress("glShaderSourceARB");
-	if(!TestPointer((const void*)glShaderSourceARB)) bIsLoaded = 0;
+	if(!glShaderSourceARB) bIsLoaded = 0;
 	glCompileShaderARB = (PFNGLCOMPILESHADERARBPROC)gleIntGetProcAddress("glCompileShaderARB");
-	if(!TestPointer((const void*)glCompileShaderARB)) bIsLoaded = 0;
+	if(!glCompileShaderARB) bIsLoaded = 0;
 	glCreateProgramObjectARB = (PFNGLCREATEPROGRAMOBJECTARBPROC)gleIntGetProcAddress("glCreateProgramObjectARB");
-	if(!TestPointer((const void*)glCreateProgramObjectARB)) bIsLoaded = 0;
+	if(!glCreateProgramObjectARB) bIsLoaded = 0;
 	glAttachObjectARB = (PFNGLATTACHOBJECTARBPROC)gleIntGetProcAddress("glAttachObjectARB");
-	if(!TestPointer((const void*)glAttachObjectARB)) bIsLoaded = 0;
+	if(!glAttachObjectARB) bIsLoaded = 0;
 	glLinkProgramARB = (PFNGLLINKPROGRAMARBPROC)gleIntGetProcAddress("glLinkProgramARB");
-	if(!TestPointer((const void*)glLinkProgramARB)) bIsLoaded = 0;
+	if(!glLinkProgramARB) bIsLoaded = 0;
 	glUseProgramObjectARB = (PFNGLUSEPROGRAMOBJECTARBPROC)gleIntGetProcAddress("glUseProgramObjectARB");
-	if(!TestPointer((const void*)glUseProgramObjectARB)) bIsLoaded = 0;
+	if(!glUseProgramObjectARB) bIsLoaded = 0;
 	glValidateProgramARB = (PFNGLVALIDATEPROGRAMARBPROC)gleIntGetProcAddress("glValidateProgramARB");
-	if(!TestPointer((const void*)glValidateProgramARB)) bIsLoaded = 0;
+	if(!glValidateProgramARB) bIsLoaded = 0;
 	glUniform1fARB = (PFNGLUNIFORM1FARBPROC)gleIntGetProcAddress("glUniform1fARB");
-	if(!TestPointer((const void*)glUniform1fARB)) bIsLoaded = 0;
+	if(!glUniform1fARB) bIsLoaded = 0;
 	glUniform2fARB = (PFNGLUNIFORM2FARBPROC)gleIntGetProcAddress("glUniform2fARB");
-	if(!TestPointer((const void*)glUniform2fARB)) bIsLoaded = 0;
+	if(!glUniform2fARB) bIsLoaded = 0;
 	glUniform3fARB = (PFNGLUNIFORM3FARBPROC)gleIntGetProcAddress("glUniform3fARB");
-	if(!TestPointer((const void*)glUniform3fARB)) bIsLoaded = 0;
+	if(!glUniform3fARB) bIsLoaded = 0;
 	glUniform4fARB = (PFNGLUNIFORM4FARBPROC)gleIntGetProcAddress("glUniform4fARB");
-	if(!TestPointer((const void*)glUniform4fARB)) bIsLoaded = 0;
+	if(!glUniform4fARB) bIsLoaded = 0;
 	glUniform1iARB = (PFNGLUNIFORM1IARBPROC)gleIntGetProcAddress("glUniform1iARB");
-	if(!TestPointer((const void*)glUniform1iARB)) bIsLoaded = 0;
+	if(!glUniform1iARB) bIsLoaded = 0;
 	glUniform2iARB = (PFNGLUNIFORM2IARBPROC)gleIntGetProcAddress("glUniform2iARB");
-	if(!TestPointer((const void*)glUniform2iARB)) bIsLoaded = 0;
+	if(!glUniform2iARB) bIsLoaded = 0;
 	glUniform3iARB = (PFNGLUNIFORM3IARBPROC)gleIntGetProcAddress("glUniform3iARB");
-	if(!TestPointer((const void*)glUniform3iARB)) bIsLoaded = 0;
+	if(!glUniform3iARB) bIsLoaded = 0;
 	glUniform4iARB = (PFNGLUNIFORM4IARBPROC)gleIntGetProcAddress("glUniform4iARB");
-	if(!TestPointer((const void*)glUniform4iARB)) bIsLoaded = 0;
+	if(!glUniform4iARB) bIsLoaded = 0;
 	glUniform1fvARB = (PFNGLUNIFORM1FVARBPROC)gleIntGetProcAddress("glUniform1fvARB");
-	if(!TestPointer((const void*)glUniform1fvARB)) bIsLoaded = 0;
+	if(!glUniform1fvARB) bIsLoaded = 0;
 	glUniform2fvARB = (PFNGLUNIFORM2FVARBPROC)gleIntGetProcAddress("glUniform2fvARB");
-	if(!TestPointer((const void*)glUniform2fvARB)) bIsLoaded = 0;
+	if(!glUniform2fvARB) bIsLoaded = 0;
 	glUniform3fvARB = (PFNGLUNIFORM3FVARBPROC)gleIntGetProcAddress("glUniform3fvARB");
-	if(!TestPointer((const void*)glUniform3fvARB)) bIsLoaded = 0;
+	if(!glUniform3fvARB) bIsLoaded = 0;
 	glUniform4fvARB = (PFNGLUNIFORM4FVARBPROC)gleIntGetProcAddress("glUniform4fvARB");
-	if(!TestPointer((const void*)glUniform4fvARB)) bIsLoaded = 0;
+	if(!glUniform4fvARB) bIsLoaded = 0;
 	glUniform1ivARB = (PFNGLUNIFORM1IVARBPROC)gleIntGetProcAddress("glUniform1ivARB");
-	if(!TestPointer((const void*)glUniform1ivARB)) bIsLoaded = 0;
+	if(!glUniform1ivARB) bIsLoaded = 0;
 	glUniform2ivARB = (PFNGLUNIFORM2IVARBPROC)gleIntGetProcAddress("glUniform2ivARB");
-	if(!TestPointer((const void*)glUniform2ivARB)) bIsLoaded = 0;
+	if(!glUniform2ivARB) bIsLoaded = 0;
 	glUniform3ivARB = (PFNGLUNIFORM3IVARBPROC)gleIntGetProcAddress("glUniform3ivARB");
-	if(!TestPointer((const void*)glUniform3ivARB)) bIsLoaded = 0;
+	if(!glUniform3ivARB) bIsLoaded = 0;
 	glUniform4ivARB = (PFNGLUNIFORM4IVARBPROC)gleIntGetProcAddress("glUniform4ivARB");
-	if(!TestPointer((const void*)glUniform4ivARB)) bIsLoaded = 0;
+	if(!glUniform4ivARB) bIsLoaded = 0;
 	glUniformMatrix2fvARB = (PFNGLUNIFORMMATRIX2FVARBPROC)gleIntGetProcAddress("glUniformMatrix2fvARB");
-	if(!TestPointer((const void*)glUniformMatrix2fvARB)) bIsLoaded = 0;
+	if(!glUniformMatrix2fvARB) bIsLoaded = 0;
 	glUniformMatrix3fvARB = (PFNGLUNIFORMMATRIX3FVARBPROC)gleIntGetProcAddress("glUniformMatrix3fvARB");
-	if(!TestPointer((const void*)glUniformMatrix3fvARB)) bIsLoaded = 0;
+	if(!glUniformMatrix3fvARB) bIsLoaded = 0;
 	glUniformMatrix4fvARB = (PFNGLUNIFORMMATRIX4FVARBPROC)gleIntGetProcAddress("glUniformMatrix4fvARB");
-	if(!TestPointer((const void*)glUniformMatrix4fvARB)) bIsLoaded = 0;
+	if(!glUniformMatrix4fvARB) bIsLoaded = 0;
 	glGetObjectParameterfvARB = (PFNGLGETOBJECTPARAMETERFVARBPROC)gleIntGetProcAddress("glGetObjectParameterfvARB");
-	if(!TestPointer((const void*)glGetObjectParameterfvARB)) bIsLoaded = 0;
+	if(!glGetObjectParameterfvARB) bIsLoaded = 0;
 	glGetObjectParameterivARB = (PFNGLGETOBJECTPARAMETERIVARBPROC)gleIntGetProcAddress("glGetObjectParameterivARB");
-	if(!TestPointer((const void*)glGetObjectParameterivARB)) bIsLoaded = 0;
+	if(!glGetObjectParameterivARB) bIsLoaded = 0;
 	glGetInfoLogARB = (PFNGLGETINFOLOGARBPROC)gleIntGetProcAddress("glGetInfoLogARB");
-	if(!TestPointer((const void*)glGetInfoLogARB)) bIsLoaded = 0;
+	if(!glGetInfoLogARB) bIsLoaded = 0;
 	glGetAttachedObjectsARB = (PFNGLGETATTACHEDOBJECTSARBPROC)gleIntGetProcAddress("glGetAttachedObjectsARB");
-	if(!TestPointer((const void*)glGetAttachedObjectsARB)) bIsLoaded = 0;
+	if(!glGetAttachedObjectsARB) bIsLoaded = 0;
 	glGetUniformLocationARB = (PFNGLGETUNIFORMLOCATIONARBPROC)gleIntGetProcAddress("glGetUniformLocationARB");
-	if(!TestPointer((const void*)glGetUniformLocationARB)) bIsLoaded = 0;
+	if(!glGetUniformLocationARB) bIsLoaded = 0;
 	glGetActiveUniformARB = (PFNGLGETACTIVEUNIFORMARBPROC)gleIntGetProcAddress("glGetActiveUniformARB");
-	if(!TestPointer((const void*)glGetActiveUniformARB)) bIsLoaded = 0;
+	if(!glGetActiveUniformARB) bIsLoaded = 0;
 	glGetUniformfvARB = (PFNGLGETUNIFORMFVARBPROC)gleIntGetProcAddress("glGetUniformfvARB");
-	if(!TestPointer((const void*)glGetUniformfvARB)) bIsLoaded = 0;
+	if(!glGetUniformfvARB) bIsLoaded = 0;
 	glGetUniformivARB = (PFNGLGETUNIFORMIVARBPROC)gleIntGetProcAddress("glGetUniformivARB");
-	if(!TestPointer((const void*)glGetUniformivARB)) bIsLoaded = 0;
+	if(!glGetUniformivARB) bIsLoaded = 0;
 	glGetShaderSourceARB = (PFNGLGETSHADERSOURCEARBPROC)gleIntGetProcAddress("glGetShaderSourceARB");
-	if(!TestPointer((const void*)glGetShaderSourceARB)) bIsLoaded = 0;
+	if(!glGetShaderSourceARB) bIsLoaded = 0;
 #endif /*GL_ARB_shader_objects*/
 	return bIsLoaded;
 }
@@ -2962,21 +2975,21 @@ static int gleIntLoad_ARB_shader_subroutine()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_shader_subroutine
 	__gleGetSubroutineUniformLocation = (PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC)gleIntGetProcAddress("glGetSubroutineUniformLocation");
-	if(!TestPointer((const void*)__gleGetSubroutineUniformLocation)) bIsLoaded = 0;
+	if(!__gleGetSubroutineUniformLocation) bIsLoaded = 0;
 	__gleGetSubroutineIndex = (PFNGLGETSUBROUTINEINDEXPROC)gleIntGetProcAddress("glGetSubroutineIndex");
-	if(!TestPointer((const void*)__gleGetSubroutineIndex)) bIsLoaded = 0;
+	if(!__gleGetSubroutineIndex) bIsLoaded = 0;
 	__gleGetActiveSubroutineUniformiv = (PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC)gleIntGetProcAddress("glGetActiveSubroutineUniformiv");
-	if(!TestPointer((const void*)__gleGetActiveSubroutineUniformiv)) bIsLoaded = 0;
+	if(!__gleGetActiveSubroutineUniformiv) bIsLoaded = 0;
 	__gleGetActiveSubroutineUniformName = (PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC)gleIntGetProcAddress("glGetActiveSubroutineUniformName");
-	if(!TestPointer((const void*)__gleGetActiveSubroutineUniformName)) bIsLoaded = 0;
+	if(!__gleGetActiveSubroutineUniformName) bIsLoaded = 0;
 	__gleGetActiveSubroutineName = (PFNGLGETACTIVESUBROUTINENAMEPROC)gleIntGetProcAddress("glGetActiveSubroutineName");
-	if(!TestPointer((const void*)__gleGetActiveSubroutineName)) bIsLoaded = 0;
+	if(!__gleGetActiveSubroutineName) bIsLoaded = 0;
 	__gleUniformSubroutinesuiv = (PFNGLUNIFORMSUBROUTINESUIVPROC)gleIntGetProcAddress("glUniformSubroutinesuiv");
-	if(!TestPointer((const void*)__gleUniformSubroutinesuiv)) bIsLoaded = 0;
+	if(!__gleUniformSubroutinesuiv) bIsLoaded = 0;
 	__gleGetUniformSubroutineuiv = (PFNGLGETUNIFORMSUBROUTINEUIVPROC)gleIntGetProcAddress("glGetUniformSubroutineuiv");
-	if(!TestPointer((const void*)__gleGetUniformSubroutineuiv)) bIsLoaded = 0;
+	if(!__gleGetUniformSubroutineuiv) bIsLoaded = 0;
 	__gleGetProgramStageiv = (PFNGLGETPROGRAMSTAGEIVPROC)gleIntGetProcAddress("glGetProgramStageiv");
-	if(!TestPointer((const void*)__gleGetProgramStageiv)) bIsLoaded = 0;
+	if(!__gleGetProgramStageiv) bIsLoaded = 0;
 #endif /*GL_ARB_shader_subroutine*/
 	return bIsLoaded;
 }
@@ -3004,17 +3017,17 @@ static int gleIntLoad_ARB_shading_language_include()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_shading_language_include
 	glNamedStringARB = (PFNGLNAMEDSTRINGARBPROC)gleIntGetProcAddress("glNamedStringARB");
-	if(!TestPointer((const void*)glNamedStringARB)) bIsLoaded = 0;
+	if(!glNamedStringARB) bIsLoaded = 0;
 	glDeleteNamedStringARB = (PFNGLDELETENAMEDSTRINGARBPROC)gleIntGetProcAddress("glDeleteNamedStringARB");
-	if(!TestPointer((const void*)glDeleteNamedStringARB)) bIsLoaded = 0;
+	if(!glDeleteNamedStringARB) bIsLoaded = 0;
 	glCompileShaderIncludeARB = (PFNGLCOMPILESHADERINCLUDEARBPROC)gleIntGetProcAddress("glCompileShaderIncludeARB");
-	if(!TestPointer((const void*)glCompileShaderIncludeARB)) bIsLoaded = 0;
+	if(!glCompileShaderIncludeARB) bIsLoaded = 0;
 	glIsNamedStringARB = (PFNGLISNAMEDSTRINGARBPROC)gleIntGetProcAddress("glIsNamedStringARB");
-	if(!TestPointer((const void*)glIsNamedStringARB)) bIsLoaded = 0;
+	if(!glIsNamedStringARB) bIsLoaded = 0;
 	glGetNamedStringARB = (PFNGLGETNAMEDSTRINGARBPROC)gleIntGetProcAddress("glGetNamedStringARB");
-	if(!TestPointer((const void*)glGetNamedStringARB)) bIsLoaded = 0;
+	if(!glGetNamedStringARB) bIsLoaded = 0;
 	glGetNamedStringivARB = (PFNGLGETNAMEDSTRINGIVARBPROC)gleIntGetProcAddress("glGetNamedStringivARB");
-	if(!TestPointer((const void*)glGetNamedStringivARB)) bIsLoaded = 0;
+	if(!glGetNamedStringivARB) bIsLoaded = 0;
 #endif /*GL_ARB_shading_language_include*/
 	return bIsLoaded;
 }
@@ -3044,19 +3057,19 @@ static int gleIntLoad_ARB_sync()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_sync
 	__gleFenceSync = (PFNGLFENCESYNCPROC)gleIntGetProcAddress("glFenceSync");
-	if(!TestPointer((const void*)__gleFenceSync)) bIsLoaded = 0;
+	if(!__gleFenceSync) bIsLoaded = 0;
 	__gleIsSync = (PFNGLISSYNCPROC)gleIntGetProcAddress("glIsSync");
-	if(!TestPointer((const void*)__gleIsSync)) bIsLoaded = 0;
+	if(!__gleIsSync) bIsLoaded = 0;
 	__gleDeleteSync = (PFNGLDELETESYNCPROC)gleIntGetProcAddress("glDeleteSync");
-	if(!TestPointer((const void*)__gleDeleteSync)) bIsLoaded = 0;
+	if(!__gleDeleteSync) bIsLoaded = 0;
 	__gleClientWaitSync = (PFNGLCLIENTWAITSYNCPROC)gleIntGetProcAddress("glClientWaitSync");
-	if(!TestPointer((const void*)__gleClientWaitSync)) bIsLoaded = 0;
+	if(!__gleClientWaitSync) bIsLoaded = 0;
 	__gleWaitSync = (PFNGLWAITSYNCPROC)gleIntGetProcAddress("glWaitSync");
-	if(!TestPointer((const void*)__gleWaitSync)) bIsLoaded = 0;
+	if(!__gleWaitSync) bIsLoaded = 0;
 	__gleGetInteger64v = (PFNGLGETINTEGER64VPROC)gleIntGetProcAddress("glGetInteger64v");
-	if(!TestPointer((const void*)__gleGetInteger64v)) bIsLoaded = 0;
+	if(!__gleGetInteger64v) bIsLoaded = 0;
 	__gleGetSynciv = (PFNGLGETSYNCIVPROC)gleIntGetProcAddress("glGetSynciv");
-	if(!TestPointer((const void*)__gleGetSynciv)) bIsLoaded = 0;
+	if(!__gleGetSynciv) bIsLoaded = 0;
 #endif /*GL_ARB_sync*/
 	return bIsLoaded;
 }
@@ -3073,9 +3086,9 @@ static int gleIntLoad_ARB_tessellation_shader()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_tessellation_shader
 	__glePatchParameteri = (PFNGLPATCHPARAMETERIPROC)gleIntGetProcAddress("glPatchParameteri");
-	if(!TestPointer((const void*)__glePatchParameteri)) bIsLoaded = 0;
+	if(!__glePatchParameteri) bIsLoaded = 0;
 	__glePatchParameterfv = (PFNGLPATCHPARAMETERFVPROC)gleIntGetProcAddress("glPatchParameterfv");
-	if(!TestPointer((const void*)__glePatchParameterfv)) bIsLoaded = 0;
+	if(!__glePatchParameterfv) bIsLoaded = 0;
 #endif /*GL_ARB_tessellation_shader*/
 	return bIsLoaded;
 }
@@ -3091,7 +3104,7 @@ static int gleIntLoad_ARB_texture_buffer_object()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_texture_buffer_object
 	glTexBufferARB = (PFNGLTEXBUFFERARBPROC)gleIntGetProcAddress("glTexBufferARB");
-	if(!TestPointer((const void*)glTexBufferARB)) bIsLoaded = 0;
+	if(!glTexBufferARB) bIsLoaded = 0;
 #endif /*GL_ARB_texture_buffer_object*/
 	return bIsLoaded;
 }
@@ -3119,19 +3132,19 @@ static int gleIntLoad_ARB_texture_compression()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_texture_compression
 	glCompressedTexImage3DARB = (PFNGLCOMPRESSEDTEXIMAGE3DARBPROC)gleIntGetProcAddress("glCompressedTexImage3DARB");
-	if(!TestPointer((const void*)glCompressedTexImage3DARB)) bIsLoaded = 0;
+	if(!glCompressedTexImage3DARB) bIsLoaded = 0;
 	glCompressedTexImage2DARB = (PFNGLCOMPRESSEDTEXIMAGE2DARBPROC)gleIntGetProcAddress("glCompressedTexImage2DARB");
-	if(!TestPointer((const void*)glCompressedTexImage2DARB)) bIsLoaded = 0;
+	if(!glCompressedTexImage2DARB) bIsLoaded = 0;
 	glCompressedTexImage1DARB = (PFNGLCOMPRESSEDTEXIMAGE1DARBPROC)gleIntGetProcAddress("glCompressedTexImage1DARB");
-	if(!TestPointer((const void*)glCompressedTexImage1DARB)) bIsLoaded = 0;
+	if(!glCompressedTexImage1DARB) bIsLoaded = 0;
 	glCompressedTexSubImage3DARB = (PFNGLCOMPRESSEDTEXSUBIMAGE3DARBPROC)gleIntGetProcAddress("glCompressedTexSubImage3DARB");
-	if(!TestPointer((const void*)glCompressedTexSubImage3DARB)) bIsLoaded = 0;
+	if(!glCompressedTexSubImage3DARB) bIsLoaded = 0;
 	glCompressedTexSubImage2DARB = (PFNGLCOMPRESSEDTEXSUBIMAGE2DARBPROC)gleIntGetProcAddress("glCompressedTexSubImage2DARB");
-	if(!TestPointer((const void*)glCompressedTexSubImage2DARB)) bIsLoaded = 0;
+	if(!glCompressedTexSubImage2DARB) bIsLoaded = 0;
 	glCompressedTexSubImage1DARB = (PFNGLCOMPRESSEDTEXSUBIMAGE1DARBPROC)gleIntGetProcAddress("glCompressedTexSubImage1DARB");
-	if(!TestPointer((const void*)glCompressedTexSubImage1DARB)) bIsLoaded = 0;
+	if(!glCompressedTexSubImage1DARB) bIsLoaded = 0;
 	glGetCompressedTexImageARB = (PFNGLGETCOMPRESSEDTEXIMAGEARBPROC)gleIntGetProcAddress("glGetCompressedTexImageARB");
-	if(!TestPointer((const void*)glGetCompressedTexImageARB)) bIsLoaded = 0;
+	if(!glGetCompressedTexImageARB) bIsLoaded = 0;
 #endif /*GL_ARB_texture_compression*/
 	return bIsLoaded;
 }
@@ -3163,13 +3176,13 @@ static int gleIntLoad_ARB_texture_multisample()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_texture_multisample
 	__gleTexImage2DMultisample = (PFNGLTEXIMAGE2DMULTISAMPLEPROC)gleIntGetProcAddress("glTexImage2DMultisample");
-	if(!TestPointer((const void*)__gleTexImage2DMultisample)) bIsLoaded = 0;
+	if(!__gleTexImage2DMultisample) bIsLoaded = 0;
 	__gleTexImage3DMultisample = (PFNGLTEXIMAGE3DMULTISAMPLEPROC)gleIntGetProcAddress("glTexImage3DMultisample");
-	if(!TestPointer((const void*)__gleTexImage3DMultisample)) bIsLoaded = 0;
+	if(!__gleTexImage3DMultisample) bIsLoaded = 0;
 	__gleGetMultisamplefv = (PFNGLGETMULTISAMPLEFVPROC)gleIntGetProcAddress("glGetMultisamplefv");
-	if(!TestPointer((const void*)__gleGetMultisamplefv)) bIsLoaded = 0;
+	if(!__gleGetMultisamplefv) bIsLoaded = 0;
 	__gleSampleMaski = (PFNGLSAMPLEMASKIPROC)gleIntGetProcAddress("glSampleMaski");
-	if(!TestPointer((const void*)__gleSampleMaski)) bIsLoaded = 0;
+	if(!__gleSampleMaski) bIsLoaded = 0;
 #endif /*GL_ARB_texture_multisample*/
 	return bIsLoaded;
 }
@@ -3199,17 +3212,17 @@ static int gleIntLoad_ARB_texture_storage()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_texture_storage
 	__gleTexStorage1D = (PFNGLTEXSTORAGE1DPROC)gleIntGetProcAddress("glTexStorage1D");
-	if(!TestPointer((const void*)__gleTexStorage1D)) bIsLoaded = 0;
+	if(!__gleTexStorage1D) bIsLoaded = 0;
 	__gleTexStorage2D = (PFNGLTEXSTORAGE2DPROC)gleIntGetProcAddress("glTexStorage2D");
-	if(!TestPointer((const void*)__gleTexStorage2D)) bIsLoaded = 0;
+	if(!__gleTexStorage2D) bIsLoaded = 0;
 	__gleTexStorage3D = (PFNGLTEXSTORAGE3DPROC)gleIntGetProcAddress("glTexStorage3D");
-	if(!TestPointer((const void*)__gleTexStorage3D)) bIsLoaded = 0;
+	if(!__gleTexStorage3D) bIsLoaded = 0;
 	__gleTextureStorage1DEXT = (PFNGLTEXTURESTORAGE1DEXTPROC)gleIntGetProcAddress("glTextureStorage1DEXT");
-	if(!TestPointer((const void*)__gleTextureStorage1DEXT)) bIsLoaded = 0;
+	if(!__gleTextureStorage1DEXT) bIsLoaded = 0;
 	__gleTextureStorage2DEXT = (PFNGLTEXTURESTORAGE2DEXTPROC)gleIntGetProcAddress("glTextureStorage2DEXT");
-	if(!TestPointer((const void*)__gleTextureStorage2DEXT)) bIsLoaded = 0;
+	if(!__gleTextureStorage2DEXT) bIsLoaded = 0;
 	__gleTextureStorage3DEXT = (PFNGLTEXTURESTORAGE3DEXTPROC)gleIntGetProcAddress("glTextureStorage3DEXT");
-	if(!TestPointer((const void*)__gleTextureStorage3DEXT)) bIsLoaded = 0;
+	if(!__gleTextureStorage3DEXT) bIsLoaded = 0;
 #endif /*GL_ARB_texture_storage*/
 	return bIsLoaded;
 }
@@ -3229,11 +3242,11 @@ static int gleIntLoad_ARB_timer_query()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_timer_query
 	__gleQueryCounter = (PFNGLQUERYCOUNTERPROC)gleIntGetProcAddress("glQueryCounter");
-	if(!TestPointer((const void*)__gleQueryCounter)) bIsLoaded = 0;
+	if(!__gleQueryCounter) bIsLoaded = 0;
 	__gleGetQueryObjecti64v = (PFNGLGETQUERYOBJECTI64VPROC)gleIntGetProcAddress("glGetQueryObjecti64v");
-	if(!TestPointer((const void*)__gleGetQueryObjecti64v)) bIsLoaded = 0;
+	if(!__gleGetQueryObjecti64v) bIsLoaded = 0;
 	__gleGetQueryObjectui64v = (PFNGLGETQUERYOBJECTUI64VPROC)gleIntGetProcAddress("glGetQueryObjectui64v");
-	if(!TestPointer((const void*)__gleGetQueryObjectui64v)) bIsLoaded = 0;
+	if(!__gleGetQueryObjectui64v) bIsLoaded = 0;
 #endif /*GL_ARB_timer_query*/
 	return bIsLoaded;
 }
@@ -3260,19 +3273,19 @@ static int gleIntLoad_ARB_transform_feedback2()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_transform_feedback2
 	__gleBindTransformFeedback = (PFNGLBINDTRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glBindTransformFeedback");
-	if(!TestPointer((const void*)__gleBindTransformFeedback)) bIsLoaded = 0;
+	if(!__gleBindTransformFeedback) bIsLoaded = 0;
 	__gleDeleteTransformFeedbacks = (PFNGLDELETETRANSFORMFEEDBACKSPROC)gleIntGetProcAddress("glDeleteTransformFeedbacks");
-	if(!TestPointer((const void*)__gleDeleteTransformFeedbacks)) bIsLoaded = 0;
+	if(!__gleDeleteTransformFeedbacks) bIsLoaded = 0;
 	__gleGenTransformFeedbacks = (PFNGLGENTRANSFORMFEEDBACKSPROC)gleIntGetProcAddress("glGenTransformFeedbacks");
-	if(!TestPointer((const void*)__gleGenTransformFeedbacks)) bIsLoaded = 0;
+	if(!__gleGenTransformFeedbacks) bIsLoaded = 0;
 	__gleIsTransformFeedback = (PFNGLISTRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glIsTransformFeedback");
-	if(!TestPointer((const void*)__gleIsTransformFeedback)) bIsLoaded = 0;
+	if(!__gleIsTransformFeedback) bIsLoaded = 0;
 	__glePauseTransformFeedback = (PFNGLPAUSETRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glPauseTransformFeedback");
-	if(!TestPointer((const void*)__glePauseTransformFeedback)) bIsLoaded = 0;
+	if(!__glePauseTransformFeedback) bIsLoaded = 0;
 	__gleResumeTransformFeedback = (PFNGLRESUMETRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glResumeTransformFeedback");
-	if(!TestPointer((const void*)__gleResumeTransformFeedback)) bIsLoaded = 0;
+	if(!__gleResumeTransformFeedback) bIsLoaded = 0;
 	__gleDrawTransformFeedback = (PFNGLDRAWTRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glDrawTransformFeedback");
-	if(!TestPointer((const void*)__gleDrawTransformFeedback)) bIsLoaded = 0;
+	if(!__gleDrawTransformFeedback) bIsLoaded = 0;
 #endif /*GL_ARB_transform_feedback2*/
 	return bIsLoaded;
 }
@@ -3293,13 +3306,13 @@ static int gleIntLoad_ARB_transform_feedback3()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_transform_feedback3
 	__gleDrawTransformFeedbackStream = (PFNGLDRAWTRANSFORMFEEDBACKSTREAMPROC)gleIntGetProcAddress("glDrawTransformFeedbackStream");
-	if(!TestPointer((const void*)__gleDrawTransformFeedbackStream)) bIsLoaded = 0;
+	if(!__gleDrawTransformFeedbackStream) bIsLoaded = 0;
 	__gleBeginQueryIndexed = (PFNGLBEGINQUERYINDEXEDPROC)gleIntGetProcAddress("glBeginQueryIndexed");
-	if(!TestPointer((const void*)__gleBeginQueryIndexed)) bIsLoaded = 0;
+	if(!__gleBeginQueryIndexed) bIsLoaded = 0;
 	__gleEndQueryIndexed = (PFNGLENDQUERYINDEXEDPROC)gleIntGetProcAddress("glEndQueryIndexed");
-	if(!TestPointer((const void*)__gleEndQueryIndexed)) bIsLoaded = 0;
+	if(!__gleEndQueryIndexed) bIsLoaded = 0;
 	__gleGetQueryIndexediv = (PFNGLGETQUERYINDEXEDIVPROC)gleIntGetProcAddress("glGetQueryIndexediv");
-	if(!TestPointer((const void*)__gleGetQueryIndexediv)) bIsLoaded = 0;
+	if(!__gleGetQueryIndexediv) bIsLoaded = 0;
 #endif /*GL_ARB_transform_feedback3*/
 	return bIsLoaded;
 }
@@ -3316,9 +3329,9 @@ static int gleIntLoad_ARB_transform_feedback_instanced()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_transform_feedback_instanced
 	__gleDrawTransformFeedbackInstanced = (PFNGLDRAWTRANSFORMFEEDBACKINSTANCEDPROC)gleIntGetProcAddress("glDrawTransformFeedbackInstanced");
-	if(!TestPointer((const void*)__gleDrawTransformFeedbackInstanced)) bIsLoaded = 0;
+	if(!__gleDrawTransformFeedbackInstanced) bIsLoaded = 0;
 	__gleDrawTransformFeedbackStreamInstanced = (PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC)gleIntGetProcAddress("glDrawTransformFeedbackStreamInstanced");
-	if(!TestPointer((const void*)__gleDrawTransformFeedbackStreamInstanced)) bIsLoaded = 0;
+	if(!__gleDrawTransformFeedbackStreamInstanced) bIsLoaded = 0;
 #endif /*GL_ARB_transform_feedback_instanced*/
 	return bIsLoaded;
 }
@@ -3339,13 +3352,13 @@ static int gleIntLoad_ARB_transpose_matrix()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_transpose_matrix
 	glLoadTransposeMatrixfARB = (PFNGLLOADTRANSPOSEMATRIXFARBPROC)gleIntGetProcAddress("glLoadTransposeMatrixfARB");
-	if(!TestPointer((const void*)glLoadTransposeMatrixfARB)) bIsLoaded = 0;
+	if(!glLoadTransposeMatrixfARB) bIsLoaded = 0;
 	glLoadTransposeMatrixdARB = (PFNGLLOADTRANSPOSEMATRIXDARBPROC)gleIntGetProcAddress("glLoadTransposeMatrixdARB");
-	if(!TestPointer((const void*)glLoadTransposeMatrixdARB)) bIsLoaded = 0;
+	if(!glLoadTransposeMatrixdARB) bIsLoaded = 0;
 	glMultTransposeMatrixfARB = (PFNGLMULTTRANSPOSEMATRIXFARBPROC)gleIntGetProcAddress("glMultTransposeMatrixfARB");
-	if(!TestPointer((const void*)glMultTransposeMatrixfARB)) bIsLoaded = 0;
+	if(!glMultTransposeMatrixfARB) bIsLoaded = 0;
 	glMultTransposeMatrixdARB = (PFNGLMULTTRANSPOSEMATRIXDARBPROC)gleIntGetProcAddress("glMultTransposeMatrixdARB");
-	if(!TestPointer((const void*)glMultTransposeMatrixdARB)) bIsLoaded = 0;
+	if(!glMultTransposeMatrixdARB) bIsLoaded = 0;
 #endif /*GL_ARB_transpose_matrix*/
 	return bIsLoaded;
 }
@@ -3372,19 +3385,19 @@ static int gleIntLoad_ARB_uniform_buffer_object()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_uniform_buffer_object
 	__gleGetUniformIndices = (PFNGLGETUNIFORMINDICESPROC)gleIntGetProcAddress("glGetUniformIndices");
-	if(!TestPointer((const void*)__gleGetUniformIndices)) bIsLoaded = 0;
+	if(!__gleGetUniformIndices) bIsLoaded = 0;
 	__gleGetActiveUniformsiv = (PFNGLGETACTIVEUNIFORMSIVPROC)gleIntGetProcAddress("glGetActiveUniformsiv");
-	if(!TestPointer((const void*)__gleGetActiveUniformsiv)) bIsLoaded = 0;
+	if(!__gleGetActiveUniformsiv) bIsLoaded = 0;
 	__gleGetActiveUniformName = (PFNGLGETACTIVEUNIFORMNAMEPROC)gleIntGetProcAddress("glGetActiveUniformName");
-	if(!TestPointer((const void*)__gleGetActiveUniformName)) bIsLoaded = 0;
+	if(!__gleGetActiveUniformName) bIsLoaded = 0;
 	__gleGetUniformBlockIndex = (PFNGLGETUNIFORMBLOCKINDEXPROC)gleIntGetProcAddress("glGetUniformBlockIndex");
-	if(!TestPointer((const void*)__gleGetUniformBlockIndex)) bIsLoaded = 0;
+	if(!__gleGetUniformBlockIndex) bIsLoaded = 0;
 	__gleGetActiveUniformBlockiv = (PFNGLGETACTIVEUNIFORMBLOCKIVPROC)gleIntGetProcAddress("glGetActiveUniformBlockiv");
-	if(!TestPointer((const void*)__gleGetActiveUniformBlockiv)) bIsLoaded = 0;
+	if(!__gleGetActiveUniformBlockiv) bIsLoaded = 0;
 	__gleGetActiveUniformBlockName = (PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC)gleIntGetProcAddress("glGetActiveUniformBlockName");
-	if(!TestPointer((const void*)__gleGetActiveUniformBlockName)) bIsLoaded = 0;
+	if(!__gleGetActiveUniformBlockName) bIsLoaded = 0;
 	__gleUniformBlockBinding = (PFNGLUNIFORMBLOCKBINDINGPROC)gleIntGetProcAddress("glUniformBlockBinding");
-	if(!TestPointer((const void*)__gleUniformBlockBinding)) bIsLoaded = 0;
+	if(!__gleUniformBlockBinding) bIsLoaded = 0;
 #endif /*GL_ARB_uniform_buffer_object*/
 	return bIsLoaded;
 }
@@ -3406,13 +3419,13 @@ static int gleIntLoad_ARB_vertex_array_object()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_vertex_array_object
 	__gleBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)gleIntGetProcAddress("glBindVertexArray");
-	if(!TestPointer((const void*)__gleBindVertexArray)) bIsLoaded = 0;
+	if(!__gleBindVertexArray) bIsLoaded = 0;
 	__gleDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSPROC)gleIntGetProcAddress("glDeleteVertexArrays");
-	if(!TestPointer((const void*)__gleDeleteVertexArrays)) bIsLoaded = 0;
+	if(!__gleDeleteVertexArrays) bIsLoaded = 0;
 	__gleGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)gleIntGetProcAddress("glGenVertexArrays");
-	if(!TestPointer((const void*)__gleGenVertexArrays)) bIsLoaded = 0;
+	if(!__gleGenVertexArrays) bIsLoaded = 0;
 	__gleIsVertexArray = (PFNGLISVERTEXARRAYPROC)gleIntGetProcAddress("glIsVertexArray");
-	if(!TestPointer((const void*)__gleIsVertexArray)) bIsLoaded = 0;
+	if(!__gleIsVertexArray) bIsLoaded = 0;
 #endif /*GL_ARB_vertex_array_object*/
 	return bIsLoaded;
 }
@@ -3445,25 +3458,25 @@ static int gleIntLoad_ARB_vertex_attrib_64bit()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_vertex_attrib_64bit
 	__gleVertexAttribL1d = (PFNGLVERTEXATTRIBL1DPROC)gleIntGetProcAddress("glVertexAttribL1d");
-	if(!TestPointer((const void*)__gleVertexAttribL1d)) bIsLoaded = 0;
+	if(!__gleVertexAttribL1d) bIsLoaded = 0;
 	__gleVertexAttribL2d = (PFNGLVERTEXATTRIBL2DPROC)gleIntGetProcAddress("glVertexAttribL2d");
-	if(!TestPointer((const void*)__gleVertexAttribL2d)) bIsLoaded = 0;
+	if(!__gleVertexAttribL2d) bIsLoaded = 0;
 	__gleVertexAttribL3d = (PFNGLVERTEXATTRIBL3DPROC)gleIntGetProcAddress("glVertexAttribL3d");
-	if(!TestPointer((const void*)__gleVertexAttribL3d)) bIsLoaded = 0;
+	if(!__gleVertexAttribL3d) bIsLoaded = 0;
 	__gleVertexAttribL4d = (PFNGLVERTEXATTRIBL4DPROC)gleIntGetProcAddress("glVertexAttribL4d");
-	if(!TestPointer((const void*)__gleVertexAttribL4d)) bIsLoaded = 0;
+	if(!__gleVertexAttribL4d) bIsLoaded = 0;
 	__gleVertexAttribL1dv = (PFNGLVERTEXATTRIBL1DVPROC)gleIntGetProcAddress("glVertexAttribL1dv");
-	if(!TestPointer((const void*)__gleVertexAttribL1dv)) bIsLoaded = 0;
+	if(!__gleVertexAttribL1dv) bIsLoaded = 0;
 	__gleVertexAttribL2dv = (PFNGLVERTEXATTRIBL2DVPROC)gleIntGetProcAddress("glVertexAttribL2dv");
-	if(!TestPointer((const void*)__gleVertexAttribL2dv)) bIsLoaded = 0;
+	if(!__gleVertexAttribL2dv) bIsLoaded = 0;
 	__gleVertexAttribL3dv = (PFNGLVERTEXATTRIBL3DVPROC)gleIntGetProcAddress("glVertexAttribL3dv");
-	if(!TestPointer((const void*)__gleVertexAttribL3dv)) bIsLoaded = 0;
+	if(!__gleVertexAttribL3dv) bIsLoaded = 0;
 	__gleVertexAttribL4dv = (PFNGLVERTEXATTRIBL4DVPROC)gleIntGetProcAddress("glVertexAttribL4dv");
-	if(!TestPointer((const void*)__gleVertexAttribL4dv)) bIsLoaded = 0;
+	if(!__gleVertexAttribL4dv) bIsLoaded = 0;
 	__gleVertexAttribLPointer = (PFNGLVERTEXATTRIBLPOINTERPROC)gleIntGetProcAddress("glVertexAttribLPointer");
-	if(!TestPointer((const void*)__gleVertexAttribLPointer)) bIsLoaded = 0;
+	if(!__gleVertexAttribLPointer) bIsLoaded = 0;
 	__gleGetVertexAttribLdv = (PFNGLGETVERTEXATTRIBLDVPROC)gleIntGetProcAddress("glGetVertexAttribLdv");
-	if(!TestPointer((const void*)__gleGetVertexAttribLdv)) bIsLoaded = 0;
+	if(!__gleGetVertexAttribLdv) bIsLoaded = 0;
 #endif /*GL_ARB_vertex_attrib_64bit*/
 	return bIsLoaded;
 }
@@ -3496,25 +3509,25 @@ static int gleIntLoad_ARB_vertex_blend()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_vertex_blend
 	glWeightbvARB = (PFNGLWEIGHTBVARBPROC)gleIntGetProcAddress("glWeightbvARB");
-	if(!TestPointer((const void*)glWeightbvARB)) bIsLoaded = 0;
+	if(!glWeightbvARB) bIsLoaded = 0;
 	glWeightsvARB = (PFNGLWEIGHTSVARBPROC)gleIntGetProcAddress("glWeightsvARB");
-	if(!TestPointer((const void*)glWeightsvARB)) bIsLoaded = 0;
+	if(!glWeightsvARB) bIsLoaded = 0;
 	glWeightivARB = (PFNGLWEIGHTIVARBPROC)gleIntGetProcAddress("glWeightivARB");
-	if(!TestPointer((const void*)glWeightivARB)) bIsLoaded = 0;
+	if(!glWeightivARB) bIsLoaded = 0;
 	glWeightfvARB = (PFNGLWEIGHTFVARBPROC)gleIntGetProcAddress("glWeightfvARB");
-	if(!TestPointer((const void*)glWeightfvARB)) bIsLoaded = 0;
+	if(!glWeightfvARB) bIsLoaded = 0;
 	glWeightdvARB = (PFNGLWEIGHTDVARBPROC)gleIntGetProcAddress("glWeightdvARB");
-	if(!TestPointer((const void*)glWeightdvARB)) bIsLoaded = 0;
+	if(!glWeightdvARB) bIsLoaded = 0;
 	glWeightubvARB = (PFNGLWEIGHTUBVARBPROC)gleIntGetProcAddress("glWeightubvARB");
-	if(!TestPointer((const void*)glWeightubvARB)) bIsLoaded = 0;
+	if(!glWeightubvARB) bIsLoaded = 0;
 	glWeightusvARB = (PFNGLWEIGHTUSVARBPROC)gleIntGetProcAddress("glWeightusvARB");
-	if(!TestPointer((const void*)glWeightusvARB)) bIsLoaded = 0;
+	if(!glWeightusvARB) bIsLoaded = 0;
 	glWeightuivARB = (PFNGLWEIGHTUIVARBPROC)gleIntGetProcAddress("glWeightuivARB");
-	if(!TestPointer((const void*)glWeightuivARB)) bIsLoaded = 0;
+	if(!glWeightuivARB) bIsLoaded = 0;
 	glWeightPointerARB = (PFNGLWEIGHTPOINTERARBPROC)gleIntGetProcAddress("glWeightPointerARB");
-	if(!TestPointer((const void*)glWeightPointerARB)) bIsLoaded = 0;
+	if(!glWeightPointerARB) bIsLoaded = 0;
 	glVertexBlendARB = (PFNGLVERTEXBLENDARBPROC)gleIntGetProcAddress("glVertexBlendARB");
-	if(!TestPointer((const void*)glVertexBlendARB)) bIsLoaded = 0;
+	if(!glVertexBlendARB) bIsLoaded = 0;
 #endif /*GL_ARB_vertex_blend*/
 	return bIsLoaded;
 }
@@ -3549,27 +3562,27 @@ static int gleIntLoad_ARB_vertex_buffer_object()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_vertex_buffer_object
 	glBindBufferARB = (PFNGLBINDBUFFERARBPROC)gleIntGetProcAddress("glBindBufferARB");
-	if(!TestPointer((const void*)glBindBufferARB)) bIsLoaded = 0;
+	if(!glBindBufferARB) bIsLoaded = 0;
 	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC)gleIntGetProcAddress("glDeleteBuffersARB");
-	if(!TestPointer((const void*)glDeleteBuffersARB)) bIsLoaded = 0;
+	if(!glDeleteBuffersARB) bIsLoaded = 0;
 	glGenBuffersARB = (PFNGLGENBUFFERSARBPROC)gleIntGetProcAddress("glGenBuffersARB");
-	if(!TestPointer((const void*)glGenBuffersARB)) bIsLoaded = 0;
+	if(!glGenBuffersARB) bIsLoaded = 0;
 	glIsBufferARB = (PFNGLISBUFFERARBPROC)gleIntGetProcAddress("glIsBufferARB");
-	if(!TestPointer((const void*)glIsBufferARB)) bIsLoaded = 0;
+	if(!glIsBufferARB) bIsLoaded = 0;
 	glBufferDataARB = (PFNGLBUFFERDATAARBPROC)gleIntGetProcAddress("glBufferDataARB");
-	if(!TestPointer((const void*)glBufferDataARB)) bIsLoaded = 0;
+	if(!glBufferDataARB) bIsLoaded = 0;
 	glBufferSubDataARB = (PFNGLBUFFERSUBDATAARBPROC)gleIntGetProcAddress("glBufferSubDataARB");
-	if(!TestPointer((const void*)glBufferSubDataARB)) bIsLoaded = 0;
+	if(!glBufferSubDataARB) bIsLoaded = 0;
 	glGetBufferSubDataARB = (PFNGLGETBUFFERSUBDATAARBPROC)gleIntGetProcAddress("glGetBufferSubDataARB");
-	if(!TestPointer((const void*)glGetBufferSubDataARB)) bIsLoaded = 0;
+	if(!glGetBufferSubDataARB) bIsLoaded = 0;
 	glMapBufferARB = (PFNGLMAPBUFFERARBPROC)gleIntGetProcAddress("glMapBufferARB");
-	if(!TestPointer((const void*)glMapBufferARB)) bIsLoaded = 0;
+	if(!glMapBufferARB) bIsLoaded = 0;
 	glUnmapBufferARB = (PFNGLUNMAPBUFFERARBPROC)gleIntGetProcAddress("glUnmapBufferARB");
-	if(!TestPointer((const void*)glUnmapBufferARB)) bIsLoaded = 0;
+	if(!glUnmapBufferARB) bIsLoaded = 0;
 	glGetBufferParameterivARB = (PFNGLGETBUFFERPARAMETERIVARBPROC)gleIntGetProcAddress("glGetBufferParameterivARB");
-	if(!TestPointer((const void*)glGetBufferParameterivARB)) bIsLoaded = 0;
+	if(!glGetBufferParameterivARB) bIsLoaded = 0;
 	glGetBufferPointervARB = (PFNGLGETBUFFERPOINTERVARBPROC)gleIntGetProcAddress("glGetBufferPointervARB");
-	if(!TestPointer((const void*)glGetBufferPointervARB)) bIsLoaded = 0;
+	if(!glGetBufferPointervARB) bIsLoaded = 0;
 #endif /*GL_ARB_vertex_buffer_object*/
 	return bIsLoaded;
 }
@@ -3706,129 +3719,129 @@ static int gleIntLoad_ARB_vertex_program()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_vertex_program
 	glVertexAttrib1dARB = (PFNGLVERTEXATTRIB1DARBPROC)gleIntGetProcAddress("glVertexAttrib1dARB");
-	if(!TestPointer((const void*)glVertexAttrib1dARB)) bIsLoaded = 0;
+	if(!glVertexAttrib1dARB) bIsLoaded = 0;
 	glVertexAttrib1dvARB = (PFNGLVERTEXATTRIB1DVARBPROC)gleIntGetProcAddress("glVertexAttrib1dvARB");
-	if(!TestPointer((const void*)glVertexAttrib1dvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib1dvARB) bIsLoaded = 0;
 	glVertexAttrib1fARB = (PFNGLVERTEXATTRIB1FARBPROC)gleIntGetProcAddress("glVertexAttrib1fARB");
-	if(!TestPointer((const void*)glVertexAttrib1fARB)) bIsLoaded = 0;
+	if(!glVertexAttrib1fARB) bIsLoaded = 0;
 	glVertexAttrib1fvARB = (PFNGLVERTEXATTRIB1FVARBPROC)gleIntGetProcAddress("glVertexAttrib1fvARB");
-	if(!TestPointer((const void*)glVertexAttrib1fvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib1fvARB) bIsLoaded = 0;
 	glVertexAttrib1sARB = (PFNGLVERTEXATTRIB1SARBPROC)gleIntGetProcAddress("glVertexAttrib1sARB");
-	if(!TestPointer((const void*)glVertexAttrib1sARB)) bIsLoaded = 0;
+	if(!glVertexAttrib1sARB) bIsLoaded = 0;
 	glVertexAttrib1svARB = (PFNGLVERTEXATTRIB1SVARBPROC)gleIntGetProcAddress("glVertexAttrib1svARB");
-	if(!TestPointer((const void*)glVertexAttrib1svARB)) bIsLoaded = 0;
+	if(!glVertexAttrib1svARB) bIsLoaded = 0;
 	glVertexAttrib2dARB = (PFNGLVERTEXATTRIB2DARBPROC)gleIntGetProcAddress("glVertexAttrib2dARB");
-	if(!TestPointer((const void*)glVertexAttrib2dARB)) bIsLoaded = 0;
+	if(!glVertexAttrib2dARB) bIsLoaded = 0;
 	glVertexAttrib2dvARB = (PFNGLVERTEXATTRIB2DVARBPROC)gleIntGetProcAddress("glVertexAttrib2dvARB");
-	if(!TestPointer((const void*)glVertexAttrib2dvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib2dvARB) bIsLoaded = 0;
 	glVertexAttrib2fARB = (PFNGLVERTEXATTRIB2FARBPROC)gleIntGetProcAddress("glVertexAttrib2fARB");
-	if(!TestPointer((const void*)glVertexAttrib2fARB)) bIsLoaded = 0;
+	if(!glVertexAttrib2fARB) bIsLoaded = 0;
 	glVertexAttrib2fvARB = (PFNGLVERTEXATTRIB2FVARBPROC)gleIntGetProcAddress("glVertexAttrib2fvARB");
-	if(!TestPointer((const void*)glVertexAttrib2fvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib2fvARB) bIsLoaded = 0;
 	glVertexAttrib2sARB = (PFNGLVERTEXATTRIB2SARBPROC)gleIntGetProcAddress("glVertexAttrib2sARB");
-	if(!TestPointer((const void*)glVertexAttrib2sARB)) bIsLoaded = 0;
+	if(!glVertexAttrib2sARB) bIsLoaded = 0;
 	glVertexAttrib2svARB = (PFNGLVERTEXATTRIB2SVARBPROC)gleIntGetProcAddress("glVertexAttrib2svARB");
-	if(!TestPointer((const void*)glVertexAttrib2svARB)) bIsLoaded = 0;
+	if(!glVertexAttrib2svARB) bIsLoaded = 0;
 	glVertexAttrib3dARB = (PFNGLVERTEXATTRIB3DARBPROC)gleIntGetProcAddress("glVertexAttrib3dARB");
-	if(!TestPointer((const void*)glVertexAttrib3dARB)) bIsLoaded = 0;
+	if(!glVertexAttrib3dARB) bIsLoaded = 0;
 	glVertexAttrib3dvARB = (PFNGLVERTEXATTRIB3DVARBPROC)gleIntGetProcAddress("glVertexAttrib3dvARB");
-	if(!TestPointer((const void*)glVertexAttrib3dvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib3dvARB) bIsLoaded = 0;
 	glVertexAttrib3fARB = (PFNGLVERTEXATTRIB3FARBPROC)gleIntGetProcAddress("glVertexAttrib3fARB");
-	if(!TestPointer((const void*)glVertexAttrib3fARB)) bIsLoaded = 0;
+	if(!glVertexAttrib3fARB) bIsLoaded = 0;
 	glVertexAttrib3fvARB = (PFNGLVERTEXATTRIB3FVARBPROC)gleIntGetProcAddress("glVertexAttrib3fvARB");
-	if(!TestPointer((const void*)glVertexAttrib3fvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib3fvARB) bIsLoaded = 0;
 	glVertexAttrib3sARB = (PFNGLVERTEXATTRIB3SARBPROC)gleIntGetProcAddress("glVertexAttrib3sARB");
-	if(!TestPointer((const void*)glVertexAttrib3sARB)) bIsLoaded = 0;
+	if(!glVertexAttrib3sARB) bIsLoaded = 0;
 	glVertexAttrib3svARB = (PFNGLVERTEXATTRIB3SVARBPROC)gleIntGetProcAddress("glVertexAttrib3svARB");
-	if(!TestPointer((const void*)glVertexAttrib3svARB)) bIsLoaded = 0;
+	if(!glVertexAttrib3svARB) bIsLoaded = 0;
 	glVertexAttrib4NbvARB = (PFNGLVERTEXATTRIB4NBVARBPROC)gleIntGetProcAddress("glVertexAttrib4NbvARB");
-	if(!TestPointer((const void*)glVertexAttrib4NbvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4NbvARB) bIsLoaded = 0;
 	glVertexAttrib4NivARB = (PFNGLVERTEXATTRIB4NIVARBPROC)gleIntGetProcAddress("glVertexAttrib4NivARB");
-	if(!TestPointer((const void*)glVertexAttrib4NivARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4NivARB) bIsLoaded = 0;
 	glVertexAttrib4NsvARB = (PFNGLVERTEXATTRIB4NSVARBPROC)gleIntGetProcAddress("glVertexAttrib4NsvARB");
-	if(!TestPointer((const void*)glVertexAttrib4NsvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4NsvARB) bIsLoaded = 0;
 	glVertexAttrib4NubARB = (PFNGLVERTEXATTRIB4NUBARBPROC)gleIntGetProcAddress("glVertexAttrib4NubARB");
-	if(!TestPointer((const void*)glVertexAttrib4NubARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4NubARB) bIsLoaded = 0;
 	glVertexAttrib4NubvARB = (PFNGLVERTEXATTRIB4NUBVARBPROC)gleIntGetProcAddress("glVertexAttrib4NubvARB");
-	if(!TestPointer((const void*)glVertexAttrib4NubvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4NubvARB) bIsLoaded = 0;
 	glVertexAttrib4NuivARB = (PFNGLVERTEXATTRIB4NUIVARBPROC)gleIntGetProcAddress("glVertexAttrib4NuivARB");
-	if(!TestPointer((const void*)glVertexAttrib4NuivARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4NuivARB) bIsLoaded = 0;
 	glVertexAttrib4NusvARB = (PFNGLVERTEXATTRIB4NUSVARBPROC)gleIntGetProcAddress("glVertexAttrib4NusvARB");
-	if(!TestPointer((const void*)glVertexAttrib4NusvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4NusvARB) bIsLoaded = 0;
 	glVertexAttrib4bvARB = (PFNGLVERTEXATTRIB4BVARBPROC)gleIntGetProcAddress("glVertexAttrib4bvARB");
-	if(!TestPointer((const void*)glVertexAttrib4bvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4bvARB) bIsLoaded = 0;
 	glVertexAttrib4dARB = (PFNGLVERTEXATTRIB4DARBPROC)gleIntGetProcAddress("glVertexAttrib4dARB");
-	if(!TestPointer((const void*)glVertexAttrib4dARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4dARB) bIsLoaded = 0;
 	glVertexAttrib4dvARB = (PFNGLVERTEXATTRIB4DVARBPROC)gleIntGetProcAddress("glVertexAttrib4dvARB");
-	if(!TestPointer((const void*)glVertexAttrib4dvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4dvARB) bIsLoaded = 0;
 	glVertexAttrib4fARB = (PFNGLVERTEXATTRIB4FARBPROC)gleIntGetProcAddress("glVertexAttrib4fARB");
-	if(!TestPointer((const void*)glVertexAttrib4fARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4fARB) bIsLoaded = 0;
 	glVertexAttrib4fvARB = (PFNGLVERTEXATTRIB4FVARBPROC)gleIntGetProcAddress("glVertexAttrib4fvARB");
-	if(!TestPointer((const void*)glVertexAttrib4fvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4fvARB) bIsLoaded = 0;
 	glVertexAttrib4ivARB = (PFNGLVERTEXATTRIB4IVARBPROC)gleIntGetProcAddress("glVertexAttrib4ivARB");
-	if(!TestPointer((const void*)glVertexAttrib4ivARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4ivARB) bIsLoaded = 0;
 	glVertexAttrib4sARB = (PFNGLVERTEXATTRIB4SARBPROC)gleIntGetProcAddress("glVertexAttrib4sARB");
-	if(!TestPointer((const void*)glVertexAttrib4sARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4sARB) bIsLoaded = 0;
 	glVertexAttrib4svARB = (PFNGLVERTEXATTRIB4SVARBPROC)gleIntGetProcAddress("glVertexAttrib4svARB");
-	if(!TestPointer((const void*)glVertexAttrib4svARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4svARB) bIsLoaded = 0;
 	glVertexAttrib4ubvARB = (PFNGLVERTEXATTRIB4UBVARBPROC)gleIntGetProcAddress("glVertexAttrib4ubvARB");
-	if(!TestPointer((const void*)glVertexAttrib4ubvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4ubvARB) bIsLoaded = 0;
 	glVertexAttrib4uivARB = (PFNGLVERTEXATTRIB4UIVARBPROC)gleIntGetProcAddress("glVertexAttrib4uivARB");
-	if(!TestPointer((const void*)glVertexAttrib4uivARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4uivARB) bIsLoaded = 0;
 	glVertexAttrib4usvARB = (PFNGLVERTEXATTRIB4USVARBPROC)gleIntGetProcAddress("glVertexAttrib4usvARB");
-	if(!TestPointer((const void*)glVertexAttrib4usvARB)) bIsLoaded = 0;
+	if(!glVertexAttrib4usvARB) bIsLoaded = 0;
 	glVertexAttribPointerARB = (PFNGLVERTEXATTRIBPOINTERARBPROC)gleIntGetProcAddress("glVertexAttribPointerARB");
-	if(!TestPointer((const void*)glVertexAttribPointerARB)) bIsLoaded = 0;
+	if(!glVertexAttribPointerARB) bIsLoaded = 0;
 	glEnableVertexAttribArrayARB = (PFNGLENABLEVERTEXATTRIBARRAYARBPROC)gleIntGetProcAddress("glEnableVertexAttribArrayARB");
-	if(!TestPointer((const void*)glEnableVertexAttribArrayARB)) bIsLoaded = 0;
+	if(!glEnableVertexAttribArrayARB) bIsLoaded = 0;
 	glDisableVertexAttribArrayARB = (PFNGLDISABLEVERTEXATTRIBARRAYARBPROC)gleIntGetProcAddress("glDisableVertexAttribArrayARB");
-	if(!TestPointer((const void*)glDisableVertexAttribArrayARB)) bIsLoaded = 0;
+	if(!glDisableVertexAttribArrayARB) bIsLoaded = 0;
 	glProgramStringARB = (PFNGLPROGRAMSTRINGARBPROC)gleIntGetProcAddress("glProgramStringARB");
-	if(!TestPointer((const void*)glProgramStringARB)) bIsLoaded = 0;
+	if(!glProgramStringARB) bIsLoaded = 0;
 	glBindProgramARB = (PFNGLBINDPROGRAMARBPROC)gleIntGetProcAddress("glBindProgramARB");
-	if(!TestPointer((const void*)glBindProgramARB)) bIsLoaded = 0;
+	if(!glBindProgramARB) bIsLoaded = 0;
 	glDeleteProgramsARB = (PFNGLDELETEPROGRAMSARBPROC)gleIntGetProcAddress("glDeleteProgramsARB");
-	if(!TestPointer((const void*)glDeleteProgramsARB)) bIsLoaded = 0;
+	if(!glDeleteProgramsARB) bIsLoaded = 0;
 	glGenProgramsARB = (PFNGLGENPROGRAMSARBPROC)gleIntGetProcAddress("glGenProgramsARB");
-	if(!TestPointer((const void*)glGenProgramsARB)) bIsLoaded = 0;
+	if(!glGenProgramsARB) bIsLoaded = 0;
 	glProgramEnvParameter4dARB = (PFNGLPROGRAMENVPARAMETER4DARBPROC)gleIntGetProcAddress("glProgramEnvParameter4dARB");
-	if(!TestPointer((const void*)glProgramEnvParameter4dARB)) bIsLoaded = 0;
+	if(!glProgramEnvParameter4dARB) bIsLoaded = 0;
 	glProgramEnvParameter4dvARB = (PFNGLPROGRAMENVPARAMETER4DVARBPROC)gleIntGetProcAddress("glProgramEnvParameter4dvARB");
-	if(!TestPointer((const void*)glProgramEnvParameter4dvARB)) bIsLoaded = 0;
+	if(!glProgramEnvParameter4dvARB) bIsLoaded = 0;
 	glProgramEnvParameter4fARB = (PFNGLPROGRAMENVPARAMETER4FARBPROC)gleIntGetProcAddress("glProgramEnvParameter4fARB");
-	if(!TestPointer((const void*)glProgramEnvParameter4fARB)) bIsLoaded = 0;
+	if(!glProgramEnvParameter4fARB) bIsLoaded = 0;
 	glProgramEnvParameter4fvARB = (PFNGLPROGRAMENVPARAMETER4FVARBPROC)gleIntGetProcAddress("glProgramEnvParameter4fvARB");
-	if(!TestPointer((const void*)glProgramEnvParameter4fvARB)) bIsLoaded = 0;
+	if(!glProgramEnvParameter4fvARB) bIsLoaded = 0;
 	glProgramLocalParameter4dARB = (PFNGLPROGRAMLOCALPARAMETER4DARBPROC)gleIntGetProcAddress("glProgramLocalParameter4dARB");
-	if(!TestPointer((const void*)glProgramLocalParameter4dARB)) bIsLoaded = 0;
+	if(!glProgramLocalParameter4dARB) bIsLoaded = 0;
 	glProgramLocalParameter4dvARB = (PFNGLPROGRAMLOCALPARAMETER4DVARBPROC)gleIntGetProcAddress("glProgramLocalParameter4dvARB");
-	if(!TestPointer((const void*)glProgramLocalParameter4dvARB)) bIsLoaded = 0;
+	if(!glProgramLocalParameter4dvARB) bIsLoaded = 0;
 	glProgramLocalParameter4fARB = (PFNGLPROGRAMLOCALPARAMETER4FARBPROC)gleIntGetProcAddress("glProgramLocalParameter4fARB");
-	if(!TestPointer((const void*)glProgramLocalParameter4fARB)) bIsLoaded = 0;
+	if(!glProgramLocalParameter4fARB) bIsLoaded = 0;
 	glProgramLocalParameter4fvARB = (PFNGLPROGRAMLOCALPARAMETER4FVARBPROC)gleIntGetProcAddress("glProgramLocalParameter4fvARB");
-	if(!TestPointer((const void*)glProgramLocalParameter4fvARB)) bIsLoaded = 0;
+	if(!glProgramLocalParameter4fvARB) bIsLoaded = 0;
 	glGetProgramEnvParameterdvARB = (PFNGLGETPROGRAMENVPARAMETERDVARBPROC)gleIntGetProcAddress("glGetProgramEnvParameterdvARB");
-	if(!TestPointer((const void*)glGetProgramEnvParameterdvARB)) bIsLoaded = 0;
+	if(!glGetProgramEnvParameterdvARB) bIsLoaded = 0;
 	glGetProgramEnvParameterfvARB = (PFNGLGETPROGRAMENVPARAMETERFVARBPROC)gleIntGetProcAddress("glGetProgramEnvParameterfvARB");
-	if(!TestPointer((const void*)glGetProgramEnvParameterfvARB)) bIsLoaded = 0;
+	if(!glGetProgramEnvParameterfvARB) bIsLoaded = 0;
 	glGetProgramLocalParameterdvARB = (PFNGLGETPROGRAMLOCALPARAMETERDVARBPROC)gleIntGetProcAddress("glGetProgramLocalParameterdvARB");
-	if(!TestPointer((const void*)glGetProgramLocalParameterdvARB)) bIsLoaded = 0;
+	if(!glGetProgramLocalParameterdvARB) bIsLoaded = 0;
 	glGetProgramLocalParameterfvARB = (PFNGLGETPROGRAMLOCALPARAMETERFVARBPROC)gleIntGetProcAddress("glGetProgramLocalParameterfvARB");
-	if(!TestPointer((const void*)glGetProgramLocalParameterfvARB)) bIsLoaded = 0;
+	if(!glGetProgramLocalParameterfvARB) bIsLoaded = 0;
 	glGetProgramivARB = (PFNGLGETPROGRAMIVARBPROC)gleIntGetProcAddress("glGetProgramivARB");
-	if(!TestPointer((const void*)glGetProgramivARB)) bIsLoaded = 0;
+	if(!glGetProgramivARB) bIsLoaded = 0;
 	glGetProgramStringARB = (PFNGLGETPROGRAMSTRINGARBPROC)gleIntGetProcAddress("glGetProgramStringARB");
-	if(!TestPointer((const void*)glGetProgramStringARB)) bIsLoaded = 0;
+	if(!glGetProgramStringARB) bIsLoaded = 0;
 	glGetVertexAttribdvARB = (PFNGLGETVERTEXATTRIBDVARBPROC)gleIntGetProcAddress("glGetVertexAttribdvARB");
-	if(!TestPointer((const void*)glGetVertexAttribdvARB)) bIsLoaded = 0;
+	if(!glGetVertexAttribdvARB) bIsLoaded = 0;
 	glGetVertexAttribfvARB = (PFNGLGETVERTEXATTRIBFVARBPROC)gleIntGetProcAddress("glGetVertexAttribfvARB");
-	if(!TestPointer((const void*)glGetVertexAttribfvARB)) bIsLoaded = 0;
+	if(!glGetVertexAttribfvARB) bIsLoaded = 0;
 	glGetVertexAttribivARB = (PFNGLGETVERTEXATTRIBIVARBPROC)gleIntGetProcAddress("glGetVertexAttribivARB");
-	if(!TestPointer((const void*)glGetVertexAttribivARB)) bIsLoaded = 0;
+	if(!glGetVertexAttribivARB) bIsLoaded = 0;
 	glGetVertexAttribPointervARB = (PFNGLGETVERTEXATTRIBPOINTERVARBPROC)gleIntGetProcAddress("glGetVertexAttribPointervARB");
-	if(!TestPointer((const void*)glGetVertexAttribPointervARB)) bIsLoaded = 0;
+	if(!glGetVertexAttribPointervARB) bIsLoaded = 0;
 	glIsProgramARB = (PFNGLISPROGRAMARBPROC)gleIntGetProcAddress("glIsProgramARB");
-	if(!TestPointer((const void*)glIsProgramARB)) bIsLoaded = 0;
+	if(!glIsProgramARB) bIsLoaded = 0;
 #endif /*GL_ARB_vertex_program*/
 	return bIsLoaded;
 }
@@ -3847,11 +3860,11 @@ static int gleIntLoad_ARB_vertex_shader()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_vertex_shader
 	glBindAttribLocationARB = (PFNGLBINDATTRIBLOCATIONARBPROC)gleIntGetProcAddress("glBindAttribLocationARB");
-	if(!TestPointer((const void*)glBindAttribLocationARB)) bIsLoaded = 0;
+	if(!glBindAttribLocationARB) bIsLoaded = 0;
 	glGetActiveAttribARB = (PFNGLGETACTIVEATTRIBARBPROC)gleIntGetProcAddress("glGetActiveAttribARB");
-	if(!TestPointer((const void*)glGetActiveAttribARB)) bIsLoaded = 0;
+	if(!glGetActiveAttribARB) bIsLoaded = 0;
 	glGetAttribLocationARB = (PFNGLGETATTRIBLOCATIONARBPROC)gleIntGetProcAddress("glGetAttribLocationARB");
-	if(!TestPointer((const void*)glGetAttribLocationARB)) bIsLoaded = 0;
+	if(!glGetAttribLocationARB) bIsLoaded = 0;
 #endif /*GL_ARB_vertex_shader*/
 	return bIsLoaded;
 }
@@ -3940,81 +3953,81 @@ static int gleIntLoad_ARB_vertex_type_2_10_10_10_rev()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_vertex_type_2_10_10_10_rev
 	__gleVertexP2ui = (PFNGLVERTEXP2UIPROC)gleIntGetProcAddress("glVertexP2ui");
-	if(!TestPointer((const void*)__gleVertexP2ui)) bIsLoaded = 0;
+	if(!__gleVertexP2ui) bIsLoaded = 0;
 	__gleVertexP2uiv = (PFNGLVERTEXP2UIVPROC)gleIntGetProcAddress("glVertexP2uiv");
-	if(!TestPointer((const void*)__gleVertexP2uiv)) bIsLoaded = 0;
+	if(!__gleVertexP2uiv) bIsLoaded = 0;
 	__gleVertexP3ui = (PFNGLVERTEXP3UIPROC)gleIntGetProcAddress("glVertexP3ui");
-	if(!TestPointer((const void*)__gleVertexP3ui)) bIsLoaded = 0;
+	if(!__gleVertexP3ui) bIsLoaded = 0;
 	__gleVertexP3uiv = (PFNGLVERTEXP3UIVPROC)gleIntGetProcAddress("glVertexP3uiv");
-	if(!TestPointer((const void*)__gleVertexP3uiv)) bIsLoaded = 0;
+	if(!__gleVertexP3uiv) bIsLoaded = 0;
 	__gleVertexP4ui = (PFNGLVERTEXP4UIPROC)gleIntGetProcAddress("glVertexP4ui");
-	if(!TestPointer((const void*)__gleVertexP4ui)) bIsLoaded = 0;
+	if(!__gleVertexP4ui) bIsLoaded = 0;
 	__gleVertexP4uiv = (PFNGLVERTEXP4UIVPROC)gleIntGetProcAddress("glVertexP4uiv");
-	if(!TestPointer((const void*)__gleVertexP4uiv)) bIsLoaded = 0;
+	if(!__gleVertexP4uiv) bIsLoaded = 0;
 	__gleTexCoordP1ui = (PFNGLTEXCOORDP1UIPROC)gleIntGetProcAddress("glTexCoordP1ui");
-	if(!TestPointer((const void*)__gleTexCoordP1ui)) bIsLoaded = 0;
+	if(!__gleTexCoordP1ui) bIsLoaded = 0;
 	__gleTexCoordP1uiv = (PFNGLTEXCOORDP1UIVPROC)gleIntGetProcAddress("glTexCoordP1uiv");
-	if(!TestPointer((const void*)__gleTexCoordP1uiv)) bIsLoaded = 0;
+	if(!__gleTexCoordP1uiv) bIsLoaded = 0;
 	__gleTexCoordP2ui = (PFNGLTEXCOORDP2UIPROC)gleIntGetProcAddress("glTexCoordP2ui");
-	if(!TestPointer((const void*)__gleTexCoordP2ui)) bIsLoaded = 0;
+	if(!__gleTexCoordP2ui) bIsLoaded = 0;
 	__gleTexCoordP2uiv = (PFNGLTEXCOORDP2UIVPROC)gleIntGetProcAddress("glTexCoordP2uiv");
-	if(!TestPointer((const void*)__gleTexCoordP2uiv)) bIsLoaded = 0;
+	if(!__gleTexCoordP2uiv) bIsLoaded = 0;
 	__gleTexCoordP3ui = (PFNGLTEXCOORDP3UIPROC)gleIntGetProcAddress("glTexCoordP3ui");
-	if(!TestPointer((const void*)__gleTexCoordP3ui)) bIsLoaded = 0;
+	if(!__gleTexCoordP3ui) bIsLoaded = 0;
 	__gleTexCoordP3uiv = (PFNGLTEXCOORDP3UIVPROC)gleIntGetProcAddress("glTexCoordP3uiv");
-	if(!TestPointer((const void*)__gleTexCoordP3uiv)) bIsLoaded = 0;
+	if(!__gleTexCoordP3uiv) bIsLoaded = 0;
 	__gleTexCoordP4ui = (PFNGLTEXCOORDP4UIPROC)gleIntGetProcAddress("glTexCoordP4ui");
-	if(!TestPointer((const void*)__gleTexCoordP4ui)) bIsLoaded = 0;
+	if(!__gleTexCoordP4ui) bIsLoaded = 0;
 	__gleTexCoordP4uiv = (PFNGLTEXCOORDP4UIVPROC)gleIntGetProcAddress("glTexCoordP4uiv");
-	if(!TestPointer((const void*)__gleTexCoordP4uiv)) bIsLoaded = 0;
+	if(!__gleTexCoordP4uiv) bIsLoaded = 0;
 	__gleMultiTexCoordP1ui = (PFNGLMULTITEXCOORDP1UIPROC)gleIntGetProcAddress("glMultiTexCoordP1ui");
-	if(!TestPointer((const void*)__gleMultiTexCoordP1ui)) bIsLoaded = 0;
+	if(!__gleMultiTexCoordP1ui) bIsLoaded = 0;
 	__gleMultiTexCoordP1uiv = (PFNGLMULTITEXCOORDP1UIVPROC)gleIntGetProcAddress("glMultiTexCoordP1uiv");
-	if(!TestPointer((const void*)__gleMultiTexCoordP1uiv)) bIsLoaded = 0;
+	if(!__gleMultiTexCoordP1uiv) bIsLoaded = 0;
 	__gleMultiTexCoordP2ui = (PFNGLMULTITEXCOORDP2UIPROC)gleIntGetProcAddress("glMultiTexCoordP2ui");
-	if(!TestPointer((const void*)__gleMultiTexCoordP2ui)) bIsLoaded = 0;
+	if(!__gleMultiTexCoordP2ui) bIsLoaded = 0;
 	__gleMultiTexCoordP2uiv = (PFNGLMULTITEXCOORDP2UIVPROC)gleIntGetProcAddress("glMultiTexCoordP2uiv");
-	if(!TestPointer((const void*)__gleMultiTexCoordP2uiv)) bIsLoaded = 0;
+	if(!__gleMultiTexCoordP2uiv) bIsLoaded = 0;
 	__gleMultiTexCoordP3ui = (PFNGLMULTITEXCOORDP3UIPROC)gleIntGetProcAddress("glMultiTexCoordP3ui");
-	if(!TestPointer((const void*)__gleMultiTexCoordP3ui)) bIsLoaded = 0;
+	if(!__gleMultiTexCoordP3ui) bIsLoaded = 0;
 	__gleMultiTexCoordP3uiv = (PFNGLMULTITEXCOORDP3UIVPROC)gleIntGetProcAddress("glMultiTexCoordP3uiv");
-	if(!TestPointer((const void*)__gleMultiTexCoordP3uiv)) bIsLoaded = 0;
+	if(!__gleMultiTexCoordP3uiv) bIsLoaded = 0;
 	__gleMultiTexCoordP4ui = (PFNGLMULTITEXCOORDP4UIPROC)gleIntGetProcAddress("glMultiTexCoordP4ui");
-	if(!TestPointer((const void*)__gleMultiTexCoordP4ui)) bIsLoaded = 0;
+	if(!__gleMultiTexCoordP4ui) bIsLoaded = 0;
 	__gleMultiTexCoordP4uiv = (PFNGLMULTITEXCOORDP4UIVPROC)gleIntGetProcAddress("glMultiTexCoordP4uiv");
-	if(!TestPointer((const void*)__gleMultiTexCoordP4uiv)) bIsLoaded = 0;
+	if(!__gleMultiTexCoordP4uiv) bIsLoaded = 0;
 	__gleNormalP3ui = (PFNGLNORMALP3UIPROC)gleIntGetProcAddress("glNormalP3ui");
-	if(!TestPointer((const void*)__gleNormalP3ui)) bIsLoaded = 0;
+	if(!__gleNormalP3ui) bIsLoaded = 0;
 	__gleNormalP3uiv = (PFNGLNORMALP3UIVPROC)gleIntGetProcAddress("glNormalP3uiv");
-	if(!TestPointer((const void*)__gleNormalP3uiv)) bIsLoaded = 0;
+	if(!__gleNormalP3uiv) bIsLoaded = 0;
 	__gleColorP3ui = (PFNGLCOLORP3UIPROC)gleIntGetProcAddress("glColorP3ui");
-	if(!TestPointer((const void*)__gleColorP3ui)) bIsLoaded = 0;
+	if(!__gleColorP3ui) bIsLoaded = 0;
 	__gleColorP3uiv = (PFNGLCOLORP3UIVPROC)gleIntGetProcAddress("glColorP3uiv");
-	if(!TestPointer((const void*)__gleColorP3uiv)) bIsLoaded = 0;
+	if(!__gleColorP3uiv) bIsLoaded = 0;
 	__gleColorP4ui = (PFNGLCOLORP4UIPROC)gleIntGetProcAddress("glColorP4ui");
-	if(!TestPointer((const void*)__gleColorP4ui)) bIsLoaded = 0;
+	if(!__gleColorP4ui) bIsLoaded = 0;
 	__gleColorP4uiv = (PFNGLCOLORP4UIVPROC)gleIntGetProcAddress("glColorP4uiv");
-	if(!TestPointer((const void*)__gleColorP4uiv)) bIsLoaded = 0;
+	if(!__gleColorP4uiv) bIsLoaded = 0;
 	__gleSecondaryColorP3ui = (PFNGLSECONDARYCOLORP3UIPROC)gleIntGetProcAddress("glSecondaryColorP3ui");
-	if(!TestPointer((const void*)__gleSecondaryColorP3ui)) bIsLoaded = 0;
+	if(!__gleSecondaryColorP3ui) bIsLoaded = 0;
 	__gleSecondaryColorP3uiv = (PFNGLSECONDARYCOLORP3UIVPROC)gleIntGetProcAddress("glSecondaryColorP3uiv");
-	if(!TestPointer((const void*)__gleSecondaryColorP3uiv)) bIsLoaded = 0;
+	if(!__gleSecondaryColorP3uiv) bIsLoaded = 0;
 	__gleVertexAttribP1ui = (PFNGLVERTEXATTRIBP1UIPROC)gleIntGetProcAddress("glVertexAttribP1ui");
-	if(!TestPointer((const void*)__gleVertexAttribP1ui)) bIsLoaded = 0;
+	if(!__gleVertexAttribP1ui) bIsLoaded = 0;
 	__gleVertexAttribP1uiv = (PFNGLVERTEXATTRIBP1UIVPROC)gleIntGetProcAddress("glVertexAttribP1uiv");
-	if(!TestPointer((const void*)__gleVertexAttribP1uiv)) bIsLoaded = 0;
+	if(!__gleVertexAttribP1uiv) bIsLoaded = 0;
 	__gleVertexAttribP2ui = (PFNGLVERTEXATTRIBP2UIPROC)gleIntGetProcAddress("glVertexAttribP2ui");
-	if(!TestPointer((const void*)__gleVertexAttribP2ui)) bIsLoaded = 0;
+	if(!__gleVertexAttribP2ui) bIsLoaded = 0;
 	__gleVertexAttribP2uiv = (PFNGLVERTEXATTRIBP2UIVPROC)gleIntGetProcAddress("glVertexAttribP2uiv");
-	if(!TestPointer((const void*)__gleVertexAttribP2uiv)) bIsLoaded = 0;
+	if(!__gleVertexAttribP2uiv) bIsLoaded = 0;
 	__gleVertexAttribP3ui = (PFNGLVERTEXATTRIBP3UIPROC)gleIntGetProcAddress("glVertexAttribP3ui");
-	if(!TestPointer((const void*)__gleVertexAttribP3ui)) bIsLoaded = 0;
+	if(!__gleVertexAttribP3ui) bIsLoaded = 0;
 	__gleVertexAttribP3uiv = (PFNGLVERTEXATTRIBP3UIVPROC)gleIntGetProcAddress("glVertexAttribP3uiv");
-	if(!TestPointer((const void*)__gleVertexAttribP3uiv)) bIsLoaded = 0;
+	if(!__gleVertexAttribP3uiv) bIsLoaded = 0;
 	__gleVertexAttribP4ui = (PFNGLVERTEXATTRIBP4UIPROC)gleIntGetProcAddress("glVertexAttribP4ui");
-	if(!TestPointer((const void*)__gleVertexAttribP4ui)) bIsLoaded = 0;
+	if(!__gleVertexAttribP4ui) bIsLoaded = 0;
 	__gleVertexAttribP4uiv = (PFNGLVERTEXATTRIBP4UIVPROC)gleIntGetProcAddress("glVertexAttribP4uiv");
-	if(!TestPointer((const void*)__gleVertexAttribP4uiv)) bIsLoaded = 0;
+	if(!__gleVertexAttribP4uiv) bIsLoaded = 0;
 #endif /*GL_ARB_vertex_type_2_10_10_10_rev*/
 	return bIsLoaded;
 }
@@ -4047,25 +4060,25 @@ static int gleIntLoad_ARB_viewport_array()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_viewport_array
 	__gleViewportArrayv = (PFNGLVIEWPORTARRAYVPROC)gleIntGetProcAddress("glViewportArrayv");
-	if(!TestPointer((const void*)__gleViewportArrayv)) bIsLoaded = 0;
+	if(!__gleViewportArrayv) bIsLoaded = 0;
 	__gleViewportIndexedf = (PFNGLVIEWPORTINDEXEDFPROC)gleIntGetProcAddress("glViewportIndexedf");
-	if(!TestPointer((const void*)__gleViewportIndexedf)) bIsLoaded = 0;
+	if(!__gleViewportIndexedf) bIsLoaded = 0;
 	__gleViewportIndexedfv = (PFNGLVIEWPORTINDEXEDFVPROC)gleIntGetProcAddress("glViewportIndexedfv");
-	if(!TestPointer((const void*)__gleViewportIndexedfv)) bIsLoaded = 0;
+	if(!__gleViewportIndexedfv) bIsLoaded = 0;
 	__gleScissorArrayv = (PFNGLSCISSORARRAYVPROC)gleIntGetProcAddress("glScissorArrayv");
-	if(!TestPointer((const void*)__gleScissorArrayv)) bIsLoaded = 0;
+	if(!__gleScissorArrayv) bIsLoaded = 0;
 	__gleScissorIndexed = (PFNGLSCISSORINDEXEDPROC)gleIntGetProcAddress("glScissorIndexed");
-	if(!TestPointer((const void*)__gleScissorIndexed)) bIsLoaded = 0;
+	if(!__gleScissorIndexed) bIsLoaded = 0;
 	__gleScissorIndexedv = (PFNGLSCISSORINDEXEDVPROC)gleIntGetProcAddress("glScissorIndexedv");
-	if(!TestPointer((const void*)__gleScissorIndexedv)) bIsLoaded = 0;
+	if(!__gleScissorIndexedv) bIsLoaded = 0;
 	__gleDepthRangeArrayv = (PFNGLDEPTHRANGEARRAYVPROC)gleIntGetProcAddress("glDepthRangeArrayv");
-	if(!TestPointer((const void*)__gleDepthRangeArrayv)) bIsLoaded = 0;
+	if(!__gleDepthRangeArrayv) bIsLoaded = 0;
 	__gleDepthRangeIndexed = (PFNGLDEPTHRANGEINDEXEDPROC)gleIntGetProcAddress("glDepthRangeIndexed");
-	if(!TestPointer((const void*)__gleDepthRangeIndexed)) bIsLoaded = 0;
+	if(!__gleDepthRangeIndexed) bIsLoaded = 0;
 	__gleGetFloati_v = (PFNGLGETFLOATI_VPROC)gleIntGetProcAddress("glGetFloati_v");
-	if(!TestPointer((const void*)__gleGetFloati_v)) bIsLoaded = 0;
+	if(!__gleGetFloati_v) bIsLoaded = 0;
 	__gleGetDoublei_v = (PFNGLGETDOUBLEI_VPROC)gleIntGetProcAddress("glGetDoublei_v");
-	if(!TestPointer((const void*)__gleGetDoublei_v)) bIsLoaded = 0;
+	if(!__gleGetDoublei_v) bIsLoaded = 0;
 #endif /*GL_ARB_viewport_array*/
 	return bIsLoaded;
 }
@@ -4110,37 +4123,37 @@ static int gleIntLoad_ARB_window_pos()
 	int bIsLoaded = 1;
 #ifndef GL_ARB_window_pos
 	glWindowPos2dARB = (PFNGLWINDOWPOS2DARBPROC)gleIntGetProcAddress("glWindowPos2dARB");
-	if(!TestPointer((const void*)glWindowPos2dARB)) bIsLoaded = 0;
+	if(!glWindowPos2dARB) bIsLoaded = 0;
 	glWindowPos2dvARB = (PFNGLWINDOWPOS2DVARBPROC)gleIntGetProcAddress("glWindowPos2dvARB");
-	if(!TestPointer((const void*)glWindowPos2dvARB)) bIsLoaded = 0;
+	if(!glWindowPos2dvARB) bIsLoaded = 0;
 	glWindowPos2fARB = (PFNGLWINDOWPOS2FARBPROC)gleIntGetProcAddress("glWindowPos2fARB");
-	if(!TestPointer((const void*)glWindowPos2fARB)) bIsLoaded = 0;
+	if(!glWindowPos2fARB) bIsLoaded = 0;
 	glWindowPos2fvARB = (PFNGLWINDOWPOS2FVARBPROC)gleIntGetProcAddress("glWindowPos2fvARB");
-	if(!TestPointer((const void*)glWindowPos2fvARB)) bIsLoaded = 0;
+	if(!glWindowPos2fvARB) bIsLoaded = 0;
 	glWindowPos2iARB = (PFNGLWINDOWPOS2IARBPROC)gleIntGetProcAddress("glWindowPos2iARB");
-	if(!TestPointer((const void*)glWindowPos2iARB)) bIsLoaded = 0;
+	if(!glWindowPos2iARB) bIsLoaded = 0;
 	glWindowPos2ivARB = (PFNGLWINDOWPOS2IVARBPROC)gleIntGetProcAddress("glWindowPos2ivARB");
-	if(!TestPointer((const void*)glWindowPos2ivARB)) bIsLoaded = 0;
+	if(!glWindowPos2ivARB) bIsLoaded = 0;
 	glWindowPos2sARB = (PFNGLWINDOWPOS2SARBPROC)gleIntGetProcAddress("glWindowPos2sARB");
-	if(!TestPointer((const void*)glWindowPos2sARB)) bIsLoaded = 0;
+	if(!glWindowPos2sARB) bIsLoaded = 0;
 	glWindowPos2svARB = (PFNGLWINDOWPOS2SVARBPROC)gleIntGetProcAddress("glWindowPos2svARB");
-	if(!TestPointer((const void*)glWindowPos2svARB)) bIsLoaded = 0;
+	if(!glWindowPos2svARB) bIsLoaded = 0;
 	glWindowPos3dARB = (PFNGLWINDOWPOS3DARBPROC)gleIntGetProcAddress("glWindowPos3dARB");
-	if(!TestPointer((const void*)glWindowPos3dARB)) bIsLoaded = 0;
+	if(!glWindowPos3dARB) bIsLoaded = 0;
 	glWindowPos3dvARB = (PFNGLWINDOWPOS3DVARBPROC)gleIntGetProcAddress("glWindowPos3dvARB");
-	if(!TestPointer((const void*)glWindowPos3dvARB)) bIsLoaded = 0;
+	if(!glWindowPos3dvARB) bIsLoaded = 0;
 	glWindowPos3fARB = (PFNGLWINDOWPOS3FARBPROC)gleIntGetProcAddress("glWindowPos3fARB");
-	if(!TestPointer((const void*)glWindowPos3fARB)) bIsLoaded = 0;
+	if(!glWindowPos3fARB) bIsLoaded = 0;
 	glWindowPos3fvARB = (PFNGLWINDOWPOS3FVARBPROC)gleIntGetProcAddress("glWindowPos3fvARB");
-	if(!TestPointer((const void*)glWindowPos3fvARB)) bIsLoaded = 0;
+	if(!glWindowPos3fvARB) bIsLoaded = 0;
 	glWindowPos3iARB = (PFNGLWINDOWPOS3IARBPROC)gleIntGetProcAddress("glWindowPos3iARB");
-	if(!TestPointer((const void*)glWindowPos3iARB)) bIsLoaded = 0;
+	if(!glWindowPos3iARB) bIsLoaded = 0;
 	glWindowPos3ivARB = (PFNGLWINDOWPOS3IVARBPROC)gleIntGetProcAddress("glWindowPos3ivARB");
-	if(!TestPointer((const void*)glWindowPos3ivARB)) bIsLoaded = 0;
+	if(!glWindowPos3ivARB) bIsLoaded = 0;
 	glWindowPos3sARB = (PFNGLWINDOWPOS3SARBPROC)gleIntGetProcAddress("glWindowPos3sARB");
-	if(!TestPointer((const void*)glWindowPos3sARB)) bIsLoaded = 0;
+	if(!glWindowPos3sARB) bIsLoaded = 0;
 	glWindowPos3svARB = (PFNGLWINDOWPOS3SVARBPROC)gleIntGetProcAddress("glWindowPos3svARB");
-	if(!TestPointer((const void*)glWindowPos3svARB)) bIsLoaded = 0;
+	if(!glWindowPos3svARB) bIsLoaded = 0;
 #endif /*GL_ARB_window_pos*/
 	return bIsLoaded;
 }
@@ -4155,7 +4168,7 @@ static int gleIntLoad_ATI_draw_buffers()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_draw_buffers
 	glDrawBuffersATI = (PFNGLDRAWBUFFERSATIPROC)gleIntGetProcAddress("glDrawBuffersATI");
-	if(!TestPointer((const void*)glDrawBuffersATI)) bIsLoaded = 0;
+	if(!glDrawBuffersATI) bIsLoaded = 0;
 #endif /*GL_ATI_draw_buffers*/
 	return bIsLoaded;
 }
@@ -4174,11 +4187,11 @@ static int gleIntLoad_ATI_element_array()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_element_array
 	glElementPointerATI = (PFNGLELEMENTPOINTERATIPROC)gleIntGetProcAddress("glElementPointerATI");
-	if(!TestPointer((const void*)glElementPointerATI)) bIsLoaded = 0;
+	if(!glElementPointerATI) bIsLoaded = 0;
 	glDrawElementArrayATI = (PFNGLDRAWELEMENTARRAYATIPROC)gleIntGetProcAddress("glDrawElementArrayATI");
-	if(!TestPointer((const void*)glDrawElementArrayATI)) bIsLoaded = 0;
+	if(!glDrawElementArrayATI) bIsLoaded = 0;
 	glDrawRangeElementArrayATI = (PFNGLDRAWRANGEELEMENTARRAYATIPROC)gleIntGetProcAddress("glDrawRangeElementArrayATI");
-	if(!TestPointer((const void*)glDrawRangeElementArrayATI)) bIsLoaded = 0;
+	if(!glDrawRangeElementArrayATI) bIsLoaded = 0;
 #endif /*GL_ATI_element_array*/
 	return bIsLoaded;
 }
@@ -4199,13 +4212,13 @@ static int gleIntLoad_ATI_envmap_bumpmap()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_envmap_bumpmap
 	glTexBumpParameterivATI = (PFNGLTEXBUMPPARAMETERIVATIPROC)gleIntGetProcAddress("glTexBumpParameterivATI");
-	if(!TestPointer((const void*)glTexBumpParameterivATI)) bIsLoaded = 0;
+	if(!glTexBumpParameterivATI) bIsLoaded = 0;
 	glTexBumpParameterfvATI = (PFNGLTEXBUMPPARAMETERFVATIPROC)gleIntGetProcAddress("glTexBumpParameterfvATI");
-	if(!TestPointer((const void*)glTexBumpParameterfvATI)) bIsLoaded = 0;
+	if(!glTexBumpParameterfvATI) bIsLoaded = 0;
 	glGetTexBumpParameterivATI = (PFNGLGETTEXBUMPPARAMETERIVATIPROC)gleIntGetProcAddress("glGetTexBumpParameterivATI");
-	if(!TestPointer((const void*)glGetTexBumpParameterivATI)) bIsLoaded = 0;
+	if(!glGetTexBumpParameterivATI) bIsLoaded = 0;
 	glGetTexBumpParameterfvATI = (PFNGLGETTEXBUMPPARAMETERFVATIPROC)gleIntGetProcAddress("glGetTexBumpParameterfvATI");
-	if(!TestPointer((const void*)glGetTexBumpParameterfvATI)) bIsLoaded = 0;
+	if(!glGetTexBumpParameterfvATI) bIsLoaded = 0;
 #endif /*GL_ATI_envmap_bumpmap*/
 	return bIsLoaded;
 }
@@ -4246,33 +4259,33 @@ static int gleIntLoad_ATI_fragment_shader()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_fragment_shader
 	glGenFragmentShadersATI = (PFNGLGENFRAGMENTSHADERSATIPROC)gleIntGetProcAddress("glGenFragmentShadersATI");
-	if(!TestPointer((const void*)glGenFragmentShadersATI)) bIsLoaded = 0;
+	if(!glGenFragmentShadersATI) bIsLoaded = 0;
 	glBindFragmentShaderATI = (PFNGLBINDFRAGMENTSHADERATIPROC)gleIntGetProcAddress("glBindFragmentShaderATI");
-	if(!TestPointer((const void*)glBindFragmentShaderATI)) bIsLoaded = 0;
+	if(!glBindFragmentShaderATI) bIsLoaded = 0;
 	glDeleteFragmentShaderATI = (PFNGLDELETEFRAGMENTSHADERATIPROC)gleIntGetProcAddress("glDeleteFragmentShaderATI");
-	if(!TestPointer((const void*)glDeleteFragmentShaderATI)) bIsLoaded = 0;
+	if(!glDeleteFragmentShaderATI) bIsLoaded = 0;
 	glBeginFragmentShaderATI = (PFNGLBEGINFRAGMENTSHADERATIPROC)gleIntGetProcAddress("glBeginFragmentShaderATI");
-	if(!TestPointer((const void*)glBeginFragmentShaderATI)) bIsLoaded = 0;
+	if(!glBeginFragmentShaderATI) bIsLoaded = 0;
 	glEndFragmentShaderATI = (PFNGLENDFRAGMENTSHADERATIPROC)gleIntGetProcAddress("glEndFragmentShaderATI");
-	if(!TestPointer((const void*)glEndFragmentShaderATI)) bIsLoaded = 0;
+	if(!glEndFragmentShaderATI) bIsLoaded = 0;
 	glPassTexCoordATI = (PFNGLPASSTEXCOORDATIPROC)gleIntGetProcAddress("glPassTexCoordATI");
-	if(!TestPointer((const void*)glPassTexCoordATI)) bIsLoaded = 0;
+	if(!glPassTexCoordATI) bIsLoaded = 0;
 	glSampleMapATI = (PFNGLSAMPLEMAPATIPROC)gleIntGetProcAddress("glSampleMapATI");
-	if(!TestPointer((const void*)glSampleMapATI)) bIsLoaded = 0;
+	if(!glSampleMapATI) bIsLoaded = 0;
 	glColorFragmentOp1ATI = (PFNGLCOLORFRAGMENTOP1ATIPROC)gleIntGetProcAddress("glColorFragmentOp1ATI");
-	if(!TestPointer((const void*)glColorFragmentOp1ATI)) bIsLoaded = 0;
+	if(!glColorFragmentOp1ATI) bIsLoaded = 0;
 	glColorFragmentOp2ATI = (PFNGLCOLORFRAGMENTOP2ATIPROC)gleIntGetProcAddress("glColorFragmentOp2ATI");
-	if(!TestPointer((const void*)glColorFragmentOp2ATI)) bIsLoaded = 0;
+	if(!glColorFragmentOp2ATI) bIsLoaded = 0;
 	glColorFragmentOp3ATI = (PFNGLCOLORFRAGMENTOP3ATIPROC)gleIntGetProcAddress("glColorFragmentOp3ATI");
-	if(!TestPointer((const void*)glColorFragmentOp3ATI)) bIsLoaded = 0;
+	if(!glColorFragmentOp3ATI) bIsLoaded = 0;
 	glAlphaFragmentOp1ATI = (PFNGLALPHAFRAGMENTOP1ATIPROC)gleIntGetProcAddress("glAlphaFragmentOp1ATI");
-	if(!TestPointer((const void*)glAlphaFragmentOp1ATI)) bIsLoaded = 0;
+	if(!glAlphaFragmentOp1ATI) bIsLoaded = 0;
 	glAlphaFragmentOp2ATI = (PFNGLALPHAFRAGMENTOP2ATIPROC)gleIntGetProcAddress("glAlphaFragmentOp2ATI");
-	if(!TestPointer((const void*)glAlphaFragmentOp2ATI)) bIsLoaded = 0;
+	if(!glAlphaFragmentOp2ATI) bIsLoaded = 0;
 	glAlphaFragmentOp3ATI = (PFNGLALPHAFRAGMENTOP3ATIPROC)gleIntGetProcAddress("glAlphaFragmentOp3ATI");
-	if(!TestPointer((const void*)glAlphaFragmentOp3ATI)) bIsLoaded = 0;
+	if(!glAlphaFragmentOp3ATI) bIsLoaded = 0;
 	glSetFragmentShaderConstantATI = (PFNGLSETFRAGMENTSHADERCONSTANTATIPROC)gleIntGetProcAddress("glSetFragmentShaderConstantATI");
-	if(!TestPointer((const void*)glSetFragmentShaderConstantATI)) bIsLoaded = 0;
+	if(!glSetFragmentShaderConstantATI) bIsLoaded = 0;
 #endif /*GL_ATI_fragment_shader*/
 	return bIsLoaded;
 }
@@ -4289,9 +4302,9 @@ static int gleIntLoad_ATI_map_object_buffer()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_map_object_buffer
 	glMapObjectBufferATI = (PFNGLMAPOBJECTBUFFERATIPROC)gleIntGetProcAddress("glMapObjectBufferATI");
-	if(!TestPointer((const void*)glMapObjectBufferATI)) bIsLoaded = 0;
+	if(!glMapObjectBufferATI) bIsLoaded = 0;
 	glUnmapObjectBufferATI = (PFNGLUNMAPOBJECTBUFFERATIPROC)gleIntGetProcAddress("glUnmapObjectBufferATI");
-	if(!TestPointer((const void*)glUnmapObjectBufferATI)) bIsLoaded = 0;
+	if(!glUnmapObjectBufferATI) bIsLoaded = 0;
 #endif /*GL_ATI_map_object_buffer*/
 	return bIsLoaded;
 }
@@ -4310,9 +4323,9 @@ static int gleIntLoad_ATI_pn_triangles()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_pn_triangles
 	glPNTrianglesiATI = (PFNGLPNTRIANGLESIATIPROC)gleIntGetProcAddress("glPNTrianglesiATI");
-	if(!TestPointer((const void*)glPNTrianglesiATI)) bIsLoaded = 0;
+	if(!glPNTrianglesiATI) bIsLoaded = 0;
 	glPNTrianglesfATI = (PFNGLPNTRIANGLESFATIPROC)gleIntGetProcAddress("glPNTrianglesfATI");
-	if(!TestPointer((const void*)glPNTrianglesfATI)) bIsLoaded = 0;
+	if(!glPNTrianglesfATI) bIsLoaded = 0;
 #endif /*GL_ATI_pn_triangles*/
 	return bIsLoaded;
 }
@@ -4329,9 +4342,9 @@ static int gleIntLoad_ATI_separate_stencil()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_separate_stencil
 	glStencilOpSeparateATI = (PFNGLSTENCILOPSEPARATEATIPROC)gleIntGetProcAddress("glStencilOpSeparateATI");
-	if(!TestPointer((const void*)glStencilOpSeparateATI)) bIsLoaded = 0;
+	if(!glStencilOpSeparateATI) bIsLoaded = 0;
 	glStencilFuncSeparateATI = (PFNGLSTENCILFUNCSEPARATEATIPROC)gleIntGetProcAddress("glStencilFuncSeparateATI");
-	if(!TestPointer((const void*)glStencilFuncSeparateATI)) bIsLoaded = 0;
+	if(!glStencilFuncSeparateATI) bIsLoaded = 0;
 #endif /*GL_ATI_separate_stencil*/
 	return bIsLoaded;
 }
@@ -4372,29 +4385,29 @@ static int gleIntLoad_ATI_vertex_array_object()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_vertex_array_object
 	glNewObjectBufferATI = (PFNGLNEWOBJECTBUFFERATIPROC)gleIntGetProcAddress("glNewObjectBufferATI");
-	if(!TestPointer((const void*)glNewObjectBufferATI)) bIsLoaded = 0;
+	if(!glNewObjectBufferATI) bIsLoaded = 0;
 	glIsObjectBufferATI = (PFNGLISOBJECTBUFFERATIPROC)gleIntGetProcAddress("glIsObjectBufferATI");
-	if(!TestPointer((const void*)glIsObjectBufferATI)) bIsLoaded = 0;
+	if(!glIsObjectBufferATI) bIsLoaded = 0;
 	glUpdateObjectBufferATI = (PFNGLUPDATEOBJECTBUFFERATIPROC)gleIntGetProcAddress("glUpdateObjectBufferATI");
-	if(!TestPointer((const void*)glUpdateObjectBufferATI)) bIsLoaded = 0;
+	if(!glUpdateObjectBufferATI) bIsLoaded = 0;
 	glGetObjectBufferfvATI = (PFNGLGETOBJECTBUFFERFVATIPROC)gleIntGetProcAddress("glGetObjectBufferfvATI");
-	if(!TestPointer((const void*)glGetObjectBufferfvATI)) bIsLoaded = 0;
+	if(!glGetObjectBufferfvATI) bIsLoaded = 0;
 	glGetObjectBufferivATI = (PFNGLGETOBJECTBUFFERIVATIPROC)gleIntGetProcAddress("glGetObjectBufferivATI");
-	if(!TestPointer((const void*)glGetObjectBufferivATI)) bIsLoaded = 0;
+	if(!glGetObjectBufferivATI) bIsLoaded = 0;
 	glFreeObjectBufferATI = (PFNGLFREEOBJECTBUFFERATIPROC)gleIntGetProcAddress("glFreeObjectBufferATI");
-	if(!TestPointer((const void*)glFreeObjectBufferATI)) bIsLoaded = 0;
+	if(!glFreeObjectBufferATI) bIsLoaded = 0;
 	glArrayObjectATI = (PFNGLARRAYOBJECTATIPROC)gleIntGetProcAddress("glArrayObjectATI");
-	if(!TestPointer((const void*)glArrayObjectATI)) bIsLoaded = 0;
+	if(!glArrayObjectATI) bIsLoaded = 0;
 	glGetArrayObjectfvATI = (PFNGLGETARRAYOBJECTFVATIPROC)gleIntGetProcAddress("glGetArrayObjectfvATI");
-	if(!TestPointer((const void*)glGetArrayObjectfvATI)) bIsLoaded = 0;
+	if(!glGetArrayObjectfvATI) bIsLoaded = 0;
 	glGetArrayObjectivATI = (PFNGLGETARRAYOBJECTIVATIPROC)gleIntGetProcAddress("glGetArrayObjectivATI");
-	if(!TestPointer((const void*)glGetArrayObjectivATI)) bIsLoaded = 0;
+	if(!glGetArrayObjectivATI) bIsLoaded = 0;
 	glVariantArrayObjectATI = (PFNGLVARIANTARRAYOBJECTATIPROC)gleIntGetProcAddress("glVariantArrayObjectATI");
-	if(!TestPointer((const void*)glVariantArrayObjectATI)) bIsLoaded = 0;
+	if(!glVariantArrayObjectATI) bIsLoaded = 0;
 	glGetVariantArrayObjectfvATI = (PFNGLGETVARIANTARRAYOBJECTFVATIPROC)gleIntGetProcAddress("glGetVariantArrayObjectfvATI");
-	if(!TestPointer((const void*)glGetVariantArrayObjectfvATI)) bIsLoaded = 0;
+	if(!glGetVariantArrayObjectfvATI) bIsLoaded = 0;
 	glGetVariantArrayObjectivATI = (PFNGLGETVARIANTARRAYOBJECTIVATIPROC)gleIntGetProcAddress("glGetVariantArrayObjectivATI");
-	if(!TestPointer((const void*)glGetVariantArrayObjectivATI)) bIsLoaded = 0;
+	if(!glGetVariantArrayObjectivATI) bIsLoaded = 0;
 #endif /*GL_ATI_vertex_array_object*/
 	return bIsLoaded;
 }
@@ -4413,11 +4426,11 @@ static int gleIntLoad_ATI_vertex_attrib_array_object()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_vertex_attrib_array_object
 	glVertexAttribArrayObjectATI = (PFNGLVERTEXATTRIBARRAYOBJECTATIPROC)gleIntGetProcAddress("glVertexAttribArrayObjectATI");
-	if(!TestPointer((const void*)glVertexAttribArrayObjectATI)) bIsLoaded = 0;
+	if(!glVertexAttribArrayObjectATI) bIsLoaded = 0;
 	glGetVertexAttribArrayObjectfvATI = (PFNGLGETVERTEXATTRIBARRAYOBJECTFVATIPROC)gleIntGetProcAddress("glGetVertexAttribArrayObjectfvATI");
-	if(!TestPointer((const void*)glGetVertexAttribArrayObjectfvATI)) bIsLoaded = 0;
+	if(!glGetVertexAttribArrayObjectfvATI) bIsLoaded = 0;
 	glGetVertexAttribArrayObjectivATI = (PFNGLGETVERTEXATTRIBARRAYOBJECTIVATIPROC)gleIntGetProcAddress("glGetVertexAttribArrayObjectivATI");
-	if(!TestPointer((const void*)glGetVertexAttribArrayObjectivATI)) bIsLoaded = 0;
+	if(!glGetVertexAttribArrayObjectivATI) bIsLoaded = 0;
 #endif /*GL_ATI_vertex_attrib_array_object*/
 	return bIsLoaded;
 }
@@ -4520,95 +4533,95 @@ static int gleIntLoad_ATI_vertex_streams()
 	int bIsLoaded = 1;
 #ifndef GL_ATI_vertex_streams
 	glVertexStream1sATI = (PFNGLVERTEXSTREAM1SATIPROC)gleIntGetProcAddress("glVertexStream1sATI");
-	if(!TestPointer((const void*)glVertexStream1sATI)) bIsLoaded = 0;
+	if(!glVertexStream1sATI) bIsLoaded = 0;
 	glVertexStream1svATI = (PFNGLVERTEXSTREAM1SVATIPROC)gleIntGetProcAddress("glVertexStream1svATI");
-	if(!TestPointer((const void*)glVertexStream1svATI)) bIsLoaded = 0;
+	if(!glVertexStream1svATI) bIsLoaded = 0;
 	glVertexStream1iATI = (PFNGLVERTEXSTREAM1IATIPROC)gleIntGetProcAddress("glVertexStream1iATI");
-	if(!TestPointer((const void*)glVertexStream1iATI)) bIsLoaded = 0;
+	if(!glVertexStream1iATI) bIsLoaded = 0;
 	glVertexStream1ivATI = (PFNGLVERTEXSTREAM1IVATIPROC)gleIntGetProcAddress("glVertexStream1ivATI");
-	if(!TestPointer((const void*)glVertexStream1ivATI)) bIsLoaded = 0;
+	if(!glVertexStream1ivATI) bIsLoaded = 0;
 	glVertexStream1fATI = (PFNGLVERTEXSTREAM1FATIPROC)gleIntGetProcAddress("glVertexStream1fATI");
-	if(!TestPointer((const void*)glVertexStream1fATI)) bIsLoaded = 0;
+	if(!glVertexStream1fATI) bIsLoaded = 0;
 	glVertexStream1fvATI = (PFNGLVERTEXSTREAM1FVATIPROC)gleIntGetProcAddress("glVertexStream1fvATI");
-	if(!TestPointer((const void*)glVertexStream1fvATI)) bIsLoaded = 0;
+	if(!glVertexStream1fvATI) bIsLoaded = 0;
 	glVertexStream1dATI = (PFNGLVERTEXSTREAM1DATIPROC)gleIntGetProcAddress("glVertexStream1dATI");
-	if(!TestPointer((const void*)glVertexStream1dATI)) bIsLoaded = 0;
+	if(!glVertexStream1dATI) bIsLoaded = 0;
 	glVertexStream1dvATI = (PFNGLVERTEXSTREAM1DVATIPROC)gleIntGetProcAddress("glVertexStream1dvATI");
-	if(!TestPointer((const void*)glVertexStream1dvATI)) bIsLoaded = 0;
+	if(!glVertexStream1dvATI) bIsLoaded = 0;
 	glVertexStream2sATI = (PFNGLVERTEXSTREAM2SATIPROC)gleIntGetProcAddress("glVertexStream2sATI");
-	if(!TestPointer((const void*)glVertexStream2sATI)) bIsLoaded = 0;
+	if(!glVertexStream2sATI) bIsLoaded = 0;
 	glVertexStream2svATI = (PFNGLVERTEXSTREAM2SVATIPROC)gleIntGetProcAddress("glVertexStream2svATI");
-	if(!TestPointer((const void*)glVertexStream2svATI)) bIsLoaded = 0;
+	if(!glVertexStream2svATI) bIsLoaded = 0;
 	glVertexStream2iATI = (PFNGLVERTEXSTREAM2IATIPROC)gleIntGetProcAddress("glVertexStream2iATI");
-	if(!TestPointer((const void*)glVertexStream2iATI)) bIsLoaded = 0;
+	if(!glVertexStream2iATI) bIsLoaded = 0;
 	glVertexStream2ivATI = (PFNGLVERTEXSTREAM2IVATIPROC)gleIntGetProcAddress("glVertexStream2ivATI");
-	if(!TestPointer((const void*)glVertexStream2ivATI)) bIsLoaded = 0;
+	if(!glVertexStream2ivATI) bIsLoaded = 0;
 	glVertexStream2fATI = (PFNGLVERTEXSTREAM2FATIPROC)gleIntGetProcAddress("glVertexStream2fATI");
-	if(!TestPointer((const void*)glVertexStream2fATI)) bIsLoaded = 0;
+	if(!glVertexStream2fATI) bIsLoaded = 0;
 	glVertexStream2fvATI = (PFNGLVERTEXSTREAM2FVATIPROC)gleIntGetProcAddress("glVertexStream2fvATI");
-	if(!TestPointer((const void*)glVertexStream2fvATI)) bIsLoaded = 0;
+	if(!glVertexStream2fvATI) bIsLoaded = 0;
 	glVertexStream2dATI = (PFNGLVERTEXSTREAM2DATIPROC)gleIntGetProcAddress("glVertexStream2dATI");
-	if(!TestPointer((const void*)glVertexStream2dATI)) bIsLoaded = 0;
+	if(!glVertexStream2dATI) bIsLoaded = 0;
 	glVertexStream2dvATI = (PFNGLVERTEXSTREAM2DVATIPROC)gleIntGetProcAddress("glVertexStream2dvATI");
-	if(!TestPointer((const void*)glVertexStream2dvATI)) bIsLoaded = 0;
+	if(!glVertexStream2dvATI) bIsLoaded = 0;
 	glVertexStream3sATI = (PFNGLVERTEXSTREAM3SATIPROC)gleIntGetProcAddress("glVertexStream3sATI");
-	if(!TestPointer((const void*)glVertexStream3sATI)) bIsLoaded = 0;
+	if(!glVertexStream3sATI) bIsLoaded = 0;
 	glVertexStream3svATI = (PFNGLVERTEXSTREAM3SVATIPROC)gleIntGetProcAddress("glVertexStream3svATI");
-	if(!TestPointer((const void*)glVertexStream3svATI)) bIsLoaded = 0;
+	if(!glVertexStream3svATI) bIsLoaded = 0;
 	glVertexStream3iATI = (PFNGLVERTEXSTREAM3IATIPROC)gleIntGetProcAddress("glVertexStream3iATI");
-	if(!TestPointer((const void*)glVertexStream3iATI)) bIsLoaded = 0;
+	if(!glVertexStream3iATI) bIsLoaded = 0;
 	glVertexStream3ivATI = (PFNGLVERTEXSTREAM3IVATIPROC)gleIntGetProcAddress("glVertexStream3ivATI");
-	if(!TestPointer((const void*)glVertexStream3ivATI)) bIsLoaded = 0;
+	if(!glVertexStream3ivATI) bIsLoaded = 0;
 	glVertexStream3fATI = (PFNGLVERTEXSTREAM3FATIPROC)gleIntGetProcAddress("glVertexStream3fATI");
-	if(!TestPointer((const void*)glVertexStream3fATI)) bIsLoaded = 0;
+	if(!glVertexStream3fATI) bIsLoaded = 0;
 	glVertexStream3fvATI = (PFNGLVERTEXSTREAM3FVATIPROC)gleIntGetProcAddress("glVertexStream3fvATI");
-	if(!TestPointer((const void*)glVertexStream3fvATI)) bIsLoaded = 0;
+	if(!glVertexStream3fvATI) bIsLoaded = 0;
 	glVertexStream3dATI = (PFNGLVERTEXSTREAM3DATIPROC)gleIntGetProcAddress("glVertexStream3dATI");
-	if(!TestPointer((const void*)glVertexStream3dATI)) bIsLoaded = 0;
+	if(!glVertexStream3dATI) bIsLoaded = 0;
 	glVertexStream3dvATI = (PFNGLVERTEXSTREAM3DVATIPROC)gleIntGetProcAddress("glVertexStream3dvATI");
-	if(!TestPointer((const void*)glVertexStream3dvATI)) bIsLoaded = 0;
+	if(!glVertexStream3dvATI) bIsLoaded = 0;
 	glVertexStream4sATI = (PFNGLVERTEXSTREAM4SATIPROC)gleIntGetProcAddress("glVertexStream4sATI");
-	if(!TestPointer((const void*)glVertexStream4sATI)) bIsLoaded = 0;
+	if(!glVertexStream4sATI) bIsLoaded = 0;
 	glVertexStream4svATI = (PFNGLVERTEXSTREAM4SVATIPROC)gleIntGetProcAddress("glVertexStream4svATI");
-	if(!TestPointer((const void*)glVertexStream4svATI)) bIsLoaded = 0;
+	if(!glVertexStream4svATI) bIsLoaded = 0;
 	glVertexStream4iATI = (PFNGLVERTEXSTREAM4IATIPROC)gleIntGetProcAddress("glVertexStream4iATI");
-	if(!TestPointer((const void*)glVertexStream4iATI)) bIsLoaded = 0;
+	if(!glVertexStream4iATI) bIsLoaded = 0;
 	glVertexStream4ivATI = (PFNGLVERTEXSTREAM4IVATIPROC)gleIntGetProcAddress("glVertexStream4ivATI");
-	if(!TestPointer((const void*)glVertexStream4ivATI)) bIsLoaded = 0;
+	if(!glVertexStream4ivATI) bIsLoaded = 0;
 	glVertexStream4fATI = (PFNGLVERTEXSTREAM4FATIPROC)gleIntGetProcAddress("glVertexStream4fATI");
-	if(!TestPointer((const void*)glVertexStream4fATI)) bIsLoaded = 0;
+	if(!glVertexStream4fATI) bIsLoaded = 0;
 	glVertexStream4fvATI = (PFNGLVERTEXSTREAM4FVATIPROC)gleIntGetProcAddress("glVertexStream4fvATI");
-	if(!TestPointer((const void*)glVertexStream4fvATI)) bIsLoaded = 0;
+	if(!glVertexStream4fvATI) bIsLoaded = 0;
 	glVertexStream4dATI = (PFNGLVERTEXSTREAM4DATIPROC)gleIntGetProcAddress("glVertexStream4dATI");
-	if(!TestPointer((const void*)glVertexStream4dATI)) bIsLoaded = 0;
+	if(!glVertexStream4dATI) bIsLoaded = 0;
 	glVertexStream4dvATI = (PFNGLVERTEXSTREAM4DVATIPROC)gleIntGetProcAddress("glVertexStream4dvATI");
-	if(!TestPointer((const void*)glVertexStream4dvATI)) bIsLoaded = 0;
+	if(!glVertexStream4dvATI) bIsLoaded = 0;
 	glNormalStream3bATI = (PFNGLNORMALSTREAM3BATIPROC)gleIntGetProcAddress("glNormalStream3bATI");
-	if(!TestPointer((const void*)glNormalStream3bATI)) bIsLoaded = 0;
+	if(!glNormalStream3bATI) bIsLoaded = 0;
 	glNormalStream3bvATI = (PFNGLNORMALSTREAM3BVATIPROC)gleIntGetProcAddress("glNormalStream3bvATI");
-	if(!TestPointer((const void*)glNormalStream3bvATI)) bIsLoaded = 0;
+	if(!glNormalStream3bvATI) bIsLoaded = 0;
 	glNormalStream3sATI = (PFNGLNORMALSTREAM3SATIPROC)gleIntGetProcAddress("glNormalStream3sATI");
-	if(!TestPointer((const void*)glNormalStream3sATI)) bIsLoaded = 0;
+	if(!glNormalStream3sATI) bIsLoaded = 0;
 	glNormalStream3svATI = (PFNGLNORMALSTREAM3SVATIPROC)gleIntGetProcAddress("glNormalStream3svATI");
-	if(!TestPointer((const void*)glNormalStream3svATI)) bIsLoaded = 0;
+	if(!glNormalStream3svATI) bIsLoaded = 0;
 	glNormalStream3iATI = (PFNGLNORMALSTREAM3IATIPROC)gleIntGetProcAddress("glNormalStream3iATI");
-	if(!TestPointer((const void*)glNormalStream3iATI)) bIsLoaded = 0;
+	if(!glNormalStream3iATI) bIsLoaded = 0;
 	glNormalStream3ivATI = (PFNGLNORMALSTREAM3IVATIPROC)gleIntGetProcAddress("glNormalStream3ivATI");
-	if(!TestPointer((const void*)glNormalStream3ivATI)) bIsLoaded = 0;
+	if(!glNormalStream3ivATI) bIsLoaded = 0;
 	glNormalStream3fATI = (PFNGLNORMALSTREAM3FATIPROC)gleIntGetProcAddress("glNormalStream3fATI");
-	if(!TestPointer((const void*)glNormalStream3fATI)) bIsLoaded = 0;
+	if(!glNormalStream3fATI) bIsLoaded = 0;
 	glNormalStream3fvATI = (PFNGLNORMALSTREAM3FVATIPROC)gleIntGetProcAddress("glNormalStream3fvATI");
-	if(!TestPointer((const void*)glNormalStream3fvATI)) bIsLoaded = 0;
+	if(!glNormalStream3fvATI) bIsLoaded = 0;
 	glNormalStream3dATI = (PFNGLNORMALSTREAM3DATIPROC)gleIntGetProcAddress("glNormalStream3dATI");
-	if(!TestPointer((const void*)glNormalStream3dATI)) bIsLoaded = 0;
+	if(!glNormalStream3dATI) bIsLoaded = 0;
 	glNormalStream3dvATI = (PFNGLNORMALSTREAM3DVATIPROC)gleIntGetProcAddress("glNormalStream3dvATI");
-	if(!TestPointer((const void*)glNormalStream3dvATI)) bIsLoaded = 0;
+	if(!glNormalStream3dvATI) bIsLoaded = 0;
 	glClientActiveVertexStreamATI = (PFNGLCLIENTACTIVEVERTEXSTREAMATIPROC)gleIntGetProcAddress("glClientActiveVertexStreamATI");
-	if(!TestPointer((const void*)glClientActiveVertexStreamATI)) bIsLoaded = 0;
+	if(!glClientActiveVertexStreamATI) bIsLoaded = 0;
 	glVertexBlendEnviATI = (PFNGLVERTEXBLENDENVIATIPROC)gleIntGetProcAddress("glVertexBlendEnviATI");
-	if(!TestPointer((const void*)glVertexBlendEnviATI)) bIsLoaded = 0;
+	if(!glVertexBlendEnviATI) bIsLoaded = 0;
 	glVertexBlendEnvfATI = (PFNGLVERTEXBLENDENVFATIPROC)gleIntGetProcAddress("glVertexBlendEnvfATI");
-	if(!TestPointer((const void*)glVertexBlendEnvfATI)) bIsLoaded = 0;
+	if(!glVertexBlendEnvfATI) bIsLoaded = 0;
 #endif /*GL_ATI_vertex_streams*/
 	return bIsLoaded;
 }
@@ -4630,11 +4643,11 @@ static int gleIntLoad_EXT_bindable_uniform()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_bindable_uniform
 	glUniformBufferEXT = (PFNGLUNIFORMBUFFEREXTPROC)gleIntGetProcAddress("glUniformBufferEXT");
-	if(!TestPointer((const void*)glUniformBufferEXT)) bIsLoaded = 0;
+	if(!glUniformBufferEXT) bIsLoaded = 0;
 	glGetUniformBufferSizeEXT = (PFNGLGETUNIFORMBUFFERSIZEEXTPROC)gleIntGetProcAddress("glGetUniformBufferSizeEXT");
-	if(!TestPointer((const void*)glGetUniformBufferSizeEXT)) bIsLoaded = 0;
+	if(!glGetUniformBufferSizeEXT) bIsLoaded = 0;
 	glGetUniformOffsetEXT = (PFNGLGETUNIFORMOFFSETEXTPROC)gleIntGetProcAddress("glGetUniformOffsetEXT");
-	if(!TestPointer((const void*)glGetUniformOffsetEXT)) bIsLoaded = 0;
+	if(!glGetUniformOffsetEXT) bIsLoaded = 0;
 #endif /*GL_EXT_bindable_uniform*/
 	return bIsLoaded;
 }
@@ -4649,7 +4662,7 @@ static int gleIntLoad_EXT_blend_color()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_blend_color
 	glBlendColorEXT = (PFNGLBLENDCOLOREXTPROC)gleIntGetProcAddress("glBlendColorEXT");
-	if(!TestPointer((const void*)glBlendColorEXT)) bIsLoaded = 0;
+	if(!glBlendColorEXT) bIsLoaded = 0;
 #endif /*GL_EXT_blend_color*/
 	return bIsLoaded;
 }
@@ -4664,7 +4677,7 @@ static int gleIntLoad_EXT_blend_equation_separate()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_blend_equation_separate
 	glBlendEquationSeparateEXT = (PFNGLBLENDEQUATIONSEPARATEEXTPROC)gleIntGetProcAddress("glBlendEquationSeparateEXT");
-	if(!TestPointer((const void*)glBlendEquationSeparateEXT)) bIsLoaded = 0;
+	if(!glBlendEquationSeparateEXT) bIsLoaded = 0;
 #endif /*GL_EXT_blend_equation_separate*/
 	return bIsLoaded;
 }
@@ -4679,7 +4692,7 @@ static int gleIntLoad_EXT_blend_func_separate()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_blend_func_separate
 	glBlendFuncSeparateEXT = (PFNGLBLENDFUNCSEPARATEEXTPROC)gleIntGetProcAddress("glBlendFuncSeparateEXT");
-	if(!TestPointer((const void*)glBlendFuncSeparateEXT)) bIsLoaded = 0;
+	if(!glBlendFuncSeparateEXT) bIsLoaded = 0;
 #endif /*GL_EXT_blend_func_separate*/
 	return bIsLoaded;
 }
@@ -4695,7 +4708,7 @@ static int gleIntLoad_EXT_blend_minmax()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_blend_minmax
 	glBlendEquationEXT = (PFNGLBLENDEQUATIONEXTPROC)gleIntGetProcAddress("glBlendEquationEXT");
-	if(!TestPointer((const void*)glBlendEquationEXT)) bIsLoaded = 0;
+	if(!glBlendEquationEXT) bIsLoaded = 0;
 #endif /*GL_EXT_blend_minmax*/
 	return bIsLoaded;
 }
@@ -4715,9 +4728,9 @@ static int gleIntLoad_EXT_color_subtable()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_color_subtable
 	glColorSubTableEXT = (PFNGLCOLORSUBTABLEEXTPROC)gleIntGetProcAddress("glColorSubTableEXT");
-	if(!TestPointer((const void*)glColorSubTableEXT)) bIsLoaded = 0;
+	if(!glColorSubTableEXT) bIsLoaded = 0;
 	glCopyColorSubTableEXT = (PFNGLCOPYCOLORSUBTABLEEXTPROC)gleIntGetProcAddress("glCopyColorSubTableEXT");
-	if(!TestPointer((const void*)glCopyColorSubTableEXT)) bIsLoaded = 0;
+	if(!glCopyColorSubTableEXT) bIsLoaded = 0;
 #endif /*GL_EXT_color_subtable*/
 	return bIsLoaded;
 }
@@ -4734,9 +4747,9 @@ static int gleIntLoad_EXT_compiled_vertex_array()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_compiled_vertex_array
 	glLockArraysEXT = (PFNGLLOCKARRAYSEXTPROC)gleIntGetProcAddress("glLockArraysEXT");
-	if(!TestPointer((const void*)glLockArraysEXT)) bIsLoaded = 0;
+	if(!glLockArraysEXT) bIsLoaded = 0;
 	glUnlockArraysEXT = (PFNGLUNLOCKARRAYSEXTPROC)gleIntGetProcAddress("glUnlockArraysEXT");
-	if(!TestPointer((const void*)glUnlockArraysEXT)) bIsLoaded = 0;
+	if(!glUnlockArraysEXT) bIsLoaded = 0;
 #endif /*GL_EXT_compiled_vertex_array*/
 	return bIsLoaded;
 }
@@ -4775,31 +4788,31 @@ static int gleIntLoad_EXT_convolution()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_convolution
 	glConvolutionFilter1DEXT = (PFNGLCONVOLUTIONFILTER1DEXTPROC)gleIntGetProcAddress("glConvolutionFilter1DEXT");
-	if(!TestPointer((const void*)glConvolutionFilter1DEXT)) bIsLoaded = 0;
+	if(!glConvolutionFilter1DEXT) bIsLoaded = 0;
 	glConvolutionFilter2DEXT = (PFNGLCONVOLUTIONFILTER2DEXTPROC)gleIntGetProcAddress("glConvolutionFilter2DEXT");
-	if(!TestPointer((const void*)glConvolutionFilter2DEXT)) bIsLoaded = 0;
+	if(!glConvolutionFilter2DEXT) bIsLoaded = 0;
 	glConvolutionParameterfEXT = (PFNGLCONVOLUTIONPARAMETERFEXTPROC)gleIntGetProcAddress("glConvolutionParameterfEXT");
-	if(!TestPointer((const void*)glConvolutionParameterfEXT)) bIsLoaded = 0;
+	if(!glConvolutionParameterfEXT) bIsLoaded = 0;
 	glConvolutionParameterfvEXT = (PFNGLCONVOLUTIONPARAMETERFVEXTPROC)gleIntGetProcAddress("glConvolutionParameterfvEXT");
-	if(!TestPointer((const void*)glConvolutionParameterfvEXT)) bIsLoaded = 0;
+	if(!glConvolutionParameterfvEXT) bIsLoaded = 0;
 	glConvolutionParameteriEXT = (PFNGLCONVOLUTIONPARAMETERIEXTPROC)gleIntGetProcAddress("glConvolutionParameteriEXT");
-	if(!TestPointer((const void*)glConvolutionParameteriEXT)) bIsLoaded = 0;
+	if(!glConvolutionParameteriEXT) bIsLoaded = 0;
 	glConvolutionParameterivEXT = (PFNGLCONVOLUTIONPARAMETERIVEXTPROC)gleIntGetProcAddress("glConvolutionParameterivEXT");
-	if(!TestPointer((const void*)glConvolutionParameterivEXT)) bIsLoaded = 0;
+	if(!glConvolutionParameterivEXT) bIsLoaded = 0;
 	glCopyConvolutionFilter1DEXT = (PFNGLCOPYCONVOLUTIONFILTER1DEXTPROC)gleIntGetProcAddress("glCopyConvolutionFilter1DEXT");
-	if(!TestPointer((const void*)glCopyConvolutionFilter1DEXT)) bIsLoaded = 0;
+	if(!glCopyConvolutionFilter1DEXT) bIsLoaded = 0;
 	glCopyConvolutionFilter2DEXT = (PFNGLCOPYCONVOLUTIONFILTER2DEXTPROC)gleIntGetProcAddress("glCopyConvolutionFilter2DEXT");
-	if(!TestPointer((const void*)glCopyConvolutionFilter2DEXT)) bIsLoaded = 0;
+	if(!glCopyConvolutionFilter2DEXT) bIsLoaded = 0;
 	glGetConvolutionFilterEXT = (PFNGLGETCONVOLUTIONFILTEREXTPROC)gleIntGetProcAddress("glGetConvolutionFilterEXT");
-	if(!TestPointer((const void*)glGetConvolutionFilterEXT)) bIsLoaded = 0;
+	if(!glGetConvolutionFilterEXT) bIsLoaded = 0;
 	glGetConvolutionParameterfvEXT = (PFNGLGETCONVOLUTIONPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetConvolutionParameterfvEXT");
-	if(!TestPointer((const void*)glGetConvolutionParameterfvEXT)) bIsLoaded = 0;
+	if(!glGetConvolutionParameterfvEXT) bIsLoaded = 0;
 	glGetConvolutionParameterivEXT = (PFNGLGETCONVOLUTIONPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetConvolutionParameterivEXT");
-	if(!TestPointer((const void*)glGetConvolutionParameterivEXT)) bIsLoaded = 0;
+	if(!glGetConvolutionParameterivEXT) bIsLoaded = 0;
 	glGetSeparableFilterEXT = (PFNGLGETSEPARABLEFILTEREXTPROC)gleIntGetProcAddress("glGetSeparableFilterEXT");
-	if(!TestPointer((const void*)glGetSeparableFilterEXT)) bIsLoaded = 0;
+	if(!glGetSeparableFilterEXT) bIsLoaded = 0;
 	glSeparableFilter2DEXT = (PFNGLSEPARABLEFILTER2DEXTPROC)gleIntGetProcAddress("glSeparableFilter2DEXT");
-	if(!TestPointer((const void*)glSeparableFilter2DEXT)) bIsLoaded = 0;
+	if(!glSeparableFilter2DEXT) bIsLoaded = 0;
 #endif /*GL_EXT_convolution*/
 	return bIsLoaded;
 }
@@ -4856,49 +4869,49 @@ static int gleIntLoad_EXT_coordinate_frame()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_coordinate_frame
 	glTangent3bEXT = (PFNGLTANGENT3BEXTPROC)gleIntGetProcAddress("glTangent3bEXT");
-	if(!TestPointer((const void*)glTangent3bEXT)) bIsLoaded = 0;
+	if(!glTangent3bEXT) bIsLoaded = 0;
 	glTangent3bvEXT = (PFNGLTANGENT3BVEXTPROC)gleIntGetProcAddress("glTangent3bvEXT");
-	if(!TestPointer((const void*)glTangent3bvEXT)) bIsLoaded = 0;
+	if(!glTangent3bvEXT) bIsLoaded = 0;
 	glTangent3dEXT = (PFNGLTANGENT3DEXTPROC)gleIntGetProcAddress("glTangent3dEXT");
-	if(!TestPointer((const void*)glTangent3dEXT)) bIsLoaded = 0;
+	if(!glTangent3dEXT) bIsLoaded = 0;
 	glTangent3dvEXT = (PFNGLTANGENT3DVEXTPROC)gleIntGetProcAddress("glTangent3dvEXT");
-	if(!TestPointer((const void*)glTangent3dvEXT)) bIsLoaded = 0;
+	if(!glTangent3dvEXT) bIsLoaded = 0;
 	glTangent3fEXT = (PFNGLTANGENT3FEXTPROC)gleIntGetProcAddress("glTangent3fEXT");
-	if(!TestPointer((const void*)glTangent3fEXT)) bIsLoaded = 0;
+	if(!glTangent3fEXT) bIsLoaded = 0;
 	glTangent3fvEXT = (PFNGLTANGENT3FVEXTPROC)gleIntGetProcAddress("glTangent3fvEXT");
-	if(!TestPointer((const void*)glTangent3fvEXT)) bIsLoaded = 0;
+	if(!glTangent3fvEXT) bIsLoaded = 0;
 	glTangent3iEXT = (PFNGLTANGENT3IEXTPROC)gleIntGetProcAddress("glTangent3iEXT");
-	if(!TestPointer((const void*)glTangent3iEXT)) bIsLoaded = 0;
+	if(!glTangent3iEXT) bIsLoaded = 0;
 	glTangent3ivEXT = (PFNGLTANGENT3IVEXTPROC)gleIntGetProcAddress("glTangent3ivEXT");
-	if(!TestPointer((const void*)glTangent3ivEXT)) bIsLoaded = 0;
+	if(!glTangent3ivEXT) bIsLoaded = 0;
 	glTangent3sEXT = (PFNGLTANGENT3SEXTPROC)gleIntGetProcAddress("glTangent3sEXT");
-	if(!TestPointer((const void*)glTangent3sEXT)) bIsLoaded = 0;
+	if(!glTangent3sEXT) bIsLoaded = 0;
 	glTangent3svEXT = (PFNGLTANGENT3SVEXTPROC)gleIntGetProcAddress("glTangent3svEXT");
-	if(!TestPointer((const void*)glTangent3svEXT)) bIsLoaded = 0;
+	if(!glTangent3svEXT) bIsLoaded = 0;
 	glBinormal3bEXT = (PFNGLBINORMAL3BEXTPROC)gleIntGetProcAddress("glBinormal3bEXT");
-	if(!TestPointer((const void*)glBinormal3bEXT)) bIsLoaded = 0;
+	if(!glBinormal3bEXT) bIsLoaded = 0;
 	glBinormal3bvEXT = (PFNGLBINORMAL3BVEXTPROC)gleIntGetProcAddress("glBinormal3bvEXT");
-	if(!TestPointer((const void*)glBinormal3bvEXT)) bIsLoaded = 0;
+	if(!glBinormal3bvEXT) bIsLoaded = 0;
 	glBinormal3dEXT = (PFNGLBINORMAL3DEXTPROC)gleIntGetProcAddress("glBinormal3dEXT");
-	if(!TestPointer((const void*)glBinormal3dEXT)) bIsLoaded = 0;
+	if(!glBinormal3dEXT) bIsLoaded = 0;
 	glBinormal3dvEXT = (PFNGLBINORMAL3DVEXTPROC)gleIntGetProcAddress("glBinormal3dvEXT");
-	if(!TestPointer((const void*)glBinormal3dvEXT)) bIsLoaded = 0;
+	if(!glBinormal3dvEXT) bIsLoaded = 0;
 	glBinormal3fEXT = (PFNGLBINORMAL3FEXTPROC)gleIntGetProcAddress("glBinormal3fEXT");
-	if(!TestPointer((const void*)glBinormal3fEXT)) bIsLoaded = 0;
+	if(!glBinormal3fEXT) bIsLoaded = 0;
 	glBinormal3fvEXT = (PFNGLBINORMAL3FVEXTPROC)gleIntGetProcAddress("glBinormal3fvEXT");
-	if(!TestPointer((const void*)glBinormal3fvEXT)) bIsLoaded = 0;
+	if(!glBinormal3fvEXT) bIsLoaded = 0;
 	glBinormal3iEXT = (PFNGLBINORMAL3IEXTPROC)gleIntGetProcAddress("glBinormal3iEXT");
-	if(!TestPointer((const void*)glBinormal3iEXT)) bIsLoaded = 0;
+	if(!glBinormal3iEXT) bIsLoaded = 0;
 	glBinormal3ivEXT = (PFNGLBINORMAL3IVEXTPROC)gleIntGetProcAddress("glBinormal3ivEXT");
-	if(!TestPointer((const void*)glBinormal3ivEXT)) bIsLoaded = 0;
+	if(!glBinormal3ivEXT) bIsLoaded = 0;
 	glBinormal3sEXT = (PFNGLBINORMAL3SEXTPROC)gleIntGetProcAddress("glBinormal3sEXT");
-	if(!TestPointer((const void*)glBinormal3sEXT)) bIsLoaded = 0;
+	if(!glBinormal3sEXT) bIsLoaded = 0;
 	glBinormal3svEXT = (PFNGLBINORMAL3SVEXTPROC)gleIntGetProcAddress("glBinormal3svEXT");
-	if(!TestPointer((const void*)glBinormal3svEXT)) bIsLoaded = 0;
+	if(!glBinormal3svEXT) bIsLoaded = 0;
 	glTangentPointerEXT = (PFNGLTANGENTPOINTEREXTPROC)gleIntGetProcAddress("glTangentPointerEXT");
-	if(!TestPointer((const void*)glTangentPointerEXT)) bIsLoaded = 0;
+	if(!glTangentPointerEXT) bIsLoaded = 0;
 	glBinormalPointerEXT = (PFNGLBINORMALPOINTEREXTPROC)gleIntGetProcAddress("glBinormalPointerEXT");
-	if(!TestPointer((const void*)glBinormalPointerEXT)) bIsLoaded = 0;
+	if(!glBinormalPointerEXT) bIsLoaded = 0;
 #endif /*GL_EXT_coordinate_frame*/
 	return bIsLoaded;
 }
@@ -4921,15 +4934,15 @@ static int gleIntLoad_EXT_copy_texture()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_copy_texture
 	glCopyTexImage1DEXT = (PFNGLCOPYTEXIMAGE1DEXTPROC)gleIntGetProcAddress("glCopyTexImage1DEXT");
-	if(!TestPointer((const void*)glCopyTexImage1DEXT)) bIsLoaded = 0;
+	if(!glCopyTexImage1DEXT) bIsLoaded = 0;
 	glCopyTexImage2DEXT = (PFNGLCOPYTEXIMAGE2DEXTPROC)gleIntGetProcAddress("glCopyTexImage2DEXT");
-	if(!TestPointer((const void*)glCopyTexImage2DEXT)) bIsLoaded = 0;
+	if(!glCopyTexImage2DEXT) bIsLoaded = 0;
 	glCopyTexSubImage1DEXT = (PFNGLCOPYTEXSUBIMAGE1DEXTPROC)gleIntGetProcAddress("glCopyTexSubImage1DEXT");
-	if(!TestPointer((const void*)glCopyTexSubImage1DEXT)) bIsLoaded = 0;
+	if(!glCopyTexSubImage1DEXT) bIsLoaded = 0;
 	glCopyTexSubImage2DEXT = (PFNGLCOPYTEXSUBIMAGE2DEXTPROC)gleIntGetProcAddress("glCopyTexSubImage2DEXT");
-	if(!TestPointer((const void*)glCopyTexSubImage2DEXT)) bIsLoaded = 0;
+	if(!glCopyTexSubImage2DEXT) bIsLoaded = 0;
 	glCopyTexSubImage3DEXT = (PFNGLCOPYTEXSUBIMAGE3DEXTPROC)gleIntGetProcAddress("glCopyTexSubImage3DEXT");
-	if(!TestPointer((const void*)glCopyTexSubImage3DEXT)) bIsLoaded = 0;
+	if(!glCopyTexSubImage3DEXT) bIsLoaded = 0;
 #endif /*GL_EXT_copy_texture*/
 	return bIsLoaded;
 }
@@ -4946,9 +4959,9 @@ static int gleIntLoad_EXT_cull_vertex()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_cull_vertex
 	glCullParameterdvEXT = (PFNGLCULLPARAMETERDVEXTPROC)gleIntGetProcAddress("glCullParameterdvEXT");
-	if(!TestPointer((const void*)glCullParameterdvEXT)) bIsLoaded = 0;
+	if(!glCullParameterdvEXT) bIsLoaded = 0;
 	glCullParameterfvEXT = (PFNGLCULLPARAMETERFVEXTPROC)gleIntGetProcAddress("glCullParameterfvEXT");
-	if(!TestPointer((const void*)glCullParameterfvEXT)) bIsLoaded = 0;
+	if(!glCullParameterfvEXT) bIsLoaded = 0;
 #endif /*GL_EXT_cull_vertex*/
 	return bIsLoaded;
 }
@@ -4963,7 +4976,7 @@ static int gleIntLoad_EXT_depth_bounds_test()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_depth_bounds_test
 	glDepthBoundsEXT = (PFNGLDEPTHBOUNDSEXTPROC)gleIntGetProcAddress("glDepthBoundsEXT");
-	if(!TestPointer((const void*)glDepthBoundsEXT)) bIsLoaded = 0;
+	if(!glDepthBoundsEXT) bIsLoaded = 0;
 #endif /*GL_EXT_depth_bounds_test*/
 	return bIsLoaded;
 }
@@ -5388,417 +5401,417 @@ static int gleIntLoad_EXT_direct_state_access()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_direct_state_access
 	glClientAttribDefaultEXT = (PFNGLCLIENTATTRIBDEFAULTEXTPROC)gleIntGetProcAddress("glClientAttribDefaultEXT");
-	if(!TestPointer((const void*)glClientAttribDefaultEXT)) bIsLoaded = 0;
+	if(!glClientAttribDefaultEXT) bIsLoaded = 0;
 	glPushClientAttribDefaultEXT = (PFNGLPUSHCLIENTATTRIBDEFAULTEXTPROC)gleIntGetProcAddress("glPushClientAttribDefaultEXT");
-	if(!TestPointer((const void*)glPushClientAttribDefaultEXT)) bIsLoaded = 0;
+	if(!glPushClientAttribDefaultEXT) bIsLoaded = 0;
 	glMatrixLoadfEXT = (PFNGLMATRIXLOADFEXTPROC)gleIntGetProcAddress("glMatrixLoadfEXT");
-	if(!TestPointer((const void*)glMatrixLoadfEXT)) bIsLoaded = 0;
+	if(!glMatrixLoadfEXT) bIsLoaded = 0;
 	glMatrixLoaddEXT = (PFNGLMATRIXLOADDEXTPROC)gleIntGetProcAddress("glMatrixLoaddEXT");
-	if(!TestPointer((const void*)glMatrixLoaddEXT)) bIsLoaded = 0;
+	if(!glMatrixLoaddEXT) bIsLoaded = 0;
 	glMatrixMultfEXT = (PFNGLMATRIXMULTFEXTPROC)gleIntGetProcAddress("glMatrixMultfEXT");
-	if(!TestPointer((const void*)glMatrixMultfEXT)) bIsLoaded = 0;
+	if(!glMatrixMultfEXT) bIsLoaded = 0;
 	glMatrixMultdEXT = (PFNGLMATRIXMULTDEXTPROC)gleIntGetProcAddress("glMatrixMultdEXT");
-	if(!TestPointer((const void*)glMatrixMultdEXT)) bIsLoaded = 0;
+	if(!glMatrixMultdEXT) bIsLoaded = 0;
 	glMatrixLoadIdentityEXT = (PFNGLMATRIXLOADIDENTITYEXTPROC)gleIntGetProcAddress("glMatrixLoadIdentityEXT");
-	if(!TestPointer((const void*)glMatrixLoadIdentityEXT)) bIsLoaded = 0;
+	if(!glMatrixLoadIdentityEXT) bIsLoaded = 0;
 	glMatrixRotatefEXT = (PFNGLMATRIXROTATEFEXTPROC)gleIntGetProcAddress("glMatrixRotatefEXT");
-	if(!TestPointer((const void*)glMatrixRotatefEXT)) bIsLoaded = 0;
+	if(!glMatrixRotatefEXT) bIsLoaded = 0;
 	glMatrixRotatedEXT = (PFNGLMATRIXROTATEDEXTPROC)gleIntGetProcAddress("glMatrixRotatedEXT");
-	if(!TestPointer((const void*)glMatrixRotatedEXT)) bIsLoaded = 0;
+	if(!glMatrixRotatedEXT) bIsLoaded = 0;
 	glMatrixScalefEXT = (PFNGLMATRIXSCALEFEXTPROC)gleIntGetProcAddress("glMatrixScalefEXT");
-	if(!TestPointer((const void*)glMatrixScalefEXT)) bIsLoaded = 0;
+	if(!glMatrixScalefEXT) bIsLoaded = 0;
 	glMatrixScaledEXT = (PFNGLMATRIXSCALEDEXTPROC)gleIntGetProcAddress("glMatrixScaledEXT");
-	if(!TestPointer((const void*)glMatrixScaledEXT)) bIsLoaded = 0;
+	if(!glMatrixScaledEXT) bIsLoaded = 0;
 	glMatrixTranslatefEXT = (PFNGLMATRIXTRANSLATEFEXTPROC)gleIntGetProcAddress("glMatrixTranslatefEXT");
-	if(!TestPointer((const void*)glMatrixTranslatefEXT)) bIsLoaded = 0;
+	if(!glMatrixTranslatefEXT) bIsLoaded = 0;
 	glMatrixTranslatedEXT = (PFNGLMATRIXTRANSLATEDEXTPROC)gleIntGetProcAddress("glMatrixTranslatedEXT");
-	if(!TestPointer((const void*)glMatrixTranslatedEXT)) bIsLoaded = 0;
+	if(!glMatrixTranslatedEXT) bIsLoaded = 0;
 	glMatrixFrustumEXT = (PFNGLMATRIXFRUSTUMEXTPROC)gleIntGetProcAddress("glMatrixFrustumEXT");
-	if(!TestPointer((const void*)glMatrixFrustumEXT)) bIsLoaded = 0;
+	if(!glMatrixFrustumEXT) bIsLoaded = 0;
 	glMatrixOrthoEXT = (PFNGLMATRIXORTHOEXTPROC)gleIntGetProcAddress("glMatrixOrthoEXT");
-	if(!TestPointer((const void*)glMatrixOrthoEXT)) bIsLoaded = 0;
+	if(!glMatrixOrthoEXT) bIsLoaded = 0;
 	glMatrixPopEXT = (PFNGLMATRIXPOPEXTPROC)gleIntGetProcAddress("glMatrixPopEXT");
-	if(!TestPointer((const void*)glMatrixPopEXT)) bIsLoaded = 0;
+	if(!glMatrixPopEXT) bIsLoaded = 0;
 	glMatrixPushEXT = (PFNGLMATRIXPUSHEXTPROC)gleIntGetProcAddress("glMatrixPushEXT");
-	if(!TestPointer((const void*)glMatrixPushEXT)) bIsLoaded = 0;
+	if(!glMatrixPushEXT) bIsLoaded = 0;
 	glMatrixLoadTransposefEXT = (PFNGLMATRIXLOADTRANSPOSEFEXTPROC)gleIntGetProcAddress("glMatrixLoadTransposefEXT");
-	if(!TestPointer((const void*)glMatrixLoadTransposefEXT)) bIsLoaded = 0;
+	if(!glMatrixLoadTransposefEXT) bIsLoaded = 0;
 	glMatrixLoadTransposedEXT = (PFNGLMATRIXLOADTRANSPOSEDEXTPROC)gleIntGetProcAddress("glMatrixLoadTransposedEXT");
-	if(!TestPointer((const void*)glMatrixLoadTransposedEXT)) bIsLoaded = 0;
+	if(!glMatrixLoadTransposedEXT) bIsLoaded = 0;
 	glMatrixMultTransposefEXT = (PFNGLMATRIXMULTTRANSPOSEFEXTPROC)gleIntGetProcAddress("glMatrixMultTransposefEXT");
-	if(!TestPointer((const void*)glMatrixMultTransposefEXT)) bIsLoaded = 0;
+	if(!glMatrixMultTransposefEXT) bIsLoaded = 0;
 	glMatrixMultTransposedEXT = (PFNGLMATRIXMULTTRANSPOSEDEXTPROC)gleIntGetProcAddress("glMatrixMultTransposedEXT");
-	if(!TestPointer((const void*)glMatrixMultTransposedEXT)) bIsLoaded = 0;
+	if(!glMatrixMultTransposedEXT) bIsLoaded = 0;
 	glTextureParameterfEXT = (PFNGLTEXTUREPARAMETERFEXTPROC)gleIntGetProcAddress("glTextureParameterfEXT");
-	if(!TestPointer((const void*)glTextureParameterfEXT)) bIsLoaded = 0;
+	if(!glTextureParameterfEXT) bIsLoaded = 0;
 	glTextureParameterfvEXT = (PFNGLTEXTUREPARAMETERFVEXTPROC)gleIntGetProcAddress("glTextureParameterfvEXT");
-	if(!TestPointer((const void*)glTextureParameterfvEXT)) bIsLoaded = 0;
+	if(!glTextureParameterfvEXT) bIsLoaded = 0;
 	glTextureParameteriEXT = (PFNGLTEXTUREPARAMETERIEXTPROC)gleIntGetProcAddress("glTextureParameteriEXT");
-	if(!TestPointer((const void*)glTextureParameteriEXT)) bIsLoaded = 0;
+	if(!glTextureParameteriEXT) bIsLoaded = 0;
 	glTextureParameterivEXT = (PFNGLTEXTUREPARAMETERIVEXTPROC)gleIntGetProcAddress("glTextureParameterivEXT");
-	if(!TestPointer((const void*)glTextureParameterivEXT)) bIsLoaded = 0;
+	if(!glTextureParameterivEXT) bIsLoaded = 0;
 	glTextureImage1DEXT = (PFNGLTEXTUREIMAGE1DEXTPROC)gleIntGetProcAddress("glTextureImage1DEXT");
-	if(!TestPointer((const void*)glTextureImage1DEXT)) bIsLoaded = 0;
+	if(!glTextureImage1DEXT) bIsLoaded = 0;
 	glTextureImage2DEXT = (PFNGLTEXTUREIMAGE2DEXTPROC)gleIntGetProcAddress("glTextureImage2DEXT");
-	if(!TestPointer((const void*)glTextureImage2DEXT)) bIsLoaded = 0;
+	if(!glTextureImage2DEXT) bIsLoaded = 0;
 	glTextureSubImage1DEXT = (PFNGLTEXTURESUBIMAGE1DEXTPROC)gleIntGetProcAddress("glTextureSubImage1DEXT");
-	if(!TestPointer((const void*)glTextureSubImage1DEXT)) bIsLoaded = 0;
+	if(!glTextureSubImage1DEXT) bIsLoaded = 0;
 	glTextureSubImage2DEXT = (PFNGLTEXTURESUBIMAGE2DEXTPROC)gleIntGetProcAddress("glTextureSubImage2DEXT");
-	if(!TestPointer((const void*)glTextureSubImage2DEXT)) bIsLoaded = 0;
+	if(!glTextureSubImage2DEXT) bIsLoaded = 0;
 	glCopyTextureImage1DEXT = (PFNGLCOPYTEXTUREIMAGE1DEXTPROC)gleIntGetProcAddress("glCopyTextureImage1DEXT");
-	if(!TestPointer((const void*)glCopyTextureImage1DEXT)) bIsLoaded = 0;
+	if(!glCopyTextureImage1DEXT) bIsLoaded = 0;
 	glCopyTextureImage2DEXT = (PFNGLCOPYTEXTUREIMAGE2DEXTPROC)gleIntGetProcAddress("glCopyTextureImage2DEXT");
-	if(!TestPointer((const void*)glCopyTextureImage2DEXT)) bIsLoaded = 0;
+	if(!glCopyTextureImage2DEXT) bIsLoaded = 0;
 	glCopyTextureSubImage1DEXT = (PFNGLCOPYTEXTURESUBIMAGE1DEXTPROC)gleIntGetProcAddress("glCopyTextureSubImage1DEXT");
-	if(!TestPointer((const void*)glCopyTextureSubImage1DEXT)) bIsLoaded = 0;
+	if(!glCopyTextureSubImage1DEXT) bIsLoaded = 0;
 	glCopyTextureSubImage2DEXT = (PFNGLCOPYTEXTURESUBIMAGE2DEXTPROC)gleIntGetProcAddress("glCopyTextureSubImage2DEXT");
-	if(!TestPointer((const void*)glCopyTextureSubImage2DEXT)) bIsLoaded = 0;
+	if(!glCopyTextureSubImage2DEXT) bIsLoaded = 0;
 	glGetTextureImageEXT = (PFNGLGETTEXTUREIMAGEEXTPROC)gleIntGetProcAddress("glGetTextureImageEXT");
-	if(!TestPointer((const void*)glGetTextureImageEXT)) bIsLoaded = 0;
+	if(!glGetTextureImageEXT) bIsLoaded = 0;
 	glGetTextureParameterfvEXT = (PFNGLGETTEXTUREPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetTextureParameterfvEXT");
-	if(!TestPointer((const void*)glGetTextureParameterfvEXT)) bIsLoaded = 0;
+	if(!glGetTextureParameterfvEXT) bIsLoaded = 0;
 	glGetTextureParameterivEXT = (PFNGLGETTEXTUREPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetTextureParameterivEXT");
-	if(!TestPointer((const void*)glGetTextureParameterivEXT)) bIsLoaded = 0;
+	if(!glGetTextureParameterivEXT) bIsLoaded = 0;
 	glGetTextureLevelParameterfvEXT = (PFNGLGETTEXTURELEVELPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetTextureLevelParameterfvEXT");
-	if(!TestPointer((const void*)glGetTextureLevelParameterfvEXT)) bIsLoaded = 0;
+	if(!glGetTextureLevelParameterfvEXT) bIsLoaded = 0;
 	glGetTextureLevelParameterivEXT = (PFNGLGETTEXTURELEVELPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetTextureLevelParameterivEXT");
-	if(!TestPointer((const void*)glGetTextureLevelParameterivEXT)) bIsLoaded = 0;
+	if(!glGetTextureLevelParameterivEXT) bIsLoaded = 0;
 	glTextureImage3DEXT = (PFNGLTEXTUREIMAGE3DEXTPROC)gleIntGetProcAddress("glTextureImage3DEXT");
-	if(!TestPointer((const void*)glTextureImage3DEXT)) bIsLoaded = 0;
+	if(!glTextureImage3DEXT) bIsLoaded = 0;
 	glTextureSubImage3DEXT = (PFNGLTEXTURESUBIMAGE3DEXTPROC)gleIntGetProcAddress("glTextureSubImage3DEXT");
-	if(!TestPointer((const void*)glTextureSubImage3DEXT)) bIsLoaded = 0;
+	if(!glTextureSubImage3DEXT) bIsLoaded = 0;
 	glCopyTextureSubImage3DEXT = (PFNGLCOPYTEXTURESUBIMAGE3DEXTPROC)gleIntGetProcAddress("glCopyTextureSubImage3DEXT");
-	if(!TestPointer((const void*)glCopyTextureSubImage3DEXT)) bIsLoaded = 0;
+	if(!glCopyTextureSubImage3DEXT) bIsLoaded = 0;
 	glMultiTexParameterfEXT = (PFNGLMULTITEXPARAMETERFEXTPROC)gleIntGetProcAddress("glMultiTexParameterfEXT");
-	if(!TestPointer((const void*)glMultiTexParameterfEXT)) bIsLoaded = 0;
+	if(!glMultiTexParameterfEXT) bIsLoaded = 0;
 	glMultiTexParameterfvEXT = (PFNGLMULTITEXPARAMETERFVEXTPROC)gleIntGetProcAddress("glMultiTexParameterfvEXT");
-	if(!TestPointer((const void*)glMultiTexParameterfvEXT)) bIsLoaded = 0;
+	if(!glMultiTexParameterfvEXT) bIsLoaded = 0;
 	glMultiTexParameteriEXT = (PFNGLMULTITEXPARAMETERIEXTPROC)gleIntGetProcAddress("glMultiTexParameteriEXT");
-	if(!TestPointer((const void*)glMultiTexParameteriEXT)) bIsLoaded = 0;
+	if(!glMultiTexParameteriEXT) bIsLoaded = 0;
 	glMultiTexParameterivEXT = (PFNGLMULTITEXPARAMETERIVEXTPROC)gleIntGetProcAddress("glMultiTexParameterivEXT");
-	if(!TestPointer((const void*)glMultiTexParameterivEXT)) bIsLoaded = 0;
+	if(!glMultiTexParameterivEXT) bIsLoaded = 0;
 	glMultiTexImage1DEXT = (PFNGLMULTITEXIMAGE1DEXTPROC)gleIntGetProcAddress("glMultiTexImage1DEXT");
-	if(!TestPointer((const void*)glMultiTexImage1DEXT)) bIsLoaded = 0;
+	if(!glMultiTexImage1DEXT) bIsLoaded = 0;
 	glMultiTexImage2DEXT = (PFNGLMULTITEXIMAGE2DEXTPROC)gleIntGetProcAddress("glMultiTexImage2DEXT");
-	if(!TestPointer((const void*)glMultiTexImage2DEXT)) bIsLoaded = 0;
+	if(!glMultiTexImage2DEXT) bIsLoaded = 0;
 	glMultiTexSubImage1DEXT = (PFNGLMULTITEXSUBIMAGE1DEXTPROC)gleIntGetProcAddress("glMultiTexSubImage1DEXT");
-	if(!TestPointer((const void*)glMultiTexSubImage1DEXT)) bIsLoaded = 0;
+	if(!glMultiTexSubImage1DEXT) bIsLoaded = 0;
 	glMultiTexSubImage2DEXT = (PFNGLMULTITEXSUBIMAGE2DEXTPROC)gleIntGetProcAddress("glMultiTexSubImage2DEXT");
-	if(!TestPointer((const void*)glMultiTexSubImage2DEXT)) bIsLoaded = 0;
+	if(!glMultiTexSubImage2DEXT) bIsLoaded = 0;
 	glCopyMultiTexImage1DEXT = (PFNGLCOPYMULTITEXIMAGE1DEXTPROC)gleIntGetProcAddress("glCopyMultiTexImage1DEXT");
-	if(!TestPointer((const void*)glCopyMultiTexImage1DEXT)) bIsLoaded = 0;
+	if(!glCopyMultiTexImage1DEXT) bIsLoaded = 0;
 	glCopyMultiTexImage2DEXT = (PFNGLCOPYMULTITEXIMAGE2DEXTPROC)gleIntGetProcAddress("glCopyMultiTexImage2DEXT");
-	if(!TestPointer((const void*)glCopyMultiTexImage2DEXT)) bIsLoaded = 0;
+	if(!glCopyMultiTexImage2DEXT) bIsLoaded = 0;
 	glCopyMultiTexSubImage1DEXT = (PFNGLCOPYMULTITEXSUBIMAGE1DEXTPROC)gleIntGetProcAddress("glCopyMultiTexSubImage1DEXT");
-	if(!TestPointer((const void*)glCopyMultiTexSubImage1DEXT)) bIsLoaded = 0;
+	if(!glCopyMultiTexSubImage1DEXT) bIsLoaded = 0;
 	glCopyMultiTexSubImage2DEXT = (PFNGLCOPYMULTITEXSUBIMAGE2DEXTPROC)gleIntGetProcAddress("glCopyMultiTexSubImage2DEXT");
-	if(!TestPointer((const void*)glCopyMultiTexSubImage2DEXT)) bIsLoaded = 0;
+	if(!glCopyMultiTexSubImage2DEXT) bIsLoaded = 0;
 	glGetMultiTexImageEXT = (PFNGLGETMULTITEXIMAGEEXTPROC)gleIntGetProcAddress("glGetMultiTexImageEXT");
-	if(!TestPointer((const void*)glGetMultiTexImageEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexImageEXT) bIsLoaded = 0;
 	glGetMultiTexParameterfvEXT = (PFNGLGETMULTITEXPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetMultiTexParameterfvEXT");
-	if(!TestPointer((const void*)glGetMultiTexParameterfvEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexParameterfvEXT) bIsLoaded = 0;
 	glGetMultiTexParameterivEXT = (PFNGLGETMULTITEXPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetMultiTexParameterivEXT");
-	if(!TestPointer((const void*)glGetMultiTexParameterivEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexParameterivEXT) bIsLoaded = 0;
 	glGetMultiTexLevelParameterfvEXT = (PFNGLGETMULTITEXLEVELPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetMultiTexLevelParameterfvEXT");
-	if(!TestPointer((const void*)glGetMultiTexLevelParameterfvEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexLevelParameterfvEXT) bIsLoaded = 0;
 	glGetMultiTexLevelParameterivEXT = (PFNGLGETMULTITEXLEVELPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetMultiTexLevelParameterivEXT");
-	if(!TestPointer((const void*)glGetMultiTexLevelParameterivEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexLevelParameterivEXT) bIsLoaded = 0;
 	glMultiTexImage3DEXT = (PFNGLMULTITEXIMAGE3DEXTPROC)gleIntGetProcAddress("glMultiTexImage3DEXT");
-	if(!TestPointer((const void*)glMultiTexImage3DEXT)) bIsLoaded = 0;
+	if(!glMultiTexImage3DEXT) bIsLoaded = 0;
 	glMultiTexSubImage3DEXT = (PFNGLMULTITEXSUBIMAGE3DEXTPROC)gleIntGetProcAddress("glMultiTexSubImage3DEXT");
-	if(!TestPointer((const void*)glMultiTexSubImage3DEXT)) bIsLoaded = 0;
+	if(!glMultiTexSubImage3DEXT) bIsLoaded = 0;
 	glCopyMultiTexSubImage3DEXT = (PFNGLCOPYMULTITEXSUBIMAGE3DEXTPROC)gleIntGetProcAddress("glCopyMultiTexSubImage3DEXT");
-	if(!TestPointer((const void*)glCopyMultiTexSubImage3DEXT)) bIsLoaded = 0;
+	if(!glCopyMultiTexSubImage3DEXT) bIsLoaded = 0;
 	glBindMultiTextureEXT = (PFNGLBINDMULTITEXTUREEXTPROC)gleIntGetProcAddress("glBindMultiTextureEXT");
-	if(!TestPointer((const void*)glBindMultiTextureEXT)) bIsLoaded = 0;
+	if(!glBindMultiTextureEXT) bIsLoaded = 0;
 	glEnableClientStateIndexedEXT = (PFNGLENABLECLIENTSTATEINDEXEDEXTPROC)gleIntGetProcAddress("glEnableClientStateIndexedEXT");
-	if(!TestPointer((const void*)glEnableClientStateIndexedEXT)) bIsLoaded = 0;
+	if(!glEnableClientStateIndexedEXT) bIsLoaded = 0;
 	glDisableClientStateIndexedEXT = (PFNGLDISABLECLIENTSTATEINDEXEDEXTPROC)gleIntGetProcAddress("glDisableClientStateIndexedEXT");
-	if(!TestPointer((const void*)glDisableClientStateIndexedEXT)) bIsLoaded = 0;
+	if(!glDisableClientStateIndexedEXT) bIsLoaded = 0;
 	glMultiTexCoordPointerEXT = (PFNGLMULTITEXCOORDPOINTEREXTPROC)gleIntGetProcAddress("glMultiTexCoordPointerEXT");
-	if(!TestPointer((const void*)glMultiTexCoordPointerEXT)) bIsLoaded = 0;
+	if(!glMultiTexCoordPointerEXT) bIsLoaded = 0;
 	glMultiTexEnvfEXT = (PFNGLMULTITEXENVFEXTPROC)gleIntGetProcAddress("glMultiTexEnvfEXT");
-	if(!TestPointer((const void*)glMultiTexEnvfEXT)) bIsLoaded = 0;
+	if(!glMultiTexEnvfEXT) bIsLoaded = 0;
 	glMultiTexEnvfvEXT = (PFNGLMULTITEXENVFVEXTPROC)gleIntGetProcAddress("glMultiTexEnvfvEXT");
-	if(!TestPointer((const void*)glMultiTexEnvfvEXT)) bIsLoaded = 0;
+	if(!glMultiTexEnvfvEXT) bIsLoaded = 0;
 	glMultiTexEnviEXT = (PFNGLMULTITEXENVIEXTPROC)gleIntGetProcAddress("glMultiTexEnviEXT");
-	if(!TestPointer((const void*)glMultiTexEnviEXT)) bIsLoaded = 0;
+	if(!glMultiTexEnviEXT) bIsLoaded = 0;
 	glMultiTexEnvivEXT = (PFNGLMULTITEXENVIVEXTPROC)gleIntGetProcAddress("glMultiTexEnvivEXT");
-	if(!TestPointer((const void*)glMultiTexEnvivEXT)) bIsLoaded = 0;
+	if(!glMultiTexEnvivEXT) bIsLoaded = 0;
 	glMultiTexGendEXT = (PFNGLMULTITEXGENDEXTPROC)gleIntGetProcAddress("glMultiTexGendEXT");
-	if(!TestPointer((const void*)glMultiTexGendEXT)) bIsLoaded = 0;
+	if(!glMultiTexGendEXT) bIsLoaded = 0;
 	glMultiTexGendvEXT = (PFNGLMULTITEXGENDVEXTPROC)gleIntGetProcAddress("glMultiTexGendvEXT");
-	if(!TestPointer((const void*)glMultiTexGendvEXT)) bIsLoaded = 0;
+	if(!glMultiTexGendvEXT) bIsLoaded = 0;
 	glMultiTexGenfEXT = (PFNGLMULTITEXGENFEXTPROC)gleIntGetProcAddress("glMultiTexGenfEXT");
-	if(!TestPointer((const void*)glMultiTexGenfEXT)) bIsLoaded = 0;
+	if(!glMultiTexGenfEXT) bIsLoaded = 0;
 	glMultiTexGenfvEXT = (PFNGLMULTITEXGENFVEXTPROC)gleIntGetProcAddress("glMultiTexGenfvEXT");
-	if(!TestPointer((const void*)glMultiTexGenfvEXT)) bIsLoaded = 0;
+	if(!glMultiTexGenfvEXT) bIsLoaded = 0;
 	glMultiTexGeniEXT = (PFNGLMULTITEXGENIEXTPROC)gleIntGetProcAddress("glMultiTexGeniEXT");
-	if(!TestPointer((const void*)glMultiTexGeniEXT)) bIsLoaded = 0;
+	if(!glMultiTexGeniEXT) bIsLoaded = 0;
 	glMultiTexGenivEXT = (PFNGLMULTITEXGENIVEXTPROC)gleIntGetProcAddress("glMultiTexGenivEXT");
-	if(!TestPointer((const void*)glMultiTexGenivEXT)) bIsLoaded = 0;
+	if(!glMultiTexGenivEXT) bIsLoaded = 0;
 	glGetMultiTexEnvfvEXT = (PFNGLGETMULTITEXENVFVEXTPROC)gleIntGetProcAddress("glGetMultiTexEnvfvEXT");
-	if(!TestPointer((const void*)glGetMultiTexEnvfvEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexEnvfvEXT) bIsLoaded = 0;
 	glGetMultiTexEnvivEXT = (PFNGLGETMULTITEXENVIVEXTPROC)gleIntGetProcAddress("glGetMultiTexEnvivEXT");
-	if(!TestPointer((const void*)glGetMultiTexEnvivEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexEnvivEXT) bIsLoaded = 0;
 	glGetMultiTexGendvEXT = (PFNGLGETMULTITEXGENDVEXTPROC)gleIntGetProcAddress("glGetMultiTexGendvEXT");
-	if(!TestPointer((const void*)glGetMultiTexGendvEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexGendvEXT) bIsLoaded = 0;
 	glGetMultiTexGenfvEXT = (PFNGLGETMULTITEXGENFVEXTPROC)gleIntGetProcAddress("glGetMultiTexGenfvEXT");
-	if(!TestPointer((const void*)glGetMultiTexGenfvEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexGenfvEXT) bIsLoaded = 0;
 	glGetMultiTexGenivEXT = (PFNGLGETMULTITEXGENIVEXTPROC)gleIntGetProcAddress("glGetMultiTexGenivEXT");
-	if(!TestPointer((const void*)glGetMultiTexGenivEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexGenivEXT) bIsLoaded = 0;
 	glGetFloatIndexedvEXT = (PFNGLGETFLOATINDEXEDVEXTPROC)gleIntGetProcAddress("glGetFloatIndexedvEXT");
-	if(!TestPointer((const void*)glGetFloatIndexedvEXT)) bIsLoaded = 0;
+	if(!glGetFloatIndexedvEXT) bIsLoaded = 0;
 	glGetDoubleIndexedvEXT = (PFNGLGETDOUBLEINDEXEDVEXTPROC)gleIntGetProcAddress("glGetDoubleIndexedvEXT");
-	if(!TestPointer((const void*)glGetDoubleIndexedvEXT)) bIsLoaded = 0;
+	if(!glGetDoubleIndexedvEXT) bIsLoaded = 0;
 	glGetPointerIndexedvEXT = (PFNGLGETPOINTERINDEXEDVEXTPROC)gleIntGetProcAddress("glGetPointerIndexedvEXT");
-	if(!TestPointer((const void*)glGetPointerIndexedvEXT)) bIsLoaded = 0;
+	if(!glGetPointerIndexedvEXT) bIsLoaded = 0;
 	glCompressedTextureImage3DEXT = (PFNGLCOMPRESSEDTEXTUREIMAGE3DEXTPROC)gleIntGetProcAddress("glCompressedTextureImage3DEXT");
-	if(!TestPointer((const void*)glCompressedTextureImage3DEXT)) bIsLoaded = 0;
+	if(!glCompressedTextureImage3DEXT) bIsLoaded = 0;
 	glCompressedTextureImage2DEXT = (PFNGLCOMPRESSEDTEXTUREIMAGE2DEXTPROC)gleIntGetProcAddress("glCompressedTextureImage2DEXT");
-	if(!TestPointer((const void*)glCompressedTextureImage2DEXT)) bIsLoaded = 0;
+	if(!glCompressedTextureImage2DEXT) bIsLoaded = 0;
 	glCompressedTextureImage1DEXT = (PFNGLCOMPRESSEDTEXTUREIMAGE1DEXTPROC)gleIntGetProcAddress("glCompressedTextureImage1DEXT");
-	if(!TestPointer((const void*)glCompressedTextureImage1DEXT)) bIsLoaded = 0;
+	if(!glCompressedTextureImage1DEXT) bIsLoaded = 0;
 	glCompressedTextureSubImage3DEXT = (PFNGLCOMPRESSEDTEXTURESUBIMAGE3DEXTPROC)gleIntGetProcAddress("glCompressedTextureSubImage3DEXT");
-	if(!TestPointer((const void*)glCompressedTextureSubImage3DEXT)) bIsLoaded = 0;
+	if(!glCompressedTextureSubImage3DEXT) bIsLoaded = 0;
 	glCompressedTextureSubImage2DEXT = (PFNGLCOMPRESSEDTEXTURESUBIMAGE2DEXTPROC)gleIntGetProcAddress("glCompressedTextureSubImage2DEXT");
-	if(!TestPointer((const void*)glCompressedTextureSubImage2DEXT)) bIsLoaded = 0;
+	if(!glCompressedTextureSubImage2DEXT) bIsLoaded = 0;
 	glCompressedTextureSubImage1DEXT = (PFNGLCOMPRESSEDTEXTURESUBIMAGE1DEXTPROC)gleIntGetProcAddress("glCompressedTextureSubImage1DEXT");
-	if(!TestPointer((const void*)glCompressedTextureSubImage1DEXT)) bIsLoaded = 0;
+	if(!glCompressedTextureSubImage1DEXT) bIsLoaded = 0;
 	glGetCompressedTextureImageEXT = (PFNGLGETCOMPRESSEDTEXTUREIMAGEEXTPROC)gleIntGetProcAddress("glGetCompressedTextureImageEXT");
-	if(!TestPointer((const void*)glGetCompressedTextureImageEXT)) bIsLoaded = 0;
+	if(!glGetCompressedTextureImageEXT) bIsLoaded = 0;
 	glCompressedMultiTexImage3DEXT = (PFNGLCOMPRESSEDMULTITEXIMAGE3DEXTPROC)gleIntGetProcAddress("glCompressedMultiTexImage3DEXT");
-	if(!TestPointer((const void*)glCompressedMultiTexImage3DEXT)) bIsLoaded = 0;
+	if(!glCompressedMultiTexImage3DEXT) bIsLoaded = 0;
 	glCompressedMultiTexImage2DEXT = (PFNGLCOMPRESSEDMULTITEXIMAGE2DEXTPROC)gleIntGetProcAddress("glCompressedMultiTexImage2DEXT");
-	if(!TestPointer((const void*)glCompressedMultiTexImage2DEXT)) bIsLoaded = 0;
+	if(!glCompressedMultiTexImage2DEXT) bIsLoaded = 0;
 	glCompressedMultiTexImage1DEXT = (PFNGLCOMPRESSEDMULTITEXIMAGE1DEXTPROC)gleIntGetProcAddress("glCompressedMultiTexImage1DEXT");
-	if(!TestPointer((const void*)glCompressedMultiTexImage1DEXT)) bIsLoaded = 0;
+	if(!glCompressedMultiTexImage1DEXT) bIsLoaded = 0;
 	glCompressedMultiTexSubImage3DEXT = (PFNGLCOMPRESSEDMULTITEXSUBIMAGE3DEXTPROC)gleIntGetProcAddress("glCompressedMultiTexSubImage3DEXT");
-	if(!TestPointer((const void*)glCompressedMultiTexSubImage3DEXT)) bIsLoaded = 0;
+	if(!glCompressedMultiTexSubImage3DEXT) bIsLoaded = 0;
 	glCompressedMultiTexSubImage2DEXT = (PFNGLCOMPRESSEDMULTITEXSUBIMAGE2DEXTPROC)gleIntGetProcAddress("glCompressedMultiTexSubImage2DEXT");
-	if(!TestPointer((const void*)glCompressedMultiTexSubImage2DEXT)) bIsLoaded = 0;
+	if(!glCompressedMultiTexSubImage2DEXT) bIsLoaded = 0;
 	glCompressedMultiTexSubImage1DEXT = (PFNGLCOMPRESSEDMULTITEXSUBIMAGE1DEXTPROC)gleIntGetProcAddress("glCompressedMultiTexSubImage1DEXT");
-	if(!TestPointer((const void*)glCompressedMultiTexSubImage1DEXT)) bIsLoaded = 0;
+	if(!glCompressedMultiTexSubImage1DEXT) bIsLoaded = 0;
 	glGetCompressedMultiTexImageEXT = (PFNGLGETCOMPRESSEDMULTITEXIMAGEEXTPROC)gleIntGetProcAddress("glGetCompressedMultiTexImageEXT");
-	if(!TestPointer((const void*)glGetCompressedMultiTexImageEXT)) bIsLoaded = 0;
+	if(!glGetCompressedMultiTexImageEXT) bIsLoaded = 0;
 	glNamedProgramStringEXT = (PFNGLNAMEDPROGRAMSTRINGEXTPROC)gleIntGetProcAddress("glNamedProgramStringEXT");
-	if(!TestPointer((const void*)glNamedProgramStringEXT)) bIsLoaded = 0;
+	if(!glNamedProgramStringEXT) bIsLoaded = 0;
 	glNamedProgramLocalParameter4dEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETER4DEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParameter4dEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParameter4dEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParameter4dEXT) bIsLoaded = 0;
 	glNamedProgramLocalParameter4dvEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETER4DVEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParameter4dvEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParameter4dvEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParameter4dvEXT) bIsLoaded = 0;
 	glNamedProgramLocalParameter4fEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETER4FEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParameter4fEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParameter4fEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParameter4fEXT) bIsLoaded = 0;
 	glNamedProgramLocalParameter4fvEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETER4FVEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParameter4fvEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParameter4fvEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParameter4fvEXT) bIsLoaded = 0;
 	glGetNamedProgramLocalParameterdvEXT = (PFNGLGETNAMEDPROGRAMLOCALPARAMETERDVEXTPROC)gleIntGetProcAddress("glGetNamedProgramLocalParameterdvEXT");
-	if(!TestPointer((const void*)glGetNamedProgramLocalParameterdvEXT)) bIsLoaded = 0;
+	if(!glGetNamedProgramLocalParameterdvEXT) bIsLoaded = 0;
 	glGetNamedProgramLocalParameterfvEXT = (PFNGLGETNAMEDPROGRAMLOCALPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetNamedProgramLocalParameterfvEXT");
-	if(!TestPointer((const void*)glGetNamedProgramLocalParameterfvEXT)) bIsLoaded = 0;
+	if(!glGetNamedProgramLocalParameterfvEXT) bIsLoaded = 0;
 	glGetNamedProgramivEXT = (PFNGLGETNAMEDPROGRAMIVEXTPROC)gleIntGetProcAddress("glGetNamedProgramivEXT");
-	if(!TestPointer((const void*)glGetNamedProgramivEXT)) bIsLoaded = 0;
+	if(!glGetNamedProgramivEXT) bIsLoaded = 0;
 	glGetNamedProgramStringEXT = (PFNGLGETNAMEDPROGRAMSTRINGEXTPROC)gleIntGetProcAddress("glGetNamedProgramStringEXT");
-	if(!TestPointer((const void*)glGetNamedProgramStringEXT)) bIsLoaded = 0;
+	if(!glGetNamedProgramStringEXT) bIsLoaded = 0;
 	glNamedProgramLocalParameters4fvEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETERS4FVEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParameters4fvEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParameters4fvEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParameters4fvEXT) bIsLoaded = 0;
 	glNamedProgramLocalParameterI4iEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETERI4IEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParameterI4iEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParameterI4iEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParameterI4iEXT) bIsLoaded = 0;
 	glNamedProgramLocalParameterI4ivEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETERI4IVEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParameterI4ivEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParameterI4ivEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParameterI4ivEXT) bIsLoaded = 0;
 	glNamedProgramLocalParametersI4ivEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETERSI4IVEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParametersI4ivEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParametersI4ivEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParametersI4ivEXT) bIsLoaded = 0;
 	glNamedProgramLocalParameterI4uiEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETERI4UIEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParameterI4uiEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParameterI4uiEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParameterI4uiEXT) bIsLoaded = 0;
 	glNamedProgramLocalParameterI4uivEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETERI4UIVEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParameterI4uivEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParameterI4uivEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParameterI4uivEXT) bIsLoaded = 0;
 	glNamedProgramLocalParametersI4uivEXT = (PFNGLNAMEDPROGRAMLOCALPARAMETERSI4UIVEXTPROC)gleIntGetProcAddress("glNamedProgramLocalParametersI4uivEXT");
-	if(!TestPointer((const void*)glNamedProgramLocalParametersI4uivEXT)) bIsLoaded = 0;
+	if(!glNamedProgramLocalParametersI4uivEXT) bIsLoaded = 0;
 	glGetNamedProgramLocalParameterIivEXT = (PFNGLGETNAMEDPROGRAMLOCALPARAMETERIIVEXTPROC)gleIntGetProcAddress("glGetNamedProgramLocalParameterIivEXT");
-	if(!TestPointer((const void*)glGetNamedProgramLocalParameterIivEXT)) bIsLoaded = 0;
+	if(!glGetNamedProgramLocalParameterIivEXT) bIsLoaded = 0;
 	glGetNamedProgramLocalParameterIuivEXT = (PFNGLGETNAMEDPROGRAMLOCALPARAMETERIUIVEXTPROC)gleIntGetProcAddress("glGetNamedProgramLocalParameterIuivEXT");
-	if(!TestPointer((const void*)glGetNamedProgramLocalParameterIuivEXT)) bIsLoaded = 0;
+	if(!glGetNamedProgramLocalParameterIuivEXT) bIsLoaded = 0;
 	glTextureParameterIivEXT = (PFNGLTEXTUREPARAMETERIIVEXTPROC)gleIntGetProcAddress("glTextureParameterIivEXT");
-	if(!TestPointer((const void*)glTextureParameterIivEXT)) bIsLoaded = 0;
+	if(!glTextureParameterIivEXT) bIsLoaded = 0;
 	glTextureParameterIuivEXT = (PFNGLTEXTUREPARAMETERIUIVEXTPROC)gleIntGetProcAddress("glTextureParameterIuivEXT");
-	if(!TestPointer((const void*)glTextureParameterIuivEXT)) bIsLoaded = 0;
+	if(!glTextureParameterIuivEXT) bIsLoaded = 0;
 	glGetTextureParameterIivEXT = (PFNGLGETTEXTUREPARAMETERIIVEXTPROC)gleIntGetProcAddress("glGetTextureParameterIivEXT");
-	if(!TestPointer((const void*)glGetTextureParameterIivEXT)) bIsLoaded = 0;
+	if(!glGetTextureParameterIivEXT) bIsLoaded = 0;
 	glGetTextureParameterIuivEXT = (PFNGLGETTEXTUREPARAMETERIUIVEXTPROC)gleIntGetProcAddress("glGetTextureParameterIuivEXT");
-	if(!TestPointer((const void*)glGetTextureParameterIuivEXT)) bIsLoaded = 0;
+	if(!glGetTextureParameterIuivEXT) bIsLoaded = 0;
 	glMultiTexParameterIivEXT = (PFNGLMULTITEXPARAMETERIIVEXTPROC)gleIntGetProcAddress("glMultiTexParameterIivEXT");
-	if(!TestPointer((const void*)glMultiTexParameterIivEXT)) bIsLoaded = 0;
+	if(!glMultiTexParameterIivEXT) bIsLoaded = 0;
 	glMultiTexParameterIuivEXT = (PFNGLMULTITEXPARAMETERIUIVEXTPROC)gleIntGetProcAddress("glMultiTexParameterIuivEXT");
-	if(!TestPointer((const void*)glMultiTexParameterIuivEXT)) bIsLoaded = 0;
+	if(!glMultiTexParameterIuivEXT) bIsLoaded = 0;
 	glGetMultiTexParameterIivEXT = (PFNGLGETMULTITEXPARAMETERIIVEXTPROC)gleIntGetProcAddress("glGetMultiTexParameterIivEXT");
-	if(!TestPointer((const void*)glGetMultiTexParameterIivEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexParameterIivEXT) bIsLoaded = 0;
 	glGetMultiTexParameterIuivEXT = (PFNGLGETMULTITEXPARAMETERIUIVEXTPROC)gleIntGetProcAddress("glGetMultiTexParameterIuivEXT");
-	if(!TestPointer((const void*)glGetMultiTexParameterIuivEXT)) bIsLoaded = 0;
+	if(!glGetMultiTexParameterIuivEXT) bIsLoaded = 0;
 	glProgramUniform1fEXT = (PFNGLPROGRAMUNIFORM1FEXTPROC)gleIntGetProcAddress("glProgramUniform1fEXT");
-	if(!TestPointer((const void*)glProgramUniform1fEXT)) bIsLoaded = 0;
+	if(!glProgramUniform1fEXT) bIsLoaded = 0;
 	glProgramUniform2fEXT = (PFNGLPROGRAMUNIFORM2FEXTPROC)gleIntGetProcAddress("glProgramUniform2fEXT");
-	if(!TestPointer((const void*)glProgramUniform2fEXT)) bIsLoaded = 0;
+	if(!glProgramUniform2fEXT) bIsLoaded = 0;
 	glProgramUniform3fEXT = (PFNGLPROGRAMUNIFORM3FEXTPROC)gleIntGetProcAddress("glProgramUniform3fEXT");
-	if(!TestPointer((const void*)glProgramUniform3fEXT)) bIsLoaded = 0;
+	if(!glProgramUniform3fEXT) bIsLoaded = 0;
 	glProgramUniform4fEXT = (PFNGLPROGRAMUNIFORM4FEXTPROC)gleIntGetProcAddress("glProgramUniform4fEXT");
-	if(!TestPointer((const void*)glProgramUniform4fEXT)) bIsLoaded = 0;
+	if(!glProgramUniform4fEXT) bIsLoaded = 0;
 	glProgramUniform1iEXT = (PFNGLPROGRAMUNIFORM1IEXTPROC)gleIntGetProcAddress("glProgramUniform1iEXT");
-	if(!TestPointer((const void*)glProgramUniform1iEXT)) bIsLoaded = 0;
+	if(!glProgramUniform1iEXT) bIsLoaded = 0;
 	glProgramUniform2iEXT = (PFNGLPROGRAMUNIFORM2IEXTPROC)gleIntGetProcAddress("glProgramUniform2iEXT");
-	if(!TestPointer((const void*)glProgramUniform2iEXT)) bIsLoaded = 0;
+	if(!glProgramUniform2iEXT) bIsLoaded = 0;
 	glProgramUniform3iEXT = (PFNGLPROGRAMUNIFORM3IEXTPROC)gleIntGetProcAddress("glProgramUniform3iEXT");
-	if(!TestPointer((const void*)glProgramUniform3iEXT)) bIsLoaded = 0;
+	if(!glProgramUniform3iEXT) bIsLoaded = 0;
 	glProgramUniform4iEXT = (PFNGLPROGRAMUNIFORM4IEXTPROC)gleIntGetProcAddress("glProgramUniform4iEXT");
-	if(!TestPointer((const void*)glProgramUniform4iEXT)) bIsLoaded = 0;
+	if(!glProgramUniform4iEXT) bIsLoaded = 0;
 	glProgramUniform1fvEXT = (PFNGLPROGRAMUNIFORM1FVEXTPROC)gleIntGetProcAddress("glProgramUniform1fvEXT");
-	if(!TestPointer((const void*)glProgramUniform1fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniform1fvEXT) bIsLoaded = 0;
 	glProgramUniform2fvEXT = (PFNGLPROGRAMUNIFORM2FVEXTPROC)gleIntGetProcAddress("glProgramUniform2fvEXT");
-	if(!TestPointer((const void*)glProgramUniform2fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniform2fvEXT) bIsLoaded = 0;
 	glProgramUniform3fvEXT = (PFNGLPROGRAMUNIFORM3FVEXTPROC)gleIntGetProcAddress("glProgramUniform3fvEXT");
-	if(!TestPointer((const void*)glProgramUniform3fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniform3fvEXT) bIsLoaded = 0;
 	glProgramUniform4fvEXT = (PFNGLPROGRAMUNIFORM4FVEXTPROC)gleIntGetProcAddress("glProgramUniform4fvEXT");
-	if(!TestPointer((const void*)glProgramUniform4fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniform4fvEXT) bIsLoaded = 0;
 	glProgramUniform1ivEXT = (PFNGLPROGRAMUNIFORM1IVEXTPROC)gleIntGetProcAddress("glProgramUniform1ivEXT");
-	if(!TestPointer((const void*)glProgramUniform1ivEXT)) bIsLoaded = 0;
+	if(!glProgramUniform1ivEXT) bIsLoaded = 0;
 	glProgramUniform2ivEXT = (PFNGLPROGRAMUNIFORM2IVEXTPROC)gleIntGetProcAddress("glProgramUniform2ivEXT");
-	if(!TestPointer((const void*)glProgramUniform2ivEXT)) bIsLoaded = 0;
+	if(!glProgramUniform2ivEXT) bIsLoaded = 0;
 	glProgramUniform3ivEXT = (PFNGLPROGRAMUNIFORM3IVEXTPROC)gleIntGetProcAddress("glProgramUniform3ivEXT");
-	if(!TestPointer((const void*)glProgramUniform3ivEXT)) bIsLoaded = 0;
+	if(!glProgramUniform3ivEXT) bIsLoaded = 0;
 	glProgramUniform4ivEXT = (PFNGLPROGRAMUNIFORM4IVEXTPROC)gleIntGetProcAddress("glProgramUniform4ivEXT");
-	if(!TestPointer((const void*)glProgramUniform4ivEXT)) bIsLoaded = 0;
+	if(!glProgramUniform4ivEXT) bIsLoaded = 0;
 	glProgramUniformMatrix2fvEXT = (PFNGLPROGRAMUNIFORMMATRIX2FVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix2fvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix2fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix2fvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix3fvEXT = (PFNGLPROGRAMUNIFORMMATRIX3FVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix3fvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix3fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix3fvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix4fvEXT = (PFNGLPROGRAMUNIFORMMATRIX4FVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix4fvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix4fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix4fvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix2x3fvEXT = (PFNGLPROGRAMUNIFORMMATRIX2X3FVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix2x3fvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix2x3fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix2x3fvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix3x2fvEXT = (PFNGLPROGRAMUNIFORMMATRIX3X2FVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix3x2fvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix3x2fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix3x2fvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix2x4fvEXT = (PFNGLPROGRAMUNIFORMMATRIX2X4FVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix2x4fvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix2x4fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix2x4fvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix4x2fvEXT = (PFNGLPROGRAMUNIFORMMATRIX4X2FVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix4x2fvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix4x2fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix4x2fvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix3x4fvEXT = (PFNGLPROGRAMUNIFORMMATRIX3X4FVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix3x4fvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix3x4fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix3x4fvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix4x3fvEXT = (PFNGLPROGRAMUNIFORMMATRIX4X3FVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix4x3fvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix4x3fvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix4x3fvEXT) bIsLoaded = 0;
 	glProgramUniform1uiEXT = (PFNGLPROGRAMUNIFORM1UIEXTPROC)gleIntGetProcAddress("glProgramUniform1uiEXT");
-	if(!TestPointer((const void*)glProgramUniform1uiEXT)) bIsLoaded = 0;
+	if(!glProgramUniform1uiEXT) bIsLoaded = 0;
 	glProgramUniform2uiEXT = (PFNGLPROGRAMUNIFORM2UIEXTPROC)gleIntGetProcAddress("glProgramUniform2uiEXT");
-	if(!TestPointer((const void*)glProgramUniform2uiEXT)) bIsLoaded = 0;
+	if(!glProgramUniform2uiEXT) bIsLoaded = 0;
 	glProgramUniform3uiEXT = (PFNGLPROGRAMUNIFORM3UIEXTPROC)gleIntGetProcAddress("glProgramUniform3uiEXT");
-	if(!TestPointer((const void*)glProgramUniform3uiEXT)) bIsLoaded = 0;
+	if(!glProgramUniform3uiEXT) bIsLoaded = 0;
 	glProgramUniform4uiEXT = (PFNGLPROGRAMUNIFORM4UIEXTPROC)gleIntGetProcAddress("glProgramUniform4uiEXT");
-	if(!TestPointer((const void*)glProgramUniform4uiEXT)) bIsLoaded = 0;
+	if(!glProgramUniform4uiEXT) bIsLoaded = 0;
 	glProgramUniform1uivEXT = (PFNGLPROGRAMUNIFORM1UIVEXTPROC)gleIntGetProcAddress("glProgramUniform1uivEXT");
-	if(!TestPointer((const void*)glProgramUniform1uivEXT)) bIsLoaded = 0;
+	if(!glProgramUniform1uivEXT) bIsLoaded = 0;
 	glProgramUniform2uivEXT = (PFNGLPROGRAMUNIFORM2UIVEXTPROC)gleIntGetProcAddress("glProgramUniform2uivEXT");
-	if(!TestPointer((const void*)glProgramUniform2uivEXT)) bIsLoaded = 0;
+	if(!glProgramUniform2uivEXT) bIsLoaded = 0;
 	glProgramUniform3uivEXT = (PFNGLPROGRAMUNIFORM3UIVEXTPROC)gleIntGetProcAddress("glProgramUniform3uivEXT");
-	if(!TestPointer((const void*)glProgramUniform3uivEXT)) bIsLoaded = 0;
+	if(!glProgramUniform3uivEXT) bIsLoaded = 0;
 	glProgramUniform4uivEXT = (PFNGLPROGRAMUNIFORM4UIVEXTPROC)gleIntGetProcAddress("glProgramUniform4uivEXT");
-	if(!TestPointer((const void*)glProgramUniform4uivEXT)) bIsLoaded = 0;
+	if(!glProgramUniform4uivEXT) bIsLoaded = 0;
 	glNamedBufferDataEXT = (PFNGLNAMEDBUFFERDATAEXTPROC)gleIntGetProcAddress("glNamedBufferDataEXT");
-	if(!TestPointer((const void*)glNamedBufferDataEXT)) bIsLoaded = 0;
+	if(!glNamedBufferDataEXT) bIsLoaded = 0;
 	glNamedBufferSubDataEXT = (PFNGLNAMEDBUFFERSUBDATAEXTPROC)gleIntGetProcAddress("glNamedBufferSubDataEXT");
-	if(!TestPointer((const void*)glNamedBufferSubDataEXT)) bIsLoaded = 0;
+	if(!glNamedBufferSubDataEXT) bIsLoaded = 0;
 	glMapNamedBufferEXT = (PFNGLMAPNAMEDBUFFEREXTPROC)gleIntGetProcAddress("glMapNamedBufferEXT");
-	if(!TestPointer((const void*)glMapNamedBufferEXT)) bIsLoaded = 0;
+	if(!glMapNamedBufferEXT) bIsLoaded = 0;
 	glUnmapNamedBufferEXT = (PFNGLUNMAPNAMEDBUFFEREXTPROC)gleIntGetProcAddress("glUnmapNamedBufferEXT");
-	if(!TestPointer((const void*)glUnmapNamedBufferEXT)) bIsLoaded = 0;
+	if(!glUnmapNamedBufferEXT) bIsLoaded = 0;
 	glMapNamedBufferRangeEXT = (PFNGLMAPNAMEDBUFFERRANGEEXTPROC)gleIntGetProcAddress("glMapNamedBufferRangeEXT");
-	if(!TestPointer((const void*)glMapNamedBufferRangeEXT)) bIsLoaded = 0;
+	if(!glMapNamedBufferRangeEXT) bIsLoaded = 0;
 	glFlushMappedNamedBufferRangeEXT = (PFNGLFLUSHMAPPEDNAMEDBUFFERRANGEEXTPROC)gleIntGetProcAddress("glFlushMappedNamedBufferRangeEXT");
-	if(!TestPointer((const void*)glFlushMappedNamedBufferRangeEXT)) bIsLoaded = 0;
+	if(!glFlushMappedNamedBufferRangeEXT) bIsLoaded = 0;
 	glNamedCopyBufferSubDataEXT = (PFNGLNAMEDCOPYBUFFERSUBDATAEXTPROC)gleIntGetProcAddress("glNamedCopyBufferSubDataEXT");
-	if(!TestPointer((const void*)glNamedCopyBufferSubDataEXT)) bIsLoaded = 0;
+	if(!glNamedCopyBufferSubDataEXT) bIsLoaded = 0;
 	glGetNamedBufferParameterivEXT = (PFNGLGETNAMEDBUFFERPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetNamedBufferParameterivEXT");
-	if(!TestPointer((const void*)glGetNamedBufferParameterivEXT)) bIsLoaded = 0;
+	if(!glGetNamedBufferParameterivEXT) bIsLoaded = 0;
 	glGetNamedBufferPointervEXT = (PFNGLGETNAMEDBUFFERPOINTERVEXTPROC)gleIntGetProcAddress("glGetNamedBufferPointervEXT");
-	if(!TestPointer((const void*)glGetNamedBufferPointervEXT)) bIsLoaded = 0;
+	if(!glGetNamedBufferPointervEXT) bIsLoaded = 0;
 	glGetNamedBufferSubDataEXT = (PFNGLGETNAMEDBUFFERSUBDATAEXTPROC)gleIntGetProcAddress("glGetNamedBufferSubDataEXT");
-	if(!TestPointer((const void*)glGetNamedBufferSubDataEXT)) bIsLoaded = 0;
+	if(!glGetNamedBufferSubDataEXT) bIsLoaded = 0;
 	glTextureBufferEXT = (PFNGLTEXTUREBUFFEREXTPROC)gleIntGetProcAddress("glTextureBufferEXT");
-	if(!TestPointer((const void*)glTextureBufferEXT)) bIsLoaded = 0;
+	if(!glTextureBufferEXT) bIsLoaded = 0;
 	glMultiTexBufferEXT = (PFNGLMULTITEXBUFFEREXTPROC)gleIntGetProcAddress("glMultiTexBufferEXT");
-	if(!TestPointer((const void*)glMultiTexBufferEXT)) bIsLoaded = 0;
+	if(!glMultiTexBufferEXT) bIsLoaded = 0;
 	glNamedRenderbufferStorageEXT = (PFNGLNAMEDRENDERBUFFERSTORAGEEXTPROC)gleIntGetProcAddress("glNamedRenderbufferStorageEXT");
-	if(!TestPointer((const void*)glNamedRenderbufferStorageEXT)) bIsLoaded = 0;
+	if(!glNamedRenderbufferStorageEXT) bIsLoaded = 0;
 	glGetNamedRenderbufferParameterivEXT = (PFNGLGETNAMEDRENDERBUFFERPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetNamedRenderbufferParameterivEXT");
-	if(!TestPointer((const void*)glGetNamedRenderbufferParameterivEXT)) bIsLoaded = 0;
+	if(!glGetNamedRenderbufferParameterivEXT) bIsLoaded = 0;
 	glCheckNamedFramebufferStatusEXT = (PFNGLCHECKNAMEDFRAMEBUFFERSTATUSEXTPROC)gleIntGetProcAddress("glCheckNamedFramebufferStatusEXT");
-	if(!TestPointer((const void*)glCheckNamedFramebufferStatusEXT)) bIsLoaded = 0;
+	if(!glCheckNamedFramebufferStatusEXT) bIsLoaded = 0;
 	glNamedFramebufferTexture1DEXT = (PFNGLNAMEDFRAMEBUFFERTEXTURE1DEXTPROC)gleIntGetProcAddress("glNamedFramebufferTexture1DEXT");
-	if(!TestPointer((const void*)glNamedFramebufferTexture1DEXT)) bIsLoaded = 0;
+	if(!glNamedFramebufferTexture1DEXT) bIsLoaded = 0;
 	glNamedFramebufferTexture2DEXT = (PFNGLNAMEDFRAMEBUFFERTEXTURE2DEXTPROC)gleIntGetProcAddress("glNamedFramebufferTexture2DEXT");
-	if(!TestPointer((const void*)glNamedFramebufferTexture2DEXT)) bIsLoaded = 0;
+	if(!glNamedFramebufferTexture2DEXT) bIsLoaded = 0;
 	glNamedFramebufferTexture3DEXT = (PFNGLNAMEDFRAMEBUFFERTEXTURE3DEXTPROC)gleIntGetProcAddress("glNamedFramebufferTexture3DEXT");
-	if(!TestPointer((const void*)glNamedFramebufferTexture3DEXT)) bIsLoaded = 0;
+	if(!glNamedFramebufferTexture3DEXT) bIsLoaded = 0;
 	glNamedFramebufferRenderbufferEXT = (PFNGLNAMEDFRAMEBUFFERRENDERBUFFEREXTPROC)gleIntGetProcAddress("glNamedFramebufferRenderbufferEXT");
-	if(!TestPointer((const void*)glNamedFramebufferRenderbufferEXT)) bIsLoaded = 0;
+	if(!glNamedFramebufferRenderbufferEXT) bIsLoaded = 0;
 	glGetNamedFramebufferAttachmentParameterivEXT = (PFNGLGETNAMEDFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetNamedFramebufferAttachmentParameterivEXT");
-	if(!TestPointer((const void*)glGetNamedFramebufferAttachmentParameterivEXT)) bIsLoaded = 0;
+	if(!glGetNamedFramebufferAttachmentParameterivEXT) bIsLoaded = 0;
 	glGenerateTextureMipmapEXT = (PFNGLGENERATETEXTUREMIPMAPEXTPROC)gleIntGetProcAddress("glGenerateTextureMipmapEXT");
-	if(!TestPointer((const void*)glGenerateTextureMipmapEXT)) bIsLoaded = 0;
+	if(!glGenerateTextureMipmapEXT) bIsLoaded = 0;
 	glGenerateMultiTexMipmapEXT = (PFNGLGENERATEMULTITEXMIPMAPEXTPROC)gleIntGetProcAddress("glGenerateMultiTexMipmapEXT");
-	if(!TestPointer((const void*)glGenerateMultiTexMipmapEXT)) bIsLoaded = 0;
+	if(!glGenerateMultiTexMipmapEXT) bIsLoaded = 0;
 	glFramebufferDrawBufferEXT = (PFNGLFRAMEBUFFERDRAWBUFFEREXTPROC)gleIntGetProcAddress("glFramebufferDrawBufferEXT");
-	if(!TestPointer((const void*)glFramebufferDrawBufferEXT)) bIsLoaded = 0;
+	if(!glFramebufferDrawBufferEXT) bIsLoaded = 0;
 	glFramebufferDrawBuffersEXT = (PFNGLFRAMEBUFFERDRAWBUFFERSEXTPROC)gleIntGetProcAddress("glFramebufferDrawBuffersEXT");
-	if(!TestPointer((const void*)glFramebufferDrawBuffersEXT)) bIsLoaded = 0;
+	if(!glFramebufferDrawBuffersEXT) bIsLoaded = 0;
 	glFramebufferReadBufferEXT = (PFNGLFRAMEBUFFERREADBUFFEREXTPROC)gleIntGetProcAddress("glFramebufferReadBufferEXT");
-	if(!TestPointer((const void*)glFramebufferReadBufferEXT)) bIsLoaded = 0;
+	if(!glFramebufferReadBufferEXT) bIsLoaded = 0;
 	glGetFramebufferParameterivEXT = (PFNGLGETFRAMEBUFFERPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetFramebufferParameterivEXT");
-	if(!TestPointer((const void*)glGetFramebufferParameterivEXT)) bIsLoaded = 0;
+	if(!glGetFramebufferParameterivEXT) bIsLoaded = 0;
 	glNamedRenderbufferStorageMultisampleEXT = (PFNGLNAMEDRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC)gleIntGetProcAddress("glNamedRenderbufferStorageMultisampleEXT");
-	if(!TestPointer((const void*)glNamedRenderbufferStorageMultisampleEXT)) bIsLoaded = 0;
+	if(!glNamedRenderbufferStorageMultisampleEXT) bIsLoaded = 0;
 	glNamedRenderbufferStorageMultisampleCoverageEXT = (PFNGLNAMEDRENDERBUFFERSTORAGEMULTISAMPLECOVERAGEEXTPROC)gleIntGetProcAddress("glNamedRenderbufferStorageMultisampleCoverageEXT");
-	if(!TestPointer((const void*)glNamedRenderbufferStorageMultisampleCoverageEXT)) bIsLoaded = 0;
+	if(!glNamedRenderbufferStorageMultisampleCoverageEXT) bIsLoaded = 0;
 	glNamedFramebufferTextureEXT = (PFNGLNAMEDFRAMEBUFFERTEXTUREEXTPROC)gleIntGetProcAddress("glNamedFramebufferTextureEXT");
-	if(!TestPointer((const void*)glNamedFramebufferTextureEXT)) bIsLoaded = 0;
+	if(!glNamedFramebufferTextureEXT) bIsLoaded = 0;
 	glNamedFramebufferTextureLayerEXT = (PFNGLNAMEDFRAMEBUFFERTEXTURELAYEREXTPROC)gleIntGetProcAddress("glNamedFramebufferTextureLayerEXT");
-	if(!TestPointer((const void*)glNamedFramebufferTextureLayerEXT)) bIsLoaded = 0;
+	if(!glNamedFramebufferTextureLayerEXT) bIsLoaded = 0;
 	glNamedFramebufferTextureFaceEXT = (PFNGLNAMEDFRAMEBUFFERTEXTUREFACEEXTPROC)gleIntGetProcAddress("glNamedFramebufferTextureFaceEXT");
-	if(!TestPointer((const void*)glNamedFramebufferTextureFaceEXT)) bIsLoaded = 0;
+	if(!glNamedFramebufferTextureFaceEXT) bIsLoaded = 0;
 	glTextureRenderbufferEXT = (PFNGLTEXTURERENDERBUFFEREXTPROC)gleIntGetProcAddress("glTextureRenderbufferEXT");
-	if(!TestPointer((const void*)glTextureRenderbufferEXT)) bIsLoaded = 0;
+	if(!glTextureRenderbufferEXT) bIsLoaded = 0;
 	glMultiTexRenderbufferEXT = (PFNGLMULTITEXRENDERBUFFEREXTPROC)gleIntGetProcAddress("glMultiTexRenderbufferEXT");
-	if(!TestPointer((const void*)glMultiTexRenderbufferEXT)) bIsLoaded = 0;
+	if(!glMultiTexRenderbufferEXT) bIsLoaded = 0;
 	glProgramUniform1dEXT = (PFNGLPROGRAMUNIFORM1DEXTPROC)gleIntGetProcAddress("glProgramUniform1dEXT");
-	if(!TestPointer((const void*)glProgramUniform1dEXT)) bIsLoaded = 0;
+	if(!glProgramUniform1dEXT) bIsLoaded = 0;
 	glProgramUniform2dEXT = (PFNGLPROGRAMUNIFORM2DEXTPROC)gleIntGetProcAddress("glProgramUniform2dEXT");
-	if(!TestPointer((const void*)glProgramUniform2dEXT)) bIsLoaded = 0;
+	if(!glProgramUniform2dEXT) bIsLoaded = 0;
 	glProgramUniform3dEXT = (PFNGLPROGRAMUNIFORM3DEXTPROC)gleIntGetProcAddress("glProgramUniform3dEXT");
-	if(!TestPointer((const void*)glProgramUniform3dEXT)) bIsLoaded = 0;
+	if(!glProgramUniform3dEXT) bIsLoaded = 0;
 	glProgramUniform4dEXT = (PFNGLPROGRAMUNIFORM4DEXTPROC)gleIntGetProcAddress("glProgramUniform4dEXT");
-	if(!TestPointer((const void*)glProgramUniform4dEXT)) bIsLoaded = 0;
+	if(!glProgramUniform4dEXT) bIsLoaded = 0;
 	glProgramUniform1dvEXT = (PFNGLPROGRAMUNIFORM1DVEXTPROC)gleIntGetProcAddress("glProgramUniform1dvEXT");
-	if(!TestPointer((const void*)glProgramUniform1dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniform1dvEXT) bIsLoaded = 0;
 	glProgramUniform2dvEXT = (PFNGLPROGRAMUNIFORM2DVEXTPROC)gleIntGetProcAddress("glProgramUniform2dvEXT");
-	if(!TestPointer((const void*)glProgramUniform2dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniform2dvEXT) bIsLoaded = 0;
 	glProgramUniform3dvEXT = (PFNGLPROGRAMUNIFORM3DVEXTPROC)gleIntGetProcAddress("glProgramUniform3dvEXT");
-	if(!TestPointer((const void*)glProgramUniform3dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniform3dvEXT) bIsLoaded = 0;
 	glProgramUniform4dvEXT = (PFNGLPROGRAMUNIFORM4DVEXTPROC)gleIntGetProcAddress("glProgramUniform4dvEXT");
-	if(!TestPointer((const void*)glProgramUniform4dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniform4dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix2dvEXT = (PFNGLPROGRAMUNIFORMMATRIX2DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix2dvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix2dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix2dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix3dvEXT = (PFNGLPROGRAMUNIFORMMATRIX3DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix3dvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix3dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix3dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix4dvEXT = (PFNGLPROGRAMUNIFORMMATRIX4DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix4dvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix4dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix4dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix2x3dvEXT = (PFNGLPROGRAMUNIFORMMATRIX2X3DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix2x3dvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix2x3dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix2x3dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix2x4dvEXT = (PFNGLPROGRAMUNIFORMMATRIX2X4DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix2x4dvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix2x4dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix2x4dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix3x2dvEXT = (PFNGLPROGRAMUNIFORMMATRIX3X2DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix3x2dvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix3x2dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix3x2dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix3x4dvEXT = (PFNGLPROGRAMUNIFORMMATRIX3X4DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix3x4dvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix3x4dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix3x4dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix4x2dvEXT = (PFNGLPROGRAMUNIFORMMATRIX4X2DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix4x2dvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix4x2dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix4x2dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix4x3dvEXT = (PFNGLPROGRAMUNIFORMMATRIX4X3DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix4x3dvEXT");
-	if(!TestPointer((const void*)glProgramUniformMatrix4x3dvEXT)) bIsLoaded = 0;
+	if(!glProgramUniformMatrix4x3dvEXT) bIsLoaded = 0;
 #endif /*GL_EXT_direct_state_access*/
 	return bIsLoaded;
 }
@@ -5823,17 +5836,17 @@ static int gleIntLoad_EXT_draw_buffers2()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_draw_buffers2
 	glColorMaskIndexedEXT = (PFNGLCOLORMASKINDEXEDEXTPROC)gleIntGetProcAddress("glColorMaskIndexedEXT");
-	if(!TestPointer((const void*)glColorMaskIndexedEXT)) bIsLoaded = 0;
+	if(!glColorMaskIndexedEXT) bIsLoaded = 0;
 	glGetBooleanIndexedvEXT = (PFNGLGETBOOLEANINDEXEDVEXTPROC)gleIntGetProcAddress("glGetBooleanIndexedvEXT");
-	if(!TestPointer((const void*)glGetBooleanIndexedvEXT)) bIsLoaded = 0;
+	if(!glGetBooleanIndexedvEXT) bIsLoaded = 0;
 	glGetIntegerIndexedvEXT = (PFNGLGETINTEGERINDEXEDVEXTPROC)gleIntGetProcAddress("glGetIntegerIndexedvEXT");
-	if(!TestPointer((const void*)glGetIntegerIndexedvEXT)) bIsLoaded = 0;
+	if(!glGetIntegerIndexedvEXT) bIsLoaded = 0;
 	glEnableIndexedEXT = (PFNGLENABLEINDEXEDEXTPROC)gleIntGetProcAddress("glEnableIndexedEXT");
-	if(!TestPointer((const void*)glEnableIndexedEXT)) bIsLoaded = 0;
+	if(!glEnableIndexedEXT) bIsLoaded = 0;
 	glDisableIndexedEXT = (PFNGLDISABLEINDEXEDEXTPROC)gleIntGetProcAddress("glDisableIndexedEXT");
-	if(!TestPointer((const void*)glDisableIndexedEXT)) bIsLoaded = 0;
+	if(!glDisableIndexedEXT) bIsLoaded = 0;
 	glIsEnabledIndexedEXT = (PFNGLISENABLEDINDEXEDEXTPROC)gleIntGetProcAddress("glIsEnabledIndexedEXT");
-	if(!TestPointer((const void*)glIsEnabledIndexedEXT)) bIsLoaded = 0;
+	if(!glIsEnabledIndexedEXT) bIsLoaded = 0;
 #endif /*GL_EXT_draw_buffers2*/
 	return bIsLoaded;
 }
@@ -5850,9 +5863,9 @@ static int gleIntLoad_EXT_draw_instanced()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_draw_instanced
 	glDrawArraysInstancedEXT = (PFNGLDRAWARRAYSINSTANCEDEXTPROC)gleIntGetProcAddress("glDrawArraysInstancedEXT");
-	if(!TestPointer((const void*)glDrawArraysInstancedEXT)) bIsLoaded = 0;
+	if(!glDrawArraysInstancedEXT) bIsLoaded = 0;
 	glDrawElementsInstancedEXT = (PFNGLDRAWELEMENTSINSTANCEDEXTPROC)gleIntGetProcAddress("glDrawElementsInstancedEXT");
-	if(!TestPointer((const void*)glDrawElementsInstancedEXT)) bIsLoaded = 0;
+	if(!glDrawElementsInstancedEXT) bIsLoaded = 0;
 #endif /*GL_EXT_draw_instanced*/
 	return bIsLoaded;
 }
@@ -5867,7 +5880,7 @@ static int gleIntLoad_EXT_draw_range_elements()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_draw_range_elements
 	glDrawRangeElementsEXT = (PFNGLDRAWRANGEELEMENTSEXTPROC)gleIntGetProcAddress("glDrawRangeElementsEXT");
-	if(!TestPointer((const void*)glDrawRangeElementsEXT)) bIsLoaded = 0;
+	if(!glDrawRangeElementsEXT) bIsLoaded = 0;
 #endif /*GL_EXT_draw_range_elements*/
 	return bIsLoaded;
 }
@@ -5890,15 +5903,15 @@ static int gleIntLoad_EXT_fog_coord()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_fog_coord
 	glFogCoordfEXT = (PFNGLFOGCOORDFEXTPROC)gleIntGetProcAddress("glFogCoordfEXT");
-	if(!TestPointer((const void*)glFogCoordfEXT)) bIsLoaded = 0;
+	if(!glFogCoordfEXT) bIsLoaded = 0;
 	glFogCoordfvEXT = (PFNGLFOGCOORDFVEXTPROC)gleIntGetProcAddress("glFogCoordfvEXT");
-	if(!TestPointer((const void*)glFogCoordfvEXT)) bIsLoaded = 0;
+	if(!glFogCoordfvEXT) bIsLoaded = 0;
 	glFogCoorddEXT = (PFNGLFOGCOORDDEXTPROC)gleIntGetProcAddress("glFogCoorddEXT");
-	if(!TestPointer((const void*)glFogCoorddEXT)) bIsLoaded = 0;
+	if(!glFogCoorddEXT) bIsLoaded = 0;
 	glFogCoorddvEXT = (PFNGLFOGCOORDDVEXTPROC)gleIntGetProcAddress("glFogCoorddvEXT");
-	if(!TestPointer((const void*)glFogCoorddvEXT)) bIsLoaded = 0;
+	if(!glFogCoorddvEXT) bIsLoaded = 0;
 	glFogCoordPointerEXT = (PFNGLFOGCOORDPOINTEREXTPROC)gleIntGetProcAddress("glFogCoordPointerEXT");
-	if(!TestPointer((const void*)glFogCoordPointerEXT)) bIsLoaded = 0;
+	if(!glFogCoordPointerEXT) bIsLoaded = 0;
 #endif /*GL_EXT_fog_coord*/
 	return bIsLoaded;
 }
@@ -5913,7 +5926,7 @@ static int gleIntLoad_EXT_framebuffer_blit()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_framebuffer_blit
 	glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC)gleIntGetProcAddress("glBlitFramebufferEXT");
-	if(!TestPointer((const void*)glBlitFramebufferEXT)) bIsLoaded = 0;
+	if(!glBlitFramebufferEXT) bIsLoaded = 0;
 #endif /*GL_EXT_framebuffer_blit*/
 	return bIsLoaded;
 }
@@ -5928,7 +5941,7 @@ static int gleIntLoad_EXT_framebuffer_multisample()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_framebuffer_multisample
 	glRenderbufferStorageMultisampleEXT = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC)gleIntGetProcAddress("glRenderbufferStorageMultisampleEXT");
-	if(!TestPointer((const void*)glRenderbufferStorageMultisampleEXT)) bIsLoaded = 0;
+	if(!glRenderbufferStorageMultisampleEXT) bIsLoaded = 0;
 #endif /*GL_EXT_framebuffer_multisample*/
 	return bIsLoaded;
 }
@@ -5976,39 +5989,39 @@ static int gleIntLoad_EXT_framebuffer_object()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_framebuffer_object
 	glIsRenderbufferEXT = (PFNGLISRENDERBUFFEREXTPROC)gleIntGetProcAddress("glIsRenderbufferEXT");
-	if(!TestPointer((const void*)glIsRenderbufferEXT)) bIsLoaded = 0;
+	if(!glIsRenderbufferEXT) bIsLoaded = 0;
 	glBindRenderbufferEXT = (PFNGLBINDRENDERBUFFEREXTPROC)gleIntGetProcAddress("glBindRenderbufferEXT");
-	if(!TestPointer((const void*)glBindRenderbufferEXT)) bIsLoaded = 0;
+	if(!glBindRenderbufferEXT) bIsLoaded = 0;
 	glDeleteRenderbuffersEXT = (PFNGLDELETERENDERBUFFERSEXTPROC)gleIntGetProcAddress("glDeleteRenderbuffersEXT");
-	if(!TestPointer((const void*)glDeleteRenderbuffersEXT)) bIsLoaded = 0;
+	if(!glDeleteRenderbuffersEXT) bIsLoaded = 0;
 	glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC)gleIntGetProcAddress("glGenRenderbuffersEXT");
-	if(!TestPointer((const void*)glGenRenderbuffersEXT)) bIsLoaded = 0;
+	if(!glGenRenderbuffersEXT) bIsLoaded = 0;
 	glRenderbufferStorageEXT = (PFNGLRENDERBUFFERSTORAGEEXTPROC)gleIntGetProcAddress("glRenderbufferStorageEXT");
-	if(!TestPointer((const void*)glRenderbufferStorageEXT)) bIsLoaded = 0;
+	if(!glRenderbufferStorageEXT) bIsLoaded = 0;
 	glGetRenderbufferParameterivEXT = (PFNGLGETRENDERBUFFERPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetRenderbufferParameterivEXT");
-	if(!TestPointer((const void*)glGetRenderbufferParameterivEXT)) bIsLoaded = 0;
+	if(!glGetRenderbufferParameterivEXT) bIsLoaded = 0;
 	glIsFramebufferEXT = (PFNGLISFRAMEBUFFEREXTPROC)gleIntGetProcAddress("glIsFramebufferEXT");
-	if(!TestPointer((const void*)glIsFramebufferEXT)) bIsLoaded = 0;
+	if(!glIsFramebufferEXT) bIsLoaded = 0;
 	glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC)gleIntGetProcAddress("glBindFramebufferEXT");
-	if(!TestPointer((const void*)glBindFramebufferEXT)) bIsLoaded = 0;
+	if(!glBindFramebufferEXT) bIsLoaded = 0;
 	glDeleteFramebuffersEXT = (PFNGLDELETEFRAMEBUFFERSEXTPROC)gleIntGetProcAddress("glDeleteFramebuffersEXT");
-	if(!TestPointer((const void*)glDeleteFramebuffersEXT)) bIsLoaded = 0;
+	if(!glDeleteFramebuffersEXT) bIsLoaded = 0;
 	glGenFramebuffersEXT = (PFNGLGENFRAMEBUFFERSEXTPROC)gleIntGetProcAddress("glGenFramebuffersEXT");
-	if(!TestPointer((const void*)glGenFramebuffersEXT)) bIsLoaded = 0;
+	if(!glGenFramebuffersEXT) bIsLoaded = 0;
 	glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC)gleIntGetProcAddress("glCheckFramebufferStatusEXT");
-	if(!TestPointer((const void*)glCheckFramebufferStatusEXT)) bIsLoaded = 0;
+	if(!glCheckFramebufferStatusEXT) bIsLoaded = 0;
 	glFramebufferTexture1DEXT = (PFNGLFRAMEBUFFERTEXTURE1DEXTPROC)gleIntGetProcAddress("glFramebufferTexture1DEXT");
-	if(!TestPointer((const void*)glFramebufferTexture1DEXT)) bIsLoaded = 0;
+	if(!glFramebufferTexture1DEXT) bIsLoaded = 0;
 	glFramebufferTexture2DEXT = (PFNGLFRAMEBUFFERTEXTURE2DEXTPROC)gleIntGetProcAddress("glFramebufferTexture2DEXT");
-	if(!TestPointer((const void*)glFramebufferTexture2DEXT)) bIsLoaded = 0;
+	if(!glFramebufferTexture2DEXT) bIsLoaded = 0;
 	glFramebufferTexture3DEXT = (PFNGLFRAMEBUFFERTEXTURE3DEXTPROC)gleIntGetProcAddress("glFramebufferTexture3DEXT");
-	if(!TestPointer((const void*)glFramebufferTexture3DEXT)) bIsLoaded = 0;
+	if(!glFramebufferTexture3DEXT) bIsLoaded = 0;
 	glFramebufferRenderbufferEXT = (PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC)gleIntGetProcAddress("glFramebufferRenderbufferEXT");
-	if(!TestPointer((const void*)glFramebufferRenderbufferEXT)) bIsLoaded = 0;
+	if(!glFramebufferRenderbufferEXT) bIsLoaded = 0;
 	glGetFramebufferAttachmentParameterivEXT = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetFramebufferAttachmentParameterivEXT");
-	if(!TestPointer((const void*)glGetFramebufferAttachmentParameterivEXT)) bIsLoaded = 0;
+	if(!glGetFramebufferAttachmentParameterivEXT) bIsLoaded = 0;
 	glGenerateMipmapEXT = (PFNGLGENERATEMIPMAPEXTPROC)gleIntGetProcAddress("glGenerateMipmapEXT");
-	if(!TestPointer((const void*)glGenerateMipmapEXT)) bIsLoaded = 0;
+	if(!glGenerateMipmapEXT) bIsLoaded = 0;
 #endif /*GL_EXT_framebuffer_object*/
 	return bIsLoaded;
 }
@@ -6024,7 +6037,7 @@ static int gleIntLoad_EXT_geometry_shader4()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_geometry_shader4
 	glProgramParameteriEXT = (PFNGLPROGRAMPARAMETERIEXTPROC)gleIntGetProcAddress("glProgramParameteriEXT");
-	if(!TestPointer((const void*)glProgramParameteriEXT)) bIsLoaded = 0;
+	if(!glProgramParameteriEXT) bIsLoaded = 0;
 #endif /*GL_EXT_geometry_shader4*/
 	return bIsLoaded;
 }
@@ -6041,9 +6054,9 @@ static int gleIntLoad_EXT_gpu_program_parameters()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_gpu_program_parameters
 	glProgramEnvParameters4fvEXT = (PFNGLPROGRAMENVPARAMETERS4FVEXTPROC)gleIntGetProcAddress("glProgramEnvParameters4fvEXT");
-	if(!TestPointer((const void*)glProgramEnvParameters4fvEXT)) bIsLoaded = 0;
+	if(!glProgramEnvParameters4fvEXT) bIsLoaded = 0;
 	glProgramLocalParameters4fvEXT = (PFNGLPROGRAMLOCALPARAMETERS4FVEXTPROC)gleIntGetProcAddress("glProgramLocalParameters4fvEXT");
-	if(!TestPointer((const void*)glProgramLocalParameters4fvEXT)) bIsLoaded = 0;
+	if(!glProgramLocalParameters4fvEXT) bIsLoaded = 0;
 #endif /*GL_EXT_gpu_program_parameters*/
 	return bIsLoaded;
 }
@@ -6078,27 +6091,27 @@ static int gleIntLoad_EXT_gpu_shader4()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_gpu_shader4
 	glGetUniformuivEXT = (PFNGLGETUNIFORMUIVEXTPROC)gleIntGetProcAddress("glGetUniformuivEXT");
-	if(!TestPointer((const void*)glGetUniformuivEXT)) bIsLoaded = 0;
+	if(!glGetUniformuivEXT) bIsLoaded = 0;
 	glBindFragDataLocationEXT = (PFNGLBINDFRAGDATALOCATIONEXTPROC)gleIntGetProcAddress("glBindFragDataLocationEXT");
-	if(!TestPointer((const void*)glBindFragDataLocationEXT)) bIsLoaded = 0;
+	if(!glBindFragDataLocationEXT) bIsLoaded = 0;
 	glGetFragDataLocationEXT = (PFNGLGETFRAGDATALOCATIONEXTPROC)gleIntGetProcAddress("glGetFragDataLocationEXT");
-	if(!TestPointer((const void*)glGetFragDataLocationEXT)) bIsLoaded = 0;
+	if(!glGetFragDataLocationEXT) bIsLoaded = 0;
 	glUniform1uiEXT = (PFNGLUNIFORM1UIEXTPROC)gleIntGetProcAddress("glUniform1uiEXT");
-	if(!TestPointer((const void*)glUniform1uiEXT)) bIsLoaded = 0;
+	if(!glUniform1uiEXT) bIsLoaded = 0;
 	glUniform2uiEXT = (PFNGLUNIFORM2UIEXTPROC)gleIntGetProcAddress("glUniform2uiEXT");
-	if(!TestPointer((const void*)glUniform2uiEXT)) bIsLoaded = 0;
+	if(!glUniform2uiEXT) bIsLoaded = 0;
 	glUniform3uiEXT = (PFNGLUNIFORM3UIEXTPROC)gleIntGetProcAddress("glUniform3uiEXT");
-	if(!TestPointer((const void*)glUniform3uiEXT)) bIsLoaded = 0;
+	if(!glUniform3uiEXT) bIsLoaded = 0;
 	glUniform4uiEXT = (PFNGLUNIFORM4UIEXTPROC)gleIntGetProcAddress("glUniform4uiEXT");
-	if(!TestPointer((const void*)glUniform4uiEXT)) bIsLoaded = 0;
+	if(!glUniform4uiEXT) bIsLoaded = 0;
 	glUniform1uivEXT = (PFNGLUNIFORM1UIVEXTPROC)gleIntGetProcAddress("glUniform1uivEXT");
-	if(!TestPointer((const void*)glUniform1uivEXT)) bIsLoaded = 0;
+	if(!glUniform1uivEXT) bIsLoaded = 0;
 	glUniform2uivEXT = (PFNGLUNIFORM2UIVEXTPROC)gleIntGetProcAddress("glUniform2uivEXT");
-	if(!TestPointer((const void*)glUniform2uivEXT)) bIsLoaded = 0;
+	if(!glUniform2uivEXT) bIsLoaded = 0;
 	glUniform3uivEXT = (PFNGLUNIFORM3UIVEXTPROC)gleIntGetProcAddress("glUniform3uivEXT");
-	if(!TestPointer((const void*)glUniform3uivEXT)) bIsLoaded = 0;
+	if(!glUniform3uivEXT) bIsLoaded = 0;
 	glUniform4uivEXT = (PFNGLUNIFORM4UIVEXTPROC)gleIntGetProcAddress("glUniform4uivEXT");
-	if(!TestPointer((const void*)glUniform4uivEXT)) bIsLoaded = 0;
+	if(!glUniform4uivEXT) bIsLoaded = 0;
 #endif /*GL_EXT_gpu_shader4*/
 	return bIsLoaded;
 }
@@ -6131,25 +6144,25 @@ static int gleIntLoad_EXT_histogram()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_histogram
 	glGetHistogramEXT = (PFNGLGETHISTOGRAMEXTPROC)gleIntGetProcAddress("glGetHistogramEXT");
-	if(!TestPointer((const void*)glGetHistogramEXT)) bIsLoaded = 0;
+	if(!glGetHistogramEXT) bIsLoaded = 0;
 	glGetHistogramParameterfvEXT = (PFNGLGETHISTOGRAMPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetHistogramParameterfvEXT");
-	if(!TestPointer((const void*)glGetHistogramParameterfvEXT)) bIsLoaded = 0;
+	if(!glGetHistogramParameterfvEXT) bIsLoaded = 0;
 	glGetHistogramParameterivEXT = (PFNGLGETHISTOGRAMPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetHistogramParameterivEXT");
-	if(!TestPointer((const void*)glGetHistogramParameterivEXT)) bIsLoaded = 0;
+	if(!glGetHistogramParameterivEXT) bIsLoaded = 0;
 	glGetMinmaxEXT = (PFNGLGETMINMAXEXTPROC)gleIntGetProcAddress("glGetMinmaxEXT");
-	if(!TestPointer((const void*)glGetMinmaxEXT)) bIsLoaded = 0;
+	if(!glGetMinmaxEXT) bIsLoaded = 0;
 	glGetMinmaxParameterfvEXT = (PFNGLGETMINMAXPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetMinmaxParameterfvEXT");
-	if(!TestPointer((const void*)glGetMinmaxParameterfvEXT)) bIsLoaded = 0;
+	if(!glGetMinmaxParameterfvEXT) bIsLoaded = 0;
 	glGetMinmaxParameterivEXT = (PFNGLGETMINMAXPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetMinmaxParameterivEXT");
-	if(!TestPointer((const void*)glGetMinmaxParameterivEXT)) bIsLoaded = 0;
+	if(!glGetMinmaxParameterivEXT) bIsLoaded = 0;
 	glHistogramEXT = (PFNGLHISTOGRAMEXTPROC)gleIntGetProcAddress("glHistogramEXT");
-	if(!TestPointer((const void*)glHistogramEXT)) bIsLoaded = 0;
+	if(!glHistogramEXT) bIsLoaded = 0;
 	glMinmaxEXT = (PFNGLMINMAXEXTPROC)gleIntGetProcAddress("glMinmaxEXT");
-	if(!TestPointer((const void*)glMinmaxEXT)) bIsLoaded = 0;
+	if(!glMinmaxEXT) bIsLoaded = 0;
 	glResetHistogramEXT = (PFNGLRESETHISTOGRAMEXTPROC)gleIntGetProcAddress("glResetHistogramEXT");
-	if(!TestPointer((const void*)glResetHistogramEXT)) bIsLoaded = 0;
+	if(!glResetHistogramEXT) bIsLoaded = 0;
 	glResetMinmaxEXT = (PFNGLRESETMINMAXEXTPROC)gleIntGetProcAddress("glResetMinmaxEXT");
-	if(!TestPointer((const void*)glResetMinmaxEXT)) bIsLoaded = 0;
+	if(!glResetMinmaxEXT) bIsLoaded = 0;
 #endif /*GL_EXT_histogram*/
 	return bIsLoaded;
 }
@@ -6165,7 +6178,7 @@ static int gleIntLoad_EXT_index_func()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_index_func
 	glIndexFuncEXT = (PFNGLINDEXFUNCEXTPROC)gleIntGetProcAddress("glIndexFuncEXT");
-	if(!TestPointer((const void*)glIndexFuncEXT)) bIsLoaded = 0;
+	if(!glIndexFuncEXT) bIsLoaded = 0;
 #endif /*GL_EXT_index_func*/
 	return bIsLoaded;
 }
@@ -6180,7 +6193,7 @@ static int gleIntLoad_EXT_index_material()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_index_material
 	glIndexMaterialEXT = (PFNGLINDEXMATERIALEXTPROC)gleIntGetProcAddress("glIndexMaterialEXT");
-	if(!TestPointer((const void*)glIndexMaterialEXT)) bIsLoaded = 0;
+	if(!glIndexMaterialEXT) bIsLoaded = 0;
 #endif /*GL_EXT_index_material*/
 	return bIsLoaded;
 }
@@ -6200,11 +6213,11 @@ static int gleIntLoad_EXT_light_texture()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_light_texture
 	glApplyTextureEXT = (PFNGLAPPLYTEXTUREEXTPROC)gleIntGetProcAddress("glApplyTextureEXT");
-	if(!TestPointer((const void*)glApplyTextureEXT)) bIsLoaded = 0;
+	if(!glApplyTextureEXT) bIsLoaded = 0;
 	glTextureLightEXT = (PFNGLTEXTURELIGHTEXTPROC)gleIntGetProcAddress("glTextureLightEXT");
-	if(!TestPointer((const void*)glTextureLightEXT)) bIsLoaded = 0;
+	if(!glTextureLightEXT) bIsLoaded = 0;
 	glTextureMaterialEXT = (PFNGLTEXTUREMATERIALEXTPROC)gleIntGetProcAddress("glTextureMaterialEXT");
-	if(!TestPointer((const void*)glTextureMaterialEXT)) bIsLoaded = 0;
+	if(!glTextureMaterialEXT) bIsLoaded = 0;
 #endif /*GL_EXT_light_texture*/
 	return bIsLoaded;
 }
@@ -6222,9 +6235,9 @@ static int gleIntLoad_EXT_multi_draw_arrays()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_multi_draw_arrays
 	glMultiDrawArraysEXT = (PFNGLMULTIDRAWARRAYSEXTPROC)gleIntGetProcAddress("glMultiDrawArraysEXT");
-	if(!TestPointer((const void*)glMultiDrawArraysEXT)) bIsLoaded = 0;
+	if(!glMultiDrawArraysEXT) bIsLoaded = 0;
 	glMultiDrawElementsEXT = (PFNGLMULTIDRAWELEMENTSEXTPROC)gleIntGetProcAddress("glMultiDrawElementsEXT");
-	if(!TestPointer((const void*)glMultiDrawElementsEXT)) bIsLoaded = 0;
+	if(!glMultiDrawElementsEXT) bIsLoaded = 0;
 #endif /*GL_EXT_multi_draw_arrays*/
 	return bIsLoaded;
 }
@@ -6241,9 +6254,9 @@ static int gleIntLoad_EXT_multisample()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_multisample
 	glSampleMaskEXT = (PFNGLSAMPLEMASKEXTPROC)gleIntGetProcAddress("glSampleMaskEXT");
-	if(!TestPointer((const void*)glSampleMaskEXT)) bIsLoaded = 0;
+	if(!glSampleMaskEXT) bIsLoaded = 0;
 	glSamplePatternEXT = (PFNGLSAMPLEPATTERNEXTPROC)gleIntGetProcAddress("glSamplePatternEXT");
-	if(!TestPointer((const void*)glSamplePatternEXT)) bIsLoaded = 0;
+	if(!glSamplePatternEXT) bIsLoaded = 0;
 #endif /*GL_EXT_multisample*/
 	return bIsLoaded;
 }
@@ -6267,13 +6280,13 @@ static int gleIntLoad_EXT_paletted_texture()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_paletted_texture
 	glColorTableEXT = (PFNGLCOLORTABLEEXTPROC)gleIntGetProcAddress("glColorTableEXT");
-	if(!TestPointer((const void*)glColorTableEXT)) bIsLoaded = 0;
+	if(!glColorTableEXT) bIsLoaded = 0;
 	glGetColorTableEXT = (PFNGLGETCOLORTABLEEXTPROC)gleIntGetProcAddress("glGetColorTableEXT");
-	if(!TestPointer((const void*)glGetColorTableEXT)) bIsLoaded = 0;
+	if(!glGetColorTableEXT) bIsLoaded = 0;
 	glGetColorTableParameterivEXT = (PFNGLGETCOLORTABLEPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetColorTableParameterivEXT");
-	if(!TestPointer((const void*)glGetColorTableParameterivEXT)) bIsLoaded = 0;
+	if(!glGetColorTableParameterivEXT) bIsLoaded = 0;
 	glGetColorTableParameterfvEXT = (PFNGLGETCOLORTABLEPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetColorTableParameterfvEXT");
-	if(!TestPointer((const void*)glGetColorTableParameterfvEXT)) bIsLoaded = 0;
+	if(!glGetColorTableParameterfvEXT) bIsLoaded = 0;
 #endif /*GL_EXT_paletted_texture*/
 	return bIsLoaded;
 }
@@ -6295,13 +6308,13 @@ static int gleIntLoad_EXT_pixel_transform()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_pixel_transform
 	glPixelTransformParameteriEXT = (PFNGLPIXELTRANSFORMPARAMETERIEXTPROC)gleIntGetProcAddress("glPixelTransformParameteriEXT");
-	if(!TestPointer((const void*)glPixelTransformParameteriEXT)) bIsLoaded = 0;
+	if(!glPixelTransformParameteriEXT) bIsLoaded = 0;
 	glPixelTransformParameterfEXT = (PFNGLPIXELTRANSFORMPARAMETERFEXTPROC)gleIntGetProcAddress("glPixelTransformParameterfEXT");
-	if(!TestPointer((const void*)glPixelTransformParameterfEXT)) bIsLoaded = 0;
+	if(!glPixelTransformParameterfEXT) bIsLoaded = 0;
 	glPixelTransformParameterivEXT = (PFNGLPIXELTRANSFORMPARAMETERIVEXTPROC)gleIntGetProcAddress("glPixelTransformParameterivEXT");
-	if(!TestPointer((const void*)glPixelTransformParameterivEXT)) bIsLoaded = 0;
+	if(!glPixelTransformParameterivEXT) bIsLoaded = 0;
 	glPixelTransformParameterfvEXT = (PFNGLPIXELTRANSFORMPARAMETERFVEXTPROC)gleIntGetProcAddress("glPixelTransformParameterfvEXT");
-	if(!TestPointer((const void*)glPixelTransformParameterfvEXT)) bIsLoaded = 0;
+	if(!glPixelTransformParameterfvEXT) bIsLoaded = 0;
 #endif /*GL_EXT_pixel_transform*/
 	return bIsLoaded;
 }
@@ -6319,9 +6332,9 @@ static int gleIntLoad_EXT_point_parameters()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_point_parameters
 	glPointParameterfEXT = (PFNGLPOINTPARAMETERFEXTPROC)gleIntGetProcAddress("glPointParameterfEXT");
-	if(!TestPointer((const void*)glPointParameterfEXT)) bIsLoaded = 0;
+	if(!glPointParameterfEXT) bIsLoaded = 0;
 	glPointParameterfvEXT = (PFNGLPOINTPARAMETERFVEXTPROC)gleIntGetProcAddress("glPointParameterfvEXT");
-	if(!TestPointer((const void*)glPointParameterfvEXT)) bIsLoaded = 0;
+	if(!glPointParameterfvEXT) bIsLoaded = 0;
 #endif /*GL_EXT_point_parameters*/
 	return bIsLoaded;
 }
@@ -6336,7 +6349,7 @@ static int gleIntLoad_EXT_polygon_offset()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_polygon_offset
 	glPolygonOffsetEXT = (PFNGLPOLYGONOFFSETEXTPROC)gleIntGetProcAddress("glPolygonOffsetEXT");
-	if(!TestPointer((const void*)glPolygonOffsetEXT)) bIsLoaded = 0;
+	if(!glPolygonOffsetEXT) bIsLoaded = 0;
 #endif /*GL_EXT_polygon_offset*/
 	return bIsLoaded;
 }
@@ -6351,7 +6364,7 @@ static int gleIntLoad_EXT_provoking_vertex()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_provoking_vertex
 	glProvokingVertexEXT = (PFNGLPROVOKINGVERTEXEXTPROC)gleIntGetProcAddress("glProvokingVertexEXT");
-	if(!TestPointer((const void*)glProvokingVertexEXT)) bIsLoaded = 0;
+	if(!glProvokingVertexEXT) bIsLoaded = 0;
 #endif /*GL_EXT_provoking_vertex*/
 	return bIsLoaded;
 }
@@ -6399,39 +6412,39 @@ static int gleIntLoad_EXT_secondary_color()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_secondary_color
 	glSecondaryColor3bEXT = (PFNGLSECONDARYCOLOR3BEXTPROC)gleIntGetProcAddress("glSecondaryColor3bEXT");
-	if(!TestPointer((const void*)glSecondaryColor3bEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3bEXT) bIsLoaded = 0;
 	glSecondaryColor3bvEXT = (PFNGLSECONDARYCOLOR3BVEXTPROC)gleIntGetProcAddress("glSecondaryColor3bvEXT");
-	if(!TestPointer((const void*)glSecondaryColor3bvEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3bvEXT) bIsLoaded = 0;
 	glSecondaryColor3dEXT = (PFNGLSECONDARYCOLOR3DEXTPROC)gleIntGetProcAddress("glSecondaryColor3dEXT");
-	if(!TestPointer((const void*)glSecondaryColor3dEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3dEXT) bIsLoaded = 0;
 	glSecondaryColor3dvEXT = (PFNGLSECONDARYCOLOR3DVEXTPROC)gleIntGetProcAddress("glSecondaryColor3dvEXT");
-	if(!TestPointer((const void*)glSecondaryColor3dvEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3dvEXT) bIsLoaded = 0;
 	glSecondaryColor3fEXT = (PFNGLSECONDARYCOLOR3FEXTPROC)gleIntGetProcAddress("glSecondaryColor3fEXT");
-	if(!TestPointer((const void*)glSecondaryColor3fEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3fEXT) bIsLoaded = 0;
 	glSecondaryColor3fvEXT = (PFNGLSECONDARYCOLOR3FVEXTPROC)gleIntGetProcAddress("glSecondaryColor3fvEXT");
-	if(!TestPointer((const void*)glSecondaryColor3fvEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3fvEXT) bIsLoaded = 0;
 	glSecondaryColor3iEXT = (PFNGLSECONDARYCOLOR3IEXTPROC)gleIntGetProcAddress("glSecondaryColor3iEXT");
-	if(!TestPointer((const void*)glSecondaryColor3iEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3iEXT) bIsLoaded = 0;
 	glSecondaryColor3ivEXT = (PFNGLSECONDARYCOLOR3IVEXTPROC)gleIntGetProcAddress("glSecondaryColor3ivEXT");
-	if(!TestPointer((const void*)glSecondaryColor3ivEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3ivEXT) bIsLoaded = 0;
 	glSecondaryColor3sEXT = (PFNGLSECONDARYCOLOR3SEXTPROC)gleIntGetProcAddress("glSecondaryColor3sEXT");
-	if(!TestPointer((const void*)glSecondaryColor3sEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3sEXT) bIsLoaded = 0;
 	glSecondaryColor3svEXT = (PFNGLSECONDARYCOLOR3SVEXTPROC)gleIntGetProcAddress("glSecondaryColor3svEXT");
-	if(!TestPointer((const void*)glSecondaryColor3svEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3svEXT) bIsLoaded = 0;
 	glSecondaryColor3ubEXT = (PFNGLSECONDARYCOLOR3UBEXTPROC)gleIntGetProcAddress("glSecondaryColor3ubEXT");
-	if(!TestPointer((const void*)glSecondaryColor3ubEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3ubEXT) bIsLoaded = 0;
 	glSecondaryColor3ubvEXT = (PFNGLSECONDARYCOLOR3UBVEXTPROC)gleIntGetProcAddress("glSecondaryColor3ubvEXT");
-	if(!TestPointer((const void*)glSecondaryColor3ubvEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3ubvEXT) bIsLoaded = 0;
 	glSecondaryColor3uiEXT = (PFNGLSECONDARYCOLOR3UIEXTPROC)gleIntGetProcAddress("glSecondaryColor3uiEXT");
-	if(!TestPointer((const void*)glSecondaryColor3uiEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3uiEXT) bIsLoaded = 0;
 	glSecondaryColor3uivEXT = (PFNGLSECONDARYCOLOR3UIVEXTPROC)gleIntGetProcAddress("glSecondaryColor3uivEXT");
-	if(!TestPointer((const void*)glSecondaryColor3uivEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3uivEXT) bIsLoaded = 0;
 	glSecondaryColor3usEXT = (PFNGLSECONDARYCOLOR3USEXTPROC)gleIntGetProcAddress("glSecondaryColor3usEXT");
-	if(!TestPointer((const void*)glSecondaryColor3usEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3usEXT) bIsLoaded = 0;
 	glSecondaryColor3usvEXT = (PFNGLSECONDARYCOLOR3USVEXTPROC)gleIntGetProcAddress("glSecondaryColor3usvEXT");
-	if(!TestPointer((const void*)glSecondaryColor3usvEXT)) bIsLoaded = 0;
+	if(!glSecondaryColor3usvEXT) bIsLoaded = 0;
 	glSecondaryColorPointerEXT = (PFNGLSECONDARYCOLORPOINTEREXTPROC)gleIntGetProcAddress("glSecondaryColorPointerEXT");
-	if(!TestPointer((const void*)glSecondaryColorPointerEXT)) bIsLoaded = 0;
+	if(!glSecondaryColorPointerEXT) bIsLoaded = 0;
 #endif /*GL_EXT_secondary_color*/
 	return bIsLoaded;
 }
@@ -6450,11 +6463,11 @@ static int gleIntLoad_EXT_separate_shader_objects()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_separate_shader_objects
 	glUseShaderProgramEXT = (PFNGLUSESHADERPROGRAMEXTPROC)gleIntGetProcAddress("glUseShaderProgramEXT");
-	if(!TestPointer((const void*)glUseShaderProgramEXT)) bIsLoaded = 0;
+	if(!glUseShaderProgramEXT) bIsLoaded = 0;
 	glActiveProgramEXT = (PFNGLACTIVEPROGRAMEXTPROC)gleIntGetProcAddress("glActiveProgramEXT");
-	if(!TestPointer((const void*)glActiveProgramEXT)) bIsLoaded = 0;
+	if(!glActiveProgramEXT) bIsLoaded = 0;
 	glCreateShaderProgramEXT = (PFNGLCREATESHADERPROGRAMEXTPROC)gleIntGetProcAddress("glCreateShaderProgramEXT");
-	if(!TestPointer((const void*)glCreateShaderProgramEXT)) bIsLoaded = 0;
+	if(!glCreateShaderProgramEXT) bIsLoaded = 0;
 #endif /*GL_EXT_separate_shader_objects*/
 	return bIsLoaded;
 }
@@ -6472,9 +6485,9 @@ static int gleIntLoad_EXT_shader_image_load_store()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_shader_image_load_store
 	glBindImageTextureEXT = (PFNGLBINDIMAGETEXTUREEXTPROC)gleIntGetProcAddress("glBindImageTextureEXT");
-	if(!TestPointer((const void*)glBindImageTextureEXT)) bIsLoaded = 0;
+	if(!glBindImageTextureEXT) bIsLoaded = 0;
 	glMemoryBarrierEXT = (PFNGLMEMORYBARRIEREXTPROC)gleIntGetProcAddress("glMemoryBarrierEXT");
-	if(!TestPointer((const void*)glMemoryBarrierEXT)) bIsLoaded = 0;
+	if(!glMemoryBarrierEXT) bIsLoaded = 0;
 #endif /*GL_EXT_shader_image_load_store*/
 	return bIsLoaded;
 }
@@ -6491,7 +6504,7 @@ static int gleIntLoad_EXT_stencil_clear_tag()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_stencil_clear_tag
 	glStencilClearTagEXT = (PFNGLSTENCILCLEARTAGEXTPROC)gleIntGetProcAddress("glStencilClearTagEXT");
-	if(!TestPointer((const void*)glStencilClearTagEXT)) bIsLoaded = 0;
+	if(!glStencilClearTagEXT) bIsLoaded = 0;
 #endif /*GL_EXT_stencil_clear_tag*/
 	return bIsLoaded;
 }
@@ -6506,7 +6519,7 @@ static int gleIntLoad_EXT_stencil_two_side()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_stencil_two_side
 	glActiveStencilFaceEXT = (PFNGLACTIVESTENCILFACEEXTPROC)gleIntGetProcAddress("glActiveStencilFaceEXT");
-	if(!TestPointer((const void*)glActiveStencilFaceEXT)) bIsLoaded = 0;
+	if(!glActiveStencilFaceEXT) bIsLoaded = 0;
 #endif /*GL_EXT_stencil_two_side*/
 	return bIsLoaded;
 }
@@ -6524,9 +6537,9 @@ static int gleIntLoad_EXT_subtexture()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_subtexture
 	glTexSubImage1DEXT = (PFNGLTEXSUBIMAGE1DEXTPROC)gleIntGetProcAddress("glTexSubImage1DEXT");
-	if(!TestPointer((const void*)glTexSubImage1DEXT)) bIsLoaded = 0;
+	if(!glTexSubImage1DEXT) bIsLoaded = 0;
 	glTexSubImage2DEXT = (PFNGLTEXSUBIMAGE2DEXTPROC)gleIntGetProcAddress("glTexSubImage2DEXT");
-	if(!TestPointer((const void*)glTexSubImage2DEXT)) bIsLoaded = 0;
+	if(!glTexSubImage2DEXT) bIsLoaded = 0;
 #endif /*GL_EXT_subtexture*/
 	return bIsLoaded;
 }
@@ -6544,9 +6557,9 @@ static int gleIntLoad_EXT_texture3D()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_texture3D
 	glTexImage3DEXT = (PFNGLTEXIMAGE3DEXTPROC)gleIntGetProcAddress("glTexImage3DEXT");
-	if(!TestPointer((const void*)glTexImage3DEXT)) bIsLoaded = 0;
+	if(!glTexImage3DEXT) bIsLoaded = 0;
 	glTexSubImage3DEXT = (PFNGLTEXSUBIMAGE3DEXTPROC)gleIntGetProcAddress("glTexSubImage3DEXT");
-	if(!TestPointer((const void*)glTexSubImage3DEXT)) bIsLoaded = 0;
+	if(!glTexSubImage3DEXT) bIsLoaded = 0;
 #endif /*GL_EXT_texture3D*/
 	return bIsLoaded;
 }
@@ -6562,7 +6575,7 @@ static int gleIntLoad_EXT_texture_buffer_object()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_texture_buffer_object
 	glTexBufferEXT = (PFNGLTEXBUFFEREXTPROC)gleIntGetProcAddress("glTexBufferEXT");
-	if(!TestPointer((const void*)glTexBufferEXT)) bIsLoaded = 0;
+	if(!glTexBufferEXT) bIsLoaded = 0;
 #endif /*GL_EXT_texture_buffer_object*/
 	return bIsLoaded;
 }
@@ -6595,17 +6608,17 @@ static int gleIntLoad_EXT_texture_integer()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_texture_integer
 	glTexParameterIivEXT = (PFNGLTEXPARAMETERIIVEXTPROC)gleIntGetProcAddress("glTexParameterIivEXT");
-	if(!TestPointer((const void*)glTexParameterIivEXT)) bIsLoaded = 0;
+	if(!glTexParameterIivEXT) bIsLoaded = 0;
 	glTexParameterIuivEXT = (PFNGLTEXPARAMETERIUIVEXTPROC)gleIntGetProcAddress("glTexParameterIuivEXT");
-	if(!TestPointer((const void*)glTexParameterIuivEXT)) bIsLoaded = 0;
+	if(!glTexParameterIuivEXT) bIsLoaded = 0;
 	glGetTexParameterIivEXT = (PFNGLGETTEXPARAMETERIIVEXTPROC)gleIntGetProcAddress("glGetTexParameterIivEXT");
-	if(!TestPointer((const void*)glGetTexParameterIivEXT)) bIsLoaded = 0;
+	if(!glGetTexParameterIivEXT) bIsLoaded = 0;
 	glGetTexParameterIuivEXT = (PFNGLGETTEXPARAMETERIUIVEXTPROC)gleIntGetProcAddress("glGetTexParameterIuivEXT");
-	if(!TestPointer((const void*)glGetTexParameterIuivEXT)) bIsLoaded = 0;
+	if(!glGetTexParameterIuivEXT) bIsLoaded = 0;
 	glClearColorIiEXT = (PFNGLCLEARCOLORIIEXTPROC)gleIntGetProcAddress("glClearColorIiEXT");
-	if(!TestPointer((const void*)glClearColorIiEXT)) bIsLoaded = 0;
+	if(!glClearColorIiEXT) bIsLoaded = 0;
 	glClearColorIuiEXT = (PFNGLCLEARCOLORIUIEXTPROC)gleIntGetProcAddress("glClearColorIuiEXT");
-	if(!TestPointer((const void*)glClearColorIuiEXT)) bIsLoaded = 0;
+	if(!glClearColorIuiEXT) bIsLoaded = 0;
 #endif /*GL_EXT_texture_integer*/
 	return bIsLoaded;
 }
@@ -6632,17 +6645,17 @@ static int gleIntLoad_EXT_texture_object()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_texture_object
 	glAreTexturesResidentEXT = (PFNGLARETEXTURESRESIDENTEXTPROC)gleIntGetProcAddress("glAreTexturesResidentEXT");
-	if(!TestPointer((const void*)glAreTexturesResidentEXT)) bIsLoaded = 0;
+	if(!glAreTexturesResidentEXT) bIsLoaded = 0;
 	glBindTextureEXT = (PFNGLBINDTEXTUREEXTPROC)gleIntGetProcAddress("glBindTextureEXT");
-	if(!TestPointer((const void*)glBindTextureEXT)) bIsLoaded = 0;
+	if(!glBindTextureEXT) bIsLoaded = 0;
 	glDeleteTexturesEXT = (PFNGLDELETETEXTURESEXTPROC)gleIntGetProcAddress("glDeleteTexturesEXT");
-	if(!TestPointer((const void*)glDeleteTexturesEXT)) bIsLoaded = 0;
+	if(!glDeleteTexturesEXT) bIsLoaded = 0;
 	glGenTexturesEXT = (PFNGLGENTEXTURESEXTPROC)gleIntGetProcAddress("glGenTexturesEXT");
-	if(!TestPointer((const void*)glGenTexturesEXT)) bIsLoaded = 0;
+	if(!glGenTexturesEXT) bIsLoaded = 0;
 	glIsTextureEXT = (PFNGLISTEXTUREEXTPROC)gleIntGetProcAddress("glIsTextureEXT");
-	if(!TestPointer((const void*)glIsTextureEXT)) bIsLoaded = 0;
+	if(!glIsTextureEXT) bIsLoaded = 0;
 	glPrioritizeTexturesEXT = (PFNGLPRIORITIZETEXTURESEXTPROC)gleIntGetProcAddress("glPrioritizeTexturesEXT");
-	if(!TestPointer((const void*)glPrioritizeTexturesEXT)) bIsLoaded = 0;
+	if(!glPrioritizeTexturesEXT) bIsLoaded = 0;
 #endif /*GL_EXT_texture_object*/
 	return bIsLoaded;
 }
@@ -6657,7 +6670,7 @@ static int gleIntLoad_EXT_texture_perturb_normal()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_texture_perturb_normal
 	glTextureNormalEXT = (PFNGLTEXTURENORMALEXTPROC)gleIntGetProcAddress("glTextureNormalEXT");
-	if(!TestPointer((const void*)glTextureNormalEXT)) bIsLoaded = 0;
+	if(!glTextureNormalEXT) bIsLoaded = 0;
 #endif /*GL_EXT_texture_perturb_normal*/
 	return bIsLoaded;
 }
@@ -6679,9 +6692,9 @@ static int gleIntLoad_EXT_timer_query()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_timer_query
 	glGetQueryObjecti64vEXT = (PFNGLGETQUERYOBJECTI64VEXTPROC)gleIntGetProcAddress("glGetQueryObjecti64vEXT");
-	if(!TestPointer((const void*)glGetQueryObjecti64vEXT)) bIsLoaded = 0;
+	if(!glGetQueryObjecti64vEXT) bIsLoaded = 0;
 	glGetQueryObjectui64vEXT = (PFNGLGETQUERYOBJECTUI64VEXTPROC)gleIntGetProcAddress("glGetQueryObjectui64vEXT");
-	if(!TestPointer((const void*)glGetQueryObjectui64vEXT)) bIsLoaded = 0;
+	if(!glGetQueryObjectui64vEXT) bIsLoaded = 0;
 #endif /*GL_EXT_timer_query*/
 	return bIsLoaded;
 }
@@ -6708,19 +6721,19 @@ static int gleIntLoad_EXT_transform_feedback()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_transform_feedback
 	glBeginTransformFeedbackEXT = (PFNGLBEGINTRANSFORMFEEDBACKEXTPROC)gleIntGetProcAddress("glBeginTransformFeedbackEXT");
-	if(!TestPointer((const void*)glBeginTransformFeedbackEXT)) bIsLoaded = 0;
+	if(!glBeginTransformFeedbackEXT) bIsLoaded = 0;
 	glEndTransformFeedbackEXT = (PFNGLENDTRANSFORMFEEDBACKEXTPROC)gleIntGetProcAddress("glEndTransformFeedbackEXT");
-	if(!TestPointer((const void*)glEndTransformFeedbackEXT)) bIsLoaded = 0;
+	if(!glEndTransformFeedbackEXT) bIsLoaded = 0;
 	glBindBufferRangeEXT = (PFNGLBINDBUFFERRANGEEXTPROC)gleIntGetProcAddress("glBindBufferRangeEXT");
-	if(!TestPointer((const void*)glBindBufferRangeEXT)) bIsLoaded = 0;
+	if(!glBindBufferRangeEXT) bIsLoaded = 0;
 	glBindBufferOffsetEXT = (PFNGLBINDBUFFEROFFSETEXTPROC)gleIntGetProcAddress("glBindBufferOffsetEXT");
-	if(!TestPointer((const void*)glBindBufferOffsetEXT)) bIsLoaded = 0;
+	if(!glBindBufferOffsetEXT) bIsLoaded = 0;
 	glBindBufferBaseEXT = (PFNGLBINDBUFFERBASEEXTPROC)gleIntGetProcAddress("glBindBufferBaseEXT");
-	if(!TestPointer((const void*)glBindBufferBaseEXT)) bIsLoaded = 0;
+	if(!glBindBufferBaseEXT) bIsLoaded = 0;
 	glTransformFeedbackVaryingsEXT = (PFNGLTRANSFORMFEEDBACKVARYINGSEXTPROC)gleIntGetProcAddress("glTransformFeedbackVaryingsEXT");
-	if(!TestPointer((const void*)glTransformFeedbackVaryingsEXT)) bIsLoaded = 0;
+	if(!glTransformFeedbackVaryingsEXT) bIsLoaded = 0;
 	glGetTransformFeedbackVaryingEXT = (PFNGLGETTRANSFORMFEEDBACKVARYINGEXTPROC)gleIntGetProcAddress("glGetTransformFeedbackVaryingEXT");
-	if(!TestPointer((const void*)glGetTransformFeedbackVaryingEXT)) bIsLoaded = 0;
+	if(!glGetTransformFeedbackVaryingEXT) bIsLoaded = 0;
 #endif /*GL_EXT_transform_feedback*/
 	return bIsLoaded;
 }
@@ -6751,23 +6764,23 @@ static int gleIntLoad_EXT_vertex_array()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_vertex_array
 	glArrayElementEXT = (PFNGLARRAYELEMENTEXTPROC)gleIntGetProcAddress("glArrayElementEXT");
-	if(!TestPointer((const void*)glArrayElementEXT)) bIsLoaded = 0;
+	if(!glArrayElementEXT) bIsLoaded = 0;
 	glColorPointerEXT = (PFNGLCOLORPOINTEREXTPROC)gleIntGetProcAddress("glColorPointerEXT");
-	if(!TestPointer((const void*)glColorPointerEXT)) bIsLoaded = 0;
+	if(!glColorPointerEXT) bIsLoaded = 0;
 	glDrawArraysEXT = (PFNGLDRAWARRAYSEXTPROC)gleIntGetProcAddress("glDrawArraysEXT");
-	if(!TestPointer((const void*)glDrawArraysEXT)) bIsLoaded = 0;
+	if(!glDrawArraysEXT) bIsLoaded = 0;
 	glEdgeFlagPointerEXT = (PFNGLEDGEFLAGPOINTEREXTPROC)gleIntGetProcAddress("glEdgeFlagPointerEXT");
-	if(!TestPointer((const void*)glEdgeFlagPointerEXT)) bIsLoaded = 0;
+	if(!glEdgeFlagPointerEXT) bIsLoaded = 0;
 	glGetPointervEXT = (PFNGLGETPOINTERVEXTPROC)gleIntGetProcAddress("glGetPointervEXT");
-	if(!TestPointer((const void*)glGetPointervEXT)) bIsLoaded = 0;
+	if(!glGetPointervEXT) bIsLoaded = 0;
 	glIndexPointerEXT = (PFNGLINDEXPOINTEREXTPROC)gleIntGetProcAddress("glIndexPointerEXT");
-	if(!TestPointer((const void*)glIndexPointerEXT)) bIsLoaded = 0;
+	if(!glIndexPointerEXT) bIsLoaded = 0;
 	glNormalPointerEXT = (PFNGLNORMALPOINTEREXTPROC)gleIntGetProcAddress("glNormalPointerEXT");
-	if(!TestPointer((const void*)glNormalPointerEXT)) bIsLoaded = 0;
+	if(!glNormalPointerEXT) bIsLoaded = 0;
 	glTexCoordPointerEXT = (PFNGLTEXCOORDPOINTEREXTPROC)gleIntGetProcAddress("glTexCoordPointerEXT");
-	if(!TestPointer((const void*)glTexCoordPointerEXT)) bIsLoaded = 0;
+	if(!glTexCoordPointerEXT) bIsLoaded = 0;
 	glVertexPointerEXT = (PFNGLVERTEXPOINTEREXTPROC)gleIntGetProcAddress("glVertexPointerEXT");
-	if(!TestPointer((const void*)glVertexPointerEXT)) bIsLoaded = 0;
+	if(!glVertexPointerEXT) bIsLoaded = 0;
 #endif /*GL_EXT_vertex_array*/
 	return bIsLoaded;
 }
@@ -6803,27 +6816,27 @@ static int gleIntLoad_EXT_vertex_attrib_64bit()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_vertex_attrib_64bit
 	glVertexAttribL1dEXT = (PFNGLVERTEXATTRIBL1DEXTPROC)gleIntGetProcAddress("glVertexAttribL1dEXT");
-	if(!TestPointer((const void*)glVertexAttribL1dEXT)) bIsLoaded = 0;
+	if(!glVertexAttribL1dEXT) bIsLoaded = 0;
 	glVertexAttribL2dEXT = (PFNGLVERTEXATTRIBL2DEXTPROC)gleIntGetProcAddress("glVertexAttribL2dEXT");
-	if(!TestPointer((const void*)glVertexAttribL2dEXT)) bIsLoaded = 0;
+	if(!glVertexAttribL2dEXT) bIsLoaded = 0;
 	glVertexAttribL3dEXT = (PFNGLVERTEXATTRIBL3DEXTPROC)gleIntGetProcAddress("glVertexAttribL3dEXT");
-	if(!TestPointer((const void*)glVertexAttribL3dEXT)) bIsLoaded = 0;
+	if(!glVertexAttribL3dEXT) bIsLoaded = 0;
 	glVertexAttribL4dEXT = (PFNGLVERTEXATTRIBL4DEXTPROC)gleIntGetProcAddress("glVertexAttribL4dEXT");
-	if(!TestPointer((const void*)glVertexAttribL4dEXT)) bIsLoaded = 0;
+	if(!glVertexAttribL4dEXT) bIsLoaded = 0;
 	glVertexAttribL1dvEXT = (PFNGLVERTEXATTRIBL1DVEXTPROC)gleIntGetProcAddress("glVertexAttribL1dvEXT");
-	if(!TestPointer((const void*)glVertexAttribL1dvEXT)) bIsLoaded = 0;
+	if(!glVertexAttribL1dvEXT) bIsLoaded = 0;
 	glVertexAttribL2dvEXT = (PFNGLVERTEXATTRIBL2DVEXTPROC)gleIntGetProcAddress("glVertexAttribL2dvEXT");
-	if(!TestPointer((const void*)glVertexAttribL2dvEXT)) bIsLoaded = 0;
+	if(!glVertexAttribL2dvEXT) bIsLoaded = 0;
 	glVertexAttribL3dvEXT = (PFNGLVERTEXATTRIBL3DVEXTPROC)gleIntGetProcAddress("glVertexAttribL3dvEXT");
-	if(!TestPointer((const void*)glVertexAttribL3dvEXT)) bIsLoaded = 0;
+	if(!glVertexAttribL3dvEXT) bIsLoaded = 0;
 	glVertexAttribL4dvEXT = (PFNGLVERTEXATTRIBL4DVEXTPROC)gleIntGetProcAddress("glVertexAttribL4dvEXT");
-	if(!TestPointer((const void*)glVertexAttribL4dvEXT)) bIsLoaded = 0;
+	if(!glVertexAttribL4dvEXT) bIsLoaded = 0;
 	glVertexAttribLPointerEXT = (PFNGLVERTEXATTRIBLPOINTEREXTPROC)gleIntGetProcAddress("glVertexAttribLPointerEXT");
-	if(!TestPointer((const void*)glVertexAttribLPointerEXT)) bIsLoaded = 0;
+	if(!glVertexAttribLPointerEXT) bIsLoaded = 0;
 	glGetVertexAttribLdvEXT = (PFNGLGETVERTEXATTRIBLDVEXTPROC)gleIntGetProcAddress("glGetVertexAttribLdvEXT");
-	if(!TestPointer((const void*)glGetVertexAttribLdvEXT)) bIsLoaded = 0;
+	if(!glGetVertexAttribLdvEXT) bIsLoaded = 0;
 	glVertexArrayVertexAttribLOffsetEXT = (PFNGLVERTEXARRAYVERTEXATTRIBLOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribLOffsetEXT");
-	if(!TestPointer((const void*)glVertexArrayVertexAttribLOffsetEXT)) bIsLoaded = 0;
+	if(!glVertexArrayVertexAttribLOffsetEXT) bIsLoaded = 0;
 #endif /*GL_EXT_vertex_attrib_64bit*/
 	return bIsLoaded;
 }
@@ -6920,89 +6933,89 @@ static int gleIntLoad_EXT_vertex_shader()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_vertex_shader
 	glBeginVertexShaderEXT = (PFNGLBEGINVERTEXSHADEREXTPROC)gleIntGetProcAddress("glBeginVertexShaderEXT");
-	if(!TestPointer((const void*)glBeginVertexShaderEXT)) bIsLoaded = 0;
+	if(!glBeginVertexShaderEXT) bIsLoaded = 0;
 	glEndVertexShaderEXT = (PFNGLENDVERTEXSHADEREXTPROC)gleIntGetProcAddress("glEndVertexShaderEXT");
-	if(!TestPointer((const void*)glEndVertexShaderEXT)) bIsLoaded = 0;
+	if(!glEndVertexShaderEXT) bIsLoaded = 0;
 	glBindVertexShaderEXT = (PFNGLBINDVERTEXSHADEREXTPROC)gleIntGetProcAddress("glBindVertexShaderEXT");
-	if(!TestPointer((const void*)glBindVertexShaderEXT)) bIsLoaded = 0;
+	if(!glBindVertexShaderEXT) bIsLoaded = 0;
 	glGenVertexShadersEXT = (PFNGLGENVERTEXSHADERSEXTPROC)gleIntGetProcAddress("glGenVertexShadersEXT");
-	if(!TestPointer((const void*)glGenVertexShadersEXT)) bIsLoaded = 0;
+	if(!glGenVertexShadersEXT) bIsLoaded = 0;
 	glDeleteVertexShaderEXT = (PFNGLDELETEVERTEXSHADEREXTPROC)gleIntGetProcAddress("glDeleteVertexShaderEXT");
-	if(!TestPointer((const void*)glDeleteVertexShaderEXT)) bIsLoaded = 0;
+	if(!glDeleteVertexShaderEXT) bIsLoaded = 0;
 	glShaderOp1EXT = (PFNGLSHADEROP1EXTPROC)gleIntGetProcAddress("glShaderOp1EXT");
-	if(!TestPointer((const void*)glShaderOp1EXT)) bIsLoaded = 0;
+	if(!glShaderOp1EXT) bIsLoaded = 0;
 	glShaderOp2EXT = (PFNGLSHADEROP2EXTPROC)gleIntGetProcAddress("glShaderOp2EXT");
-	if(!TestPointer((const void*)glShaderOp2EXT)) bIsLoaded = 0;
+	if(!glShaderOp2EXT) bIsLoaded = 0;
 	glShaderOp3EXT = (PFNGLSHADEROP3EXTPROC)gleIntGetProcAddress("glShaderOp3EXT");
-	if(!TestPointer((const void*)glShaderOp3EXT)) bIsLoaded = 0;
+	if(!glShaderOp3EXT) bIsLoaded = 0;
 	glSwizzleEXT = (PFNGLSWIZZLEEXTPROC)gleIntGetProcAddress("glSwizzleEXT");
-	if(!TestPointer((const void*)glSwizzleEXT)) bIsLoaded = 0;
+	if(!glSwizzleEXT) bIsLoaded = 0;
 	glWriteMaskEXT = (PFNGLWRITEMASKEXTPROC)gleIntGetProcAddress("glWriteMaskEXT");
-	if(!TestPointer((const void*)glWriteMaskEXT)) bIsLoaded = 0;
+	if(!glWriteMaskEXT) bIsLoaded = 0;
 	glInsertComponentEXT = (PFNGLINSERTCOMPONENTEXTPROC)gleIntGetProcAddress("glInsertComponentEXT");
-	if(!TestPointer((const void*)glInsertComponentEXT)) bIsLoaded = 0;
+	if(!glInsertComponentEXT) bIsLoaded = 0;
 	glExtractComponentEXT = (PFNGLEXTRACTCOMPONENTEXTPROC)gleIntGetProcAddress("glExtractComponentEXT");
-	if(!TestPointer((const void*)glExtractComponentEXT)) bIsLoaded = 0;
+	if(!glExtractComponentEXT) bIsLoaded = 0;
 	glGenSymbolsEXT = (PFNGLGENSYMBOLSEXTPROC)gleIntGetProcAddress("glGenSymbolsEXT");
-	if(!TestPointer((const void*)glGenSymbolsEXT)) bIsLoaded = 0;
+	if(!glGenSymbolsEXT) bIsLoaded = 0;
 	glSetInvariantEXT = (PFNGLSETINVARIANTEXTPROC)gleIntGetProcAddress("glSetInvariantEXT");
-	if(!TestPointer((const void*)glSetInvariantEXT)) bIsLoaded = 0;
+	if(!glSetInvariantEXT) bIsLoaded = 0;
 	glSetLocalConstantEXT = (PFNGLSETLOCALCONSTANTEXTPROC)gleIntGetProcAddress("glSetLocalConstantEXT");
-	if(!TestPointer((const void*)glSetLocalConstantEXT)) bIsLoaded = 0;
+	if(!glSetLocalConstantEXT) bIsLoaded = 0;
 	glVariantbvEXT = (PFNGLVARIANTBVEXTPROC)gleIntGetProcAddress("glVariantbvEXT");
-	if(!TestPointer((const void*)glVariantbvEXT)) bIsLoaded = 0;
+	if(!glVariantbvEXT) bIsLoaded = 0;
 	glVariantsvEXT = (PFNGLVARIANTSVEXTPROC)gleIntGetProcAddress("glVariantsvEXT");
-	if(!TestPointer((const void*)glVariantsvEXT)) bIsLoaded = 0;
+	if(!glVariantsvEXT) bIsLoaded = 0;
 	glVariantivEXT = (PFNGLVARIANTIVEXTPROC)gleIntGetProcAddress("glVariantivEXT");
-	if(!TestPointer((const void*)glVariantivEXT)) bIsLoaded = 0;
+	if(!glVariantivEXT) bIsLoaded = 0;
 	glVariantfvEXT = (PFNGLVARIANTFVEXTPROC)gleIntGetProcAddress("glVariantfvEXT");
-	if(!TestPointer((const void*)glVariantfvEXT)) bIsLoaded = 0;
+	if(!glVariantfvEXT) bIsLoaded = 0;
 	glVariantdvEXT = (PFNGLVARIANTDVEXTPROC)gleIntGetProcAddress("glVariantdvEXT");
-	if(!TestPointer((const void*)glVariantdvEXT)) bIsLoaded = 0;
+	if(!glVariantdvEXT) bIsLoaded = 0;
 	glVariantubvEXT = (PFNGLVARIANTUBVEXTPROC)gleIntGetProcAddress("glVariantubvEXT");
-	if(!TestPointer((const void*)glVariantubvEXT)) bIsLoaded = 0;
+	if(!glVariantubvEXT) bIsLoaded = 0;
 	glVariantusvEXT = (PFNGLVARIANTUSVEXTPROC)gleIntGetProcAddress("glVariantusvEXT");
-	if(!TestPointer((const void*)glVariantusvEXT)) bIsLoaded = 0;
+	if(!glVariantusvEXT) bIsLoaded = 0;
 	glVariantuivEXT = (PFNGLVARIANTUIVEXTPROC)gleIntGetProcAddress("glVariantuivEXT");
-	if(!TestPointer((const void*)glVariantuivEXT)) bIsLoaded = 0;
+	if(!glVariantuivEXT) bIsLoaded = 0;
 	glVariantPointerEXT = (PFNGLVARIANTPOINTEREXTPROC)gleIntGetProcAddress("glVariantPointerEXT");
-	if(!TestPointer((const void*)glVariantPointerEXT)) bIsLoaded = 0;
+	if(!glVariantPointerEXT) bIsLoaded = 0;
 	glEnableVariantClientStateEXT = (PFNGLENABLEVARIANTCLIENTSTATEEXTPROC)gleIntGetProcAddress("glEnableVariantClientStateEXT");
-	if(!TestPointer((const void*)glEnableVariantClientStateEXT)) bIsLoaded = 0;
+	if(!glEnableVariantClientStateEXT) bIsLoaded = 0;
 	glDisableVariantClientStateEXT = (PFNGLDISABLEVARIANTCLIENTSTATEEXTPROC)gleIntGetProcAddress("glDisableVariantClientStateEXT");
-	if(!TestPointer((const void*)glDisableVariantClientStateEXT)) bIsLoaded = 0;
+	if(!glDisableVariantClientStateEXT) bIsLoaded = 0;
 	glBindLightParameterEXT = (PFNGLBINDLIGHTPARAMETEREXTPROC)gleIntGetProcAddress("glBindLightParameterEXT");
-	if(!TestPointer((const void*)glBindLightParameterEXT)) bIsLoaded = 0;
+	if(!glBindLightParameterEXT) bIsLoaded = 0;
 	glBindMaterialParameterEXT = (PFNGLBINDMATERIALPARAMETEREXTPROC)gleIntGetProcAddress("glBindMaterialParameterEXT");
-	if(!TestPointer((const void*)glBindMaterialParameterEXT)) bIsLoaded = 0;
+	if(!glBindMaterialParameterEXT) bIsLoaded = 0;
 	glBindTexGenParameterEXT = (PFNGLBINDTEXGENPARAMETEREXTPROC)gleIntGetProcAddress("glBindTexGenParameterEXT");
-	if(!TestPointer((const void*)glBindTexGenParameterEXT)) bIsLoaded = 0;
+	if(!glBindTexGenParameterEXT) bIsLoaded = 0;
 	glBindTextureUnitParameterEXT = (PFNGLBINDTEXTUREUNITPARAMETEREXTPROC)gleIntGetProcAddress("glBindTextureUnitParameterEXT");
-	if(!TestPointer((const void*)glBindTextureUnitParameterEXT)) bIsLoaded = 0;
+	if(!glBindTextureUnitParameterEXT) bIsLoaded = 0;
 	glBindParameterEXT = (PFNGLBINDPARAMETEREXTPROC)gleIntGetProcAddress("glBindParameterEXT");
-	if(!TestPointer((const void*)glBindParameterEXT)) bIsLoaded = 0;
+	if(!glBindParameterEXT) bIsLoaded = 0;
 	glIsVariantEnabledEXT = (PFNGLISVARIANTENABLEDEXTPROC)gleIntGetProcAddress("glIsVariantEnabledEXT");
-	if(!TestPointer((const void*)glIsVariantEnabledEXT)) bIsLoaded = 0;
+	if(!glIsVariantEnabledEXT) bIsLoaded = 0;
 	glGetVariantBooleanvEXT = (PFNGLGETVARIANTBOOLEANVEXTPROC)gleIntGetProcAddress("glGetVariantBooleanvEXT");
-	if(!TestPointer((const void*)glGetVariantBooleanvEXT)) bIsLoaded = 0;
+	if(!glGetVariantBooleanvEXT) bIsLoaded = 0;
 	glGetVariantIntegervEXT = (PFNGLGETVARIANTINTEGERVEXTPROC)gleIntGetProcAddress("glGetVariantIntegervEXT");
-	if(!TestPointer((const void*)glGetVariantIntegervEXT)) bIsLoaded = 0;
+	if(!glGetVariantIntegervEXT) bIsLoaded = 0;
 	glGetVariantFloatvEXT = (PFNGLGETVARIANTFLOATVEXTPROC)gleIntGetProcAddress("glGetVariantFloatvEXT");
-	if(!TestPointer((const void*)glGetVariantFloatvEXT)) bIsLoaded = 0;
+	if(!glGetVariantFloatvEXT) bIsLoaded = 0;
 	glGetVariantPointervEXT = (PFNGLGETVARIANTPOINTERVEXTPROC)gleIntGetProcAddress("glGetVariantPointervEXT");
-	if(!TestPointer((const void*)glGetVariantPointervEXT)) bIsLoaded = 0;
+	if(!glGetVariantPointervEXT) bIsLoaded = 0;
 	glGetInvariantBooleanvEXT = (PFNGLGETINVARIANTBOOLEANVEXTPROC)gleIntGetProcAddress("glGetInvariantBooleanvEXT");
-	if(!TestPointer((const void*)glGetInvariantBooleanvEXT)) bIsLoaded = 0;
+	if(!glGetInvariantBooleanvEXT) bIsLoaded = 0;
 	glGetInvariantIntegervEXT = (PFNGLGETINVARIANTINTEGERVEXTPROC)gleIntGetProcAddress("glGetInvariantIntegervEXT");
-	if(!TestPointer((const void*)glGetInvariantIntegervEXT)) bIsLoaded = 0;
+	if(!glGetInvariantIntegervEXT) bIsLoaded = 0;
 	glGetInvariantFloatvEXT = (PFNGLGETINVARIANTFLOATVEXTPROC)gleIntGetProcAddress("glGetInvariantFloatvEXT");
-	if(!TestPointer((const void*)glGetInvariantFloatvEXT)) bIsLoaded = 0;
+	if(!glGetInvariantFloatvEXT) bIsLoaded = 0;
 	glGetLocalConstantBooleanvEXT = (PFNGLGETLOCALCONSTANTBOOLEANVEXTPROC)gleIntGetProcAddress("glGetLocalConstantBooleanvEXT");
-	if(!TestPointer((const void*)glGetLocalConstantBooleanvEXT)) bIsLoaded = 0;
+	if(!glGetLocalConstantBooleanvEXT) bIsLoaded = 0;
 	glGetLocalConstantIntegervEXT = (PFNGLGETLOCALCONSTANTINTEGERVEXTPROC)gleIntGetProcAddress("glGetLocalConstantIntegervEXT");
-	if(!TestPointer((const void*)glGetLocalConstantIntegervEXT)) bIsLoaded = 0;
+	if(!glGetLocalConstantIntegervEXT) bIsLoaded = 0;
 	glGetLocalConstantFloatvEXT = (PFNGLGETLOCALCONSTANTFLOATVEXTPROC)gleIntGetProcAddress("glGetLocalConstantFloatvEXT");
-	if(!TestPointer((const void*)glGetLocalConstantFloatvEXT)) bIsLoaded = 0;
+	if(!glGetLocalConstantFloatvEXT) bIsLoaded = 0;
 #endif /*GL_EXT_vertex_shader*/
 	return bIsLoaded;
 }
@@ -7021,11 +7034,11 @@ static int gleIntLoad_EXT_vertex_weighting()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_vertex_weighting
 	glVertexWeightfEXT = (PFNGLVERTEXWEIGHTFEXTPROC)gleIntGetProcAddress("glVertexWeightfEXT");
-	if(!TestPointer((const void*)glVertexWeightfEXT)) bIsLoaded = 0;
+	if(!glVertexWeightfEXT) bIsLoaded = 0;
 	glVertexWeightfvEXT = (PFNGLVERTEXWEIGHTFVEXTPROC)gleIntGetProcAddress("glVertexWeightfvEXT");
-	if(!TestPointer((const void*)glVertexWeightfvEXT)) bIsLoaded = 0;
+	if(!glVertexWeightfvEXT) bIsLoaded = 0;
 	glVertexWeightPointerEXT = (PFNGLVERTEXWEIGHTPOINTEREXTPROC)gleIntGetProcAddress("glVertexWeightPointerEXT");
-	if(!TestPointer((const void*)glVertexWeightPointerEXT)) bIsLoaded = 0;
+	if(!glVertexWeightPointerEXT) bIsLoaded = 0;
 #endif /*GL_EXT_vertex_weighting*/
 	return bIsLoaded;
 }
@@ -7040,7 +7053,7 @@ static int gleIntLoad_EXT_x11_sync_object()
 	int bIsLoaded = 1;
 #ifndef GL_EXT_x11_sync_object
 	glImportSyncEXT = (PFNGLIMPORTSYNCEXTPROC)gleIntGetProcAddress("glImportSyncEXT");
-	if(!TestPointer((const void*)glImportSyncEXT)) bIsLoaded = 0;
+	if(!glImportSyncEXT) bIsLoaded = 0;
 #endif /*GL_EXT_x11_sync_object*/
 	return bIsLoaded;
 }
@@ -7056,7 +7069,7 @@ static int gleIntLoad_GREMEDY_frame_terminator()
 	int bIsLoaded = 1;
 #ifndef GL_GREMEDY_frame_terminator
 	glFrameTerminatorGREMEDY = (PFNGLFRAMETERMINATORGREMEDYPROC)gleIntGetProcAddress("glFrameTerminatorGREMEDY");
-	if(!TestPointer((const void*)glFrameTerminatorGREMEDY)) bIsLoaded = 0;
+	if(!glFrameTerminatorGREMEDY) bIsLoaded = 0;
 #endif /*GL_GREMEDY_frame_terminator*/
 	return bIsLoaded;
 }
@@ -7071,7 +7084,7 @@ static int gleIntLoad_GREMEDY_string_marker()
 	int bIsLoaded = 1;
 #ifndef GL_GREMEDY_string_marker
 	glStringMarkerGREMEDY = (PFNGLSTRINGMARKERGREMEDYPROC)gleIntGetProcAddress("glStringMarkerGREMEDY");
-	if(!TestPointer((const void*)glStringMarkerGREMEDY)) bIsLoaded = 0;
+	if(!glStringMarkerGREMEDY) bIsLoaded = 0;
 #endif /*GL_GREMEDY_string_marker*/
 	return bIsLoaded;
 }
@@ -7097,17 +7110,17 @@ static int gleIntLoad_HP_image_transform()
 	int bIsLoaded = 1;
 #ifndef GL_HP_image_transform
 	glImageTransformParameteriHP = (PFNGLIMAGETRANSFORMPARAMETERIHPPROC)gleIntGetProcAddress("glImageTransformParameteriHP");
-	if(!TestPointer((const void*)glImageTransformParameteriHP)) bIsLoaded = 0;
+	if(!glImageTransformParameteriHP) bIsLoaded = 0;
 	glImageTransformParameterfHP = (PFNGLIMAGETRANSFORMPARAMETERFHPPROC)gleIntGetProcAddress("glImageTransformParameterfHP");
-	if(!TestPointer((const void*)glImageTransformParameterfHP)) bIsLoaded = 0;
+	if(!glImageTransformParameterfHP) bIsLoaded = 0;
 	glImageTransformParameterivHP = (PFNGLIMAGETRANSFORMPARAMETERIVHPPROC)gleIntGetProcAddress("glImageTransformParameterivHP");
-	if(!TestPointer((const void*)glImageTransformParameterivHP)) bIsLoaded = 0;
+	if(!glImageTransformParameterivHP) bIsLoaded = 0;
 	glImageTransformParameterfvHP = (PFNGLIMAGETRANSFORMPARAMETERFVHPPROC)gleIntGetProcAddress("glImageTransformParameterfvHP");
-	if(!TestPointer((const void*)glImageTransformParameterfvHP)) bIsLoaded = 0;
+	if(!glImageTransformParameterfvHP) bIsLoaded = 0;
 	glGetImageTransformParameterivHP = (PFNGLGETIMAGETRANSFORMPARAMETERIVHPPROC)gleIntGetProcAddress("glGetImageTransformParameterivHP");
-	if(!TestPointer((const void*)glGetImageTransformParameterivHP)) bIsLoaded = 0;
+	if(!glGetImageTransformParameterivHP) bIsLoaded = 0;
 	glGetImageTransformParameterfvHP = (PFNGLGETIMAGETRANSFORMPARAMETERFVHPPROC)gleIntGetProcAddress("glGetImageTransformParameterfvHP");
-	if(!TestPointer((const void*)glGetImageTransformParameterfvHP)) bIsLoaded = 0;
+	if(!glGetImageTransformParameterfvHP) bIsLoaded = 0;
 #endif /*GL_HP_image_transform*/
 	return bIsLoaded;
 }
@@ -7127,9 +7140,9 @@ static int gleIntLoad_IBM_multimode_draw_arrays()
 	int bIsLoaded = 1;
 #ifndef GL_IBM_multimode_draw_arrays
 	glMultiModeDrawArraysIBM = (PFNGLMULTIMODEDRAWARRAYSIBMPROC)gleIntGetProcAddress("glMultiModeDrawArraysIBM");
-	if(!TestPointer((const void*)glMultiModeDrawArraysIBM)) bIsLoaded = 0;
+	if(!glMultiModeDrawArraysIBM) bIsLoaded = 0;
 	glMultiModeDrawElementsIBM = (PFNGLMULTIMODEDRAWELEMENTSIBMPROC)gleIntGetProcAddress("glMultiModeDrawElementsIBM");
-	if(!TestPointer((const void*)glMultiModeDrawElementsIBM)) bIsLoaded = 0;
+	if(!glMultiModeDrawElementsIBM) bIsLoaded = 0;
 #endif /*GL_IBM_multimode_draw_arrays*/
 	return bIsLoaded;
 }
@@ -7160,21 +7173,21 @@ static int gleIntLoad_IBM_vertex_array_lists()
 	int bIsLoaded = 1;
 #ifndef GL_IBM_vertex_array_lists
 	glColorPointerListIBM = (PFNGLCOLORPOINTERLISTIBMPROC)gleIntGetProcAddress("glColorPointerListIBM");
-	if(!TestPointer((const void*)glColorPointerListIBM)) bIsLoaded = 0;
+	if(!glColorPointerListIBM) bIsLoaded = 0;
 	glSecondaryColorPointerListIBM = (PFNGLSECONDARYCOLORPOINTERLISTIBMPROC)gleIntGetProcAddress("glSecondaryColorPointerListIBM");
-	if(!TestPointer((const void*)glSecondaryColorPointerListIBM)) bIsLoaded = 0;
+	if(!glSecondaryColorPointerListIBM) bIsLoaded = 0;
 	glEdgeFlagPointerListIBM = (PFNGLEDGEFLAGPOINTERLISTIBMPROC)gleIntGetProcAddress("glEdgeFlagPointerListIBM");
-	if(!TestPointer((const void*)glEdgeFlagPointerListIBM)) bIsLoaded = 0;
+	if(!glEdgeFlagPointerListIBM) bIsLoaded = 0;
 	glFogCoordPointerListIBM = (PFNGLFOGCOORDPOINTERLISTIBMPROC)gleIntGetProcAddress("glFogCoordPointerListIBM");
-	if(!TestPointer((const void*)glFogCoordPointerListIBM)) bIsLoaded = 0;
+	if(!glFogCoordPointerListIBM) bIsLoaded = 0;
 	glIndexPointerListIBM = (PFNGLINDEXPOINTERLISTIBMPROC)gleIntGetProcAddress("glIndexPointerListIBM");
-	if(!TestPointer((const void*)glIndexPointerListIBM)) bIsLoaded = 0;
+	if(!glIndexPointerListIBM) bIsLoaded = 0;
 	glNormalPointerListIBM = (PFNGLNORMALPOINTERLISTIBMPROC)gleIntGetProcAddress("glNormalPointerListIBM");
-	if(!TestPointer((const void*)glNormalPointerListIBM)) bIsLoaded = 0;
+	if(!glNormalPointerListIBM) bIsLoaded = 0;
 	glTexCoordPointerListIBM = (PFNGLTEXCOORDPOINTERLISTIBMPROC)gleIntGetProcAddress("glTexCoordPointerListIBM");
-	if(!TestPointer((const void*)glTexCoordPointerListIBM)) bIsLoaded = 0;
+	if(!glTexCoordPointerListIBM) bIsLoaded = 0;
 	glVertexPointerListIBM = (PFNGLVERTEXPOINTERLISTIBMPROC)gleIntGetProcAddress("glVertexPointerListIBM");
-	if(!TestPointer((const void*)glVertexPointerListIBM)) bIsLoaded = 0;
+	if(!glVertexPointerListIBM) bIsLoaded = 0;
 #endif /*GL_IBM_vertex_array_lists*/
 	return bIsLoaded;
 }
@@ -7198,13 +7211,13 @@ static int gleIntLoad_INTEL_parallel_arrays()
 	int bIsLoaded = 1;
 #ifndef GL_INTEL_parallel_arrays
 	glVertexPointervINTEL = (PFNGLVERTEXPOINTERVINTELPROC)gleIntGetProcAddress("glVertexPointervINTEL");
-	if(!TestPointer((const void*)glVertexPointervINTEL)) bIsLoaded = 0;
+	if(!glVertexPointervINTEL) bIsLoaded = 0;
 	glNormalPointervINTEL = (PFNGLNORMALPOINTERVINTELPROC)gleIntGetProcAddress("glNormalPointervINTEL");
-	if(!TestPointer((const void*)glNormalPointervINTEL)) bIsLoaded = 0;
+	if(!glNormalPointervINTEL) bIsLoaded = 0;
 	glColorPointervINTEL = (PFNGLCOLORPOINTERVINTELPROC)gleIntGetProcAddress("glColorPointervINTEL");
-	if(!TestPointer((const void*)glColorPointervINTEL)) bIsLoaded = 0;
+	if(!glColorPointervINTEL) bIsLoaded = 0;
 	glTexCoordPointervINTEL = (PFNGLTEXCOORDPOINTERVINTELPROC)gleIntGetProcAddress("glTexCoordPointervINTEL");
-	if(!TestPointer((const void*)glTexCoordPointervINTEL)) bIsLoaded = 0;
+	if(!glTexCoordPointervINTEL) bIsLoaded = 0;
 #endif /*GL_INTEL_parallel_arrays*/
 	return bIsLoaded;
 }
@@ -7222,7 +7235,7 @@ static int gleIntLoad_MESA_resize_buffers()
 	int bIsLoaded = 1;
 #ifndef GL_MESA_resize_buffers
 	glResizeBuffersMESA = (PFNGLRESIZEBUFFERSMESAPROC)gleIntGetProcAddress("glResizeBuffersMESA");
-	if(!TestPointer((const void*)glResizeBuffersMESA)) bIsLoaded = 0;
+	if(!glResizeBuffersMESA) bIsLoaded = 0;
 #endif /*GL_MESA_resize_buffers*/
 	return bIsLoaded;
 }
@@ -7283,53 +7296,53 @@ static int gleIntLoad_MESA_window_pos()
 	int bIsLoaded = 1;
 #ifndef GL_MESA_window_pos
 	glWindowPos2dMESA = (PFNGLWINDOWPOS2DMESAPROC)gleIntGetProcAddress("glWindowPos2dMESA");
-	if(!TestPointer((const void*)glWindowPos2dMESA)) bIsLoaded = 0;
+	if(!glWindowPos2dMESA) bIsLoaded = 0;
 	glWindowPos2dvMESA = (PFNGLWINDOWPOS2DVMESAPROC)gleIntGetProcAddress("glWindowPos2dvMESA");
-	if(!TestPointer((const void*)glWindowPos2dvMESA)) bIsLoaded = 0;
+	if(!glWindowPos2dvMESA) bIsLoaded = 0;
 	glWindowPos2fMESA = (PFNGLWINDOWPOS2FMESAPROC)gleIntGetProcAddress("glWindowPos2fMESA");
-	if(!TestPointer((const void*)glWindowPos2fMESA)) bIsLoaded = 0;
+	if(!glWindowPos2fMESA) bIsLoaded = 0;
 	glWindowPos2fvMESA = (PFNGLWINDOWPOS2FVMESAPROC)gleIntGetProcAddress("glWindowPos2fvMESA");
-	if(!TestPointer((const void*)glWindowPos2fvMESA)) bIsLoaded = 0;
+	if(!glWindowPos2fvMESA) bIsLoaded = 0;
 	glWindowPos2iMESA = (PFNGLWINDOWPOS2IMESAPROC)gleIntGetProcAddress("glWindowPos2iMESA");
-	if(!TestPointer((const void*)glWindowPos2iMESA)) bIsLoaded = 0;
+	if(!glWindowPos2iMESA) bIsLoaded = 0;
 	glWindowPos2ivMESA = (PFNGLWINDOWPOS2IVMESAPROC)gleIntGetProcAddress("glWindowPos2ivMESA");
-	if(!TestPointer((const void*)glWindowPos2ivMESA)) bIsLoaded = 0;
+	if(!glWindowPos2ivMESA) bIsLoaded = 0;
 	glWindowPos2sMESA = (PFNGLWINDOWPOS2SMESAPROC)gleIntGetProcAddress("glWindowPos2sMESA");
-	if(!TestPointer((const void*)glWindowPos2sMESA)) bIsLoaded = 0;
+	if(!glWindowPos2sMESA) bIsLoaded = 0;
 	glWindowPos2svMESA = (PFNGLWINDOWPOS2SVMESAPROC)gleIntGetProcAddress("glWindowPos2svMESA");
-	if(!TestPointer((const void*)glWindowPos2svMESA)) bIsLoaded = 0;
+	if(!glWindowPos2svMESA) bIsLoaded = 0;
 	glWindowPos3dMESA = (PFNGLWINDOWPOS3DMESAPROC)gleIntGetProcAddress("glWindowPos3dMESA");
-	if(!TestPointer((const void*)glWindowPos3dMESA)) bIsLoaded = 0;
+	if(!glWindowPos3dMESA) bIsLoaded = 0;
 	glWindowPos3dvMESA = (PFNGLWINDOWPOS3DVMESAPROC)gleIntGetProcAddress("glWindowPos3dvMESA");
-	if(!TestPointer((const void*)glWindowPos3dvMESA)) bIsLoaded = 0;
+	if(!glWindowPos3dvMESA) bIsLoaded = 0;
 	glWindowPos3fMESA = (PFNGLWINDOWPOS3FMESAPROC)gleIntGetProcAddress("glWindowPos3fMESA");
-	if(!TestPointer((const void*)glWindowPos3fMESA)) bIsLoaded = 0;
+	if(!glWindowPos3fMESA) bIsLoaded = 0;
 	glWindowPos3fvMESA = (PFNGLWINDOWPOS3FVMESAPROC)gleIntGetProcAddress("glWindowPos3fvMESA");
-	if(!TestPointer((const void*)glWindowPos3fvMESA)) bIsLoaded = 0;
+	if(!glWindowPos3fvMESA) bIsLoaded = 0;
 	glWindowPos3iMESA = (PFNGLWINDOWPOS3IMESAPROC)gleIntGetProcAddress("glWindowPos3iMESA");
-	if(!TestPointer((const void*)glWindowPos3iMESA)) bIsLoaded = 0;
+	if(!glWindowPos3iMESA) bIsLoaded = 0;
 	glWindowPos3ivMESA = (PFNGLWINDOWPOS3IVMESAPROC)gleIntGetProcAddress("glWindowPos3ivMESA");
-	if(!TestPointer((const void*)glWindowPos3ivMESA)) bIsLoaded = 0;
+	if(!glWindowPos3ivMESA) bIsLoaded = 0;
 	glWindowPos3sMESA = (PFNGLWINDOWPOS3SMESAPROC)gleIntGetProcAddress("glWindowPos3sMESA");
-	if(!TestPointer((const void*)glWindowPos3sMESA)) bIsLoaded = 0;
+	if(!glWindowPos3sMESA) bIsLoaded = 0;
 	glWindowPos3svMESA = (PFNGLWINDOWPOS3SVMESAPROC)gleIntGetProcAddress("glWindowPos3svMESA");
-	if(!TestPointer((const void*)glWindowPos3svMESA)) bIsLoaded = 0;
+	if(!glWindowPos3svMESA) bIsLoaded = 0;
 	glWindowPos4dMESA = (PFNGLWINDOWPOS4DMESAPROC)gleIntGetProcAddress("glWindowPos4dMESA");
-	if(!TestPointer((const void*)glWindowPos4dMESA)) bIsLoaded = 0;
+	if(!glWindowPos4dMESA) bIsLoaded = 0;
 	glWindowPos4dvMESA = (PFNGLWINDOWPOS4DVMESAPROC)gleIntGetProcAddress("glWindowPos4dvMESA");
-	if(!TestPointer((const void*)glWindowPos4dvMESA)) bIsLoaded = 0;
+	if(!glWindowPos4dvMESA) bIsLoaded = 0;
 	glWindowPos4fMESA = (PFNGLWINDOWPOS4FMESAPROC)gleIntGetProcAddress("glWindowPos4fMESA");
-	if(!TestPointer((const void*)glWindowPos4fMESA)) bIsLoaded = 0;
+	if(!glWindowPos4fMESA) bIsLoaded = 0;
 	glWindowPos4fvMESA = (PFNGLWINDOWPOS4FVMESAPROC)gleIntGetProcAddress("glWindowPos4fvMESA");
-	if(!TestPointer((const void*)glWindowPos4fvMESA)) bIsLoaded = 0;
+	if(!glWindowPos4fvMESA) bIsLoaded = 0;
 	glWindowPos4iMESA = (PFNGLWINDOWPOS4IMESAPROC)gleIntGetProcAddress("glWindowPos4iMESA");
-	if(!TestPointer((const void*)glWindowPos4iMESA)) bIsLoaded = 0;
+	if(!glWindowPos4iMESA) bIsLoaded = 0;
 	glWindowPos4ivMESA = (PFNGLWINDOWPOS4IVMESAPROC)gleIntGetProcAddress("glWindowPos4ivMESA");
-	if(!TestPointer((const void*)glWindowPos4ivMESA)) bIsLoaded = 0;
+	if(!glWindowPos4ivMESA) bIsLoaded = 0;
 	glWindowPos4sMESA = (PFNGLWINDOWPOS4SMESAPROC)gleIntGetProcAddress("glWindowPos4sMESA");
-	if(!TestPointer((const void*)glWindowPos4sMESA)) bIsLoaded = 0;
+	if(!glWindowPos4sMESA) bIsLoaded = 0;
 	glWindowPos4svMESA = (PFNGLWINDOWPOS4SVMESAPROC)gleIntGetProcAddress("glWindowPos4svMESA");
-	if(!TestPointer((const void*)glWindowPos4svMESA)) bIsLoaded = 0;
+	if(!glWindowPos4svMESA) bIsLoaded = 0;
 #endif /*GL_MESA_window_pos*/
 	return bIsLoaded;
 }
@@ -7348,9 +7361,9 @@ static int gleIntLoad_NV_conditional_render()
 	int bIsLoaded = 1;
 #ifndef GL_NV_conditional_render
 	glBeginConditionalRenderNV = (PFNGLBEGINCONDITIONALRENDERNVPROC)gleIntGetProcAddress("glBeginConditionalRenderNV");
-	if(!TestPointer((const void*)glBeginConditionalRenderNV)) bIsLoaded = 0;
+	if(!glBeginConditionalRenderNV) bIsLoaded = 0;
 	glEndConditionalRenderNV = (PFNGLENDCONDITIONALRENDERNVPROC)gleIntGetProcAddress("glEndConditionalRenderNV");
-	if(!TestPointer((const void*)glEndConditionalRenderNV)) bIsLoaded = 0;
+	if(!glEndConditionalRenderNV) bIsLoaded = 0;
 #endif /*GL_NV_conditional_render*/
 	return bIsLoaded;
 }
@@ -7366,7 +7379,7 @@ static int gleIntLoad_NV_copy_image()
 	int bIsLoaded = 1;
 #ifndef GL_NV_copy_image
 	glCopyImageSubDataNV = (PFNGLCOPYIMAGESUBDATANVPROC)gleIntGetProcAddress("glCopyImageSubDataNV");
-	if(!TestPointer((const void*)glCopyImageSubDataNV)) bIsLoaded = 0;
+	if(!glCopyImageSubDataNV) bIsLoaded = 0;
 #endif /*GL_NV_copy_image*/
 	return bIsLoaded;
 }
@@ -7385,11 +7398,11 @@ static int gleIntLoad_NV_depth_buffer_float()
 	int bIsLoaded = 1;
 #ifndef GL_NV_depth_buffer_float
 	glDepthRangedNV = (PFNGLDEPTHRANGEDNVPROC)gleIntGetProcAddress("glDepthRangedNV");
-	if(!TestPointer((const void*)glDepthRangedNV)) bIsLoaded = 0;
+	if(!glDepthRangedNV) bIsLoaded = 0;
 	glClearDepthdNV = (PFNGLCLEARDEPTHDNVPROC)gleIntGetProcAddress("glClearDepthdNV");
-	if(!TestPointer((const void*)glClearDepthdNV)) bIsLoaded = 0;
+	if(!glClearDepthdNV) bIsLoaded = 0;
 	glDepthBoundsdNV = (PFNGLDEPTHBOUNDSDNVPROC)gleIntGetProcAddress("glDepthBoundsdNV");
-	if(!TestPointer((const void*)glDepthBoundsdNV)) bIsLoaded = 0;
+	if(!glDepthBoundsdNV) bIsLoaded = 0;
 #endif /*GL_NV_depth_buffer_float*/
 	return bIsLoaded;
 }
@@ -7421,23 +7434,23 @@ static int gleIntLoad_NV_evaluators()
 	int bIsLoaded = 1;
 #ifndef GL_NV_evaluators
 	glMapControlPointsNV = (PFNGLMAPCONTROLPOINTSNVPROC)gleIntGetProcAddress("glMapControlPointsNV");
-	if(!TestPointer((const void*)glMapControlPointsNV)) bIsLoaded = 0;
+	if(!glMapControlPointsNV) bIsLoaded = 0;
 	glMapParameterivNV = (PFNGLMAPPARAMETERIVNVPROC)gleIntGetProcAddress("glMapParameterivNV");
-	if(!TestPointer((const void*)glMapParameterivNV)) bIsLoaded = 0;
+	if(!glMapParameterivNV) bIsLoaded = 0;
 	glMapParameterfvNV = (PFNGLMAPPARAMETERFVNVPROC)gleIntGetProcAddress("glMapParameterfvNV");
-	if(!TestPointer((const void*)glMapParameterfvNV)) bIsLoaded = 0;
+	if(!glMapParameterfvNV) bIsLoaded = 0;
 	glGetMapControlPointsNV = (PFNGLGETMAPCONTROLPOINTSNVPROC)gleIntGetProcAddress("glGetMapControlPointsNV");
-	if(!TestPointer((const void*)glGetMapControlPointsNV)) bIsLoaded = 0;
+	if(!glGetMapControlPointsNV) bIsLoaded = 0;
 	glGetMapParameterivNV = (PFNGLGETMAPPARAMETERIVNVPROC)gleIntGetProcAddress("glGetMapParameterivNV");
-	if(!TestPointer((const void*)glGetMapParameterivNV)) bIsLoaded = 0;
+	if(!glGetMapParameterivNV) bIsLoaded = 0;
 	glGetMapParameterfvNV = (PFNGLGETMAPPARAMETERFVNVPROC)gleIntGetProcAddress("glGetMapParameterfvNV");
-	if(!TestPointer((const void*)glGetMapParameterfvNV)) bIsLoaded = 0;
+	if(!glGetMapParameterfvNV) bIsLoaded = 0;
 	glGetMapAttribParameterivNV = (PFNGLGETMAPATTRIBPARAMETERIVNVPROC)gleIntGetProcAddress("glGetMapAttribParameterivNV");
-	if(!TestPointer((const void*)glGetMapAttribParameterivNV)) bIsLoaded = 0;
+	if(!glGetMapAttribParameterivNV) bIsLoaded = 0;
 	glGetMapAttribParameterfvNV = (PFNGLGETMAPATTRIBPARAMETERFVNVPROC)gleIntGetProcAddress("glGetMapAttribParameterfvNV");
-	if(!TestPointer((const void*)glGetMapAttribParameterfvNV)) bIsLoaded = 0;
+	if(!glGetMapAttribParameterfvNV) bIsLoaded = 0;
 	glEvalMapsNV = (PFNGLEVALMAPSNVPROC)gleIntGetProcAddress("glEvalMapsNV");
-	if(!TestPointer((const void*)glEvalMapsNV)) bIsLoaded = 0;
+	if(!glEvalMapsNV) bIsLoaded = 0;
 #endif /*GL_NV_evaluators*/
 	return bIsLoaded;
 }
@@ -7456,11 +7469,11 @@ static int gleIntLoad_NV_explicit_multisample()
 	int bIsLoaded = 1;
 #ifndef GL_NV_explicit_multisample
 	glGetMultisamplefvNV = (PFNGLGETMULTISAMPLEFVNVPROC)gleIntGetProcAddress("glGetMultisamplefvNV");
-	if(!TestPointer((const void*)glGetMultisamplefvNV)) bIsLoaded = 0;
+	if(!glGetMultisamplefvNV) bIsLoaded = 0;
 	glSampleMaskIndexedNV = (PFNGLSAMPLEMASKINDEXEDNVPROC)gleIntGetProcAddress("glSampleMaskIndexedNV");
-	if(!TestPointer((const void*)glSampleMaskIndexedNV)) bIsLoaded = 0;
+	if(!glSampleMaskIndexedNV) bIsLoaded = 0;
 	glTexRenderbufferNV = (PFNGLTEXRENDERBUFFERNVPROC)gleIntGetProcAddress("glTexRenderbufferNV");
-	if(!TestPointer((const void*)glTexRenderbufferNV)) bIsLoaded = 0;
+	if(!glTexRenderbufferNV) bIsLoaded = 0;
 #endif /*GL_NV_explicit_multisample*/
 	return bIsLoaded;
 }
@@ -7487,19 +7500,19 @@ static int gleIntLoad_NV_fence()
 	int bIsLoaded = 1;
 #ifndef GL_NV_fence
 	glDeleteFencesNV = (PFNGLDELETEFENCESNVPROC)gleIntGetProcAddress("glDeleteFencesNV");
-	if(!TestPointer((const void*)glDeleteFencesNV)) bIsLoaded = 0;
+	if(!glDeleteFencesNV) bIsLoaded = 0;
 	glGenFencesNV = (PFNGLGENFENCESNVPROC)gleIntGetProcAddress("glGenFencesNV");
-	if(!TestPointer((const void*)glGenFencesNV)) bIsLoaded = 0;
+	if(!glGenFencesNV) bIsLoaded = 0;
 	glIsFenceNV = (PFNGLISFENCENVPROC)gleIntGetProcAddress("glIsFenceNV");
-	if(!TestPointer((const void*)glIsFenceNV)) bIsLoaded = 0;
+	if(!glIsFenceNV) bIsLoaded = 0;
 	glTestFenceNV = (PFNGLTESTFENCENVPROC)gleIntGetProcAddress("glTestFenceNV");
-	if(!TestPointer((const void*)glTestFenceNV)) bIsLoaded = 0;
+	if(!glTestFenceNV) bIsLoaded = 0;
 	glGetFenceivNV = (PFNGLGETFENCEIVNVPROC)gleIntGetProcAddress("glGetFenceivNV");
-	if(!TestPointer((const void*)glGetFenceivNV)) bIsLoaded = 0;
+	if(!glGetFenceivNV) bIsLoaded = 0;
 	glFinishFenceNV = (PFNGLFINISHFENCENVPROC)gleIntGetProcAddress("glFinishFenceNV");
-	if(!TestPointer((const void*)glFinishFenceNV)) bIsLoaded = 0;
+	if(!glFinishFenceNV) bIsLoaded = 0;
 	glSetFenceNV = (PFNGLSETFENCENVPROC)gleIntGetProcAddress("glSetFenceNV");
-	if(!TestPointer((const void*)glSetFenceNV)) bIsLoaded = 0;
+	if(!glSetFenceNV) bIsLoaded = 0;
 #endif /*GL_NV_fence*/
 	return bIsLoaded;
 }
@@ -7526,17 +7539,17 @@ static int gleIntLoad_NV_fragment_program()
 	int bIsLoaded = 1;
 #ifndef GL_NV_fragment_program
 	glProgramNamedParameter4fNV = (PFNGLPROGRAMNAMEDPARAMETER4FNVPROC)gleIntGetProcAddress("glProgramNamedParameter4fNV");
-	if(!TestPointer((const void*)glProgramNamedParameter4fNV)) bIsLoaded = 0;
+	if(!glProgramNamedParameter4fNV) bIsLoaded = 0;
 	glProgramNamedParameter4dNV = (PFNGLPROGRAMNAMEDPARAMETER4DNVPROC)gleIntGetProcAddress("glProgramNamedParameter4dNV");
-	if(!TestPointer((const void*)glProgramNamedParameter4dNV)) bIsLoaded = 0;
+	if(!glProgramNamedParameter4dNV) bIsLoaded = 0;
 	glProgramNamedParameter4fvNV = (PFNGLPROGRAMNAMEDPARAMETER4FVNVPROC)gleIntGetProcAddress("glProgramNamedParameter4fvNV");
-	if(!TestPointer((const void*)glProgramNamedParameter4fvNV)) bIsLoaded = 0;
+	if(!glProgramNamedParameter4fvNV) bIsLoaded = 0;
 	glProgramNamedParameter4dvNV = (PFNGLPROGRAMNAMEDPARAMETER4DVNVPROC)gleIntGetProcAddress("glProgramNamedParameter4dvNV");
-	if(!TestPointer((const void*)glProgramNamedParameter4dvNV)) bIsLoaded = 0;
+	if(!glProgramNamedParameter4dvNV) bIsLoaded = 0;
 	glGetProgramNamedParameterfvNV = (PFNGLGETPROGRAMNAMEDPARAMETERFVNVPROC)gleIntGetProcAddress("glGetProgramNamedParameterfvNV");
-	if(!TestPointer((const void*)glGetProgramNamedParameterfvNV)) bIsLoaded = 0;
+	if(!glGetProgramNamedParameterfvNV) bIsLoaded = 0;
 	glGetProgramNamedParameterdvNV = (PFNGLGETPROGRAMNAMEDPARAMETERDVNVPROC)gleIntGetProcAddress("glGetProgramNamedParameterdvNV");
-	if(!TestPointer((const void*)glGetProgramNamedParameterdvNV)) bIsLoaded = 0;
+	if(!glGetProgramNamedParameterdvNV) bIsLoaded = 0;
 #endif /*GL_NV_fragment_program*/
 	return bIsLoaded;
 }
@@ -7554,7 +7567,7 @@ static int gleIntLoad_NV_framebuffer_multisample_coverage()
 	int bIsLoaded = 1;
 #ifndef GL_NV_framebuffer_multisample_coverage
 	glRenderbufferStorageMultisampleCoverageNV = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC)gleIntGetProcAddress("glRenderbufferStorageMultisampleCoverageNV");
-	if(!TestPointer((const void*)glRenderbufferStorageMultisampleCoverageNV)) bIsLoaded = 0;
+	if(!glRenderbufferStorageMultisampleCoverageNV) bIsLoaded = 0;
 #endif /*GL_NV_framebuffer_multisample_coverage*/
 	return bIsLoaded;
 }
@@ -7575,13 +7588,13 @@ static int gleIntLoad_NV_geometry_program4()
 	int bIsLoaded = 1;
 #ifndef GL_NV_geometry_program4
 	glProgramVertexLimitNV = (PFNGLPROGRAMVERTEXLIMITNVPROC)gleIntGetProcAddress("glProgramVertexLimitNV");
-	if(!TestPointer((const void*)glProgramVertexLimitNV)) bIsLoaded = 0;
+	if(!glProgramVertexLimitNV) bIsLoaded = 0;
 	glFramebufferTextureEXT = (PFNGLFRAMEBUFFERTEXTUREEXTPROC)gleIntGetProcAddress("glFramebufferTextureEXT");
-	if(!TestPointer((const void*)glFramebufferTextureEXT)) bIsLoaded = 0;
+	if(!glFramebufferTextureEXT) bIsLoaded = 0;
 	glFramebufferTextureLayerEXT = (PFNGLFRAMEBUFFERTEXTURELAYEREXTPROC)gleIntGetProcAddress("glFramebufferTextureLayerEXT");
-	if(!TestPointer((const void*)glFramebufferTextureLayerEXT)) bIsLoaded = 0;
+	if(!glFramebufferTextureLayerEXT) bIsLoaded = 0;
 	glFramebufferTextureFaceEXT = (PFNGLFRAMEBUFFERTEXTUREFACEEXTPROC)gleIntGetProcAddress("glFramebufferTextureFaceEXT");
-	if(!TestPointer((const void*)glFramebufferTextureFaceEXT)) bIsLoaded = 0;
+	if(!glFramebufferTextureFaceEXT) bIsLoaded = 0;
 #endif /*GL_NV_geometry_program4*/
 	return bIsLoaded;
 }
@@ -7627,37 +7640,37 @@ static int gleIntLoad_NV_gpu_program4()
 	int bIsLoaded = 1;
 #ifndef GL_NV_gpu_program4
 	glProgramLocalParameterI4iNV = (PFNGLPROGRAMLOCALPARAMETERI4INVPROC)gleIntGetProcAddress("glProgramLocalParameterI4iNV");
-	if(!TestPointer((const void*)glProgramLocalParameterI4iNV)) bIsLoaded = 0;
+	if(!glProgramLocalParameterI4iNV) bIsLoaded = 0;
 	glProgramLocalParameterI4ivNV = (PFNGLPROGRAMLOCALPARAMETERI4IVNVPROC)gleIntGetProcAddress("glProgramLocalParameterI4ivNV");
-	if(!TestPointer((const void*)glProgramLocalParameterI4ivNV)) bIsLoaded = 0;
+	if(!glProgramLocalParameterI4ivNV) bIsLoaded = 0;
 	glProgramLocalParametersI4ivNV = (PFNGLPROGRAMLOCALPARAMETERSI4IVNVPROC)gleIntGetProcAddress("glProgramLocalParametersI4ivNV");
-	if(!TestPointer((const void*)glProgramLocalParametersI4ivNV)) bIsLoaded = 0;
+	if(!glProgramLocalParametersI4ivNV) bIsLoaded = 0;
 	glProgramLocalParameterI4uiNV = (PFNGLPROGRAMLOCALPARAMETERI4UINVPROC)gleIntGetProcAddress("glProgramLocalParameterI4uiNV");
-	if(!TestPointer((const void*)glProgramLocalParameterI4uiNV)) bIsLoaded = 0;
+	if(!glProgramLocalParameterI4uiNV) bIsLoaded = 0;
 	glProgramLocalParameterI4uivNV = (PFNGLPROGRAMLOCALPARAMETERI4UIVNVPROC)gleIntGetProcAddress("glProgramLocalParameterI4uivNV");
-	if(!TestPointer((const void*)glProgramLocalParameterI4uivNV)) bIsLoaded = 0;
+	if(!glProgramLocalParameterI4uivNV) bIsLoaded = 0;
 	glProgramLocalParametersI4uivNV = (PFNGLPROGRAMLOCALPARAMETERSI4UIVNVPROC)gleIntGetProcAddress("glProgramLocalParametersI4uivNV");
-	if(!TestPointer((const void*)glProgramLocalParametersI4uivNV)) bIsLoaded = 0;
+	if(!glProgramLocalParametersI4uivNV) bIsLoaded = 0;
 	glProgramEnvParameterI4iNV = (PFNGLPROGRAMENVPARAMETERI4INVPROC)gleIntGetProcAddress("glProgramEnvParameterI4iNV");
-	if(!TestPointer((const void*)glProgramEnvParameterI4iNV)) bIsLoaded = 0;
+	if(!glProgramEnvParameterI4iNV) bIsLoaded = 0;
 	glProgramEnvParameterI4ivNV = (PFNGLPROGRAMENVPARAMETERI4IVNVPROC)gleIntGetProcAddress("glProgramEnvParameterI4ivNV");
-	if(!TestPointer((const void*)glProgramEnvParameterI4ivNV)) bIsLoaded = 0;
+	if(!glProgramEnvParameterI4ivNV) bIsLoaded = 0;
 	glProgramEnvParametersI4ivNV = (PFNGLPROGRAMENVPARAMETERSI4IVNVPROC)gleIntGetProcAddress("glProgramEnvParametersI4ivNV");
-	if(!TestPointer((const void*)glProgramEnvParametersI4ivNV)) bIsLoaded = 0;
+	if(!glProgramEnvParametersI4ivNV) bIsLoaded = 0;
 	glProgramEnvParameterI4uiNV = (PFNGLPROGRAMENVPARAMETERI4UINVPROC)gleIntGetProcAddress("glProgramEnvParameterI4uiNV");
-	if(!TestPointer((const void*)glProgramEnvParameterI4uiNV)) bIsLoaded = 0;
+	if(!glProgramEnvParameterI4uiNV) bIsLoaded = 0;
 	glProgramEnvParameterI4uivNV = (PFNGLPROGRAMENVPARAMETERI4UIVNVPROC)gleIntGetProcAddress("glProgramEnvParameterI4uivNV");
-	if(!TestPointer((const void*)glProgramEnvParameterI4uivNV)) bIsLoaded = 0;
+	if(!glProgramEnvParameterI4uivNV) bIsLoaded = 0;
 	glProgramEnvParametersI4uivNV = (PFNGLPROGRAMENVPARAMETERSI4UIVNVPROC)gleIntGetProcAddress("glProgramEnvParametersI4uivNV");
-	if(!TestPointer((const void*)glProgramEnvParametersI4uivNV)) bIsLoaded = 0;
+	if(!glProgramEnvParametersI4uivNV) bIsLoaded = 0;
 	glGetProgramLocalParameterIivNV = (PFNGLGETPROGRAMLOCALPARAMETERIIVNVPROC)gleIntGetProcAddress("glGetProgramLocalParameterIivNV");
-	if(!TestPointer((const void*)glGetProgramLocalParameterIivNV)) bIsLoaded = 0;
+	if(!glGetProgramLocalParameterIivNV) bIsLoaded = 0;
 	glGetProgramLocalParameterIuivNV = (PFNGLGETPROGRAMLOCALPARAMETERIUIVNVPROC)gleIntGetProcAddress("glGetProgramLocalParameterIuivNV");
-	if(!TestPointer((const void*)glGetProgramLocalParameterIuivNV)) bIsLoaded = 0;
+	if(!glGetProgramLocalParameterIuivNV) bIsLoaded = 0;
 	glGetProgramEnvParameterIivNV = (PFNGLGETPROGRAMENVPARAMETERIIVNVPROC)gleIntGetProcAddress("glGetProgramEnvParameterIivNV");
-	if(!TestPointer((const void*)glGetProgramEnvParameterIivNV)) bIsLoaded = 0;
+	if(!glGetProgramEnvParameterIivNV) bIsLoaded = 0;
 	glGetProgramEnvParameterIuivNV = (PFNGLGETPROGRAMENVPARAMETERIUIVNVPROC)gleIntGetProcAddress("glGetProgramEnvParameterIuivNV");
-	if(!TestPointer((const void*)glGetProgramEnvParameterIuivNV)) bIsLoaded = 0;
+	if(!glGetProgramEnvParameterIuivNV) bIsLoaded = 0;
 #endif /*GL_NV_gpu_program4*/
 	return bIsLoaded;
 }
@@ -7674,9 +7687,9 @@ static int gleIntLoad_NV_gpu_program5()
 	int bIsLoaded = 1;
 #ifndef GL_NV_gpu_program5
 	glProgramSubroutineParametersuivNV = (PFNGLPROGRAMSUBROUTINEPARAMETERSUIVNVPROC)gleIntGetProcAddress("glProgramSubroutineParametersuivNV");
-	if(!TestPointer((const void*)glProgramSubroutineParametersuivNV)) bIsLoaded = 0;
+	if(!glProgramSubroutineParametersuivNV) bIsLoaded = 0;
 	glGetProgramSubroutineParameteruivNV = (PFNGLGETPROGRAMSUBROUTINEPARAMETERUIVNVPROC)gleIntGetProcAddress("glGetProgramSubroutineParameteruivNV");
-	if(!TestPointer((const void*)glGetProgramSubroutineParameteruivNV)) bIsLoaded = 0;
+	if(!glGetProgramSubroutineParameteruivNV) bIsLoaded = 0;
 #endif /*GL_NV_gpu_program5*/
 	return bIsLoaded;
 }
@@ -7755,71 +7768,71 @@ static int gleIntLoad_NV_gpu_shader5()
 	int bIsLoaded = 1;
 #ifndef GL_NV_gpu_shader5
 	glUniform1i64NV = (PFNGLUNIFORM1I64NVPROC)gleIntGetProcAddress("glUniform1i64NV");
-	if(!TestPointer((const void*)glUniform1i64NV)) bIsLoaded = 0;
+	if(!glUniform1i64NV) bIsLoaded = 0;
 	glUniform2i64NV = (PFNGLUNIFORM2I64NVPROC)gleIntGetProcAddress("glUniform2i64NV");
-	if(!TestPointer((const void*)glUniform2i64NV)) bIsLoaded = 0;
+	if(!glUniform2i64NV) bIsLoaded = 0;
 	glUniform3i64NV = (PFNGLUNIFORM3I64NVPROC)gleIntGetProcAddress("glUniform3i64NV");
-	if(!TestPointer((const void*)glUniform3i64NV)) bIsLoaded = 0;
+	if(!glUniform3i64NV) bIsLoaded = 0;
 	glUniform4i64NV = (PFNGLUNIFORM4I64NVPROC)gleIntGetProcAddress("glUniform4i64NV");
-	if(!TestPointer((const void*)glUniform4i64NV)) bIsLoaded = 0;
+	if(!glUniform4i64NV) bIsLoaded = 0;
 	glUniform1i64vNV = (PFNGLUNIFORM1I64VNVPROC)gleIntGetProcAddress("glUniform1i64vNV");
-	if(!TestPointer((const void*)glUniform1i64vNV)) bIsLoaded = 0;
+	if(!glUniform1i64vNV) bIsLoaded = 0;
 	glUniform2i64vNV = (PFNGLUNIFORM2I64VNVPROC)gleIntGetProcAddress("glUniform2i64vNV");
-	if(!TestPointer((const void*)glUniform2i64vNV)) bIsLoaded = 0;
+	if(!glUniform2i64vNV) bIsLoaded = 0;
 	glUniform3i64vNV = (PFNGLUNIFORM3I64VNVPROC)gleIntGetProcAddress("glUniform3i64vNV");
-	if(!TestPointer((const void*)glUniform3i64vNV)) bIsLoaded = 0;
+	if(!glUniform3i64vNV) bIsLoaded = 0;
 	glUniform4i64vNV = (PFNGLUNIFORM4I64VNVPROC)gleIntGetProcAddress("glUniform4i64vNV");
-	if(!TestPointer((const void*)glUniform4i64vNV)) bIsLoaded = 0;
+	if(!glUniform4i64vNV) bIsLoaded = 0;
 	glUniform1ui64NV = (PFNGLUNIFORM1UI64NVPROC)gleIntGetProcAddress("glUniform1ui64NV");
-	if(!TestPointer((const void*)glUniform1ui64NV)) bIsLoaded = 0;
+	if(!glUniform1ui64NV) bIsLoaded = 0;
 	glUniform2ui64NV = (PFNGLUNIFORM2UI64NVPROC)gleIntGetProcAddress("glUniform2ui64NV");
-	if(!TestPointer((const void*)glUniform2ui64NV)) bIsLoaded = 0;
+	if(!glUniform2ui64NV) bIsLoaded = 0;
 	glUniform3ui64NV = (PFNGLUNIFORM3UI64NVPROC)gleIntGetProcAddress("glUniform3ui64NV");
-	if(!TestPointer((const void*)glUniform3ui64NV)) bIsLoaded = 0;
+	if(!glUniform3ui64NV) bIsLoaded = 0;
 	glUniform4ui64NV = (PFNGLUNIFORM4UI64NVPROC)gleIntGetProcAddress("glUniform4ui64NV");
-	if(!TestPointer((const void*)glUniform4ui64NV)) bIsLoaded = 0;
+	if(!glUniform4ui64NV) bIsLoaded = 0;
 	glUniform1ui64vNV = (PFNGLUNIFORM1UI64VNVPROC)gleIntGetProcAddress("glUniform1ui64vNV");
-	if(!TestPointer((const void*)glUniform1ui64vNV)) bIsLoaded = 0;
+	if(!glUniform1ui64vNV) bIsLoaded = 0;
 	glUniform2ui64vNV = (PFNGLUNIFORM2UI64VNVPROC)gleIntGetProcAddress("glUniform2ui64vNV");
-	if(!TestPointer((const void*)glUniform2ui64vNV)) bIsLoaded = 0;
+	if(!glUniform2ui64vNV) bIsLoaded = 0;
 	glUniform3ui64vNV = (PFNGLUNIFORM3UI64VNVPROC)gleIntGetProcAddress("glUniform3ui64vNV");
-	if(!TestPointer((const void*)glUniform3ui64vNV)) bIsLoaded = 0;
+	if(!glUniform3ui64vNV) bIsLoaded = 0;
 	glUniform4ui64vNV = (PFNGLUNIFORM4UI64VNVPROC)gleIntGetProcAddress("glUniform4ui64vNV");
-	if(!TestPointer((const void*)glUniform4ui64vNV)) bIsLoaded = 0;
+	if(!glUniform4ui64vNV) bIsLoaded = 0;
 	glGetUniformi64vNV = (PFNGLGETUNIFORMI64VNVPROC)gleIntGetProcAddress("glGetUniformi64vNV");
-	if(!TestPointer((const void*)glGetUniformi64vNV)) bIsLoaded = 0;
+	if(!glGetUniformi64vNV) bIsLoaded = 0;
 	glProgramUniform1i64NV = (PFNGLPROGRAMUNIFORM1I64NVPROC)gleIntGetProcAddress("glProgramUniform1i64NV");
-	if(!TestPointer((const void*)glProgramUniform1i64NV)) bIsLoaded = 0;
+	if(!glProgramUniform1i64NV) bIsLoaded = 0;
 	glProgramUniform2i64NV = (PFNGLPROGRAMUNIFORM2I64NVPROC)gleIntGetProcAddress("glProgramUniform2i64NV");
-	if(!TestPointer((const void*)glProgramUniform2i64NV)) bIsLoaded = 0;
+	if(!glProgramUniform2i64NV) bIsLoaded = 0;
 	glProgramUniform3i64NV = (PFNGLPROGRAMUNIFORM3I64NVPROC)gleIntGetProcAddress("glProgramUniform3i64NV");
-	if(!TestPointer((const void*)glProgramUniform3i64NV)) bIsLoaded = 0;
+	if(!glProgramUniform3i64NV) bIsLoaded = 0;
 	glProgramUniform4i64NV = (PFNGLPROGRAMUNIFORM4I64NVPROC)gleIntGetProcAddress("glProgramUniform4i64NV");
-	if(!TestPointer((const void*)glProgramUniform4i64NV)) bIsLoaded = 0;
+	if(!glProgramUniform4i64NV) bIsLoaded = 0;
 	glProgramUniform1i64vNV = (PFNGLPROGRAMUNIFORM1I64VNVPROC)gleIntGetProcAddress("glProgramUniform1i64vNV");
-	if(!TestPointer((const void*)glProgramUniform1i64vNV)) bIsLoaded = 0;
+	if(!glProgramUniform1i64vNV) bIsLoaded = 0;
 	glProgramUniform2i64vNV = (PFNGLPROGRAMUNIFORM2I64VNVPROC)gleIntGetProcAddress("glProgramUniform2i64vNV");
-	if(!TestPointer((const void*)glProgramUniform2i64vNV)) bIsLoaded = 0;
+	if(!glProgramUniform2i64vNV) bIsLoaded = 0;
 	glProgramUniform3i64vNV = (PFNGLPROGRAMUNIFORM3I64VNVPROC)gleIntGetProcAddress("glProgramUniform3i64vNV");
-	if(!TestPointer((const void*)glProgramUniform3i64vNV)) bIsLoaded = 0;
+	if(!glProgramUniform3i64vNV) bIsLoaded = 0;
 	glProgramUniform4i64vNV = (PFNGLPROGRAMUNIFORM4I64VNVPROC)gleIntGetProcAddress("glProgramUniform4i64vNV");
-	if(!TestPointer((const void*)glProgramUniform4i64vNV)) bIsLoaded = 0;
+	if(!glProgramUniform4i64vNV) bIsLoaded = 0;
 	glProgramUniform1ui64NV = (PFNGLPROGRAMUNIFORM1UI64NVPROC)gleIntGetProcAddress("glProgramUniform1ui64NV");
-	if(!TestPointer((const void*)glProgramUniform1ui64NV)) bIsLoaded = 0;
+	if(!glProgramUniform1ui64NV) bIsLoaded = 0;
 	glProgramUniform2ui64NV = (PFNGLPROGRAMUNIFORM2UI64NVPROC)gleIntGetProcAddress("glProgramUniform2ui64NV");
-	if(!TestPointer((const void*)glProgramUniform2ui64NV)) bIsLoaded = 0;
+	if(!glProgramUniform2ui64NV) bIsLoaded = 0;
 	glProgramUniform3ui64NV = (PFNGLPROGRAMUNIFORM3UI64NVPROC)gleIntGetProcAddress("glProgramUniform3ui64NV");
-	if(!TestPointer((const void*)glProgramUniform3ui64NV)) bIsLoaded = 0;
+	if(!glProgramUniform3ui64NV) bIsLoaded = 0;
 	glProgramUniform4ui64NV = (PFNGLPROGRAMUNIFORM4UI64NVPROC)gleIntGetProcAddress("glProgramUniform4ui64NV");
-	if(!TestPointer((const void*)glProgramUniform4ui64NV)) bIsLoaded = 0;
+	if(!glProgramUniform4ui64NV) bIsLoaded = 0;
 	glProgramUniform1ui64vNV = (PFNGLPROGRAMUNIFORM1UI64VNVPROC)gleIntGetProcAddress("glProgramUniform1ui64vNV");
-	if(!TestPointer((const void*)glProgramUniform1ui64vNV)) bIsLoaded = 0;
+	if(!glProgramUniform1ui64vNV) bIsLoaded = 0;
 	glProgramUniform2ui64vNV = (PFNGLPROGRAMUNIFORM2UI64VNVPROC)gleIntGetProcAddress("glProgramUniform2ui64vNV");
-	if(!TestPointer((const void*)glProgramUniform2ui64vNV)) bIsLoaded = 0;
+	if(!glProgramUniform2ui64vNV) bIsLoaded = 0;
 	glProgramUniform3ui64vNV = (PFNGLPROGRAMUNIFORM3UI64VNVPROC)gleIntGetProcAddress("glProgramUniform3ui64vNV");
-	if(!TestPointer((const void*)glProgramUniform3ui64vNV)) bIsLoaded = 0;
+	if(!glProgramUniform3ui64vNV) bIsLoaded = 0;
 	glProgramUniform4ui64vNV = (PFNGLPROGRAMUNIFORM4UI64VNVPROC)gleIntGetProcAddress("glProgramUniform4ui64vNV");
-	if(!TestPointer((const void*)glProgramUniform4ui64vNV)) bIsLoaded = 0;
+	if(!glProgramUniform4ui64vNV) bIsLoaded = 0;
 #endif /*GL_NV_gpu_shader5*/
 	return bIsLoaded;
 }
@@ -7924,97 +7937,97 @@ static int gleIntLoad_NV_half_float()
 	int bIsLoaded = 1;
 #ifndef GL_NV_half_float
 	glVertex2hNV = (PFNGLVERTEX2HNVPROC)gleIntGetProcAddress("glVertex2hNV");
-	if(!TestPointer((const void*)glVertex2hNV)) bIsLoaded = 0;
+	if(!glVertex2hNV) bIsLoaded = 0;
 	glVertex2hvNV = (PFNGLVERTEX2HVNVPROC)gleIntGetProcAddress("glVertex2hvNV");
-	if(!TestPointer((const void*)glVertex2hvNV)) bIsLoaded = 0;
+	if(!glVertex2hvNV) bIsLoaded = 0;
 	glVertex3hNV = (PFNGLVERTEX3HNVPROC)gleIntGetProcAddress("glVertex3hNV");
-	if(!TestPointer((const void*)glVertex3hNV)) bIsLoaded = 0;
+	if(!glVertex3hNV) bIsLoaded = 0;
 	glVertex3hvNV = (PFNGLVERTEX3HVNVPROC)gleIntGetProcAddress("glVertex3hvNV");
-	if(!TestPointer((const void*)glVertex3hvNV)) bIsLoaded = 0;
+	if(!glVertex3hvNV) bIsLoaded = 0;
 	glVertex4hNV = (PFNGLVERTEX4HNVPROC)gleIntGetProcAddress("glVertex4hNV");
-	if(!TestPointer((const void*)glVertex4hNV)) bIsLoaded = 0;
+	if(!glVertex4hNV) bIsLoaded = 0;
 	glVertex4hvNV = (PFNGLVERTEX4HVNVPROC)gleIntGetProcAddress("glVertex4hvNV");
-	if(!TestPointer((const void*)glVertex4hvNV)) bIsLoaded = 0;
+	if(!glVertex4hvNV) bIsLoaded = 0;
 	glNormal3hNV = (PFNGLNORMAL3HNVPROC)gleIntGetProcAddress("glNormal3hNV");
-	if(!TestPointer((const void*)glNormal3hNV)) bIsLoaded = 0;
+	if(!glNormal3hNV) bIsLoaded = 0;
 	glNormal3hvNV = (PFNGLNORMAL3HVNVPROC)gleIntGetProcAddress("glNormal3hvNV");
-	if(!TestPointer((const void*)glNormal3hvNV)) bIsLoaded = 0;
+	if(!glNormal3hvNV) bIsLoaded = 0;
 	glColor3hNV = (PFNGLCOLOR3HNVPROC)gleIntGetProcAddress("glColor3hNV");
-	if(!TestPointer((const void*)glColor3hNV)) bIsLoaded = 0;
+	if(!glColor3hNV) bIsLoaded = 0;
 	glColor3hvNV = (PFNGLCOLOR3HVNVPROC)gleIntGetProcAddress("glColor3hvNV");
-	if(!TestPointer((const void*)glColor3hvNV)) bIsLoaded = 0;
+	if(!glColor3hvNV) bIsLoaded = 0;
 	glColor4hNV = (PFNGLCOLOR4HNVPROC)gleIntGetProcAddress("glColor4hNV");
-	if(!TestPointer((const void*)glColor4hNV)) bIsLoaded = 0;
+	if(!glColor4hNV) bIsLoaded = 0;
 	glColor4hvNV = (PFNGLCOLOR4HVNVPROC)gleIntGetProcAddress("glColor4hvNV");
-	if(!TestPointer((const void*)glColor4hvNV)) bIsLoaded = 0;
+	if(!glColor4hvNV) bIsLoaded = 0;
 	glTexCoord1hNV = (PFNGLTEXCOORD1HNVPROC)gleIntGetProcAddress("glTexCoord1hNV");
-	if(!TestPointer((const void*)glTexCoord1hNV)) bIsLoaded = 0;
+	if(!glTexCoord1hNV) bIsLoaded = 0;
 	glTexCoord1hvNV = (PFNGLTEXCOORD1HVNVPROC)gleIntGetProcAddress("glTexCoord1hvNV");
-	if(!TestPointer((const void*)glTexCoord1hvNV)) bIsLoaded = 0;
+	if(!glTexCoord1hvNV) bIsLoaded = 0;
 	glTexCoord2hNV = (PFNGLTEXCOORD2HNVPROC)gleIntGetProcAddress("glTexCoord2hNV");
-	if(!TestPointer((const void*)glTexCoord2hNV)) bIsLoaded = 0;
+	if(!glTexCoord2hNV) bIsLoaded = 0;
 	glTexCoord2hvNV = (PFNGLTEXCOORD2HVNVPROC)gleIntGetProcAddress("glTexCoord2hvNV");
-	if(!TestPointer((const void*)glTexCoord2hvNV)) bIsLoaded = 0;
+	if(!glTexCoord2hvNV) bIsLoaded = 0;
 	glTexCoord3hNV = (PFNGLTEXCOORD3HNVPROC)gleIntGetProcAddress("glTexCoord3hNV");
-	if(!TestPointer((const void*)glTexCoord3hNV)) bIsLoaded = 0;
+	if(!glTexCoord3hNV) bIsLoaded = 0;
 	glTexCoord3hvNV = (PFNGLTEXCOORD3HVNVPROC)gleIntGetProcAddress("glTexCoord3hvNV");
-	if(!TestPointer((const void*)glTexCoord3hvNV)) bIsLoaded = 0;
+	if(!glTexCoord3hvNV) bIsLoaded = 0;
 	glTexCoord4hNV = (PFNGLTEXCOORD4HNVPROC)gleIntGetProcAddress("glTexCoord4hNV");
-	if(!TestPointer((const void*)glTexCoord4hNV)) bIsLoaded = 0;
+	if(!glTexCoord4hNV) bIsLoaded = 0;
 	glTexCoord4hvNV = (PFNGLTEXCOORD4HVNVPROC)gleIntGetProcAddress("glTexCoord4hvNV");
-	if(!TestPointer((const void*)glTexCoord4hvNV)) bIsLoaded = 0;
+	if(!glTexCoord4hvNV) bIsLoaded = 0;
 	glMultiTexCoord1hNV = (PFNGLMULTITEXCOORD1HNVPROC)gleIntGetProcAddress("glMultiTexCoord1hNV");
-	if(!TestPointer((const void*)glMultiTexCoord1hNV)) bIsLoaded = 0;
+	if(!glMultiTexCoord1hNV) bIsLoaded = 0;
 	glMultiTexCoord1hvNV = (PFNGLMULTITEXCOORD1HVNVPROC)gleIntGetProcAddress("glMultiTexCoord1hvNV");
-	if(!TestPointer((const void*)glMultiTexCoord1hvNV)) bIsLoaded = 0;
+	if(!glMultiTexCoord1hvNV) bIsLoaded = 0;
 	glMultiTexCoord2hNV = (PFNGLMULTITEXCOORD2HNVPROC)gleIntGetProcAddress("glMultiTexCoord2hNV");
-	if(!TestPointer((const void*)glMultiTexCoord2hNV)) bIsLoaded = 0;
+	if(!glMultiTexCoord2hNV) bIsLoaded = 0;
 	glMultiTexCoord2hvNV = (PFNGLMULTITEXCOORD2HVNVPROC)gleIntGetProcAddress("glMultiTexCoord2hvNV");
-	if(!TestPointer((const void*)glMultiTexCoord2hvNV)) bIsLoaded = 0;
+	if(!glMultiTexCoord2hvNV) bIsLoaded = 0;
 	glMultiTexCoord3hNV = (PFNGLMULTITEXCOORD3HNVPROC)gleIntGetProcAddress("glMultiTexCoord3hNV");
-	if(!TestPointer((const void*)glMultiTexCoord3hNV)) bIsLoaded = 0;
+	if(!glMultiTexCoord3hNV) bIsLoaded = 0;
 	glMultiTexCoord3hvNV = (PFNGLMULTITEXCOORD3HVNVPROC)gleIntGetProcAddress("glMultiTexCoord3hvNV");
-	if(!TestPointer((const void*)glMultiTexCoord3hvNV)) bIsLoaded = 0;
+	if(!glMultiTexCoord3hvNV) bIsLoaded = 0;
 	glMultiTexCoord4hNV = (PFNGLMULTITEXCOORD4HNVPROC)gleIntGetProcAddress("glMultiTexCoord4hNV");
-	if(!TestPointer((const void*)glMultiTexCoord4hNV)) bIsLoaded = 0;
+	if(!glMultiTexCoord4hNV) bIsLoaded = 0;
 	glMultiTexCoord4hvNV = (PFNGLMULTITEXCOORD4HVNVPROC)gleIntGetProcAddress("glMultiTexCoord4hvNV");
-	if(!TestPointer((const void*)glMultiTexCoord4hvNV)) bIsLoaded = 0;
+	if(!glMultiTexCoord4hvNV) bIsLoaded = 0;
 	glFogCoordhNV = (PFNGLFOGCOORDHNVPROC)gleIntGetProcAddress("glFogCoordhNV");
-	if(!TestPointer((const void*)glFogCoordhNV)) bIsLoaded = 0;
+	if(!glFogCoordhNV) bIsLoaded = 0;
 	glFogCoordhvNV = (PFNGLFOGCOORDHVNVPROC)gleIntGetProcAddress("glFogCoordhvNV");
-	if(!TestPointer((const void*)glFogCoordhvNV)) bIsLoaded = 0;
+	if(!glFogCoordhvNV) bIsLoaded = 0;
 	glSecondaryColor3hNV = (PFNGLSECONDARYCOLOR3HNVPROC)gleIntGetProcAddress("glSecondaryColor3hNV");
-	if(!TestPointer((const void*)glSecondaryColor3hNV)) bIsLoaded = 0;
+	if(!glSecondaryColor3hNV) bIsLoaded = 0;
 	glSecondaryColor3hvNV = (PFNGLSECONDARYCOLOR3HVNVPROC)gleIntGetProcAddress("glSecondaryColor3hvNV");
-	if(!TestPointer((const void*)glSecondaryColor3hvNV)) bIsLoaded = 0;
+	if(!glSecondaryColor3hvNV) bIsLoaded = 0;
 	glVertexWeighthNV = (PFNGLVERTEXWEIGHTHNVPROC)gleIntGetProcAddress("glVertexWeighthNV");
-	if(!TestPointer((const void*)glVertexWeighthNV)) bIsLoaded = 0;
+	if(!glVertexWeighthNV) bIsLoaded = 0;
 	glVertexWeighthvNV = (PFNGLVERTEXWEIGHTHVNVPROC)gleIntGetProcAddress("glVertexWeighthvNV");
-	if(!TestPointer((const void*)glVertexWeighthvNV)) bIsLoaded = 0;
+	if(!glVertexWeighthvNV) bIsLoaded = 0;
 	glVertexAttrib1hNV = (PFNGLVERTEXATTRIB1HNVPROC)gleIntGetProcAddress("glVertexAttrib1hNV");
-	if(!TestPointer((const void*)glVertexAttrib1hNV)) bIsLoaded = 0;
+	if(!glVertexAttrib1hNV) bIsLoaded = 0;
 	glVertexAttrib1hvNV = (PFNGLVERTEXATTRIB1HVNVPROC)gleIntGetProcAddress("glVertexAttrib1hvNV");
-	if(!TestPointer((const void*)glVertexAttrib1hvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib1hvNV) bIsLoaded = 0;
 	glVertexAttrib2hNV = (PFNGLVERTEXATTRIB2HNVPROC)gleIntGetProcAddress("glVertexAttrib2hNV");
-	if(!TestPointer((const void*)glVertexAttrib2hNV)) bIsLoaded = 0;
+	if(!glVertexAttrib2hNV) bIsLoaded = 0;
 	glVertexAttrib2hvNV = (PFNGLVERTEXATTRIB2HVNVPROC)gleIntGetProcAddress("glVertexAttrib2hvNV");
-	if(!TestPointer((const void*)glVertexAttrib2hvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib2hvNV) bIsLoaded = 0;
 	glVertexAttrib3hNV = (PFNGLVERTEXATTRIB3HNVPROC)gleIntGetProcAddress("glVertexAttrib3hNV");
-	if(!TestPointer((const void*)glVertexAttrib3hNV)) bIsLoaded = 0;
+	if(!glVertexAttrib3hNV) bIsLoaded = 0;
 	glVertexAttrib3hvNV = (PFNGLVERTEXATTRIB3HVNVPROC)gleIntGetProcAddress("glVertexAttrib3hvNV");
-	if(!TestPointer((const void*)glVertexAttrib3hvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib3hvNV) bIsLoaded = 0;
 	glVertexAttrib4hNV = (PFNGLVERTEXATTRIB4HNVPROC)gleIntGetProcAddress("glVertexAttrib4hNV");
-	if(!TestPointer((const void*)glVertexAttrib4hNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4hNV) bIsLoaded = 0;
 	glVertexAttrib4hvNV = (PFNGLVERTEXATTRIB4HVNVPROC)gleIntGetProcAddress("glVertexAttrib4hvNV");
-	if(!TestPointer((const void*)glVertexAttrib4hvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4hvNV) bIsLoaded = 0;
 	glVertexAttribs1hvNV = (PFNGLVERTEXATTRIBS1HVNVPROC)gleIntGetProcAddress("glVertexAttribs1hvNV");
-	if(!TestPointer((const void*)glVertexAttribs1hvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs1hvNV) bIsLoaded = 0;
 	glVertexAttribs2hvNV = (PFNGLVERTEXATTRIBS2HVNVPROC)gleIntGetProcAddress("glVertexAttribs2hvNV");
-	if(!TestPointer((const void*)glVertexAttribs2hvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs2hvNV) bIsLoaded = 0;
 	glVertexAttribs3hvNV = (PFNGLVERTEXATTRIBS3HVNVPROC)gleIntGetProcAddress("glVertexAttribs3hvNV");
-	if(!TestPointer((const void*)glVertexAttribs3hvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs3hvNV) bIsLoaded = 0;
 	glVertexAttribs4hvNV = (PFNGLVERTEXATTRIBS4HVNVPROC)gleIntGetProcAddress("glVertexAttribs4hvNV");
-	if(!TestPointer((const void*)glVertexAttribs4hvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs4hvNV) bIsLoaded = 0;
 #endif /*GL_NV_half_float*/
 	return bIsLoaded;
 }
@@ -8044,19 +8057,19 @@ static int gleIntLoad_NV_occlusion_query()
 	int bIsLoaded = 1;
 #ifndef GL_NV_occlusion_query
 	glGenOcclusionQueriesNV = (PFNGLGENOCCLUSIONQUERIESNVPROC)gleIntGetProcAddress("glGenOcclusionQueriesNV");
-	if(!TestPointer((const void*)glGenOcclusionQueriesNV)) bIsLoaded = 0;
+	if(!glGenOcclusionQueriesNV) bIsLoaded = 0;
 	glDeleteOcclusionQueriesNV = (PFNGLDELETEOCCLUSIONQUERIESNVPROC)gleIntGetProcAddress("glDeleteOcclusionQueriesNV");
-	if(!TestPointer((const void*)glDeleteOcclusionQueriesNV)) bIsLoaded = 0;
+	if(!glDeleteOcclusionQueriesNV) bIsLoaded = 0;
 	glIsOcclusionQueryNV = (PFNGLISOCCLUSIONQUERYNVPROC)gleIntGetProcAddress("glIsOcclusionQueryNV");
-	if(!TestPointer((const void*)glIsOcclusionQueryNV)) bIsLoaded = 0;
+	if(!glIsOcclusionQueryNV) bIsLoaded = 0;
 	glBeginOcclusionQueryNV = (PFNGLBEGINOCCLUSIONQUERYNVPROC)gleIntGetProcAddress("glBeginOcclusionQueryNV");
-	if(!TestPointer((const void*)glBeginOcclusionQueryNV)) bIsLoaded = 0;
+	if(!glBeginOcclusionQueryNV) bIsLoaded = 0;
 	glEndOcclusionQueryNV = (PFNGLENDOCCLUSIONQUERYNVPROC)gleIntGetProcAddress("glEndOcclusionQueryNV");
-	if(!TestPointer((const void*)glEndOcclusionQueryNV)) bIsLoaded = 0;
+	if(!glEndOcclusionQueryNV) bIsLoaded = 0;
 	glGetOcclusionQueryivNV = (PFNGLGETOCCLUSIONQUERYIVNVPROC)gleIntGetProcAddress("glGetOcclusionQueryivNV");
-	if(!TestPointer((const void*)glGetOcclusionQueryivNV)) bIsLoaded = 0;
+	if(!glGetOcclusionQueryivNV) bIsLoaded = 0;
 	glGetOcclusionQueryuivNV = (PFNGLGETOCCLUSIONQUERYUIVNVPROC)gleIntGetProcAddress("glGetOcclusionQueryuivNV");
-	if(!TestPointer((const void*)glGetOcclusionQueryuivNV)) bIsLoaded = 0;
+	if(!glGetOcclusionQueryuivNV) bIsLoaded = 0;
 #endif /*GL_NV_occlusion_query*/
 	return bIsLoaded;
 }
@@ -8076,11 +8089,11 @@ static int gleIntLoad_NV_parameter_buffer_object()
 	int bIsLoaded = 1;
 #ifndef GL_NV_parameter_buffer_object
 	glProgramBufferParametersfvNV = (PFNGLPROGRAMBUFFERPARAMETERSFVNVPROC)gleIntGetProcAddress("glProgramBufferParametersfvNV");
-	if(!TestPointer((const void*)glProgramBufferParametersfvNV)) bIsLoaded = 0;
+	if(!glProgramBufferParametersfvNV) bIsLoaded = 0;
 	glProgramBufferParametersIivNV = (PFNGLPROGRAMBUFFERPARAMETERSIIVNVPROC)gleIntGetProcAddress("glProgramBufferParametersIivNV");
-	if(!TestPointer((const void*)glProgramBufferParametersIivNV)) bIsLoaded = 0;
+	if(!glProgramBufferParametersIivNV) bIsLoaded = 0;
 	glProgramBufferParametersIuivNV = (PFNGLPROGRAMBUFFERPARAMETERSIUIVNVPROC)gleIntGetProcAddress("glProgramBufferParametersIuivNV");
-	if(!TestPointer((const void*)glProgramBufferParametersIuivNV)) bIsLoaded = 0;
+	if(!glProgramBufferParametersIuivNV) bIsLoaded = 0;
 #endif /*GL_NV_parameter_buffer_object*/
 	return bIsLoaded;
 }
@@ -8098,9 +8111,9 @@ static int gleIntLoad_NV_pixel_data_range()
 	int bIsLoaded = 1;
 #ifndef GL_NV_pixel_data_range
 	glPixelDataRangeNV = (PFNGLPIXELDATARANGENVPROC)gleIntGetProcAddress("glPixelDataRangeNV");
-	if(!TestPointer((const void*)glPixelDataRangeNV)) bIsLoaded = 0;
+	if(!glPixelDataRangeNV) bIsLoaded = 0;
 	glFlushPixelDataRangeNV = (PFNGLFLUSHPIXELDATARANGENVPROC)gleIntGetProcAddress("glFlushPixelDataRangeNV");
-	if(!TestPointer((const void*)glFlushPixelDataRangeNV)) bIsLoaded = 0;
+	if(!glFlushPixelDataRangeNV) bIsLoaded = 0;
 #endif /*GL_NV_pixel_data_range*/
 	return bIsLoaded;
 }
@@ -8117,9 +8130,9 @@ static int gleIntLoad_NV_point_sprite()
 	int bIsLoaded = 1;
 #ifndef GL_NV_point_sprite
 	glPointParameteriNV = (PFNGLPOINTPARAMETERINVPROC)gleIntGetProcAddress("glPointParameteriNV");
-	if(!TestPointer((const void*)glPointParameteriNV)) bIsLoaded = 0;
+	if(!glPointParameteriNV) bIsLoaded = 0;
 	glPointParameterivNV = (PFNGLPOINTPARAMETERIVNVPROC)gleIntGetProcAddress("glPointParameterivNV");
-	if(!TestPointer((const void*)glPointParameterivNV)) bIsLoaded = 0;
+	if(!glPointParameterivNV) bIsLoaded = 0;
 #endif /*GL_NV_point_sprite*/
 	return bIsLoaded;
 }
@@ -8144,17 +8157,17 @@ static int gleIntLoad_NV_present_video()
 	int bIsLoaded = 1;
 #ifndef GL_NV_present_video
 	glPresentFrameKeyedNV = (PFNGLPRESENTFRAMEKEYEDNVPROC)gleIntGetProcAddress("glPresentFrameKeyedNV");
-	if(!TestPointer((const void*)glPresentFrameKeyedNV)) bIsLoaded = 0;
+	if(!glPresentFrameKeyedNV) bIsLoaded = 0;
 	glPresentFrameDualFillNV = (PFNGLPRESENTFRAMEDUALFILLNVPROC)gleIntGetProcAddress("glPresentFrameDualFillNV");
-	if(!TestPointer((const void*)glPresentFrameDualFillNV)) bIsLoaded = 0;
+	if(!glPresentFrameDualFillNV) bIsLoaded = 0;
 	glGetVideoivNV = (PFNGLGETVIDEOIVNVPROC)gleIntGetProcAddress("glGetVideoivNV");
-	if(!TestPointer((const void*)glGetVideoivNV)) bIsLoaded = 0;
+	if(!glGetVideoivNV) bIsLoaded = 0;
 	glGetVideouivNV = (PFNGLGETVIDEOUIVNVPROC)gleIntGetProcAddress("glGetVideouivNV");
-	if(!TestPointer((const void*)glGetVideouivNV)) bIsLoaded = 0;
+	if(!glGetVideouivNV) bIsLoaded = 0;
 	glGetVideoi64vNV = (PFNGLGETVIDEOI64VNVPROC)gleIntGetProcAddress("glGetVideoi64vNV");
-	if(!TestPointer((const void*)glGetVideoi64vNV)) bIsLoaded = 0;
+	if(!glGetVideoi64vNV) bIsLoaded = 0;
 	glGetVideoui64vNV = (PFNGLGETVIDEOUI64VNVPROC)gleIntGetProcAddress("glGetVideoui64vNV");
-	if(!TestPointer((const void*)glGetVideoui64vNV)) bIsLoaded = 0;
+	if(!glGetVideoui64vNV) bIsLoaded = 0;
 #endif /*GL_NV_present_video*/
 	return bIsLoaded;
 }
@@ -8171,9 +8184,9 @@ static int gleIntLoad_NV_primitive_restart()
 	int bIsLoaded = 1;
 #ifndef GL_NV_primitive_restart
 	glPrimitiveRestartNV = (PFNGLPRIMITIVERESTARTNVPROC)gleIntGetProcAddress("glPrimitiveRestartNV");
-	if(!TestPointer((const void*)glPrimitiveRestartNV)) bIsLoaded = 0;
+	if(!glPrimitiveRestartNV) bIsLoaded = 0;
 	glPrimitiveRestartIndexNV = (PFNGLPRIMITIVERESTARTINDEXNVPROC)gleIntGetProcAddress("glPrimitiveRestartIndexNV");
-	if(!TestPointer((const void*)glPrimitiveRestartIndexNV)) bIsLoaded = 0;
+	if(!glPrimitiveRestartIndexNV) bIsLoaded = 0;
 #endif /*GL_NV_primitive_restart*/
 	return bIsLoaded;
 }
@@ -8212,31 +8225,31 @@ static int gleIntLoad_NV_register_combiners()
 	int bIsLoaded = 1;
 #ifndef GL_NV_register_combiners
 	glCombinerParameterfvNV = (PFNGLCOMBINERPARAMETERFVNVPROC)gleIntGetProcAddress("glCombinerParameterfvNV");
-	if(!TestPointer((const void*)glCombinerParameterfvNV)) bIsLoaded = 0;
+	if(!glCombinerParameterfvNV) bIsLoaded = 0;
 	glCombinerParameterfNV = (PFNGLCOMBINERPARAMETERFNVPROC)gleIntGetProcAddress("glCombinerParameterfNV");
-	if(!TestPointer((const void*)glCombinerParameterfNV)) bIsLoaded = 0;
+	if(!glCombinerParameterfNV) bIsLoaded = 0;
 	glCombinerParameterivNV = (PFNGLCOMBINERPARAMETERIVNVPROC)gleIntGetProcAddress("glCombinerParameterivNV");
-	if(!TestPointer((const void*)glCombinerParameterivNV)) bIsLoaded = 0;
+	if(!glCombinerParameterivNV) bIsLoaded = 0;
 	glCombinerParameteriNV = (PFNGLCOMBINERPARAMETERINVPROC)gleIntGetProcAddress("glCombinerParameteriNV");
-	if(!TestPointer((const void*)glCombinerParameteriNV)) bIsLoaded = 0;
+	if(!glCombinerParameteriNV) bIsLoaded = 0;
 	glCombinerInputNV = (PFNGLCOMBINERINPUTNVPROC)gleIntGetProcAddress("glCombinerInputNV");
-	if(!TestPointer((const void*)glCombinerInputNV)) bIsLoaded = 0;
+	if(!glCombinerInputNV) bIsLoaded = 0;
 	glCombinerOutputNV = (PFNGLCOMBINEROUTPUTNVPROC)gleIntGetProcAddress("glCombinerOutputNV");
-	if(!TestPointer((const void*)glCombinerOutputNV)) bIsLoaded = 0;
+	if(!glCombinerOutputNV) bIsLoaded = 0;
 	glFinalCombinerInputNV = (PFNGLFINALCOMBINERINPUTNVPROC)gleIntGetProcAddress("glFinalCombinerInputNV");
-	if(!TestPointer((const void*)glFinalCombinerInputNV)) bIsLoaded = 0;
+	if(!glFinalCombinerInputNV) bIsLoaded = 0;
 	glGetCombinerInputParameterfvNV = (PFNGLGETCOMBINERINPUTPARAMETERFVNVPROC)gleIntGetProcAddress("glGetCombinerInputParameterfvNV");
-	if(!TestPointer((const void*)glGetCombinerInputParameterfvNV)) bIsLoaded = 0;
+	if(!glGetCombinerInputParameterfvNV) bIsLoaded = 0;
 	glGetCombinerInputParameterivNV = (PFNGLGETCOMBINERINPUTPARAMETERIVNVPROC)gleIntGetProcAddress("glGetCombinerInputParameterivNV");
-	if(!TestPointer((const void*)glGetCombinerInputParameterivNV)) bIsLoaded = 0;
+	if(!glGetCombinerInputParameterivNV) bIsLoaded = 0;
 	glGetCombinerOutputParameterfvNV = (PFNGLGETCOMBINEROUTPUTPARAMETERFVNVPROC)gleIntGetProcAddress("glGetCombinerOutputParameterfvNV");
-	if(!TestPointer((const void*)glGetCombinerOutputParameterfvNV)) bIsLoaded = 0;
+	if(!glGetCombinerOutputParameterfvNV) bIsLoaded = 0;
 	glGetCombinerOutputParameterivNV = (PFNGLGETCOMBINEROUTPUTPARAMETERIVNVPROC)gleIntGetProcAddress("glGetCombinerOutputParameterivNV");
-	if(!TestPointer((const void*)glGetCombinerOutputParameterivNV)) bIsLoaded = 0;
+	if(!glGetCombinerOutputParameterivNV) bIsLoaded = 0;
 	glGetFinalCombinerInputParameterfvNV = (PFNGLGETFINALCOMBINERINPUTPARAMETERFVNVPROC)gleIntGetProcAddress("glGetFinalCombinerInputParameterfvNV");
-	if(!TestPointer((const void*)glGetFinalCombinerInputParameterfvNV)) bIsLoaded = 0;
+	if(!glGetFinalCombinerInputParameterfvNV) bIsLoaded = 0;
 	glGetFinalCombinerInputParameterivNV = (PFNGLGETFINALCOMBINERINPUTPARAMETERIVNVPROC)gleIntGetProcAddress("glGetFinalCombinerInputParameterivNV");
-	if(!TestPointer((const void*)glGetFinalCombinerInputParameterivNV)) bIsLoaded = 0;
+	if(!glGetFinalCombinerInputParameterivNV) bIsLoaded = 0;
 #endif /*GL_NV_register_combiners*/
 	return bIsLoaded;
 }
@@ -8253,9 +8266,9 @@ static int gleIntLoad_NV_register_combiners2()
 	int bIsLoaded = 1;
 #ifndef GL_NV_register_combiners2
 	glCombinerStageParameterfvNV = (PFNGLCOMBINERSTAGEPARAMETERFVNVPROC)gleIntGetProcAddress("glCombinerStageParameterfvNV");
-	if(!TestPointer((const void*)glCombinerStageParameterfvNV)) bIsLoaded = 0;
+	if(!glCombinerStageParameterfvNV) bIsLoaded = 0;
 	glGetCombinerStageParameterfvNV = (PFNGLGETCOMBINERSTAGEPARAMETERFVNVPROC)gleIntGetProcAddress("glGetCombinerStageParameterfvNV");
-	if(!TestPointer((const void*)glGetCombinerStageParameterfvNV)) bIsLoaded = 0;
+	if(!glGetCombinerStageParameterfvNV) bIsLoaded = 0;
 #endif /*GL_NV_register_combiners2*/
 	return bIsLoaded;
 }
@@ -8296,33 +8309,33 @@ static int gleIntLoad_NV_shader_buffer_load()
 	int bIsLoaded = 1;
 #ifndef GL_NV_shader_buffer_load
 	glMakeBufferResidentNV = (PFNGLMAKEBUFFERRESIDENTNVPROC)gleIntGetProcAddress("glMakeBufferResidentNV");
-	if(!TestPointer((const void*)glMakeBufferResidentNV)) bIsLoaded = 0;
+	if(!glMakeBufferResidentNV) bIsLoaded = 0;
 	glMakeBufferNonResidentNV = (PFNGLMAKEBUFFERNONRESIDENTNVPROC)gleIntGetProcAddress("glMakeBufferNonResidentNV");
-	if(!TestPointer((const void*)glMakeBufferNonResidentNV)) bIsLoaded = 0;
+	if(!glMakeBufferNonResidentNV) bIsLoaded = 0;
 	glIsBufferResidentNV = (PFNGLISBUFFERRESIDENTNVPROC)gleIntGetProcAddress("glIsBufferResidentNV");
-	if(!TestPointer((const void*)glIsBufferResidentNV)) bIsLoaded = 0;
+	if(!glIsBufferResidentNV) bIsLoaded = 0;
 	glMakeNamedBufferResidentNV = (PFNGLMAKENAMEDBUFFERRESIDENTNVPROC)gleIntGetProcAddress("glMakeNamedBufferResidentNV");
-	if(!TestPointer((const void*)glMakeNamedBufferResidentNV)) bIsLoaded = 0;
+	if(!glMakeNamedBufferResidentNV) bIsLoaded = 0;
 	glMakeNamedBufferNonResidentNV = (PFNGLMAKENAMEDBUFFERNONRESIDENTNVPROC)gleIntGetProcAddress("glMakeNamedBufferNonResidentNV");
-	if(!TestPointer((const void*)glMakeNamedBufferNonResidentNV)) bIsLoaded = 0;
+	if(!glMakeNamedBufferNonResidentNV) bIsLoaded = 0;
 	glIsNamedBufferResidentNV = (PFNGLISNAMEDBUFFERRESIDENTNVPROC)gleIntGetProcAddress("glIsNamedBufferResidentNV");
-	if(!TestPointer((const void*)glIsNamedBufferResidentNV)) bIsLoaded = 0;
+	if(!glIsNamedBufferResidentNV) bIsLoaded = 0;
 	glGetBufferParameterui64vNV = (PFNGLGETBUFFERPARAMETERUI64VNVPROC)gleIntGetProcAddress("glGetBufferParameterui64vNV");
-	if(!TestPointer((const void*)glGetBufferParameterui64vNV)) bIsLoaded = 0;
+	if(!glGetBufferParameterui64vNV) bIsLoaded = 0;
 	glGetNamedBufferParameterui64vNV = (PFNGLGETNAMEDBUFFERPARAMETERUI64VNVPROC)gleIntGetProcAddress("glGetNamedBufferParameterui64vNV");
-	if(!TestPointer((const void*)glGetNamedBufferParameterui64vNV)) bIsLoaded = 0;
+	if(!glGetNamedBufferParameterui64vNV) bIsLoaded = 0;
 	glGetIntegerui64vNV = (PFNGLGETINTEGERUI64VNVPROC)gleIntGetProcAddress("glGetIntegerui64vNV");
-	if(!TestPointer((const void*)glGetIntegerui64vNV)) bIsLoaded = 0;
+	if(!glGetIntegerui64vNV) bIsLoaded = 0;
 	glUniformui64NV = (PFNGLUNIFORMUI64NVPROC)gleIntGetProcAddress("glUniformui64NV");
-	if(!TestPointer((const void*)glUniformui64NV)) bIsLoaded = 0;
+	if(!glUniformui64NV) bIsLoaded = 0;
 	glUniformui64vNV = (PFNGLUNIFORMUI64VNVPROC)gleIntGetProcAddress("glUniformui64vNV");
-	if(!TestPointer((const void*)glUniformui64vNV)) bIsLoaded = 0;
+	if(!glUniformui64vNV) bIsLoaded = 0;
 	glGetUniformui64vNV = (PFNGLGETUNIFORMUI64VNVPROC)gleIntGetProcAddress("glGetUniformui64vNV");
-	if(!TestPointer((const void*)glGetUniformui64vNV)) bIsLoaded = 0;
+	if(!glGetUniformui64vNV) bIsLoaded = 0;
 	glProgramUniformui64NV = (PFNGLPROGRAMUNIFORMUI64NVPROC)gleIntGetProcAddress("glProgramUniformui64NV");
-	if(!TestPointer((const void*)glProgramUniformui64NV)) bIsLoaded = 0;
+	if(!glProgramUniformui64NV) bIsLoaded = 0;
 	glProgramUniformui64vNV = (PFNGLPROGRAMUNIFORMUI64VNVPROC)gleIntGetProcAddress("glProgramUniformui64vNV");
-	if(!TestPointer((const void*)glProgramUniformui64vNV)) bIsLoaded = 0;
+	if(!glProgramUniformui64vNV) bIsLoaded = 0;
 #endif /*GL_NV_shader_buffer_load*/
 	return bIsLoaded;
 }
@@ -8341,7 +8354,7 @@ static int gleIntLoad_NV_texture_barrier()
 	int bIsLoaded = 1;
 #ifndef GL_NV_texture_barrier
 	glTextureBarrierNV = (PFNGLTEXTUREBARRIERNVPROC)gleIntGetProcAddress("glTextureBarrierNV");
-	if(!TestPointer((const void*)glTextureBarrierNV)) bIsLoaded = 0;
+	if(!glTextureBarrierNV) bIsLoaded = 0;
 #endif /*GL_NV_texture_barrier*/
 	return bIsLoaded;
 }
@@ -8369,17 +8382,17 @@ static int gleIntLoad_NV_texture_multisample()
 	int bIsLoaded = 1;
 #ifndef GL_NV_texture_multisample
 	glTexImage2DMultisampleCoverageNV = (PFNGLTEXIMAGE2DMULTISAMPLECOVERAGENVPROC)gleIntGetProcAddress("glTexImage2DMultisampleCoverageNV");
-	if(!TestPointer((const void*)glTexImage2DMultisampleCoverageNV)) bIsLoaded = 0;
+	if(!glTexImage2DMultisampleCoverageNV) bIsLoaded = 0;
 	glTexImage3DMultisampleCoverageNV = (PFNGLTEXIMAGE3DMULTISAMPLECOVERAGENVPROC)gleIntGetProcAddress("glTexImage3DMultisampleCoverageNV");
-	if(!TestPointer((const void*)glTexImage3DMultisampleCoverageNV)) bIsLoaded = 0;
+	if(!glTexImage3DMultisampleCoverageNV) bIsLoaded = 0;
 	glTextureImage2DMultisampleNV = (PFNGLTEXTUREIMAGE2DMULTISAMPLENVPROC)gleIntGetProcAddress("glTextureImage2DMultisampleNV");
-	if(!TestPointer((const void*)glTextureImage2DMultisampleNV)) bIsLoaded = 0;
+	if(!glTextureImage2DMultisampleNV) bIsLoaded = 0;
 	glTextureImage3DMultisampleNV = (PFNGLTEXTUREIMAGE3DMULTISAMPLENVPROC)gleIntGetProcAddress("glTextureImage3DMultisampleNV");
-	if(!TestPointer((const void*)glTextureImage3DMultisampleNV)) bIsLoaded = 0;
+	if(!glTextureImage3DMultisampleNV) bIsLoaded = 0;
 	glTextureImage2DMultisampleCoverageNV = (PFNGLTEXTUREIMAGE2DMULTISAMPLECOVERAGENVPROC)gleIntGetProcAddress("glTextureImage2DMultisampleCoverageNV");
-	if(!TestPointer((const void*)glTextureImage2DMultisampleCoverageNV)) bIsLoaded = 0;
+	if(!glTextureImage2DMultisampleCoverageNV) bIsLoaded = 0;
 	glTextureImage3DMultisampleCoverageNV = (PFNGLTEXTUREIMAGE3DMULTISAMPLECOVERAGENVPROC)gleIntGetProcAddress("glTextureImage3DMultisampleCoverageNV");
-	if(!TestPointer((const void*)glTextureImage3DMultisampleCoverageNV)) bIsLoaded = 0;
+	if(!glTextureImage3DMultisampleCoverageNV) bIsLoaded = 0;
 #endif /*GL_NV_texture_multisample*/
 	return bIsLoaded;
 }
@@ -8420,29 +8433,29 @@ static int gleIntLoad_NV_transform_feedback()
 	int bIsLoaded = 1;
 #ifndef GL_NV_transform_feedback
 	glBeginTransformFeedbackNV = (PFNGLBEGINTRANSFORMFEEDBACKNVPROC)gleIntGetProcAddress("glBeginTransformFeedbackNV");
-	if(!TestPointer((const void*)glBeginTransformFeedbackNV)) bIsLoaded = 0;
+	if(!glBeginTransformFeedbackNV) bIsLoaded = 0;
 	glEndTransformFeedbackNV = (PFNGLENDTRANSFORMFEEDBACKNVPROC)gleIntGetProcAddress("glEndTransformFeedbackNV");
-	if(!TestPointer((const void*)glEndTransformFeedbackNV)) bIsLoaded = 0;
+	if(!glEndTransformFeedbackNV) bIsLoaded = 0;
 	glTransformFeedbackAttribsNV = (PFNGLTRANSFORMFEEDBACKATTRIBSNVPROC)gleIntGetProcAddress("glTransformFeedbackAttribsNV");
-	if(!TestPointer((const void*)glTransformFeedbackAttribsNV)) bIsLoaded = 0;
+	if(!glTransformFeedbackAttribsNV) bIsLoaded = 0;
 	glBindBufferRangeNV = (PFNGLBINDBUFFERRANGENVPROC)gleIntGetProcAddress("glBindBufferRangeNV");
-	if(!TestPointer((const void*)glBindBufferRangeNV)) bIsLoaded = 0;
+	if(!glBindBufferRangeNV) bIsLoaded = 0;
 	glBindBufferOffsetNV = (PFNGLBINDBUFFEROFFSETNVPROC)gleIntGetProcAddress("glBindBufferOffsetNV");
-	if(!TestPointer((const void*)glBindBufferOffsetNV)) bIsLoaded = 0;
+	if(!glBindBufferOffsetNV) bIsLoaded = 0;
 	glBindBufferBaseNV = (PFNGLBINDBUFFERBASENVPROC)gleIntGetProcAddress("glBindBufferBaseNV");
-	if(!TestPointer((const void*)glBindBufferBaseNV)) bIsLoaded = 0;
+	if(!glBindBufferBaseNV) bIsLoaded = 0;
 	glTransformFeedbackVaryingsNV = (PFNGLTRANSFORMFEEDBACKVARYINGSNVPROC)gleIntGetProcAddress("glTransformFeedbackVaryingsNV");
-	if(!TestPointer((const void*)glTransformFeedbackVaryingsNV)) bIsLoaded = 0;
+	if(!glTransformFeedbackVaryingsNV) bIsLoaded = 0;
 	glActiveVaryingNV = (PFNGLACTIVEVARYINGNVPROC)gleIntGetProcAddress("glActiveVaryingNV");
-	if(!TestPointer((const void*)glActiveVaryingNV)) bIsLoaded = 0;
+	if(!glActiveVaryingNV) bIsLoaded = 0;
 	glGetVaryingLocationNV = (PFNGLGETVARYINGLOCATIONNVPROC)gleIntGetProcAddress("glGetVaryingLocationNV");
-	if(!TestPointer((const void*)glGetVaryingLocationNV)) bIsLoaded = 0;
+	if(!glGetVaryingLocationNV) bIsLoaded = 0;
 	glGetActiveVaryingNV = (PFNGLGETACTIVEVARYINGNVPROC)gleIntGetProcAddress("glGetActiveVaryingNV");
-	if(!TestPointer((const void*)glGetActiveVaryingNV)) bIsLoaded = 0;
+	if(!glGetActiveVaryingNV) bIsLoaded = 0;
 	glGetTransformFeedbackVaryingNV = (PFNGLGETTRANSFORMFEEDBACKVARYINGNVPROC)gleIntGetProcAddress("glGetTransformFeedbackVaryingNV");
-	if(!TestPointer((const void*)glGetTransformFeedbackVaryingNV)) bIsLoaded = 0;
+	if(!glGetTransformFeedbackVaryingNV) bIsLoaded = 0;
 	glTransformFeedbackStreamAttribsNV = (PFNGLTRANSFORMFEEDBACKSTREAMATTRIBSNVPROC)gleIntGetProcAddress("glTransformFeedbackStreamAttribsNV");
-	if(!TestPointer((const void*)glTransformFeedbackStreamAttribsNV)) bIsLoaded = 0;
+	if(!glTransformFeedbackStreamAttribsNV) bIsLoaded = 0;
 #endif /*GL_NV_transform_feedback*/
 	return bIsLoaded;
 }
@@ -8469,19 +8482,19 @@ static int gleIntLoad_NV_transform_feedback2()
 	int bIsLoaded = 1;
 #ifndef GL_NV_transform_feedback2
 	glBindTransformFeedbackNV = (PFNGLBINDTRANSFORMFEEDBACKNVPROC)gleIntGetProcAddress("glBindTransformFeedbackNV");
-	if(!TestPointer((const void*)glBindTransformFeedbackNV)) bIsLoaded = 0;
+	if(!glBindTransformFeedbackNV) bIsLoaded = 0;
 	glDeleteTransformFeedbacksNV = (PFNGLDELETETRANSFORMFEEDBACKSNVPROC)gleIntGetProcAddress("glDeleteTransformFeedbacksNV");
-	if(!TestPointer((const void*)glDeleteTransformFeedbacksNV)) bIsLoaded = 0;
+	if(!glDeleteTransformFeedbacksNV) bIsLoaded = 0;
 	glGenTransformFeedbacksNV = (PFNGLGENTRANSFORMFEEDBACKSNVPROC)gleIntGetProcAddress("glGenTransformFeedbacksNV");
-	if(!TestPointer((const void*)glGenTransformFeedbacksNV)) bIsLoaded = 0;
+	if(!glGenTransformFeedbacksNV) bIsLoaded = 0;
 	glIsTransformFeedbackNV = (PFNGLISTRANSFORMFEEDBACKNVPROC)gleIntGetProcAddress("glIsTransformFeedbackNV");
-	if(!TestPointer((const void*)glIsTransformFeedbackNV)) bIsLoaded = 0;
+	if(!glIsTransformFeedbackNV) bIsLoaded = 0;
 	glPauseTransformFeedbackNV = (PFNGLPAUSETRANSFORMFEEDBACKNVPROC)gleIntGetProcAddress("glPauseTransformFeedbackNV");
-	if(!TestPointer((const void*)glPauseTransformFeedbackNV)) bIsLoaded = 0;
+	if(!glPauseTransformFeedbackNV) bIsLoaded = 0;
 	glResumeTransformFeedbackNV = (PFNGLRESUMETRANSFORMFEEDBACKNVPROC)gleIntGetProcAddress("glResumeTransformFeedbackNV");
-	if(!TestPointer((const void*)glResumeTransformFeedbackNV)) bIsLoaded = 0;
+	if(!glResumeTransformFeedbackNV) bIsLoaded = 0;
 	glDrawTransformFeedbackNV = (PFNGLDRAWTRANSFORMFEEDBACKNVPROC)gleIntGetProcAddress("glDrawTransformFeedbackNV");
-	if(!TestPointer((const void*)glDrawTransformFeedbackNV)) bIsLoaded = 0;
+	if(!glDrawTransformFeedbackNV) bIsLoaded = 0;
 #endif /*GL_NV_transform_feedback2*/
 	return bIsLoaded;
 }
@@ -8514,25 +8527,25 @@ static int gleIntLoad_NV_vdpau_interop()
 	int bIsLoaded = 1;
 #ifndef GL_NV_vdpau_interop
 	glVDPAUInitNV = (PFNGLVDPAUINITNVPROC)gleIntGetProcAddress("glVDPAUInitNV");
-	if(!TestPointer((const void*)glVDPAUInitNV)) bIsLoaded = 0;
+	if(!glVDPAUInitNV) bIsLoaded = 0;
 	glVDPAUFiniNV = (PFNGLVDPAUFININVPROC)gleIntGetProcAddress("glVDPAUFiniNV");
-	if(!TestPointer((const void*)glVDPAUFiniNV)) bIsLoaded = 0;
+	if(!glVDPAUFiniNV) bIsLoaded = 0;
 	glVDPAURegisterVideoSurfaceNV = (PFNGLVDPAUREGISTERVIDEOSURFACENVPROC)gleIntGetProcAddress("glVDPAURegisterVideoSurfaceNV");
-	if(!TestPointer((const void*)glVDPAURegisterVideoSurfaceNV)) bIsLoaded = 0;
+	if(!glVDPAURegisterVideoSurfaceNV) bIsLoaded = 0;
 	glVDPAURegisterOutputSurfaceNV = (PFNGLVDPAUREGISTEROUTPUTSURFACENVPROC)gleIntGetProcAddress("glVDPAURegisterOutputSurfaceNV");
-	if(!TestPointer((const void*)glVDPAURegisterOutputSurfaceNV)) bIsLoaded = 0;
+	if(!glVDPAURegisterOutputSurfaceNV) bIsLoaded = 0;
 	glVDPAUIsSurfaceNV = (PFNGLVDPAUISSURFACENVPROC)gleIntGetProcAddress("glVDPAUIsSurfaceNV");
-	if(!TestPointer((const void*)glVDPAUIsSurfaceNV)) bIsLoaded = 0;
+	if(!glVDPAUIsSurfaceNV) bIsLoaded = 0;
 	glVDPAUUnregisterSurfaceNV = (PFNGLVDPAUUNREGISTERSURFACENVPROC)gleIntGetProcAddress("glVDPAUUnregisterSurfaceNV");
-	if(!TestPointer((const void*)glVDPAUUnregisterSurfaceNV)) bIsLoaded = 0;
+	if(!glVDPAUUnregisterSurfaceNV) bIsLoaded = 0;
 	glVDPAUGetSurfaceivNV = (PFNGLVDPAUGETSURFACEIVNVPROC)gleIntGetProcAddress("glVDPAUGetSurfaceivNV");
-	if(!TestPointer((const void*)glVDPAUGetSurfaceivNV)) bIsLoaded = 0;
+	if(!glVDPAUGetSurfaceivNV) bIsLoaded = 0;
 	glVDPAUSurfaceAccessNV = (PFNGLVDPAUSURFACEACCESSNVPROC)gleIntGetProcAddress("glVDPAUSurfaceAccessNV");
-	if(!TestPointer((const void*)glVDPAUSurfaceAccessNV)) bIsLoaded = 0;
+	if(!glVDPAUSurfaceAccessNV) bIsLoaded = 0;
 	glVDPAUMapSurfacesNV = (PFNGLVDPAUMAPSURFACESNVPROC)gleIntGetProcAddress("glVDPAUMapSurfacesNV");
-	if(!TestPointer((const void*)glVDPAUMapSurfacesNV)) bIsLoaded = 0;
+	if(!glVDPAUMapSurfacesNV) bIsLoaded = 0;
 	glVDPAUUnmapSurfacesNV = (PFNGLVDPAUUNMAPSURFACESNVPROC)gleIntGetProcAddress("glVDPAUUnmapSurfacesNV");
-	if(!TestPointer((const void*)glVDPAUUnmapSurfacesNV)) bIsLoaded = 0;
+	if(!glVDPAUUnmapSurfacesNV) bIsLoaded = 0;
 #endif /*GL_NV_vdpau_interop*/
 	return bIsLoaded;
 }
@@ -8549,9 +8562,9 @@ static int gleIntLoad_NV_vertex_array_range()
 	int bIsLoaded = 1;
 #ifndef GL_NV_vertex_array_range
 	glFlushVertexArrayRangeNV = (PFNGLFLUSHVERTEXARRAYRANGENVPROC)gleIntGetProcAddress("glFlushVertexArrayRangeNV");
-	if(!TestPointer((const void*)glFlushVertexArrayRangeNV)) bIsLoaded = 0;
+	if(!glFlushVertexArrayRangeNV) bIsLoaded = 0;
 	glVertexArrayRangeNV = (PFNGLVERTEXARRAYRANGENVPROC)gleIntGetProcAddress("glVertexArrayRangeNV");
-	if(!TestPointer((const void*)glVertexArrayRangeNV)) bIsLoaded = 0;
+	if(!glVertexArrayRangeNV) bIsLoaded = 0;
 #endif /*GL_NV_vertex_array_range*/
 	return bIsLoaded;
 }
@@ -8603,43 +8616,43 @@ static int gleIntLoad_NV_vertex_attrib_integer_64bit()
 	int bIsLoaded = 1;
 #ifndef GL_NV_vertex_attrib_integer_64bit
 	glVertexAttribL1i64NV = (PFNGLVERTEXATTRIBL1I64NVPROC)gleIntGetProcAddress("glVertexAttribL1i64NV");
-	if(!TestPointer((const void*)glVertexAttribL1i64NV)) bIsLoaded = 0;
+	if(!glVertexAttribL1i64NV) bIsLoaded = 0;
 	glVertexAttribL2i64NV = (PFNGLVERTEXATTRIBL2I64NVPROC)gleIntGetProcAddress("glVertexAttribL2i64NV");
-	if(!TestPointer((const void*)glVertexAttribL2i64NV)) bIsLoaded = 0;
+	if(!glVertexAttribL2i64NV) bIsLoaded = 0;
 	glVertexAttribL3i64NV = (PFNGLVERTEXATTRIBL3I64NVPROC)gleIntGetProcAddress("glVertexAttribL3i64NV");
-	if(!TestPointer((const void*)glVertexAttribL3i64NV)) bIsLoaded = 0;
+	if(!glVertexAttribL3i64NV) bIsLoaded = 0;
 	glVertexAttribL4i64NV = (PFNGLVERTEXATTRIBL4I64NVPROC)gleIntGetProcAddress("glVertexAttribL4i64NV");
-	if(!TestPointer((const void*)glVertexAttribL4i64NV)) bIsLoaded = 0;
+	if(!glVertexAttribL4i64NV) bIsLoaded = 0;
 	glVertexAttribL1i64vNV = (PFNGLVERTEXATTRIBL1I64VNVPROC)gleIntGetProcAddress("glVertexAttribL1i64vNV");
-	if(!TestPointer((const void*)glVertexAttribL1i64vNV)) bIsLoaded = 0;
+	if(!glVertexAttribL1i64vNV) bIsLoaded = 0;
 	glVertexAttribL2i64vNV = (PFNGLVERTEXATTRIBL2I64VNVPROC)gleIntGetProcAddress("glVertexAttribL2i64vNV");
-	if(!TestPointer((const void*)glVertexAttribL2i64vNV)) bIsLoaded = 0;
+	if(!glVertexAttribL2i64vNV) bIsLoaded = 0;
 	glVertexAttribL3i64vNV = (PFNGLVERTEXATTRIBL3I64VNVPROC)gleIntGetProcAddress("glVertexAttribL3i64vNV");
-	if(!TestPointer((const void*)glVertexAttribL3i64vNV)) bIsLoaded = 0;
+	if(!glVertexAttribL3i64vNV) bIsLoaded = 0;
 	glVertexAttribL4i64vNV = (PFNGLVERTEXATTRIBL4I64VNVPROC)gleIntGetProcAddress("glVertexAttribL4i64vNV");
-	if(!TestPointer((const void*)glVertexAttribL4i64vNV)) bIsLoaded = 0;
+	if(!glVertexAttribL4i64vNV) bIsLoaded = 0;
 	glVertexAttribL1ui64NV = (PFNGLVERTEXATTRIBL1UI64NVPROC)gleIntGetProcAddress("glVertexAttribL1ui64NV");
-	if(!TestPointer((const void*)glVertexAttribL1ui64NV)) bIsLoaded = 0;
+	if(!glVertexAttribL1ui64NV) bIsLoaded = 0;
 	glVertexAttribL2ui64NV = (PFNGLVERTEXATTRIBL2UI64NVPROC)gleIntGetProcAddress("glVertexAttribL2ui64NV");
-	if(!TestPointer((const void*)glVertexAttribL2ui64NV)) bIsLoaded = 0;
+	if(!glVertexAttribL2ui64NV) bIsLoaded = 0;
 	glVertexAttribL3ui64NV = (PFNGLVERTEXATTRIBL3UI64NVPROC)gleIntGetProcAddress("glVertexAttribL3ui64NV");
-	if(!TestPointer((const void*)glVertexAttribL3ui64NV)) bIsLoaded = 0;
+	if(!glVertexAttribL3ui64NV) bIsLoaded = 0;
 	glVertexAttribL4ui64NV = (PFNGLVERTEXATTRIBL4UI64NVPROC)gleIntGetProcAddress("glVertexAttribL4ui64NV");
-	if(!TestPointer((const void*)glVertexAttribL4ui64NV)) bIsLoaded = 0;
+	if(!glVertexAttribL4ui64NV) bIsLoaded = 0;
 	glVertexAttribL1ui64vNV = (PFNGLVERTEXATTRIBL1UI64VNVPROC)gleIntGetProcAddress("glVertexAttribL1ui64vNV");
-	if(!TestPointer((const void*)glVertexAttribL1ui64vNV)) bIsLoaded = 0;
+	if(!glVertexAttribL1ui64vNV) bIsLoaded = 0;
 	glVertexAttribL2ui64vNV = (PFNGLVERTEXATTRIBL2UI64VNVPROC)gleIntGetProcAddress("glVertexAttribL2ui64vNV");
-	if(!TestPointer((const void*)glVertexAttribL2ui64vNV)) bIsLoaded = 0;
+	if(!glVertexAttribL2ui64vNV) bIsLoaded = 0;
 	glVertexAttribL3ui64vNV = (PFNGLVERTEXATTRIBL3UI64VNVPROC)gleIntGetProcAddress("glVertexAttribL3ui64vNV");
-	if(!TestPointer((const void*)glVertexAttribL3ui64vNV)) bIsLoaded = 0;
+	if(!glVertexAttribL3ui64vNV) bIsLoaded = 0;
 	glVertexAttribL4ui64vNV = (PFNGLVERTEXATTRIBL4UI64VNVPROC)gleIntGetProcAddress("glVertexAttribL4ui64vNV");
-	if(!TestPointer((const void*)glVertexAttribL4ui64vNV)) bIsLoaded = 0;
+	if(!glVertexAttribL4ui64vNV) bIsLoaded = 0;
 	glGetVertexAttribLi64vNV = (PFNGLGETVERTEXATTRIBLI64VNVPROC)gleIntGetProcAddress("glGetVertexAttribLi64vNV");
-	if(!TestPointer((const void*)glGetVertexAttribLi64vNV)) bIsLoaded = 0;
+	if(!glGetVertexAttribLi64vNV) bIsLoaded = 0;
 	glGetVertexAttribLui64vNV = (PFNGLGETVERTEXATTRIBLUI64VNVPROC)gleIntGetProcAddress("glGetVertexAttribLui64vNV");
-	if(!TestPointer((const void*)glGetVertexAttribLui64vNV)) bIsLoaded = 0;
+	if(!glGetVertexAttribLui64vNV) bIsLoaded = 0;
 	glVertexAttribLFormatNV = (PFNGLVERTEXATTRIBLFORMATNVPROC)gleIntGetProcAddress("glVertexAttribLFormatNV");
-	if(!TestPointer((const void*)glVertexAttribLFormatNV)) bIsLoaded = 0;
+	if(!glVertexAttribLFormatNV) bIsLoaded = 0;
 #endif /*GL_NV_vertex_attrib_integer_64bit*/
 	return bIsLoaded;
 }
@@ -8676,29 +8689,29 @@ static int gleIntLoad_NV_vertex_buffer_unified_memory()
 	int bIsLoaded = 1;
 #ifndef GL_NV_vertex_buffer_unified_memory
 	glBufferAddressRangeNV = (PFNGLBUFFERADDRESSRANGENVPROC)gleIntGetProcAddress("glBufferAddressRangeNV");
-	if(!TestPointer((const void*)glBufferAddressRangeNV)) bIsLoaded = 0;
+	if(!glBufferAddressRangeNV) bIsLoaded = 0;
 	glVertexFormatNV = (PFNGLVERTEXFORMATNVPROC)gleIntGetProcAddress("glVertexFormatNV");
-	if(!TestPointer((const void*)glVertexFormatNV)) bIsLoaded = 0;
+	if(!glVertexFormatNV) bIsLoaded = 0;
 	glNormalFormatNV = (PFNGLNORMALFORMATNVPROC)gleIntGetProcAddress("glNormalFormatNV");
-	if(!TestPointer((const void*)glNormalFormatNV)) bIsLoaded = 0;
+	if(!glNormalFormatNV) bIsLoaded = 0;
 	glColorFormatNV = (PFNGLCOLORFORMATNVPROC)gleIntGetProcAddress("glColorFormatNV");
-	if(!TestPointer((const void*)glColorFormatNV)) bIsLoaded = 0;
+	if(!glColorFormatNV) bIsLoaded = 0;
 	glIndexFormatNV = (PFNGLINDEXFORMATNVPROC)gleIntGetProcAddress("glIndexFormatNV");
-	if(!TestPointer((const void*)glIndexFormatNV)) bIsLoaded = 0;
+	if(!glIndexFormatNV) bIsLoaded = 0;
 	glTexCoordFormatNV = (PFNGLTEXCOORDFORMATNVPROC)gleIntGetProcAddress("glTexCoordFormatNV");
-	if(!TestPointer((const void*)glTexCoordFormatNV)) bIsLoaded = 0;
+	if(!glTexCoordFormatNV) bIsLoaded = 0;
 	glEdgeFlagFormatNV = (PFNGLEDGEFLAGFORMATNVPROC)gleIntGetProcAddress("glEdgeFlagFormatNV");
-	if(!TestPointer((const void*)glEdgeFlagFormatNV)) bIsLoaded = 0;
+	if(!glEdgeFlagFormatNV) bIsLoaded = 0;
 	glSecondaryColorFormatNV = (PFNGLSECONDARYCOLORFORMATNVPROC)gleIntGetProcAddress("glSecondaryColorFormatNV");
-	if(!TestPointer((const void*)glSecondaryColorFormatNV)) bIsLoaded = 0;
+	if(!glSecondaryColorFormatNV) bIsLoaded = 0;
 	glFogCoordFormatNV = (PFNGLFOGCOORDFORMATNVPROC)gleIntGetProcAddress("glFogCoordFormatNV");
-	if(!TestPointer((const void*)glFogCoordFormatNV)) bIsLoaded = 0;
+	if(!glFogCoordFormatNV) bIsLoaded = 0;
 	glVertexAttribFormatNV = (PFNGLVERTEXATTRIBFORMATNVPROC)gleIntGetProcAddress("glVertexAttribFormatNV");
-	if(!TestPointer((const void*)glVertexAttribFormatNV)) bIsLoaded = 0;
+	if(!glVertexAttribFormatNV) bIsLoaded = 0;
 	glVertexAttribIFormatNV = (PFNGLVERTEXATTRIBIFORMATNVPROC)gleIntGetProcAddress("glVertexAttribIFormatNV");
-	if(!TestPointer((const void*)glVertexAttribIFormatNV)) bIsLoaded = 0;
+	if(!glVertexAttribIFormatNV) bIsLoaded = 0;
 	glGetIntegerui64i_vNV = (PFNGLGETINTEGERUI64I_VNVPROC)gleIntGetProcAddress("glGetIntegerui64i_vNV");
-	if(!TestPointer((const void*)glGetIntegerui64i_vNV)) bIsLoaded = 0;
+	if(!glGetIntegerui64i_vNV) bIsLoaded = 0;
 #endif /*GL_NV_vertex_buffer_unified_memory*/
 	return bIsLoaded;
 }
@@ -8839,133 +8852,133 @@ static int gleIntLoad_NV_vertex_program()
 	int bIsLoaded = 1;
 #ifndef GL_NV_vertex_program
 	glAreProgramsResidentNV = (PFNGLAREPROGRAMSRESIDENTNVPROC)gleIntGetProcAddress("glAreProgramsResidentNV");
-	if(!TestPointer((const void*)glAreProgramsResidentNV)) bIsLoaded = 0;
+	if(!glAreProgramsResidentNV) bIsLoaded = 0;
 	glBindProgramNV = (PFNGLBINDPROGRAMNVPROC)gleIntGetProcAddress("glBindProgramNV");
-	if(!TestPointer((const void*)glBindProgramNV)) bIsLoaded = 0;
+	if(!glBindProgramNV) bIsLoaded = 0;
 	glDeleteProgramsNV = (PFNGLDELETEPROGRAMSNVPROC)gleIntGetProcAddress("glDeleteProgramsNV");
-	if(!TestPointer((const void*)glDeleteProgramsNV)) bIsLoaded = 0;
+	if(!glDeleteProgramsNV) bIsLoaded = 0;
 	glExecuteProgramNV = (PFNGLEXECUTEPROGRAMNVPROC)gleIntGetProcAddress("glExecuteProgramNV");
-	if(!TestPointer((const void*)glExecuteProgramNV)) bIsLoaded = 0;
+	if(!glExecuteProgramNV) bIsLoaded = 0;
 	glGenProgramsNV = (PFNGLGENPROGRAMSNVPROC)gleIntGetProcAddress("glGenProgramsNV");
-	if(!TestPointer((const void*)glGenProgramsNV)) bIsLoaded = 0;
+	if(!glGenProgramsNV) bIsLoaded = 0;
 	glGetProgramParameterdvNV = (PFNGLGETPROGRAMPARAMETERDVNVPROC)gleIntGetProcAddress("glGetProgramParameterdvNV");
-	if(!TestPointer((const void*)glGetProgramParameterdvNV)) bIsLoaded = 0;
+	if(!glGetProgramParameterdvNV) bIsLoaded = 0;
 	glGetProgramParameterfvNV = (PFNGLGETPROGRAMPARAMETERFVNVPROC)gleIntGetProcAddress("glGetProgramParameterfvNV");
-	if(!TestPointer((const void*)glGetProgramParameterfvNV)) bIsLoaded = 0;
+	if(!glGetProgramParameterfvNV) bIsLoaded = 0;
 	glGetProgramivNV = (PFNGLGETPROGRAMIVNVPROC)gleIntGetProcAddress("glGetProgramivNV");
-	if(!TestPointer((const void*)glGetProgramivNV)) bIsLoaded = 0;
+	if(!glGetProgramivNV) bIsLoaded = 0;
 	glGetProgramStringNV = (PFNGLGETPROGRAMSTRINGNVPROC)gleIntGetProcAddress("glGetProgramStringNV");
-	if(!TestPointer((const void*)glGetProgramStringNV)) bIsLoaded = 0;
+	if(!glGetProgramStringNV) bIsLoaded = 0;
 	glGetTrackMatrixivNV = (PFNGLGETTRACKMATRIXIVNVPROC)gleIntGetProcAddress("glGetTrackMatrixivNV");
-	if(!TestPointer((const void*)glGetTrackMatrixivNV)) bIsLoaded = 0;
+	if(!glGetTrackMatrixivNV) bIsLoaded = 0;
 	glGetVertexAttribdvNV = (PFNGLGETVERTEXATTRIBDVNVPROC)gleIntGetProcAddress("glGetVertexAttribdvNV");
-	if(!TestPointer((const void*)glGetVertexAttribdvNV)) bIsLoaded = 0;
+	if(!glGetVertexAttribdvNV) bIsLoaded = 0;
 	glGetVertexAttribfvNV = (PFNGLGETVERTEXATTRIBFVNVPROC)gleIntGetProcAddress("glGetVertexAttribfvNV");
-	if(!TestPointer((const void*)glGetVertexAttribfvNV)) bIsLoaded = 0;
+	if(!glGetVertexAttribfvNV) bIsLoaded = 0;
 	glGetVertexAttribivNV = (PFNGLGETVERTEXATTRIBIVNVPROC)gleIntGetProcAddress("glGetVertexAttribivNV");
-	if(!TestPointer((const void*)glGetVertexAttribivNV)) bIsLoaded = 0;
+	if(!glGetVertexAttribivNV) bIsLoaded = 0;
 	glGetVertexAttribPointervNV = (PFNGLGETVERTEXATTRIBPOINTERVNVPROC)gleIntGetProcAddress("glGetVertexAttribPointervNV");
-	if(!TestPointer((const void*)glGetVertexAttribPointervNV)) bIsLoaded = 0;
+	if(!glGetVertexAttribPointervNV) bIsLoaded = 0;
 	glIsProgramNV = (PFNGLISPROGRAMNVPROC)gleIntGetProcAddress("glIsProgramNV");
-	if(!TestPointer((const void*)glIsProgramNV)) bIsLoaded = 0;
+	if(!glIsProgramNV) bIsLoaded = 0;
 	glLoadProgramNV = (PFNGLLOADPROGRAMNVPROC)gleIntGetProcAddress("glLoadProgramNV");
-	if(!TestPointer((const void*)glLoadProgramNV)) bIsLoaded = 0;
+	if(!glLoadProgramNV) bIsLoaded = 0;
 	glProgramParameter4dNV = (PFNGLPROGRAMPARAMETER4DNVPROC)gleIntGetProcAddress("glProgramParameter4dNV");
-	if(!TestPointer((const void*)glProgramParameter4dNV)) bIsLoaded = 0;
+	if(!glProgramParameter4dNV) bIsLoaded = 0;
 	glProgramParameter4dvNV = (PFNGLPROGRAMPARAMETER4DVNVPROC)gleIntGetProcAddress("glProgramParameter4dvNV");
-	if(!TestPointer((const void*)glProgramParameter4dvNV)) bIsLoaded = 0;
+	if(!glProgramParameter4dvNV) bIsLoaded = 0;
 	glProgramParameter4fNV = (PFNGLPROGRAMPARAMETER4FNVPROC)gleIntGetProcAddress("glProgramParameter4fNV");
-	if(!TestPointer((const void*)glProgramParameter4fNV)) bIsLoaded = 0;
+	if(!glProgramParameter4fNV) bIsLoaded = 0;
 	glProgramParameter4fvNV = (PFNGLPROGRAMPARAMETER4FVNVPROC)gleIntGetProcAddress("glProgramParameter4fvNV");
-	if(!TestPointer((const void*)glProgramParameter4fvNV)) bIsLoaded = 0;
+	if(!glProgramParameter4fvNV) bIsLoaded = 0;
 	glProgramParameters4dvNV = (PFNGLPROGRAMPARAMETERS4DVNVPROC)gleIntGetProcAddress("glProgramParameters4dvNV");
-	if(!TestPointer((const void*)glProgramParameters4dvNV)) bIsLoaded = 0;
+	if(!glProgramParameters4dvNV) bIsLoaded = 0;
 	glProgramParameters4fvNV = (PFNGLPROGRAMPARAMETERS4FVNVPROC)gleIntGetProcAddress("glProgramParameters4fvNV");
-	if(!TestPointer((const void*)glProgramParameters4fvNV)) bIsLoaded = 0;
+	if(!glProgramParameters4fvNV) bIsLoaded = 0;
 	glRequestResidentProgramsNV = (PFNGLREQUESTRESIDENTPROGRAMSNVPROC)gleIntGetProcAddress("glRequestResidentProgramsNV");
-	if(!TestPointer((const void*)glRequestResidentProgramsNV)) bIsLoaded = 0;
+	if(!glRequestResidentProgramsNV) bIsLoaded = 0;
 	glTrackMatrixNV = (PFNGLTRACKMATRIXNVPROC)gleIntGetProcAddress("glTrackMatrixNV");
-	if(!TestPointer((const void*)glTrackMatrixNV)) bIsLoaded = 0;
+	if(!glTrackMatrixNV) bIsLoaded = 0;
 	glVertexAttribPointerNV = (PFNGLVERTEXATTRIBPOINTERNVPROC)gleIntGetProcAddress("glVertexAttribPointerNV");
-	if(!TestPointer((const void*)glVertexAttribPointerNV)) bIsLoaded = 0;
+	if(!glVertexAttribPointerNV) bIsLoaded = 0;
 	glVertexAttrib1dNV = (PFNGLVERTEXATTRIB1DNVPROC)gleIntGetProcAddress("glVertexAttrib1dNV");
-	if(!TestPointer((const void*)glVertexAttrib1dNV)) bIsLoaded = 0;
+	if(!glVertexAttrib1dNV) bIsLoaded = 0;
 	glVertexAttrib1dvNV = (PFNGLVERTEXATTRIB1DVNVPROC)gleIntGetProcAddress("glVertexAttrib1dvNV");
-	if(!TestPointer((const void*)glVertexAttrib1dvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib1dvNV) bIsLoaded = 0;
 	glVertexAttrib1fNV = (PFNGLVERTEXATTRIB1FNVPROC)gleIntGetProcAddress("glVertexAttrib1fNV");
-	if(!TestPointer((const void*)glVertexAttrib1fNV)) bIsLoaded = 0;
+	if(!glVertexAttrib1fNV) bIsLoaded = 0;
 	glVertexAttrib1fvNV = (PFNGLVERTEXATTRIB1FVNVPROC)gleIntGetProcAddress("glVertexAttrib1fvNV");
-	if(!TestPointer((const void*)glVertexAttrib1fvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib1fvNV) bIsLoaded = 0;
 	glVertexAttrib1sNV = (PFNGLVERTEXATTRIB1SNVPROC)gleIntGetProcAddress("glVertexAttrib1sNV");
-	if(!TestPointer((const void*)glVertexAttrib1sNV)) bIsLoaded = 0;
+	if(!glVertexAttrib1sNV) bIsLoaded = 0;
 	glVertexAttrib1svNV = (PFNGLVERTEXATTRIB1SVNVPROC)gleIntGetProcAddress("glVertexAttrib1svNV");
-	if(!TestPointer((const void*)glVertexAttrib1svNV)) bIsLoaded = 0;
+	if(!glVertexAttrib1svNV) bIsLoaded = 0;
 	glVertexAttrib2dNV = (PFNGLVERTEXATTRIB2DNVPROC)gleIntGetProcAddress("glVertexAttrib2dNV");
-	if(!TestPointer((const void*)glVertexAttrib2dNV)) bIsLoaded = 0;
+	if(!glVertexAttrib2dNV) bIsLoaded = 0;
 	glVertexAttrib2dvNV = (PFNGLVERTEXATTRIB2DVNVPROC)gleIntGetProcAddress("glVertexAttrib2dvNV");
-	if(!TestPointer((const void*)glVertexAttrib2dvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib2dvNV) bIsLoaded = 0;
 	glVertexAttrib2fNV = (PFNGLVERTEXATTRIB2FNVPROC)gleIntGetProcAddress("glVertexAttrib2fNV");
-	if(!TestPointer((const void*)glVertexAttrib2fNV)) bIsLoaded = 0;
+	if(!glVertexAttrib2fNV) bIsLoaded = 0;
 	glVertexAttrib2fvNV = (PFNGLVERTEXATTRIB2FVNVPROC)gleIntGetProcAddress("glVertexAttrib2fvNV");
-	if(!TestPointer((const void*)glVertexAttrib2fvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib2fvNV) bIsLoaded = 0;
 	glVertexAttrib2sNV = (PFNGLVERTEXATTRIB2SNVPROC)gleIntGetProcAddress("glVertexAttrib2sNV");
-	if(!TestPointer((const void*)glVertexAttrib2sNV)) bIsLoaded = 0;
+	if(!glVertexAttrib2sNV) bIsLoaded = 0;
 	glVertexAttrib2svNV = (PFNGLVERTEXATTRIB2SVNVPROC)gleIntGetProcAddress("glVertexAttrib2svNV");
-	if(!TestPointer((const void*)glVertexAttrib2svNV)) bIsLoaded = 0;
+	if(!glVertexAttrib2svNV) bIsLoaded = 0;
 	glVertexAttrib3dNV = (PFNGLVERTEXATTRIB3DNVPROC)gleIntGetProcAddress("glVertexAttrib3dNV");
-	if(!TestPointer((const void*)glVertexAttrib3dNV)) bIsLoaded = 0;
+	if(!glVertexAttrib3dNV) bIsLoaded = 0;
 	glVertexAttrib3dvNV = (PFNGLVERTEXATTRIB3DVNVPROC)gleIntGetProcAddress("glVertexAttrib3dvNV");
-	if(!TestPointer((const void*)glVertexAttrib3dvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib3dvNV) bIsLoaded = 0;
 	glVertexAttrib3fNV = (PFNGLVERTEXATTRIB3FNVPROC)gleIntGetProcAddress("glVertexAttrib3fNV");
-	if(!TestPointer((const void*)glVertexAttrib3fNV)) bIsLoaded = 0;
+	if(!glVertexAttrib3fNV) bIsLoaded = 0;
 	glVertexAttrib3fvNV = (PFNGLVERTEXATTRIB3FVNVPROC)gleIntGetProcAddress("glVertexAttrib3fvNV");
-	if(!TestPointer((const void*)glVertexAttrib3fvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib3fvNV) bIsLoaded = 0;
 	glVertexAttrib3sNV = (PFNGLVERTEXATTRIB3SNVPROC)gleIntGetProcAddress("glVertexAttrib3sNV");
-	if(!TestPointer((const void*)glVertexAttrib3sNV)) bIsLoaded = 0;
+	if(!glVertexAttrib3sNV) bIsLoaded = 0;
 	glVertexAttrib3svNV = (PFNGLVERTEXATTRIB3SVNVPROC)gleIntGetProcAddress("glVertexAttrib3svNV");
-	if(!TestPointer((const void*)glVertexAttrib3svNV)) bIsLoaded = 0;
+	if(!glVertexAttrib3svNV) bIsLoaded = 0;
 	glVertexAttrib4dNV = (PFNGLVERTEXATTRIB4DNVPROC)gleIntGetProcAddress("glVertexAttrib4dNV");
-	if(!TestPointer((const void*)glVertexAttrib4dNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4dNV) bIsLoaded = 0;
 	glVertexAttrib4dvNV = (PFNGLVERTEXATTRIB4DVNVPROC)gleIntGetProcAddress("glVertexAttrib4dvNV");
-	if(!TestPointer((const void*)glVertexAttrib4dvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4dvNV) bIsLoaded = 0;
 	glVertexAttrib4fNV = (PFNGLVERTEXATTRIB4FNVPROC)gleIntGetProcAddress("glVertexAttrib4fNV");
-	if(!TestPointer((const void*)glVertexAttrib4fNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4fNV) bIsLoaded = 0;
 	glVertexAttrib4fvNV = (PFNGLVERTEXATTRIB4FVNVPROC)gleIntGetProcAddress("glVertexAttrib4fvNV");
-	if(!TestPointer((const void*)glVertexAttrib4fvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4fvNV) bIsLoaded = 0;
 	glVertexAttrib4sNV = (PFNGLVERTEXATTRIB4SNVPROC)gleIntGetProcAddress("glVertexAttrib4sNV");
-	if(!TestPointer((const void*)glVertexAttrib4sNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4sNV) bIsLoaded = 0;
 	glVertexAttrib4svNV = (PFNGLVERTEXATTRIB4SVNVPROC)gleIntGetProcAddress("glVertexAttrib4svNV");
-	if(!TestPointer((const void*)glVertexAttrib4svNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4svNV) bIsLoaded = 0;
 	glVertexAttrib4ubNV = (PFNGLVERTEXATTRIB4UBNVPROC)gleIntGetProcAddress("glVertexAttrib4ubNV");
-	if(!TestPointer((const void*)glVertexAttrib4ubNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4ubNV) bIsLoaded = 0;
 	glVertexAttrib4ubvNV = (PFNGLVERTEXATTRIB4UBVNVPROC)gleIntGetProcAddress("glVertexAttrib4ubvNV");
-	if(!TestPointer((const void*)glVertexAttrib4ubvNV)) bIsLoaded = 0;
+	if(!glVertexAttrib4ubvNV) bIsLoaded = 0;
 	glVertexAttribs1dvNV = (PFNGLVERTEXATTRIBS1DVNVPROC)gleIntGetProcAddress("glVertexAttribs1dvNV");
-	if(!TestPointer((const void*)glVertexAttribs1dvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs1dvNV) bIsLoaded = 0;
 	glVertexAttribs1fvNV = (PFNGLVERTEXATTRIBS1FVNVPROC)gleIntGetProcAddress("glVertexAttribs1fvNV");
-	if(!TestPointer((const void*)glVertexAttribs1fvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs1fvNV) bIsLoaded = 0;
 	glVertexAttribs1svNV = (PFNGLVERTEXATTRIBS1SVNVPROC)gleIntGetProcAddress("glVertexAttribs1svNV");
-	if(!TestPointer((const void*)glVertexAttribs1svNV)) bIsLoaded = 0;
+	if(!glVertexAttribs1svNV) bIsLoaded = 0;
 	glVertexAttribs2dvNV = (PFNGLVERTEXATTRIBS2DVNVPROC)gleIntGetProcAddress("glVertexAttribs2dvNV");
-	if(!TestPointer((const void*)glVertexAttribs2dvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs2dvNV) bIsLoaded = 0;
 	glVertexAttribs2fvNV = (PFNGLVERTEXATTRIBS2FVNVPROC)gleIntGetProcAddress("glVertexAttribs2fvNV");
-	if(!TestPointer((const void*)glVertexAttribs2fvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs2fvNV) bIsLoaded = 0;
 	glVertexAttribs2svNV = (PFNGLVERTEXATTRIBS2SVNVPROC)gleIntGetProcAddress("glVertexAttribs2svNV");
-	if(!TestPointer((const void*)glVertexAttribs2svNV)) bIsLoaded = 0;
+	if(!glVertexAttribs2svNV) bIsLoaded = 0;
 	glVertexAttribs3dvNV = (PFNGLVERTEXATTRIBS3DVNVPROC)gleIntGetProcAddress("glVertexAttribs3dvNV");
-	if(!TestPointer((const void*)glVertexAttribs3dvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs3dvNV) bIsLoaded = 0;
 	glVertexAttribs3fvNV = (PFNGLVERTEXATTRIBS3FVNVPROC)gleIntGetProcAddress("glVertexAttribs3fvNV");
-	if(!TestPointer((const void*)glVertexAttribs3fvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs3fvNV) bIsLoaded = 0;
 	glVertexAttribs3svNV = (PFNGLVERTEXATTRIBS3SVNVPROC)gleIntGetProcAddress("glVertexAttribs3svNV");
-	if(!TestPointer((const void*)glVertexAttribs3svNV)) bIsLoaded = 0;
+	if(!glVertexAttribs3svNV) bIsLoaded = 0;
 	glVertexAttribs4dvNV = (PFNGLVERTEXATTRIBS4DVNVPROC)gleIntGetProcAddress("glVertexAttribs4dvNV");
-	if(!TestPointer((const void*)glVertexAttribs4dvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs4dvNV) bIsLoaded = 0;
 	glVertexAttribs4fvNV = (PFNGLVERTEXATTRIBS4FVNVPROC)gleIntGetProcAddress("glVertexAttribs4fvNV");
-	if(!TestPointer((const void*)glVertexAttribs4fvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs4fvNV) bIsLoaded = 0;
 	glVertexAttribs4svNV = (PFNGLVERTEXATTRIBS4SVNVPROC)gleIntGetProcAddress("glVertexAttribs4svNV");
-	if(!TestPointer((const void*)glVertexAttribs4svNV)) bIsLoaded = 0;
+	if(!glVertexAttribs4svNV) bIsLoaded = 0;
 	glVertexAttribs4ubvNV = (PFNGLVERTEXATTRIBS4UBVNVPROC)gleIntGetProcAddress("glVertexAttribs4ubvNV");
-	if(!TestPointer((const void*)glVertexAttribs4ubvNV)) bIsLoaded = 0;
+	if(!glVertexAttribs4ubvNV) bIsLoaded = 0;
 #endif /*GL_NV_vertex_program*/
 	return bIsLoaded;
 }
@@ -9028,51 +9041,51 @@ static int gleIntLoad_NV_vertex_program4()
 	int bIsLoaded = 1;
 #ifndef GL_NV_vertex_program4
 	glVertexAttribI1iEXT = (PFNGLVERTEXATTRIBI1IEXTPROC)gleIntGetProcAddress("glVertexAttribI1iEXT");
-	if(!TestPointer((const void*)glVertexAttribI1iEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI1iEXT) bIsLoaded = 0;
 	glVertexAttribI2iEXT = (PFNGLVERTEXATTRIBI2IEXTPROC)gleIntGetProcAddress("glVertexAttribI2iEXT");
-	if(!TestPointer((const void*)glVertexAttribI2iEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI2iEXT) bIsLoaded = 0;
 	glVertexAttribI3iEXT = (PFNGLVERTEXATTRIBI3IEXTPROC)gleIntGetProcAddress("glVertexAttribI3iEXT");
-	if(!TestPointer((const void*)glVertexAttribI3iEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI3iEXT) bIsLoaded = 0;
 	glVertexAttribI4iEXT = (PFNGLVERTEXATTRIBI4IEXTPROC)gleIntGetProcAddress("glVertexAttribI4iEXT");
-	if(!TestPointer((const void*)glVertexAttribI4iEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI4iEXT) bIsLoaded = 0;
 	glVertexAttribI1uiEXT = (PFNGLVERTEXATTRIBI1UIEXTPROC)gleIntGetProcAddress("glVertexAttribI1uiEXT");
-	if(!TestPointer((const void*)glVertexAttribI1uiEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI1uiEXT) bIsLoaded = 0;
 	glVertexAttribI2uiEXT = (PFNGLVERTEXATTRIBI2UIEXTPROC)gleIntGetProcAddress("glVertexAttribI2uiEXT");
-	if(!TestPointer((const void*)glVertexAttribI2uiEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI2uiEXT) bIsLoaded = 0;
 	glVertexAttribI3uiEXT = (PFNGLVERTEXATTRIBI3UIEXTPROC)gleIntGetProcAddress("glVertexAttribI3uiEXT");
-	if(!TestPointer((const void*)glVertexAttribI3uiEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI3uiEXT) bIsLoaded = 0;
 	glVertexAttribI4uiEXT = (PFNGLVERTEXATTRIBI4UIEXTPROC)gleIntGetProcAddress("glVertexAttribI4uiEXT");
-	if(!TestPointer((const void*)glVertexAttribI4uiEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI4uiEXT) bIsLoaded = 0;
 	glVertexAttribI1ivEXT = (PFNGLVERTEXATTRIBI1IVEXTPROC)gleIntGetProcAddress("glVertexAttribI1ivEXT");
-	if(!TestPointer((const void*)glVertexAttribI1ivEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI1ivEXT) bIsLoaded = 0;
 	glVertexAttribI2ivEXT = (PFNGLVERTEXATTRIBI2IVEXTPROC)gleIntGetProcAddress("glVertexAttribI2ivEXT");
-	if(!TestPointer((const void*)glVertexAttribI2ivEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI2ivEXT) bIsLoaded = 0;
 	glVertexAttribI3ivEXT = (PFNGLVERTEXATTRIBI3IVEXTPROC)gleIntGetProcAddress("glVertexAttribI3ivEXT");
-	if(!TestPointer((const void*)glVertexAttribI3ivEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI3ivEXT) bIsLoaded = 0;
 	glVertexAttribI4ivEXT = (PFNGLVERTEXATTRIBI4IVEXTPROC)gleIntGetProcAddress("glVertexAttribI4ivEXT");
-	if(!TestPointer((const void*)glVertexAttribI4ivEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI4ivEXT) bIsLoaded = 0;
 	glVertexAttribI1uivEXT = (PFNGLVERTEXATTRIBI1UIVEXTPROC)gleIntGetProcAddress("glVertexAttribI1uivEXT");
-	if(!TestPointer((const void*)glVertexAttribI1uivEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI1uivEXT) bIsLoaded = 0;
 	glVertexAttribI2uivEXT = (PFNGLVERTEXATTRIBI2UIVEXTPROC)gleIntGetProcAddress("glVertexAttribI2uivEXT");
-	if(!TestPointer((const void*)glVertexAttribI2uivEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI2uivEXT) bIsLoaded = 0;
 	glVertexAttribI3uivEXT = (PFNGLVERTEXATTRIBI3UIVEXTPROC)gleIntGetProcAddress("glVertexAttribI3uivEXT");
-	if(!TestPointer((const void*)glVertexAttribI3uivEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI3uivEXT) bIsLoaded = 0;
 	glVertexAttribI4uivEXT = (PFNGLVERTEXATTRIBI4UIVEXTPROC)gleIntGetProcAddress("glVertexAttribI4uivEXT");
-	if(!TestPointer((const void*)glVertexAttribI4uivEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI4uivEXT) bIsLoaded = 0;
 	glVertexAttribI4bvEXT = (PFNGLVERTEXATTRIBI4BVEXTPROC)gleIntGetProcAddress("glVertexAttribI4bvEXT");
-	if(!TestPointer((const void*)glVertexAttribI4bvEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI4bvEXT) bIsLoaded = 0;
 	glVertexAttribI4svEXT = (PFNGLVERTEXATTRIBI4SVEXTPROC)gleIntGetProcAddress("glVertexAttribI4svEXT");
-	if(!TestPointer((const void*)glVertexAttribI4svEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI4svEXT) bIsLoaded = 0;
 	glVertexAttribI4ubvEXT = (PFNGLVERTEXATTRIBI4UBVEXTPROC)gleIntGetProcAddress("glVertexAttribI4ubvEXT");
-	if(!TestPointer((const void*)glVertexAttribI4ubvEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI4ubvEXT) bIsLoaded = 0;
 	glVertexAttribI4usvEXT = (PFNGLVERTEXATTRIBI4USVEXTPROC)gleIntGetProcAddress("glVertexAttribI4usvEXT");
-	if(!TestPointer((const void*)glVertexAttribI4usvEXT)) bIsLoaded = 0;
+	if(!glVertexAttribI4usvEXT) bIsLoaded = 0;
 	glVertexAttribIPointerEXT = (PFNGLVERTEXATTRIBIPOINTEREXTPROC)gleIntGetProcAddress("glVertexAttribIPointerEXT");
-	if(!TestPointer((const void*)glVertexAttribIPointerEXT)) bIsLoaded = 0;
+	if(!glVertexAttribIPointerEXT) bIsLoaded = 0;
 	glGetVertexAttribIivEXT = (PFNGLGETVERTEXATTRIBIIVEXTPROC)gleIntGetProcAddress("glGetVertexAttribIivEXT");
-	if(!TestPointer((const void*)glGetVertexAttribIivEXT)) bIsLoaded = 0;
+	if(!glGetVertexAttribIivEXT) bIsLoaded = 0;
 	glGetVertexAttribIuivEXT = (PFNGLGETVERTEXATTRIBIUIVEXTPROC)gleIntGetProcAddress("glGetVertexAttribIuivEXT");
-	if(!TestPointer((const void*)glGetVertexAttribIuivEXT)) bIsLoaded = 0;
+	if(!glGetVertexAttribIuivEXT) bIsLoaded = 0;
 #endif /*GL_NV_vertex_program4*/
 	return bIsLoaded;
 }
@@ -9109,29 +9122,29 @@ static int gleIntLoad_NV_video_capture()
 	int bIsLoaded = 1;
 #ifndef GL_NV_video_capture
 	glBeginVideoCaptureNV = (PFNGLBEGINVIDEOCAPTURENVPROC)gleIntGetProcAddress("glBeginVideoCaptureNV");
-	if(!TestPointer((const void*)glBeginVideoCaptureNV)) bIsLoaded = 0;
+	if(!glBeginVideoCaptureNV) bIsLoaded = 0;
 	glBindVideoCaptureStreamBufferNV = (PFNGLBINDVIDEOCAPTURESTREAMBUFFERNVPROC)gleIntGetProcAddress("glBindVideoCaptureStreamBufferNV");
-	if(!TestPointer((const void*)glBindVideoCaptureStreamBufferNV)) bIsLoaded = 0;
+	if(!glBindVideoCaptureStreamBufferNV) bIsLoaded = 0;
 	glBindVideoCaptureStreamTextureNV = (PFNGLBINDVIDEOCAPTURESTREAMTEXTURENVPROC)gleIntGetProcAddress("glBindVideoCaptureStreamTextureNV");
-	if(!TestPointer((const void*)glBindVideoCaptureStreamTextureNV)) bIsLoaded = 0;
+	if(!glBindVideoCaptureStreamTextureNV) bIsLoaded = 0;
 	glEndVideoCaptureNV = (PFNGLENDVIDEOCAPTURENVPROC)gleIntGetProcAddress("glEndVideoCaptureNV");
-	if(!TestPointer((const void*)glEndVideoCaptureNV)) bIsLoaded = 0;
+	if(!glEndVideoCaptureNV) bIsLoaded = 0;
 	glGetVideoCaptureivNV = (PFNGLGETVIDEOCAPTUREIVNVPROC)gleIntGetProcAddress("glGetVideoCaptureivNV");
-	if(!TestPointer((const void*)glGetVideoCaptureivNV)) bIsLoaded = 0;
+	if(!glGetVideoCaptureivNV) bIsLoaded = 0;
 	glGetVideoCaptureStreamivNV = (PFNGLGETVIDEOCAPTURESTREAMIVNVPROC)gleIntGetProcAddress("glGetVideoCaptureStreamivNV");
-	if(!TestPointer((const void*)glGetVideoCaptureStreamivNV)) bIsLoaded = 0;
+	if(!glGetVideoCaptureStreamivNV) bIsLoaded = 0;
 	glGetVideoCaptureStreamfvNV = (PFNGLGETVIDEOCAPTURESTREAMFVNVPROC)gleIntGetProcAddress("glGetVideoCaptureStreamfvNV");
-	if(!TestPointer((const void*)glGetVideoCaptureStreamfvNV)) bIsLoaded = 0;
+	if(!glGetVideoCaptureStreamfvNV) bIsLoaded = 0;
 	glGetVideoCaptureStreamdvNV = (PFNGLGETVIDEOCAPTURESTREAMDVNVPROC)gleIntGetProcAddress("glGetVideoCaptureStreamdvNV");
-	if(!TestPointer((const void*)glGetVideoCaptureStreamdvNV)) bIsLoaded = 0;
+	if(!glGetVideoCaptureStreamdvNV) bIsLoaded = 0;
 	glVideoCaptureNV = (PFNGLVIDEOCAPTURENVPROC)gleIntGetProcAddress("glVideoCaptureNV");
-	if(!TestPointer((const void*)glVideoCaptureNV)) bIsLoaded = 0;
+	if(!glVideoCaptureNV) bIsLoaded = 0;
 	glVideoCaptureStreamParameterivNV = (PFNGLVIDEOCAPTURESTREAMPARAMETERIVNVPROC)gleIntGetProcAddress("glVideoCaptureStreamParameterivNV");
-	if(!TestPointer((const void*)glVideoCaptureStreamParameterivNV)) bIsLoaded = 0;
+	if(!glVideoCaptureStreamParameterivNV) bIsLoaded = 0;
 	glVideoCaptureStreamParameterfvNV = (PFNGLVIDEOCAPTURESTREAMPARAMETERFVNVPROC)gleIntGetProcAddress("glVideoCaptureStreamParameterfvNV");
-	if(!TestPointer((const void*)glVideoCaptureStreamParameterfvNV)) bIsLoaded = 0;
+	if(!glVideoCaptureStreamParameterfvNV) bIsLoaded = 0;
 	glVideoCaptureStreamParameterdvNV = (PFNGLVIDEOCAPTURESTREAMPARAMETERDVNVPROC)gleIntGetProcAddress("glVideoCaptureStreamParameterdvNV");
-	if(!TestPointer((const void*)glVideoCaptureStreamParameterdvNV)) bIsLoaded = 0;
+	if(!glVideoCaptureStreamParameterdvNV) bIsLoaded = 0;
 #endif /*GL_NV_video_capture*/
 	return bIsLoaded;
 }
@@ -9150,7 +9163,7 @@ static int gleIntLoad_PGI_misc_hints()
 	int bIsLoaded = 1;
 #ifndef GL_PGI_misc_hints
 	glHintPGI = (PFNGLHINTPGIPROC)gleIntGetProcAddress("glHintPGI");
-	if(!TestPointer((const void*)glHintPGI)) bIsLoaded = 0;
+	if(!glHintPGI) bIsLoaded = 0;
 #endif /*GL_PGI_misc_hints*/
 	return bIsLoaded;
 }
@@ -9170,9 +9183,9 @@ static int gleIntLoad_SGIS_detail_texture()
 	int bIsLoaded = 1;
 #ifndef GL_SGIS_detail_texture
 	glDetailTexFuncSGIS = (PFNGLDETAILTEXFUNCSGISPROC)gleIntGetProcAddress("glDetailTexFuncSGIS");
-	if(!TestPointer((const void*)glDetailTexFuncSGIS)) bIsLoaded = 0;
+	if(!glDetailTexFuncSGIS) bIsLoaded = 0;
 	glGetDetailTexFuncSGIS = (PFNGLGETDETAILTEXFUNCSGISPROC)gleIntGetProcAddress("glGetDetailTexFuncSGIS");
-	if(!TestPointer((const void*)glGetDetailTexFuncSGIS)) bIsLoaded = 0;
+	if(!glGetDetailTexFuncSGIS) bIsLoaded = 0;
 #endif /*GL_SGIS_detail_texture*/
 	return bIsLoaded;
 }
@@ -9189,9 +9202,9 @@ static int gleIntLoad_SGIS_fog_function()
 	int bIsLoaded = 1;
 #ifndef GL_SGIS_fog_function
 	glFogFuncSGIS = (PFNGLFOGFUNCSGISPROC)gleIntGetProcAddress("glFogFuncSGIS");
-	if(!TestPointer((const void*)glFogFuncSGIS)) bIsLoaded = 0;
+	if(!glFogFuncSGIS) bIsLoaded = 0;
 	glGetFogFuncSGIS = (PFNGLGETFOGFUNCSGISPROC)gleIntGetProcAddress("glGetFogFuncSGIS");
-	if(!TestPointer((const void*)glGetFogFuncSGIS)) bIsLoaded = 0;
+	if(!glGetFogFuncSGIS) bIsLoaded = 0;
 #endif /*GL_SGIS_fog_function*/
 	return bIsLoaded;
 }
@@ -9209,9 +9222,9 @@ static int gleIntLoad_SGIS_multisample()
 	int bIsLoaded = 1;
 #ifndef GL_SGIS_multisample
 	glSampleMaskSGIS = (PFNGLSAMPLEMASKSGISPROC)gleIntGetProcAddress("glSampleMaskSGIS");
-	if(!TestPointer((const void*)glSampleMaskSGIS)) bIsLoaded = 0;
+	if(!glSampleMaskSGIS) bIsLoaded = 0;
 	glSamplePatternSGIS = (PFNGLSAMPLEPATTERNSGISPROC)gleIntGetProcAddress("glSamplePatternSGIS");
-	if(!TestPointer((const void*)glSamplePatternSGIS)) bIsLoaded = 0;
+	if(!glSamplePatternSGIS) bIsLoaded = 0;
 #endif /*GL_SGIS_multisample*/
 	return bIsLoaded;
 }
@@ -9236,17 +9249,17 @@ static int gleIntLoad_SGIS_pixel_texture()
 	int bIsLoaded = 1;
 #ifndef GL_SGIS_pixel_texture
 	glPixelTexGenParameteriSGIS = (PFNGLPIXELTEXGENPARAMETERISGISPROC)gleIntGetProcAddress("glPixelTexGenParameteriSGIS");
-	if(!TestPointer((const void*)glPixelTexGenParameteriSGIS)) bIsLoaded = 0;
+	if(!glPixelTexGenParameteriSGIS) bIsLoaded = 0;
 	glPixelTexGenParameterivSGIS = (PFNGLPIXELTEXGENPARAMETERIVSGISPROC)gleIntGetProcAddress("glPixelTexGenParameterivSGIS");
-	if(!TestPointer((const void*)glPixelTexGenParameterivSGIS)) bIsLoaded = 0;
+	if(!glPixelTexGenParameterivSGIS) bIsLoaded = 0;
 	glPixelTexGenParameterfSGIS = (PFNGLPIXELTEXGENPARAMETERFSGISPROC)gleIntGetProcAddress("glPixelTexGenParameterfSGIS");
-	if(!TestPointer((const void*)glPixelTexGenParameterfSGIS)) bIsLoaded = 0;
+	if(!glPixelTexGenParameterfSGIS) bIsLoaded = 0;
 	glPixelTexGenParameterfvSGIS = (PFNGLPIXELTEXGENPARAMETERFVSGISPROC)gleIntGetProcAddress("glPixelTexGenParameterfvSGIS");
-	if(!TestPointer((const void*)glPixelTexGenParameterfvSGIS)) bIsLoaded = 0;
+	if(!glPixelTexGenParameterfvSGIS) bIsLoaded = 0;
 	glGetPixelTexGenParameterivSGIS = (PFNGLGETPIXELTEXGENPARAMETERIVSGISPROC)gleIntGetProcAddress("glGetPixelTexGenParameterivSGIS");
-	if(!TestPointer((const void*)glGetPixelTexGenParameterivSGIS)) bIsLoaded = 0;
+	if(!glGetPixelTexGenParameterivSGIS) bIsLoaded = 0;
 	glGetPixelTexGenParameterfvSGIS = (PFNGLGETPIXELTEXGENPARAMETERFVSGISPROC)gleIntGetProcAddress("glGetPixelTexGenParameterfvSGIS");
-	if(!TestPointer((const void*)glGetPixelTexGenParameterfvSGIS)) bIsLoaded = 0;
+	if(!glGetPixelTexGenParameterfvSGIS) bIsLoaded = 0;
 #endif /*GL_SGIS_pixel_texture*/
 	return bIsLoaded;
 }
@@ -9264,9 +9277,9 @@ static int gleIntLoad_SGIS_point_parameters()
 	int bIsLoaded = 1;
 #ifndef GL_SGIS_point_parameters
 	glPointParameterfSGIS = (PFNGLPOINTPARAMETERFSGISPROC)gleIntGetProcAddress("glPointParameterfSGIS");
-	if(!TestPointer((const void*)glPointParameterfSGIS)) bIsLoaded = 0;
+	if(!glPointParameterfSGIS) bIsLoaded = 0;
 	glPointParameterfvSGIS = (PFNGLPOINTPARAMETERFVSGISPROC)gleIntGetProcAddress("glPointParameterfvSGIS");
-	if(!TestPointer((const void*)glPointParameterfvSGIS)) bIsLoaded = 0;
+	if(!glPointParameterfvSGIS) bIsLoaded = 0;
 #endif /*GL_SGIS_point_parameters*/
 	return bIsLoaded;
 }
@@ -9283,9 +9296,9 @@ static int gleIntLoad_SGIS_sharpen_texture()
 	int bIsLoaded = 1;
 #ifndef GL_SGIS_sharpen_texture
 	glSharpenTexFuncSGIS = (PFNGLSHARPENTEXFUNCSGISPROC)gleIntGetProcAddress("glSharpenTexFuncSGIS");
-	if(!TestPointer((const void*)glSharpenTexFuncSGIS)) bIsLoaded = 0;
+	if(!glSharpenTexFuncSGIS) bIsLoaded = 0;
 	glGetSharpenTexFuncSGIS = (PFNGLGETSHARPENTEXFUNCSGISPROC)gleIntGetProcAddress("glGetSharpenTexFuncSGIS");
-	if(!TestPointer((const void*)glGetSharpenTexFuncSGIS)) bIsLoaded = 0;
+	if(!glGetSharpenTexFuncSGIS) bIsLoaded = 0;
 #endif /*GL_SGIS_sharpen_texture*/
 	return bIsLoaded;
 }
@@ -9302,9 +9315,9 @@ static int gleIntLoad_SGIS_texture4D()
 	int bIsLoaded = 1;
 #ifndef GL_SGIS_texture4D
 	glTexImage4DSGIS = (PFNGLTEXIMAGE4DSGISPROC)gleIntGetProcAddress("glTexImage4DSGIS");
-	if(!TestPointer((const void*)glTexImage4DSGIS)) bIsLoaded = 0;
+	if(!glTexImage4DSGIS) bIsLoaded = 0;
 	glTexSubImage4DSGIS = (PFNGLTEXSUBIMAGE4DSGISPROC)gleIntGetProcAddress("glTexSubImage4DSGIS");
-	if(!TestPointer((const void*)glTexSubImage4DSGIS)) bIsLoaded = 0;
+	if(!glTexSubImage4DSGIS) bIsLoaded = 0;
 #endif /*GL_SGIS_texture4D*/
 	return bIsLoaded;
 }
@@ -9320,7 +9333,7 @@ static int gleIntLoad_SGIS_texture_color_mask()
 	int bIsLoaded = 1;
 #ifndef GL_SGIS_texture_color_mask
 	glTextureColorMaskSGIS = (PFNGLTEXTURECOLORMASKSGISPROC)gleIntGetProcAddress("glTextureColorMaskSGIS");
-	if(!TestPointer((const void*)glTextureColorMaskSGIS)) bIsLoaded = 0;
+	if(!glTextureColorMaskSGIS) bIsLoaded = 0;
 #endif /*GL_SGIS_texture_color_mask*/
 	return bIsLoaded;
 }
@@ -9338,9 +9351,9 @@ static int gleIntLoad_SGIS_texture_filter4()
 	int bIsLoaded = 1;
 #ifndef GL_SGIS_texture_filter4
 	glGetTexFilterFuncSGIS = (PFNGLGETTEXFILTERFUNCSGISPROC)gleIntGetProcAddress("glGetTexFilterFuncSGIS");
-	if(!TestPointer((const void*)glGetTexFilterFuncSGIS)) bIsLoaded = 0;
+	if(!glGetTexFilterFuncSGIS) bIsLoaded = 0;
 	glTexFilterFuncSGIS = (PFNGLTEXFILTERFUNCSGISPROC)gleIntGetProcAddress("glTexFilterFuncSGIS");
-	if(!TestPointer((const void*)glTexFilterFuncSGIS)) bIsLoaded = 0;
+	if(!glTexFilterFuncSGIS) bIsLoaded = 0;
 #endif /*GL_SGIS_texture_filter4*/
 	return bIsLoaded;
 }
@@ -9367,17 +9380,17 @@ static int gleIntLoad_SGIX_async()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_async
 	glAsyncMarkerSGIX = (PFNGLASYNCMARKERSGIXPROC)gleIntGetProcAddress("glAsyncMarkerSGIX");
-	if(!TestPointer((const void*)glAsyncMarkerSGIX)) bIsLoaded = 0;
+	if(!glAsyncMarkerSGIX) bIsLoaded = 0;
 	glFinishAsyncSGIX = (PFNGLFINISHASYNCSGIXPROC)gleIntGetProcAddress("glFinishAsyncSGIX");
-	if(!TestPointer((const void*)glFinishAsyncSGIX)) bIsLoaded = 0;
+	if(!glFinishAsyncSGIX) bIsLoaded = 0;
 	glPollAsyncSGIX = (PFNGLPOLLASYNCSGIXPROC)gleIntGetProcAddress("glPollAsyncSGIX");
-	if(!TestPointer((const void*)glPollAsyncSGIX)) bIsLoaded = 0;
+	if(!glPollAsyncSGIX) bIsLoaded = 0;
 	glGenAsyncMarkersSGIX = (PFNGLGENASYNCMARKERSSGIXPROC)gleIntGetProcAddress("glGenAsyncMarkersSGIX");
-	if(!TestPointer((const void*)glGenAsyncMarkersSGIX)) bIsLoaded = 0;
+	if(!glGenAsyncMarkersSGIX) bIsLoaded = 0;
 	glDeleteAsyncMarkersSGIX = (PFNGLDELETEASYNCMARKERSSGIXPROC)gleIntGetProcAddress("glDeleteAsyncMarkersSGIX");
-	if(!TestPointer((const void*)glDeleteAsyncMarkersSGIX)) bIsLoaded = 0;
+	if(!glDeleteAsyncMarkersSGIX) bIsLoaded = 0;
 	glIsAsyncMarkerSGIX = (PFNGLISASYNCMARKERSGIXPROC)gleIntGetProcAddress("glIsAsyncMarkerSGIX");
-	if(!TestPointer((const void*)glIsAsyncMarkerSGIX)) bIsLoaded = 0;
+	if(!glIsAsyncMarkerSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_async*/
 	return bIsLoaded;
 }
@@ -9399,7 +9412,7 @@ static int gleIntLoad_SGIX_flush_raster()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_flush_raster
 	glFlushRasterSGIX = (PFNGLFLUSHRASTERSGIXPROC)gleIntGetProcAddress("glFlushRasterSGIX");
-	if(!TestPointer((const void*)glFlushRasterSGIX)) bIsLoaded = 0;
+	if(!glFlushRasterSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_flush_raster*/
 	return bIsLoaded;
 }
@@ -9450,41 +9463,41 @@ static int gleIntLoad_SGIX_fragment_lighting()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_fragment_lighting
 	glFragmentColorMaterialSGIX = (PFNGLFRAGMENTCOLORMATERIALSGIXPROC)gleIntGetProcAddress("glFragmentColorMaterialSGIX");
-	if(!TestPointer((const void*)glFragmentColorMaterialSGIX)) bIsLoaded = 0;
+	if(!glFragmentColorMaterialSGIX) bIsLoaded = 0;
 	glFragmentLightfSGIX = (PFNGLFRAGMENTLIGHTFSGIXPROC)gleIntGetProcAddress("glFragmentLightfSGIX");
-	if(!TestPointer((const void*)glFragmentLightfSGIX)) bIsLoaded = 0;
+	if(!glFragmentLightfSGIX) bIsLoaded = 0;
 	glFragmentLightfvSGIX = (PFNGLFRAGMENTLIGHTFVSGIXPROC)gleIntGetProcAddress("glFragmentLightfvSGIX");
-	if(!TestPointer((const void*)glFragmentLightfvSGIX)) bIsLoaded = 0;
+	if(!glFragmentLightfvSGIX) bIsLoaded = 0;
 	glFragmentLightiSGIX = (PFNGLFRAGMENTLIGHTISGIXPROC)gleIntGetProcAddress("glFragmentLightiSGIX");
-	if(!TestPointer((const void*)glFragmentLightiSGIX)) bIsLoaded = 0;
+	if(!glFragmentLightiSGIX) bIsLoaded = 0;
 	glFragmentLightivSGIX = (PFNGLFRAGMENTLIGHTIVSGIXPROC)gleIntGetProcAddress("glFragmentLightivSGIX");
-	if(!TestPointer((const void*)glFragmentLightivSGIX)) bIsLoaded = 0;
+	if(!glFragmentLightivSGIX) bIsLoaded = 0;
 	glFragmentLightModelfSGIX = (PFNGLFRAGMENTLIGHTMODELFSGIXPROC)gleIntGetProcAddress("glFragmentLightModelfSGIX");
-	if(!TestPointer((const void*)glFragmentLightModelfSGIX)) bIsLoaded = 0;
+	if(!glFragmentLightModelfSGIX) bIsLoaded = 0;
 	glFragmentLightModelfvSGIX = (PFNGLFRAGMENTLIGHTMODELFVSGIXPROC)gleIntGetProcAddress("glFragmentLightModelfvSGIX");
-	if(!TestPointer((const void*)glFragmentLightModelfvSGIX)) bIsLoaded = 0;
+	if(!glFragmentLightModelfvSGIX) bIsLoaded = 0;
 	glFragmentLightModeliSGIX = (PFNGLFRAGMENTLIGHTMODELISGIXPROC)gleIntGetProcAddress("glFragmentLightModeliSGIX");
-	if(!TestPointer((const void*)glFragmentLightModeliSGIX)) bIsLoaded = 0;
+	if(!glFragmentLightModeliSGIX) bIsLoaded = 0;
 	glFragmentLightModelivSGIX = (PFNGLFRAGMENTLIGHTMODELIVSGIXPROC)gleIntGetProcAddress("glFragmentLightModelivSGIX");
-	if(!TestPointer((const void*)glFragmentLightModelivSGIX)) bIsLoaded = 0;
+	if(!glFragmentLightModelivSGIX) bIsLoaded = 0;
 	glFragmentMaterialfSGIX = (PFNGLFRAGMENTMATERIALFSGIXPROC)gleIntGetProcAddress("glFragmentMaterialfSGIX");
-	if(!TestPointer((const void*)glFragmentMaterialfSGIX)) bIsLoaded = 0;
+	if(!glFragmentMaterialfSGIX) bIsLoaded = 0;
 	glFragmentMaterialfvSGIX = (PFNGLFRAGMENTMATERIALFVSGIXPROC)gleIntGetProcAddress("glFragmentMaterialfvSGIX");
-	if(!TestPointer((const void*)glFragmentMaterialfvSGIX)) bIsLoaded = 0;
+	if(!glFragmentMaterialfvSGIX) bIsLoaded = 0;
 	glFragmentMaterialiSGIX = (PFNGLFRAGMENTMATERIALISGIXPROC)gleIntGetProcAddress("glFragmentMaterialiSGIX");
-	if(!TestPointer((const void*)glFragmentMaterialiSGIX)) bIsLoaded = 0;
+	if(!glFragmentMaterialiSGIX) bIsLoaded = 0;
 	glFragmentMaterialivSGIX = (PFNGLFRAGMENTMATERIALIVSGIXPROC)gleIntGetProcAddress("glFragmentMaterialivSGIX");
-	if(!TestPointer((const void*)glFragmentMaterialivSGIX)) bIsLoaded = 0;
+	if(!glFragmentMaterialivSGIX) bIsLoaded = 0;
 	glGetFragmentLightfvSGIX = (PFNGLGETFRAGMENTLIGHTFVSGIXPROC)gleIntGetProcAddress("glGetFragmentLightfvSGIX");
-	if(!TestPointer((const void*)glGetFragmentLightfvSGIX)) bIsLoaded = 0;
+	if(!glGetFragmentLightfvSGIX) bIsLoaded = 0;
 	glGetFragmentLightivSGIX = (PFNGLGETFRAGMENTLIGHTIVSGIXPROC)gleIntGetProcAddress("glGetFragmentLightivSGIX");
-	if(!TestPointer((const void*)glGetFragmentLightivSGIX)) bIsLoaded = 0;
+	if(!glGetFragmentLightivSGIX) bIsLoaded = 0;
 	glGetFragmentMaterialfvSGIX = (PFNGLGETFRAGMENTMATERIALFVSGIXPROC)gleIntGetProcAddress("glGetFragmentMaterialfvSGIX");
-	if(!TestPointer((const void*)glGetFragmentMaterialfvSGIX)) bIsLoaded = 0;
+	if(!glGetFragmentMaterialfvSGIX) bIsLoaded = 0;
 	glGetFragmentMaterialivSGIX = (PFNGLGETFRAGMENTMATERIALIVSGIXPROC)gleIntGetProcAddress("glGetFragmentMaterialivSGIX");
-	if(!TestPointer((const void*)glGetFragmentMaterialivSGIX)) bIsLoaded = 0;
+	if(!glGetFragmentMaterialivSGIX) bIsLoaded = 0;
 	glLightEnviSGIX = (PFNGLLIGHTENVISGIXPROC)gleIntGetProcAddress("glLightEnviSGIX");
-	if(!TestPointer((const void*)glLightEnviSGIX)) bIsLoaded = 0;
+	if(!glLightEnviSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_fragment_lighting*/
 	return bIsLoaded;
 }
@@ -9499,7 +9512,7 @@ static int gleIntLoad_SGIX_framezoom()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_framezoom
 	glFrameZoomSGIX = (PFNGLFRAMEZOOMSGIXPROC)gleIntGetProcAddress("glFrameZoomSGIX");
-	if(!TestPointer((const void*)glFrameZoomSGIX)) bIsLoaded = 0;
+	if(!glFrameZoomSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_framezoom*/
 	return bIsLoaded;
 }
@@ -9525,17 +9538,17 @@ static int gleIntLoad_SGIX_instruments()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_instruments
 	glGetInstrumentsSGIX = (PFNGLGETINSTRUMENTSSGIXPROC)gleIntGetProcAddress("glGetInstrumentsSGIX");
-	if(!TestPointer((const void*)glGetInstrumentsSGIX)) bIsLoaded = 0;
+	if(!glGetInstrumentsSGIX) bIsLoaded = 0;
 	glInstrumentsBufferSGIX = (PFNGLINSTRUMENTSBUFFERSGIXPROC)gleIntGetProcAddress("glInstrumentsBufferSGIX");
-	if(!TestPointer((const void*)glInstrumentsBufferSGIX)) bIsLoaded = 0;
+	if(!glInstrumentsBufferSGIX) bIsLoaded = 0;
 	glPollInstrumentsSGIX = (PFNGLPOLLINSTRUMENTSSGIXPROC)gleIntGetProcAddress("glPollInstrumentsSGIX");
-	if(!TestPointer((const void*)glPollInstrumentsSGIX)) bIsLoaded = 0;
+	if(!glPollInstrumentsSGIX) bIsLoaded = 0;
 	glReadInstrumentsSGIX = (PFNGLREADINSTRUMENTSSGIXPROC)gleIntGetProcAddress("glReadInstrumentsSGIX");
-	if(!TestPointer((const void*)glReadInstrumentsSGIX)) bIsLoaded = 0;
+	if(!glReadInstrumentsSGIX) bIsLoaded = 0;
 	glStartInstrumentsSGIX = (PFNGLSTARTINSTRUMENTSSGIXPROC)gleIntGetProcAddress("glStartInstrumentsSGIX");
-	if(!TestPointer((const void*)glStartInstrumentsSGIX)) bIsLoaded = 0;
+	if(!glStartInstrumentsSGIX) bIsLoaded = 0;
 	glStopInstrumentsSGIX = (PFNGLSTOPINSTRUMENTSSGIXPROC)gleIntGetProcAddress("glStopInstrumentsSGIX");
-	if(!TestPointer((const void*)glStopInstrumentsSGIX)) bIsLoaded = 0;
+	if(!glStopInstrumentsSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_instruments*/
 	return bIsLoaded;
 }
@@ -9562,17 +9575,17 @@ static int gleIntLoad_SGIX_list_priority()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_list_priority
 	glGetListParameterfvSGIX = (PFNGLGETLISTPARAMETERFVSGIXPROC)gleIntGetProcAddress("glGetListParameterfvSGIX");
-	if(!TestPointer((const void*)glGetListParameterfvSGIX)) bIsLoaded = 0;
+	if(!glGetListParameterfvSGIX) bIsLoaded = 0;
 	glGetListParameterivSGIX = (PFNGLGETLISTPARAMETERIVSGIXPROC)gleIntGetProcAddress("glGetListParameterivSGIX");
-	if(!TestPointer((const void*)glGetListParameterivSGIX)) bIsLoaded = 0;
+	if(!glGetListParameterivSGIX) bIsLoaded = 0;
 	glListParameterfSGIX = (PFNGLLISTPARAMETERFSGIXPROC)gleIntGetProcAddress("glListParameterfSGIX");
-	if(!TestPointer((const void*)glListParameterfSGIX)) bIsLoaded = 0;
+	if(!glListParameterfSGIX) bIsLoaded = 0;
 	glListParameterfvSGIX = (PFNGLLISTPARAMETERFVSGIXPROC)gleIntGetProcAddress("glListParameterfvSGIX");
-	if(!TestPointer((const void*)glListParameterfvSGIX)) bIsLoaded = 0;
+	if(!glListParameterfvSGIX) bIsLoaded = 0;
 	glListParameteriSGIX = (PFNGLLISTPARAMETERISGIXPROC)gleIntGetProcAddress("glListParameteriSGIX");
-	if(!TestPointer((const void*)glListParameteriSGIX)) bIsLoaded = 0;
+	if(!glListParameteriSGIX) bIsLoaded = 0;
 	glListParameterivSGIX = (PFNGLLISTPARAMETERIVSGIXPROC)gleIntGetProcAddress("glListParameterivSGIX");
-	if(!TestPointer((const void*)glListParameterivSGIX)) bIsLoaded = 0;
+	if(!glListParameterivSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_list_priority*/
 	return bIsLoaded;
 }
@@ -9587,7 +9600,7 @@ static int gleIntLoad_SGIX_pixel_texture()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_pixel_texture
 	glPixelTexGenSGIX = (PFNGLPIXELTEXGENSGIXPROC)gleIntGetProcAddress("glPixelTexGenSGIX");
-	if(!TestPointer((const void*)glPixelTexGenSGIX)) bIsLoaded = 0;
+	if(!glPixelTexGenSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_pixel_texture*/
 	return bIsLoaded;
 }
@@ -9609,13 +9622,13 @@ static int gleIntLoad_SGIX_polynomial_ffd()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_polynomial_ffd
 	glDeformationMap3dSGIX = (PFNGLDEFORMATIONMAP3DSGIXPROC)gleIntGetProcAddress("glDeformationMap3dSGIX");
-	if(!TestPointer((const void*)glDeformationMap3dSGIX)) bIsLoaded = 0;
+	if(!glDeformationMap3dSGIX) bIsLoaded = 0;
 	glDeformationMap3fSGIX = (PFNGLDEFORMATIONMAP3FSGIXPROC)gleIntGetProcAddress("glDeformationMap3fSGIX");
-	if(!TestPointer((const void*)glDeformationMap3fSGIX)) bIsLoaded = 0;
+	if(!glDeformationMap3fSGIX) bIsLoaded = 0;
 	glDeformSGIX = (PFNGLDEFORMSGIXPROC)gleIntGetProcAddress("glDeformSGIX");
-	if(!TestPointer((const void*)glDeformSGIX)) bIsLoaded = 0;
+	if(!glDeformSGIX) bIsLoaded = 0;
 	glLoadIdentityDeformationMapSGIX = (PFNGLLOADIDENTITYDEFORMATIONMAPSGIXPROC)gleIntGetProcAddress("glLoadIdentityDeformationMapSGIX");
-	if(!TestPointer((const void*)glLoadIdentityDeformationMapSGIX)) bIsLoaded = 0;
+	if(!glLoadIdentityDeformationMapSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_polynomial_ffd*/
 	return bIsLoaded;
 }
@@ -9630,7 +9643,7 @@ static int gleIntLoad_SGIX_reference_plane()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_reference_plane
 	glReferencePlaneSGIX = (PFNGLREFERENCEPLANESGIXPROC)gleIntGetProcAddress("glReferencePlaneSGIX");
-	if(!TestPointer((const void*)glReferencePlaneSGIX)) bIsLoaded = 0;
+	if(!glReferencePlaneSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_reference_plane*/
 	return bIsLoaded;
 }
@@ -9655,13 +9668,13 @@ static int gleIntLoad_SGIX_sprite()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_sprite
 	glSpriteParameterfSGIX = (PFNGLSPRITEPARAMETERFSGIXPROC)gleIntGetProcAddress("glSpriteParameterfSGIX");
-	if(!TestPointer((const void*)glSpriteParameterfSGIX)) bIsLoaded = 0;
+	if(!glSpriteParameterfSGIX) bIsLoaded = 0;
 	glSpriteParameterfvSGIX = (PFNGLSPRITEPARAMETERFVSGIXPROC)gleIntGetProcAddress("glSpriteParameterfvSGIX");
-	if(!TestPointer((const void*)glSpriteParameterfvSGIX)) bIsLoaded = 0;
+	if(!glSpriteParameterfvSGIX) bIsLoaded = 0;
 	glSpriteParameteriSGIX = (PFNGLSPRITEPARAMETERISGIXPROC)gleIntGetProcAddress("glSpriteParameteriSGIX");
-	if(!TestPointer((const void*)glSpriteParameteriSGIX)) bIsLoaded = 0;
+	if(!glSpriteParameteriSGIX) bIsLoaded = 0;
 	glSpriteParameterivSGIX = (PFNGLSPRITEPARAMETERIVSGIXPROC)gleIntGetProcAddress("glSpriteParameterivSGIX");
-	if(!TestPointer((const void*)glSpriteParameterivSGIX)) bIsLoaded = 0;
+	if(!glSpriteParameterivSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_sprite*/
 	return bIsLoaded;
 }
@@ -9677,7 +9690,7 @@ static int gleIntLoad_SGIX_tag_sample_buffer()
 	int bIsLoaded = 1;
 #ifndef GL_SGIX_tag_sample_buffer
 	glTagSampleBufferSGIX = (PFNGLTAGSAMPLEBUFFERSGIXPROC)gleIntGetProcAddress("glTagSampleBufferSGIX");
-	if(!TestPointer((const void*)glTagSampleBufferSGIX)) bIsLoaded = 0;
+	if(!glTagSampleBufferSGIX) bIsLoaded = 0;
 #endif /*GL_SGIX_tag_sample_buffer*/
 	return bIsLoaded;
 }
@@ -9714,19 +9727,19 @@ static int gleIntLoad_SGI_color_table()
 	int bIsLoaded = 1;
 #ifndef GL_SGI_color_table
 	glColorTableSGI = (PFNGLCOLORTABLESGIPROC)gleIntGetProcAddress("glColorTableSGI");
-	if(!TestPointer((const void*)glColorTableSGI)) bIsLoaded = 0;
+	if(!glColorTableSGI) bIsLoaded = 0;
 	glColorTableParameterfvSGI = (PFNGLCOLORTABLEPARAMETERFVSGIPROC)gleIntGetProcAddress("glColorTableParameterfvSGI");
-	if(!TestPointer((const void*)glColorTableParameterfvSGI)) bIsLoaded = 0;
+	if(!glColorTableParameterfvSGI) bIsLoaded = 0;
 	glColorTableParameterivSGI = (PFNGLCOLORTABLEPARAMETERIVSGIPROC)gleIntGetProcAddress("glColorTableParameterivSGI");
-	if(!TestPointer((const void*)glColorTableParameterivSGI)) bIsLoaded = 0;
+	if(!glColorTableParameterivSGI) bIsLoaded = 0;
 	glCopyColorTableSGI = (PFNGLCOPYCOLORTABLESGIPROC)gleIntGetProcAddress("glCopyColorTableSGI");
-	if(!TestPointer((const void*)glCopyColorTableSGI)) bIsLoaded = 0;
+	if(!glCopyColorTableSGI) bIsLoaded = 0;
 	glGetColorTableSGI = (PFNGLGETCOLORTABLESGIPROC)gleIntGetProcAddress("glGetColorTableSGI");
-	if(!TestPointer((const void*)glGetColorTableSGI)) bIsLoaded = 0;
+	if(!glGetColorTableSGI) bIsLoaded = 0;
 	glGetColorTableParameterfvSGI = (PFNGLGETCOLORTABLEPARAMETERFVSGIPROC)gleIntGetProcAddress("glGetColorTableParameterfvSGI");
-	if(!TestPointer((const void*)glGetColorTableParameterfvSGI)) bIsLoaded = 0;
+	if(!glGetColorTableParameterfvSGI) bIsLoaded = 0;
 	glGetColorTableParameterivSGI = (PFNGLGETCOLORTABLEPARAMETERIVSGIPROC)gleIntGetProcAddress("glGetColorTableParameterivSGI");
-	if(!TestPointer((const void*)glGetColorTableParameterivSGI)) bIsLoaded = 0;
+	if(!glGetColorTableParameterivSGI) bIsLoaded = 0;
 #endif /*GL_SGI_color_table*/
 	return bIsLoaded;
 }
@@ -9743,7 +9756,7 @@ static int gleIntLoad_SUNX_constant_data()
 	int bIsLoaded = 1;
 #ifndef GL_SUNX_constant_data
 	glFinishTextureSUNX = (PFNGLFINISHTEXTURESUNXPROC)gleIntGetProcAddress("glFinishTextureSUNX");
-	if(!TestPointer((const void*)glFinishTextureSUNX)) bIsLoaded = 0;
+	if(!glFinishTextureSUNX) bIsLoaded = 0;
 #endif /*GL_SUNX_constant_data*/
 	return bIsLoaded;
 }
@@ -9773,21 +9786,21 @@ static int gleIntLoad_SUN_global_alpha()
 	int bIsLoaded = 1;
 #ifndef GL_SUN_global_alpha
 	glGlobalAlphaFactorbSUN = (PFNGLGLOBALALPHAFACTORBSUNPROC)gleIntGetProcAddress("glGlobalAlphaFactorbSUN");
-	if(!TestPointer((const void*)glGlobalAlphaFactorbSUN)) bIsLoaded = 0;
+	if(!glGlobalAlphaFactorbSUN) bIsLoaded = 0;
 	glGlobalAlphaFactorsSUN = (PFNGLGLOBALALPHAFACTORSSUNPROC)gleIntGetProcAddress("glGlobalAlphaFactorsSUN");
-	if(!TestPointer((const void*)glGlobalAlphaFactorsSUN)) bIsLoaded = 0;
+	if(!glGlobalAlphaFactorsSUN) bIsLoaded = 0;
 	glGlobalAlphaFactoriSUN = (PFNGLGLOBALALPHAFACTORISUNPROC)gleIntGetProcAddress("glGlobalAlphaFactoriSUN");
-	if(!TestPointer((const void*)glGlobalAlphaFactoriSUN)) bIsLoaded = 0;
+	if(!glGlobalAlphaFactoriSUN) bIsLoaded = 0;
 	glGlobalAlphaFactorfSUN = (PFNGLGLOBALALPHAFACTORFSUNPROC)gleIntGetProcAddress("glGlobalAlphaFactorfSUN");
-	if(!TestPointer((const void*)glGlobalAlphaFactorfSUN)) bIsLoaded = 0;
+	if(!glGlobalAlphaFactorfSUN) bIsLoaded = 0;
 	glGlobalAlphaFactordSUN = (PFNGLGLOBALALPHAFACTORDSUNPROC)gleIntGetProcAddress("glGlobalAlphaFactordSUN");
-	if(!TestPointer((const void*)glGlobalAlphaFactordSUN)) bIsLoaded = 0;
+	if(!glGlobalAlphaFactordSUN) bIsLoaded = 0;
 	glGlobalAlphaFactorubSUN = (PFNGLGLOBALALPHAFACTORUBSUNPROC)gleIntGetProcAddress("glGlobalAlphaFactorubSUN");
-	if(!TestPointer((const void*)glGlobalAlphaFactorubSUN)) bIsLoaded = 0;
+	if(!glGlobalAlphaFactorubSUN) bIsLoaded = 0;
 	glGlobalAlphaFactorusSUN = (PFNGLGLOBALALPHAFACTORUSSUNPROC)gleIntGetProcAddress("glGlobalAlphaFactorusSUN");
-	if(!TestPointer((const void*)glGlobalAlphaFactorusSUN)) bIsLoaded = 0;
+	if(!glGlobalAlphaFactorusSUN) bIsLoaded = 0;
 	glGlobalAlphaFactoruiSUN = (PFNGLGLOBALALPHAFACTORUISUNPROC)gleIntGetProcAddress("glGlobalAlphaFactoruiSUN");
-	if(!TestPointer((const void*)glGlobalAlphaFactoruiSUN)) bIsLoaded = 0;
+	if(!glGlobalAlphaFactoruiSUN) bIsLoaded = 0;
 #endif /*GL_SUN_global_alpha*/
 	return bIsLoaded;
 }
@@ -9802,7 +9815,7 @@ static int gleIntLoad_SUN_mesh_array()
 	int bIsLoaded = 1;
 #ifndef GL_SUN_mesh_array
 	glDrawMeshArraysSUN = (PFNGLDRAWMESHARRAYSSUNPROC)gleIntGetProcAddress("glDrawMeshArraysSUN");
-	if(!TestPointer((const void*)glDrawMeshArraysSUN)) bIsLoaded = 0;
+	if(!glDrawMeshArraysSUN) bIsLoaded = 0;
 #endif /*GL_SUN_mesh_array*/
 	return bIsLoaded;
 }
@@ -9830,19 +9843,19 @@ static int gleIntLoad_SUN_triangle_list()
 	int bIsLoaded = 1;
 #ifndef GL_SUN_triangle_list
 	glReplacementCodeuiSUN = (PFNGLREPLACEMENTCODEUISUNPROC)gleIntGetProcAddress("glReplacementCodeuiSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiSUN) bIsLoaded = 0;
 	glReplacementCodeusSUN = (PFNGLREPLACEMENTCODEUSSUNPROC)gleIntGetProcAddress("glReplacementCodeusSUN");
-	if(!TestPointer((const void*)glReplacementCodeusSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeusSUN) bIsLoaded = 0;
 	glReplacementCodeubSUN = (PFNGLREPLACEMENTCODEUBSUNPROC)gleIntGetProcAddress("glReplacementCodeubSUN");
-	if(!TestPointer((const void*)glReplacementCodeubSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeubSUN) bIsLoaded = 0;
 	glReplacementCodeuivSUN = (PFNGLREPLACEMENTCODEUIVSUNPROC)gleIntGetProcAddress("glReplacementCodeuivSUN");
-	if(!TestPointer((const void*)glReplacementCodeuivSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuivSUN) bIsLoaded = 0;
 	glReplacementCodeusvSUN = (PFNGLREPLACEMENTCODEUSVSUNPROC)gleIntGetProcAddress("glReplacementCodeusvSUN");
-	if(!TestPointer((const void*)glReplacementCodeusvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeusvSUN) bIsLoaded = 0;
 	glReplacementCodeubvSUN = (PFNGLREPLACEMENTCODEUBVSUNPROC)gleIntGetProcAddress("glReplacementCodeubvSUN");
-	if(!TestPointer((const void*)glReplacementCodeubvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeubvSUN) bIsLoaded = 0;
 	glReplacementCodePointerSUN = (PFNGLREPLACEMENTCODEPOINTERSUNPROC)gleIntGetProcAddress("glReplacementCodePointerSUN");
-	if(!TestPointer((const void*)glReplacementCodePointerSUN)) bIsLoaded = 0;
+	if(!glReplacementCodePointerSUN) bIsLoaded = 0;
 #endif /*GL_SUN_triangle_list*/
 	return bIsLoaded;
 }
@@ -9935,85 +9948,85 @@ static int gleIntLoad_SUN_vertex()
 	int bIsLoaded = 1;
 #ifndef GL_SUN_vertex
 	glColor4ubVertex2fSUN = (PFNGLCOLOR4UBVERTEX2FSUNPROC)gleIntGetProcAddress("glColor4ubVertex2fSUN");
-	if(!TestPointer((const void*)glColor4ubVertex2fSUN)) bIsLoaded = 0;
+	if(!glColor4ubVertex2fSUN) bIsLoaded = 0;
 	glColor4ubVertex2fvSUN = (PFNGLCOLOR4UBVERTEX2FVSUNPROC)gleIntGetProcAddress("glColor4ubVertex2fvSUN");
-	if(!TestPointer((const void*)glColor4ubVertex2fvSUN)) bIsLoaded = 0;
+	if(!glColor4ubVertex2fvSUN) bIsLoaded = 0;
 	glColor4ubVertex3fSUN = (PFNGLCOLOR4UBVERTEX3FSUNPROC)gleIntGetProcAddress("glColor4ubVertex3fSUN");
-	if(!TestPointer((const void*)glColor4ubVertex3fSUN)) bIsLoaded = 0;
+	if(!glColor4ubVertex3fSUN) bIsLoaded = 0;
 	glColor4ubVertex3fvSUN = (PFNGLCOLOR4UBVERTEX3FVSUNPROC)gleIntGetProcAddress("glColor4ubVertex3fvSUN");
-	if(!TestPointer((const void*)glColor4ubVertex3fvSUN)) bIsLoaded = 0;
+	if(!glColor4ubVertex3fvSUN) bIsLoaded = 0;
 	glColor3fVertex3fSUN = (PFNGLCOLOR3FVERTEX3FSUNPROC)gleIntGetProcAddress("glColor3fVertex3fSUN");
-	if(!TestPointer((const void*)glColor3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glColor3fVertex3fSUN) bIsLoaded = 0;
 	glColor3fVertex3fvSUN = (PFNGLCOLOR3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glColor3fVertex3fvSUN");
-	if(!TestPointer((const void*)glColor3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glColor3fVertex3fvSUN) bIsLoaded = 0;
 	glNormal3fVertex3fSUN = (PFNGLNORMAL3FVERTEX3FSUNPROC)gleIntGetProcAddress("glNormal3fVertex3fSUN");
-	if(!TestPointer((const void*)glNormal3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glNormal3fVertex3fSUN) bIsLoaded = 0;
 	glNormal3fVertex3fvSUN = (PFNGLNORMAL3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glNormal3fVertex3fvSUN");
-	if(!TestPointer((const void*)glNormal3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glNormal3fVertex3fvSUN) bIsLoaded = 0;
 	glColor4fNormal3fVertex3fSUN = (PFNGLCOLOR4FNORMAL3FVERTEX3FSUNPROC)gleIntGetProcAddress("glColor4fNormal3fVertex3fSUN");
-	if(!TestPointer((const void*)glColor4fNormal3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glColor4fNormal3fVertex3fSUN) bIsLoaded = 0;
 	glColor4fNormal3fVertex3fvSUN = (PFNGLCOLOR4FNORMAL3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glColor4fNormal3fVertex3fvSUN");
-	if(!TestPointer((const void*)glColor4fNormal3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glColor4fNormal3fVertex3fvSUN) bIsLoaded = 0;
 	glTexCoord2fVertex3fSUN = (PFNGLTEXCOORD2FVERTEX3FSUNPROC)gleIntGetProcAddress("glTexCoord2fVertex3fSUN");
-	if(!TestPointer((const void*)glTexCoord2fVertex3fSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fVertex3fSUN) bIsLoaded = 0;
 	glTexCoord2fVertex3fvSUN = (PFNGLTEXCOORD2FVERTEX3FVSUNPROC)gleIntGetProcAddress("glTexCoord2fVertex3fvSUN");
-	if(!TestPointer((const void*)glTexCoord2fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fVertex3fvSUN) bIsLoaded = 0;
 	glTexCoord4fVertex4fSUN = (PFNGLTEXCOORD4FVERTEX4FSUNPROC)gleIntGetProcAddress("glTexCoord4fVertex4fSUN");
-	if(!TestPointer((const void*)glTexCoord4fVertex4fSUN)) bIsLoaded = 0;
+	if(!glTexCoord4fVertex4fSUN) bIsLoaded = 0;
 	glTexCoord4fVertex4fvSUN = (PFNGLTEXCOORD4FVERTEX4FVSUNPROC)gleIntGetProcAddress("glTexCoord4fVertex4fvSUN");
-	if(!TestPointer((const void*)glTexCoord4fVertex4fvSUN)) bIsLoaded = 0;
+	if(!glTexCoord4fVertex4fvSUN) bIsLoaded = 0;
 	glTexCoord2fColor4ubVertex3fSUN = (PFNGLTEXCOORD2FCOLOR4UBVERTEX3FSUNPROC)gleIntGetProcAddress("glTexCoord2fColor4ubVertex3fSUN");
-	if(!TestPointer((const void*)glTexCoord2fColor4ubVertex3fSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fColor4ubVertex3fSUN) bIsLoaded = 0;
 	glTexCoord2fColor4ubVertex3fvSUN = (PFNGLTEXCOORD2FCOLOR4UBVERTEX3FVSUNPROC)gleIntGetProcAddress("glTexCoord2fColor4ubVertex3fvSUN");
-	if(!TestPointer((const void*)glTexCoord2fColor4ubVertex3fvSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fColor4ubVertex3fvSUN) bIsLoaded = 0;
 	glTexCoord2fColor3fVertex3fSUN = (PFNGLTEXCOORD2FCOLOR3FVERTEX3FSUNPROC)gleIntGetProcAddress("glTexCoord2fColor3fVertex3fSUN");
-	if(!TestPointer((const void*)glTexCoord2fColor3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fColor3fVertex3fSUN) bIsLoaded = 0;
 	glTexCoord2fColor3fVertex3fvSUN = (PFNGLTEXCOORD2FCOLOR3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glTexCoord2fColor3fVertex3fvSUN");
-	if(!TestPointer((const void*)glTexCoord2fColor3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fColor3fVertex3fvSUN) bIsLoaded = 0;
 	glTexCoord2fNormal3fVertex3fSUN = (PFNGLTEXCOORD2FNORMAL3FVERTEX3FSUNPROC)gleIntGetProcAddress("glTexCoord2fNormal3fVertex3fSUN");
-	if(!TestPointer((const void*)glTexCoord2fNormal3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fNormal3fVertex3fSUN) bIsLoaded = 0;
 	glTexCoord2fNormal3fVertex3fvSUN = (PFNGLTEXCOORD2FNORMAL3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glTexCoord2fNormal3fVertex3fvSUN");
-	if(!TestPointer((const void*)glTexCoord2fNormal3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fNormal3fVertex3fvSUN) bIsLoaded = 0;
 	glTexCoord2fColor4fNormal3fVertex3fSUN = (PFNGLTEXCOORD2FCOLOR4FNORMAL3FVERTEX3FSUNPROC)gleIntGetProcAddress("glTexCoord2fColor4fNormal3fVertex3fSUN");
-	if(!TestPointer((const void*)glTexCoord2fColor4fNormal3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fColor4fNormal3fVertex3fSUN) bIsLoaded = 0;
 	glTexCoord2fColor4fNormal3fVertex3fvSUN = (PFNGLTEXCOORD2FCOLOR4FNORMAL3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glTexCoord2fColor4fNormal3fVertex3fvSUN");
-	if(!TestPointer((const void*)glTexCoord2fColor4fNormal3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glTexCoord2fColor4fNormal3fVertex3fvSUN) bIsLoaded = 0;
 	glTexCoord4fColor4fNormal3fVertex4fSUN = (PFNGLTEXCOORD4FCOLOR4FNORMAL3FVERTEX4FSUNPROC)gleIntGetProcAddress("glTexCoord4fColor4fNormal3fVertex4fSUN");
-	if(!TestPointer((const void*)glTexCoord4fColor4fNormal3fVertex4fSUN)) bIsLoaded = 0;
+	if(!glTexCoord4fColor4fNormal3fVertex4fSUN) bIsLoaded = 0;
 	glTexCoord4fColor4fNormal3fVertex4fvSUN = (PFNGLTEXCOORD4FCOLOR4FNORMAL3FVERTEX4FVSUNPROC)gleIntGetProcAddress("glTexCoord4fColor4fNormal3fVertex4fvSUN");
-	if(!TestPointer((const void*)glTexCoord4fColor4fNormal3fVertex4fvSUN)) bIsLoaded = 0;
+	if(!glTexCoord4fColor4fNormal3fVertex4fvSUN) bIsLoaded = 0;
 	glReplacementCodeuiVertex3fSUN = (PFNGLREPLACEMENTCODEUIVERTEX3FSUNPROC)gleIntGetProcAddress("glReplacementCodeuiVertex3fSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiVertex3fSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiVertex3fSUN) bIsLoaded = 0;
 	glReplacementCodeuiVertex3fvSUN = (PFNGLREPLACEMENTCODEUIVERTEX3FVSUNPROC)gleIntGetProcAddress("glReplacementCodeuiVertex3fvSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiVertex3fvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiVertex3fvSUN) bIsLoaded = 0;
 	glReplacementCodeuiColor4ubVertex3fSUN = (PFNGLREPLACEMENTCODEUICOLOR4UBVERTEX3FSUNPROC)gleIntGetProcAddress("glReplacementCodeuiColor4ubVertex3fSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiColor4ubVertex3fSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiColor4ubVertex3fSUN) bIsLoaded = 0;
 	glReplacementCodeuiColor4ubVertex3fvSUN = (PFNGLREPLACEMENTCODEUICOLOR4UBVERTEX3FVSUNPROC)gleIntGetProcAddress("glReplacementCodeuiColor4ubVertex3fvSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiColor4ubVertex3fvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiColor4ubVertex3fvSUN) bIsLoaded = 0;
 	glReplacementCodeuiColor3fVertex3fSUN = (PFNGLREPLACEMENTCODEUICOLOR3FVERTEX3FSUNPROC)gleIntGetProcAddress("glReplacementCodeuiColor3fVertex3fSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiColor3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiColor3fVertex3fSUN) bIsLoaded = 0;
 	glReplacementCodeuiColor3fVertex3fvSUN = (PFNGLREPLACEMENTCODEUICOLOR3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glReplacementCodeuiColor3fVertex3fvSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiColor3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiColor3fVertex3fvSUN) bIsLoaded = 0;
 	glReplacementCodeuiNormal3fVertex3fSUN = (PFNGLREPLACEMENTCODEUINORMAL3FVERTEX3FSUNPROC)gleIntGetProcAddress("glReplacementCodeuiNormal3fVertex3fSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiNormal3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiNormal3fVertex3fSUN) bIsLoaded = 0;
 	glReplacementCodeuiNormal3fVertex3fvSUN = (PFNGLREPLACEMENTCODEUINORMAL3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glReplacementCodeuiNormal3fVertex3fvSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiNormal3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiNormal3fVertex3fvSUN) bIsLoaded = 0;
 	glReplacementCodeuiColor4fNormal3fVertex3fSUN = (PFNGLREPLACEMENTCODEUICOLOR4FNORMAL3FVERTEX3FSUNPROC)gleIntGetProcAddress("glReplacementCodeuiColor4fNormal3fVertex3fSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiColor4fNormal3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiColor4fNormal3fVertex3fSUN) bIsLoaded = 0;
 	glReplacementCodeuiColor4fNormal3fVertex3fvSUN = (PFNGLREPLACEMENTCODEUICOLOR4FNORMAL3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glReplacementCodeuiColor4fNormal3fVertex3fvSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiColor4fNormal3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiColor4fNormal3fVertex3fvSUN) bIsLoaded = 0;
 	glReplacementCodeuiTexCoord2fVertex3fSUN = (PFNGLREPLACEMENTCODEUITEXCOORD2FVERTEX3FSUNPROC)gleIntGetProcAddress("glReplacementCodeuiTexCoord2fVertex3fSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiTexCoord2fVertex3fSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiTexCoord2fVertex3fSUN) bIsLoaded = 0;
 	glReplacementCodeuiTexCoord2fVertex3fvSUN = (PFNGLREPLACEMENTCODEUITEXCOORD2FVERTEX3FVSUNPROC)gleIntGetProcAddress("glReplacementCodeuiTexCoord2fVertex3fvSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiTexCoord2fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiTexCoord2fVertex3fvSUN) bIsLoaded = 0;
 	glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN = (PFNGLREPLACEMENTCODEUITEXCOORD2FNORMAL3FVERTEX3FSUNPROC)gleIntGetProcAddress("glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN) bIsLoaded = 0;
 	glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN = (PFNGLREPLACEMENTCODEUITEXCOORD2FNORMAL3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN) bIsLoaded = 0;
 	glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN = (PFNGLREPLACEMENTCODEUITEXCOORD2FCOLOR4FNORMAL3FVERTEX3FSUNPROC)gleIntGetProcAddress("glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN) bIsLoaded = 0;
 	glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN = (PFNGLREPLACEMENTCODEUITEXCOORD2FCOLOR4FNORMAL3FVERTEX3FVSUNPROC)gleIntGetProcAddress("glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN");
-	if(!TestPointer((const void*)glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN)) bIsLoaded = 0;
+	if(!glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN) bIsLoaded = 0;
 #endif /*GL_SUN_vertex*/
 	return bIsLoaded;
 }
@@ -11742,389 +11755,133 @@ static int gleIntLoadCore_1_1_Version_3_1()
 {
 	int bIsLoaded = 1;
 	__gleCullFace = (PFNGLCULLFACEPROC)gleIntGetProcAddress("glCullFace");
-	if(!TestPointer((const void*)__gleCullFace))
-	{
-		__gleCullFace = (PFNGLCULLFACEPROC)gle_CoreStruct.gleVarCullFace;
-		if(!__gleCullFace) bIsLoaded = 0;
-	}
+	if(!__gleCullFace) bIsLoaded = 0;
 	__gleFrontFace = (PFNGLFRONTFACEPROC)gleIntGetProcAddress("glFrontFace");
-	if(!TestPointer((const void*)__gleFrontFace))
-	{
-		__gleFrontFace = (PFNGLFRONTFACEPROC)gle_CoreStruct.gleVarFrontFace;
-		if(!__gleFrontFace) bIsLoaded = 0;
-	}
+	if(!__gleFrontFace) bIsLoaded = 0;
 	__gleHint = (PFNGLHINTPROC)gleIntGetProcAddress("glHint");
-	if(!TestPointer((const void*)__gleHint))
-	{
-		__gleHint = (PFNGLHINTPROC)gle_CoreStruct.gleVarHint;
-		if(!__gleHint) bIsLoaded = 0;
-	}
+	if(!__gleHint) bIsLoaded = 0;
 	__gleLineWidth = (PFNGLLINEWIDTHPROC)gleIntGetProcAddress("glLineWidth");
-	if(!TestPointer((const void*)__gleLineWidth))
-	{
-		__gleLineWidth = (PFNGLLINEWIDTHPROC)gle_CoreStruct.gleVarLineWidth;
-		if(!__gleLineWidth) bIsLoaded = 0;
-	}
+	if(!__gleLineWidth) bIsLoaded = 0;
 	__glePointSize = (PFNGLPOINTSIZEPROC)gleIntGetProcAddress("glPointSize");
-	if(!TestPointer((const void*)__glePointSize))
-	{
-		__glePointSize = (PFNGLPOINTSIZEPROC)gle_CoreStruct.gleVarPointSize;
-		if(!__glePointSize) bIsLoaded = 0;
-	}
+	if(!__glePointSize) bIsLoaded = 0;
 	__glePolygonMode = (PFNGLPOLYGONMODEPROC)gleIntGetProcAddress("glPolygonMode");
-	if(!TestPointer((const void*)__glePolygonMode))
-	{
-		__glePolygonMode = (PFNGLPOLYGONMODEPROC)gle_CoreStruct.gleVarPolygonMode;
-		if(!__glePolygonMode) bIsLoaded = 0;
-	}
+	if(!__glePolygonMode) bIsLoaded = 0;
 	__gleScissor = (PFNGLSCISSORPROC)gleIntGetProcAddress("glScissor");
-	if(!TestPointer((const void*)__gleScissor))
-	{
-		__gleScissor = (PFNGLSCISSORPROC)gle_CoreStruct.gleVarScissor;
-		if(!__gleScissor) bIsLoaded = 0;
-	}
+	if(!__gleScissor) bIsLoaded = 0;
 	__gleTexParameterf = (PFNGLTEXPARAMETERFPROC)gleIntGetProcAddress("glTexParameterf");
-	if(!TestPointer((const void*)__gleTexParameterf))
-	{
-		__gleTexParameterf = (PFNGLTEXPARAMETERFPROC)gle_CoreStruct.gleVarTexParameterf;
-		if(!__gleTexParameterf) bIsLoaded = 0;
-	}
+	if(!__gleTexParameterf) bIsLoaded = 0;
 	__gleTexParameterfv = (PFNGLTEXPARAMETERFVPROC)gleIntGetProcAddress("glTexParameterfv");
-	if(!TestPointer((const void*)__gleTexParameterfv))
-	{
-		__gleTexParameterfv = (PFNGLTEXPARAMETERFVPROC)gle_CoreStruct.gleVarTexParameterfv;
-		if(!__gleTexParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleTexParameterfv) bIsLoaded = 0;
 	__gleTexParameteri = (PFNGLTEXPARAMETERIPROC)gleIntGetProcAddress("glTexParameteri");
-	if(!TestPointer((const void*)__gleTexParameteri))
-	{
-		__gleTexParameteri = (PFNGLTEXPARAMETERIPROC)gle_CoreStruct.gleVarTexParameteri;
-		if(!__gleTexParameteri) bIsLoaded = 0;
-	}
+	if(!__gleTexParameteri) bIsLoaded = 0;
 	__gleTexParameteriv = (PFNGLTEXPARAMETERIVPROC)gleIntGetProcAddress("glTexParameteriv");
-	if(!TestPointer((const void*)__gleTexParameteriv))
-	{
-		__gleTexParameteriv = (PFNGLTEXPARAMETERIVPROC)gle_CoreStruct.gleVarTexParameteriv;
-		if(!__gleTexParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleTexParameteriv) bIsLoaded = 0;
 	__gleTexImage1D = (PFNGLTEXIMAGE1DPROC)gleIntGetProcAddress("glTexImage1D");
-	if(!TestPointer((const void*)__gleTexImage1D))
-	{
-		__gleTexImage1D = (PFNGLTEXIMAGE1DPROC)gle_CoreStruct.gleVarTexImage1D;
-		if(!__gleTexImage1D) bIsLoaded = 0;
-	}
+	if(!__gleTexImage1D) bIsLoaded = 0;
 	__gleTexImage2D = (PFNGLTEXIMAGE2DPROC)gleIntGetProcAddress("glTexImage2D");
-	if(!TestPointer((const void*)__gleTexImage2D))
-	{
-		__gleTexImage2D = (PFNGLTEXIMAGE2DPROC)gle_CoreStruct.gleVarTexImage2D;
-		if(!__gleTexImage2D) bIsLoaded = 0;
-	}
+	if(!__gleTexImage2D) bIsLoaded = 0;
 	__gleDrawBuffer = (PFNGLDRAWBUFFERPROC)gleIntGetProcAddress("glDrawBuffer");
-	if(!TestPointer((const void*)__gleDrawBuffer))
-	{
-		__gleDrawBuffer = (PFNGLDRAWBUFFERPROC)gle_CoreStruct.gleVarDrawBuffer;
-		if(!__gleDrawBuffer) bIsLoaded = 0;
-	}
+	if(!__gleDrawBuffer) bIsLoaded = 0;
 	__gleClear = (PFNGLCLEARPROC)gleIntGetProcAddress("glClear");
-	if(!TestPointer((const void*)__gleClear))
-	{
-		__gleClear = (PFNGLCLEARPROC)gle_CoreStruct.gleVarClear;
-		if(!__gleClear) bIsLoaded = 0;
-	}
+	if(!__gleClear) bIsLoaded = 0;
 	__gleClearColor = (PFNGLCLEARCOLORPROC)gleIntGetProcAddress("glClearColor");
-	if(!TestPointer((const void*)__gleClearColor))
-	{
-		__gleClearColor = (PFNGLCLEARCOLORPROC)gle_CoreStruct.gleVarClearColor;
-		if(!__gleClearColor) bIsLoaded = 0;
-	}
+	if(!__gleClearColor) bIsLoaded = 0;
 	__gleClearStencil = (PFNGLCLEARSTENCILPROC)gleIntGetProcAddress("glClearStencil");
-	if(!TestPointer((const void*)__gleClearStencil))
-	{
-		__gleClearStencil = (PFNGLCLEARSTENCILPROC)gle_CoreStruct.gleVarClearStencil;
-		if(!__gleClearStencil) bIsLoaded = 0;
-	}
+	if(!__gleClearStencil) bIsLoaded = 0;
 	__gleClearDepth = (PFNGLCLEARDEPTHPROC)gleIntGetProcAddress("glClearDepth");
-	if(!TestPointer((const void*)__gleClearDepth))
-	{
-		__gleClearDepth = (PFNGLCLEARDEPTHPROC)gle_CoreStruct.gleVarClearDepth;
-		if(!__gleClearDepth) bIsLoaded = 0;
-	}
+	if(!__gleClearDepth) bIsLoaded = 0;
 	__gleStencilMask = (PFNGLSTENCILMASKPROC)gleIntGetProcAddress("glStencilMask");
-	if(!TestPointer((const void*)__gleStencilMask))
-	{
-		__gleStencilMask = (PFNGLSTENCILMASKPROC)gle_CoreStruct.gleVarStencilMask;
-		if(!__gleStencilMask) bIsLoaded = 0;
-	}
+	if(!__gleStencilMask) bIsLoaded = 0;
 	__gleColorMask = (PFNGLCOLORMASKPROC)gleIntGetProcAddress("glColorMask");
-	if(!TestPointer((const void*)__gleColorMask))
-	{
-		__gleColorMask = (PFNGLCOLORMASKPROC)gle_CoreStruct.gleVarColorMask;
-		if(!__gleColorMask) bIsLoaded = 0;
-	}
+	if(!__gleColorMask) bIsLoaded = 0;
 	__gleDepthMask = (PFNGLDEPTHMASKPROC)gleIntGetProcAddress("glDepthMask");
-	if(!TestPointer((const void*)__gleDepthMask))
-	{
-		__gleDepthMask = (PFNGLDEPTHMASKPROC)gle_CoreStruct.gleVarDepthMask;
-		if(!__gleDepthMask) bIsLoaded = 0;
-	}
+	if(!__gleDepthMask) bIsLoaded = 0;
 	__gleDisable = (PFNGLDISABLEPROC)gleIntGetProcAddress("glDisable");
-	if(!TestPointer((const void*)__gleDisable))
-	{
-		__gleDisable = (PFNGLDISABLEPROC)gle_CoreStruct.gleVarDisable;
-		if(!__gleDisable) bIsLoaded = 0;
-	}
+	if(!__gleDisable) bIsLoaded = 0;
 	__gleEnable = (PFNGLENABLEPROC)gleIntGetProcAddress("glEnable");
-	if(!TestPointer((const void*)__gleEnable))
-	{
-		__gleEnable = (PFNGLENABLEPROC)gle_CoreStruct.gleVarEnable;
-		if(!__gleEnable) bIsLoaded = 0;
-	}
+	if(!__gleEnable) bIsLoaded = 0;
 	__gleFinish = (PFNGLFINISHPROC)gleIntGetProcAddress("glFinish");
-	if(!TestPointer((const void*)__gleFinish))
-	{
-		__gleFinish = (PFNGLFINISHPROC)gle_CoreStruct.gleVarFinish;
-		if(!__gleFinish) bIsLoaded = 0;
-	}
+	if(!__gleFinish) bIsLoaded = 0;
 	__gleFlush = (PFNGLFLUSHPROC)gleIntGetProcAddress("glFlush");
-	if(!TestPointer((const void*)__gleFlush))
-	{
-		__gleFlush = (PFNGLFLUSHPROC)gle_CoreStruct.gleVarFlush;
-		if(!__gleFlush) bIsLoaded = 0;
-	}
+	if(!__gleFlush) bIsLoaded = 0;
 	__gleBlendFunc = (PFNGLBLENDFUNCPROC)gleIntGetProcAddress("glBlendFunc");
-	if(!TestPointer((const void*)__gleBlendFunc))
-	{
-		__gleBlendFunc = (PFNGLBLENDFUNCPROC)gle_CoreStruct.gleVarBlendFunc;
-		if(!__gleBlendFunc) bIsLoaded = 0;
-	}
+	if(!__gleBlendFunc) bIsLoaded = 0;
 	__gleLogicOp = (PFNGLLOGICOPPROC)gleIntGetProcAddress("glLogicOp");
-	if(!TestPointer((const void*)__gleLogicOp))
-	{
-		__gleLogicOp = (PFNGLLOGICOPPROC)gle_CoreStruct.gleVarLogicOp;
-		if(!__gleLogicOp) bIsLoaded = 0;
-	}
+	if(!__gleLogicOp) bIsLoaded = 0;
 	__gleStencilFunc = (PFNGLSTENCILFUNCPROC)gleIntGetProcAddress("glStencilFunc");
-	if(!TestPointer((const void*)__gleStencilFunc))
-	{
-		__gleStencilFunc = (PFNGLSTENCILFUNCPROC)gle_CoreStruct.gleVarStencilFunc;
-		if(!__gleStencilFunc) bIsLoaded = 0;
-	}
+	if(!__gleStencilFunc) bIsLoaded = 0;
 	__gleStencilOp = (PFNGLSTENCILOPPROC)gleIntGetProcAddress("glStencilOp");
-	if(!TestPointer((const void*)__gleStencilOp))
-	{
-		__gleStencilOp = (PFNGLSTENCILOPPROC)gle_CoreStruct.gleVarStencilOp;
-		if(!__gleStencilOp) bIsLoaded = 0;
-	}
+	if(!__gleStencilOp) bIsLoaded = 0;
 	__gleDepthFunc = (PFNGLDEPTHFUNCPROC)gleIntGetProcAddress("glDepthFunc");
-	if(!TestPointer((const void*)__gleDepthFunc))
-	{
-		__gleDepthFunc = (PFNGLDEPTHFUNCPROC)gle_CoreStruct.gleVarDepthFunc;
-		if(!__gleDepthFunc) bIsLoaded = 0;
-	}
+	if(!__gleDepthFunc) bIsLoaded = 0;
 	__glePixelStoref = (PFNGLPIXELSTOREFPROC)gleIntGetProcAddress("glPixelStoref");
-	if(!TestPointer((const void*)__glePixelStoref))
-	{
-		__glePixelStoref = (PFNGLPIXELSTOREFPROC)gle_CoreStruct.gleVarPixelStoref;
-		if(!__glePixelStoref) bIsLoaded = 0;
-	}
+	if(!__glePixelStoref) bIsLoaded = 0;
 	__glePixelStorei = (PFNGLPIXELSTOREIPROC)gleIntGetProcAddress("glPixelStorei");
-	if(!TestPointer((const void*)__glePixelStorei))
-	{
-		__glePixelStorei = (PFNGLPIXELSTOREIPROC)gle_CoreStruct.gleVarPixelStorei;
-		if(!__glePixelStorei) bIsLoaded = 0;
-	}
+	if(!__glePixelStorei) bIsLoaded = 0;
 	__gleReadBuffer = (PFNGLREADBUFFERPROC)gleIntGetProcAddress("glReadBuffer");
-	if(!TestPointer((const void*)__gleReadBuffer))
-	{
-		__gleReadBuffer = (PFNGLREADBUFFERPROC)gle_CoreStruct.gleVarReadBuffer;
-		if(!__gleReadBuffer) bIsLoaded = 0;
-	}
+	if(!__gleReadBuffer) bIsLoaded = 0;
 	__gleReadPixels = (PFNGLREADPIXELSPROC)gleIntGetProcAddress("glReadPixels");
-	if(!TestPointer((const void*)__gleReadPixels))
-	{
-		__gleReadPixels = (PFNGLREADPIXELSPROC)gle_CoreStruct.gleVarReadPixels;
-		if(!__gleReadPixels) bIsLoaded = 0;
-	}
+	if(!__gleReadPixels) bIsLoaded = 0;
 	__gleGetBooleanv = (PFNGLGETBOOLEANVPROC)gleIntGetProcAddress("glGetBooleanv");
-	if(!TestPointer((const void*)__gleGetBooleanv))
-	{
-		__gleGetBooleanv = (PFNGLGETBOOLEANVPROC)gle_CoreStruct.gleVarGetBooleanv;
-		if(!__gleGetBooleanv) bIsLoaded = 0;
-	}
+	if(!__gleGetBooleanv) bIsLoaded = 0;
 	__gleGetDoublev = (PFNGLGETDOUBLEVPROC)gleIntGetProcAddress("glGetDoublev");
-	if(!TestPointer((const void*)__gleGetDoublev))
-	{
-		__gleGetDoublev = (PFNGLGETDOUBLEVPROC)gle_CoreStruct.gleVarGetDoublev;
-		if(!__gleGetDoublev) bIsLoaded = 0;
-	}
+	if(!__gleGetDoublev) bIsLoaded = 0;
 	__gleGetError = (PFNGLGETERRORPROC)gleIntGetProcAddress("glGetError");
-	if(!TestPointer((const void*)__gleGetError))
-	{
-		__gleGetError = (PFNGLGETERRORPROC)gle_CoreStruct.gleVarGetError;
-		if(!__gleGetError) bIsLoaded = 0;
-	}
+	if(!__gleGetError) bIsLoaded = 0;
 	__gleGetFloatv = (PFNGLGETFLOATVPROC)gleIntGetProcAddress("glGetFloatv");
-	if(!TestPointer((const void*)__gleGetFloatv))
-	{
-		__gleGetFloatv = (PFNGLGETFLOATVPROC)gle_CoreStruct.gleVarGetFloatv;
-		if(!__gleGetFloatv) bIsLoaded = 0;
-	}
+	if(!__gleGetFloatv) bIsLoaded = 0;
 	__gleGetIntegerv = (PFNGLGETINTEGERVPROC)gleIntGetProcAddress("glGetIntegerv");
-	if(!TestPointer((const void*)__gleGetIntegerv))
-	{
-		__gleGetIntegerv = (PFNGLGETINTEGERVPROC)gle_CoreStruct.gleVarGetIntegerv;
-		if(!__gleGetIntegerv) bIsLoaded = 0;
-	}
+	if(!__gleGetIntegerv) bIsLoaded = 0;
 	__gleGetString = (PFNGLGETSTRINGPROC)gleIntGetProcAddress("glGetString");
-	if(!TestPointer((const void*)__gleGetString))
-	{
-		__gleGetString = (PFNGLGETSTRINGPROC)gle_CoreStruct.gleVarGetString;
-		if(!__gleGetString) bIsLoaded = 0;
-	}
+	if(!__gleGetString) bIsLoaded = 0;
 	__gleGetTexImage = (PFNGLGETTEXIMAGEPROC)gleIntGetProcAddress("glGetTexImage");
-	if(!TestPointer((const void*)__gleGetTexImage))
-	{
-		__gleGetTexImage = (PFNGLGETTEXIMAGEPROC)gle_CoreStruct.gleVarGetTexImage;
-		if(!__gleGetTexImage) bIsLoaded = 0;
-	}
+	if(!__gleGetTexImage) bIsLoaded = 0;
 	__gleGetTexParameterfv = (PFNGLGETTEXPARAMETERFVPROC)gleIntGetProcAddress("glGetTexParameterfv");
-	if(!TestPointer((const void*)__gleGetTexParameterfv))
-	{
-		__gleGetTexParameterfv = (PFNGLGETTEXPARAMETERFVPROC)gle_CoreStruct.gleVarGetTexParameterfv;
-		if(!__gleGetTexParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexParameterfv) bIsLoaded = 0;
 	__gleGetTexParameteriv = (PFNGLGETTEXPARAMETERIVPROC)gleIntGetProcAddress("glGetTexParameteriv");
-	if(!TestPointer((const void*)__gleGetTexParameteriv))
-	{
-		__gleGetTexParameteriv = (PFNGLGETTEXPARAMETERIVPROC)gle_CoreStruct.gleVarGetTexParameteriv;
-		if(!__gleGetTexParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexParameteriv) bIsLoaded = 0;
 	__gleGetTexLevelParameterfv = (PFNGLGETTEXLEVELPARAMETERFVPROC)gleIntGetProcAddress("glGetTexLevelParameterfv");
-	if(!TestPointer((const void*)__gleGetTexLevelParameterfv))
-	{
-		__gleGetTexLevelParameterfv = (PFNGLGETTEXLEVELPARAMETERFVPROC)gle_CoreStruct.gleVarGetTexLevelParameterfv;
-		if(!__gleGetTexLevelParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexLevelParameterfv) bIsLoaded = 0;
 	__gleGetTexLevelParameteriv = (PFNGLGETTEXLEVELPARAMETERIVPROC)gleIntGetProcAddress("glGetTexLevelParameteriv");
-	if(!TestPointer((const void*)__gleGetTexLevelParameteriv))
-	{
-		__gleGetTexLevelParameteriv = (PFNGLGETTEXLEVELPARAMETERIVPROC)gle_CoreStruct.gleVarGetTexLevelParameteriv;
-		if(!__gleGetTexLevelParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexLevelParameteriv) bIsLoaded = 0;
 	__gleIsEnabled = (PFNGLISENABLEDPROC)gleIntGetProcAddress("glIsEnabled");
-	if(!TestPointer((const void*)__gleIsEnabled))
-	{
-		__gleIsEnabled = (PFNGLISENABLEDPROC)gle_CoreStruct.gleVarIsEnabled;
-		if(!__gleIsEnabled) bIsLoaded = 0;
-	}
+	if(!__gleIsEnabled) bIsLoaded = 0;
 	__gleDepthRange = (PFNGLDEPTHRANGEPROC)gleIntGetProcAddress("glDepthRange");
-	if(!TestPointer((const void*)__gleDepthRange))
-	{
-		__gleDepthRange = (PFNGLDEPTHRANGEPROC)gle_CoreStruct.gleVarDepthRange;
-		if(!__gleDepthRange) bIsLoaded = 0;
-	}
+	if(!__gleDepthRange) bIsLoaded = 0;
 	__gleViewport = (PFNGLVIEWPORTPROC)gleIntGetProcAddress("glViewport");
-	if(!TestPointer((const void*)__gleViewport))
-	{
-		__gleViewport = (PFNGLVIEWPORTPROC)gle_CoreStruct.gleVarViewport;
-		if(!__gleViewport) bIsLoaded = 0;
-	}
+	if(!__gleViewport) bIsLoaded = 0;
 	__gleDrawArrays = (PFNGLDRAWARRAYSPROC)gleIntGetProcAddress("glDrawArrays");
-	if(!TestPointer((const void*)__gleDrawArrays))
-	{
-		__gleDrawArrays = (PFNGLDRAWARRAYSPROC)gle_CoreStruct.gleVarDrawArrays;
-		if(!__gleDrawArrays) bIsLoaded = 0;
-	}
+	if(!__gleDrawArrays) bIsLoaded = 0;
 	__gleDrawElements = (PFNGLDRAWELEMENTSPROC)gleIntGetProcAddress("glDrawElements");
-	if(!TestPointer((const void*)__gleDrawElements))
-	{
-		__gleDrawElements = (PFNGLDRAWELEMENTSPROC)gle_CoreStruct.gleVarDrawElements;
-		if(!__gleDrawElements) bIsLoaded = 0;
-	}
+	if(!__gleDrawElements) bIsLoaded = 0;
 	__gleGetPointerv = (PFNGLGETPOINTERVPROC)gleIntGetProcAddress("glGetPointerv");
-	if(!TestPointer((const void*)__gleGetPointerv))
-	{
-		__gleGetPointerv = (PFNGLGETPOINTERVPROC)gle_CoreStruct.gleVarGetPointerv;
-		if(!__gleGetPointerv) bIsLoaded = 0;
-	}
+	if(!__gleGetPointerv) bIsLoaded = 0;
 	__glePolygonOffset = (PFNGLPOLYGONOFFSETPROC)gleIntGetProcAddress("glPolygonOffset");
-	if(!TestPointer((const void*)__glePolygonOffset))
-	{
-		__glePolygonOffset = (PFNGLPOLYGONOFFSETPROC)gle_CoreStruct.gleVarPolygonOffset;
-		if(!__glePolygonOffset) bIsLoaded = 0;
-	}
+	if(!__glePolygonOffset) bIsLoaded = 0;
 	__gleCopyTexImage1D = (PFNGLCOPYTEXIMAGE1DPROC)gleIntGetProcAddress("glCopyTexImage1D");
-	if(!TestPointer((const void*)__gleCopyTexImage1D))
-	{
-		__gleCopyTexImage1D = (PFNGLCOPYTEXIMAGE1DPROC)gle_CoreStruct.gleVarCopyTexImage1D;
-		if(!__gleCopyTexImage1D) bIsLoaded = 0;
-	}
+	if(!__gleCopyTexImage1D) bIsLoaded = 0;
 	__gleCopyTexImage2D = (PFNGLCOPYTEXIMAGE2DPROC)gleIntGetProcAddress("glCopyTexImage2D");
-	if(!TestPointer((const void*)__gleCopyTexImage2D))
-	{
-		__gleCopyTexImage2D = (PFNGLCOPYTEXIMAGE2DPROC)gle_CoreStruct.gleVarCopyTexImage2D;
-		if(!__gleCopyTexImage2D) bIsLoaded = 0;
-	}
+	if(!__gleCopyTexImage2D) bIsLoaded = 0;
 	__gleCopyTexSubImage1D = (PFNGLCOPYTEXSUBIMAGE1DPROC)gleIntGetProcAddress("glCopyTexSubImage1D");
-	if(!TestPointer((const void*)__gleCopyTexSubImage1D))
-	{
-		__gleCopyTexSubImage1D = (PFNGLCOPYTEXSUBIMAGE1DPROC)gle_CoreStruct.gleVarCopyTexSubImage1D;
-		if(!__gleCopyTexSubImage1D) bIsLoaded = 0;
-	}
+	if(!__gleCopyTexSubImage1D) bIsLoaded = 0;
 	__gleCopyTexSubImage2D = (PFNGLCOPYTEXSUBIMAGE2DPROC)gleIntGetProcAddress("glCopyTexSubImage2D");
-	if(!TestPointer((const void*)__gleCopyTexSubImage2D))
-	{
-		__gleCopyTexSubImage2D = (PFNGLCOPYTEXSUBIMAGE2DPROC)gle_CoreStruct.gleVarCopyTexSubImage2D;
-		if(!__gleCopyTexSubImage2D) bIsLoaded = 0;
-	}
+	if(!__gleCopyTexSubImage2D) bIsLoaded = 0;
 	__gleTexSubImage1D = (PFNGLTEXSUBIMAGE1DPROC)gleIntGetProcAddress("glTexSubImage1D");
-	if(!TestPointer((const void*)__gleTexSubImage1D))
-	{
-		__gleTexSubImage1D = (PFNGLTEXSUBIMAGE1DPROC)gle_CoreStruct.gleVarTexSubImage1D;
-		if(!__gleTexSubImage1D) bIsLoaded = 0;
-	}
+	if(!__gleTexSubImage1D) bIsLoaded = 0;
 	__gleTexSubImage2D = (PFNGLTEXSUBIMAGE2DPROC)gleIntGetProcAddress("glTexSubImage2D");
-	if(!TestPointer((const void*)__gleTexSubImage2D))
-	{
-		__gleTexSubImage2D = (PFNGLTEXSUBIMAGE2DPROC)gle_CoreStruct.gleVarTexSubImage2D;
-		if(!__gleTexSubImage2D) bIsLoaded = 0;
-	}
+	if(!__gleTexSubImage2D) bIsLoaded = 0;
 	__gleBindTexture = (PFNGLBINDTEXTUREPROC)gleIntGetProcAddress("glBindTexture");
-	if(!TestPointer((const void*)__gleBindTexture))
-	{
-		__gleBindTexture = (PFNGLBINDTEXTUREPROC)gle_CoreStruct.gleVarBindTexture;
-		if(!__gleBindTexture) bIsLoaded = 0;
-	}
+	if(!__gleBindTexture) bIsLoaded = 0;
 	__gleDeleteTextures = (PFNGLDELETETEXTURESPROC)gleIntGetProcAddress("glDeleteTextures");
-	if(!TestPointer((const void*)__gleDeleteTextures))
-	{
-		__gleDeleteTextures = (PFNGLDELETETEXTURESPROC)gle_CoreStruct.gleVarDeleteTextures;
-		if(!__gleDeleteTextures) bIsLoaded = 0;
-	}
+	if(!__gleDeleteTextures) bIsLoaded = 0;
 	__gleGenTextures = (PFNGLGENTEXTURESPROC)gleIntGetProcAddress("glGenTextures");
-	if(!TestPointer((const void*)__gleGenTextures))
-	{
-		__gleGenTextures = (PFNGLGENTEXTURESPROC)gle_CoreStruct.gleVarGenTextures;
-		if(!__gleGenTextures) bIsLoaded = 0;
-	}
+	if(!__gleGenTextures) bIsLoaded = 0;
 	__gleIsTexture = (PFNGLISTEXTUREPROC)gleIntGetProcAddress("glIsTexture");
-	if(!TestPointer((const void*)__gleIsTexture))
-	{
-		__gleIsTexture = (PFNGLISTEXTUREPROC)gle_CoreStruct.gleVarIsTexture;
-		if(!__gleIsTexture) bIsLoaded = 0;
-	}
+	if(!__gleIsTexture) bIsLoaded = 0;
 	__gleIndexub = (PFNGLINDEXUBPROC)gleIntGetProcAddress("glIndexub");
-	if(!TestPointer((const void*)__gleIndexub))
-	{
-		__gleIndexub = (PFNGLINDEXUBPROC)gle_CoreStruct.gleVarIndexub;
-		if(!__gleIndexub) bIsLoaded = 0;
-	}
+	if(!__gleIndexub) bIsLoaded = 0;
 	__gleIndexubv = (PFNGLINDEXUBVPROC)gleIntGetProcAddress("glIndexubv");
-	if(!TestPointer((const void*)__gleIndexubv))
-	{
-		__gleIndexubv = (PFNGLINDEXUBVPROC)gle_CoreStruct.gleVarIndexubv;
-		if(!__gleIndexubv) bIsLoaded = 0;
-	}
+	if(!__gleIndexubv) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -12132,41 +11889,17 @@ static int gleIntLoadCore_1_2_Version_3_1()
 {
 	int bIsLoaded = 1;
 	__gleBlendColor = (PFNGLBLENDCOLORPROC)gleIntGetProcAddress("glBlendColor");
-	if(!TestPointer((const void*)__gleBlendColor))
-	{
-		__gleBlendColor = (PFNGLBLENDCOLORPROC)gle_CoreStruct.gleVarBlendColor;
-		if(!__gleBlendColor) bIsLoaded = 0;
-	}
+	if(!__gleBlendColor) bIsLoaded = 0;
 	__gleBlendEquation = (PFNGLBLENDEQUATIONPROC)gleIntGetProcAddress("glBlendEquation");
-	if(!TestPointer((const void*)__gleBlendEquation))
-	{
-		__gleBlendEquation = (PFNGLBLENDEQUATIONPROC)gle_CoreStruct.gleVarBlendEquation;
-		if(!__gleBlendEquation) bIsLoaded = 0;
-	}
+	if(!__gleBlendEquation) bIsLoaded = 0;
 	__gleDrawRangeElements = (PFNGLDRAWRANGEELEMENTSPROC)gleIntGetProcAddress("glDrawRangeElements");
-	if(!TestPointer((const void*)__gleDrawRangeElements))
-	{
-		__gleDrawRangeElements = (PFNGLDRAWRANGEELEMENTSPROC)gle_CoreStruct.gleVarDrawRangeElements;
-		if(!__gleDrawRangeElements) bIsLoaded = 0;
-	}
+	if(!__gleDrawRangeElements) bIsLoaded = 0;
 	__gleTexImage3D = (PFNGLTEXIMAGE3DPROC)gleIntGetProcAddress("glTexImage3D");
-	if(!TestPointer((const void*)__gleTexImage3D))
-	{
-		__gleTexImage3D = (PFNGLTEXIMAGE3DPROC)gle_CoreStruct.gleVarTexImage3D;
-		if(!__gleTexImage3D) bIsLoaded = 0;
-	}
+	if(!__gleTexImage3D) bIsLoaded = 0;
 	__gleTexSubImage3D = (PFNGLTEXSUBIMAGE3DPROC)gleIntGetProcAddress("glTexSubImage3D");
-	if(!TestPointer((const void*)__gleTexSubImage3D))
-	{
-		__gleTexSubImage3D = (PFNGLTEXSUBIMAGE3DPROC)gle_CoreStruct.gleVarTexSubImage3D;
-		if(!__gleTexSubImage3D) bIsLoaded = 0;
-	}
+	if(!__gleTexSubImage3D) bIsLoaded = 0;
 	__gleCopyTexSubImage3D = (PFNGLCOPYTEXSUBIMAGE3DPROC)gleIntGetProcAddress("glCopyTexSubImage3D");
-	if(!TestPointer((const void*)__gleCopyTexSubImage3D))
-	{
-		__gleCopyTexSubImage3D = (PFNGLCOPYTEXSUBIMAGE3DPROC)gle_CoreStruct.gleVarCopyTexSubImage3D;
-		if(!__gleCopyTexSubImage3D) bIsLoaded = 0;
-	}
+	if(!__gleCopyTexSubImage3D) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -12174,59 +11907,23 @@ static int gleIntLoadCore_1_3_Version_3_1()
 {
 	int bIsLoaded = 1;
 	__gleActiveTexture = (PFNGLACTIVETEXTUREPROC)gleIntGetProcAddress("glActiveTexture");
-	if(!TestPointer((const void*)__gleActiveTexture))
-	{
-		__gleActiveTexture = (PFNGLACTIVETEXTUREPROC)gle_CoreStruct.gleVarActiveTexture;
-		if(!__gleActiveTexture) bIsLoaded = 0;
-	}
+	if(!__gleActiveTexture) bIsLoaded = 0;
 	__gleSampleCoverage = (PFNGLSAMPLECOVERAGEPROC)gleIntGetProcAddress("glSampleCoverage");
-	if(!TestPointer((const void*)__gleSampleCoverage))
-	{
-		__gleSampleCoverage = (PFNGLSAMPLECOVERAGEPROC)gle_CoreStruct.gleVarSampleCoverage;
-		if(!__gleSampleCoverage) bIsLoaded = 0;
-	}
+	if(!__gleSampleCoverage) bIsLoaded = 0;
 	__gleCompressedTexImage3D = (PFNGLCOMPRESSEDTEXIMAGE3DPROC)gleIntGetProcAddress("glCompressedTexImage3D");
-	if(!TestPointer((const void*)__gleCompressedTexImage3D))
-	{
-		__gleCompressedTexImage3D = (PFNGLCOMPRESSEDTEXIMAGE3DPROC)gle_CoreStruct.gleVarCompressedTexImage3D;
-		if(!__gleCompressedTexImage3D) bIsLoaded = 0;
-	}
+	if(!__gleCompressedTexImage3D) bIsLoaded = 0;
 	__gleCompressedTexImage2D = (PFNGLCOMPRESSEDTEXIMAGE2DPROC)gleIntGetProcAddress("glCompressedTexImage2D");
-	if(!TestPointer((const void*)__gleCompressedTexImage2D))
-	{
-		__gleCompressedTexImage2D = (PFNGLCOMPRESSEDTEXIMAGE2DPROC)gle_CoreStruct.gleVarCompressedTexImage2D;
-		if(!__gleCompressedTexImage2D) bIsLoaded = 0;
-	}
+	if(!__gleCompressedTexImage2D) bIsLoaded = 0;
 	__gleCompressedTexImage1D = (PFNGLCOMPRESSEDTEXIMAGE1DPROC)gleIntGetProcAddress("glCompressedTexImage1D");
-	if(!TestPointer((const void*)__gleCompressedTexImage1D))
-	{
-		__gleCompressedTexImage1D = (PFNGLCOMPRESSEDTEXIMAGE1DPROC)gle_CoreStruct.gleVarCompressedTexImage1D;
-		if(!__gleCompressedTexImage1D) bIsLoaded = 0;
-	}
+	if(!__gleCompressedTexImage1D) bIsLoaded = 0;
 	__gleCompressedTexSubImage3D = (PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC)gleIntGetProcAddress("glCompressedTexSubImage3D");
-	if(!TestPointer((const void*)__gleCompressedTexSubImage3D))
-	{
-		__gleCompressedTexSubImage3D = (PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC)gle_CoreStruct.gleVarCompressedTexSubImage3D;
-		if(!__gleCompressedTexSubImage3D) bIsLoaded = 0;
-	}
+	if(!__gleCompressedTexSubImage3D) bIsLoaded = 0;
 	__gleCompressedTexSubImage2D = (PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC)gleIntGetProcAddress("glCompressedTexSubImage2D");
-	if(!TestPointer((const void*)__gleCompressedTexSubImage2D))
-	{
-		__gleCompressedTexSubImage2D = (PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC)gle_CoreStruct.gleVarCompressedTexSubImage2D;
-		if(!__gleCompressedTexSubImage2D) bIsLoaded = 0;
-	}
+	if(!__gleCompressedTexSubImage2D) bIsLoaded = 0;
 	__gleCompressedTexSubImage1D = (PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC)gleIntGetProcAddress("glCompressedTexSubImage1D");
-	if(!TestPointer((const void*)__gleCompressedTexSubImage1D))
-	{
-		__gleCompressedTexSubImage1D = (PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC)gle_CoreStruct.gleVarCompressedTexSubImage1D;
-		if(!__gleCompressedTexSubImage1D) bIsLoaded = 0;
-	}
+	if(!__gleCompressedTexSubImage1D) bIsLoaded = 0;
 	__gleGetCompressedTexImage = (PFNGLGETCOMPRESSEDTEXIMAGEPROC)gleIntGetProcAddress("glGetCompressedTexImage");
-	if(!TestPointer((const void*)__gleGetCompressedTexImage))
-	{
-		__gleGetCompressedTexImage = (PFNGLGETCOMPRESSEDTEXIMAGEPROC)gle_CoreStruct.gleVarGetCompressedTexImage;
-		if(!__gleGetCompressedTexImage) bIsLoaded = 0;
-	}
+	if(!__gleGetCompressedTexImage) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -12234,47 +11931,19 @@ static int gleIntLoadCore_1_4_Version_3_1()
 {
 	int bIsLoaded = 1;
 	__gleBlendFuncSeparate = (PFNGLBLENDFUNCSEPARATEPROC)gleIntGetProcAddress("glBlendFuncSeparate");
-	if(!TestPointer((const void*)__gleBlendFuncSeparate))
-	{
-		__gleBlendFuncSeparate = (PFNGLBLENDFUNCSEPARATEPROC)gle_CoreStruct.gleVarBlendFuncSeparate;
-		if(!__gleBlendFuncSeparate) bIsLoaded = 0;
-	}
+	if(!__gleBlendFuncSeparate) bIsLoaded = 0;
 	__gleMultiDrawArrays = (PFNGLMULTIDRAWARRAYSPROC)gleIntGetProcAddress("glMultiDrawArrays");
-	if(!TestPointer((const void*)__gleMultiDrawArrays))
-	{
-		__gleMultiDrawArrays = (PFNGLMULTIDRAWARRAYSPROC)gle_CoreStruct.gleVarMultiDrawArrays;
-		if(!__gleMultiDrawArrays) bIsLoaded = 0;
-	}
+	if(!__gleMultiDrawArrays) bIsLoaded = 0;
 	__gleMultiDrawElements = (PFNGLMULTIDRAWELEMENTSPROC)gleIntGetProcAddress("glMultiDrawElements");
-	if(!TestPointer((const void*)__gleMultiDrawElements))
-	{
-		__gleMultiDrawElements = (PFNGLMULTIDRAWELEMENTSPROC)gle_CoreStruct.gleVarMultiDrawElements;
-		if(!__gleMultiDrawElements) bIsLoaded = 0;
-	}
+	if(!__gleMultiDrawElements) bIsLoaded = 0;
 	__glePointParameterf = (PFNGLPOINTPARAMETERFPROC)gleIntGetProcAddress("glPointParameterf");
-	if(!TestPointer((const void*)__glePointParameterf))
-	{
-		__glePointParameterf = (PFNGLPOINTPARAMETERFPROC)gle_CoreStruct.gleVarPointParameterf;
-		if(!__glePointParameterf) bIsLoaded = 0;
-	}
+	if(!__glePointParameterf) bIsLoaded = 0;
 	__glePointParameterfv = (PFNGLPOINTPARAMETERFVPROC)gleIntGetProcAddress("glPointParameterfv");
-	if(!TestPointer((const void*)__glePointParameterfv))
-	{
-		__glePointParameterfv = (PFNGLPOINTPARAMETERFVPROC)gle_CoreStruct.gleVarPointParameterfv;
-		if(!__glePointParameterfv) bIsLoaded = 0;
-	}
+	if(!__glePointParameterfv) bIsLoaded = 0;
 	__glePointParameteri = (PFNGLPOINTPARAMETERIPROC)gleIntGetProcAddress("glPointParameteri");
-	if(!TestPointer((const void*)__glePointParameteri))
-	{
-		__glePointParameteri = (PFNGLPOINTPARAMETERIPROC)gle_CoreStruct.gleVarPointParameteri;
-		if(!__glePointParameteri) bIsLoaded = 0;
-	}
+	if(!__glePointParameteri) bIsLoaded = 0;
 	__glePointParameteriv = (PFNGLPOINTPARAMETERIVPROC)gleIntGetProcAddress("glPointParameteriv");
-	if(!TestPointer((const void*)__glePointParameteriv))
-	{
-		__glePointParameteriv = (PFNGLPOINTPARAMETERIVPROC)gle_CoreStruct.gleVarPointParameteriv;
-		if(!__glePointParameteriv) bIsLoaded = 0;
-	}
+	if(!__glePointParameteriv) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -12282,119 +11951,43 @@ static int gleIntLoadCore_1_5_Version_3_1()
 {
 	int bIsLoaded = 1;
 	__gleGenQueries = (PFNGLGENQUERIESPROC)gleIntGetProcAddress("glGenQueries");
-	if(!TestPointer((const void*)__gleGenQueries))
-	{
-		__gleGenQueries = (PFNGLGENQUERIESPROC)gle_CoreStruct.gleVarGenQueries;
-		if(!__gleGenQueries) bIsLoaded = 0;
-	}
+	if(!__gleGenQueries) bIsLoaded = 0;
 	__gleDeleteQueries = (PFNGLDELETEQUERIESPROC)gleIntGetProcAddress("glDeleteQueries");
-	if(!TestPointer((const void*)__gleDeleteQueries))
-	{
-		__gleDeleteQueries = (PFNGLDELETEQUERIESPROC)gle_CoreStruct.gleVarDeleteQueries;
-		if(!__gleDeleteQueries) bIsLoaded = 0;
-	}
+	if(!__gleDeleteQueries) bIsLoaded = 0;
 	__gleIsQuery = (PFNGLISQUERYPROC)gleIntGetProcAddress("glIsQuery");
-	if(!TestPointer((const void*)__gleIsQuery))
-	{
-		__gleIsQuery = (PFNGLISQUERYPROC)gle_CoreStruct.gleVarIsQuery;
-		if(!__gleIsQuery) bIsLoaded = 0;
-	}
+	if(!__gleIsQuery) bIsLoaded = 0;
 	__gleBeginQuery = (PFNGLBEGINQUERYPROC)gleIntGetProcAddress("glBeginQuery");
-	if(!TestPointer((const void*)__gleBeginQuery))
-	{
-		__gleBeginQuery = (PFNGLBEGINQUERYPROC)gle_CoreStruct.gleVarBeginQuery;
-		if(!__gleBeginQuery) bIsLoaded = 0;
-	}
+	if(!__gleBeginQuery) bIsLoaded = 0;
 	__gleEndQuery = (PFNGLENDQUERYPROC)gleIntGetProcAddress("glEndQuery");
-	if(!TestPointer((const void*)__gleEndQuery))
-	{
-		__gleEndQuery = (PFNGLENDQUERYPROC)gle_CoreStruct.gleVarEndQuery;
-		if(!__gleEndQuery) bIsLoaded = 0;
-	}
+	if(!__gleEndQuery) bIsLoaded = 0;
 	__gleGetQueryiv = (PFNGLGETQUERYIVPROC)gleIntGetProcAddress("glGetQueryiv");
-	if(!TestPointer((const void*)__gleGetQueryiv))
-	{
-		__gleGetQueryiv = (PFNGLGETQUERYIVPROC)gle_CoreStruct.gleVarGetQueryiv;
-		if(!__gleGetQueryiv) bIsLoaded = 0;
-	}
+	if(!__gleGetQueryiv) bIsLoaded = 0;
 	__gleGetQueryObjectiv = (PFNGLGETQUERYOBJECTIVPROC)gleIntGetProcAddress("glGetQueryObjectiv");
-	if(!TestPointer((const void*)__gleGetQueryObjectiv))
-	{
-		__gleGetQueryObjectiv = (PFNGLGETQUERYOBJECTIVPROC)gle_CoreStruct.gleVarGetQueryObjectiv;
-		if(!__gleGetQueryObjectiv) bIsLoaded = 0;
-	}
+	if(!__gleGetQueryObjectiv) bIsLoaded = 0;
 	__gleGetQueryObjectuiv = (PFNGLGETQUERYOBJECTUIVPROC)gleIntGetProcAddress("glGetQueryObjectuiv");
-	if(!TestPointer((const void*)__gleGetQueryObjectuiv))
-	{
-		__gleGetQueryObjectuiv = (PFNGLGETQUERYOBJECTUIVPROC)gle_CoreStruct.gleVarGetQueryObjectuiv;
-		if(!__gleGetQueryObjectuiv) bIsLoaded = 0;
-	}
+	if(!__gleGetQueryObjectuiv) bIsLoaded = 0;
 	__gleBindBuffer = (PFNGLBINDBUFFERPROC)gleIntGetProcAddress("glBindBuffer");
-	if(!TestPointer((const void*)__gleBindBuffer))
-	{
-		__gleBindBuffer = (PFNGLBINDBUFFERPROC)gle_CoreStruct.gleVarBindBuffer;
-		if(!__gleBindBuffer) bIsLoaded = 0;
-	}
+	if(!__gleBindBuffer) bIsLoaded = 0;
 	__gleDeleteBuffers = (PFNGLDELETEBUFFERSPROC)gleIntGetProcAddress("glDeleteBuffers");
-	if(!TestPointer((const void*)__gleDeleteBuffers))
-	{
-		__gleDeleteBuffers = (PFNGLDELETEBUFFERSPROC)gle_CoreStruct.gleVarDeleteBuffers;
-		if(!__gleDeleteBuffers) bIsLoaded = 0;
-	}
+	if(!__gleDeleteBuffers) bIsLoaded = 0;
 	__gleGenBuffers = (PFNGLGENBUFFERSPROC)gleIntGetProcAddress("glGenBuffers");
-	if(!TestPointer((const void*)__gleGenBuffers))
-	{
-		__gleGenBuffers = (PFNGLGENBUFFERSPROC)gle_CoreStruct.gleVarGenBuffers;
-		if(!__gleGenBuffers) bIsLoaded = 0;
-	}
+	if(!__gleGenBuffers) bIsLoaded = 0;
 	__gleIsBuffer = (PFNGLISBUFFERPROC)gleIntGetProcAddress("glIsBuffer");
-	if(!TestPointer((const void*)__gleIsBuffer))
-	{
-		__gleIsBuffer = (PFNGLISBUFFERPROC)gle_CoreStruct.gleVarIsBuffer;
-		if(!__gleIsBuffer) bIsLoaded = 0;
-	}
+	if(!__gleIsBuffer) bIsLoaded = 0;
 	__gleBufferData = (PFNGLBUFFERDATAPROC)gleIntGetProcAddress("glBufferData");
-	if(!TestPointer((const void*)__gleBufferData))
-	{
-		__gleBufferData = (PFNGLBUFFERDATAPROC)gle_CoreStruct.gleVarBufferData;
-		if(!__gleBufferData) bIsLoaded = 0;
-	}
+	if(!__gleBufferData) bIsLoaded = 0;
 	__gleBufferSubData = (PFNGLBUFFERSUBDATAPROC)gleIntGetProcAddress("glBufferSubData");
-	if(!TestPointer((const void*)__gleBufferSubData))
-	{
-		__gleBufferSubData = (PFNGLBUFFERSUBDATAPROC)gle_CoreStruct.gleVarBufferSubData;
-		if(!__gleBufferSubData) bIsLoaded = 0;
-	}
+	if(!__gleBufferSubData) bIsLoaded = 0;
 	__gleGetBufferSubData = (PFNGLGETBUFFERSUBDATAPROC)gleIntGetProcAddress("glGetBufferSubData");
-	if(!TestPointer((const void*)__gleGetBufferSubData))
-	{
-		__gleGetBufferSubData = (PFNGLGETBUFFERSUBDATAPROC)gle_CoreStruct.gleVarGetBufferSubData;
-		if(!__gleGetBufferSubData) bIsLoaded = 0;
-	}
+	if(!__gleGetBufferSubData) bIsLoaded = 0;
 	__gleMapBuffer = (PFNGLMAPBUFFERPROC)gleIntGetProcAddress("glMapBuffer");
-	if(!TestPointer((const void*)__gleMapBuffer))
-	{
-		__gleMapBuffer = (PFNGLMAPBUFFERPROC)gle_CoreStruct.gleVarMapBuffer;
-		if(!__gleMapBuffer) bIsLoaded = 0;
-	}
+	if(!__gleMapBuffer) bIsLoaded = 0;
 	__gleUnmapBuffer = (PFNGLUNMAPBUFFERPROC)gleIntGetProcAddress("glUnmapBuffer");
-	if(!TestPointer((const void*)__gleUnmapBuffer))
-	{
-		__gleUnmapBuffer = (PFNGLUNMAPBUFFERPROC)gle_CoreStruct.gleVarUnmapBuffer;
-		if(!__gleUnmapBuffer) bIsLoaded = 0;
-	}
+	if(!__gleUnmapBuffer) bIsLoaded = 0;
 	__gleGetBufferParameteriv = (PFNGLGETBUFFERPARAMETERIVPROC)gleIntGetProcAddress("glGetBufferParameteriv");
-	if(!TestPointer((const void*)__gleGetBufferParameteriv))
-	{
-		__gleGetBufferParameteriv = (PFNGLGETBUFFERPARAMETERIVPROC)gle_CoreStruct.gleVarGetBufferParameteriv;
-		if(!__gleGetBufferParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetBufferParameteriv) bIsLoaded = 0;
 	__gleGetBufferPointerv = (PFNGLGETBUFFERPOINTERVPROC)gleIntGetProcAddress("glGetBufferPointerv");
-	if(!TestPointer((const void*)__gleGetBufferPointerv))
-	{
-		__gleGetBufferPointerv = (PFNGLGETBUFFERPOINTERVPROC)gle_CoreStruct.gleVarGetBufferPointerv;
-		if(!__gleGetBufferPointerv) bIsLoaded = 0;
-	}
+	if(!__gleGetBufferPointerv) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -12402,347 +11995,119 @@ static int gleIntLoadCore_2_0_Version_3_1()
 {
 	int bIsLoaded = 1;
 	__gleBlendEquationSeparate = (PFNGLBLENDEQUATIONSEPARATEPROC)gleIntGetProcAddress("glBlendEquationSeparate");
-	if(!TestPointer((const void*)__gleBlendEquationSeparate))
-	{
-		__gleBlendEquationSeparate = (PFNGLBLENDEQUATIONSEPARATEPROC)gle_CoreStruct.gleVarBlendEquationSeparate;
-		if(!__gleBlendEquationSeparate) bIsLoaded = 0;
-	}
+	if(!__gleBlendEquationSeparate) bIsLoaded = 0;
 	__gleDrawBuffers = (PFNGLDRAWBUFFERSPROC)gleIntGetProcAddress("glDrawBuffers");
-	if(!TestPointer((const void*)__gleDrawBuffers))
-	{
-		__gleDrawBuffers = (PFNGLDRAWBUFFERSPROC)gle_CoreStruct.gleVarDrawBuffers;
-		if(!__gleDrawBuffers) bIsLoaded = 0;
-	}
+	if(!__gleDrawBuffers) bIsLoaded = 0;
 	__gleStencilOpSeparate = (PFNGLSTENCILOPSEPARATEPROC)gleIntGetProcAddress("glStencilOpSeparate");
-	if(!TestPointer((const void*)__gleStencilOpSeparate))
-	{
-		__gleStencilOpSeparate = (PFNGLSTENCILOPSEPARATEPROC)gle_CoreStruct.gleVarStencilOpSeparate;
-		if(!__gleStencilOpSeparate) bIsLoaded = 0;
-	}
+	if(!__gleStencilOpSeparate) bIsLoaded = 0;
 	__gleStencilFuncSeparate = (PFNGLSTENCILFUNCSEPARATEPROC)gleIntGetProcAddress("glStencilFuncSeparate");
-	if(!TestPointer((const void*)__gleStencilFuncSeparate))
-	{
-		__gleStencilFuncSeparate = (PFNGLSTENCILFUNCSEPARATEPROC)gle_CoreStruct.gleVarStencilFuncSeparate;
-		if(!__gleStencilFuncSeparate) bIsLoaded = 0;
-	}
+	if(!__gleStencilFuncSeparate) bIsLoaded = 0;
 	__gleStencilMaskSeparate = (PFNGLSTENCILMASKSEPARATEPROC)gleIntGetProcAddress("glStencilMaskSeparate");
-	if(!TestPointer((const void*)__gleStencilMaskSeparate))
-	{
-		__gleStencilMaskSeparate = (PFNGLSTENCILMASKSEPARATEPROC)gle_CoreStruct.gleVarStencilMaskSeparate;
-		if(!__gleStencilMaskSeparate) bIsLoaded = 0;
-	}
+	if(!__gleStencilMaskSeparate) bIsLoaded = 0;
 	__gleAttachShader = (PFNGLATTACHSHADERPROC)gleIntGetProcAddress("glAttachShader");
-	if(!TestPointer((const void*)__gleAttachShader))
-	{
-		__gleAttachShader = (PFNGLATTACHSHADERPROC)gle_CoreStruct.gleVarAttachShader;
-		if(!__gleAttachShader) bIsLoaded = 0;
-	}
+	if(!__gleAttachShader) bIsLoaded = 0;
 	__gleBindAttribLocation = (PFNGLBINDATTRIBLOCATIONPROC)gleIntGetProcAddress("glBindAttribLocation");
-	if(!TestPointer((const void*)__gleBindAttribLocation))
-	{
-		__gleBindAttribLocation = (PFNGLBINDATTRIBLOCATIONPROC)gle_CoreStruct.gleVarBindAttribLocation;
-		if(!__gleBindAttribLocation) bIsLoaded = 0;
-	}
+	if(!__gleBindAttribLocation) bIsLoaded = 0;
 	__gleCompileShader = (PFNGLCOMPILESHADERPROC)gleIntGetProcAddress("glCompileShader");
-	if(!TestPointer((const void*)__gleCompileShader))
-	{
-		__gleCompileShader = (PFNGLCOMPILESHADERPROC)gle_CoreStruct.gleVarCompileShader;
-		if(!__gleCompileShader) bIsLoaded = 0;
-	}
+	if(!__gleCompileShader) bIsLoaded = 0;
 	__gleCreateProgram = (PFNGLCREATEPROGRAMPROC)gleIntGetProcAddress("glCreateProgram");
-	if(!TestPointer((const void*)__gleCreateProgram))
-	{
-		__gleCreateProgram = (PFNGLCREATEPROGRAMPROC)gle_CoreStruct.gleVarCreateProgram;
-		if(!__gleCreateProgram) bIsLoaded = 0;
-	}
+	if(!__gleCreateProgram) bIsLoaded = 0;
 	__gleCreateShader = (PFNGLCREATESHADERPROC)gleIntGetProcAddress("glCreateShader");
-	if(!TestPointer((const void*)__gleCreateShader))
-	{
-		__gleCreateShader = (PFNGLCREATESHADERPROC)gle_CoreStruct.gleVarCreateShader;
-		if(!__gleCreateShader) bIsLoaded = 0;
-	}
+	if(!__gleCreateShader) bIsLoaded = 0;
 	__gleDeleteProgram = (PFNGLDELETEPROGRAMPROC)gleIntGetProcAddress("glDeleteProgram");
-	if(!TestPointer((const void*)__gleDeleteProgram))
-	{
-		__gleDeleteProgram = (PFNGLDELETEPROGRAMPROC)gle_CoreStruct.gleVarDeleteProgram;
-		if(!__gleDeleteProgram) bIsLoaded = 0;
-	}
+	if(!__gleDeleteProgram) bIsLoaded = 0;
 	__gleDeleteShader = (PFNGLDELETESHADERPROC)gleIntGetProcAddress("glDeleteShader");
-	if(!TestPointer((const void*)__gleDeleteShader))
-	{
-		__gleDeleteShader = (PFNGLDELETESHADERPROC)gle_CoreStruct.gleVarDeleteShader;
-		if(!__gleDeleteShader) bIsLoaded = 0;
-	}
+	if(!__gleDeleteShader) bIsLoaded = 0;
 	__gleDetachShader = (PFNGLDETACHSHADERPROC)gleIntGetProcAddress("glDetachShader");
-	if(!TestPointer((const void*)__gleDetachShader))
-	{
-		__gleDetachShader = (PFNGLDETACHSHADERPROC)gle_CoreStruct.gleVarDetachShader;
-		if(!__gleDetachShader) bIsLoaded = 0;
-	}
+	if(!__gleDetachShader) bIsLoaded = 0;
 	__gleDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC)gleIntGetProcAddress("glDisableVertexAttribArray");
-	if(!TestPointer((const void*)__gleDisableVertexAttribArray))
-	{
-		__gleDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC)gle_CoreStruct.gleVarDisableVertexAttribArray;
-		if(!__gleDisableVertexAttribArray) bIsLoaded = 0;
-	}
+	if(!__gleDisableVertexAttribArray) bIsLoaded = 0;
 	__gleEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC)gleIntGetProcAddress("glEnableVertexAttribArray");
-	if(!TestPointer((const void*)__gleEnableVertexAttribArray))
-	{
-		__gleEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC)gle_CoreStruct.gleVarEnableVertexAttribArray;
-		if(!__gleEnableVertexAttribArray) bIsLoaded = 0;
-	}
+	if(!__gleEnableVertexAttribArray) bIsLoaded = 0;
 	__gleGetActiveAttrib = (PFNGLGETACTIVEATTRIBPROC)gleIntGetProcAddress("glGetActiveAttrib");
-	if(!TestPointer((const void*)__gleGetActiveAttrib))
-	{
-		__gleGetActiveAttrib = (PFNGLGETACTIVEATTRIBPROC)gle_CoreStruct.gleVarGetActiveAttrib;
-		if(!__gleGetActiveAttrib) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveAttrib) bIsLoaded = 0;
 	__gleGetActiveUniform = (PFNGLGETACTIVEUNIFORMPROC)gleIntGetProcAddress("glGetActiveUniform");
-	if(!TestPointer((const void*)__gleGetActiveUniform))
-	{
-		__gleGetActiveUniform = (PFNGLGETACTIVEUNIFORMPROC)gle_CoreStruct.gleVarGetActiveUniform;
-		if(!__gleGetActiveUniform) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveUniform) bIsLoaded = 0;
 	__gleGetAttachedShaders = (PFNGLGETATTACHEDSHADERSPROC)gleIntGetProcAddress("glGetAttachedShaders");
-	if(!TestPointer((const void*)__gleGetAttachedShaders))
-	{
-		__gleGetAttachedShaders = (PFNGLGETATTACHEDSHADERSPROC)gle_CoreStruct.gleVarGetAttachedShaders;
-		if(!__gleGetAttachedShaders) bIsLoaded = 0;
-	}
+	if(!__gleGetAttachedShaders) bIsLoaded = 0;
 	__gleGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC)gleIntGetProcAddress("glGetAttribLocation");
-	if(!TestPointer((const void*)__gleGetAttribLocation))
-	{
-		__gleGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC)gle_CoreStruct.gleVarGetAttribLocation;
-		if(!__gleGetAttribLocation) bIsLoaded = 0;
-	}
+	if(!__gleGetAttribLocation) bIsLoaded = 0;
 	__gleGetProgramiv = (PFNGLGETPROGRAMIVPROC)gleIntGetProcAddress("glGetProgramiv");
-	if(!TestPointer((const void*)__gleGetProgramiv))
-	{
-		__gleGetProgramiv = (PFNGLGETPROGRAMIVPROC)gle_CoreStruct.gleVarGetProgramiv;
-		if(!__gleGetProgramiv) bIsLoaded = 0;
-	}
+	if(!__gleGetProgramiv) bIsLoaded = 0;
 	__gleGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC)gleIntGetProcAddress("glGetProgramInfoLog");
-	if(!TestPointer((const void*)__gleGetProgramInfoLog))
-	{
-		__gleGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC)gle_CoreStruct.gleVarGetProgramInfoLog;
-		if(!__gleGetProgramInfoLog) bIsLoaded = 0;
-	}
+	if(!__gleGetProgramInfoLog) bIsLoaded = 0;
 	__gleGetShaderiv = (PFNGLGETSHADERIVPROC)gleIntGetProcAddress("glGetShaderiv");
-	if(!TestPointer((const void*)__gleGetShaderiv))
-	{
-		__gleGetShaderiv = (PFNGLGETSHADERIVPROC)gle_CoreStruct.gleVarGetShaderiv;
-		if(!__gleGetShaderiv) bIsLoaded = 0;
-	}
+	if(!__gleGetShaderiv) bIsLoaded = 0;
 	__gleGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC)gleIntGetProcAddress("glGetShaderInfoLog");
-	if(!TestPointer((const void*)__gleGetShaderInfoLog))
-	{
-		__gleGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC)gle_CoreStruct.gleVarGetShaderInfoLog;
-		if(!__gleGetShaderInfoLog) bIsLoaded = 0;
-	}
+	if(!__gleGetShaderInfoLog) bIsLoaded = 0;
 	__gleGetShaderSource = (PFNGLGETSHADERSOURCEPROC)gleIntGetProcAddress("glGetShaderSource");
-	if(!TestPointer((const void*)__gleGetShaderSource))
-	{
-		__gleGetShaderSource = (PFNGLGETSHADERSOURCEPROC)gle_CoreStruct.gleVarGetShaderSource;
-		if(!__gleGetShaderSource) bIsLoaded = 0;
-	}
+	if(!__gleGetShaderSource) bIsLoaded = 0;
 	__gleGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)gleIntGetProcAddress("glGetUniformLocation");
-	if(!TestPointer((const void*)__gleGetUniformLocation))
-	{
-		__gleGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)gle_CoreStruct.gleVarGetUniformLocation;
-		if(!__gleGetUniformLocation) bIsLoaded = 0;
-	}
+	if(!__gleGetUniformLocation) bIsLoaded = 0;
 	__gleGetUniformfv = (PFNGLGETUNIFORMFVPROC)gleIntGetProcAddress("glGetUniformfv");
-	if(!TestPointer((const void*)__gleGetUniformfv))
-	{
-		__gleGetUniformfv = (PFNGLGETUNIFORMFVPROC)gle_CoreStruct.gleVarGetUniformfv;
-		if(!__gleGetUniformfv) bIsLoaded = 0;
-	}
+	if(!__gleGetUniformfv) bIsLoaded = 0;
 	__gleGetUniformiv = (PFNGLGETUNIFORMIVPROC)gleIntGetProcAddress("glGetUniformiv");
-	if(!TestPointer((const void*)__gleGetUniformiv))
-	{
-		__gleGetUniformiv = (PFNGLGETUNIFORMIVPROC)gle_CoreStruct.gleVarGetUniformiv;
-		if(!__gleGetUniformiv) bIsLoaded = 0;
-	}
+	if(!__gleGetUniformiv) bIsLoaded = 0;
 	__gleGetVertexAttribdv = (PFNGLGETVERTEXATTRIBDVPROC)gleIntGetProcAddress("glGetVertexAttribdv");
-	if(!TestPointer((const void*)__gleGetVertexAttribdv))
-	{
-		__gleGetVertexAttribdv = (PFNGLGETVERTEXATTRIBDVPROC)gle_CoreStruct.gleVarGetVertexAttribdv;
-		if(!__gleGetVertexAttribdv) bIsLoaded = 0;
-	}
+	if(!__gleGetVertexAttribdv) bIsLoaded = 0;
 	__gleGetVertexAttribfv = (PFNGLGETVERTEXATTRIBFVPROC)gleIntGetProcAddress("glGetVertexAttribfv");
-	if(!TestPointer((const void*)__gleGetVertexAttribfv))
-	{
-		__gleGetVertexAttribfv = (PFNGLGETVERTEXATTRIBFVPROC)gle_CoreStruct.gleVarGetVertexAttribfv;
-		if(!__gleGetVertexAttribfv) bIsLoaded = 0;
-	}
+	if(!__gleGetVertexAttribfv) bIsLoaded = 0;
 	__gleGetVertexAttribiv = (PFNGLGETVERTEXATTRIBIVPROC)gleIntGetProcAddress("glGetVertexAttribiv");
-	if(!TestPointer((const void*)__gleGetVertexAttribiv))
-	{
-		__gleGetVertexAttribiv = (PFNGLGETVERTEXATTRIBIVPROC)gle_CoreStruct.gleVarGetVertexAttribiv;
-		if(!__gleGetVertexAttribiv) bIsLoaded = 0;
-	}
+	if(!__gleGetVertexAttribiv) bIsLoaded = 0;
 	__gleGetVertexAttribPointerv = (PFNGLGETVERTEXATTRIBPOINTERVPROC)gleIntGetProcAddress("glGetVertexAttribPointerv");
-	if(!TestPointer((const void*)__gleGetVertexAttribPointerv))
-	{
-		__gleGetVertexAttribPointerv = (PFNGLGETVERTEXATTRIBPOINTERVPROC)gle_CoreStruct.gleVarGetVertexAttribPointerv;
-		if(!__gleGetVertexAttribPointerv) bIsLoaded = 0;
-	}
+	if(!__gleGetVertexAttribPointerv) bIsLoaded = 0;
 	__gleIsProgram = (PFNGLISPROGRAMPROC)gleIntGetProcAddress("glIsProgram");
-	if(!TestPointer((const void*)__gleIsProgram))
-	{
-		__gleIsProgram = (PFNGLISPROGRAMPROC)gle_CoreStruct.gleVarIsProgram;
-		if(!__gleIsProgram) bIsLoaded = 0;
-	}
+	if(!__gleIsProgram) bIsLoaded = 0;
 	__gleIsShader = (PFNGLISSHADERPROC)gleIntGetProcAddress("glIsShader");
-	if(!TestPointer((const void*)__gleIsShader))
-	{
-		__gleIsShader = (PFNGLISSHADERPROC)gle_CoreStruct.gleVarIsShader;
-		if(!__gleIsShader) bIsLoaded = 0;
-	}
+	if(!__gleIsShader) bIsLoaded = 0;
 	__gleLinkProgram = (PFNGLLINKPROGRAMPROC)gleIntGetProcAddress("glLinkProgram");
-	if(!TestPointer((const void*)__gleLinkProgram))
-	{
-		__gleLinkProgram = (PFNGLLINKPROGRAMPROC)gle_CoreStruct.gleVarLinkProgram;
-		if(!__gleLinkProgram) bIsLoaded = 0;
-	}
+	if(!__gleLinkProgram) bIsLoaded = 0;
 	__gleShaderSource = (PFNGLSHADERSOURCEPROC)gleIntGetProcAddress("glShaderSource");
-	if(!TestPointer((const void*)__gleShaderSource))
-	{
-		__gleShaderSource = (PFNGLSHADERSOURCEPROC)gle_CoreStruct.gleVarShaderSource;
-		if(!__gleShaderSource) bIsLoaded = 0;
-	}
+	if(!__gleShaderSource) bIsLoaded = 0;
 	__gleUseProgram = (PFNGLUSEPROGRAMPROC)gleIntGetProcAddress("glUseProgram");
-	if(!TestPointer((const void*)__gleUseProgram))
-	{
-		__gleUseProgram = (PFNGLUSEPROGRAMPROC)gle_CoreStruct.gleVarUseProgram;
-		if(!__gleUseProgram) bIsLoaded = 0;
-	}
+	if(!__gleUseProgram) bIsLoaded = 0;
 	__gleUniform1f = (PFNGLUNIFORM1FPROC)gleIntGetProcAddress("glUniform1f");
-	if(!TestPointer((const void*)__gleUniform1f))
-	{
-		__gleUniform1f = (PFNGLUNIFORM1FPROC)gle_CoreStruct.gleVarUniform1f;
-		if(!__gleUniform1f) bIsLoaded = 0;
-	}
+	if(!__gleUniform1f) bIsLoaded = 0;
 	__gleUniform2f = (PFNGLUNIFORM2FPROC)gleIntGetProcAddress("glUniform2f");
-	if(!TestPointer((const void*)__gleUniform2f))
-	{
-		__gleUniform2f = (PFNGLUNIFORM2FPROC)gle_CoreStruct.gleVarUniform2f;
-		if(!__gleUniform2f) bIsLoaded = 0;
-	}
+	if(!__gleUniform2f) bIsLoaded = 0;
 	__gleUniform3f = (PFNGLUNIFORM3FPROC)gleIntGetProcAddress("glUniform3f");
-	if(!TestPointer((const void*)__gleUniform3f))
-	{
-		__gleUniform3f = (PFNGLUNIFORM3FPROC)gle_CoreStruct.gleVarUniform3f;
-		if(!__gleUniform3f) bIsLoaded = 0;
-	}
+	if(!__gleUniform3f) bIsLoaded = 0;
 	__gleUniform4f = (PFNGLUNIFORM4FPROC)gleIntGetProcAddress("glUniform4f");
-	if(!TestPointer((const void*)__gleUniform4f))
-	{
-		__gleUniform4f = (PFNGLUNIFORM4FPROC)gle_CoreStruct.gleVarUniform4f;
-		if(!__gleUniform4f) bIsLoaded = 0;
-	}
+	if(!__gleUniform4f) bIsLoaded = 0;
 	__gleUniform1i = (PFNGLUNIFORM1IPROC)gleIntGetProcAddress("glUniform1i");
-	if(!TestPointer((const void*)__gleUniform1i))
-	{
-		__gleUniform1i = (PFNGLUNIFORM1IPROC)gle_CoreStruct.gleVarUniform1i;
-		if(!__gleUniform1i) bIsLoaded = 0;
-	}
+	if(!__gleUniform1i) bIsLoaded = 0;
 	__gleUniform2i = (PFNGLUNIFORM2IPROC)gleIntGetProcAddress("glUniform2i");
-	if(!TestPointer((const void*)__gleUniform2i))
-	{
-		__gleUniform2i = (PFNGLUNIFORM2IPROC)gle_CoreStruct.gleVarUniform2i;
-		if(!__gleUniform2i) bIsLoaded = 0;
-	}
+	if(!__gleUniform2i) bIsLoaded = 0;
 	__gleUniform3i = (PFNGLUNIFORM3IPROC)gleIntGetProcAddress("glUniform3i");
-	if(!TestPointer((const void*)__gleUniform3i))
-	{
-		__gleUniform3i = (PFNGLUNIFORM3IPROC)gle_CoreStruct.gleVarUniform3i;
-		if(!__gleUniform3i) bIsLoaded = 0;
-	}
+	if(!__gleUniform3i) bIsLoaded = 0;
 	__gleUniform4i = (PFNGLUNIFORM4IPROC)gleIntGetProcAddress("glUniform4i");
-	if(!TestPointer((const void*)__gleUniform4i))
-	{
-		__gleUniform4i = (PFNGLUNIFORM4IPROC)gle_CoreStruct.gleVarUniform4i;
-		if(!__gleUniform4i) bIsLoaded = 0;
-	}
+	if(!__gleUniform4i) bIsLoaded = 0;
 	__gleUniform1fv = (PFNGLUNIFORM1FVPROC)gleIntGetProcAddress("glUniform1fv");
-	if(!TestPointer((const void*)__gleUniform1fv))
-	{
-		__gleUniform1fv = (PFNGLUNIFORM1FVPROC)gle_CoreStruct.gleVarUniform1fv;
-		if(!__gleUniform1fv) bIsLoaded = 0;
-	}
+	if(!__gleUniform1fv) bIsLoaded = 0;
 	__gleUniform2fv = (PFNGLUNIFORM2FVPROC)gleIntGetProcAddress("glUniform2fv");
-	if(!TestPointer((const void*)__gleUniform2fv))
-	{
-		__gleUniform2fv = (PFNGLUNIFORM2FVPROC)gle_CoreStruct.gleVarUniform2fv;
-		if(!__gleUniform2fv) bIsLoaded = 0;
-	}
+	if(!__gleUniform2fv) bIsLoaded = 0;
 	__gleUniform3fv = (PFNGLUNIFORM3FVPROC)gleIntGetProcAddress("glUniform3fv");
-	if(!TestPointer((const void*)__gleUniform3fv))
-	{
-		__gleUniform3fv = (PFNGLUNIFORM3FVPROC)gle_CoreStruct.gleVarUniform3fv;
-		if(!__gleUniform3fv) bIsLoaded = 0;
-	}
+	if(!__gleUniform3fv) bIsLoaded = 0;
 	__gleUniform4fv = (PFNGLUNIFORM4FVPROC)gleIntGetProcAddress("glUniform4fv");
-	if(!TestPointer((const void*)__gleUniform4fv))
-	{
-		__gleUniform4fv = (PFNGLUNIFORM4FVPROC)gle_CoreStruct.gleVarUniform4fv;
-		if(!__gleUniform4fv) bIsLoaded = 0;
-	}
+	if(!__gleUniform4fv) bIsLoaded = 0;
 	__gleUniform1iv = (PFNGLUNIFORM1IVPROC)gleIntGetProcAddress("glUniform1iv");
-	if(!TestPointer((const void*)__gleUniform1iv))
-	{
-		__gleUniform1iv = (PFNGLUNIFORM1IVPROC)gle_CoreStruct.gleVarUniform1iv;
-		if(!__gleUniform1iv) bIsLoaded = 0;
-	}
+	if(!__gleUniform1iv) bIsLoaded = 0;
 	__gleUniform2iv = (PFNGLUNIFORM2IVPROC)gleIntGetProcAddress("glUniform2iv");
-	if(!TestPointer((const void*)__gleUniform2iv))
-	{
-		__gleUniform2iv = (PFNGLUNIFORM2IVPROC)gle_CoreStruct.gleVarUniform2iv;
-		if(!__gleUniform2iv) bIsLoaded = 0;
-	}
+	if(!__gleUniform2iv) bIsLoaded = 0;
 	__gleUniform3iv = (PFNGLUNIFORM3IVPROC)gleIntGetProcAddress("glUniform3iv");
-	if(!TestPointer((const void*)__gleUniform3iv))
-	{
-		__gleUniform3iv = (PFNGLUNIFORM3IVPROC)gle_CoreStruct.gleVarUniform3iv;
-		if(!__gleUniform3iv) bIsLoaded = 0;
-	}
+	if(!__gleUniform3iv) bIsLoaded = 0;
 	__gleUniform4iv = (PFNGLUNIFORM4IVPROC)gleIntGetProcAddress("glUniform4iv");
-	if(!TestPointer((const void*)__gleUniform4iv))
-	{
-		__gleUniform4iv = (PFNGLUNIFORM4IVPROC)gle_CoreStruct.gleVarUniform4iv;
-		if(!__gleUniform4iv) bIsLoaded = 0;
-	}
+	if(!__gleUniform4iv) bIsLoaded = 0;
 	__gleUniformMatrix2fv = (PFNGLUNIFORMMATRIX2FVPROC)gleIntGetProcAddress("glUniformMatrix2fv");
-	if(!TestPointer((const void*)__gleUniformMatrix2fv))
-	{
-		__gleUniformMatrix2fv = (PFNGLUNIFORMMATRIX2FVPROC)gle_CoreStruct.gleVarUniformMatrix2fv;
-		if(!__gleUniformMatrix2fv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix2fv) bIsLoaded = 0;
 	__gleUniformMatrix3fv = (PFNGLUNIFORMMATRIX3FVPROC)gleIntGetProcAddress("glUniformMatrix3fv");
-	if(!TestPointer((const void*)__gleUniformMatrix3fv))
-	{
-		__gleUniformMatrix3fv = (PFNGLUNIFORMMATRIX3FVPROC)gle_CoreStruct.gleVarUniformMatrix3fv;
-		if(!__gleUniformMatrix3fv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix3fv) bIsLoaded = 0;
 	__gleUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)gleIntGetProcAddress("glUniformMatrix4fv");
-	if(!TestPointer((const void*)__gleUniformMatrix4fv))
-	{
-		__gleUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)gle_CoreStruct.gleVarUniformMatrix4fv;
-		if(!__gleUniformMatrix4fv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix4fv) bIsLoaded = 0;
 	__gleValidateProgram = (PFNGLVALIDATEPROGRAMPROC)gleIntGetProcAddress("glValidateProgram");
-	if(!TestPointer((const void*)__gleValidateProgram))
-	{
-		__gleValidateProgram = (PFNGLVALIDATEPROGRAMPROC)gle_CoreStruct.gleVarValidateProgram;
-		if(!__gleValidateProgram) bIsLoaded = 0;
-	}
+	if(!__gleValidateProgram) bIsLoaded = 0;
 	__gleVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC)gleIntGetProcAddress("glVertexAttribPointer");
-	if(!TestPointer((const void*)__gleVertexAttribPointer))
-	{
-		__gleVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC)gle_CoreStruct.gleVarVertexAttribPointer;
-		if(!__gleVertexAttribPointer) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribPointer) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -12750,41 +12115,17 @@ static int gleIntLoadCore_2_1_Version_3_1()
 {
 	int bIsLoaded = 1;
 	__gleUniformMatrix2x3fv = (PFNGLUNIFORMMATRIX2X3FVPROC)gleIntGetProcAddress("glUniformMatrix2x3fv");
-	if(!TestPointer((const void*)__gleUniformMatrix2x3fv))
-	{
-		__gleUniformMatrix2x3fv = (PFNGLUNIFORMMATRIX2X3FVPROC)gle_CoreStruct.gleVarUniformMatrix2x3fv;
-		if(!__gleUniformMatrix2x3fv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix2x3fv) bIsLoaded = 0;
 	__gleUniformMatrix3x2fv = (PFNGLUNIFORMMATRIX3X2FVPROC)gleIntGetProcAddress("glUniformMatrix3x2fv");
-	if(!TestPointer((const void*)__gleUniformMatrix3x2fv))
-	{
-		__gleUniformMatrix3x2fv = (PFNGLUNIFORMMATRIX3X2FVPROC)gle_CoreStruct.gleVarUniformMatrix3x2fv;
-		if(!__gleUniformMatrix3x2fv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix3x2fv) bIsLoaded = 0;
 	__gleUniformMatrix2x4fv = (PFNGLUNIFORMMATRIX2X4FVPROC)gleIntGetProcAddress("glUniformMatrix2x4fv");
-	if(!TestPointer((const void*)__gleUniformMatrix2x4fv))
-	{
-		__gleUniformMatrix2x4fv = (PFNGLUNIFORMMATRIX2X4FVPROC)gle_CoreStruct.gleVarUniformMatrix2x4fv;
-		if(!__gleUniformMatrix2x4fv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix2x4fv) bIsLoaded = 0;
 	__gleUniformMatrix4x2fv = (PFNGLUNIFORMMATRIX4X2FVPROC)gleIntGetProcAddress("glUniformMatrix4x2fv");
-	if(!TestPointer((const void*)__gleUniformMatrix4x2fv))
-	{
-		__gleUniformMatrix4x2fv = (PFNGLUNIFORMMATRIX4X2FVPROC)gle_CoreStruct.gleVarUniformMatrix4x2fv;
-		if(!__gleUniformMatrix4x2fv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix4x2fv) bIsLoaded = 0;
 	__gleUniformMatrix3x4fv = (PFNGLUNIFORMMATRIX3X4FVPROC)gleIntGetProcAddress("glUniformMatrix3x4fv");
-	if(!TestPointer((const void*)__gleUniformMatrix3x4fv))
-	{
-		__gleUniformMatrix3x4fv = (PFNGLUNIFORMMATRIX3X4FVPROC)gle_CoreStruct.gleVarUniformMatrix3x4fv;
-		if(!__gleUniformMatrix3x4fv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix3x4fv) bIsLoaded = 0;
 	__gleUniformMatrix4x3fv = (PFNGLUNIFORMMATRIX4X3FVPROC)gleIntGetProcAddress("glUniformMatrix4x3fv");
-	if(!TestPointer((const void*)__gleUniformMatrix4x3fv))
-	{
-		__gleUniformMatrix4x3fv = (PFNGLUNIFORMMATRIX4X3FVPROC)gle_CoreStruct.gleVarUniformMatrix4x3fv;
-		if(!__gleUniformMatrix4x3fv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix4x3fv) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -12792,511 +12133,175 @@ static int gleIntLoadCore_3_0_Version_3_1()
 {
 	int bIsLoaded = 1;
 	__gleColorMaski = (PFNGLCOLORMASKIPROC)gleIntGetProcAddress("glColorMaski");
-	if(!TestPointer((const void*)__gleColorMaski))
-	{
-		__gleColorMaski = (PFNGLCOLORMASKIPROC)gle_CoreStruct.gleVarColorMaski;
-		if(!__gleColorMaski) bIsLoaded = 0;
-	}
+	if(!__gleColorMaski) bIsLoaded = 0;
 	__gleGetBooleani_v = (PFNGLGETBOOLEANI_VPROC)gleIntGetProcAddress("glGetBooleani_v");
-	if(!TestPointer((const void*)__gleGetBooleani_v))
-	{
-		__gleGetBooleani_v = (PFNGLGETBOOLEANI_VPROC)gle_CoreStruct.gleVarGetBooleani_v;
-		if(!__gleGetBooleani_v) bIsLoaded = 0;
-	}
+	if(!__gleGetBooleani_v) bIsLoaded = 0;
 	__gleGetIntegeri_v = (PFNGLGETINTEGERI_VPROC)gleIntGetProcAddress("glGetIntegeri_v");
-	if(!TestPointer((const void*)__gleGetIntegeri_v))
-	{
-		__gleGetIntegeri_v = (PFNGLGETINTEGERI_VPROC)gle_CoreStruct.gleVarGetIntegeri_v;
-		if(!__gleGetIntegeri_v) bIsLoaded = 0;
-	}
+	if(!__gleGetIntegeri_v) bIsLoaded = 0;
 	__gleEnablei = (PFNGLENABLEIPROC)gleIntGetProcAddress("glEnablei");
-	if(!TestPointer((const void*)__gleEnablei))
-	{
-		__gleEnablei = (PFNGLENABLEIPROC)gle_CoreStruct.gleVarEnablei;
-		if(!__gleEnablei) bIsLoaded = 0;
-	}
+	if(!__gleEnablei) bIsLoaded = 0;
 	__gleDisablei = (PFNGLDISABLEIPROC)gleIntGetProcAddress("glDisablei");
-	if(!TestPointer((const void*)__gleDisablei))
-	{
-		__gleDisablei = (PFNGLDISABLEIPROC)gle_CoreStruct.gleVarDisablei;
-		if(!__gleDisablei) bIsLoaded = 0;
-	}
+	if(!__gleDisablei) bIsLoaded = 0;
 	__gleIsEnabledi = (PFNGLISENABLEDIPROC)gleIntGetProcAddress("glIsEnabledi");
-	if(!TestPointer((const void*)__gleIsEnabledi))
-	{
-		__gleIsEnabledi = (PFNGLISENABLEDIPROC)gle_CoreStruct.gleVarIsEnabledi;
-		if(!__gleIsEnabledi) bIsLoaded = 0;
-	}
+	if(!__gleIsEnabledi) bIsLoaded = 0;
 	__gleBeginTransformFeedback = (PFNGLBEGINTRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glBeginTransformFeedback");
-	if(!TestPointer((const void*)__gleBeginTransformFeedback))
-	{
-		__gleBeginTransformFeedback = (PFNGLBEGINTRANSFORMFEEDBACKPROC)gle_CoreStruct.gleVarBeginTransformFeedback;
-		if(!__gleBeginTransformFeedback) bIsLoaded = 0;
-	}
+	if(!__gleBeginTransformFeedback) bIsLoaded = 0;
 	__gleEndTransformFeedback = (PFNGLENDTRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glEndTransformFeedback");
-	if(!TestPointer((const void*)__gleEndTransformFeedback))
-	{
-		__gleEndTransformFeedback = (PFNGLENDTRANSFORMFEEDBACKPROC)gle_CoreStruct.gleVarEndTransformFeedback;
-		if(!__gleEndTransformFeedback) bIsLoaded = 0;
-	}
+	if(!__gleEndTransformFeedback) bIsLoaded = 0;
 	__gleBindBufferRange = (PFNGLBINDBUFFERRANGEPROC)gleIntGetProcAddress("glBindBufferRange");
-	if(!TestPointer((const void*)__gleBindBufferRange))
-	{
-		__gleBindBufferRange = (PFNGLBINDBUFFERRANGEPROC)gle_CoreStruct.gleVarBindBufferRange;
-		if(!__gleBindBufferRange) bIsLoaded = 0;
-	}
+	if(!__gleBindBufferRange) bIsLoaded = 0;
 	__gleBindBufferBase = (PFNGLBINDBUFFERBASEPROC)gleIntGetProcAddress("glBindBufferBase");
-	if(!TestPointer((const void*)__gleBindBufferBase))
-	{
-		__gleBindBufferBase = (PFNGLBINDBUFFERBASEPROC)gle_CoreStruct.gleVarBindBufferBase;
-		if(!__gleBindBufferBase) bIsLoaded = 0;
-	}
+	if(!__gleBindBufferBase) bIsLoaded = 0;
 	__gleTransformFeedbackVaryings = (PFNGLTRANSFORMFEEDBACKVARYINGSPROC)gleIntGetProcAddress("glTransformFeedbackVaryings");
-	if(!TestPointer((const void*)__gleTransformFeedbackVaryings))
-	{
-		__gleTransformFeedbackVaryings = (PFNGLTRANSFORMFEEDBACKVARYINGSPROC)gle_CoreStruct.gleVarTransformFeedbackVaryings;
-		if(!__gleTransformFeedbackVaryings) bIsLoaded = 0;
-	}
+	if(!__gleTransformFeedbackVaryings) bIsLoaded = 0;
 	__gleGetTransformFeedbackVarying = (PFNGLGETTRANSFORMFEEDBACKVARYINGPROC)gleIntGetProcAddress("glGetTransformFeedbackVarying");
-	if(!TestPointer((const void*)__gleGetTransformFeedbackVarying))
-	{
-		__gleGetTransformFeedbackVarying = (PFNGLGETTRANSFORMFEEDBACKVARYINGPROC)gle_CoreStruct.gleVarGetTransformFeedbackVarying;
-		if(!__gleGetTransformFeedbackVarying) bIsLoaded = 0;
-	}
+	if(!__gleGetTransformFeedbackVarying) bIsLoaded = 0;
 	__gleClampColor = (PFNGLCLAMPCOLORPROC)gleIntGetProcAddress("glClampColor");
-	if(!TestPointer((const void*)__gleClampColor))
-	{
-		__gleClampColor = (PFNGLCLAMPCOLORPROC)gle_CoreStruct.gleVarClampColor;
-		if(!__gleClampColor) bIsLoaded = 0;
-	}
+	if(!__gleClampColor) bIsLoaded = 0;
 	__gleBeginConditionalRender = (PFNGLBEGINCONDITIONALRENDERPROC)gleIntGetProcAddress("glBeginConditionalRender");
-	if(!TestPointer((const void*)__gleBeginConditionalRender))
-	{
-		__gleBeginConditionalRender = (PFNGLBEGINCONDITIONALRENDERPROC)gle_CoreStruct.gleVarBeginConditionalRender;
-		if(!__gleBeginConditionalRender) bIsLoaded = 0;
-	}
+	if(!__gleBeginConditionalRender) bIsLoaded = 0;
 	__gleEndConditionalRender = (PFNGLENDCONDITIONALRENDERPROC)gleIntGetProcAddress("glEndConditionalRender");
-	if(!TestPointer((const void*)__gleEndConditionalRender))
-	{
-		__gleEndConditionalRender = (PFNGLENDCONDITIONALRENDERPROC)gle_CoreStruct.gleVarEndConditionalRender;
-		if(!__gleEndConditionalRender) bIsLoaded = 0;
-	}
+	if(!__gleEndConditionalRender) bIsLoaded = 0;
 	__gleVertexAttribIPointer = (PFNGLVERTEXATTRIBIPOINTERPROC)gleIntGetProcAddress("glVertexAttribIPointer");
-	if(!TestPointer((const void*)__gleVertexAttribIPointer))
-	{
-		__gleVertexAttribIPointer = (PFNGLVERTEXATTRIBIPOINTERPROC)gle_CoreStruct.gleVarVertexAttribIPointer;
-		if(!__gleVertexAttribIPointer) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribIPointer) bIsLoaded = 0;
 	__gleGetVertexAttribIiv = (PFNGLGETVERTEXATTRIBIIVPROC)gleIntGetProcAddress("glGetVertexAttribIiv");
-	if(!TestPointer((const void*)__gleGetVertexAttribIiv))
-	{
-		__gleGetVertexAttribIiv = (PFNGLGETVERTEXATTRIBIIVPROC)gle_CoreStruct.gleVarGetVertexAttribIiv;
-		if(!__gleGetVertexAttribIiv) bIsLoaded = 0;
-	}
+	if(!__gleGetVertexAttribIiv) bIsLoaded = 0;
 	__gleGetVertexAttribIuiv = (PFNGLGETVERTEXATTRIBIUIVPROC)gleIntGetProcAddress("glGetVertexAttribIuiv");
-	if(!TestPointer((const void*)__gleGetVertexAttribIuiv))
-	{
-		__gleGetVertexAttribIuiv = (PFNGLGETVERTEXATTRIBIUIVPROC)gle_CoreStruct.gleVarGetVertexAttribIuiv;
-		if(!__gleGetVertexAttribIuiv) bIsLoaded = 0;
-	}
+	if(!__gleGetVertexAttribIuiv) bIsLoaded = 0;
 	__gleVertexAttribI1i = (PFNGLVERTEXATTRIBI1IPROC)gleIntGetProcAddress("glVertexAttribI1i");
-	if(!TestPointer((const void*)__gleVertexAttribI1i))
-	{
-		__gleVertexAttribI1i = (PFNGLVERTEXATTRIBI1IPROC)gle_CoreStruct.gleVarVertexAttribI1i;
-		if(!__gleVertexAttribI1i) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI1i) bIsLoaded = 0;
 	__gleVertexAttribI2i = (PFNGLVERTEXATTRIBI2IPROC)gleIntGetProcAddress("glVertexAttribI2i");
-	if(!TestPointer((const void*)__gleVertexAttribI2i))
-	{
-		__gleVertexAttribI2i = (PFNGLVERTEXATTRIBI2IPROC)gle_CoreStruct.gleVarVertexAttribI2i;
-		if(!__gleVertexAttribI2i) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI2i) bIsLoaded = 0;
 	__gleVertexAttribI3i = (PFNGLVERTEXATTRIBI3IPROC)gleIntGetProcAddress("glVertexAttribI3i");
-	if(!TestPointer((const void*)__gleVertexAttribI3i))
-	{
-		__gleVertexAttribI3i = (PFNGLVERTEXATTRIBI3IPROC)gle_CoreStruct.gleVarVertexAttribI3i;
-		if(!__gleVertexAttribI3i) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI3i) bIsLoaded = 0;
 	__gleVertexAttribI4i = (PFNGLVERTEXATTRIBI4IPROC)gleIntGetProcAddress("glVertexAttribI4i");
-	if(!TestPointer((const void*)__gleVertexAttribI4i))
-	{
-		__gleVertexAttribI4i = (PFNGLVERTEXATTRIBI4IPROC)gle_CoreStruct.gleVarVertexAttribI4i;
-		if(!__gleVertexAttribI4i) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI4i) bIsLoaded = 0;
 	__gleVertexAttribI1ui = (PFNGLVERTEXATTRIBI1UIPROC)gleIntGetProcAddress("glVertexAttribI1ui");
-	if(!TestPointer((const void*)__gleVertexAttribI1ui))
-	{
-		__gleVertexAttribI1ui = (PFNGLVERTEXATTRIBI1UIPROC)gle_CoreStruct.gleVarVertexAttribI1ui;
-		if(!__gleVertexAttribI1ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI1ui) bIsLoaded = 0;
 	__gleVertexAttribI2ui = (PFNGLVERTEXATTRIBI2UIPROC)gleIntGetProcAddress("glVertexAttribI2ui");
-	if(!TestPointer((const void*)__gleVertexAttribI2ui))
-	{
-		__gleVertexAttribI2ui = (PFNGLVERTEXATTRIBI2UIPROC)gle_CoreStruct.gleVarVertexAttribI2ui;
-		if(!__gleVertexAttribI2ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI2ui) bIsLoaded = 0;
 	__gleVertexAttribI3ui = (PFNGLVERTEXATTRIBI3UIPROC)gleIntGetProcAddress("glVertexAttribI3ui");
-	if(!TestPointer((const void*)__gleVertexAttribI3ui))
-	{
-		__gleVertexAttribI3ui = (PFNGLVERTEXATTRIBI3UIPROC)gle_CoreStruct.gleVarVertexAttribI3ui;
-		if(!__gleVertexAttribI3ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI3ui) bIsLoaded = 0;
 	__gleVertexAttribI4ui = (PFNGLVERTEXATTRIBI4UIPROC)gleIntGetProcAddress("glVertexAttribI4ui");
-	if(!TestPointer((const void*)__gleVertexAttribI4ui))
-	{
-		__gleVertexAttribI4ui = (PFNGLVERTEXATTRIBI4UIPROC)gle_CoreStruct.gleVarVertexAttribI4ui;
-		if(!__gleVertexAttribI4ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI4ui) bIsLoaded = 0;
 	__gleVertexAttribI1iv = (PFNGLVERTEXATTRIBI1IVPROC)gleIntGetProcAddress("glVertexAttribI1iv");
-	if(!TestPointer((const void*)__gleVertexAttribI1iv))
-	{
-		__gleVertexAttribI1iv = (PFNGLVERTEXATTRIBI1IVPROC)gle_CoreStruct.gleVarVertexAttribI1iv;
-		if(!__gleVertexAttribI1iv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI1iv) bIsLoaded = 0;
 	__gleVertexAttribI2iv = (PFNGLVERTEXATTRIBI2IVPROC)gleIntGetProcAddress("glVertexAttribI2iv");
-	if(!TestPointer((const void*)__gleVertexAttribI2iv))
-	{
-		__gleVertexAttribI2iv = (PFNGLVERTEXATTRIBI2IVPROC)gle_CoreStruct.gleVarVertexAttribI2iv;
-		if(!__gleVertexAttribI2iv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI2iv) bIsLoaded = 0;
 	__gleVertexAttribI3iv = (PFNGLVERTEXATTRIBI3IVPROC)gleIntGetProcAddress("glVertexAttribI3iv");
-	if(!TestPointer((const void*)__gleVertexAttribI3iv))
-	{
-		__gleVertexAttribI3iv = (PFNGLVERTEXATTRIBI3IVPROC)gle_CoreStruct.gleVarVertexAttribI3iv;
-		if(!__gleVertexAttribI3iv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI3iv) bIsLoaded = 0;
 	__gleVertexAttribI4iv = (PFNGLVERTEXATTRIBI4IVPROC)gleIntGetProcAddress("glVertexAttribI4iv");
-	if(!TestPointer((const void*)__gleVertexAttribI4iv))
-	{
-		__gleVertexAttribI4iv = (PFNGLVERTEXATTRIBI4IVPROC)gle_CoreStruct.gleVarVertexAttribI4iv;
-		if(!__gleVertexAttribI4iv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI4iv) bIsLoaded = 0;
 	__gleVertexAttribI1uiv = (PFNGLVERTEXATTRIBI1UIVPROC)gleIntGetProcAddress("glVertexAttribI1uiv");
-	if(!TestPointer((const void*)__gleVertexAttribI1uiv))
-	{
-		__gleVertexAttribI1uiv = (PFNGLVERTEXATTRIBI1UIVPROC)gle_CoreStruct.gleVarVertexAttribI1uiv;
-		if(!__gleVertexAttribI1uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI1uiv) bIsLoaded = 0;
 	__gleVertexAttribI2uiv = (PFNGLVERTEXATTRIBI2UIVPROC)gleIntGetProcAddress("glVertexAttribI2uiv");
-	if(!TestPointer((const void*)__gleVertexAttribI2uiv))
-	{
-		__gleVertexAttribI2uiv = (PFNGLVERTEXATTRIBI2UIVPROC)gle_CoreStruct.gleVarVertexAttribI2uiv;
-		if(!__gleVertexAttribI2uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI2uiv) bIsLoaded = 0;
 	__gleVertexAttribI3uiv = (PFNGLVERTEXATTRIBI3UIVPROC)gleIntGetProcAddress("glVertexAttribI3uiv");
-	if(!TestPointer((const void*)__gleVertexAttribI3uiv))
-	{
-		__gleVertexAttribI3uiv = (PFNGLVERTEXATTRIBI3UIVPROC)gle_CoreStruct.gleVarVertexAttribI3uiv;
-		if(!__gleVertexAttribI3uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI3uiv) bIsLoaded = 0;
 	__gleVertexAttribI4uiv = (PFNGLVERTEXATTRIBI4UIVPROC)gleIntGetProcAddress("glVertexAttribI4uiv");
-	if(!TestPointer((const void*)__gleVertexAttribI4uiv))
-	{
-		__gleVertexAttribI4uiv = (PFNGLVERTEXATTRIBI4UIVPROC)gle_CoreStruct.gleVarVertexAttribI4uiv;
-		if(!__gleVertexAttribI4uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI4uiv) bIsLoaded = 0;
 	__gleVertexAttribI4bv = (PFNGLVERTEXATTRIBI4BVPROC)gleIntGetProcAddress("glVertexAttribI4bv");
-	if(!TestPointer((const void*)__gleVertexAttribI4bv))
-	{
-		__gleVertexAttribI4bv = (PFNGLVERTEXATTRIBI4BVPROC)gle_CoreStruct.gleVarVertexAttribI4bv;
-		if(!__gleVertexAttribI4bv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI4bv) bIsLoaded = 0;
 	__gleVertexAttribI4sv = (PFNGLVERTEXATTRIBI4SVPROC)gleIntGetProcAddress("glVertexAttribI4sv");
-	if(!TestPointer((const void*)__gleVertexAttribI4sv))
-	{
-		__gleVertexAttribI4sv = (PFNGLVERTEXATTRIBI4SVPROC)gle_CoreStruct.gleVarVertexAttribI4sv;
-		if(!__gleVertexAttribI4sv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI4sv) bIsLoaded = 0;
 	__gleVertexAttribI4ubv = (PFNGLVERTEXATTRIBI4UBVPROC)gleIntGetProcAddress("glVertexAttribI4ubv");
-	if(!TestPointer((const void*)__gleVertexAttribI4ubv))
-	{
-		__gleVertexAttribI4ubv = (PFNGLVERTEXATTRIBI4UBVPROC)gle_CoreStruct.gleVarVertexAttribI4ubv;
-		if(!__gleVertexAttribI4ubv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI4ubv) bIsLoaded = 0;
 	__gleVertexAttribI4usv = (PFNGLVERTEXATTRIBI4USVPROC)gleIntGetProcAddress("glVertexAttribI4usv");
-	if(!TestPointer((const void*)__gleVertexAttribI4usv))
-	{
-		__gleVertexAttribI4usv = (PFNGLVERTEXATTRIBI4USVPROC)gle_CoreStruct.gleVarVertexAttribI4usv;
-		if(!__gleVertexAttribI4usv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribI4usv) bIsLoaded = 0;
 	__gleGetUniformuiv = (PFNGLGETUNIFORMUIVPROC)gleIntGetProcAddress("glGetUniformuiv");
-	if(!TestPointer((const void*)__gleGetUniformuiv))
-	{
-		__gleGetUniformuiv = (PFNGLGETUNIFORMUIVPROC)gle_CoreStruct.gleVarGetUniformuiv;
-		if(!__gleGetUniformuiv) bIsLoaded = 0;
-	}
+	if(!__gleGetUniformuiv) bIsLoaded = 0;
 	__gleBindFragDataLocation = (PFNGLBINDFRAGDATALOCATIONPROC)gleIntGetProcAddress("glBindFragDataLocation");
-	if(!TestPointer((const void*)__gleBindFragDataLocation))
-	{
-		__gleBindFragDataLocation = (PFNGLBINDFRAGDATALOCATIONPROC)gle_CoreStruct.gleVarBindFragDataLocation;
-		if(!__gleBindFragDataLocation) bIsLoaded = 0;
-	}
+	if(!__gleBindFragDataLocation) bIsLoaded = 0;
 	__gleGetFragDataLocation = (PFNGLGETFRAGDATALOCATIONPROC)gleIntGetProcAddress("glGetFragDataLocation");
-	if(!TestPointer((const void*)__gleGetFragDataLocation))
-	{
-		__gleGetFragDataLocation = (PFNGLGETFRAGDATALOCATIONPROC)gle_CoreStruct.gleVarGetFragDataLocation;
-		if(!__gleGetFragDataLocation) bIsLoaded = 0;
-	}
+	if(!__gleGetFragDataLocation) bIsLoaded = 0;
 	__gleUniform1ui = (PFNGLUNIFORM1UIPROC)gleIntGetProcAddress("glUniform1ui");
-	if(!TestPointer((const void*)__gleUniform1ui))
-	{
-		__gleUniform1ui = (PFNGLUNIFORM1UIPROC)gle_CoreStruct.gleVarUniform1ui;
-		if(!__gleUniform1ui) bIsLoaded = 0;
-	}
+	if(!__gleUniform1ui) bIsLoaded = 0;
 	__gleUniform2ui = (PFNGLUNIFORM2UIPROC)gleIntGetProcAddress("glUniform2ui");
-	if(!TestPointer((const void*)__gleUniform2ui))
-	{
-		__gleUniform2ui = (PFNGLUNIFORM2UIPROC)gle_CoreStruct.gleVarUniform2ui;
-		if(!__gleUniform2ui) bIsLoaded = 0;
-	}
+	if(!__gleUniform2ui) bIsLoaded = 0;
 	__gleUniform3ui = (PFNGLUNIFORM3UIPROC)gleIntGetProcAddress("glUniform3ui");
-	if(!TestPointer((const void*)__gleUniform3ui))
-	{
-		__gleUniform3ui = (PFNGLUNIFORM3UIPROC)gle_CoreStruct.gleVarUniform3ui;
-		if(!__gleUniform3ui) bIsLoaded = 0;
-	}
+	if(!__gleUniform3ui) bIsLoaded = 0;
 	__gleUniform4ui = (PFNGLUNIFORM4UIPROC)gleIntGetProcAddress("glUniform4ui");
-	if(!TestPointer((const void*)__gleUniform4ui))
-	{
-		__gleUniform4ui = (PFNGLUNIFORM4UIPROC)gle_CoreStruct.gleVarUniform4ui;
-		if(!__gleUniform4ui) bIsLoaded = 0;
-	}
+	if(!__gleUniform4ui) bIsLoaded = 0;
 	__gleUniform1uiv = (PFNGLUNIFORM1UIVPROC)gleIntGetProcAddress("glUniform1uiv");
-	if(!TestPointer((const void*)__gleUniform1uiv))
-	{
-		__gleUniform1uiv = (PFNGLUNIFORM1UIVPROC)gle_CoreStruct.gleVarUniform1uiv;
-		if(!__gleUniform1uiv) bIsLoaded = 0;
-	}
+	if(!__gleUniform1uiv) bIsLoaded = 0;
 	__gleUniform2uiv = (PFNGLUNIFORM2UIVPROC)gleIntGetProcAddress("glUniform2uiv");
-	if(!TestPointer((const void*)__gleUniform2uiv))
-	{
-		__gleUniform2uiv = (PFNGLUNIFORM2UIVPROC)gle_CoreStruct.gleVarUniform2uiv;
-		if(!__gleUniform2uiv) bIsLoaded = 0;
-	}
+	if(!__gleUniform2uiv) bIsLoaded = 0;
 	__gleUniform3uiv = (PFNGLUNIFORM3UIVPROC)gleIntGetProcAddress("glUniform3uiv");
-	if(!TestPointer((const void*)__gleUniform3uiv))
-	{
-		__gleUniform3uiv = (PFNGLUNIFORM3UIVPROC)gle_CoreStruct.gleVarUniform3uiv;
-		if(!__gleUniform3uiv) bIsLoaded = 0;
-	}
+	if(!__gleUniform3uiv) bIsLoaded = 0;
 	__gleUniform4uiv = (PFNGLUNIFORM4UIVPROC)gleIntGetProcAddress("glUniform4uiv");
-	if(!TestPointer((const void*)__gleUniform4uiv))
-	{
-		__gleUniform4uiv = (PFNGLUNIFORM4UIVPROC)gle_CoreStruct.gleVarUniform4uiv;
-		if(!__gleUniform4uiv) bIsLoaded = 0;
-	}
+	if(!__gleUniform4uiv) bIsLoaded = 0;
 	__gleTexParameterIiv = (PFNGLTEXPARAMETERIIVPROC)gleIntGetProcAddress("glTexParameterIiv");
-	if(!TestPointer((const void*)__gleTexParameterIiv))
-	{
-		__gleTexParameterIiv = (PFNGLTEXPARAMETERIIVPROC)gle_CoreStruct.gleVarTexParameterIiv;
-		if(!__gleTexParameterIiv) bIsLoaded = 0;
-	}
+	if(!__gleTexParameterIiv) bIsLoaded = 0;
 	__gleTexParameterIuiv = (PFNGLTEXPARAMETERIUIVPROC)gleIntGetProcAddress("glTexParameterIuiv");
-	if(!TestPointer((const void*)__gleTexParameterIuiv))
-	{
-		__gleTexParameterIuiv = (PFNGLTEXPARAMETERIUIVPROC)gle_CoreStruct.gleVarTexParameterIuiv;
-		if(!__gleTexParameterIuiv) bIsLoaded = 0;
-	}
+	if(!__gleTexParameterIuiv) bIsLoaded = 0;
 	__gleGetTexParameterIiv = (PFNGLGETTEXPARAMETERIIVPROC)gleIntGetProcAddress("glGetTexParameterIiv");
-	if(!TestPointer((const void*)__gleGetTexParameterIiv))
-	{
-		__gleGetTexParameterIiv = (PFNGLGETTEXPARAMETERIIVPROC)gle_CoreStruct.gleVarGetTexParameterIiv;
-		if(!__gleGetTexParameterIiv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexParameterIiv) bIsLoaded = 0;
 	__gleGetTexParameterIuiv = (PFNGLGETTEXPARAMETERIUIVPROC)gleIntGetProcAddress("glGetTexParameterIuiv");
-	if(!TestPointer((const void*)__gleGetTexParameterIuiv))
-	{
-		__gleGetTexParameterIuiv = (PFNGLGETTEXPARAMETERIUIVPROC)gle_CoreStruct.gleVarGetTexParameterIuiv;
-		if(!__gleGetTexParameterIuiv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexParameterIuiv) bIsLoaded = 0;
 	__gleClearBufferiv = (PFNGLCLEARBUFFERIVPROC)gleIntGetProcAddress("glClearBufferiv");
-	if(!TestPointer((const void*)__gleClearBufferiv))
-	{
-		__gleClearBufferiv = (PFNGLCLEARBUFFERIVPROC)gle_CoreStruct.gleVarClearBufferiv;
-		if(!__gleClearBufferiv) bIsLoaded = 0;
-	}
+	if(!__gleClearBufferiv) bIsLoaded = 0;
 	__gleClearBufferuiv = (PFNGLCLEARBUFFERUIVPROC)gleIntGetProcAddress("glClearBufferuiv");
-	if(!TestPointer((const void*)__gleClearBufferuiv))
-	{
-		__gleClearBufferuiv = (PFNGLCLEARBUFFERUIVPROC)gle_CoreStruct.gleVarClearBufferuiv;
-		if(!__gleClearBufferuiv) bIsLoaded = 0;
-	}
+	if(!__gleClearBufferuiv) bIsLoaded = 0;
 	__gleClearBufferfv = (PFNGLCLEARBUFFERFVPROC)gleIntGetProcAddress("glClearBufferfv");
-	if(!TestPointer((const void*)__gleClearBufferfv))
-	{
-		__gleClearBufferfv = (PFNGLCLEARBUFFERFVPROC)gle_CoreStruct.gleVarClearBufferfv;
-		if(!__gleClearBufferfv) bIsLoaded = 0;
-	}
+	if(!__gleClearBufferfv) bIsLoaded = 0;
 	__gleClearBufferfi = (PFNGLCLEARBUFFERFIPROC)gleIntGetProcAddress("glClearBufferfi");
-	if(!TestPointer((const void*)__gleClearBufferfi))
-	{
-		__gleClearBufferfi = (PFNGLCLEARBUFFERFIPROC)gle_CoreStruct.gleVarClearBufferfi;
-		if(!__gleClearBufferfi) bIsLoaded = 0;
-	}
+	if(!__gleClearBufferfi) bIsLoaded = 0;
 	__gleGetStringi = (PFNGLGETSTRINGIPROC)gleIntGetProcAddress("glGetStringi");
-	if(!TestPointer((const void*)__gleGetStringi))
-	{
-		__gleGetStringi = (PFNGLGETSTRINGIPROC)gle_CoreStruct.gleVarGetStringi;
-		if(!__gleGetStringi) bIsLoaded = 0;
-	}
+	if(!__gleGetStringi) bIsLoaded = 0;
 	__gleIsRenderbuffer = (PFNGLISRENDERBUFFERPROC)gleIntGetProcAddress("glIsRenderbuffer");
-	if(!TestPointer((const void*)__gleIsRenderbuffer))
-	{
-		__gleIsRenderbuffer = (PFNGLISRENDERBUFFERPROC)gle_CoreStruct.gleVarIsRenderbuffer;
-		if(!__gleIsRenderbuffer) bIsLoaded = 0;
-	}
+	if(!__gleIsRenderbuffer) bIsLoaded = 0;
 	__gleBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC)gleIntGetProcAddress("glBindRenderbuffer");
-	if(!TestPointer((const void*)__gleBindRenderbuffer))
-	{
-		__gleBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC)gle_CoreStruct.gleVarBindRenderbuffer;
-		if(!__gleBindRenderbuffer) bIsLoaded = 0;
-	}
+	if(!__gleBindRenderbuffer) bIsLoaded = 0;
 	__gleDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)gleIntGetProcAddress("glDeleteRenderbuffers");
-	if(!TestPointer((const void*)__gleDeleteRenderbuffers))
-	{
-		__gleDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)gle_CoreStruct.gleVarDeleteRenderbuffers;
-		if(!__gleDeleteRenderbuffers) bIsLoaded = 0;
-	}
+	if(!__gleDeleteRenderbuffers) bIsLoaded = 0;
 	__gleGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC)gleIntGetProcAddress("glGenRenderbuffers");
-	if(!TestPointer((const void*)__gleGenRenderbuffers))
-	{
-		__gleGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC)gle_CoreStruct.gleVarGenRenderbuffers;
-		if(!__gleGenRenderbuffers) bIsLoaded = 0;
-	}
+	if(!__gleGenRenderbuffers) bIsLoaded = 0;
 	__gleRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)gleIntGetProcAddress("glRenderbufferStorage");
-	if(!TestPointer((const void*)__gleRenderbufferStorage))
-	{
-		__gleRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)gle_CoreStruct.gleVarRenderbufferStorage;
-		if(!__gleRenderbufferStorage) bIsLoaded = 0;
-	}
+	if(!__gleRenderbufferStorage) bIsLoaded = 0;
 	__gleGetRenderbufferParameteriv = (PFNGLGETRENDERBUFFERPARAMETERIVPROC)gleIntGetProcAddress("glGetRenderbufferParameteriv");
-	if(!TestPointer((const void*)__gleGetRenderbufferParameteriv))
-	{
-		__gleGetRenderbufferParameteriv = (PFNGLGETRENDERBUFFERPARAMETERIVPROC)gle_CoreStruct.gleVarGetRenderbufferParameteriv;
-		if(!__gleGetRenderbufferParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetRenderbufferParameteriv) bIsLoaded = 0;
 	__gleIsFramebuffer = (PFNGLISFRAMEBUFFERPROC)gleIntGetProcAddress("glIsFramebuffer");
-	if(!TestPointer((const void*)__gleIsFramebuffer))
-	{
-		__gleIsFramebuffer = (PFNGLISFRAMEBUFFERPROC)gle_CoreStruct.gleVarIsFramebuffer;
-		if(!__gleIsFramebuffer) bIsLoaded = 0;
-	}
+	if(!__gleIsFramebuffer) bIsLoaded = 0;
 	__gleBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC)gleIntGetProcAddress("glBindFramebuffer");
-	if(!TestPointer((const void*)__gleBindFramebuffer))
-	{
-		__gleBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC)gle_CoreStruct.gleVarBindFramebuffer;
-		if(!__gleBindFramebuffer) bIsLoaded = 0;
-	}
+	if(!__gleBindFramebuffer) bIsLoaded = 0;
 	__gleDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)gleIntGetProcAddress("glDeleteFramebuffers");
-	if(!TestPointer((const void*)__gleDeleteFramebuffers))
-	{
-		__gleDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)gle_CoreStruct.gleVarDeleteFramebuffers;
-		if(!__gleDeleteFramebuffers) bIsLoaded = 0;
-	}
+	if(!__gleDeleteFramebuffers) bIsLoaded = 0;
 	__gleGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC)gleIntGetProcAddress("glGenFramebuffers");
-	if(!TestPointer((const void*)__gleGenFramebuffers))
-	{
-		__gleGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC)gle_CoreStruct.gleVarGenFramebuffers;
-		if(!__gleGenFramebuffers) bIsLoaded = 0;
-	}
+	if(!__gleGenFramebuffers) bIsLoaded = 0;
 	__gleCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC)gleIntGetProcAddress("glCheckFramebufferStatus");
-	if(!TestPointer((const void*)__gleCheckFramebufferStatus))
-	{
-		__gleCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC)gle_CoreStruct.gleVarCheckFramebufferStatus;
-		if(!__gleCheckFramebufferStatus) bIsLoaded = 0;
-	}
+	if(!__gleCheckFramebufferStatus) bIsLoaded = 0;
 	__gleFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC)gleIntGetProcAddress("glFramebufferTexture1D");
-	if(!TestPointer((const void*)__gleFramebufferTexture1D))
-	{
-		__gleFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC)gle_CoreStruct.gleVarFramebufferTexture1D;
-		if(!__gleFramebufferTexture1D) bIsLoaded = 0;
-	}
+	if(!__gleFramebufferTexture1D) bIsLoaded = 0;
 	__gleFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)gleIntGetProcAddress("glFramebufferTexture2D");
-	if(!TestPointer((const void*)__gleFramebufferTexture2D))
-	{
-		__gleFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)gle_CoreStruct.gleVarFramebufferTexture2D;
-		if(!__gleFramebufferTexture2D) bIsLoaded = 0;
-	}
+	if(!__gleFramebufferTexture2D) bIsLoaded = 0;
 	__gleFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC)gleIntGetProcAddress("glFramebufferTexture3D");
-	if(!TestPointer((const void*)__gleFramebufferTexture3D))
-	{
-		__gleFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC)gle_CoreStruct.gleVarFramebufferTexture3D;
-		if(!__gleFramebufferTexture3D) bIsLoaded = 0;
-	}
+	if(!__gleFramebufferTexture3D) bIsLoaded = 0;
 	__gleFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC)gleIntGetProcAddress("glFramebufferRenderbuffer");
-	if(!TestPointer((const void*)__gleFramebufferRenderbuffer))
-	{
-		__gleFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC)gle_CoreStruct.gleVarFramebufferRenderbuffer;
-		if(!__gleFramebufferRenderbuffer) bIsLoaded = 0;
-	}
+	if(!__gleFramebufferRenderbuffer) bIsLoaded = 0;
 	__gleGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)gleIntGetProcAddress("glGetFramebufferAttachmentParameteriv");
-	if(!TestPointer((const void*)__gleGetFramebufferAttachmentParameteriv))
-	{
-		__gleGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)gle_CoreStruct.gleVarGetFramebufferAttachmentParameteriv;
-		if(!__gleGetFramebufferAttachmentParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetFramebufferAttachmentParameteriv) bIsLoaded = 0;
 	__gleGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)gleIntGetProcAddress("glGenerateMipmap");
-	if(!TestPointer((const void*)__gleGenerateMipmap))
-	{
-		__gleGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)gle_CoreStruct.gleVarGenerateMipmap;
-		if(!__gleGenerateMipmap) bIsLoaded = 0;
-	}
+	if(!__gleGenerateMipmap) bIsLoaded = 0;
 	__gleBlitFramebuffer = (PFNGLBLITFRAMEBUFFERPROC)gleIntGetProcAddress("glBlitFramebuffer");
-	if(!TestPointer((const void*)__gleBlitFramebuffer))
-	{
-		__gleBlitFramebuffer = (PFNGLBLITFRAMEBUFFERPROC)gle_CoreStruct.gleVarBlitFramebuffer;
-		if(!__gleBlitFramebuffer) bIsLoaded = 0;
-	}
+	if(!__gleBlitFramebuffer) bIsLoaded = 0;
 	__gleRenderbufferStorageMultisample = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC)gleIntGetProcAddress("glRenderbufferStorageMultisample");
-	if(!TestPointer((const void*)__gleRenderbufferStorageMultisample))
-	{
-		__gleRenderbufferStorageMultisample = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC)gle_CoreStruct.gleVarRenderbufferStorageMultisample;
-		if(!__gleRenderbufferStorageMultisample) bIsLoaded = 0;
-	}
+	if(!__gleRenderbufferStorageMultisample) bIsLoaded = 0;
 	__gleFramebufferTextureLayer = (PFNGLFRAMEBUFFERTEXTURELAYERPROC)gleIntGetProcAddress("glFramebufferTextureLayer");
-	if(!TestPointer((const void*)__gleFramebufferTextureLayer))
-	{
-		__gleFramebufferTextureLayer = (PFNGLFRAMEBUFFERTEXTURELAYERPROC)gle_CoreStruct.gleVarFramebufferTextureLayer;
-		if(!__gleFramebufferTextureLayer) bIsLoaded = 0;
-	}
+	if(!__gleFramebufferTextureLayer) bIsLoaded = 0;
 	glext_ARB_framebuffer_object = 1;
 	__gleMapBufferRange = (PFNGLMAPBUFFERRANGEPROC)gleIntGetProcAddress("glMapBufferRange");
-	if(!TestPointer((const void*)__gleMapBufferRange))
-	{
-		__gleMapBufferRange = (PFNGLMAPBUFFERRANGEPROC)gle_CoreStruct.gleVarMapBufferRange;
-		if(!__gleMapBufferRange) bIsLoaded = 0;
-	}
+	if(!__gleMapBufferRange) bIsLoaded = 0;
 	__gleFlushMappedBufferRange = (PFNGLFLUSHMAPPEDBUFFERRANGEPROC)gleIntGetProcAddress("glFlushMappedBufferRange");
-	if(!TestPointer((const void*)__gleFlushMappedBufferRange))
-	{
-		__gleFlushMappedBufferRange = (PFNGLFLUSHMAPPEDBUFFERRANGEPROC)gle_CoreStruct.gleVarFlushMappedBufferRange;
-		if(!__gleFlushMappedBufferRange) bIsLoaded = 0;
-	}
+	if(!__gleFlushMappedBufferRange) bIsLoaded = 0;
 	glext_ARB_map_buffer_range = 1;
 	__gleBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)gleIntGetProcAddress("glBindVertexArray");
-	if(!TestPointer((const void*)__gleBindVertexArray))
-	{
-		__gleBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)gle_CoreStruct.gleVarBindVertexArray;
-		if(!__gleBindVertexArray) bIsLoaded = 0;
-	}
+	if(!__gleBindVertexArray) bIsLoaded = 0;
 	__gleDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSPROC)gleIntGetProcAddress("glDeleteVertexArrays");
-	if(!TestPointer((const void*)__gleDeleteVertexArrays))
-	{
-		__gleDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSPROC)gle_CoreStruct.gleVarDeleteVertexArrays;
-		if(!__gleDeleteVertexArrays) bIsLoaded = 0;
-	}
+	if(!__gleDeleteVertexArrays) bIsLoaded = 0;
 	__gleGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)gleIntGetProcAddress("glGenVertexArrays");
-	if(!TestPointer((const void*)__gleGenVertexArrays))
-	{
-		__gleGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)gle_CoreStruct.gleVarGenVertexArrays;
-		if(!__gleGenVertexArrays) bIsLoaded = 0;
-	}
+	if(!__gleGenVertexArrays) bIsLoaded = 0;
 	__gleIsVertexArray = (PFNGLISVERTEXARRAYPROC)gleIntGetProcAddress("glIsVertexArray");
-	if(!TestPointer((const void*)__gleIsVertexArray))
-	{
-		__gleIsVertexArray = (PFNGLISVERTEXARRAYPROC)gle_CoreStruct.gleVarIsVertexArray;
-		if(!__gleIsVertexArray) bIsLoaded = 0;
-	}
+	if(!__gleIsVertexArray) bIsLoaded = 0;
 	glext_ARB_vertex_array_object = 1;
 	return bIsLoaded;
 }
@@ -13305,1637 +12310,549 @@ static int gleIntLoadCore_1_1_Base()
 {
 	int bIsLoaded = gleIntLoadCore_1_1_Version_3_1();
 	__gleNewList = (PFNGLNEWLISTPROC)gleIntGetProcAddress("glNewList");
-	if(!TestPointer((const void*)__gleNewList))
-	{
-		__gleNewList = (PFNGLNEWLISTPROC)gle_CoreStruct.gleVarNewList;
-		if(!__gleNewList) bIsLoaded = 0;
-	}
+	if(!__gleNewList) bIsLoaded = 0;
 	__gleEndList = (PFNGLENDLISTPROC)gleIntGetProcAddress("glEndList");
-	if(!TestPointer((const void*)__gleEndList))
-	{
-		__gleEndList = (PFNGLENDLISTPROC)gle_CoreStruct.gleVarEndList;
-		if(!__gleEndList) bIsLoaded = 0;
-	}
+	if(!__gleEndList) bIsLoaded = 0;
 	__gleCallList = (PFNGLCALLLISTPROC)gleIntGetProcAddress("glCallList");
-	if(!TestPointer((const void*)__gleCallList))
-	{
-		__gleCallList = (PFNGLCALLLISTPROC)gle_CoreStruct.gleVarCallList;
-		if(!__gleCallList) bIsLoaded = 0;
-	}
+	if(!__gleCallList) bIsLoaded = 0;
 	__gleCallLists = (PFNGLCALLLISTSPROC)gleIntGetProcAddress("glCallLists");
-	if(!TestPointer((const void*)__gleCallLists))
-	{
-		__gleCallLists = (PFNGLCALLLISTSPROC)gle_CoreStruct.gleVarCallLists;
-		if(!__gleCallLists) bIsLoaded = 0;
-	}
+	if(!__gleCallLists) bIsLoaded = 0;
 	__gleDeleteLists = (PFNGLDELETELISTSPROC)gleIntGetProcAddress("glDeleteLists");
-	if(!TestPointer((const void*)__gleDeleteLists))
-	{
-		__gleDeleteLists = (PFNGLDELETELISTSPROC)gle_CoreStruct.gleVarDeleteLists;
-		if(!__gleDeleteLists) bIsLoaded = 0;
-	}
+	if(!__gleDeleteLists) bIsLoaded = 0;
 	__gleGenLists = (PFNGLGENLISTSPROC)gleIntGetProcAddress("glGenLists");
-	if(!TestPointer((const void*)__gleGenLists))
-	{
-		__gleGenLists = (PFNGLGENLISTSPROC)gle_CoreStruct.gleVarGenLists;
-		if(!__gleGenLists) bIsLoaded = 0;
-	}
+	if(!__gleGenLists) bIsLoaded = 0;
 	__gleListBase = (PFNGLLISTBASEPROC)gleIntGetProcAddress("glListBase");
-	if(!TestPointer((const void*)__gleListBase))
-	{
-		__gleListBase = (PFNGLLISTBASEPROC)gle_CoreStruct.gleVarListBase;
-		if(!__gleListBase) bIsLoaded = 0;
-	}
+	if(!__gleListBase) bIsLoaded = 0;
 	__gleBegin = (PFNGLBEGINPROC)gleIntGetProcAddress("glBegin");
-	if(!TestPointer((const void*)__gleBegin))
-	{
-		__gleBegin = (PFNGLBEGINPROC)gle_CoreStruct.gleVarBegin;
-		if(!__gleBegin) bIsLoaded = 0;
-	}
+	if(!__gleBegin) bIsLoaded = 0;
 	__gleBitmap = (PFNGLBITMAPPROC)gleIntGetProcAddress("glBitmap");
-	if(!TestPointer((const void*)__gleBitmap))
-	{
-		__gleBitmap = (PFNGLBITMAPPROC)gle_CoreStruct.gleVarBitmap;
-		if(!__gleBitmap) bIsLoaded = 0;
-	}
+	if(!__gleBitmap) bIsLoaded = 0;
 	__gleColor3b = (PFNGLCOLOR3BPROC)gleIntGetProcAddress("glColor3b");
-	if(!TestPointer((const void*)__gleColor3b))
-	{
-		__gleColor3b = (PFNGLCOLOR3BPROC)gle_CoreStruct.gleVarColor3b;
-		if(!__gleColor3b) bIsLoaded = 0;
-	}
+	if(!__gleColor3b) bIsLoaded = 0;
 	__gleColor3bv = (PFNGLCOLOR3BVPROC)gleIntGetProcAddress("glColor3bv");
-	if(!TestPointer((const void*)__gleColor3bv))
-	{
-		__gleColor3bv = (PFNGLCOLOR3BVPROC)gle_CoreStruct.gleVarColor3bv;
-		if(!__gleColor3bv) bIsLoaded = 0;
-	}
+	if(!__gleColor3bv) bIsLoaded = 0;
 	__gleColor3d = (PFNGLCOLOR3DPROC)gleIntGetProcAddress("glColor3d");
-	if(!TestPointer((const void*)__gleColor3d))
-	{
-		__gleColor3d = (PFNGLCOLOR3DPROC)gle_CoreStruct.gleVarColor3d;
-		if(!__gleColor3d) bIsLoaded = 0;
-	}
+	if(!__gleColor3d) bIsLoaded = 0;
 	__gleColor3dv = (PFNGLCOLOR3DVPROC)gleIntGetProcAddress("glColor3dv");
-	if(!TestPointer((const void*)__gleColor3dv))
-	{
-		__gleColor3dv = (PFNGLCOLOR3DVPROC)gle_CoreStruct.gleVarColor3dv;
-		if(!__gleColor3dv) bIsLoaded = 0;
-	}
+	if(!__gleColor3dv) bIsLoaded = 0;
 	__gleColor3f = (PFNGLCOLOR3FPROC)gleIntGetProcAddress("glColor3f");
-	if(!TestPointer((const void*)__gleColor3f))
-	{
-		__gleColor3f = (PFNGLCOLOR3FPROC)gle_CoreStruct.gleVarColor3f;
-		if(!__gleColor3f) bIsLoaded = 0;
-	}
+	if(!__gleColor3f) bIsLoaded = 0;
 	__gleColor3fv = (PFNGLCOLOR3FVPROC)gleIntGetProcAddress("glColor3fv");
-	if(!TestPointer((const void*)__gleColor3fv))
-	{
-		__gleColor3fv = (PFNGLCOLOR3FVPROC)gle_CoreStruct.gleVarColor3fv;
-		if(!__gleColor3fv) bIsLoaded = 0;
-	}
+	if(!__gleColor3fv) bIsLoaded = 0;
 	__gleColor3i = (PFNGLCOLOR3IPROC)gleIntGetProcAddress("glColor3i");
-	if(!TestPointer((const void*)__gleColor3i))
-	{
-		__gleColor3i = (PFNGLCOLOR3IPROC)gle_CoreStruct.gleVarColor3i;
-		if(!__gleColor3i) bIsLoaded = 0;
-	}
+	if(!__gleColor3i) bIsLoaded = 0;
 	__gleColor3iv = (PFNGLCOLOR3IVPROC)gleIntGetProcAddress("glColor3iv");
-	if(!TestPointer((const void*)__gleColor3iv))
-	{
-		__gleColor3iv = (PFNGLCOLOR3IVPROC)gle_CoreStruct.gleVarColor3iv;
-		if(!__gleColor3iv) bIsLoaded = 0;
-	}
+	if(!__gleColor3iv) bIsLoaded = 0;
 	__gleColor3s = (PFNGLCOLOR3SPROC)gleIntGetProcAddress("glColor3s");
-	if(!TestPointer((const void*)__gleColor3s))
-	{
-		__gleColor3s = (PFNGLCOLOR3SPROC)gle_CoreStruct.gleVarColor3s;
-		if(!__gleColor3s) bIsLoaded = 0;
-	}
+	if(!__gleColor3s) bIsLoaded = 0;
 	__gleColor3sv = (PFNGLCOLOR3SVPROC)gleIntGetProcAddress("glColor3sv");
-	if(!TestPointer((const void*)__gleColor3sv))
-	{
-		__gleColor3sv = (PFNGLCOLOR3SVPROC)gle_CoreStruct.gleVarColor3sv;
-		if(!__gleColor3sv) bIsLoaded = 0;
-	}
+	if(!__gleColor3sv) bIsLoaded = 0;
 	__gleColor3ub = (PFNGLCOLOR3UBPROC)gleIntGetProcAddress("glColor3ub");
-	if(!TestPointer((const void*)__gleColor3ub))
-	{
-		__gleColor3ub = (PFNGLCOLOR3UBPROC)gle_CoreStruct.gleVarColor3ub;
-		if(!__gleColor3ub) bIsLoaded = 0;
-	}
+	if(!__gleColor3ub) bIsLoaded = 0;
 	__gleColor3ubv = (PFNGLCOLOR3UBVPROC)gleIntGetProcAddress("glColor3ubv");
-	if(!TestPointer((const void*)__gleColor3ubv))
-	{
-		__gleColor3ubv = (PFNGLCOLOR3UBVPROC)gle_CoreStruct.gleVarColor3ubv;
-		if(!__gleColor3ubv) bIsLoaded = 0;
-	}
+	if(!__gleColor3ubv) bIsLoaded = 0;
 	__gleColor3ui = (PFNGLCOLOR3UIPROC)gleIntGetProcAddress("glColor3ui");
-	if(!TestPointer((const void*)__gleColor3ui))
-	{
-		__gleColor3ui = (PFNGLCOLOR3UIPROC)gle_CoreStruct.gleVarColor3ui;
-		if(!__gleColor3ui) bIsLoaded = 0;
-	}
+	if(!__gleColor3ui) bIsLoaded = 0;
 	__gleColor3uiv = (PFNGLCOLOR3UIVPROC)gleIntGetProcAddress("glColor3uiv");
-	if(!TestPointer((const void*)__gleColor3uiv))
-	{
-		__gleColor3uiv = (PFNGLCOLOR3UIVPROC)gle_CoreStruct.gleVarColor3uiv;
-		if(!__gleColor3uiv) bIsLoaded = 0;
-	}
+	if(!__gleColor3uiv) bIsLoaded = 0;
 	__gleColor3us = (PFNGLCOLOR3USPROC)gleIntGetProcAddress("glColor3us");
-	if(!TestPointer((const void*)__gleColor3us))
-	{
-		__gleColor3us = (PFNGLCOLOR3USPROC)gle_CoreStruct.gleVarColor3us;
-		if(!__gleColor3us) bIsLoaded = 0;
-	}
+	if(!__gleColor3us) bIsLoaded = 0;
 	__gleColor3usv = (PFNGLCOLOR3USVPROC)gleIntGetProcAddress("glColor3usv");
-	if(!TestPointer((const void*)__gleColor3usv))
-	{
-		__gleColor3usv = (PFNGLCOLOR3USVPROC)gle_CoreStruct.gleVarColor3usv;
-		if(!__gleColor3usv) bIsLoaded = 0;
-	}
+	if(!__gleColor3usv) bIsLoaded = 0;
 	__gleColor4b = (PFNGLCOLOR4BPROC)gleIntGetProcAddress("glColor4b");
-	if(!TestPointer((const void*)__gleColor4b))
-	{
-		__gleColor4b = (PFNGLCOLOR4BPROC)gle_CoreStruct.gleVarColor4b;
-		if(!__gleColor4b) bIsLoaded = 0;
-	}
+	if(!__gleColor4b) bIsLoaded = 0;
 	__gleColor4bv = (PFNGLCOLOR4BVPROC)gleIntGetProcAddress("glColor4bv");
-	if(!TestPointer((const void*)__gleColor4bv))
-	{
-		__gleColor4bv = (PFNGLCOLOR4BVPROC)gle_CoreStruct.gleVarColor4bv;
-		if(!__gleColor4bv) bIsLoaded = 0;
-	}
+	if(!__gleColor4bv) bIsLoaded = 0;
 	__gleColor4d = (PFNGLCOLOR4DPROC)gleIntGetProcAddress("glColor4d");
-	if(!TestPointer((const void*)__gleColor4d))
-	{
-		__gleColor4d = (PFNGLCOLOR4DPROC)gle_CoreStruct.gleVarColor4d;
-		if(!__gleColor4d) bIsLoaded = 0;
-	}
+	if(!__gleColor4d) bIsLoaded = 0;
 	__gleColor4dv = (PFNGLCOLOR4DVPROC)gleIntGetProcAddress("glColor4dv");
-	if(!TestPointer((const void*)__gleColor4dv))
-	{
-		__gleColor4dv = (PFNGLCOLOR4DVPROC)gle_CoreStruct.gleVarColor4dv;
-		if(!__gleColor4dv) bIsLoaded = 0;
-	}
+	if(!__gleColor4dv) bIsLoaded = 0;
 	__gleColor4f = (PFNGLCOLOR4FPROC)gleIntGetProcAddress("glColor4f");
-	if(!TestPointer((const void*)__gleColor4f))
-	{
-		__gleColor4f = (PFNGLCOLOR4FPROC)gle_CoreStruct.gleVarColor4f;
-		if(!__gleColor4f) bIsLoaded = 0;
-	}
+	if(!__gleColor4f) bIsLoaded = 0;
 	__gleColor4fv = (PFNGLCOLOR4FVPROC)gleIntGetProcAddress("glColor4fv");
-	if(!TestPointer((const void*)__gleColor4fv))
-	{
-		__gleColor4fv = (PFNGLCOLOR4FVPROC)gle_CoreStruct.gleVarColor4fv;
-		if(!__gleColor4fv) bIsLoaded = 0;
-	}
+	if(!__gleColor4fv) bIsLoaded = 0;
 	__gleColor4i = (PFNGLCOLOR4IPROC)gleIntGetProcAddress("glColor4i");
-	if(!TestPointer((const void*)__gleColor4i))
-	{
-		__gleColor4i = (PFNGLCOLOR4IPROC)gle_CoreStruct.gleVarColor4i;
-		if(!__gleColor4i) bIsLoaded = 0;
-	}
+	if(!__gleColor4i) bIsLoaded = 0;
 	__gleColor4iv = (PFNGLCOLOR4IVPROC)gleIntGetProcAddress("glColor4iv");
-	if(!TestPointer((const void*)__gleColor4iv))
-	{
-		__gleColor4iv = (PFNGLCOLOR4IVPROC)gle_CoreStruct.gleVarColor4iv;
-		if(!__gleColor4iv) bIsLoaded = 0;
-	}
+	if(!__gleColor4iv) bIsLoaded = 0;
 	__gleColor4s = (PFNGLCOLOR4SPROC)gleIntGetProcAddress("glColor4s");
-	if(!TestPointer((const void*)__gleColor4s))
-	{
-		__gleColor4s = (PFNGLCOLOR4SPROC)gle_CoreStruct.gleVarColor4s;
-		if(!__gleColor4s) bIsLoaded = 0;
-	}
+	if(!__gleColor4s) bIsLoaded = 0;
 	__gleColor4sv = (PFNGLCOLOR4SVPROC)gleIntGetProcAddress("glColor4sv");
-	if(!TestPointer((const void*)__gleColor4sv))
-	{
-		__gleColor4sv = (PFNGLCOLOR4SVPROC)gle_CoreStruct.gleVarColor4sv;
-		if(!__gleColor4sv) bIsLoaded = 0;
-	}
+	if(!__gleColor4sv) bIsLoaded = 0;
 	__gleColor4ub = (PFNGLCOLOR4UBPROC)gleIntGetProcAddress("glColor4ub");
-	if(!TestPointer((const void*)__gleColor4ub))
-	{
-		__gleColor4ub = (PFNGLCOLOR4UBPROC)gle_CoreStruct.gleVarColor4ub;
-		if(!__gleColor4ub) bIsLoaded = 0;
-	}
+	if(!__gleColor4ub) bIsLoaded = 0;
 	__gleColor4ubv = (PFNGLCOLOR4UBVPROC)gleIntGetProcAddress("glColor4ubv");
-	if(!TestPointer((const void*)__gleColor4ubv))
-	{
-		__gleColor4ubv = (PFNGLCOLOR4UBVPROC)gle_CoreStruct.gleVarColor4ubv;
-		if(!__gleColor4ubv) bIsLoaded = 0;
-	}
+	if(!__gleColor4ubv) bIsLoaded = 0;
 	__gleColor4ui = (PFNGLCOLOR4UIPROC)gleIntGetProcAddress("glColor4ui");
-	if(!TestPointer((const void*)__gleColor4ui))
-	{
-		__gleColor4ui = (PFNGLCOLOR4UIPROC)gle_CoreStruct.gleVarColor4ui;
-		if(!__gleColor4ui) bIsLoaded = 0;
-	}
+	if(!__gleColor4ui) bIsLoaded = 0;
 	__gleColor4uiv = (PFNGLCOLOR4UIVPROC)gleIntGetProcAddress("glColor4uiv");
-	if(!TestPointer((const void*)__gleColor4uiv))
-	{
-		__gleColor4uiv = (PFNGLCOLOR4UIVPROC)gle_CoreStruct.gleVarColor4uiv;
-		if(!__gleColor4uiv) bIsLoaded = 0;
-	}
+	if(!__gleColor4uiv) bIsLoaded = 0;
 	__gleColor4us = (PFNGLCOLOR4USPROC)gleIntGetProcAddress("glColor4us");
-	if(!TestPointer((const void*)__gleColor4us))
-	{
-		__gleColor4us = (PFNGLCOLOR4USPROC)gle_CoreStruct.gleVarColor4us;
-		if(!__gleColor4us) bIsLoaded = 0;
-	}
+	if(!__gleColor4us) bIsLoaded = 0;
 	__gleColor4usv = (PFNGLCOLOR4USVPROC)gleIntGetProcAddress("glColor4usv");
-	if(!TestPointer((const void*)__gleColor4usv))
-	{
-		__gleColor4usv = (PFNGLCOLOR4USVPROC)gle_CoreStruct.gleVarColor4usv;
-		if(!__gleColor4usv) bIsLoaded = 0;
-	}
+	if(!__gleColor4usv) bIsLoaded = 0;
 	__gleEdgeFlag = (PFNGLEDGEFLAGPROC)gleIntGetProcAddress("glEdgeFlag");
-	if(!TestPointer((const void*)__gleEdgeFlag))
-	{
-		__gleEdgeFlag = (PFNGLEDGEFLAGPROC)gle_CoreStruct.gleVarEdgeFlag;
-		if(!__gleEdgeFlag) bIsLoaded = 0;
-	}
+	if(!__gleEdgeFlag) bIsLoaded = 0;
 	__gleEdgeFlagv = (PFNGLEDGEFLAGVPROC)gleIntGetProcAddress("glEdgeFlagv");
-	if(!TestPointer((const void*)__gleEdgeFlagv))
-	{
-		__gleEdgeFlagv = (PFNGLEDGEFLAGVPROC)gle_CoreStruct.gleVarEdgeFlagv;
-		if(!__gleEdgeFlagv) bIsLoaded = 0;
-	}
+	if(!__gleEdgeFlagv) bIsLoaded = 0;
 	__gleEnd = (PFNGLENDPROC)gleIntGetProcAddress("glEnd");
-	if(!TestPointer((const void*)__gleEnd))
-	{
-		__gleEnd = (PFNGLENDPROC)gle_CoreStruct.gleVarEnd;
-		if(!__gleEnd) bIsLoaded = 0;
-	}
+	if(!__gleEnd) bIsLoaded = 0;
 	__gleIndexd = (PFNGLINDEXDPROC)gleIntGetProcAddress("glIndexd");
-	if(!TestPointer((const void*)__gleIndexd))
-	{
-		__gleIndexd = (PFNGLINDEXDPROC)gle_CoreStruct.gleVarIndexd;
-		if(!__gleIndexd) bIsLoaded = 0;
-	}
+	if(!__gleIndexd) bIsLoaded = 0;
 	__gleIndexdv = (PFNGLINDEXDVPROC)gleIntGetProcAddress("glIndexdv");
-	if(!TestPointer((const void*)__gleIndexdv))
-	{
-		__gleIndexdv = (PFNGLINDEXDVPROC)gle_CoreStruct.gleVarIndexdv;
-		if(!__gleIndexdv) bIsLoaded = 0;
-	}
+	if(!__gleIndexdv) bIsLoaded = 0;
 	__gleIndexf = (PFNGLINDEXFPROC)gleIntGetProcAddress("glIndexf");
-	if(!TestPointer((const void*)__gleIndexf))
-	{
-		__gleIndexf = (PFNGLINDEXFPROC)gle_CoreStruct.gleVarIndexf;
-		if(!__gleIndexf) bIsLoaded = 0;
-	}
+	if(!__gleIndexf) bIsLoaded = 0;
 	__gleIndexfv = (PFNGLINDEXFVPROC)gleIntGetProcAddress("glIndexfv");
-	if(!TestPointer((const void*)__gleIndexfv))
-	{
-		__gleIndexfv = (PFNGLINDEXFVPROC)gle_CoreStruct.gleVarIndexfv;
-		if(!__gleIndexfv) bIsLoaded = 0;
-	}
+	if(!__gleIndexfv) bIsLoaded = 0;
 	__gleIndexi = (PFNGLINDEXIPROC)gleIntGetProcAddress("glIndexi");
-	if(!TestPointer((const void*)__gleIndexi))
-	{
-		__gleIndexi = (PFNGLINDEXIPROC)gle_CoreStruct.gleVarIndexi;
-		if(!__gleIndexi) bIsLoaded = 0;
-	}
+	if(!__gleIndexi) bIsLoaded = 0;
 	__gleIndexiv = (PFNGLINDEXIVPROC)gleIntGetProcAddress("glIndexiv");
-	if(!TestPointer((const void*)__gleIndexiv))
-	{
-		__gleIndexiv = (PFNGLINDEXIVPROC)gle_CoreStruct.gleVarIndexiv;
-		if(!__gleIndexiv) bIsLoaded = 0;
-	}
+	if(!__gleIndexiv) bIsLoaded = 0;
 	__gleIndexs = (PFNGLINDEXSPROC)gleIntGetProcAddress("glIndexs");
-	if(!TestPointer((const void*)__gleIndexs))
-	{
-		__gleIndexs = (PFNGLINDEXSPROC)gle_CoreStruct.gleVarIndexs;
-		if(!__gleIndexs) bIsLoaded = 0;
-	}
+	if(!__gleIndexs) bIsLoaded = 0;
 	__gleIndexsv = (PFNGLINDEXSVPROC)gleIntGetProcAddress("glIndexsv");
-	if(!TestPointer((const void*)__gleIndexsv))
-	{
-		__gleIndexsv = (PFNGLINDEXSVPROC)gle_CoreStruct.gleVarIndexsv;
-		if(!__gleIndexsv) bIsLoaded = 0;
-	}
+	if(!__gleIndexsv) bIsLoaded = 0;
 	__gleNormal3b = (PFNGLNORMAL3BPROC)gleIntGetProcAddress("glNormal3b");
-	if(!TestPointer((const void*)__gleNormal3b))
-	{
-		__gleNormal3b = (PFNGLNORMAL3BPROC)gle_CoreStruct.gleVarNormal3b;
-		if(!__gleNormal3b) bIsLoaded = 0;
-	}
+	if(!__gleNormal3b) bIsLoaded = 0;
 	__gleNormal3bv = (PFNGLNORMAL3BVPROC)gleIntGetProcAddress("glNormal3bv");
-	if(!TestPointer((const void*)__gleNormal3bv))
-	{
-		__gleNormal3bv = (PFNGLNORMAL3BVPROC)gle_CoreStruct.gleVarNormal3bv;
-		if(!__gleNormal3bv) bIsLoaded = 0;
-	}
+	if(!__gleNormal3bv) bIsLoaded = 0;
 	__gleNormal3d = (PFNGLNORMAL3DPROC)gleIntGetProcAddress("glNormal3d");
-	if(!TestPointer((const void*)__gleNormal3d))
-	{
-		__gleNormal3d = (PFNGLNORMAL3DPROC)gle_CoreStruct.gleVarNormal3d;
-		if(!__gleNormal3d) bIsLoaded = 0;
-	}
+	if(!__gleNormal3d) bIsLoaded = 0;
 	__gleNormal3dv = (PFNGLNORMAL3DVPROC)gleIntGetProcAddress("glNormal3dv");
-	if(!TestPointer((const void*)__gleNormal3dv))
-	{
-		__gleNormal3dv = (PFNGLNORMAL3DVPROC)gle_CoreStruct.gleVarNormal3dv;
-		if(!__gleNormal3dv) bIsLoaded = 0;
-	}
+	if(!__gleNormal3dv) bIsLoaded = 0;
 	__gleNormal3f = (PFNGLNORMAL3FPROC)gleIntGetProcAddress("glNormal3f");
-	if(!TestPointer((const void*)__gleNormal3f))
-	{
-		__gleNormal3f = (PFNGLNORMAL3FPROC)gle_CoreStruct.gleVarNormal3f;
-		if(!__gleNormal3f) bIsLoaded = 0;
-	}
+	if(!__gleNormal3f) bIsLoaded = 0;
 	__gleNormal3fv = (PFNGLNORMAL3FVPROC)gleIntGetProcAddress("glNormal3fv");
-	if(!TestPointer((const void*)__gleNormal3fv))
-	{
-		__gleNormal3fv = (PFNGLNORMAL3FVPROC)gle_CoreStruct.gleVarNormal3fv;
-		if(!__gleNormal3fv) bIsLoaded = 0;
-	}
+	if(!__gleNormal3fv) bIsLoaded = 0;
 	__gleNormal3i = (PFNGLNORMAL3IPROC)gleIntGetProcAddress("glNormal3i");
-	if(!TestPointer((const void*)__gleNormal3i))
-	{
-		__gleNormal3i = (PFNGLNORMAL3IPROC)gle_CoreStruct.gleVarNormal3i;
-		if(!__gleNormal3i) bIsLoaded = 0;
-	}
+	if(!__gleNormal3i) bIsLoaded = 0;
 	__gleNormal3iv = (PFNGLNORMAL3IVPROC)gleIntGetProcAddress("glNormal3iv");
-	if(!TestPointer((const void*)__gleNormal3iv))
-	{
-		__gleNormal3iv = (PFNGLNORMAL3IVPROC)gle_CoreStruct.gleVarNormal3iv;
-		if(!__gleNormal3iv) bIsLoaded = 0;
-	}
+	if(!__gleNormal3iv) bIsLoaded = 0;
 	__gleNormal3s = (PFNGLNORMAL3SPROC)gleIntGetProcAddress("glNormal3s");
-	if(!TestPointer((const void*)__gleNormal3s))
-	{
-		__gleNormal3s = (PFNGLNORMAL3SPROC)gle_CoreStruct.gleVarNormal3s;
-		if(!__gleNormal3s) bIsLoaded = 0;
-	}
+	if(!__gleNormal3s) bIsLoaded = 0;
 	__gleNormal3sv = (PFNGLNORMAL3SVPROC)gleIntGetProcAddress("glNormal3sv");
-	if(!TestPointer((const void*)__gleNormal3sv))
-	{
-		__gleNormal3sv = (PFNGLNORMAL3SVPROC)gle_CoreStruct.gleVarNormal3sv;
-		if(!__gleNormal3sv) bIsLoaded = 0;
-	}
+	if(!__gleNormal3sv) bIsLoaded = 0;
 	__gleRasterPos2d = (PFNGLRASTERPOS2DPROC)gleIntGetProcAddress("glRasterPos2d");
-	if(!TestPointer((const void*)__gleRasterPos2d))
-	{
-		__gleRasterPos2d = (PFNGLRASTERPOS2DPROC)gle_CoreStruct.gleVarRasterPos2d;
-		if(!__gleRasterPos2d) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos2d) bIsLoaded = 0;
 	__gleRasterPos2dv = (PFNGLRASTERPOS2DVPROC)gleIntGetProcAddress("glRasterPos2dv");
-	if(!TestPointer((const void*)__gleRasterPos2dv))
-	{
-		__gleRasterPos2dv = (PFNGLRASTERPOS2DVPROC)gle_CoreStruct.gleVarRasterPos2dv;
-		if(!__gleRasterPos2dv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos2dv) bIsLoaded = 0;
 	__gleRasterPos2f = (PFNGLRASTERPOS2FPROC)gleIntGetProcAddress("glRasterPos2f");
-	if(!TestPointer((const void*)__gleRasterPos2f))
-	{
-		__gleRasterPos2f = (PFNGLRASTERPOS2FPROC)gle_CoreStruct.gleVarRasterPos2f;
-		if(!__gleRasterPos2f) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos2f) bIsLoaded = 0;
 	__gleRasterPos2fv = (PFNGLRASTERPOS2FVPROC)gleIntGetProcAddress("glRasterPos2fv");
-	if(!TestPointer((const void*)__gleRasterPos2fv))
-	{
-		__gleRasterPos2fv = (PFNGLRASTERPOS2FVPROC)gle_CoreStruct.gleVarRasterPos2fv;
-		if(!__gleRasterPos2fv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos2fv) bIsLoaded = 0;
 	__gleRasterPos2i = (PFNGLRASTERPOS2IPROC)gleIntGetProcAddress("glRasterPos2i");
-	if(!TestPointer((const void*)__gleRasterPos2i))
-	{
-		__gleRasterPos2i = (PFNGLRASTERPOS2IPROC)gle_CoreStruct.gleVarRasterPos2i;
-		if(!__gleRasterPos2i) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos2i) bIsLoaded = 0;
 	__gleRasterPos2iv = (PFNGLRASTERPOS2IVPROC)gleIntGetProcAddress("glRasterPos2iv");
-	if(!TestPointer((const void*)__gleRasterPos2iv))
-	{
-		__gleRasterPos2iv = (PFNGLRASTERPOS2IVPROC)gle_CoreStruct.gleVarRasterPos2iv;
-		if(!__gleRasterPos2iv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos2iv) bIsLoaded = 0;
 	__gleRasterPos2s = (PFNGLRASTERPOS2SPROC)gleIntGetProcAddress("glRasterPos2s");
-	if(!TestPointer((const void*)__gleRasterPos2s))
-	{
-		__gleRasterPos2s = (PFNGLRASTERPOS2SPROC)gle_CoreStruct.gleVarRasterPos2s;
-		if(!__gleRasterPos2s) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos2s) bIsLoaded = 0;
 	__gleRasterPos2sv = (PFNGLRASTERPOS2SVPROC)gleIntGetProcAddress("glRasterPos2sv");
-	if(!TestPointer((const void*)__gleRasterPos2sv))
-	{
-		__gleRasterPos2sv = (PFNGLRASTERPOS2SVPROC)gle_CoreStruct.gleVarRasterPos2sv;
-		if(!__gleRasterPos2sv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos2sv) bIsLoaded = 0;
 	__gleRasterPos3d = (PFNGLRASTERPOS3DPROC)gleIntGetProcAddress("glRasterPos3d");
-	if(!TestPointer((const void*)__gleRasterPos3d))
-	{
-		__gleRasterPos3d = (PFNGLRASTERPOS3DPROC)gle_CoreStruct.gleVarRasterPos3d;
-		if(!__gleRasterPos3d) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos3d) bIsLoaded = 0;
 	__gleRasterPos3dv = (PFNGLRASTERPOS3DVPROC)gleIntGetProcAddress("glRasterPos3dv");
-	if(!TestPointer((const void*)__gleRasterPos3dv))
-	{
-		__gleRasterPos3dv = (PFNGLRASTERPOS3DVPROC)gle_CoreStruct.gleVarRasterPos3dv;
-		if(!__gleRasterPos3dv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos3dv) bIsLoaded = 0;
 	__gleRasterPos3f = (PFNGLRASTERPOS3FPROC)gleIntGetProcAddress("glRasterPos3f");
-	if(!TestPointer((const void*)__gleRasterPos3f))
-	{
-		__gleRasterPos3f = (PFNGLRASTERPOS3FPROC)gle_CoreStruct.gleVarRasterPos3f;
-		if(!__gleRasterPos3f) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos3f) bIsLoaded = 0;
 	__gleRasterPos3fv = (PFNGLRASTERPOS3FVPROC)gleIntGetProcAddress("glRasterPos3fv");
-	if(!TestPointer((const void*)__gleRasterPos3fv))
-	{
-		__gleRasterPos3fv = (PFNGLRASTERPOS3FVPROC)gle_CoreStruct.gleVarRasterPos3fv;
-		if(!__gleRasterPos3fv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos3fv) bIsLoaded = 0;
 	__gleRasterPos3i = (PFNGLRASTERPOS3IPROC)gleIntGetProcAddress("glRasterPos3i");
-	if(!TestPointer((const void*)__gleRasterPos3i))
-	{
-		__gleRasterPos3i = (PFNGLRASTERPOS3IPROC)gle_CoreStruct.gleVarRasterPos3i;
-		if(!__gleRasterPos3i) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos3i) bIsLoaded = 0;
 	__gleRasterPos3iv = (PFNGLRASTERPOS3IVPROC)gleIntGetProcAddress("glRasterPos3iv");
-	if(!TestPointer((const void*)__gleRasterPos3iv))
-	{
-		__gleRasterPos3iv = (PFNGLRASTERPOS3IVPROC)gle_CoreStruct.gleVarRasterPos3iv;
-		if(!__gleRasterPos3iv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos3iv) bIsLoaded = 0;
 	__gleRasterPos3s = (PFNGLRASTERPOS3SPROC)gleIntGetProcAddress("glRasterPos3s");
-	if(!TestPointer((const void*)__gleRasterPos3s))
-	{
-		__gleRasterPos3s = (PFNGLRASTERPOS3SPROC)gle_CoreStruct.gleVarRasterPos3s;
-		if(!__gleRasterPos3s) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos3s) bIsLoaded = 0;
 	__gleRasterPos3sv = (PFNGLRASTERPOS3SVPROC)gleIntGetProcAddress("glRasterPos3sv");
-	if(!TestPointer((const void*)__gleRasterPos3sv))
-	{
-		__gleRasterPos3sv = (PFNGLRASTERPOS3SVPROC)gle_CoreStruct.gleVarRasterPos3sv;
-		if(!__gleRasterPos3sv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos3sv) bIsLoaded = 0;
 	__gleRasterPos4d = (PFNGLRASTERPOS4DPROC)gleIntGetProcAddress("glRasterPos4d");
-	if(!TestPointer((const void*)__gleRasterPos4d))
-	{
-		__gleRasterPos4d = (PFNGLRASTERPOS4DPROC)gle_CoreStruct.gleVarRasterPos4d;
-		if(!__gleRasterPos4d) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos4d) bIsLoaded = 0;
 	__gleRasterPos4dv = (PFNGLRASTERPOS4DVPROC)gleIntGetProcAddress("glRasterPos4dv");
-	if(!TestPointer((const void*)__gleRasterPos4dv))
-	{
-		__gleRasterPos4dv = (PFNGLRASTERPOS4DVPROC)gle_CoreStruct.gleVarRasterPos4dv;
-		if(!__gleRasterPos4dv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos4dv) bIsLoaded = 0;
 	__gleRasterPos4f = (PFNGLRASTERPOS4FPROC)gleIntGetProcAddress("glRasterPos4f");
-	if(!TestPointer((const void*)__gleRasterPos4f))
-	{
-		__gleRasterPos4f = (PFNGLRASTERPOS4FPROC)gle_CoreStruct.gleVarRasterPos4f;
-		if(!__gleRasterPos4f) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos4f) bIsLoaded = 0;
 	__gleRasterPos4fv = (PFNGLRASTERPOS4FVPROC)gleIntGetProcAddress("glRasterPos4fv");
-	if(!TestPointer((const void*)__gleRasterPos4fv))
-	{
-		__gleRasterPos4fv = (PFNGLRASTERPOS4FVPROC)gle_CoreStruct.gleVarRasterPos4fv;
-		if(!__gleRasterPos4fv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos4fv) bIsLoaded = 0;
 	__gleRasterPos4i = (PFNGLRASTERPOS4IPROC)gleIntGetProcAddress("glRasterPos4i");
-	if(!TestPointer((const void*)__gleRasterPos4i))
-	{
-		__gleRasterPos4i = (PFNGLRASTERPOS4IPROC)gle_CoreStruct.gleVarRasterPos4i;
-		if(!__gleRasterPos4i) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos4i) bIsLoaded = 0;
 	__gleRasterPos4iv = (PFNGLRASTERPOS4IVPROC)gleIntGetProcAddress("glRasterPos4iv");
-	if(!TestPointer((const void*)__gleRasterPos4iv))
-	{
-		__gleRasterPos4iv = (PFNGLRASTERPOS4IVPROC)gle_CoreStruct.gleVarRasterPos4iv;
-		if(!__gleRasterPos4iv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos4iv) bIsLoaded = 0;
 	__gleRasterPos4s = (PFNGLRASTERPOS4SPROC)gleIntGetProcAddress("glRasterPos4s");
-	if(!TestPointer((const void*)__gleRasterPos4s))
-	{
-		__gleRasterPos4s = (PFNGLRASTERPOS4SPROC)gle_CoreStruct.gleVarRasterPos4s;
-		if(!__gleRasterPos4s) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos4s) bIsLoaded = 0;
 	__gleRasterPos4sv = (PFNGLRASTERPOS4SVPROC)gleIntGetProcAddress("glRasterPos4sv");
-	if(!TestPointer((const void*)__gleRasterPos4sv))
-	{
-		__gleRasterPos4sv = (PFNGLRASTERPOS4SVPROC)gle_CoreStruct.gleVarRasterPos4sv;
-		if(!__gleRasterPos4sv) bIsLoaded = 0;
-	}
+	if(!__gleRasterPos4sv) bIsLoaded = 0;
 	__gleRectd = (PFNGLRECTDPROC)gleIntGetProcAddress("glRectd");
-	if(!TestPointer((const void*)__gleRectd))
-	{
-		__gleRectd = (PFNGLRECTDPROC)gle_CoreStruct.gleVarRectd;
-		if(!__gleRectd) bIsLoaded = 0;
-	}
+	if(!__gleRectd) bIsLoaded = 0;
 	__gleRectdv = (PFNGLRECTDVPROC)gleIntGetProcAddress("glRectdv");
-	if(!TestPointer((const void*)__gleRectdv))
-	{
-		__gleRectdv = (PFNGLRECTDVPROC)gle_CoreStruct.gleVarRectdv;
-		if(!__gleRectdv) bIsLoaded = 0;
-	}
+	if(!__gleRectdv) bIsLoaded = 0;
 	__gleRectf = (PFNGLRECTFPROC)gleIntGetProcAddress("glRectf");
-	if(!TestPointer((const void*)__gleRectf))
-	{
-		__gleRectf = (PFNGLRECTFPROC)gle_CoreStruct.gleVarRectf;
-		if(!__gleRectf) bIsLoaded = 0;
-	}
+	if(!__gleRectf) bIsLoaded = 0;
 	__gleRectfv = (PFNGLRECTFVPROC)gleIntGetProcAddress("glRectfv");
-	if(!TestPointer((const void*)__gleRectfv))
-	{
-		__gleRectfv = (PFNGLRECTFVPROC)gle_CoreStruct.gleVarRectfv;
-		if(!__gleRectfv) bIsLoaded = 0;
-	}
+	if(!__gleRectfv) bIsLoaded = 0;
 	__gleRecti = (PFNGLRECTIPROC)gleIntGetProcAddress("glRecti");
-	if(!TestPointer((const void*)__gleRecti))
-	{
-		__gleRecti = (PFNGLRECTIPROC)gle_CoreStruct.gleVarRecti;
-		if(!__gleRecti) bIsLoaded = 0;
-	}
+	if(!__gleRecti) bIsLoaded = 0;
 	__gleRectiv = (PFNGLRECTIVPROC)gleIntGetProcAddress("glRectiv");
-	if(!TestPointer((const void*)__gleRectiv))
-	{
-		__gleRectiv = (PFNGLRECTIVPROC)gle_CoreStruct.gleVarRectiv;
-		if(!__gleRectiv) bIsLoaded = 0;
-	}
+	if(!__gleRectiv) bIsLoaded = 0;
 	__gleRects = (PFNGLRECTSPROC)gleIntGetProcAddress("glRects");
-	if(!TestPointer((const void*)__gleRects))
-	{
-		__gleRects = (PFNGLRECTSPROC)gle_CoreStruct.gleVarRects;
-		if(!__gleRects) bIsLoaded = 0;
-	}
+	if(!__gleRects) bIsLoaded = 0;
 	__gleRectsv = (PFNGLRECTSVPROC)gleIntGetProcAddress("glRectsv");
-	if(!TestPointer((const void*)__gleRectsv))
-	{
-		__gleRectsv = (PFNGLRECTSVPROC)gle_CoreStruct.gleVarRectsv;
-		if(!__gleRectsv) bIsLoaded = 0;
-	}
+	if(!__gleRectsv) bIsLoaded = 0;
 	__gleTexCoord1d = (PFNGLTEXCOORD1DPROC)gleIntGetProcAddress("glTexCoord1d");
-	if(!TestPointer((const void*)__gleTexCoord1d))
-	{
-		__gleTexCoord1d = (PFNGLTEXCOORD1DPROC)gle_CoreStruct.gleVarTexCoord1d;
-		if(!__gleTexCoord1d) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord1d) bIsLoaded = 0;
 	__gleTexCoord1dv = (PFNGLTEXCOORD1DVPROC)gleIntGetProcAddress("glTexCoord1dv");
-	if(!TestPointer((const void*)__gleTexCoord1dv))
-	{
-		__gleTexCoord1dv = (PFNGLTEXCOORD1DVPROC)gle_CoreStruct.gleVarTexCoord1dv;
-		if(!__gleTexCoord1dv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord1dv) bIsLoaded = 0;
 	__gleTexCoord1f = (PFNGLTEXCOORD1FPROC)gleIntGetProcAddress("glTexCoord1f");
-	if(!TestPointer((const void*)__gleTexCoord1f))
-	{
-		__gleTexCoord1f = (PFNGLTEXCOORD1FPROC)gle_CoreStruct.gleVarTexCoord1f;
-		if(!__gleTexCoord1f) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord1f) bIsLoaded = 0;
 	__gleTexCoord1fv = (PFNGLTEXCOORD1FVPROC)gleIntGetProcAddress("glTexCoord1fv");
-	if(!TestPointer((const void*)__gleTexCoord1fv))
-	{
-		__gleTexCoord1fv = (PFNGLTEXCOORD1FVPROC)gle_CoreStruct.gleVarTexCoord1fv;
-		if(!__gleTexCoord1fv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord1fv) bIsLoaded = 0;
 	__gleTexCoord1i = (PFNGLTEXCOORD1IPROC)gleIntGetProcAddress("glTexCoord1i");
-	if(!TestPointer((const void*)__gleTexCoord1i))
-	{
-		__gleTexCoord1i = (PFNGLTEXCOORD1IPROC)gle_CoreStruct.gleVarTexCoord1i;
-		if(!__gleTexCoord1i) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord1i) bIsLoaded = 0;
 	__gleTexCoord1iv = (PFNGLTEXCOORD1IVPROC)gleIntGetProcAddress("glTexCoord1iv");
-	if(!TestPointer((const void*)__gleTexCoord1iv))
-	{
-		__gleTexCoord1iv = (PFNGLTEXCOORD1IVPROC)gle_CoreStruct.gleVarTexCoord1iv;
-		if(!__gleTexCoord1iv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord1iv) bIsLoaded = 0;
 	__gleTexCoord1s = (PFNGLTEXCOORD1SPROC)gleIntGetProcAddress("glTexCoord1s");
-	if(!TestPointer((const void*)__gleTexCoord1s))
-	{
-		__gleTexCoord1s = (PFNGLTEXCOORD1SPROC)gle_CoreStruct.gleVarTexCoord1s;
-		if(!__gleTexCoord1s) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord1s) bIsLoaded = 0;
 	__gleTexCoord1sv = (PFNGLTEXCOORD1SVPROC)gleIntGetProcAddress("glTexCoord1sv");
-	if(!TestPointer((const void*)__gleTexCoord1sv))
-	{
-		__gleTexCoord1sv = (PFNGLTEXCOORD1SVPROC)gle_CoreStruct.gleVarTexCoord1sv;
-		if(!__gleTexCoord1sv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord1sv) bIsLoaded = 0;
 	__gleTexCoord2d = (PFNGLTEXCOORD2DPROC)gleIntGetProcAddress("glTexCoord2d");
-	if(!TestPointer((const void*)__gleTexCoord2d))
-	{
-		__gleTexCoord2d = (PFNGLTEXCOORD2DPROC)gle_CoreStruct.gleVarTexCoord2d;
-		if(!__gleTexCoord2d) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord2d) bIsLoaded = 0;
 	__gleTexCoord2dv = (PFNGLTEXCOORD2DVPROC)gleIntGetProcAddress("glTexCoord2dv");
-	if(!TestPointer((const void*)__gleTexCoord2dv))
-	{
-		__gleTexCoord2dv = (PFNGLTEXCOORD2DVPROC)gle_CoreStruct.gleVarTexCoord2dv;
-		if(!__gleTexCoord2dv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord2dv) bIsLoaded = 0;
 	__gleTexCoord2f = (PFNGLTEXCOORD2FPROC)gleIntGetProcAddress("glTexCoord2f");
-	if(!TestPointer((const void*)__gleTexCoord2f))
-	{
-		__gleTexCoord2f = (PFNGLTEXCOORD2FPROC)gle_CoreStruct.gleVarTexCoord2f;
-		if(!__gleTexCoord2f) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord2f) bIsLoaded = 0;
 	__gleTexCoord2fv = (PFNGLTEXCOORD2FVPROC)gleIntGetProcAddress("glTexCoord2fv");
-	if(!TestPointer((const void*)__gleTexCoord2fv))
-	{
-		__gleTexCoord2fv = (PFNGLTEXCOORD2FVPROC)gle_CoreStruct.gleVarTexCoord2fv;
-		if(!__gleTexCoord2fv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord2fv) bIsLoaded = 0;
 	__gleTexCoord2i = (PFNGLTEXCOORD2IPROC)gleIntGetProcAddress("glTexCoord2i");
-	if(!TestPointer((const void*)__gleTexCoord2i))
-	{
-		__gleTexCoord2i = (PFNGLTEXCOORD2IPROC)gle_CoreStruct.gleVarTexCoord2i;
-		if(!__gleTexCoord2i) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord2i) bIsLoaded = 0;
 	__gleTexCoord2iv = (PFNGLTEXCOORD2IVPROC)gleIntGetProcAddress("glTexCoord2iv");
-	if(!TestPointer((const void*)__gleTexCoord2iv))
-	{
-		__gleTexCoord2iv = (PFNGLTEXCOORD2IVPROC)gle_CoreStruct.gleVarTexCoord2iv;
-		if(!__gleTexCoord2iv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord2iv) bIsLoaded = 0;
 	__gleTexCoord2s = (PFNGLTEXCOORD2SPROC)gleIntGetProcAddress("glTexCoord2s");
-	if(!TestPointer((const void*)__gleTexCoord2s))
-	{
-		__gleTexCoord2s = (PFNGLTEXCOORD2SPROC)gle_CoreStruct.gleVarTexCoord2s;
-		if(!__gleTexCoord2s) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord2s) bIsLoaded = 0;
 	__gleTexCoord2sv = (PFNGLTEXCOORD2SVPROC)gleIntGetProcAddress("glTexCoord2sv");
-	if(!TestPointer((const void*)__gleTexCoord2sv))
-	{
-		__gleTexCoord2sv = (PFNGLTEXCOORD2SVPROC)gle_CoreStruct.gleVarTexCoord2sv;
-		if(!__gleTexCoord2sv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord2sv) bIsLoaded = 0;
 	__gleTexCoord3d = (PFNGLTEXCOORD3DPROC)gleIntGetProcAddress("glTexCoord3d");
-	if(!TestPointer((const void*)__gleTexCoord3d))
-	{
-		__gleTexCoord3d = (PFNGLTEXCOORD3DPROC)gle_CoreStruct.gleVarTexCoord3d;
-		if(!__gleTexCoord3d) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord3d) bIsLoaded = 0;
 	__gleTexCoord3dv = (PFNGLTEXCOORD3DVPROC)gleIntGetProcAddress("glTexCoord3dv");
-	if(!TestPointer((const void*)__gleTexCoord3dv))
-	{
-		__gleTexCoord3dv = (PFNGLTEXCOORD3DVPROC)gle_CoreStruct.gleVarTexCoord3dv;
-		if(!__gleTexCoord3dv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord3dv) bIsLoaded = 0;
 	__gleTexCoord3f = (PFNGLTEXCOORD3FPROC)gleIntGetProcAddress("glTexCoord3f");
-	if(!TestPointer((const void*)__gleTexCoord3f))
-	{
-		__gleTexCoord3f = (PFNGLTEXCOORD3FPROC)gle_CoreStruct.gleVarTexCoord3f;
-		if(!__gleTexCoord3f) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord3f) bIsLoaded = 0;
 	__gleTexCoord3fv = (PFNGLTEXCOORD3FVPROC)gleIntGetProcAddress("glTexCoord3fv");
-	if(!TestPointer((const void*)__gleTexCoord3fv))
-	{
-		__gleTexCoord3fv = (PFNGLTEXCOORD3FVPROC)gle_CoreStruct.gleVarTexCoord3fv;
-		if(!__gleTexCoord3fv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord3fv) bIsLoaded = 0;
 	__gleTexCoord3i = (PFNGLTEXCOORD3IPROC)gleIntGetProcAddress("glTexCoord3i");
-	if(!TestPointer((const void*)__gleTexCoord3i))
-	{
-		__gleTexCoord3i = (PFNGLTEXCOORD3IPROC)gle_CoreStruct.gleVarTexCoord3i;
-		if(!__gleTexCoord3i) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord3i) bIsLoaded = 0;
 	__gleTexCoord3iv = (PFNGLTEXCOORD3IVPROC)gleIntGetProcAddress("glTexCoord3iv");
-	if(!TestPointer((const void*)__gleTexCoord3iv))
-	{
-		__gleTexCoord3iv = (PFNGLTEXCOORD3IVPROC)gle_CoreStruct.gleVarTexCoord3iv;
-		if(!__gleTexCoord3iv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord3iv) bIsLoaded = 0;
 	__gleTexCoord3s = (PFNGLTEXCOORD3SPROC)gleIntGetProcAddress("glTexCoord3s");
-	if(!TestPointer((const void*)__gleTexCoord3s))
-	{
-		__gleTexCoord3s = (PFNGLTEXCOORD3SPROC)gle_CoreStruct.gleVarTexCoord3s;
-		if(!__gleTexCoord3s) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord3s) bIsLoaded = 0;
 	__gleTexCoord3sv = (PFNGLTEXCOORD3SVPROC)gleIntGetProcAddress("glTexCoord3sv");
-	if(!TestPointer((const void*)__gleTexCoord3sv))
-	{
-		__gleTexCoord3sv = (PFNGLTEXCOORD3SVPROC)gle_CoreStruct.gleVarTexCoord3sv;
-		if(!__gleTexCoord3sv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord3sv) bIsLoaded = 0;
 	__gleTexCoord4d = (PFNGLTEXCOORD4DPROC)gleIntGetProcAddress("glTexCoord4d");
-	if(!TestPointer((const void*)__gleTexCoord4d))
-	{
-		__gleTexCoord4d = (PFNGLTEXCOORD4DPROC)gle_CoreStruct.gleVarTexCoord4d;
-		if(!__gleTexCoord4d) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord4d) bIsLoaded = 0;
 	__gleTexCoord4dv = (PFNGLTEXCOORD4DVPROC)gleIntGetProcAddress("glTexCoord4dv");
-	if(!TestPointer((const void*)__gleTexCoord4dv))
-	{
-		__gleTexCoord4dv = (PFNGLTEXCOORD4DVPROC)gle_CoreStruct.gleVarTexCoord4dv;
-		if(!__gleTexCoord4dv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord4dv) bIsLoaded = 0;
 	__gleTexCoord4f = (PFNGLTEXCOORD4FPROC)gleIntGetProcAddress("glTexCoord4f");
-	if(!TestPointer((const void*)__gleTexCoord4f))
-	{
-		__gleTexCoord4f = (PFNGLTEXCOORD4FPROC)gle_CoreStruct.gleVarTexCoord4f;
-		if(!__gleTexCoord4f) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord4f) bIsLoaded = 0;
 	__gleTexCoord4fv = (PFNGLTEXCOORD4FVPROC)gleIntGetProcAddress("glTexCoord4fv");
-	if(!TestPointer((const void*)__gleTexCoord4fv))
-	{
-		__gleTexCoord4fv = (PFNGLTEXCOORD4FVPROC)gle_CoreStruct.gleVarTexCoord4fv;
-		if(!__gleTexCoord4fv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord4fv) bIsLoaded = 0;
 	__gleTexCoord4i = (PFNGLTEXCOORD4IPROC)gleIntGetProcAddress("glTexCoord4i");
-	if(!TestPointer((const void*)__gleTexCoord4i))
-	{
-		__gleTexCoord4i = (PFNGLTEXCOORD4IPROC)gle_CoreStruct.gleVarTexCoord4i;
-		if(!__gleTexCoord4i) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord4i) bIsLoaded = 0;
 	__gleTexCoord4iv = (PFNGLTEXCOORD4IVPROC)gleIntGetProcAddress("glTexCoord4iv");
-	if(!TestPointer((const void*)__gleTexCoord4iv))
-	{
-		__gleTexCoord4iv = (PFNGLTEXCOORD4IVPROC)gle_CoreStruct.gleVarTexCoord4iv;
-		if(!__gleTexCoord4iv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord4iv) bIsLoaded = 0;
 	__gleTexCoord4s = (PFNGLTEXCOORD4SPROC)gleIntGetProcAddress("glTexCoord4s");
-	if(!TestPointer((const void*)__gleTexCoord4s))
-	{
-		__gleTexCoord4s = (PFNGLTEXCOORD4SPROC)gle_CoreStruct.gleVarTexCoord4s;
-		if(!__gleTexCoord4s) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord4s) bIsLoaded = 0;
 	__gleTexCoord4sv = (PFNGLTEXCOORD4SVPROC)gleIntGetProcAddress("glTexCoord4sv");
-	if(!TestPointer((const void*)__gleTexCoord4sv))
-	{
-		__gleTexCoord4sv = (PFNGLTEXCOORD4SVPROC)gle_CoreStruct.gleVarTexCoord4sv;
-		if(!__gleTexCoord4sv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoord4sv) bIsLoaded = 0;
 	__gleVertex2d = (PFNGLVERTEX2DPROC)gleIntGetProcAddress("glVertex2d");
-	if(!TestPointer((const void*)__gleVertex2d))
-	{
-		__gleVertex2d = (PFNGLVERTEX2DPROC)gle_CoreStruct.gleVarVertex2d;
-		if(!__gleVertex2d) bIsLoaded = 0;
-	}
+	if(!__gleVertex2d) bIsLoaded = 0;
 	__gleVertex2dv = (PFNGLVERTEX2DVPROC)gleIntGetProcAddress("glVertex2dv");
-	if(!TestPointer((const void*)__gleVertex2dv))
-	{
-		__gleVertex2dv = (PFNGLVERTEX2DVPROC)gle_CoreStruct.gleVarVertex2dv;
-		if(!__gleVertex2dv) bIsLoaded = 0;
-	}
+	if(!__gleVertex2dv) bIsLoaded = 0;
 	__gleVertex2f = (PFNGLVERTEX2FPROC)gleIntGetProcAddress("glVertex2f");
-	if(!TestPointer((const void*)__gleVertex2f))
-	{
-		__gleVertex2f = (PFNGLVERTEX2FPROC)gle_CoreStruct.gleVarVertex2f;
-		if(!__gleVertex2f) bIsLoaded = 0;
-	}
+	if(!__gleVertex2f) bIsLoaded = 0;
 	__gleVertex2fv = (PFNGLVERTEX2FVPROC)gleIntGetProcAddress("glVertex2fv");
-	if(!TestPointer((const void*)__gleVertex2fv))
-	{
-		__gleVertex2fv = (PFNGLVERTEX2FVPROC)gle_CoreStruct.gleVarVertex2fv;
-		if(!__gleVertex2fv) bIsLoaded = 0;
-	}
+	if(!__gleVertex2fv) bIsLoaded = 0;
 	__gleVertex2i = (PFNGLVERTEX2IPROC)gleIntGetProcAddress("glVertex2i");
-	if(!TestPointer((const void*)__gleVertex2i))
-	{
-		__gleVertex2i = (PFNGLVERTEX2IPROC)gle_CoreStruct.gleVarVertex2i;
-		if(!__gleVertex2i) bIsLoaded = 0;
-	}
+	if(!__gleVertex2i) bIsLoaded = 0;
 	__gleVertex2iv = (PFNGLVERTEX2IVPROC)gleIntGetProcAddress("glVertex2iv");
-	if(!TestPointer((const void*)__gleVertex2iv))
-	{
-		__gleVertex2iv = (PFNGLVERTEX2IVPROC)gle_CoreStruct.gleVarVertex2iv;
-		if(!__gleVertex2iv) bIsLoaded = 0;
-	}
+	if(!__gleVertex2iv) bIsLoaded = 0;
 	__gleVertex2s = (PFNGLVERTEX2SPROC)gleIntGetProcAddress("glVertex2s");
-	if(!TestPointer((const void*)__gleVertex2s))
-	{
-		__gleVertex2s = (PFNGLVERTEX2SPROC)gle_CoreStruct.gleVarVertex2s;
-		if(!__gleVertex2s) bIsLoaded = 0;
-	}
+	if(!__gleVertex2s) bIsLoaded = 0;
 	__gleVertex2sv = (PFNGLVERTEX2SVPROC)gleIntGetProcAddress("glVertex2sv");
-	if(!TestPointer((const void*)__gleVertex2sv))
-	{
-		__gleVertex2sv = (PFNGLVERTEX2SVPROC)gle_CoreStruct.gleVarVertex2sv;
-		if(!__gleVertex2sv) bIsLoaded = 0;
-	}
+	if(!__gleVertex2sv) bIsLoaded = 0;
 	__gleVertex3d = (PFNGLVERTEX3DPROC)gleIntGetProcAddress("glVertex3d");
-	if(!TestPointer((const void*)__gleVertex3d))
-	{
-		__gleVertex3d = (PFNGLVERTEX3DPROC)gle_CoreStruct.gleVarVertex3d;
-		if(!__gleVertex3d) bIsLoaded = 0;
-	}
+	if(!__gleVertex3d) bIsLoaded = 0;
 	__gleVertex3dv = (PFNGLVERTEX3DVPROC)gleIntGetProcAddress("glVertex3dv");
-	if(!TestPointer((const void*)__gleVertex3dv))
-	{
-		__gleVertex3dv = (PFNGLVERTEX3DVPROC)gle_CoreStruct.gleVarVertex3dv;
-		if(!__gleVertex3dv) bIsLoaded = 0;
-	}
+	if(!__gleVertex3dv) bIsLoaded = 0;
 	__gleVertex3f = (PFNGLVERTEX3FPROC)gleIntGetProcAddress("glVertex3f");
-	if(!TestPointer((const void*)__gleVertex3f))
-	{
-		__gleVertex3f = (PFNGLVERTEX3FPROC)gle_CoreStruct.gleVarVertex3f;
-		if(!__gleVertex3f) bIsLoaded = 0;
-	}
+	if(!__gleVertex3f) bIsLoaded = 0;
 	__gleVertex3fv = (PFNGLVERTEX3FVPROC)gleIntGetProcAddress("glVertex3fv");
-	if(!TestPointer((const void*)__gleVertex3fv))
-	{
-		__gleVertex3fv = (PFNGLVERTEX3FVPROC)gle_CoreStruct.gleVarVertex3fv;
-		if(!__gleVertex3fv) bIsLoaded = 0;
-	}
+	if(!__gleVertex3fv) bIsLoaded = 0;
 	__gleVertex3i = (PFNGLVERTEX3IPROC)gleIntGetProcAddress("glVertex3i");
-	if(!TestPointer((const void*)__gleVertex3i))
-	{
-		__gleVertex3i = (PFNGLVERTEX3IPROC)gle_CoreStruct.gleVarVertex3i;
-		if(!__gleVertex3i) bIsLoaded = 0;
-	}
+	if(!__gleVertex3i) bIsLoaded = 0;
 	__gleVertex3iv = (PFNGLVERTEX3IVPROC)gleIntGetProcAddress("glVertex3iv");
-	if(!TestPointer((const void*)__gleVertex3iv))
-	{
-		__gleVertex3iv = (PFNGLVERTEX3IVPROC)gle_CoreStruct.gleVarVertex3iv;
-		if(!__gleVertex3iv) bIsLoaded = 0;
-	}
+	if(!__gleVertex3iv) bIsLoaded = 0;
 	__gleVertex3s = (PFNGLVERTEX3SPROC)gleIntGetProcAddress("glVertex3s");
-	if(!TestPointer((const void*)__gleVertex3s))
-	{
-		__gleVertex3s = (PFNGLVERTEX3SPROC)gle_CoreStruct.gleVarVertex3s;
-		if(!__gleVertex3s) bIsLoaded = 0;
-	}
+	if(!__gleVertex3s) bIsLoaded = 0;
 	__gleVertex3sv = (PFNGLVERTEX3SVPROC)gleIntGetProcAddress("glVertex3sv");
-	if(!TestPointer((const void*)__gleVertex3sv))
-	{
-		__gleVertex3sv = (PFNGLVERTEX3SVPROC)gle_CoreStruct.gleVarVertex3sv;
-		if(!__gleVertex3sv) bIsLoaded = 0;
-	}
+	if(!__gleVertex3sv) bIsLoaded = 0;
 	__gleVertex4d = (PFNGLVERTEX4DPROC)gleIntGetProcAddress("glVertex4d");
-	if(!TestPointer((const void*)__gleVertex4d))
-	{
-		__gleVertex4d = (PFNGLVERTEX4DPROC)gle_CoreStruct.gleVarVertex4d;
-		if(!__gleVertex4d) bIsLoaded = 0;
-	}
+	if(!__gleVertex4d) bIsLoaded = 0;
 	__gleVertex4dv = (PFNGLVERTEX4DVPROC)gleIntGetProcAddress("glVertex4dv");
-	if(!TestPointer((const void*)__gleVertex4dv))
-	{
-		__gleVertex4dv = (PFNGLVERTEX4DVPROC)gle_CoreStruct.gleVarVertex4dv;
-		if(!__gleVertex4dv) bIsLoaded = 0;
-	}
+	if(!__gleVertex4dv) bIsLoaded = 0;
 	__gleVertex4f = (PFNGLVERTEX4FPROC)gleIntGetProcAddress("glVertex4f");
-	if(!TestPointer((const void*)__gleVertex4f))
-	{
-		__gleVertex4f = (PFNGLVERTEX4FPROC)gle_CoreStruct.gleVarVertex4f;
-		if(!__gleVertex4f) bIsLoaded = 0;
-	}
+	if(!__gleVertex4f) bIsLoaded = 0;
 	__gleVertex4fv = (PFNGLVERTEX4FVPROC)gleIntGetProcAddress("glVertex4fv");
-	if(!TestPointer((const void*)__gleVertex4fv))
-	{
-		__gleVertex4fv = (PFNGLVERTEX4FVPROC)gle_CoreStruct.gleVarVertex4fv;
-		if(!__gleVertex4fv) bIsLoaded = 0;
-	}
+	if(!__gleVertex4fv) bIsLoaded = 0;
 	__gleVertex4i = (PFNGLVERTEX4IPROC)gleIntGetProcAddress("glVertex4i");
-	if(!TestPointer((const void*)__gleVertex4i))
-	{
-		__gleVertex4i = (PFNGLVERTEX4IPROC)gle_CoreStruct.gleVarVertex4i;
-		if(!__gleVertex4i) bIsLoaded = 0;
-	}
+	if(!__gleVertex4i) bIsLoaded = 0;
 	__gleVertex4iv = (PFNGLVERTEX4IVPROC)gleIntGetProcAddress("glVertex4iv");
-	if(!TestPointer((const void*)__gleVertex4iv))
-	{
-		__gleVertex4iv = (PFNGLVERTEX4IVPROC)gle_CoreStruct.gleVarVertex4iv;
-		if(!__gleVertex4iv) bIsLoaded = 0;
-	}
+	if(!__gleVertex4iv) bIsLoaded = 0;
 	__gleVertex4s = (PFNGLVERTEX4SPROC)gleIntGetProcAddress("glVertex4s");
-	if(!TestPointer((const void*)__gleVertex4s))
-	{
-		__gleVertex4s = (PFNGLVERTEX4SPROC)gle_CoreStruct.gleVarVertex4s;
-		if(!__gleVertex4s) bIsLoaded = 0;
-	}
+	if(!__gleVertex4s) bIsLoaded = 0;
 	__gleVertex4sv = (PFNGLVERTEX4SVPROC)gleIntGetProcAddress("glVertex4sv");
-	if(!TestPointer((const void*)__gleVertex4sv))
-	{
-		__gleVertex4sv = (PFNGLVERTEX4SVPROC)gle_CoreStruct.gleVarVertex4sv;
-		if(!__gleVertex4sv) bIsLoaded = 0;
-	}
+	if(!__gleVertex4sv) bIsLoaded = 0;
 	__gleClipPlane = (PFNGLCLIPPLANEPROC)gleIntGetProcAddress("glClipPlane");
-	if(!TestPointer((const void*)__gleClipPlane))
-	{
-		__gleClipPlane = (PFNGLCLIPPLANEPROC)gle_CoreStruct.gleVarClipPlane;
-		if(!__gleClipPlane) bIsLoaded = 0;
-	}
+	if(!__gleClipPlane) bIsLoaded = 0;
 	__gleColorMaterial = (PFNGLCOLORMATERIALPROC)gleIntGetProcAddress("glColorMaterial");
-	if(!TestPointer((const void*)__gleColorMaterial))
-	{
-		__gleColorMaterial = (PFNGLCOLORMATERIALPROC)gle_CoreStruct.gleVarColorMaterial;
-		if(!__gleColorMaterial) bIsLoaded = 0;
-	}
+	if(!__gleColorMaterial) bIsLoaded = 0;
 	__gleFogf = (PFNGLFOGFPROC)gleIntGetProcAddress("glFogf");
-	if(!TestPointer((const void*)__gleFogf))
-	{
-		__gleFogf = (PFNGLFOGFPROC)gle_CoreStruct.gleVarFogf;
-		if(!__gleFogf) bIsLoaded = 0;
-	}
+	if(!__gleFogf) bIsLoaded = 0;
 	__gleFogfv = (PFNGLFOGFVPROC)gleIntGetProcAddress("glFogfv");
-	if(!TestPointer((const void*)__gleFogfv))
-	{
-		__gleFogfv = (PFNGLFOGFVPROC)gle_CoreStruct.gleVarFogfv;
-		if(!__gleFogfv) bIsLoaded = 0;
-	}
+	if(!__gleFogfv) bIsLoaded = 0;
 	__gleFogi = (PFNGLFOGIPROC)gleIntGetProcAddress("glFogi");
-	if(!TestPointer((const void*)__gleFogi))
-	{
-		__gleFogi = (PFNGLFOGIPROC)gle_CoreStruct.gleVarFogi;
-		if(!__gleFogi) bIsLoaded = 0;
-	}
+	if(!__gleFogi) bIsLoaded = 0;
 	__gleFogiv = (PFNGLFOGIVPROC)gleIntGetProcAddress("glFogiv");
-	if(!TestPointer((const void*)__gleFogiv))
-	{
-		__gleFogiv = (PFNGLFOGIVPROC)gle_CoreStruct.gleVarFogiv;
-		if(!__gleFogiv) bIsLoaded = 0;
-	}
+	if(!__gleFogiv) bIsLoaded = 0;
 	__gleLightf = (PFNGLLIGHTFPROC)gleIntGetProcAddress("glLightf");
-	if(!TestPointer((const void*)__gleLightf))
-	{
-		__gleLightf = (PFNGLLIGHTFPROC)gle_CoreStruct.gleVarLightf;
-		if(!__gleLightf) bIsLoaded = 0;
-	}
+	if(!__gleLightf) bIsLoaded = 0;
 	__gleLightfv = (PFNGLLIGHTFVPROC)gleIntGetProcAddress("glLightfv");
-	if(!TestPointer((const void*)__gleLightfv))
-	{
-		__gleLightfv = (PFNGLLIGHTFVPROC)gle_CoreStruct.gleVarLightfv;
-		if(!__gleLightfv) bIsLoaded = 0;
-	}
+	if(!__gleLightfv) bIsLoaded = 0;
 	__gleLighti = (PFNGLLIGHTIPROC)gleIntGetProcAddress("glLighti");
-	if(!TestPointer((const void*)__gleLighti))
-	{
-		__gleLighti = (PFNGLLIGHTIPROC)gle_CoreStruct.gleVarLighti;
-		if(!__gleLighti) bIsLoaded = 0;
-	}
+	if(!__gleLighti) bIsLoaded = 0;
 	__gleLightiv = (PFNGLLIGHTIVPROC)gleIntGetProcAddress("glLightiv");
-	if(!TestPointer((const void*)__gleLightiv))
-	{
-		__gleLightiv = (PFNGLLIGHTIVPROC)gle_CoreStruct.gleVarLightiv;
-		if(!__gleLightiv) bIsLoaded = 0;
-	}
+	if(!__gleLightiv) bIsLoaded = 0;
 	__gleLightModelf = (PFNGLLIGHTMODELFPROC)gleIntGetProcAddress("glLightModelf");
-	if(!TestPointer((const void*)__gleLightModelf))
-	{
-		__gleLightModelf = (PFNGLLIGHTMODELFPROC)gle_CoreStruct.gleVarLightModelf;
-		if(!__gleLightModelf) bIsLoaded = 0;
-	}
+	if(!__gleLightModelf) bIsLoaded = 0;
 	__gleLightModelfv = (PFNGLLIGHTMODELFVPROC)gleIntGetProcAddress("glLightModelfv");
-	if(!TestPointer((const void*)__gleLightModelfv))
-	{
-		__gleLightModelfv = (PFNGLLIGHTMODELFVPROC)gle_CoreStruct.gleVarLightModelfv;
-		if(!__gleLightModelfv) bIsLoaded = 0;
-	}
+	if(!__gleLightModelfv) bIsLoaded = 0;
 	__gleLightModeli = (PFNGLLIGHTMODELIPROC)gleIntGetProcAddress("glLightModeli");
-	if(!TestPointer((const void*)__gleLightModeli))
-	{
-		__gleLightModeli = (PFNGLLIGHTMODELIPROC)gle_CoreStruct.gleVarLightModeli;
-		if(!__gleLightModeli) bIsLoaded = 0;
-	}
+	if(!__gleLightModeli) bIsLoaded = 0;
 	__gleLightModeliv = (PFNGLLIGHTMODELIVPROC)gleIntGetProcAddress("glLightModeliv");
-	if(!TestPointer((const void*)__gleLightModeliv))
-	{
-		__gleLightModeliv = (PFNGLLIGHTMODELIVPROC)gle_CoreStruct.gleVarLightModeliv;
-		if(!__gleLightModeliv) bIsLoaded = 0;
-	}
+	if(!__gleLightModeliv) bIsLoaded = 0;
 	__gleLineStipple = (PFNGLLINESTIPPLEPROC)gleIntGetProcAddress("glLineStipple");
-	if(!TestPointer((const void*)__gleLineStipple))
-	{
-		__gleLineStipple = (PFNGLLINESTIPPLEPROC)gle_CoreStruct.gleVarLineStipple;
-		if(!__gleLineStipple) bIsLoaded = 0;
-	}
+	if(!__gleLineStipple) bIsLoaded = 0;
 	__gleMaterialf = (PFNGLMATERIALFPROC)gleIntGetProcAddress("glMaterialf");
-	if(!TestPointer((const void*)__gleMaterialf))
-	{
-		__gleMaterialf = (PFNGLMATERIALFPROC)gle_CoreStruct.gleVarMaterialf;
-		if(!__gleMaterialf) bIsLoaded = 0;
-	}
+	if(!__gleMaterialf) bIsLoaded = 0;
 	__gleMaterialfv = (PFNGLMATERIALFVPROC)gleIntGetProcAddress("glMaterialfv");
-	if(!TestPointer((const void*)__gleMaterialfv))
-	{
-		__gleMaterialfv = (PFNGLMATERIALFVPROC)gle_CoreStruct.gleVarMaterialfv;
-		if(!__gleMaterialfv) bIsLoaded = 0;
-	}
+	if(!__gleMaterialfv) bIsLoaded = 0;
 	__gleMateriali = (PFNGLMATERIALIPROC)gleIntGetProcAddress("glMateriali");
-	if(!TestPointer((const void*)__gleMateriali))
-	{
-		__gleMateriali = (PFNGLMATERIALIPROC)gle_CoreStruct.gleVarMateriali;
-		if(!__gleMateriali) bIsLoaded = 0;
-	}
+	if(!__gleMateriali) bIsLoaded = 0;
 	__gleMaterialiv = (PFNGLMATERIALIVPROC)gleIntGetProcAddress("glMaterialiv");
-	if(!TestPointer((const void*)__gleMaterialiv))
-	{
-		__gleMaterialiv = (PFNGLMATERIALIVPROC)gle_CoreStruct.gleVarMaterialiv;
-		if(!__gleMaterialiv) bIsLoaded = 0;
-	}
+	if(!__gleMaterialiv) bIsLoaded = 0;
 	__glePolygonStipple = (PFNGLPOLYGONSTIPPLEPROC)gleIntGetProcAddress("glPolygonStipple");
-	if(!TestPointer((const void*)__glePolygonStipple))
-	{
-		__glePolygonStipple = (PFNGLPOLYGONSTIPPLEPROC)gle_CoreStruct.gleVarPolygonStipple;
-		if(!__glePolygonStipple) bIsLoaded = 0;
-	}
+	if(!__glePolygonStipple) bIsLoaded = 0;
 	__gleShadeModel = (PFNGLSHADEMODELPROC)gleIntGetProcAddress("glShadeModel");
-	if(!TestPointer((const void*)__gleShadeModel))
-	{
-		__gleShadeModel = (PFNGLSHADEMODELPROC)gle_CoreStruct.gleVarShadeModel;
-		if(!__gleShadeModel) bIsLoaded = 0;
-	}
+	if(!__gleShadeModel) bIsLoaded = 0;
 	__gleTexEnvf = (PFNGLTEXENVFPROC)gleIntGetProcAddress("glTexEnvf");
-	if(!TestPointer((const void*)__gleTexEnvf))
-	{
-		__gleTexEnvf = (PFNGLTEXENVFPROC)gle_CoreStruct.gleVarTexEnvf;
-		if(!__gleTexEnvf) bIsLoaded = 0;
-	}
+	if(!__gleTexEnvf) bIsLoaded = 0;
 	__gleTexEnvfv = (PFNGLTEXENVFVPROC)gleIntGetProcAddress("glTexEnvfv");
-	if(!TestPointer((const void*)__gleTexEnvfv))
-	{
-		__gleTexEnvfv = (PFNGLTEXENVFVPROC)gle_CoreStruct.gleVarTexEnvfv;
-		if(!__gleTexEnvfv) bIsLoaded = 0;
-	}
+	if(!__gleTexEnvfv) bIsLoaded = 0;
 	__gleTexEnvi = (PFNGLTEXENVIPROC)gleIntGetProcAddress("glTexEnvi");
-	if(!TestPointer((const void*)__gleTexEnvi))
-	{
-		__gleTexEnvi = (PFNGLTEXENVIPROC)gle_CoreStruct.gleVarTexEnvi;
-		if(!__gleTexEnvi) bIsLoaded = 0;
-	}
+	if(!__gleTexEnvi) bIsLoaded = 0;
 	__gleTexEnviv = (PFNGLTEXENVIVPROC)gleIntGetProcAddress("glTexEnviv");
-	if(!TestPointer((const void*)__gleTexEnviv))
-	{
-		__gleTexEnviv = (PFNGLTEXENVIVPROC)gle_CoreStruct.gleVarTexEnviv;
-		if(!__gleTexEnviv) bIsLoaded = 0;
-	}
+	if(!__gleTexEnviv) bIsLoaded = 0;
 	__gleTexGend = (PFNGLTEXGENDPROC)gleIntGetProcAddress("glTexGend");
-	if(!TestPointer((const void*)__gleTexGend))
-	{
-		__gleTexGend = (PFNGLTEXGENDPROC)gle_CoreStruct.gleVarTexGend;
-		if(!__gleTexGend) bIsLoaded = 0;
-	}
+	if(!__gleTexGend) bIsLoaded = 0;
 	__gleTexGendv = (PFNGLTEXGENDVPROC)gleIntGetProcAddress("glTexGendv");
-	if(!TestPointer((const void*)__gleTexGendv))
-	{
-		__gleTexGendv = (PFNGLTEXGENDVPROC)gle_CoreStruct.gleVarTexGendv;
-		if(!__gleTexGendv) bIsLoaded = 0;
-	}
+	if(!__gleTexGendv) bIsLoaded = 0;
 	__gleTexGenf = (PFNGLTEXGENFPROC)gleIntGetProcAddress("glTexGenf");
-	if(!TestPointer((const void*)__gleTexGenf))
-	{
-		__gleTexGenf = (PFNGLTEXGENFPROC)gle_CoreStruct.gleVarTexGenf;
-		if(!__gleTexGenf) bIsLoaded = 0;
-	}
+	if(!__gleTexGenf) bIsLoaded = 0;
 	__gleTexGenfv = (PFNGLTEXGENFVPROC)gleIntGetProcAddress("glTexGenfv");
-	if(!TestPointer((const void*)__gleTexGenfv))
-	{
-		__gleTexGenfv = (PFNGLTEXGENFVPROC)gle_CoreStruct.gleVarTexGenfv;
-		if(!__gleTexGenfv) bIsLoaded = 0;
-	}
+	if(!__gleTexGenfv) bIsLoaded = 0;
 	__gleTexGeni = (PFNGLTEXGENIPROC)gleIntGetProcAddress("glTexGeni");
-	if(!TestPointer((const void*)__gleTexGeni))
-	{
-		__gleTexGeni = (PFNGLTEXGENIPROC)gle_CoreStruct.gleVarTexGeni;
-		if(!__gleTexGeni) bIsLoaded = 0;
-	}
+	if(!__gleTexGeni) bIsLoaded = 0;
 	__gleTexGeniv = (PFNGLTEXGENIVPROC)gleIntGetProcAddress("glTexGeniv");
-	if(!TestPointer((const void*)__gleTexGeniv))
-	{
-		__gleTexGeniv = (PFNGLTEXGENIVPROC)gle_CoreStruct.gleVarTexGeniv;
-		if(!__gleTexGeniv) bIsLoaded = 0;
-	}
+	if(!__gleTexGeniv) bIsLoaded = 0;
 	__gleFeedbackBuffer = (PFNGLFEEDBACKBUFFERPROC)gleIntGetProcAddress("glFeedbackBuffer");
-	if(!TestPointer((const void*)__gleFeedbackBuffer))
-	{
-		__gleFeedbackBuffer = (PFNGLFEEDBACKBUFFERPROC)gle_CoreStruct.gleVarFeedbackBuffer;
-		if(!__gleFeedbackBuffer) bIsLoaded = 0;
-	}
+	if(!__gleFeedbackBuffer) bIsLoaded = 0;
 	__gleSelectBuffer = (PFNGLSELECTBUFFERPROC)gleIntGetProcAddress("glSelectBuffer");
-	if(!TestPointer((const void*)__gleSelectBuffer))
-	{
-		__gleSelectBuffer = (PFNGLSELECTBUFFERPROC)gle_CoreStruct.gleVarSelectBuffer;
-		if(!__gleSelectBuffer) bIsLoaded = 0;
-	}
+	if(!__gleSelectBuffer) bIsLoaded = 0;
 	__gleRenderMode = (PFNGLRENDERMODEPROC)gleIntGetProcAddress("glRenderMode");
-	if(!TestPointer((const void*)__gleRenderMode))
-	{
-		__gleRenderMode = (PFNGLRENDERMODEPROC)gle_CoreStruct.gleVarRenderMode;
-		if(!__gleRenderMode) bIsLoaded = 0;
-	}
+	if(!__gleRenderMode) bIsLoaded = 0;
 	__gleInitNames = (PFNGLINITNAMESPROC)gleIntGetProcAddress("glInitNames");
-	if(!TestPointer((const void*)__gleInitNames))
-	{
-		__gleInitNames = (PFNGLINITNAMESPROC)gle_CoreStruct.gleVarInitNames;
-		if(!__gleInitNames) bIsLoaded = 0;
-	}
+	if(!__gleInitNames) bIsLoaded = 0;
 	__gleLoadName = (PFNGLLOADNAMEPROC)gleIntGetProcAddress("glLoadName");
-	if(!TestPointer((const void*)__gleLoadName))
-	{
-		__gleLoadName = (PFNGLLOADNAMEPROC)gle_CoreStruct.gleVarLoadName;
-		if(!__gleLoadName) bIsLoaded = 0;
-	}
+	if(!__gleLoadName) bIsLoaded = 0;
 	__glePassThrough = (PFNGLPASSTHROUGHPROC)gleIntGetProcAddress("glPassThrough");
-	if(!TestPointer((const void*)__glePassThrough))
-	{
-		__glePassThrough = (PFNGLPASSTHROUGHPROC)gle_CoreStruct.gleVarPassThrough;
-		if(!__glePassThrough) bIsLoaded = 0;
-	}
+	if(!__glePassThrough) bIsLoaded = 0;
 	__glePopName = (PFNGLPOPNAMEPROC)gleIntGetProcAddress("glPopName");
-	if(!TestPointer((const void*)__glePopName))
-	{
-		__glePopName = (PFNGLPOPNAMEPROC)gle_CoreStruct.gleVarPopName;
-		if(!__glePopName) bIsLoaded = 0;
-	}
+	if(!__glePopName) bIsLoaded = 0;
 	__glePushName = (PFNGLPUSHNAMEPROC)gleIntGetProcAddress("glPushName");
-	if(!TestPointer((const void*)__glePushName))
-	{
-		__glePushName = (PFNGLPUSHNAMEPROC)gle_CoreStruct.gleVarPushName;
-		if(!__glePushName) bIsLoaded = 0;
-	}
+	if(!__glePushName) bIsLoaded = 0;
 	__gleClearAccum = (PFNGLCLEARACCUMPROC)gleIntGetProcAddress("glClearAccum");
-	if(!TestPointer((const void*)__gleClearAccum))
-	{
-		__gleClearAccum = (PFNGLCLEARACCUMPROC)gle_CoreStruct.gleVarClearAccum;
-		if(!__gleClearAccum) bIsLoaded = 0;
-	}
+	if(!__gleClearAccum) bIsLoaded = 0;
 	__gleClearIndex = (PFNGLCLEARINDEXPROC)gleIntGetProcAddress("glClearIndex");
-	if(!TestPointer((const void*)__gleClearIndex))
-	{
-		__gleClearIndex = (PFNGLCLEARINDEXPROC)gle_CoreStruct.gleVarClearIndex;
-		if(!__gleClearIndex) bIsLoaded = 0;
-	}
+	if(!__gleClearIndex) bIsLoaded = 0;
 	__gleIndexMask = (PFNGLINDEXMASKPROC)gleIntGetProcAddress("glIndexMask");
-	if(!TestPointer((const void*)__gleIndexMask))
-	{
-		__gleIndexMask = (PFNGLINDEXMASKPROC)gle_CoreStruct.gleVarIndexMask;
-		if(!__gleIndexMask) bIsLoaded = 0;
-	}
+	if(!__gleIndexMask) bIsLoaded = 0;
 	__gleAccum = (PFNGLACCUMPROC)gleIntGetProcAddress("glAccum");
-	if(!TestPointer((const void*)__gleAccum))
-	{
-		__gleAccum = (PFNGLACCUMPROC)gle_CoreStruct.gleVarAccum;
-		if(!__gleAccum) bIsLoaded = 0;
-	}
+	if(!__gleAccum) bIsLoaded = 0;
 	__glePopAttrib = (PFNGLPOPATTRIBPROC)gleIntGetProcAddress("glPopAttrib");
-	if(!TestPointer((const void*)__glePopAttrib))
-	{
-		__glePopAttrib = (PFNGLPOPATTRIBPROC)gle_CoreStruct.gleVarPopAttrib;
-		if(!__glePopAttrib) bIsLoaded = 0;
-	}
+	if(!__glePopAttrib) bIsLoaded = 0;
 	__glePushAttrib = (PFNGLPUSHATTRIBPROC)gleIntGetProcAddress("glPushAttrib");
-	if(!TestPointer((const void*)__glePushAttrib))
-	{
-		__glePushAttrib = (PFNGLPUSHATTRIBPROC)gle_CoreStruct.gleVarPushAttrib;
-		if(!__glePushAttrib) bIsLoaded = 0;
-	}
+	if(!__glePushAttrib) bIsLoaded = 0;
 	__gleMap1d = (PFNGLMAP1DPROC)gleIntGetProcAddress("glMap1d");
-	if(!TestPointer((const void*)__gleMap1d))
-	{
-		__gleMap1d = (PFNGLMAP1DPROC)gle_CoreStruct.gleVarMap1d;
-		if(!__gleMap1d) bIsLoaded = 0;
-	}
+	if(!__gleMap1d) bIsLoaded = 0;
 	__gleMap1f = (PFNGLMAP1FPROC)gleIntGetProcAddress("glMap1f");
-	if(!TestPointer((const void*)__gleMap1f))
-	{
-		__gleMap1f = (PFNGLMAP1FPROC)gle_CoreStruct.gleVarMap1f;
-		if(!__gleMap1f) bIsLoaded = 0;
-	}
+	if(!__gleMap1f) bIsLoaded = 0;
 	__gleMap2d = (PFNGLMAP2DPROC)gleIntGetProcAddress("glMap2d");
-	if(!TestPointer((const void*)__gleMap2d))
-	{
-		__gleMap2d = (PFNGLMAP2DPROC)gle_CoreStruct.gleVarMap2d;
-		if(!__gleMap2d) bIsLoaded = 0;
-	}
+	if(!__gleMap2d) bIsLoaded = 0;
 	__gleMap2f = (PFNGLMAP2FPROC)gleIntGetProcAddress("glMap2f");
-	if(!TestPointer((const void*)__gleMap2f))
-	{
-		__gleMap2f = (PFNGLMAP2FPROC)gle_CoreStruct.gleVarMap2f;
-		if(!__gleMap2f) bIsLoaded = 0;
-	}
+	if(!__gleMap2f) bIsLoaded = 0;
 	__gleMapGrid1d = (PFNGLMAPGRID1DPROC)gleIntGetProcAddress("glMapGrid1d");
-	if(!TestPointer((const void*)__gleMapGrid1d))
-	{
-		__gleMapGrid1d = (PFNGLMAPGRID1DPROC)gle_CoreStruct.gleVarMapGrid1d;
-		if(!__gleMapGrid1d) bIsLoaded = 0;
-	}
+	if(!__gleMapGrid1d) bIsLoaded = 0;
 	__gleMapGrid1f = (PFNGLMAPGRID1FPROC)gleIntGetProcAddress("glMapGrid1f");
-	if(!TestPointer((const void*)__gleMapGrid1f))
-	{
-		__gleMapGrid1f = (PFNGLMAPGRID1FPROC)gle_CoreStruct.gleVarMapGrid1f;
-		if(!__gleMapGrid1f) bIsLoaded = 0;
-	}
+	if(!__gleMapGrid1f) bIsLoaded = 0;
 	__gleMapGrid2d = (PFNGLMAPGRID2DPROC)gleIntGetProcAddress("glMapGrid2d");
-	if(!TestPointer((const void*)__gleMapGrid2d))
-	{
-		__gleMapGrid2d = (PFNGLMAPGRID2DPROC)gle_CoreStruct.gleVarMapGrid2d;
-		if(!__gleMapGrid2d) bIsLoaded = 0;
-	}
+	if(!__gleMapGrid2d) bIsLoaded = 0;
 	__gleMapGrid2f = (PFNGLMAPGRID2FPROC)gleIntGetProcAddress("glMapGrid2f");
-	if(!TestPointer((const void*)__gleMapGrid2f))
-	{
-		__gleMapGrid2f = (PFNGLMAPGRID2FPROC)gle_CoreStruct.gleVarMapGrid2f;
-		if(!__gleMapGrid2f) bIsLoaded = 0;
-	}
+	if(!__gleMapGrid2f) bIsLoaded = 0;
 	__gleEvalCoord1d = (PFNGLEVALCOORD1DPROC)gleIntGetProcAddress("glEvalCoord1d");
-	if(!TestPointer((const void*)__gleEvalCoord1d))
-	{
-		__gleEvalCoord1d = (PFNGLEVALCOORD1DPROC)gle_CoreStruct.gleVarEvalCoord1d;
-		if(!__gleEvalCoord1d) bIsLoaded = 0;
-	}
+	if(!__gleEvalCoord1d) bIsLoaded = 0;
 	__gleEvalCoord1dv = (PFNGLEVALCOORD1DVPROC)gleIntGetProcAddress("glEvalCoord1dv");
-	if(!TestPointer((const void*)__gleEvalCoord1dv))
-	{
-		__gleEvalCoord1dv = (PFNGLEVALCOORD1DVPROC)gle_CoreStruct.gleVarEvalCoord1dv;
-		if(!__gleEvalCoord1dv) bIsLoaded = 0;
-	}
+	if(!__gleEvalCoord1dv) bIsLoaded = 0;
 	__gleEvalCoord1f = (PFNGLEVALCOORD1FPROC)gleIntGetProcAddress("glEvalCoord1f");
-	if(!TestPointer((const void*)__gleEvalCoord1f))
-	{
-		__gleEvalCoord1f = (PFNGLEVALCOORD1FPROC)gle_CoreStruct.gleVarEvalCoord1f;
-		if(!__gleEvalCoord1f) bIsLoaded = 0;
-	}
+	if(!__gleEvalCoord1f) bIsLoaded = 0;
 	__gleEvalCoord1fv = (PFNGLEVALCOORD1FVPROC)gleIntGetProcAddress("glEvalCoord1fv");
-	if(!TestPointer((const void*)__gleEvalCoord1fv))
-	{
-		__gleEvalCoord1fv = (PFNGLEVALCOORD1FVPROC)gle_CoreStruct.gleVarEvalCoord1fv;
-		if(!__gleEvalCoord1fv) bIsLoaded = 0;
-	}
+	if(!__gleEvalCoord1fv) bIsLoaded = 0;
 	__gleEvalCoord2d = (PFNGLEVALCOORD2DPROC)gleIntGetProcAddress("glEvalCoord2d");
-	if(!TestPointer((const void*)__gleEvalCoord2d))
-	{
-		__gleEvalCoord2d = (PFNGLEVALCOORD2DPROC)gle_CoreStruct.gleVarEvalCoord2d;
-		if(!__gleEvalCoord2d) bIsLoaded = 0;
-	}
+	if(!__gleEvalCoord2d) bIsLoaded = 0;
 	__gleEvalCoord2dv = (PFNGLEVALCOORD2DVPROC)gleIntGetProcAddress("glEvalCoord2dv");
-	if(!TestPointer((const void*)__gleEvalCoord2dv))
-	{
-		__gleEvalCoord2dv = (PFNGLEVALCOORD2DVPROC)gle_CoreStruct.gleVarEvalCoord2dv;
-		if(!__gleEvalCoord2dv) bIsLoaded = 0;
-	}
+	if(!__gleEvalCoord2dv) bIsLoaded = 0;
 	__gleEvalCoord2f = (PFNGLEVALCOORD2FPROC)gleIntGetProcAddress("glEvalCoord2f");
-	if(!TestPointer((const void*)__gleEvalCoord2f))
-	{
-		__gleEvalCoord2f = (PFNGLEVALCOORD2FPROC)gle_CoreStruct.gleVarEvalCoord2f;
-		if(!__gleEvalCoord2f) bIsLoaded = 0;
-	}
+	if(!__gleEvalCoord2f) bIsLoaded = 0;
 	__gleEvalCoord2fv = (PFNGLEVALCOORD2FVPROC)gleIntGetProcAddress("glEvalCoord2fv");
-	if(!TestPointer((const void*)__gleEvalCoord2fv))
-	{
-		__gleEvalCoord2fv = (PFNGLEVALCOORD2FVPROC)gle_CoreStruct.gleVarEvalCoord2fv;
-		if(!__gleEvalCoord2fv) bIsLoaded = 0;
-	}
+	if(!__gleEvalCoord2fv) bIsLoaded = 0;
 	__gleEvalMesh1 = (PFNGLEVALMESH1PROC)gleIntGetProcAddress("glEvalMesh1");
-	if(!TestPointer((const void*)__gleEvalMesh1))
-	{
-		__gleEvalMesh1 = (PFNGLEVALMESH1PROC)gle_CoreStruct.gleVarEvalMesh1;
-		if(!__gleEvalMesh1) bIsLoaded = 0;
-	}
+	if(!__gleEvalMesh1) bIsLoaded = 0;
 	__gleEvalPoint1 = (PFNGLEVALPOINT1PROC)gleIntGetProcAddress("glEvalPoint1");
-	if(!TestPointer((const void*)__gleEvalPoint1))
-	{
-		__gleEvalPoint1 = (PFNGLEVALPOINT1PROC)gle_CoreStruct.gleVarEvalPoint1;
-		if(!__gleEvalPoint1) bIsLoaded = 0;
-	}
+	if(!__gleEvalPoint1) bIsLoaded = 0;
 	__gleEvalMesh2 = (PFNGLEVALMESH2PROC)gleIntGetProcAddress("glEvalMesh2");
-	if(!TestPointer((const void*)__gleEvalMesh2))
-	{
-		__gleEvalMesh2 = (PFNGLEVALMESH2PROC)gle_CoreStruct.gleVarEvalMesh2;
-		if(!__gleEvalMesh2) bIsLoaded = 0;
-	}
+	if(!__gleEvalMesh2) bIsLoaded = 0;
 	__gleEvalPoint2 = (PFNGLEVALPOINT2PROC)gleIntGetProcAddress("glEvalPoint2");
-	if(!TestPointer((const void*)__gleEvalPoint2))
-	{
-		__gleEvalPoint2 = (PFNGLEVALPOINT2PROC)gle_CoreStruct.gleVarEvalPoint2;
-		if(!__gleEvalPoint2) bIsLoaded = 0;
-	}
+	if(!__gleEvalPoint2) bIsLoaded = 0;
 	__gleAlphaFunc = (PFNGLALPHAFUNCPROC)gleIntGetProcAddress("glAlphaFunc");
-	if(!TestPointer((const void*)__gleAlphaFunc))
-	{
-		__gleAlphaFunc = (PFNGLALPHAFUNCPROC)gle_CoreStruct.gleVarAlphaFunc;
-		if(!__gleAlphaFunc) bIsLoaded = 0;
-	}
+	if(!__gleAlphaFunc) bIsLoaded = 0;
 	__glePixelZoom = (PFNGLPIXELZOOMPROC)gleIntGetProcAddress("glPixelZoom");
-	if(!TestPointer((const void*)__glePixelZoom))
-	{
-		__glePixelZoom = (PFNGLPIXELZOOMPROC)gle_CoreStruct.gleVarPixelZoom;
-		if(!__glePixelZoom) bIsLoaded = 0;
-	}
+	if(!__glePixelZoom) bIsLoaded = 0;
 	__glePixelTransferf = (PFNGLPIXELTRANSFERFPROC)gleIntGetProcAddress("glPixelTransferf");
-	if(!TestPointer((const void*)__glePixelTransferf))
-	{
-		__glePixelTransferf = (PFNGLPIXELTRANSFERFPROC)gle_CoreStruct.gleVarPixelTransferf;
-		if(!__glePixelTransferf) bIsLoaded = 0;
-	}
+	if(!__glePixelTransferf) bIsLoaded = 0;
 	__glePixelTransferi = (PFNGLPIXELTRANSFERIPROC)gleIntGetProcAddress("glPixelTransferi");
-	if(!TestPointer((const void*)__glePixelTransferi))
-	{
-		__glePixelTransferi = (PFNGLPIXELTRANSFERIPROC)gle_CoreStruct.gleVarPixelTransferi;
-		if(!__glePixelTransferi) bIsLoaded = 0;
-	}
+	if(!__glePixelTransferi) bIsLoaded = 0;
 	__glePixelMapfv = (PFNGLPIXELMAPFVPROC)gleIntGetProcAddress("glPixelMapfv");
-	if(!TestPointer((const void*)__glePixelMapfv))
-	{
-		__glePixelMapfv = (PFNGLPIXELMAPFVPROC)gle_CoreStruct.gleVarPixelMapfv;
-		if(!__glePixelMapfv) bIsLoaded = 0;
-	}
+	if(!__glePixelMapfv) bIsLoaded = 0;
 	__glePixelMapuiv = (PFNGLPIXELMAPUIVPROC)gleIntGetProcAddress("glPixelMapuiv");
-	if(!TestPointer((const void*)__glePixelMapuiv))
-	{
-		__glePixelMapuiv = (PFNGLPIXELMAPUIVPROC)gle_CoreStruct.gleVarPixelMapuiv;
-		if(!__glePixelMapuiv) bIsLoaded = 0;
-	}
+	if(!__glePixelMapuiv) bIsLoaded = 0;
 	__glePixelMapusv = (PFNGLPIXELMAPUSVPROC)gleIntGetProcAddress("glPixelMapusv");
-	if(!TestPointer((const void*)__glePixelMapusv))
-	{
-		__glePixelMapusv = (PFNGLPIXELMAPUSVPROC)gle_CoreStruct.gleVarPixelMapusv;
-		if(!__glePixelMapusv) bIsLoaded = 0;
-	}
+	if(!__glePixelMapusv) bIsLoaded = 0;
 	__gleCopyPixels = (PFNGLCOPYPIXELSPROC)gleIntGetProcAddress("glCopyPixels");
-	if(!TestPointer((const void*)__gleCopyPixels))
-	{
-		__gleCopyPixels = (PFNGLCOPYPIXELSPROC)gle_CoreStruct.gleVarCopyPixels;
-		if(!__gleCopyPixels) bIsLoaded = 0;
-	}
+	if(!__gleCopyPixels) bIsLoaded = 0;
 	__gleDrawPixels = (PFNGLDRAWPIXELSPROC)gleIntGetProcAddress("glDrawPixels");
-	if(!TestPointer((const void*)__gleDrawPixels))
-	{
-		__gleDrawPixels = (PFNGLDRAWPIXELSPROC)gle_CoreStruct.gleVarDrawPixels;
-		if(!__gleDrawPixels) bIsLoaded = 0;
-	}
+	if(!__gleDrawPixels) bIsLoaded = 0;
 	__gleGetClipPlane = (PFNGLGETCLIPPLANEPROC)gleIntGetProcAddress("glGetClipPlane");
-	if(!TestPointer((const void*)__gleGetClipPlane))
-	{
-		__gleGetClipPlane = (PFNGLGETCLIPPLANEPROC)gle_CoreStruct.gleVarGetClipPlane;
-		if(!__gleGetClipPlane) bIsLoaded = 0;
-	}
+	if(!__gleGetClipPlane) bIsLoaded = 0;
 	__gleGetLightfv = (PFNGLGETLIGHTFVPROC)gleIntGetProcAddress("glGetLightfv");
-	if(!TestPointer((const void*)__gleGetLightfv))
-	{
-		__gleGetLightfv = (PFNGLGETLIGHTFVPROC)gle_CoreStruct.gleVarGetLightfv;
-		if(!__gleGetLightfv) bIsLoaded = 0;
-	}
+	if(!__gleGetLightfv) bIsLoaded = 0;
 	__gleGetLightiv = (PFNGLGETLIGHTIVPROC)gleIntGetProcAddress("glGetLightiv");
-	if(!TestPointer((const void*)__gleGetLightiv))
-	{
-		__gleGetLightiv = (PFNGLGETLIGHTIVPROC)gle_CoreStruct.gleVarGetLightiv;
-		if(!__gleGetLightiv) bIsLoaded = 0;
-	}
+	if(!__gleGetLightiv) bIsLoaded = 0;
 	__gleGetMapdv = (PFNGLGETMAPDVPROC)gleIntGetProcAddress("glGetMapdv");
-	if(!TestPointer((const void*)__gleGetMapdv))
-	{
-		__gleGetMapdv = (PFNGLGETMAPDVPROC)gle_CoreStruct.gleVarGetMapdv;
-		if(!__gleGetMapdv) bIsLoaded = 0;
-	}
+	if(!__gleGetMapdv) bIsLoaded = 0;
 	__gleGetMapfv = (PFNGLGETMAPFVPROC)gleIntGetProcAddress("glGetMapfv");
-	if(!TestPointer((const void*)__gleGetMapfv))
-	{
-		__gleGetMapfv = (PFNGLGETMAPFVPROC)gle_CoreStruct.gleVarGetMapfv;
-		if(!__gleGetMapfv) bIsLoaded = 0;
-	}
+	if(!__gleGetMapfv) bIsLoaded = 0;
 	__gleGetMapiv = (PFNGLGETMAPIVPROC)gleIntGetProcAddress("glGetMapiv");
-	if(!TestPointer((const void*)__gleGetMapiv))
-	{
-		__gleGetMapiv = (PFNGLGETMAPIVPROC)gle_CoreStruct.gleVarGetMapiv;
-		if(!__gleGetMapiv) bIsLoaded = 0;
-	}
+	if(!__gleGetMapiv) bIsLoaded = 0;
 	__gleGetMaterialfv = (PFNGLGETMATERIALFVPROC)gleIntGetProcAddress("glGetMaterialfv");
-	if(!TestPointer((const void*)__gleGetMaterialfv))
-	{
-		__gleGetMaterialfv = (PFNGLGETMATERIALFVPROC)gle_CoreStruct.gleVarGetMaterialfv;
-		if(!__gleGetMaterialfv) bIsLoaded = 0;
-	}
+	if(!__gleGetMaterialfv) bIsLoaded = 0;
 	__gleGetMaterialiv = (PFNGLGETMATERIALIVPROC)gleIntGetProcAddress("glGetMaterialiv");
-	if(!TestPointer((const void*)__gleGetMaterialiv))
-	{
-		__gleGetMaterialiv = (PFNGLGETMATERIALIVPROC)gle_CoreStruct.gleVarGetMaterialiv;
-		if(!__gleGetMaterialiv) bIsLoaded = 0;
-	}
+	if(!__gleGetMaterialiv) bIsLoaded = 0;
 	__gleGetPixelMapfv = (PFNGLGETPIXELMAPFVPROC)gleIntGetProcAddress("glGetPixelMapfv");
-	if(!TestPointer((const void*)__gleGetPixelMapfv))
-	{
-		__gleGetPixelMapfv = (PFNGLGETPIXELMAPFVPROC)gle_CoreStruct.gleVarGetPixelMapfv;
-		if(!__gleGetPixelMapfv) bIsLoaded = 0;
-	}
+	if(!__gleGetPixelMapfv) bIsLoaded = 0;
 	__gleGetPixelMapuiv = (PFNGLGETPIXELMAPUIVPROC)gleIntGetProcAddress("glGetPixelMapuiv");
-	if(!TestPointer((const void*)__gleGetPixelMapuiv))
-	{
-		__gleGetPixelMapuiv = (PFNGLGETPIXELMAPUIVPROC)gle_CoreStruct.gleVarGetPixelMapuiv;
-		if(!__gleGetPixelMapuiv) bIsLoaded = 0;
-	}
+	if(!__gleGetPixelMapuiv) bIsLoaded = 0;
 	__gleGetPixelMapusv = (PFNGLGETPIXELMAPUSVPROC)gleIntGetProcAddress("glGetPixelMapusv");
-	if(!TestPointer((const void*)__gleGetPixelMapusv))
-	{
-		__gleGetPixelMapusv = (PFNGLGETPIXELMAPUSVPROC)gle_CoreStruct.gleVarGetPixelMapusv;
-		if(!__gleGetPixelMapusv) bIsLoaded = 0;
-	}
+	if(!__gleGetPixelMapusv) bIsLoaded = 0;
 	__gleGetPolygonStipple = (PFNGLGETPOLYGONSTIPPLEPROC)gleIntGetProcAddress("glGetPolygonStipple");
-	if(!TestPointer((const void*)__gleGetPolygonStipple))
-	{
-		__gleGetPolygonStipple = (PFNGLGETPOLYGONSTIPPLEPROC)gle_CoreStruct.gleVarGetPolygonStipple;
-		if(!__gleGetPolygonStipple) bIsLoaded = 0;
-	}
+	if(!__gleGetPolygonStipple) bIsLoaded = 0;
 	__gleGetTexEnvfv = (PFNGLGETTEXENVFVPROC)gleIntGetProcAddress("glGetTexEnvfv");
-	if(!TestPointer((const void*)__gleGetTexEnvfv))
-	{
-		__gleGetTexEnvfv = (PFNGLGETTEXENVFVPROC)gle_CoreStruct.gleVarGetTexEnvfv;
-		if(!__gleGetTexEnvfv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexEnvfv) bIsLoaded = 0;
 	__gleGetTexEnviv = (PFNGLGETTEXENVIVPROC)gleIntGetProcAddress("glGetTexEnviv");
-	if(!TestPointer((const void*)__gleGetTexEnviv))
-	{
-		__gleGetTexEnviv = (PFNGLGETTEXENVIVPROC)gle_CoreStruct.gleVarGetTexEnviv;
-		if(!__gleGetTexEnviv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexEnviv) bIsLoaded = 0;
 	__gleGetTexGendv = (PFNGLGETTEXGENDVPROC)gleIntGetProcAddress("glGetTexGendv");
-	if(!TestPointer((const void*)__gleGetTexGendv))
-	{
-		__gleGetTexGendv = (PFNGLGETTEXGENDVPROC)gle_CoreStruct.gleVarGetTexGendv;
-		if(!__gleGetTexGendv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexGendv) bIsLoaded = 0;
 	__gleGetTexGenfv = (PFNGLGETTEXGENFVPROC)gleIntGetProcAddress("glGetTexGenfv");
-	if(!TestPointer((const void*)__gleGetTexGenfv))
-	{
-		__gleGetTexGenfv = (PFNGLGETTEXGENFVPROC)gle_CoreStruct.gleVarGetTexGenfv;
-		if(!__gleGetTexGenfv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexGenfv) bIsLoaded = 0;
 	__gleGetTexGeniv = (PFNGLGETTEXGENIVPROC)gleIntGetProcAddress("glGetTexGeniv");
-	if(!TestPointer((const void*)__gleGetTexGeniv))
-	{
-		__gleGetTexGeniv = (PFNGLGETTEXGENIVPROC)gle_CoreStruct.gleVarGetTexGeniv;
-		if(!__gleGetTexGeniv) bIsLoaded = 0;
-	}
+	if(!__gleGetTexGeniv) bIsLoaded = 0;
 	__gleIsList = (PFNGLISLISTPROC)gleIntGetProcAddress("glIsList");
-	if(!TestPointer((const void*)__gleIsList))
-	{
-		__gleIsList = (PFNGLISLISTPROC)gle_CoreStruct.gleVarIsList;
-		if(!__gleIsList) bIsLoaded = 0;
-	}
+	if(!__gleIsList) bIsLoaded = 0;
 	__gleFrustum = (PFNGLFRUSTUMPROC)gleIntGetProcAddress("glFrustum");
-	if(!TestPointer((const void*)__gleFrustum))
-	{
-		__gleFrustum = (PFNGLFRUSTUMPROC)gle_CoreStruct.gleVarFrustum;
-		if(!__gleFrustum) bIsLoaded = 0;
-	}
+	if(!__gleFrustum) bIsLoaded = 0;
 	__gleLoadIdentity = (PFNGLLOADIDENTITYPROC)gleIntGetProcAddress("glLoadIdentity");
-	if(!TestPointer((const void*)__gleLoadIdentity))
-	{
-		__gleLoadIdentity = (PFNGLLOADIDENTITYPROC)gle_CoreStruct.gleVarLoadIdentity;
-		if(!__gleLoadIdentity) bIsLoaded = 0;
-	}
+	if(!__gleLoadIdentity) bIsLoaded = 0;
 	__gleLoadMatrixf = (PFNGLLOADMATRIXFPROC)gleIntGetProcAddress("glLoadMatrixf");
-	if(!TestPointer((const void*)__gleLoadMatrixf))
-	{
-		__gleLoadMatrixf = (PFNGLLOADMATRIXFPROC)gle_CoreStruct.gleVarLoadMatrixf;
-		if(!__gleLoadMatrixf) bIsLoaded = 0;
-	}
+	if(!__gleLoadMatrixf) bIsLoaded = 0;
 	__gleLoadMatrixd = (PFNGLLOADMATRIXDPROC)gleIntGetProcAddress("glLoadMatrixd");
-	if(!TestPointer((const void*)__gleLoadMatrixd))
-	{
-		__gleLoadMatrixd = (PFNGLLOADMATRIXDPROC)gle_CoreStruct.gleVarLoadMatrixd;
-		if(!__gleLoadMatrixd) bIsLoaded = 0;
-	}
+	if(!__gleLoadMatrixd) bIsLoaded = 0;
 	__gleMatrixMode = (PFNGLMATRIXMODEPROC)gleIntGetProcAddress("glMatrixMode");
-	if(!TestPointer((const void*)__gleMatrixMode))
-	{
-		__gleMatrixMode = (PFNGLMATRIXMODEPROC)gle_CoreStruct.gleVarMatrixMode;
-		if(!__gleMatrixMode) bIsLoaded = 0;
-	}
+	if(!__gleMatrixMode) bIsLoaded = 0;
 	__gleMultMatrixf = (PFNGLMULTMATRIXFPROC)gleIntGetProcAddress("glMultMatrixf");
-	if(!TestPointer((const void*)__gleMultMatrixf))
-	{
-		__gleMultMatrixf = (PFNGLMULTMATRIXFPROC)gle_CoreStruct.gleVarMultMatrixf;
-		if(!__gleMultMatrixf) bIsLoaded = 0;
-	}
+	if(!__gleMultMatrixf) bIsLoaded = 0;
 	__gleMultMatrixd = (PFNGLMULTMATRIXDPROC)gleIntGetProcAddress("glMultMatrixd");
-	if(!TestPointer((const void*)__gleMultMatrixd))
-	{
-		__gleMultMatrixd = (PFNGLMULTMATRIXDPROC)gle_CoreStruct.gleVarMultMatrixd;
-		if(!__gleMultMatrixd) bIsLoaded = 0;
-	}
+	if(!__gleMultMatrixd) bIsLoaded = 0;
 	__gleOrtho = (PFNGLORTHOPROC)gleIntGetProcAddress("glOrtho");
-	if(!TestPointer((const void*)__gleOrtho))
-	{
-		__gleOrtho = (PFNGLORTHOPROC)gle_CoreStruct.gleVarOrtho;
-		if(!__gleOrtho) bIsLoaded = 0;
-	}
+	if(!__gleOrtho) bIsLoaded = 0;
 	__glePopMatrix = (PFNGLPOPMATRIXPROC)gleIntGetProcAddress("glPopMatrix");
-	if(!TestPointer((const void*)__glePopMatrix))
-	{
-		__glePopMatrix = (PFNGLPOPMATRIXPROC)gle_CoreStruct.gleVarPopMatrix;
-		if(!__glePopMatrix) bIsLoaded = 0;
-	}
+	if(!__glePopMatrix) bIsLoaded = 0;
 	__glePushMatrix = (PFNGLPUSHMATRIXPROC)gleIntGetProcAddress("glPushMatrix");
-	if(!TestPointer((const void*)__glePushMatrix))
-	{
-		__glePushMatrix = (PFNGLPUSHMATRIXPROC)gle_CoreStruct.gleVarPushMatrix;
-		if(!__glePushMatrix) bIsLoaded = 0;
-	}
+	if(!__glePushMatrix) bIsLoaded = 0;
 	__gleRotated = (PFNGLROTATEDPROC)gleIntGetProcAddress("glRotated");
-	if(!TestPointer((const void*)__gleRotated))
-	{
-		__gleRotated = (PFNGLROTATEDPROC)gle_CoreStruct.gleVarRotated;
-		if(!__gleRotated) bIsLoaded = 0;
-	}
+	if(!__gleRotated) bIsLoaded = 0;
 	__gleRotatef = (PFNGLROTATEFPROC)gleIntGetProcAddress("glRotatef");
-	if(!TestPointer((const void*)__gleRotatef))
-	{
-		__gleRotatef = (PFNGLROTATEFPROC)gle_CoreStruct.gleVarRotatef;
-		if(!__gleRotatef) bIsLoaded = 0;
-	}
+	if(!__gleRotatef) bIsLoaded = 0;
 	__gleScaled = (PFNGLSCALEDPROC)gleIntGetProcAddress("glScaled");
-	if(!TestPointer((const void*)__gleScaled))
-	{
-		__gleScaled = (PFNGLSCALEDPROC)gle_CoreStruct.gleVarScaled;
-		if(!__gleScaled) bIsLoaded = 0;
-	}
+	if(!__gleScaled) bIsLoaded = 0;
 	__gleScalef = (PFNGLSCALEFPROC)gleIntGetProcAddress("glScalef");
-	if(!TestPointer((const void*)__gleScalef))
-	{
-		__gleScalef = (PFNGLSCALEFPROC)gle_CoreStruct.gleVarScalef;
-		if(!__gleScalef) bIsLoaded = 0;
-	}
+	if(!__gleScalef) bIsLoaded = 0;
 	__gleTranslated = (PFNGLTRANSLATEDPROC)gleIntGetProcAddress("glTranslated");
-	if(!TestPointer((const void*)__gleTranslated))
-	{
-		__gleTranslated = (PFNGLTRANSLATEDPROC)gle_CoreStruct.gleVarTranslated;
-		if(!__gleTranslated) bIsLoaded = 0;
-	}
+	if(!__gleTranslated) bIsLoaded = 0;
 	__gleTranslatef = (PFNGLTRANSLATEFPROC)gleIntGetProcAddress("glTranslatef");
-	if(!TestPointer((const void*)__gleTranslatef))
-	{
-		__gleTranslatef = (PFNGLTRANSLATEFPROC)gle_CoreStruct.gleVarTranslatef;
-		if(!__gleTranslatef) bIsLoaded = 0;
-	}
+	if(!__gleTranslatef) bIsLoaded = 0;
 	__gleArrayElement = (PFNGLARRAYELEMENTPROC)gleIntGetProcAddress("glArrayElement");
-	if(!TestPointer((const void*)__gleArrayElement))
-	{
-		__gleArrayElement = (PFNGLARRAYELEMENTPROC)gle_CoreStruct.gleVarArrayElement;
-		if(!__gleArrayElement) bIsLoaded = 0;
-	}
+	if(!__gleArrayElement) bIsLoaded = 0;
 	__gleColorPointer = (PFNGLCOLORPOINTERPROC)gleIntGetProcAddress("glColorPointer");
-	if(!TestPointer((const void*)__gleColorPointer))
-	{
-		__gleColorPointer = (PFNGLCOLORPOINTERPROC)gle_CoreStruct.gleVarColorPointer;
-		if(!__gleColorPointer) bIsLoaded = 0;
-	}
+	if(!__gleColorPointer) bIsLoaded = 0;
 	__gleDisableClientState = (PFNGLDISABLECLIENTSTATEPROC)gleIntGetProcAddress("glDisableClientState");
-	if(!TestPointer((const void*)__gleDisableClientState))
-	{
-		__gleDisableClientState = (PFNGLDISABLECLIENTSTATEPROC)gle_CoreStruct.gleVarDisableClientState;
-		if(!__gleDisableClientState) bIsLoaded = 0;
-	}
+	if(!__gleDisableClientState) bIsLoaded = 0;
 	__gleEdgeFlagPointer = (PFNGLEDGEFLAGPOINTERPROC)gleIntGetProcAddress("glEdgeFlagPointer");
-	if(!TestPointer((const void*)__gleEdgeFlagPointer))
-	{
-		__gleEdgeFlagPointer = (PFNGLEDGEFLAGPOINTERPROC)gle_CoreStruct.gleVarEdgeFlagPointer;
-		if(!__gleEdgeFlagPointer) bIsLoaded = 0;
-	}
+	if(!__gleEdgeFlagPointer) bIsLoaded = 0;
 	__gleEnableClientState = (PFNGLENABLECLIENTSTATEPROC)gleIntGetProcAddress("glEnableClientState");
-	if(!TestPointer((const void*)__gleEnableClientState))
-	{
-		__gleEnableClientState = (PFNGLENABLECLIENTSTATEPROC)gle_CoreStruct.gleVarEnableClientState;
-		if(!__gleEnableClientState) bIsLoaded = 0;
-	}
+	if(!__gleEnableClientState) bIsLoaded = 0;
 	__gleIndexPointer = (PFNGLINDEXPOINTERPROC)gleIntGetProcAddress("glIndexPointer");
-	if(!TestPointer((const void*)__gleIndexPointer))
-	{
-		__gleIndexPointer = (PFNGLINDEXPOINTERPROC)gle_CoreStruct.gleVarIndexPointer;
-		if(!__gleIndexPointer) bIsLoaded = 0;
-	}
+	if(!__gleIndexPointer) bIsLoaded = 0;
 	__gleInterleavedArrays = (PFNGLINTERLEAVEDARRAYSPROC)gleIntGetProcAddress("glInterleavedArrays");
-	if(!TestPointer((const void*)__gleInterleavedArrays))
-	{
-		__gleInterleavedArrays = (PFNGLINTERLEAVEDARRAYSPROC)gle_CoreStruct.gleVarInterleavedArrays;
-		if(!__gleInterleavedArrays) bIsLoaded = 0;
-	}
+	if(!__gleInterleavedArrays) bIsLoaded = 0;
 	__gleNormalPointer = (PFNGLNORMALPOINTERPROC)gleIntGetProcAddress("glNormalPointer");
-	if(!TestPointer((const void*)__gleNormalPointer))
-	{
-		__gleNormalPointer = (PFNGLNORMALPOINTERPROC)gle_CoreStruct.gleVarNormalPointer;
-		if(!__gleNormalPointer) bIsLoaded = 0;
-	}
+	if(!__gleNormalPointer) bIsLoaded = 0;
 	__gleTexCoordPointer = (PFNGLTEXCOORDPOINTERPROC)gleIntGetProcAddress("glTexCoordPointer");
-	if(!TestPointer((const void*)__gleTexCoordPointer))
-	{
-		__gleTexCoordPointer = (PFNGLTEXCOORDPOINTERPROC)gle_CoreStruct.gleVarTexCoordPointer;
-		if(!__gleTexCoordPointer) bIsLoaded = 0;
-	}
+	if(!__gleTexCoordPointer) bIsLoaded = 0;
 	__gleVertexPointer = (PFNGLVERTEXPOINTERPROC)gleIntGetProcAddress("glVertexPointer");
-	if(!TestPointer((const void*)__gleVertexPointer))
-	{
-		__gleVertexPointer = (PFNGLVERTEXPOINTERPROC)gle_CoreStruct.gleVarVertexPointer;
-		if(!__gleVertexPointer) bIsLoaded = 0;
-	}
+	if(!__gleVertexPointer) bIsLoaded = 0;
 	__gleAreTexturesResident = (PFNGLARETEXTURESRESIDENTPROC)gleIntGetProcAddress("glAreTexturesResident");
-	if(!TestPointer((const void*)__gleAreTexturesResident))
-	{
-		__gleAreTexturesResident = (PFNGLARETEXTURESRESIDENTPROC)gle_CoreStruct.gleVarAreTexturesResident;
-		if(!__gleAreTexturesResident) bIsLoaded = 0;
-	}
+	if(!__gleAreTexturesResident) bIsLoaded = 0;
 	__glePrioritizeTextures = (PFNGLPRIORITIZETEXTURESPROC)gleIntGetProcAddress("glPrioritizeTextures");
-	if(!TestPointer((const void*)__glePrioritizeTextures))
-	{
-		__glePrioritizeTextures = (PFNGLPRIORITIZETEXTURESPROC)gle_CoreStruct.gleVarPrioritizeTextures;
-		if(!__glePrioritizeTextures) bIsLoaded = 0;
-	}
+	if(!__glePrioritizeTextures) bIsLoaded = 0;
 	__glePopClientAttrib = (PFNGLPOPCLIENTATTRIBPROC)gleIntGetProcAddress("glPopClientAttrib");
-	if(!TestPointer((const void*)__glePopClientAttrib))
-	{
-		__glePopClientAttrib = (PFNGLPOPCLIENTATTRIBPROC)gle_CoreStruct.gleVarPopClientAttrib;
-		if(!__glePopClientAttrib) bIsLoaded = 0;
-	}
+	if(!__glePopClientAttrib) bIsLoaded = 0;
 	__glePushClientAttrib = (PFNGLPUSHCLIENTATTRIBPROC)gleIntGetProcAddress("glPushClientAttrib");
-	if(!TestPointer((const void*)__glePushClientAttrib))
-	{
-		__glePushClientAttrib = (PFNGLPUSHCLIENTATTRIBPROC)gle_CoreStruct.gleVarPushClientAttrib;
-		if(!__glePushClientAttrib) bIsLoaded = 0;
-	}
+	if(!__glePushClientAttrib) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -14943,197 +12860,69 @@ static int gleIntLoadCore_1_2_Base()
 {
 	int bIsLoaded = gleIntLoadCore_1_2_Version_3_1();
 	__gleColorTable = (PFNGLCOLORTABLEPROC)gleIntGetProcAddress("glColorTable");
-	if(!TestPointer((const void*)__gleColorTable))
-	{
-		__gleColorTable = (PFNGLCOLORTABLEPROC)gle_CoreStruct.gleVarColorTable;
-		if(!__gleColorTable) bIsLoaded = 0;
-	}
+	if(!__gleColorTable) bIsLoaded = 0;
 	__gleColorTableParameterfv = (PFNGLCOLORTABLEPARAMETERFVPROC)gleIntGetProcAddress("glColorTableParameterfv");
-	if(!TestPointer((const void*)__gleColorTableParameterfv))
-	{
-		__gleColorTableParameterfv = (PFNGLCOLORTABLEPARAMETERFVPROC)gle_CoreStruct.gleVarColorTableParameterfv;
-		if(!__gleColorTableParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleColorTableParameterfv) bIsLoaded = 0;
 	__gleColorTableParameteriv = (PFNGLCOLORTABLEPARAMETERIVPROC)gleIntGetProcAddress("glColorTableParameteriv");
-	if(!TestPointer((const void*)__gleColorTableParameteriv))
-	{
-		__gleColorTableParameteriv = (PFNGLCOLORTABLEPARAMETERIVPROC)gle_CoreStruct.gleVarColorTableParameteriv;
-		if(!__gleColorTableParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleColorTableParameteriv) bIsLoaded = 0;
 	__gleCopyColorTable = (PFNGLCOPYCOLORTABLEPROC)gleIntGetProcAddress("glCopyColorTable");
-	if(!TestPointer((const void*)__gleCopyColorTable))
-	{
-		__gleCopyColorTable = (PFNGLCOPYCOLORTABLEPROC)gle_CoreStruct.gleVarCopyColorTable;
-		if(!__gleCopyColorTable) bIsLoaded = 0;
-	}
+	if(!__gleCopyColorTable) bIsLoaded = 0;
 	__gleGetColorTable = (PFNGLGETCOLORTABLEPROC)gleIntGetProcAddress("glGetColorTable");
-	if(!TestPointer((const void*)__gleGetColorTable))
-	{
-		__gleGetColorTable = (PFNGLGETCOLORTABLEPROC)gle_CoreStruct.gleVarGetColorTable;
-		if(!__gleGetColorTable) bIsLoaded = 0;
-	}
+	if(!__gleGetColorTable) bIsLoaded = 0;
 	__gleGetColorTableParameterfv = (PFNGLGETCOLORTABLEPARAMETERFVPROC)gleIntGetProcAddress("glGetColorTableParameterfv");
-	if(!TestPointer((const void*)__gleGetColorTableParameterfv))
-	{
-		__gleGetColorTableParameterfv = (PFNGLGETCOLORTABLEPARAMETERFVPROC)gle_CoreStruct.gleVarGetColorTableParameterfv;
-		if(!__gleGetColorTableParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleGetColorTableParameterfv) bIsLoaded = 0;
 	__gleGetColorTableParameteriv = (PFNGLGETCOLORTABLEPARAMETERIVPROC)gleIntGetProcAddress("glGetColorTableParameteriv");
-	if(!TestPointer((const void*)__gleGetColorTableParameteriv))
-	{
-		__gleGetColorTableParameteriv = (PFNGLGETCOLORTABLEPARAMETERIVPROC)gle_CoreStruct.gleVarGetColorTableParameteriv;
-		if(!__gleGetColorTableParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetColorTableParameteriv) bIsLoaded = 0;
 	__gleColorSubTable = (PFNGLCOLORSUBTABLEPROC)gleIntGetProcAddress("glColorSubTable");
-	if(!TestPointer((const void*)__gleColorSubTable))
-	{
-		__gleColorSubTable = (PFNGLCOLORSUBTABLEPROC)gle_CoreStruct.gleVarColorSubTable;
-		if(!__gleColorSubTable) bIsLoaded = 0;
-	}
+	if(!__gleColorSubTable) bIsLoaded = 0;
 	__gleCopyColorSubTable = (PFNGLCOPYCOLORSUBTABLEPROC)gleIntGetProcAddress("glCopyColorSubTable");
-	if(!TestPointer((const void*)__gleCopyColorSubTable))
-	{
-		__gleCopyColorSubTable = (PFNGLCOPYCOLORSUBTABLEPROC)gle_CoreStruct.gleVarCopyColorSubTable;
-		if(!__gleCopyColorSubTable) bIsLoaded = 0;
-	}
+	if(!__gleCopyColorSubTable) bIsLoaded = 0;
 	__gleConvolutionFilter1D = (PFNGLCONVOLUTIONFILTER1DPROC)gleIntGetProcAddress("glConvolutionFilter1D");
-	if(!TestPointer((const void*)__gleConvolutionFilter1D))
-	{
-		__gleConvolutionFilter1D = (PFNGLCONVOLUTIONFILTER1DPROC)gle_CoreStruct.gleVarConvolutionFilter1D;
-		if(!__gleConvolutionFilter1D) bIsLoaded = 0;
-	}
+	if(!__gleConvolutionFilter1D) bIsLoaded = 0;
 	__gleConvolutionFilter2D = (PFNGLCONVOLUTIONFILTER2DPROC)gleIntGetProcAddress("glConvolutionFilter2D");
-	if(!TestPointer((const void*)__gleConvolutionFilter2D))
-	{
-		__gleConvolutionFilter2D = (PFNGLCONVOLUTIONFILTER2DPROC)gle_CoreStruct.gleVarConvolutionFilter2D;
-		if(!__gleConvolutionFilter2D) bIsLoaded = 0;
-	}
+	if(!__gleConvolutionFilter2D) bIsLoaded = 0;
 	__gleConvolutionParameterf = (PFNGLCONVOLUTIONPARAMETERFPROC)gleIntGetProcAddress("glConvolutionParameterf");
-	if(!TestPointer((const void*)__gleConvolutionParameterf))
-	{
-		__gleConvolutionParameterf = (PFNGLCONVOLUTIONPARAMETERFPROC)gle_CoreStruct.gleVarConvolutionParameterf;
-		if(!__gleConvolutionParameterf) bIsLoaded = 0;
-	}
+	if(!__gleConvolutionParameterf) bIsLoaded = 0;
 	__gleConvolutionParameterfv = (PFNGLCONVOLUTIONPARAMETERFVPROC)gleIntGetProcAddress("glConvolutionParameterfv");
-	if(!TestPointer((const void*)__gleConvolutionParameterfv))
-	{
-		__gleConvolutionParameterfv = (PFNGLCONVOLUTIONPARAMETERFVPROC)gle_CoreStruct.gleVarConvolutionParameterfv;
-		if(!__gleConvolutionParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleConvolutionParameterfv) bIsLoaded = 0;
 	__gleConvolutionParameteri = (PFNGLCONVOLUTIONPARAMETERIPROC)gleIntGetProcAddress("glConvolutionParameteri");
-	if(!TestPointer((const void*)__gleConvolutionParameteri))
-	{
-		__gleConvolutionParameteri = (PFNGLCONVOLUTIONPARAMETERIPROC)gle_CoreStruct.gleVarConvolutionParameteri;
-		if(!__gleConvolutionParameteri) bIsLoaded = 0;
-	}
+	if(!__gleConvolutionParameteri) bIsLoaded = 0;
 	__gleConvolutionParameteriv = (PFNGLCONVOLUTIONPARAMETERIVPROC)gleIntGetProcAddress("glConvolutionParameteriv");
-	if(!TestPointer((const void*)__gleConvolutionParameteriv))
-	{
-		__gleConvolutionParameteriv = (PFNGLCONVOLUTIONPARAMETERIVPROC)gle_CoreStruct.gleVarConvolutionParameteriv;
-		if(!__gleConvolutionParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleConvolutionParameteriv) bIsLoaded = 0;
 	__gleCopyConvolutionFilter1D = (PFNGLCOPYCONVOLUTIONFILTER1DPROC)gleIntGetProcAddress("glCopyConvolutionFilter1D");
-	if(!TestPointer((const void*)__gleCopyConvolutionFilter1D))
-	{
-		__gleCopyConvolutionFilter1D = (PFNGLCOPYCONVOLUTIONFILTER1DPROC)gle_CoreStruct.gleVarCopyConvolutionFilter1D;
-		if(!__gleCopyConvolutionFilter1D) bIsLoaded = 0;
-	}
+	if(!__gleCopyConvolutionFilter1D) bIsLoaded = 0;
 	__gleCopyConvolutionFilter2D = (PFNGLCOPYCONVOLUTIONFILTER2DPROC)gleIntGetProcAddress("glCopyConvolutionFilter2D");
-	if(!TestPointer((const void*)__gleCopyConvolutionFilter2D))
-	{
-		__gleCopyConvolutionFilter2D = (PFNGLCOPYCONVOLUTIONFILTER2DPROC)gle_CoreStruct.gleVarCopyConvolutionFilter2D;
-		if(!__gleCopyConvolutionFilter2D) bIsLoaded = 0;
-	}
+	if(!__gleCopyConvolutionFilter2D) bIsLoaded = 0;
 	__gleGetConvolutionFilter = (PFNGLGETCONVOLUTIONFILTERPROC)gleIntGetProcAddress("glGetConvolutionFilter");
-	if(!TestPointer((const void*)__gleGetConvolutionFilter))
-	{
-		__gleGetConvolutionFilter = (PFNGLGETCONVOLUTIONFILTERPROC)gle_CoreStruct.gleVarGetConvolutionFilter;
-		if(!__gleGetConvolutionFilter) bIsLoaded = 0;
-	}
+	if(!__gleGetConvolutionFilter) bIsLoaded = 0;
 	__gleGetConvolutionParameterfv = (PFNGLGETCONVOLUTIONPARAMETERFVPROC)gleIntGetProcAddress("glGetConvolutionParameterfv");
-	if(!TestPointer((const void*)__gleGetConvolutionParameterfv))
-	{
-		__gleGetConvolutionParameterfv = (PFNGLGETCONVOLUTIONPARAMETERFVPROC)gle_CoreStruct.gleVarGetConvolutionParameterfv;
-		if(!__gleGetConvolutionParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleGetConvolutionParameterfv) bIsLoaded = 0;
 	__gleGetConvolutionParameteriv = (PFNGLGETCONVOLUTIONPARAMETERIVPROC)gleIntGetProcAddress("glGetConvolutionParameteriv");
-	if(!TestPointer((const void*)__gleGetConvolutionParameteriv))
-	{
-		__gleGetConvolutionParameteriv = (PFNGLGETCONVOLUTIONPARAMETERIVPROC)gle_CoreStruct.gleVarGetConvolutionParameteriv;
-		if(!__gleGetConvolutionParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetConvolutionParameteriv) bIsLoaded = 0;
 	__gleGetSeparableFilter = (PFNGLGETSEPARABLEFILTERPROC)gleIntGetProcAddress("glGetSeparableFilter");
-	if(!TestPointer((const void*)__gleGetSeparableFilter))
-	{
-		__gleGetSeparableFilter = (PFNGLGETSEPARABLEFILTERPROC)gle_CoreStruct.gleVarGetSeparableFilter;
-		if(!__gleGetSeparableFilter) bIsLoaded = 0;
-	}
+	if(!__gleGetSeparableFilter) bIsLoaded = 0;
 	__gleSeparableFilter2D = (PFNGLSEPARABLEFILTER2DPROC)gleIntGetProcAddress("glSeparableFilter2D");
-	if(!TestPointer((const void*)__gleSeparableFilter2D))
-	{
-		__gleSeparableFilter2D = (PFNGLSEPARABLEFILTER2DPROC)gle_CoreStruct.gleVarSeparableFilter2D;
-		if(!__gleSeparableFilter2D) bIsLoaded = 0;
-	}
+	if(!__gleSeparableFilter2D) bIsLoaded = 0;
 	__gleGetHistogram = (PFNGLGETHISTOGRAMPROC)gleIntGetProcAddress("glGetHistogram");
-	if(!TestPointer((const void*)__gleGetHistogram))
-	{
-		__gleGetHistogram = (PFNGLGETHISTOGRAMPROC)gle_CoreStruct.gleVarGetHistogram;
-		if(!__gleGetHistogram) bIsLoaded = 0;
-	}
+	if(!__gleGetHistogram) bIsLoaded = 0;
 	__gleGetHistogramParameterfv = (PFNGLGETHISTOGRAMPARAMETERFVPROC)gleIntGetProcAddress("glGetHistogramParameterfv");
-	if(!TestPointer((const void*)__gleGetHistogramParameterfv))
-	{
-		__gleGetHistogramParameterfv = (PFNGLGETHISTOGRAMPARAMETERFVPROC)gle_CoreStruct.gleVarGetHistogramParameterfv;
-		if(!__gleGetHistogramParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleGetHistogramParameterfv) bIsLoaded = 0;
 	__gleGetHistogramParameteriv = (PFNGLGETHISTOGRAMPARAMETERIVPROC)gleIntGetProcAddress("glGetHistogramParameteriv");
-	if(!TestPointer((const void*)__gleGetHistogramParameteriv))
-	{
-		__gleGetHistogramParameteriv = (PFNGLGETHISTOGRAMPARAMETERIVPROC)gle_CoreStruct.gleVarGetHistogramParameteriv;
-		if(!__gleGetHistogramParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetHistogramParameteriv) bIsLoaded = 0;
 	__gleGetMinmax = (PFNGLGETMINMAXPROC)gleIntGetProcAddress("glGetMinmax");
-	if(!TestPointer((const void*)__gleGetMinmax))
-	{
-		__gleGetMinmax = (PFNGLGETMINMAXPROC)gle_CoreStruct.gleVarGetMinmax;
-		if(!__gleGetMinmax) bIsLoaded = 0;
-	}
+	if(!__gleGetMinmax) bIsLoaded = 0;
 	__gleGetMinmaxParameterfv = (PFNGLGETMINMAXPARAMETERFVPROC)gleIntGetProcAddress("glGetMinmaxParameterfv");
-	if(!TestPointer((const void*)__gleGetMinmaxParameterfv))
-	{
-		__gleGetMinmaxParameterfv = (PFNGLGETMINMAXPARAMETERFVPROC)gle_CoreStruct.gleVarGetMinmaxParameterfv;
-		if(!__gleGetMinmaxParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleGetMinmaxParameterfv) bIsLoaded = 0;
 	__gleGetMinmaxParameteriv = (PFNGLGETMINMAXPARAMETERIVPROC)gleIntGetProcAddress("glGetMinmaxParameteriv");
-	if(!TestPointer((const void*)__gleGetMinmaxParameteriv))
-	{
-		__gleGetMinmaxParameteriv = (PFNGLGETMINMAXPARAMETERIVPROC)gle_CoreStruct.gleVarGetMinmaxParameteriv;
-		if(!__gleGetMinmaxParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetMinmaxParameteriv) bIsLoaded = 0;
 	__gleHistogram = (PFNGLHISTOGRAMPROC)gleIntGetProcAddress("glHistogram");
-	if(!TestPointer((const void*)__gleHistogram))
-	{
-		__gleHistogram = (PFNGLHISTOGRAMPROC)gle_CoreStruct.gleVarHistogram;
-		if(!__gleHistogram) bIsLoaded = 0;
-	}
+	if(!__gleHistogram) bIsLoaded = 0;
 	__gleMinmax = (PFNGLMINMAXPROC)gleIntGetProcAddress("glMinmax");
-	if(!TestPointer((const void*)__gleMinmax))
-	{
-		__gleMinmax = (PFNGLMINMAXPROC)gle_CoreStruct.gleVarMinmax;
-		if(!__gleMinmax) bIsLoaded = 0;
-	}
+	if(!__gleMinmax) bIsLoaded = 0;
 	__gleResetHistogram = (PFNGLRESETHISTOGRAMPROC)gleIntGetProcAddress("glResetHistogram");
-	if(!TestPointer((const void*)__gleResetHistogram))
-	{
-		__gleResetHistogram = (PFNGLRESETHISTOGRAMPROC)gle_CoreStruct.gleVarResetHistogram;
-		if(!__gleResetHistogram) bIsLoaded = 0;
-	}
+	if(!__gleResetHistogram) bIsLoaded = 0;
 	__gleResetMinmax = (PFNGLRESETMINMAXPROC)gleIntGetProcAddress("glResetMinmax");
-	if(!TestPointer((const void*)__gleResetMinmax))
-	{
-		__gleResetMinmax = (PFNGLRESETMINMAXPROC)gle_CoreStruct.gleVarResetMinmax;
-		if(!__gleResetMinmax) bIsLoaded = 0;
-	}
+	if(!__gleResetMinmax) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -15141,227 +12930,79 @@ static int gleIntLoadCore_1_3_Base()
 {
 	int bIsLoaded = gleIntLoadCore_1_3_Version_3_1();
 	__gleClientActiveTexture = (PFNGLCLIENTACTIVETEXTUREPROC)gleIntGetProcAddress("glClientActiveTexture");
-	if(!TestPointer((const void*)__gleClientActiveTexture))
-	{
-		__gleClientActiveTexture = (PFNGLCLIENTACTIVETEXTUREPROC)gle_CoreStruct.gleVarClientActiveTexture;
-		if(!__gleClientActiveTexture) bIsLoaded = 0;
-	}
+	if(!__gleClientActiveTexture) bIsLoaded = 0;
 	__gleMultiTexCoord1d = (PFNGLMULTITEXCOORD1DPROC)gleIntGetProcAddress("glMultiTexCoord1d");
-	if(!TestPointer((const void*)__gleMultiTexCoord1d))
-	{
-		__gleMultiTexCoord1d = (PFNGLMULTITEXCOORD1DPROC)gle_CoreStruct.gleVarMultiTexCoord1d;
-		if(!__gleMultiTexCoord1d) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord1d) bIsLoaded = 0;
 	__gleMultiTexCoord1dv = (PFNGLMULTITEXCOORD1DVPROC)gleIntGetProcAddress("glMultiTexCoord1dv");
-	if(!TestPointer((const void*)__gleMultiTexCoord1dv))
-	{
-		__gleMultiTexCoord1dv = (PFNGLMULTITEXCOORD1DVPROC)gle_CoreStruct.gleVarMultiTexCoord1dv;
-		if(!__gleMultiTexCoord1dv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord1dv) bIsLoaded = 0;
 	__gleMultiTexCoord1f = (PFNGLMULTITEXCOORD1FPROC)gleIntGetProcAddress("glMultiTexCoord1f");
-	if(!TestPointer((const void*)__gleMultiTexCoord1f))
-	{
-		__gleMultiTexCoord1f = (PFNGLMULTITEXCOORD1FPROC)gle_CoreStruct.gleVarMultiTexCoord1f;
-		if(!__gleMultiTexCoord1f) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord1f) bIsLoaded = 0;
 	__gleMultiTexCoord1fv = (PFNGLMULTITEXCOORD1FVPROC)gleIntGetProcAddress("glMultiTexCoord1fv");
-	if(!TestPointer((const void*)__gleMultiTexCoord1fv))
-	{
-		__gleMultiTexCoord1fv = (PFNGLMULTITEXCOORD1FVPROC)gle_CoreStruct.gleVarMultiTexCoord1fv;
-		if(!__gleMultiTexCoord1fv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord1fv) bIsLoaded = 0;
 	__gleMultiTexCoord1i = (PFNGLMULTITEXCOORD1IPROC)gleIntGetProcAddress("glMultiTexCoord1i");
-	if(!TestPointer((const void*)__gleMultiTexCoord1i))
-	{
-		__gleMultiTexCoord1i = (PFNGLMULTITEXCOORD1IPROC)gle_CoreStruct.gleVarMultiTexCoord1i;
-		if(!__gleMultiTexCoord1i) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord1i) bIsLoaded = 0;
 	__gleMultiTexCoord1iv = (PFNGLMULTITEXCOORD1IVPROC)gleIntGetProcAddress("glMultiTexCoord1iv");
-	if(!TestPointer((const void*)__gleMultiTexCoord1iv))
-	{
-		__gleMultiTexCoord1iv = (PFNGLMULTITEXCOORD1IVPROC)gle_CoreStruct.gleVarMultiTexCoord1iv;
-		if(!__gleMultiTexCoord1iv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord1iv) bIsLoaded = 0;
 	__gleMultiTexCoord1s = (PFNGLMULTITEXCOORD1SPROC)gleIntGetProcAddress("glMultiTexCoord1s");
-	if(!TestPointer((const void*)__gleMultiTexCoord1s))
-	{
-		__gleMultiTexCoord1s = (PFNGLMULTITEXCOORD1SPROC)gle_CoreStruct.gleVarMultiTexCoord1s;
-		if(!__gleMultiTexCoord1s) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord1s) bIsLoaded = 0;
 	__gleMultiTexCoord1sv = (PFNGLMULTITEXCOORD1SVPROC)gleIntGetProcAddress("glMultiTexCoord1sv");
-	if(!TestPointer((const void*)__gleMultiTexCoord1sv))
-	{
-		__gleMultiTexCoord1sv = (PFNGLMULTITEXCOORD1SVPROC)gle_CoreStruct.gleVarMultiTexCoord1sv;
-		if(!__gleMultiTexCoord1sv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord1sv) bIsLoaded = 0;
 	__gleMultiTexCoord2d = (PFNGLMULTITEXCOORD2DPROC)gleIntGetProcAddress("glMultiTexCoord2d");
-	if(!TestPointer((const void*)__gleMultiTexCoord2d))
-	{
-		__gleMultiTexCoord2d = (PFNGLMULTITEXCOORD2DPROC)gle_CoreStruct.gleVarMultiTexCoord2d;
-		if(!__gleMultiTexCoord2d) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord2d) bIsLoaded = 0;
 	__gleMultiTexCoord2dv = (PFNGLMULTITEXCOORD2DVPROC)gleIntGetProcAddress("glMultiTexCoord2dv");
-	if(!TestPointer((const void*)__gleMultiTexCoord2dv))
-	{
-		__gleMultiTexCoord2dv = (PFNGLMULTITEXCOORD2DVPROC)gle_CoreStruct.gleVarMultiTexCoord2dv;
-		if(!__gleMultiTexCoord2dv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord2dv) bIsLoaded = 0;
 	__gleMultiTexCoord2f = (PFNGLMULTITEXCOORD2FPROC)gleIntGetProcAddress("glMultiTexCoord2f");
-	if(!TestPointer((const void*)__gleMultiTexCoord2f))
-	{
-		__gleMultiTexCoord2f = (PFNGLMULTITEXCOORD2FPROC)gle_CoreStruct.gleVarMultiTexCoord2f;
-		if(!__gleMultiTexCoord2f) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord2f) bIsLoaded = 0;
 	__gleMultiTexCoord2fv = (PFNGLMULTITEXCOORD2FVPROC)gleIntGetProcAddress("glMultiTexCoord2fv");
-	if(!TestPointer((const void*)__gleMultiTexCoord2fv))
-	{
-		__gleMultiTexCoord2fv = (PFNGLMULTITEXCOORD2FVPROC)gle_CoreStruct.gleVarMultiTexCoord2fv;
-		if(!__gleMultiTexCoord2fv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord2fv) bIsLoaded = 0;
 	__gleMultiTexCoord2i = (PFNGLMULTITEXCOORD2IPROC)gleIntGetProcAddress("glMultiTexCoord2i");
-	if(!TestPointer((const void*)__gleMultiTexCoord2i))
-	{
-		__gleMultiTexCoord2i = (PFNGLMULTITEXCOORD2IPROC)gle_CoreStruct.gleVarMultiTexCoord2i;
-		if(!__gleMultiTexCoord2i) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord2i) bIsLoaded = 0;
 	__gleMultiTexCoord2iv = (PFNGLMULTITEXCOORD2IVPROC)gleIntGetProcAddress("glMultiTexCoord2iv");
-	if(!TestPointer((const void*)__gleMultiTexCoord2iv))
-	{
-		__gleMultiTexCoord2iv = (PFNGLMULTITEXCOORD2IVPROC)gle_CoreStruct.gleVarMultiTexCoord2iv;
-		if(!__gleMultiTexCoord2iv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord2iv) bIsLoaded = 0;
 	__gleMultiTexCoord2s = (PFNGLMULTITEXCOORD2SPROC)gleIntGetProcAddress("glMultiTexCoord2s");
-	if(!TestPointer((const void*)__gleMultiTexCoord2s))
-	{
-		__gleMultiTexCoord2s = (PFNGLMULTITEXCOORD2SPROC)gle_CoreStruct.gleVarMultiTexCoord2s;
-		if(!__gleMultiTexCoord2s) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord2s) bIsLoaded = 0;
 	__gleMultiTexCoord2sv = (PFNGLMULTITEXCOORD2SVPROC)gleIntGetProcAddress("glMultiTexCoord2sv");
-	if(!TestPointer((const void*)__gleMultiTexCoord2sv))
-	{
-		__gleMultiTexCoord2sv = (PFNGLMULTITEXCOORD2SVPROC)gle_CoreStruct.gleVarMultiTexCoord2sv;
-		if(!__gleMultiTexCoord2sv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord2sv) bIsLoaded = 0;
 	__gleMultiTexCoord3d = (PFNGLMULTITEXCOORD3DPROC)gleIntGetProcAddress("glMultiTexCoord3d");
-	if(!TestPointer((const void*)__gleMultiTexCoord3d))
-	{
-		__gleMultiTexCoord3d = (PFNGLMULTITEXCOORD3DPROC)gle_CoreStruct.gleVarMultiTexCoord3d;
-		if(!__gleMultiTexCoord3d) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord3d) bIsLoaded = 0;
 	__gleMultiTexCoord3dv = (PFNGLMULTITEXCOORD3DVPROC)gleIntGetProcAddress("glMultiTexCoord3dv");
-	if(!TestPointer((const void*)__gleMultiTexCoord3dv))
-	{
-		__gleMultiTexCoord3dv = (PFNGLMULTITEXCOORD3DVPROC)gle_CoreStruct.gleVarMultiTexCoord3dv;
-		if(!__gleMultiTexCoord3dv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord3dv) bIsLoaded = 0;
 	__gleMultiTexCoord3f = (PFNGLMULTITEXCOORD3FPROC)gleIntGetProcAddress("glMultiTexCoord3f");
-	if(!TestPointer((const void*)__gleMultiTexCoord3f))
-	{
-		__gleMultiTexCoord3f = (PFNGLMULTITEXCOORD3FPROC)gle_CoreStruct.gleVarMultiTexCoord3f;
-		if(!__gleMultiTexCoord3f) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord3f) bIsLoaded = 0;
 	__gleMultiTexCoord3fv = (PFNGLMULTITEXCOORD3FVPROC)gleIntGetProcAddress("glMultiTexCoord3fv");
-	if(!TestPointer((const void*)__gleMultiTexCoord3fv))
-	{
-		__gleMultiTexCoord3fv = (PFNGLMULTITEXCOORD3FVPROC)gle_CoreStruct.gleVarMultiTexCoord3fv;
-		if(!__gleMultiTexCoord3fv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord3fv) bIsLoaded = 0;
 	__gleMultiTexCoord3i = (PFNGLMULTITEXCOORD3IPROC)gleIntGetProcAddress("glMultiTexCoord3i");
-	if(!TestPointer((const void*)__gleMultiTexCoord3i))
-	{
-		__gleMultiTexCoord3i = (PFNGLMULTITEXCOORD3IPROC)gle_CoreStruct.gleVarMultiTexCoord3i;
-		if(!__gleMultiTexCoord3i) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord3i) bIsLoaded = 0;
 	__gleMultiTexCoord3iv = (PFNGLMULTITEXCOORD3IVPROC)gleIntGetProcAddress("glMultiTexCoord3iv");
-	if(!TestPointer((const void*)__gleMultiTexCoord3iv))
-	{
-		__gleMultiTexCoord3iv = (PFNGLMULTITEXCOORD3IVPROC)gle_CoreStruct.gleVarMultiTexCoord3iv;
-		if(!__gleMultiTexCoord3iv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord3iv) bIsLoaded = 0;
 	__gleMultiTexCoord3s = (PFNGLMULTITEXCOORD3SPROC)gleIntGetProcAddress("glMultiTexCoord3s");
-	if(!TestPointer((const void*)__gleMultiTexCoord3s))
-	{
-		__gleMultiTexCoord3s = (PFNGLMULTITEXCOORD3SPROC)gle_CoreStruct.gleVarMultiTexCoord3s;
-		if(!__gleMultiTexCoord3s) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord3s) bIsLoaded = 0;
 	__gleMultiTexCoord3sv = (PFNGLMULTITEXCOORD3SVPROC)gleIntGetProcAddress("glMultiTexCoord3sv");
-	if(!TestPointer((const void*)__gleMultiTexCoord3sv))
-	{
-		__gleMultiTexCoord3sv = (PFNGLMULTITEXCOORD3SVPROC)gle_CoreStruct.gleVarMultiTexCoord3sv;
-		if(!__gleMultiTexCoord3sv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord3sv) bIsLoaded = 0;
 	__gleMultiTexCoord4d = (PFNGLMULTITEXCOORD4DPROC)gleIntGetProcAddress("glMultiTexCoord4d");
-	if(!TestPointer((const void*)__gleMultiTexCoord4d))
-	{
-		__gleMultiTexCoord4d = (PFNGLMULTITEXCOORD4DPROC)gle_CoreStruct.gleVarMultiTexCoord4d;
-		if(!__gleMultiTexCoord4d) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord4d) bIsLoaded = 0;
 	__gleMultiTexCoord4dv = (PFNGLMULTITEXCOORD4DVPROC)gleIntGetProcAddress("glMultiTexCoord4dv");
-	if(!TestPointer((const void*)__gleMultiTexCoord4dv))
-	{
-		__gleMultiTexCoord4dv = (PFNGLMULTITEXCOORD4DVPROC)gle_CoreStruct.gleVarMultiTexCoord4dv;
-		if(!__gleMultiTexCoord4dv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord4dv) bIsLoaded = 0;
 	__gleMultiTexCoord4f = (PFNGLMULTITEXCOORD4FPROC)gleIntGetProcAddress("glMultiTexCoord4f");
-	if(!TestPointer((const void*)__gleMultiTexCoord4f))
-	{
-		__gleMultiTexCoord4f = (PFNGLMULTITEXCOORD4FPROC)gle_CoreStruct.gleVarMultiTexCoord4f;
-		if(!__gleMultiTexCoord4f) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord4f) bIsLoaded = 0;
 	__gleMultiTexCoord4fv = (PFNGLMULTITEXCOORD4FVPROC)gleIntGetProcAddress("glMultiTexCoord4fv");
-	if(!TestPointer((const void*)__gleMultiTexCoord4fv))
-	{
-		__gleMultiTexCoord4fv = (PFNGLMULTITEXCOORD4FVPROC)gle_CoreStruct.gleVarMultiTexCoord4fv;
-		if(!__gleMultiTexCoord4fv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord4fv) bIsLoaded = 0;
 	__gleMultiTexCoord4i = (PFNGLMULTITEXCOORD4IPROC)gleIntGetProcAddress("glMultiTexCoord4i");
-	if(!TestPointer((const void*)__gleMultiTexCoord4i))
-	{
-		__gleMultiTexCoord4i = (PFNGLMULTITEXCOORD4IPROC)gle_CoreStruct.gleVarMultiTexCoord4i;
-		if(!__gleMultiTexCoord4i) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord4i) bIsLoaded = 0;
 	__gleMultiTexCoord4iv = (PFNGLMULTITEXCOORD4IVPROC)gleIntGetProcAddress("glMultiTexCoord4iv");
-	if(!TestPointer((const void*)__gleMultiTexCoord4iv))
-	{
-		__gleMultiTexCoord4iv = (PFNGLMULTITEXCOORD4IVPROC)gle_CoreStruct.gleVarMultiTexCoord4iv;
-		if(!__gleMultiTexCoord4iv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord4iv) bIsLoaded = 0;
 	__gleMultiTexCoord4s = (PFNGLMULTITEXCOORD4SPROC)gleIntGetProcAddress("glMultiTexCoord4s");
-	if(!TestPointer((const void*)__gleMultiTexCoord4s))
-	{
-		__gleMultiTexCoord4s = (PFNGLMULTITEXCOORD4SPROC)gle_CoreStruct.gleVarMultiTexCoord4s;
-		if(!__gleMultiTexCoord4s) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord4s) bIsLoaded = 0;
 	__gleMultiTexCoord4sv = (PFNGLMULTITEXCOORD4SVPROC)gleIntGetProcAddress("glMultiTexCoord4sv");
-	if(!TestPointer((const void*)__gleMultiTexCoord4sv))
-	{
-		__gleMultiTexCoord4sv = (PFNGLMULTITEXCOORD4SVPROC)gle_CoreStruct.gleVarMultiTexCoord4sv;
-		if(!__gleMultiTexCoord4sv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoord4sv) bIsLoaded = 0;
 	__gleLoadTransposeMatrixf = (PFNGLLOADTRANSPOSEMATRIXFPROC)gleIntGetProcAddress("glLoadTransposeMatrixf");
-	if(!TestPointer((const void*)__gleLoadTransposeMatrixf))
-	{
-		__gleLoadTransposeMatrixf = (PFNGLLOADTRANSPOSEMATRIXFPROC)gle_CoreStruct.gleVarLoadTransposeMatrixf;
-		if(!__gleLoadTransposeMatrixf) bIsLoaded = 0;
-	}
+	if(!__gleLoadTransposeMatrixf) bIsLoaded = 0;
 	__gleLoadTransposeMatrixd = (PFNGLLOADTRANSPOSEMATRIXDPROC)gleIntGetProcAddress("glLoadTransposeMatrixd");
-	if(!TestPointer((const void*)__gleLoadTransposeMatrixd))
-	{
-		__gleLoadTransposeMatrixd = (PFNGLLOADTRANSPOSEMATRIXDPROC)gle_CoreStruct.gleVarLoadTransposeMatrixd;
-		if(!__gleLoadTransposeMatrixd) bIsLoaded = 0;
-	}
+	if(!__gleLoadTransposeMatrixd) bIsLoaded = 0;
 	__gleMultTransposeMatrixf = (PFNGLMULTTRANSPOSEMATRIXFPROC)gleIntGetProcAddress("glMultTransposeMatrixf");
-	if(!TestPointer((const void*)__gleMultTransposeMatrixf))
-	{
-		__gleMultTransposeMatrixf = (PFNGLMULTTRANSPOSEMATRIXFPROC)gle_CoreStruct.gleVarMultTransposeMatrixf;
-		if(!__gleMultTransposeMatrixf) bIsLoaded = 0;
-	}
+	if(!__gleMultTransposeMatrixf) bIsLoaded = 0;
 	__gleMultTransposeMatrixd = (PFNGLMULTTRANSPOSEMATRIXDPROC)gleIntGetProcAddress("glMultTransposeMatrixd");
-	if(!TestPointer((const void*)__gleMultTransposeMatrixd))
-	{
-		__gleMultTransposeMatrixd = (PFNGLMULTTRANSPOSEMATRIXDPROC)gle_CoreStruct.gleVarMultTransposeMatrixd;
-		if(!__gleMultTransposeMatrixd) bIsLoaded = 0;
-	}
+	if(!__gleMultTransposeMatrixd) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -15369,233 +13010,81 @@ static int gleIntLoadCore_1_4_Base()
 {
 	int bIsLoaded = gleIntLoadCore_1_4_Version_3_1();
 	__gleFogCoordf = (PFNGLFOGCOORDFPROC)gleIntGetProcAddress("glFogCoordf");
-	if(!TestPointer((const void*)__gleFogCoordf))
-	{
-		__gleFogCoordf = (PFNGLFOGCOORDFPROC)gle_CoreStruct.gleVarFogCoordf;
-		if(!__gleFogCoordf) bIsLoaded = 0;
-	}
+	if(!__gleFogCoordf) bIsLoaded = 0;
 	__gleFogCoordfv = (PFNGLFOGCOORDFVPROC)gleIntGetProcAddress("glFogCoordfv");
-	if(!TestPointer((const void*)__gleFogCoordfv))
-	{
-		__gleFogCoordfv = (PFNGLFOGCOORDFVPROC)gle_CoreStruct.gleVarFogCoordfv;
-		if(!__gleFogCoordfv) bIsLoaded = 0;
-	}
+	if(!__gleFogCoordfv) bIsLoaded = 0;
 	__gleFogCoordd = (PFNGLFOGCOORDDPROC)gleIntGetProcAddress("glFogCoordd");
-	if(!TestPointer((const void*)__gleFogCoordd))
-	{
-		__gleFogCoordd = (PFNGLFOGCOORDDPROC)gle_CoreStruct.gleVarFogCoordd;
-		if(!__gleFogCoordd) bIsLoaded = 0;
-	}
+	if(!__gleFogCoordd) bIsLoaded = 0;
 	__gleFogCoorddv = (PFNGLFOGCOORDDVPROC)gleIntGetProcAddress("glFogCoorddv");
-	if(!TestPointer((const void*)__gleFogCoorddv))
-	{
-		__gleFogCoorddv = (PFNGLFOGCOORDDVPROC)gle_CoreStruct.gleVarFogCoorddv;
-		if(!__gleFogCoorddv) bIsLoaded = 0;
-	}
+	if(!__gleFogCoorddv) bIsLoaded = 0;
 	__gleFogCoordPointer = (PFNGLFOGCOORDPOINTERPROC)gleIntGetProcAddress("glFogCoordPointer");
-	if(!TestPointer((const void*)__gleFogCoordPointer))
-	{
-		__gleFogCoordPointer = (PFNGLFOGCOORDPOINTERPROC)gle_CoreStruct.gleVarFogCoordPointer;
-		if(!__gleFogCoordPointer) bIsLoaded = 0;
-	}
+	if(!__gleFogCoordPointer) bIsLoaded = 0;
 	__gleSecondaryColor3b = (PFNGLSECONDARYCOLOR3BPROC)gleIntGetProcAddress("glSecondaryColor3b");
-	if(!TestPointer((const void*)__gleSecondaryColor3b))
-	{
-		__gleSecondaryColor3b = (PFNGLSECONDARYCOLOR3BPROC)gle_CoreStruct.gleVarSecondaryColor3b;
-		if(!__gleSecondaryColor3b) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3b) bIsLoaded = 0;
 	__gleSecondaryColor3bv = (PFNGLSECONDARYCOLOR3BVPROC)gleIntGetProcAddress("glSecondaryColor3bv");
-	if(!TestPointer((const void*)__gleSecondaryColor3bv))
-	{
-		__gleSecondaryColor3bv = (PFNGLSECONDARYCOLOR3BVPROC)gle_CoreStruct.gleVarSecondaryColor3bv;
-		if(!__gleSecondaryColor3bv) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3bv) bIsLoaded = 0;
 	__gleSecondaryColor3d = (PFNGLSECONDARYCOLOR3DPROC)gleIntGetProcAddress("glSecondaryColor3d");
-	if(!TestPointer((const void*)__gleSecondaryColor3d))
-	{
-		__gleSecondaryColor3d = (PFNGLSECONDARYCOLOR3DPROC)gle_CoreStruct.gleVarSecondaryColor3d;
-		if(!__gleSecondaryColor3d) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3d) bIsLoaded = 0;
 	__gleSecondaryColor3dv = (PFNGLSECONDARYCOLOR3DVPROC)gleIntGetProcAddress("glSecondaryColor3dv");
-	if(!TestPointer((const void*)__gleSecondaryColor3dv))
-	{
-		__gleSecondaryColor3dv = (PFNGLSECONDARYCOLOR3DVPROC)gle_CoreStruct.gleVarSecondaryColor3dv;
-		if(!__gleSecondaryColor3dv) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3dv) bIsLoaded = 0;
 	__gleSecondaryColor3f = (PFNGLSECONDARYCOLOR3FPROC)gleIntGetProcAddress("glSecondaryColor3f");
-	if(!TestPointer((const void*)__gleSecondaryColor3f))
-	{
-		__gleSecondaryColor3f = (PFNGLSECONDARYCOLOR3FPROC)gle_CoreStruct.gleVarSecondaryColor3f;
-		if(!__gleSecondaryColor3f) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3f) bIsLoaded = 0;
 	__gleSecondaryColor3fv = (PFNGLSECONDARYCOLOR3FVPROC)gleIntGetProcAddress("glSecondaryColor3fv");
-	if(!TestPointer((const void*)__gleSecondaryColor3fv))
-	{
-		__gleSecondaryColor3fv = (PFNGLSECONDARYCOLOR3FVPROC)gle_CoreStruct.gleVarSecondaryColor3fv;
-		if(!__gleSecondaryColor3fv) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3fv) bIsLoaded = 0;
 	__gleSecondaryColor3i = (PFNGLSECONDARYCOLOR3IPROC)gleIntGetProcAddress("glSecondaryColor3i");
-	if(!TestPointer((const void*)__gleSecondaryColor3i))
-	{
-		__gleSecondaryColor3i = (PFNGLSECONDARYCOLOR3IPROC)gle_CoreStruct.gleVarSecondaryColor3i;
-		if(!__gleSecondaryColor3i) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3i) bIsLoaded = 0;
 	__gleSecondaryColor3iv = (PFNGLSECONDARYCOLOR3IVPROC)gleIntGetProcAddress("glSecondaryColor3iv");
-	if(!TestPointer((const void*)__gleSecondaryColor3iv))
-	{
-		__gleSecondaryColor3iv = (PFNGLSECONDARYCOLOR3IVPROC)gle_CoreStruct.gleVarSecondaryColor3iv;
-		if(!__gleSecondaryColor3iv) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3iv) bIsLoaded = 0;
 	__gleSecondaryColor3s = (PFNGLSECONDARYCOLOR3SPROC)gleIntGetProcAddress("glSecondaryColor3s");
-	if(!TestPointer((const void*)__gleSecondaryColor3s))
-	{
-		__gleSecondaryColor3s = (PFNGLSECONDARYCOLOR3SPROC)gle_CoreStruct.gleVarSecondaryColor3s;
-		if(!__gleSecondaryColor3s) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3s) bIsLoaded = 0;
 	__gleSecondaryColor3sv = (PFNGLSECONDARYCOLOR3SVPROC)gleIntGetProcAddress("glSecondaryColor3sv");
-	if(!TestPointer((const void*)__gleSecondaryColor3sv))
-	{
-		__gleSecondaryColor3sv = (PFNGLSECONDARYCOLOR3SVPROC)gle_CoreStruct.gleVarSecondaryColor3sv;
-		if(!__gleSecondaryColor3sv) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3sv) bIsLoaded = 0;
 	__gleSecondaryColor3ub = (PFNGLSECONDARYCOLOR3UBPROC)gleIntGetProcAddress("glSecondaryColor3ub");
-	if(!TestPointer((const void*)__gleSecondaryColor3ub))
-	{
-		__gleSecondaryColor3ub = (PFNGLSECONDARYCOLOR3UBPROC)gle_CoreStruct.gleVarSecondaryColor3ub;
-		if(!__gleSecondaryColor3ub) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3ub) bIsLoaded = 0;
 	__gleSecondaryColor3ubv = (PFNGLSECONDARYCOLOR3UBVPROC)gleIntGetProcAddress("glSecondaryColor3ubv");
-	if(!TestPointer((const void*)__gleSecondaryColor3ubv))
-	{
-		__gleSecondaryColor3ubv = (PFNGLSECONDARYCOLOR3UBVPROC)gle_CoreStruct.gleVarSecondaryColor3ubv;
-		if(!__gleSecondaryColor3ubv) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3ubv) bIsLoaded = 0;
 	__gleSecondaryColor3ui = (PFNGLSECONDARYCOLOR3UIPROC)gleIntGetProcAddress("glSecondaryColor3ui");
-	if(!TestPointer((const void*)__gleSecondaryColor3ui))
-	{
-		__gleSecondaryColor3ui = (PFNGLSECONDARYCOLOR3UIPROC)gle_CoreStruct.gleVarSecondaryColor3ui;
-		if(!__gleSecondaryColor3ui) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3ui) bIsLoaded = 0;
 	__gleSecondaryColor3uiv = (PFNGLSECONDARYCOLOR3UIVPROC)gleIntGetProcAddress("glSecondaryColor3uiv");
-	if(!TestPointer((const void*)__gleSecondaryColor3uiv))
-	{
-		__gleSecondaryColor3uiv = (PFNGLSECONDARYCOLOR3UIVPROC)gle_CoreStruct.gleVarSecondaryColor3uiv;
-		if(!__gleSecondaryColor3uiv) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3uiv) bIsLoaded = 0;
 	__gleSecondaryColor3us = (PFNGLSECONDARYCOLOR3USPROC)gleIntGetProcAddress("glSecondaryColor3us");
-	if(!TestPointer((const void*)__gleSecondaryColor3us))
-	{
-		__gleSecondaryColor3us = (PFNGLSECONDARYCOLOR3USPROC)gle_CoreStruct.gleVarSecondaryColor3us;
-		if(!__gleSecondaryColor3us) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3us) bIsLoaded = 0;
 	__gleSecondaryColor3usv = (PFNGLSECONDARYCOLOR3USVPROC)gleIntGetProcAddress("glSecondaryColor3usv");
-	if(!TestPointer((const void*)__gleSecondaryColor3usv))
-	{
-		__gleSecondaryColor3usv = (PFNGLSECONDARYCOLOR3USVPROC)gle_CoreStruct.gleVarSecondaryColor3usv;
-		if(!__gleSecondaryColor3usv) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColor3usv) bIsLoaded = 0;
 	__gleSecondaryColorPointer = (PFNGLSECONDARYCOLORPOINTERPROC)gleIntGetProcAddress("glSecondaryColorPointer");
-	if(!TestPointer((const void*)__gleSecondaryColorPointer))
-	{
-		__gleSecondaryColorPointer = (PFNGLSECONDARYCOLORPOINTERPROC)gle_CoreStruct.gleVarSecondaryColorPointer;
-		if(!__gleSecondaryColorPointer) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColorPointer) bIsLoaded = 0;
 	__gleWindowPos2d = (PFNGLWINDOWPOS2DPROC)gleIntGetProcAddress("glWindowPos2d");
-	if(!TestPointer((const void*)__gleWindowPos2d))
-	{
-		__gleWindowPos2d = (PFNGLWINDOWPOS2DPROC)gle_CoreStruct.gleVarWindowPos2d;
-		if(!__gleWindowPos2d) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos2d) bIsLoaded = 0;
 	__gleWindowPos2dv = (PFNGLWINDOWPOS2DVPROC)gleIntGetProcAddress("glWindowPos2dv");
-	if(!TestPointer((const void*)__gleWindowPos2dv))
-	{
-		__gleWindowPos2dv = (PFNGLWINDOWPOS2DVPROC)gle_CoreStruct.gleVarWindowPos2dv;
-		if(!__gleWindowPos2dv) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos2dv) bIsLoaded = 0;
 	__gleWindowPos2f = (PFNGLWINDOWPOS2FPROC)gleIntGetProcAddress("glWindowPos2f");
-	if(!TestPointer((const void*)__gleWindowPos2f))
-	{
-		__gleWindowPos2f = (PFNGLWINDOWPOS2FPROC)gle_CoreStruct.gleVarWindowPos2f;
-		if(!__gleWindowPos2f) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos2f) bIsLoaded = 0;
 	__gleWindowPos2fv = (PFNGLWINDOWPOS2FVPROC)gleIntGetProcAddress("glWindowPos2fv");
-	if(!TestPointer((const void*)__gleWindowPos2fv))
-	{
-		__gleWindowPos2fv = (PFNGLWINDOWPOS2FVPROC)gle_CoreStruct.gleVarWindowPos2fv;
-		if(!__gleWindowPos2fv) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos2fv) bIsLoaded = 0;
 	__gleWindowPos2i = (PFNGLWINDOWPOS2IPROC)gleIntGetProcAddress("glWindowPos2i");
-	if(!TestPointer((const void*)__gleWindowPos2i))
-	{
-		__gleWindowPos2i = (PFNGLWINDOWPOS2IPROC)gle_CoreStruct.gleVarWindowPos2i;
-		if(!__gleWindowPos2i) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos2i) bIsLoaded = 0;
 	__gleWindowPos2iv = (PFNGLWINDOWPOS2IVPROC)gleIntGetProcAddress("glWindowPos2iv");
-	if(!TestPointer((const void*)__gleWindowPos2iv))
-	{
-		__gleWindowPos2iv = (PFNGLWINDOWPOS2IVPROC)gle_CoreStruct.gleVarWindowPos2iv;
-		if(!__gleWindowPos2iv) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos2iv) bIsLoaded = 0;
 	__gleWindowPos2s = (PFNGLWINDOWPOS2SPROC)gleIntGetProcAddress("glWindowPos2s");
-	if(!TestPointer((const void*)__gleWindowPos2s))
-	{
-		__gleWindowPos2s = (PFNGLWINDOWPOS2SPROC)gle_CoreStruct.gleVarWindowPos2s;
-		if(!__gleWindowPos2s) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos2s) bIsLoaded = 0;
 	__gleWindowPos2sv = (PFNGLWINDOWPOS2SVPROC)gleIntGetProcAddress("glWindowPos2sv");
-	if(!TestPointer((const void*)__gleWindowPos2sv))
-	{
-		__gleWindowPos2sv = (PFNGLWINDOWPOS2SVPROC)gle_CoreStruct.gleVarWindowPos2sv;
-		if(!__gleWindowPos2sv) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos2sv) bIsLoaded = 0;
 	__gleWindowPos3d = (PFNGLWINDOWPOS3DPROC)gleIntGetProcAddress("glWindowPos3d");
-	if(!TestPointer((const void*)__gleWindowPos3d))
-	{
-		__gleWindowPos3d = (PFNGLWINDOWPOS3DPROC)gle_CoreStruct.gleVarWindowPos3d;
-		if(!__gleWindowPos3d) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos3d) bIsLoaded = 0;
 	__gleWindowPos3dv = (PFNGLWINDOWPOS3DVPROC)gleIntGetProcAddress("glWindowPos3dv");
-	if(!TestPointer((const void*)__gleWindowPos3dv))
-	{
-		__gleWindowPos3dv = (PFNGLWINDOWPOS3DVPROC)gle_CoreStruct.gleVarWindowPos3dv;
-		if(!__gleWindowPos3dv) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos3dv) bIsLoaded = 0;
 	__gleWindowPos3f = (PFNGLWINDOWPOS3FPROC)gleIntGetProcAddress("glWindowPos3f");
-	if(!TestPointer((const void*)__gleWindowPos3f))
-	{
-		__gleWindowPos3f = (PFNGLWINDOWPOS3FPROC)gle_CoreStruct.gleVarWindowPos3f;
-		if(!__gleWindowPos3f) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos3f) bIsLoaded = 0;
 	__gleWindowPos3fv = (PFNGLWINDOWPOS3FVPROC)gleIntGetProcAddress("glWindowPos3fv");
-	if(!TestPointer((const void*)__gleWindowPos3fv))
-	{
-		__gleWindowPos3fv = (PFNGLWINDOWPOS3FVPROC)gle_CoreStruct.gleVarWindowPos3fv;
-		if(!__gleWindowPos3fv) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos3fv) bIsLoaded = 0;
 	__gleWindowPos3i = (PFNGLWINDOWPOS3IPROC)gleIntGetProcAddress("glWindowPos3i");
-	if(!TestPointer((const void*)__gleWindowPos3i))
-	{
-		__gleWindowPos3i = (PFNGLWINDOWPOS3IPROC)gle_CoreStruct.gleVarWindowPos3i;
-		if(!__gleWindowPos3i) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos3i) bIsLoaded = 0;
 	__gleWindowPos3iv = (PFNGLWINDOWPOS3IVPROC)gleIntGetProcAddress("glWindowPos3iv");
-	if(!TestPointer((const void*)__gleWindowPos3iv))
-	{
-		__gleWindowPos3iv = (PFNGLWINDOWPOS3IVPROC)gle_CoreStruct.gleVarWindowPos3iv;
-		if(!__gleWindowPos3iv) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos3iv) bIsLoaded = 0;
 	__gleWindowPos3s = (PFNGLWINDOWPOS3SPROC)gleIntGetProcAddress("glWindowPos3s");
-	if(!TestPointer((const void*)__gleWindowPos3s))
-	{
-		__gleWindowPos3s = (PFNGLWINDOWPOS3SPROC)gle_CoreStruct.gleVarWindowPos3s;
-		if(!__gleWindowPos3s) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos3s) bIsLoaded = 0;
 	__gleWindowPos3sv = (PFNGLWINDOWPOS3SVPROC)gleIntGetProcAddress("glWindowPos3sv");
-	if(!TestPointer((const void*)__gleWindowPos3sv))
-	{
-		__gleWindowPos3sv = (PFNGLWINDOWPOS3SVPROC)gle_CoreStruct.gleVarWindowPos3sv;
-		if(!__gleWindowPos3sv) bIsLoaded = 0;
-	}
+	if(!__gleWindowPos3sv) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -15609,221 +13098,77 @@ static int gleIntLoadCore_2_0_Base()
 {
 	int bIsLoaded = gleIntLoadCore_2_0_Version_3_1();
 	__gleVertexAttrib1d = (PFNGLVERTEXATTRIB1DPROC)gleIntGetProcAddress("glVertexAttrib1d");
-	if(!TestPointer((const void*)__gleVertexAttrib1d))
-	{
-		__gleVertexAttrib1d = (PFNGLVERTEXATTRIB1DPROC)gle_CoreStruct.gleVarVertexAttrib1d;
-		if(!__gleVertexAttrib1d) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib1d) bIsLoaded = 0;
 	__gleVertexAttrib1dv = (PFNGLVERTEXATTRIB1DVPROC)gleIntGetProcAddress("glVertexAttrib1dv");
-	if(!TestPointer((const void*)__gleVertexAttrib1dv))
-	{
-		__gleVertexAttrib1dv = (PFNGLVERTEXATTRIB1DVPROC)gle_CoreStruct.gleVarVertexAttrib1dv;
-		if(!__gleVertexAttrib1dv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib1dv) bIsLoaded = 0;
 	__gleVertexAttrib1f = (PFNGLVERTEXATTRIB1FPROC)gleIntGetProcAddress("glVertexAttrib1f");
-	if(!TestPointer((const void*)__gleVertexAttrib1f))
-	{
-		__gleVertexAttrib1f = (PFNGLVERTEXATTRIB1FPROC)gle_CoreStruct.gleVarVertexAttrib1f;
-		if(!__gleVertexAttrib1f) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib1f) bIsLoaded = 0;
 	__gleVertexAttrib1fv = (PFNGLVERTEXATTRIB1FVPROC)gleIntGetProcAddress("glVertexAttrib1fv");
-	if(!TestPointer((const void*)__gleVertexAttrib1fv))
-	{
-		__gleVertexAttrib1fv = (PFNGLVERTEXATTRIB1FVPROC)gle_CoreStruct.gleVarVertexAttrib1fv;
-		if(!__gleVertexAttrib1fv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib1fv) bIsLoaded = 0;
 	__gleVertexAttrib1s = (PFNGLVERTEXATTRIB1SPROC)gleIntGetProcAddress("glVertexAttrib1s");
-	if(!TestPointer((const void*)__gleVertexAttrib1s))
-	{
-		__gleVertexAttrib1s = (PFNGLVERTEXATTRIB1SPROC)gle_CoreStruct.gleVarVertexAttrib1s;
-		if(!__gleVertexAttrib1s) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib1s) bIsLoaded = 0;
 	__gleVertexAttrib1sv = (PFNGLVERTEXATTRIB1SVPROC)gleIntGetProcAddress("glVertexAttrib1sv");
-	if(!TestPointer((const void*)__gleVertexAttrib1sv))
-	{
-		__gleVertexAttrib1sv = (PFNGLVERTEXATTRIB1SVPROC)gle_CoreStruct.gleVarVertexAttrib1sv;
-		if(!__gleVertexAttrib1sv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib1sv) bIsLoaded = 0;
 	__gleVertexAttrib2d = (PFNGLVERTEXATTRIB2DPROC)gleIntGetProcAddress("glVertexAttrib2d");
-	if(!TestPointer((const void*)__gleVertexAttrib2d))
-	{
-		__gleVertexAttrib2d = (PFNGLVERTEXATTRIB2DPROC)gle_CoreStruct.gleVarVertexAttrib2d;
-		if(!__gleVertexAttrib2d) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib2d) bIsLoaded = 0;
 	__gleVertexAttrib2dv = (PFNGLVERTEXATTRIB2DVPROC)gleIntGetProcAddress("glVertexAttrib2dv");
-	if(!TestPointer((const void*)__gleVertexAttrib2dv))
-	{
-		__gleVertexAttrib2dv = (PFNGLVERTEXATTRIB2DVPROC)gle_CoreStruct.gleVarVertexAttrib2dv;
-		if(!__gleVertexAttrib2dv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib2dv) bIsLoaded = 0;
 	__gleVertexAttrib2f = (PFNGLVERTEXATTRIB2FPROC)gleIntGetProcAddress("glVertexAttrib2f");
-	if(!TestPointer((const void*)__gleVertexAttrib2f))
-	{
-		__gleVertexAttrib2f = (PFNGLVERTEXATTRIB2FPROC)gle_CoreStruct.gleVarVertexAttrib2f;
-		if(!__gleVertexAttrib2f) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib2f) bIsLoaded = 0;
 	__gleVertexAttrib2fv = (PFNGLVERTEXATTRIB2FVPROC)gleIntGetProcAddress("glVertexAttrib2fv");
-	if(!TestPointer((const void*)__gleVertexAttrib2fv))
-	{
-		__gleVertexAttrib2fv = (PFNGLVERTEXATTRIB2FVPROC)gle_CoreStruct.gleVarVertexAttrib2fv;
-		if(!__gleVertexAttrib2fv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib2fv) bIsLoaded = 0;
 	__gleVertexAttrib2s = (PFNGLVERTEXATTRIB2SPROC)gleIntGetProcAddress("glVertexAttrib2s");
-	if(!TestPointer((const void*)__gleVertexAttrib2s))
-	{
-		__gleVertexAttrib2s = (PFNGLVERTEXATTRIB2SPROC)gle_CoreStruct.gleVarVertexAttrib2s;
-		if(!__gleVertexAttrib2s) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib2s) bIsLoaded = 0;
 	__gleVertexAttrib2sv = (PFNGLVERTEXATTRIB2SVPROC)gleIntGetProcAddress("glVertexAttrib2sv");
-	if(!TestPointer((const void*)__gleVertexAttrib2sv))
-	{
-		__gleVertexAttrib2sv = (PFNGLVERTEXATTRIB2SVPROC)gle_CoreStruct.gleVarVertexAttrib2sv;
-		if(!__gleVertexAttrib2sv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib2sv) bIsLoaded = 0;
 	__gleVertexAttrib3d = (PFNGLVERTEXATTRIB3DPROC)gleIntGetProcAddress("glVertexAttrib3d");
-	if(!TestPointer((const void*)__gleVertexAttrib3d))
-	{
-		__gleVertexAttrib3d = (PFNGLVERTEXATTRIB3DPROC)gle_CoreStruct.gleVarVertexAttrib3d;
-		if(!__gleVertexAttrib3d) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib3d) bIsLoaded = 0;
 	__gleVertexAttrib3dv = (PFNGLVERTEXATTRIB3DVPROC)gleIntGetProcAddress("glVertexAttrib3dv");
-	if(!TestPointer((const void*)__gleVertexAttrib3dv))
-	{
-		__gleVertexAttrib3dv = (PFNGLVERTEXATTRIB3DVPROC)gle_CoreStruct.gleVarVertexAttrib3dv;
-		if(!__gleVertexAttrib3dv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib3dv) bIsLoaded = 0;
 	__gleVertexAttrib3f = (PFNGLVERTEXATTRIB3FPROC)gleIntGetProcAddress("glVertexAttrib3f");
-	if(!TestPointer((const void*)__gleVertexAttrib3f))
-	{
-		__gleVertexAttrib3f = (PFNGLVERTEXATTRIB3FPROC)gle_CoreStruct.gleVarVertexAttrib3f;
-		if(!__gleVertexAttrib3f) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib3f) bIsLoaded = 0;
 	__gleVertexAttrib3fv = (PFNGLVERTEXATTRIB3FVPROC)gleIntGetProcAddress("glVertexAttrib3fv");
-	if(!TestPointer((const void*)__gleVertexAttrib3fv))
-	{
-		__gleVertexAttrib3fv = (PFNGLVERTEXATTRIB3FVPROC)gle_CoreStruct.gleVarVertexAttrib3fv;
-		if(!__gleVertexAttrib3fv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib3fv) bIsLoaded = 0;
 	__gleVertexAttrib3s = (PFNGLVERTEXATTRIB3SPROC)gleIntGetProcAddress("glVertexAttrib3s");
-	if(!TestPointer((const void*)__gleVertexAttrib3s))
-	{
-		__gleVertexAttrib3s = (PFNGLVERTEXATTRIB3SPROC)gle_CoreStruct.gleVarVertexAttrib3s;
-		if(!__gleVertexAttrib3s) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib3s) bIsLoaded = 0;
 	__gleVertexAttrib3sv = (PFNGLVERTEXATTRIB3SVPROC)gleIntGetProcAddress("glVertexAttrib3sv");
-	if(!TestPointer((const void*)__gleVertexAttrib3sv))
-	{
-		__gleVertexAttrib3sv = (PFNGLVERTEXATTRIB3SVPROC)gle_CoreStruct.gleVarVertexAttrib3sv;
-		if(!__gleVertexAttrib3sv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib3sv) bIsLoaded = 0;
 	__gleVertexAttrib4Nbv = (PFNGLVERTEXATTRIB4NBVPROC)gleIntGetProcAddress("glVertexAttrib4Nbv");
-	if(!TestPointer((const void*)__gleVertexAttrib4Nbv))
-	{
-		__gleVertexAttrib4Nbv = (PFNGLVERTEXATTRIB4NBVPROC)gle_CoreStruct.gleVarVertexAttrib4Nbv;
-		if(!__gleVertexAttrib4Nbv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4Nbv) bIsLoaded = 0;
 	__gleVertexAttrib4Niv = (PFNGLVERTEXATTRIB4NIVPROC)gleIntGetProcAddress("glVertexAttrib4Niv");
-	if(!TestPointer((const void*)__gleVertexAttrib4Niv))
-	{
-		__gleVertexAttrib4Niv = (PFNGLVERTEXATTRIB4NIVPROC)gle_CoreStruct.gleVarVertexAttrib4Niv;
-		if(!__gleVertexAttrib4Niv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4Niv) bIsLoaded = 0;
 	__gleVertexAttrib4Nsv = (PFNGLVERTEXATTRIB4NSVPROC)gleIntGetProcAddress("glVertexAttrib4Nsv");
-	if(!TestPointer((const void*)__gleVertexAttrib4Nsv))
-	{
-		__gleVertexAttrib4Nsv = (PFNGLVERTEXATTRIB4NSVPROC)gle_CoreStruct.gleVarVertexAttrib4Nsv;
-		if(!__gleVertexAttrib4Nsv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4Nsv) bIsLoaded = 0;
 	__gleVertexAttrib4Nub = (PFNGLVERTEXATTRIB4NUBPROC)gleIntGetProcAddress("glVertexAttrib4Nub");
-	if(!TestPointer((const void*)__gleVertexAttrib4Nub))
-	{
-		__gleVertexAttrib4Nub = (PFNGLVERTEXATTRIB4NUBPROC)gle_CoreStruct.gleVarVertexAttrib4Nub;
-		if(!__gleVertexAttrib4Nub) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4Nub) bIsLoaded = 0;
 	__gleVertexAttrib4Nubv = (PFNGLVERTEXATTRIB4NUBVPROC)gleIntGetProcAddress("glVertexAttrib4Nubv");
-	if(!TestPointer((const void*)__gleVertexAttrib4Nubv))
-	{
-		__gleVertexAttrib4Nubv = (PFNGLVERTEXATTRIB4NUBVPROC)gle_CoreStruct.gleVarVertexAttrib4Nubv;
-		if(!__gleVertexAttrib4Nubv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4Nubv) bIsLoaded = 0;
 	__gleVertexAttrib4Nuiv = (PFNGLVERTEXATTRIB4NUIVPROC)gleIntGetProcAddress("glVertexAttrib4Nuiv");
-	if(!TestPointer((const void*)__gleVertexAttrib4Nuiv))
-	{
-		__gleVertexAttrib4Nuiv = (PFNGLVERTEXATTRIB4NUIVPROC)gle_CoreStruct.gleVarVertexAttrib4Nuiv;
-		if(!__gleVertexAttrib4Nuiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4Nuiv) bIsLoaded = 0;
 	__gleVertexAttrib4Nusv = (PFNGLVERTEXATTRIB4NUSVPROC)gleIntGetProcAddress("glVertexAttrib4Nusv");
-	if(!TestPointer((const void*)__gleVertexAttrib4Nusv))
-	{
-		__gleVertexAttrib4Nusv = (PFNGLVERTEXATTRIB4NUSVPROC)gle_CoreStruct.gleVarVertexAttrib4Nusv;
-		if(!__gleVertexAttrib4Nusv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4Nusv) bIsLoaded = 0;
 	__gleVertexAttrib4bv = (PFNGLVERTEXATTRIB4BVPROC)gleIntGetProcAddress("glVertexAttrib4bv");
-	if(!TestPointer((const void*)__gleVertexAttrib4bv))
-	{
-		__gleVertexAttrib4bv = (PFNGLVERTEXATTRIB4BVPROC)gle_CoreStruct.gleVarVertexAttrib4bv;
-		if(!__gleVertexAttrib4bv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4bv) bIsLoaded = 0;
 	__gleVertexAttrib4d = (PFNGLVERTEXATTRIB4DPROC)gleIntGetProcAddress("glVertexAttrib4d");
-	if(!TestPointer((const void*)__gleVertexAttrib4d))
-	{
-		__gleVertexAttrib4d = (PFNGLVERTEXATTRIB4DPROC)gle_CoreStruct.gleVarVertexAttrib4d;
-		if(!__gleVertexAttrib4d) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4d) bIsLoaded = 0;
 	__gleVertexAttrib4dv = (PFNGLVERTEXATTRIB4DVPROC)gleIntGetProcAddress("glVertexAttrib4dv");
-	if(!TestPointer((const void*)__gleVertexAttrib4dv))
-	{
-		__gleVertexAttrib4dv = (PFNGLVERTEXATTRIB4DVPROC)gle_CoreStruct.gleVarVertexAttrib4dv;
-		if(!__gleVertexAttrib4dv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4dv) bIsLoaded = 0;
 	__gleVertexAttrib4f = (PFNGLVERTEXATTRIB4FPROC)gleIntGetProcAddress("glVertexAttrib4f");
-	if(!TestPointer((const void*)__gleVertexAttrib4f))
-	{
-		__gleVertexAttrib4f = (PFNGLVERTEXATTRIB4FPROC)gle_CoreStruct.gleVarVertexAttrib4f;
-		if(!__gleVertexAttrib4f) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4f) bIsLoaded = 0;
 	__gleVertexAttrib4fv = (PFNGLVERTEXATTRIB4FVPROC)gleIntGetProcAddress("glVertexAttrib4fv");
-	if(!TestPointer((const void*)__gleVertexAttrib4fv))
-	{
-		__gleVertexAttrib4fv = (PFNGLVERTEXATTRIB4FVPROC)gle_CoreStruct.gleVarVertexAttrib4fv;
-		if(!__gleVertexAttrib4fv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4fv) bIsLoaded = 0;
 	__gleVertexAttrib4iv = (PFNGLVERTEXATTRIB4IVPROC)gleIntGetProcAddress("glVertexAttrib4iv");
-	if(!TestPointer((const void*)__gleVertexAttrib4iv))
-	{
-		__gleVertexAttrib4iv = (PFNGLVERTEXATTRIB4IVPROC)gle_CoreStruct.gleVarVertexAttrib4iv;
-		if(!__gleVertexAttrib4iv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4iv) bIsLoaded = 0;
 	__gleVertexAttrib4s = (PFNGLVERTEXATTRIB4SPROC)gleIntGetProcAddress("glVertexAttrib4s");
-	if(!TestPointer((const void*)__gleVertexAttrib4s))
-	{
-		__gleVertexAttrib4s = (PFNGLVERTEXATTRIB4SPROC)gle_CoreStruct.gleVarVertexAttrib4s;
-		if(!__gleVertexAttrib4s) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4s) bIsLoaded = 0;
 	__gleVertexAttrib4sv = (PFNGLVERTEXATTRIB4SVPROC)gleIntGetProcAddress("glVertexAttrib4sv");
-	if(!TestPointer((const void*)__gleVertexAttrib4sv))
-	{
-		__gleVertexAttrib4sv = (PFNGLVERTEXATTRIB4SVPROC)gle_CoreStruct.gleVarVertexAttrib4sv;
-		if(!__gleVertexAttrib4sv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4sv) bIsLoaded = 0;
 	__gleVertexAttrib4ubv = (PFNGLVERTEXATTRIB4UBVPROC)gleIntGetProcAddress("glVertexAttrib4ubv");
-	if(!TestPointer((const void*)__gleVertexAttrib4ubv))
-	{
-		__gleVertexAttrib4ubv = (PFNGLVERTEXATTRIB4UBVPROC)gle_CoreStruct.gleVarVertexAttrib4ubv;
-		if(!__gleVertexAttrib4ubv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4ubv) bIsLoaded = 0;
 	__gleVertexAttrib4uiv = (PFNGLVERTEXATTRIB4UIVPROC)gleIntGetProcAddress("glVertexAttrib4uiv");
-	if(!TestPointer((const void*)__gleVertexAttrib4uiv))
-	{
-		__gleVertexAttrib4uiv = (PFNGLVERTEXATTRIB4UIVPROC)gle_CoreStruct.gleVarVertexAttrib4uiv;
-		if(!__gleVertexAttrib4uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4uiv) bIsLoaded = 0;
 	__gleVertexAttrib4usv = (PFNGLVERTEXATTRIB4USVPROC)gleIntGetProcAddress("glVertexAttrib4usv");
-	if(!TestPointer((const void*)__gleVertexAttrib4usv))
-	{
-		__gleVertexAttrib4usv = (PFNGLVERTEXATTRIB4USVPROC)gle_CoreStruct.gleVarVertexAttrib4usv;
-		if(!__gleVertexAttrib4usv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttrib4usv) bIsLoaded = 0;
 	return bIsLoaded;
 }
 
@@ -15843,78 +13188,30 @@ static int gleIntLoadCore_3_1_Base()
 {
 	int bIsLoaded = 1;
 	__gleDrawArraysInstanced = (PFNGLDRAWARRAYSINSTANCEDPROC)gleIntGetProcAddress("glDrawArraysInstanced");
-	if(!TestPointer((const void*)__gleDrawArraysInstanced))
-	{
-		__gleDrawArraysInstanced = (PFNGLDRAWARRAYSINSTANCEDPROC)gle_CoreStruct.gleVarDrawArraysInstanced;
-		if(!__gleDrawArraysInstanced) bIsLoaded = 0;
-	}
+	if(!__gleDrawArraysInstanced) bIsLoaded = 0;
 	__gleDrawElementsInstanced = (PFNGLDRAWELEMENTSINSTANCEDPROC)gleIntGetProcAddress("glDrawElementsInstanced");
-	if(!TestPointer((const void*)__gleDrawElementsInstanced))
-	{
-		__gleDrawElementsInstanced = (PFNGLDRAWELEMENTSINSTANCEDPROC)gle_CoreStruct.gleVarDrawElementsInstanced;
-		if(!__gleDrawElementsInstanced) bIsLoaded = 0;
-	}
+	if(!__gleDrawElementsInstanced) bIsLoaded = 0;
 	__gleTexBuffer = (PFNGLTEXBUFFERPROC)gleIntGetProcAddress("glTexBuffer");
-	if(!TestPointer((const void*)__gleTexBuffer))
-	{
-		__gleTexBuffer = (PFNGLTEXBUFFERPROC)gle_CoreStruct.gleVarTexBuffer;
-		if(!__gleTexBuffer) bIsLoaded = 0;
-	}
+	if(!__gleTexBuffer) bIsLoaded = 0;
 	__glePrimitiveRestartIndex = (PFNGLPRIMITIVERESTARTINDEXPROC)gleIntGetProcAddress("glPrimitiveRestartIndex");
-	if(!TestPointer((const void*)__glePrimitiveRestartIndex))
-	{
-		__glePrimitiveRestartIndex = (PFNGLPRIMITIVERESTARTINDEXPROC)gle_CoreStruct.gleVarPrimitiveRestartIndex;
-		if(!__glePrimitiveRestartIndex) bIsLoaded = 0;
-	}
+	if(!__glePrimitiveRestartIndex) bIsLoaded = 0;
 	__gleGetUniformIndices = (PFNGLGETUNIFORMINDICESPROC)gleIntGetProcAddress("glGetUniformIndices");
-	if(!TestPointer((const void*)__gleGetUniformIndices))
-	{
-		__gleGetUniformIndices = (PFNGLGETUNIFORMINDICESPROC)gle_CoreStruct.gleVarGetUniformIndices;
-		if(!__gleGetUniformIndices) bIsLoaded = 0;
-	}
+	if(!__gleGetUniformIndices) bIsLoaded = 0;
 	__gleGetActiveUniformsiv = (PFNGLGETACTIVEUNIFORMSIVPROC)gleIntGetProcAddress("glGetActiveUniformsiv");
-	if(!TestPointer((const void*)__gleGetActiveUniformsiv))
-	{
-		__gleGetActiveUniformsiv = (PFNGLGETACTIVEUNIFORMSIVPROC)gle_CoreStruct.gleVarGetActiveUniformsiv;
-		if(!__gleGetActiveUniformsiv) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveUniformsiv) bIsLoaded = 0;
 	__gleGetActiveUniformName = (PFNGLGETACTIVEUNIFORMNAMEPROC)gleIntGetProcAddress("glGetActiveUniformName");
-	if(!TestPointer((const void*)__gleGetActiveUniformName))
-	{
-		__gleGetActiveUniformName = (PFNGLGETACTIVEUNIFORMNAMEPROC)gle_CoreStruct.gleVarGetActiveUniformName;
-		if(!__gleGetActiveUniformName) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveUniformName) bIsLoaded = 0;
 	__gleGetUniformBlockIndex = (PFNGLGETUNIFORMBLOCKINDEXPROC)gleIntGetProcAddress("glGetUniformBlockIndex");
-	if(!TestPointer((const void*)__gleGetUniformBlockIndex))
-	{
-		__gleGetUniformBlockIndex = (PFNGLGETUNIFORMBLOCKINDEXPROC)gle_CoreStruct.gleVarGetUniformBlockIndex;
-		if(!__gleGetUniformBlockIndex) bIsLoaded = 0;
-	}
+	if(!__gleGetUniformBlockIndex) bIsLoaded = 0;
 	__gleGetActiveUniformBlockiv = (PFNGLGETACTIVEUNIFORMBLOCKIVPROC)gleIntGetProcAddress("glGetActiveUniformBlockiv");
-	if(!TestPointer((const void*)__gleGetActiveUniformBlockiv))
-	{
-		__gleGetActiveUniformBlockiv = (PFNGLGETACTIVEUNIFORMBLOCKIVPROC)gle_CoreStruct.gleVarGetActiveUniformBlockiv;
-		if(!__gleGetActiveUniformBlockiv) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveUniformBlockiv) bIsLoaded = 0;
 	__gleGetActiveUniformBlockName = (PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC)gleIntGetProcAddress("glGetActiveUniformBlockName");
-	if(!TestPointer((const void*)__gleGetActiveUniformBlockName))
-	{
-		__gleGetActiveUniformBlockName = (PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC)gle_CoreStruct.gleVarGetActiveUniformBlockName;
-		if(!__gleGetActiveUniformBlockName) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveUniformBlockName) bIsLoaded = 0;
 	__gleUniformBlockBinding = (PFNGLUNIFORMBLOCKBINDINGPROC)gleIntGetProcAddress("glUniformBlockBinding");
-	if(!TestPointer((const void*)__gleUniformBlockBinding))
-	{
-		__gleUniformBlockBinding = (PFNGLUNIFORMBLOCKBINDINGPROC)gle_CoreStruct.gleVarUniformBlockBinding;
-		if(!__gleUniformBlockBinding) bIsLoaded = 0;
-	}
+	if(!__gleUniformBlockBinding) bIsLoaded = 0;
 	glext_ARB_uniform_buffer_object = 1;
 	__gleCopyBufferSubData = (PFNGLCOPYBUFFERSUBDATAPROC)gleIntGetProcAddress("glCopyBufferSubData");
-	if(!TestPointer((const void*)__gleCopyBufferSubData))
-	{
-		__gleCopyBufferSubData = (PFNGLCOPYBUFFERSUBDATAPROC)gle_CoreStruct.gleVarCopyBufferSubData;
-		if(!__gleCopyBufferSubData) bIsLoaded = 0;
-	}
+	if(!__gleCopyBufferSubData) bIsLoaded = 0;
 	glext_ARB_copy_buffer = 1;
 	return bIsLoaded;
 }
@@ -15923,122 +13220,46 @@ static int gleIntLoadCore_3_2_Base()
 {
 	int bIsLoaded = 1;
 	__gleGetInteger64i_v = (PFNGLGETINTEGER64I_VPROC)gleIntGetProcAddress("glGetInteger64i_v");
-	if(!TestPointer((const void*)__gleGetInteger64i_v))
-	{
-		__gleGetInteger64i_v = (PFNGLGETINTEGER64I_VPROC)gle_CoreStruct.gleVarGetInteger64i_v;
-		if(!__gleGetInteger64i_v) bIsLoaded = 0;
-	}
+	if(!__gleGetInteger64i_v) bIsLoaded = 0;
 	__gleGetBufferParameteri64v = (PFNGLGETBUFFERPARAMETERI64VPROC)gleIntGetProcAddress("glGetBufferParameteri64v");
-	if(!TestPointer((const void*)__gleGetBufferParameteri64v))
-	{
-		__gleGetBufferParameteri64v = (PFNGLGETBUFFERPARAMETERI64VPROC)gle_CoreStruct.gleVarGetBufferParameteri64v;
-		if(!__gleGetBufferParameteri64v) bIsLoaded = 0;
-	}
+	if(!__gleGetBufferParameteri64v) bIsLoaded = 0;
 	__gleFramebufferTexture = (PFNGLFRAMEBUFFERTEXTUREPROC)gleIntGetProcAddress("glFramebufferTexture");
-	if(!TestPointer((const void*)__gleFramebufferTexture))
-	{
-		__gleFramebufferTexture = (PFNGLFRAMEBUFFERTEXTUREPROC)gle_CoreStruct.gleVarFramebufferTexture;
-		if(!__gleFramebufferTexture) bIsLoaded = 0;
-	}
+	if(!__gleFramebufferTexture) bIsLoaded = 0;
 	__gleTexImage2DMultisample = (PFNGLTEXIMAGE2DMULTISAMPLEPROC)gleIntGetProcAddress("glTexImage2DMultisample");
-	if(!TestPointer((const void*)__gleTexImage2DMultisample))
-	{
-		__gleTexImage2DMultisample = (PFNGLTEXIMAGE2DMULTISAMPLEPROC)gle_CoreStruct.gleVarTexImage2DMultisample;
-		if(!__gleTexImage2DMultisample) bIsLoaded = 0;
-	}
+	if(!__gleTexImage2DMultisample) bIsLoaded = 0;
 	__gleTexImage3DMultisample = (PFNGLTEXIMAGE3DMULTISAMPLEPROC)gleIntGetProcAddress("glTexImage3DMultisample");
-	if(!TestPointer((const void*)__gleTexImage3DMultisample))
-	{
-		__gleTexImage3DMultisample = (PFNGLTEXIMAGE3DMULTISAMPLEPROC)gle_CoreStruct.gleVarTexImage3DMultisample;
-		if(!__gleTexImage3DMultisample) bIsLoaded = 0;
-	}
+	if(!__gleTexImage3DMultisample) bIsLoaded = 0;
 	__gleGetMultisamplefv = (PFNGLGETMULTISAMPLEFVPROC)gleIntGetProcAddress("glGetMultisamplefv");
-	if(!TestPointer((const void*)__gleGetMultisamplefv))
-	{
-		__gleGetMultisamplefv = (PFNGLGETMULTISAMPLEFVPROC)gle_CoreStruct.gleVarGetMultisamplefv;
-		if(!__gleGetMultisamplefv) bIsLoaded = 0;
-	}
+	if(!__gleGetMultisamplefv) bIsLoaded = 0;
 	__gleSampleMaski = (PFNGLSAMPLEMASKIPROC)gleIntGetProcAddress("glSampleMaski");
-	if(!TestPointer((const void*)__gleSampleMaski))
-	{
-		__gleSampleMaski = (PFNGLSAMPLEMASKIPROC)gle_CoreStruct.gleVarSampleMaski;
-		if(!__gleSampleMaski) bIsLoaded = 0;
-	}
+	if(!__gleSampleMaski) bIsLoaded = 0;
 	glext_ARB_texture_multisample = 1;
 	__gleDrawElementsBaseVertex = (PFNGLDRAWELEMENTSBASEVERTEXPROC)gleIntGetProcAddress("glDrawElementsBaseVertex");
-	if(!TestPointer((const void*)__gleDrawElementsBaseVertex))
-	{
-		__gleDrawElementsBaseVertex = (PFNGLDRAWELEMENTSBASEVERTEXPROC)gle_CoreStruct.gleVarDrawElementsBaseVertex;
-		if(!__gleDrawElementsBaseVertex) bIsLoaded = 0;
-	}
+	if(!__gleDrawElementsBaseVertex) bIsLoaded = 0;
 	__gleDrawRangeElementsBaseVertex = (PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC)gleIntGetProcAddress("glDrawRangeElementsBaseVertex");
-	if(!TestPointer((const void*)__gleDrawRangeElementsBaseVertex))
-	{
-		__gleDrawRangeElementsBaseVertex = (PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC)gle_CoreStruct.gleVarDrawRangeElementsBaseVertex;
-		if(!__gleDrawRangeElementsBaseVertex) bIsLoaded = 0;
-	}
+	if(!__gleDrawRangeElementsBaseVertex) bIsLoaded = 0;
 	__gleDrawElementsInstancedBaseVertex = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseVertex");
-	if(!TestPointer((const void*)__gleDrawElementsInstancedBaseVertex))
-	{
-		__gleDrawElementsInstancedBaseVertex = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC)gle_CoreStruct.gleVarDrawElementsInstancedBaseVertex;
-		if(!__gleDrawElementsInstancedBaseVertex) bIsLoaded = 0;
-	}
+	if(!__gleDrawElementsInstancedBaseVertex) bIsLoaded = 0;
 	__gleMultiDrawElementsBaseVertex = (PFNGLMULTIDRAWELEMENTSBASEVERTEXPROC)gleIntGetProcAddress("glMultiDrawElementsBaseVertex");
-	if(!TestPointer((const void*)__gleMultiDrawElementsBaseVertex))
-	{
-		__gleMultiDrawElementsBaseVertex = (PFNGLMULTIDRAWELEMENTSBASEVERTEXPROC)gle_CoreStruct.gleVarMultiDrawElementsBaseVertex;
-		if(!__gleMultiDrawElementsBaseVertex) bIsLoaded = 0;
-	}
+	if(!__gleMultiDrawElementsBaseVertex) bIsLoaded = 0;
 	glext_ARB_draw_elements_base_vertex = 1;
 	__gleProvokingVertex = (PFNGLPROVOKINGVERTEXPROC)gleIntGetProcAddress("glProvokingVertex");
-	if(!TestPointer((const void*)__gleProvokingVertex))
-	{
-		__gleProvokingVertex = (PFNGLPROVOKINGVERTEXPROC)gle_CoreStruct.gleVarProvokingVertex;
-		if(!__gleProvokingVertex) bIsLoaded = 0;
-	}
+	if(!__gleProvokingVertex) bIsLoaded = 0;
 	glext_ARB_provoking_vertex = 1;
 	__gleFenceSync = (PFNGLFENCESYNCPROC)gleIntGetProcAddress("glFenceSync");
-	if(!TestPointer((const void*)__gleFenceSync))
-	{
-		__gleFenceSync = (PFNGLFENCESYNCPROC)gle_CoreStruct.gleVarFenceSync;
-		if(!__gleFenceSync) bIsLoaded = 0;
-	}
+	if(!__gleFenceSync) bIsLoaded = 0;
 	__gleIsSync = (PFNGLISSYNCPROC)gleIntGetProcAddress("glIsSync");
-	if(!TestPointer((const void*)__gleIsSync))
-	{
-		__gleIsSync = (PFNGLISSYNCPROC)gle_CoreStruct.gleVarIsSync;
-		if(!__gleIsSync) bIsLoaded = 0;
-	}
+	if(!__gleIsSync) bIsLoaded = 0;
 	__gleDeleteSync = (PFNGLDELETESYNCPROC)gleIntGetProcAddress("glDeleteSync");
-	if(!TestPointer((const void*)__gleDeleteSync))
-	{
-		__gleDeleteSync = (PFNGLDELETESYNCPROC)gle_CoreStruct.gleVarDeleteSync;
-		if(!__gleDeleteSync) bIsLoaded = 0;
-	}
+	if(!__gleDeleteSync) bIsLoaded = 0;
 	__gleClientWaitSync = (PFNGLCLIENTWAITSYNCPROC)gleIntGetProcAddress("glClientWaitSync");
-	if(!TestPointer((const void*)__gleClientWaitSync))
-	{
-		__gleClientWaitSync = (PFNGLCLIENTWAITSYNCPROC)gle_CoreStruct.gleVarClientWaitSync;
-		if(!__gleClientWaitSync) bIsLoaded = 0;
-	}
+	if(!__gleClientWaitSync) bIsLoaded = 0;
 	__gleWaitSync = (PFNGLWAITSYNCPROC)gleIntGetProcAddress("glWaitSync");
-	if(!TestPointer((const void*)__gleWaitSync))
-	{
-		__gleWaitSync = (PFNGLWAITSYNCPROC)gle_CoreStruct.gleVarWaitSync;
-		if(!__gleWaitSync) bIsLoaded = 0;
-	}
+	if(!__gleWaitSync) bIsLoaded = 0;
 	__gleGetInteger64v = (PFNGLGETINTEGER64VPROC)gleIntGetProcAddress("glGetInteger64v");
-	if(!TestPointer((const void*)__gleGetInteger64v))
-	{
-		__gleGetInteger64v = (PFNGLGETINTEGER64VPROC)gle_CoreStruct.gleVarGetInteger64v;
-		if(!__gleGetInteger64v) bIsLoaded = 0;
-	}
+	if(!__gleGetInteger64v) bIsLoaded = 0;
 	__gleGetSynciv = (PFNGLGETSYNCIVPROC)gleIntGetProcAddress("glGetSynciv");
-	if(!TestPointer((const void*)__gleGetSynciv))
-	{
-		__gleGetSynciv = (PFNGLGETSYNCIVPROC)gle_CoreStruct.gleVarGetSynciv;
-		if(!__gleGetSynciv) bIsLoaded = 0;
-	}
+	if(!__gleGetSynciv) bIsLoaded = 0;
 	glext_ARB_sync = 1;
 	return bIsLoaded;
 }
@@ -16047,356 +13268,124 @@ static int gleIntLoadCore_3_3_Base()
 {
 	int bIsLoaded = 1;
 	__gleVertexAttribDivisor = (PFNGLVERTEXATTRIBDIVISORPROC)gleIntGetProcAddress("glVertexAttribDivisor");
-	if(!TestPointer((const void*)__gleVertexAttribDivisor))
-	{
-		__gleVertexAttribDivisor = (PFNGLVERTEXATTRIBDIVISORPROC)gle_CoreStruct.gleVarVertexAttribDivisor;
-		if(!__gleVertexAttribDivisor) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribDivisor) bIsLoaded = 0;
 	__gleQueryCounter = (PFNGLQUERYCOUNTERPROC)gleIntGetProcAddress("glQueryCounter");
-	if(!TestPointer((const void*)__gleQueryCounter))
-	{
-		__gleQueryCounter = (PFNGLQUERYCOUNTERPROC)gle_CoreStruct.gleVarQueryCounter;
-		if(!__gleQueryCounter) bIsLoaded = 0;
-	}
+	if(!__gleQueryCounter) bIsLoaded = 0;
 	__gleGetQueryObjecti64v = (PFNGLGETQUERYOBJECTI64VPROC)gleIntGetProcAddress("glGetQueryObjecti64v");
-	if(!TestPointer((const void*)__gleGetQueryObjecti64v))
-	{
-		__gleGetQueryObjecti64v = (PFNGLGETQUERYOBJECTI64VPROC)gle_CoreStruct.gleVarGetQueryObjecti64v;
-		if(!__gleGetQueryObjecti64v) bIsLoaded = 0;
-	}
+	if(!__gleGetQueryObjecti64v) bIsLoaded = 0;
 	__gleGetQueryObjectui64v = (PFNGLGETQUERYOBJECTUI64VPROC)gleIntGetProcAddress("glGetQueryObjectui64v");
-	if(!TestPointer((const void*)__gleGetQueryObjectui64v))
-	{
-		__gleGetQueryObjectui64v = (PFNGLGETQUERYOBJECTUI64VPROC)gle_CoreStruct.gleVarGetQueryObjectui64v;
-		if(!__gleGetQueryObjectui64v) bIsLoaded = 0;
-	}
+	if(!__gleGetQueryObjectui64v) bIsLoaded = 0;
 	glext_ARB_timer_query = 1;
 	__gleVertexP2ui = (PFNGLVERTEXP2UIPROC)gleIntGetProcAddress("glVertexP2ui");
-	if(!TestPointer((const void*)__gleVertexP2ui))
-	{
-		__gleVertexP2ui = (PFNGLVERTEXP2UIPROC)gle_CoreStruct.gleVarVertexP2ui;
-		if(!__gleVertexP2ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexP2ui) bIsLoaded = 0;
 	__gleVertexP2uiv = (PFNGLVERTEXP2UIVPROC)gleIntGetProcAddress("glVertexP2uiv");
-	if(!TestPointer((const void*)__gleVertexP2uiv))
-	{
-		__gleVertexP2uiv = (PFNGLVERTEXP2UIVPROC)gle_CoreStruct.gleVarVertexP2uiv;
-		if(!__gleVertexP2uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexP2uiv) bIsLoaded = 0;
 	__gleVertexP3ui = (PFNGLVERTEXP3UIPROC)gleIntGetProcAddress("glVertexP3ui");
-	if(!TestPointer((const void*)__gleVertexP3ui))
-	{
-		__gleVertexP3ui = (PFNGLVERTEXP3UIPROC)gle_CoreStruct.gleVarVertexP3ui;
-		if(!__gleVertexP3ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexP3ui) bIsLoaded = 0;
 	__gleVertexP3uiv = (PFNGLVERTEXP3UIVPROC)gleIntGetProcAddress("glVertexP3uiv");
-	if(!TestPointer((const void*)__gleVertexP3uiv))
-	{
-		__gleVertexP3uiv = (PFNGLVERTEXP3UIVPROC)gle_CoreStruct.gleVarVertexP3uiv;
-		if(!__gleVertexP3uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexP3uiv) bIsLoaded = 0;
 	__gleVertexP4ui = (PFNGLVERTEXP4UIPROC)gleIntGetProcAddress("glVertexP4ui");
-	if(!TestPointer((const void*)__gleVertexP4ui))
-	{
-		__gleVertexP4ui = (PFNGLVERTEXP4UIPROC)gle_CoreStruct.gleVarVertexP4ui;
-		if(!__gleVertexP4ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexP4ui) bIsLoaded = 0;
 	__gleVertexP4uiv = (PFNGLVERTEXP4UIVPROC)gleIntGetProcAddress("glVertexP4uiv");
-	if(!TestPointer((const void*)__gleVertexP4uiv))
-	{
-		__gleVertexP4uiv = (PFNGLVERTEXP4UIVPROC)gle_CoreStruct.gleVarVertexP4uiv;
-		if(!__gleVertexP4uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexP4uiv) bIsLoaded = 0;
 	__gleTexCoordP1ui = (PFNGLTEXCOORDP1UIPROC)gleIntGetProcAddress("glTexCoordP1ui");
-	if(!TestPointer((const void*)__gleTexCoordP1ui))
-	{
-		__gleTexCoordP1ui = (PFNGLTEXCOORDP1UIPROC)gle_CoreStruct.gleVarTexCoordP1ui;
-		if(!__gleTexCoordP1ui) bIsLoaded = 0;
-	}
+	if(!__gleTexCoordP1ui) bIsLoaded = 0;
 	__gleTexCoordP1uiv = (PFNGLTEXCOORDP1UIVPROC)gleIntGetProcAddress("glTexCoordP1uiv");
-	if(!TestPointer((const void*)__gleTexCoordP1uiv))
-	{
-		__gleTexCoordP1uiv = (PFNGLTEXCOORDP1UIVPROC)gle_CoreStruct.gleVarTexCoordP1uiv;
-		if(!__gleTexCoordP1uiv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoordP1uiv) bIsLoaded = 0;
 	__gleTexCoordP2ui = (PFNGLTEXCOORDP2UIPROC)gleIntGetProcAddress("glTexCoordP2ui");
-	if(!TestPointer((const void*)__gleTexCoordP2ui))
-	{
-		__gleTexCoordP2ui = (PFNGLTEXCOORDP2UIPROC)gle_CoreStruct.gleVarTexCoordP2ui;
-		if(!__gleTexCoordP2ui) bIsLoaded = 0;
-	}
+	if(!__gleTexCoordP2ui) bIsLoaded = 0;
 	__gleTexCoordP2uiv = (PFNGLTEXCOORDP2UIVPROC)gleIntGetProcAddress("glTexCoordP2uiv");
-	if(!TestPointer((const void*)__gleTexCoordP2uiv))
-	{
-		__gleTexCoordP2uiv = (PFNGLTEXCOORDP2UIVPROC)gle_CoreStruct.gleVarTexCoordP2uiv;
-		if(!__gleTexCoordP2uiv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoordP2uiv) bIsLoaded = 0;
 	__gleTexCoordP3ui = (PFNGLTEXCOORDP3UIPROC)gleIntGetProcAddress("glTexCoordP3ui");
-	if(!TestPointer((const void*)__gleTexCoordP3ui))
-	{
-		__gleTexCoordP3ui = (PFNGLTEXCOORDP3UIPROC)gle_CoreStruct.gleVarTexCoordP3ui;
-		if(!__gleTexCoordP3ui) bIsLoaded = 0;
-	}
+	if(!__gleTexCoordP3ui) bIsLoaded = 0;
 	__gleTexCoordP3uiv = (PFNGLTEXCOORDP3UIVPROC)gleIntGetProcAddress("glTexCoordP3uiv");
-	if(!TestPointer((const void*)__gleTexCoordP3uiv))
-	{
-		__gleTexCoordP3uiv = (PFNGLTEXCOORDP3UIVPROC)gle_CoreStruct.gleVarTexCoordP3uiv;
-		if(!__gleTexCoordP3uiv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoordP3uiv) bIsLoaded = 0;
 	__gleTexCoordP4ui = (PFNGLTEXCOORDP4UIPROC)gleIntGetProcAddress("glTexCoordP4ui");
-	if(!TestPointer((const void*)__gleTexCoordP4ui))
-	{
-		__gleTexCoordP4ui = (PFNGLTEXCOORDP4UIPROC)gle_CoreStruct.gleVarTexCoordP4ui;
-		if(!__gleTexCoordP4ui) bIsLoaded = 0;
-	}
+	if(!__gleTexCoordP4ui) bIsLoaded = 0;
 	__gleTexCoordP4uiv = (PFNGLTEXCOORDP4UIVPROC)gleIntGetProcAddress("glTexCoordP4uiv");
-	if(!TestPointer((const void*)__gleTexCoordP4uiv))
-	{
-		__gleTexCoordP4uiv = (PFNGLTEXCOORDP4UIVPROC)gle_CoreStruct.gleVarTexCoordP4uiv;
-		if(!__gleTexCoordP4uiv) bIsLoaded = 0;
-	}
+	if(!__gleTexCoordP4uiv) bIsLoaded = 0;
 	__gleMultiTexCoordP1ui = (PFNGLMULTITEXCOORDP1UIPROC)gleIntGetProcAddress("glMultiTexCoordP1ui");
-	if(!TestPointer((const void*)__gleMultiTexCoordP1ui))
-	{
-		__gleMultiTexCoordP1ui = (PFNGLMULTITEXCOORDP1UIPROC)gle_CoreStruct.gleVarMultiTexCoordP1ui;
-		if(!__gleMultiTexCoordP1ui) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoordP1ui) bIsLoaded = 0;
 	__gleMultiTexCoordP1uiv = (PFNGLMULTITEXCOORDP1UIVPROC)gleIntGetProcAddress("glMultiTexCoordP1uiv");
-	if(!TestPointer((const void*)__gleMultiTexCoordP1uiv))
-	{
-		__gleMultiTexCoordP1uiv = (PFNGLMULTITEXCOORDP1UIVPROC)gle_CoreStruct.gleVarMultiTexCoordP1uiv;
-		if(!__gleMultiTexCoordP1uiv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoordP1uiv) bIsLoaded = 0;
 	__gleMultiTexCoordP2ui = (PFNGLMULTITEXCOORDP2UIPROC)gleIntGetProcAddress("glMultiTexCoordP2ui");
-	if(!TestPointer((const void*)__gleMultiTexCoordP2ui))
-	{
-		__gleMultiTexCoordP2ui = (PFNGLMULTITEXCOORDP2UIPROC)gle_CoreStruct.gleVarMultiTexCoordP2ui;
-		if(!__gleMultiTexCoordP2ui) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoordP2ui) bIsLoaded = 0;
 	__gleMultiTexCoordP2uiv = (PFNGLMULTITEXCOORDP2UIVPROC)gleIntGetProcAddress("glMultiTexCoordP2uiv");
-	if(!TestPointer((const void*)__gleMultiTexCoordP2uiv))
-	{
-		__gleMultiTexCoordP2uiv = (PFNGLMULTITEXCOORDP2UIVPROC)gle_CoreStruct.gleVarMultiTexCoordP2uiv;
-		if(!__gleMultiTexCoordP2uiv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoordP2uiv) bIsLoaded = 0;
 	__gleMultiTexCoordP3ui = (PFNGLMULTITEXCOORDP3UIPROC)gleIntGetProcAddress("glMultiTexCoordP3ui");
-	if(!TestPointer((const void*)__gleMultiTexCoordP3ui))
-	{
-		__gleMultiTexCoordP3ui = (PFNGLMULTITEXCOORDP3UIPROC)gle_CoreStruct.gleVarMultiTexCoordP3ui;
-		if(!__gleMultiTexCoordP3ui) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoordP3ui) bIsLoaded = 0;
 	__gleMultiTexCoordP3uiv = (PFNGLMULTITEXCOORDP3UIVPROC)gleIntGetProcAddress("glMultiTexCoordP3uiv");
-	if(!TestPointer((const void*)__gleMultiTexCoordP3uiv))
-	{
-		__gleMultiTexCoordP3uiv = (PFNGLMULTITEXCOORDP3UIVPROC)gle_CoreStruct.gleVarMultiTexCoordP3uiv;
-		if(!__gleMultiTexCoordP3uiv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoordP3uiv) bIsLoaded = 0;
 	__gleMultiTexCoordP4ui = (PFNGLMULTITEXCOORDP4UIPROC)gleIntGetProcAddress("glMultiTexCoordP4ui");
-	if(!TestPointer((const void*)__gleMultiTexCoordP4ui))
-	{
-		__gleMultiTexCoordP4ui = (PFNGLMULTITEXCOORDP4UIPROC)gle_CoreStruct.gleVarMultiTexCoordP4ui;
-		if(!__gleMultiTexCoordP4ui) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoordP4ui) bIsLoaded = 0;
 	__gleMultiTexCoordP4uiv = (PFNGLMULTITEXCOORDP4UIVPROC)gleIntGetProcAddress("glMultiTexCoordP4uiv");
-	if(!TestPointer((const void*)__gleMultiTexCoordP4uiv))
-	{
-		__gleMultiTexCoordP4uiv = (PFNGLMULTITEXCOORDP4UIVPROC)gle_CoreStruct.gleVarMultiTexCoordP4uiv;
-		if(!__gleMultiTexCoordP4uiv) bIsLoaded = 0;
-	}
+	if(!__gleMultiTexCoordP4uiv) bIsLoaded = 0;
 	__gleNormalP3ui = (PFNGLNORMALP3UIPROC)gleIntGetProcAddress("glNormalP3ui");
-	if(!TestPointer((const void*)__gleNormalP3ui))
-	{
-		__gleNormalP3ui = (PFNGLNORMALP3UIPROC)gle_CoreStruct.gleVarNormalP3ui;
-		if(!__gleNormalP3ui) bIsLoaded = 0;
-	}
+	if(!__gleNormalP3ui) bIsLoaded = 0;
 	__gleNormalP3uiv = (PFNGLNORMALP3UIVPROC)gleIntGetProcAddress("glNormalP3uiv");
-	if(!TestPointer((const void*)__gleNormalP3uiv))
-	{
-		__gleNormalP3uiv = (PFNGLNORMALP3UIVPROC)gle_CoreStruct.gleVarNormalP3uiv;
-		if(!__gleNormalP3uiv) bIsLoaded = 0;
-	}
+	if(!__gleNormalP3uiv) bIsLoaded = 0;
 	__gleColorP3ui = (PFNGLCOLORP3UIPROC)gleIntGetProcAddress("glColorP3ui");
-	if(!TestPointer((const void*)__gleColorP3ui))
-	{
-		__gleColorP3ui = (PFNGLCOLORP3UIPROC)gle_CoreStruct.gleVarColorP3ui;
-		if(!__gleColorP3ui) bIsLoaded = 0;
-	}
+	if(!__gleColorP3ui) bIsLoaded = 0;
 	__gleColorP3uiv = (PFNGLCOLORP3UIVPROC)gleIntGetProcAddress("glColorP3uiv");
-	if(!TestPointer((const void*)__gleColorP3uiv))
-	{
-		__gleColorP3uiv = (PFNGLCOLORP3UIVPROC)gle_CoreStruct.gleVarColorP3uiv;
-		if(!__gleColorP3uiv) bIsLoaded = 0;
-	}
+	if(!__gleColorP3uiv) bIsLoaded = 0;
 	__gleColorP4ui = (PFNGLCOLORP4UIPROC)gleIntGetProcAddress("glColorP4ui");
-	if(!TestPointer((const void*)__gleColorP4ui))
-	{
-		__gleColorP4ui = (PFNGLCOLORP4UIPROC)gle_CoreStruct.gleVarColorP4ui;
-		if(!__gleColorP4ui) bIsLoaded = 0;
-	}
+	if(!__gleColorP4ui) bIsLoaded = 0;
 	__gleColorP4uiv = (PFNGLCOLORP4UIVPROC)gleIntGetProcAddress("glColorP4uiv");
-	if(!TestPointer((const void*)__gleColorP4uiv))
-	{
-		__gleColorP4uiv = (PFNGLCOLORP4UIVPROC)gle_CoreStruct.gleVarColorP4uiv;
-		if(!__gleColorP4uiv) bIsLoaded = 0;
-	}
+	if(!__gleColorP4uiv) bIsLoaded = 0;
 	__gleSecondaryColorP3ui = (PFNGLSECONDARYCOLORP3UIPROC)gleIntGetProcAddress("glSecondaryColorP3ui");
-	if(!TestPointer((const void*)__gleSecondaryColorP3ui))
-	{
-		__gleSecondaryColorP3ui = (PFNGLSECONDARYCOLORP3UIPROC)gle_CoreStruct.gleVarSecondaryColorP3ui;
-		if(!__gleSecondaryColorP3ui) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColorP3ui) bIsLoaded = 0;
 	__gleSecondaryColorP3uiv = (PFNGLSECONDARYCOLORP3UIVPROC)gleIntGetProcAddress("glSecondaryColorP3uiv");
-	if(!TestPointer((const void*)__gleSecondaryColorP3uiv))
-	{
-		__gleSecondaryColorP3uiv = (PFNGLSECONDARYCOLORP3UIVPROC)gle_CoreStruct.gleVarSecondaryColorP3uiv;
-		if(!__gleSecondaryColorP3uiv) bIsLoaded = 0;
-	}
+	if(!__gleSecondaryColorP3uiv) bIsLoaded = 0;
 	__gleVertexAttribP1ui = (PFNGLVERTEXATTRIBP1UIPROC)gleIntGetProcAddress("glVertexAttribP1ui");
-	if(!TestPointer((const void*)__gleVertexAttribP1ui))
-	{
-		__gleVertexAttribP1ui = (PFNGLVERTEXATTRIBP1UIPROC)gle_CoreStruct.gleVarVertexAttribP1ui;
-		if(!__gleVertexAttribP1ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribP1ui) bIsLoaded = 0;
 	__gleVertexAttribP1uiv = (PFNGLVERTEXATTRIBP1UIVPROC)gleIntGetProcAddress("glVertexAttribP1uiv");
-	if(!TestPointer((const void*)__gleVertexAttribP1uiv))
-	{
-		__gleVertexAttribP1uiv = (PFNGLVERTEXATTRIBP1UIVPROC)gle_CoreStruct.gleVarVertexAttribP1uiv;
-		if(!__gleVertexAttribP1uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribP1uiv) bIsLoaded = 0;
 	__gleVertexAttribP2ui = (PFNGLVERTEXATTRIBP2UIPROC)gleIntGetProcAddress("glVertexAttribP2ui");
-	if(!TestPointer((const void*)__gleVertexAttribP2ui))
-	{
-		__gleVertexAttribP2ui = (PFNGLVERTEXATTRIBP2UIPROC)gle_CoreStruct.gleVarVertexAttribP2ui;
-		if(!__gleVertexAttribP2ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribP2ui) bIsLoaded = 0;
 	__gleVertexAttribP2uiv = (PFNGLVERTEXATTRIBP2UIVPROC)gleIntGetProcAddress("glVertexAttribP2uiv");
-	if(!TestPointer((const void*)__gleVertexAttribP2uiv))
-	{
-		__gleVertexAttribP2uiv = (PFNGLVERTEXATTRIBP2UIVPROC)gle_CoreStruct.gleVarVertexAttribP2uiv;
-		if(!__gleVertexAttribP2uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribP2uiv) bIsLoaded = 0;
 	__gleVertexAttribP3ui = (PFNGLVERTEXATTRIBP3UIPROC)gleIntGetProcAddress("glVertexAttribP3ui");
-	if(!TestPointer((const void*)__gleVertexAttribP3ui))
-	{
-		__gleVertexAttribP3ui = (PFNGLVERTEXATTRIBP3UIPROC)gle_CoreStruct.gleVarVertexAttribP3ui;
-		if(!__gleVertexAttribP3ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribP3ui) bIsLoaded = 0;
 	__gleVertexAttribP3uiv = (PFNGLVERTEXATTRIBP3UIVPROC)gleIntGetProcAddress("glVertexAttribP3uiv");
-	if(!TestPointer((const void*)__gleVertexAttribP3uiv))
-	{
-		__gleVertexAttribP3uiv = (PFNGLVERTEXATTRIBP3UIVPROC)gle_CoreStruct.gleVarVertexAttribP3uiv;
-		if(!__gleVertexAttribP3uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribP3uiv) bIsLoaded = 0;
 	__gleVertexAttribP4ui = (PFNGLVERTEXATTRIBP4UIPROC)gleIntGetProcAddress("glVertexAttribP4ui");
-	if(!TestPointer((const void*)__gleVertexAttribP4ui))
-	{
-		__gleVertexAttribP4ui = (PFNGLVERTEXATTRIBP4UIPROC)gle_CoreStruct.gleVarVertexAttribP4ui;
-		if(!__gleVertexAttribP4ui) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribP4ui) bIsLoaded = 0;
 	__gleVertexAttribP4uiv = (PFNGLVERTEXATTRIBP4UIVPROC)gleIntGetProcAddress("glVertexAttribP4uiv");
-	if(!TestPointer((const void*)__gleVertexAttribP4uiv))
-	{
-		__gleVertexAttribP4uiv = (PFNGLVERTEXATTRIBP4UIVPROC)gle_CoreStruct.gleVarVertexAttribP4uiv;
-		if(!__gleVertexAttribP4uiv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribP4uiv) bIsLoaded = 0;
 	glext_ARB_vertex_type_2_10_10_10_rev = 1;
 	__gleGenSamplers = (PFNGLGENSAMPLERSPROC)gleIntGetProcAddress("glGenSamplers");
-	if(!TestPointer((const void*)__gleGenSamplers))
-	{
-		__gleGenSamplers = (PFNGLGENSAMPLERSPROC)gle_CoreStruct.gleVarGenSamplers;
-		if(!__gleGenSamplers) bIsLoaded = 0;
-	}
+	if(!__gleGenSamplers) bIsLoaded = 0;
 	__gleDeleteSamplers = (PFNGLDELETESAMPLERSPROC)gleIntGetProcAddress("glDeleteSamplers");
-	if(!TestPointer((const void*)__gleDeleteSamplers))
-	{
-		__gleDeleteSamplers = (PFNGLDELETESAMPLERSPROC)gle_CoreStruct.gleVarDeleteSamplers;
-		if(!__gleDeleteSamplers) bIsLoaded = 0;
-	}
+	if(!__gleDeleteSamplers) bIsLoaded = 0;
 	__gleIsSampler = (PFNGLISSAMPLERPROC)gleIntGetProcAddress("glIsSampler");
-	if(!TestPointer((const void*)__gleIsSampler))
-	{
-		__gleIsSampler = (PFNGLISSAMPLERPROC)gle_CoreStruct.gleVarIsSampler;
-		if(!__gleIsSampler) bIsLoaded = 0;
-	}
+	if(!__gleIsSampler) bIsLoaded = 0;
 	__gleBindSampler = (PFNGLBINDSAMPLERPROC)gleIntGetProcAddress("glBindSampler");
-	if(!TestPointer((const void*)__gleBindSampler))
-	{
-		__gleBindSampler = (PFNGLBINDSAMPLERPROC)gle_CoreStruct.gleVarBindSampler;
-		if(!__gleBindSampler) bIsLoaded = 0;
-	}
+	if(!__gleBindSampler) bIsLoaded = 0;
 	__gleSamplerParameteri = (PFNGLSAMPLERPARAMETERIPROC)gleIntGetProcAddress("glSamplerParameteri");
-	if(!TestPointer((const void*)__gleSamplerParameteri))
-	{
-		__gleSamplerParameteri = (PFNGLSAMPLERPARAMETERIPROC)gle_CoreStruct.gleVarSamplerParameteri;
-		if(!__gleSamplerParameteri) bIsLoaded = 0;
-	}
+	if(!__gleSamplerParameteri) bIsLoaded = 0;
 	__gleSamplerParameteriv = (PFNGLSAMPLERPARAMETERIVPROC)gleIntGetProcAddress("glSamplerParameteriv");
-	if(!TestPointer((const void*)__gleSamplerParameteriv))
-	{
-		__gleSamplerParameteriv = (PFNGLSAMPLERPARAMETERIVPROC)gle_CoreStruct.gleVarSamplerParameteriv;
-		if(!__gleSamplerParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleSamplerParameteriv) bIsLoaded = 0;
 	__gleSamplerParameterf = (PFNGLSAMPLERPARAMETERFPROC)gleIntGetProcAddress("glSamplerParameterf");
-	if(!TestPointer((const void*)__gleSamplerParameterf))
-	{
-		__gleSamplerParameterf = (PFNGLSAMPLERPARAMETERFPROC)gle_CoreStruct.gleVarSamplerParameterf;
-		if(!__gleSamplerParameterf) bIsLoaded = 0;
-	}
+	if(!__gleSamplerParameterf) bIsLoaded = 0;
 	__gleSamplerParameterfv = (PFNGLSAMPLERPARAMETERFVPROC)gleIntGetProcAddress("glSamplerParameterfv");
-	if(!TestPointer((const void*)__gleSamplerParameterfv))
-	{
-		__gleSamplerParameterfv = (PFNGLSAMPLERPARAMETERFVPROC)gle_CoreStruct.gleVarSamplerParameterfv;
-		if(!__gleSamplerParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleSamplerParameterfv) bIsLoaded = 0;
 	__gleSamplerParameterIiv = (PFNGLSAMPLERPARAMETERIIVPROC)gleIntGetProcAddress("glSamplerParameterIiv");
-	if(!TestPointer((const void*)__gleSamplerParameterIiv))
-	{
-		__gleSamplerParameterIiv = (PFNGLSAMPLERPARAMETERIIVPROC)gle_CoreStruct.gleVarSamplerParameterIiv;
-		if(!__gleSamplerParameterIiv) bIsLoaded = 0;
-	}
+	if(!__gleSamplerParameterIiv) bIsLoaded = 0;
 	__gleSamplerParameterIuiv = (PFNGLSAMPLERPARAMETERIUIVPROC)gleIntGetProcAddress("glSamplerParameterIuiv");
-	if(!TestPointer((const void*)__gleSamplerParameterIuiv))
-	{
-		__gleSamplerParameterIuiv = (PFNGLSAMPLERPARAMETERIUIVPROC)gle_CoreStruct.gleVarSamplerParameterIuiv;
-		if(!__gleSamplerParameterIuiv) bIsLoaded = 0;
-	}
+	if(!__gleSamplerParameterIuiv) bIsLoaded = 0;
 	__gleGetSamplerParameteriv = (PFNGLGETSAMPLERPARAMETERIVPROC)gleIntGetProcAddress("glGetSamplerParameteriv");
-	if(!TestPointer((const void*)__gleGetSamplerParameteriv))
-	{
-		__gleGetSamplerParameteriv = (PFNGLGETSAMPLERPARAMETERIVPROC)gle_CoreStruct.gleVarGetSamplerParameteriv;
-		if(!__gleGetSamplerParameteriv) bIsLoaded = 0;
-	}
+	if(!__gleGetSamplerParameteriv) bIsLoaded = 0;
 	__gleGetSamplerParameterIiv = (PFNGLGETSAMPLERPARAMETERIIVPROC)gleIntGetProcAddress("glGetSamplerParameterIiv");
-	if(!TestPointer((const void*)__gleGetSamplerParameterIiv))
-	{
-		__gleGetSamplerParameterIiv = (PFNGLGETSAMPLERPARAMETERIIVPROC)gle_CoreStruct.gleVarGetSamplerParameterIiv;
-		if(!__gleGetSamplerParameterIiv) bIsLoaded = 0;
-	}
+	if(!__gleGetSamplerParameterIiv) bIsLoaded = 0;
 	__gleGetSamplerParameterfv = (PFNGLGETSAMPLERPARAMETERFVPROC)gleIntGetProcAddress("glGetSamplerParameterfv");
-	if(!TestPointer((const void*)__gleGetSamplerParameterfv))
-	{
-		__gleGetSamplerParameterfv = (PFNGLGETSAMPLERPARAMETERFVPROC)gle_CoreStruct.gleVarGetSamplerParameterfv;
-		if(!__gleGetSamplerParameterfv) bIsLoaded = 0;
-	}
+	if(!__gleGetSamplerParameterfv) bIsLoaded = 0;
 	__gleGetSamplerParameterIuiv = (PFNGLGETSAMPLERPARAMETERIUIVPROC)gleIntGetProcAddress("glGetSamplerParameterIuiv");
-	if(!TestPointer((const void*)__gleGetSamplerParameterIuiv))
-	{
-		__gleGetSamplerParameterIuiv = (PFNGLGETSAMPLERPARAMETERIUIVPROC)gle_CoreStruct.gleVarGetSamplerParameterIuiv;
-		if(!__gleGetSamplerParameterIuiv) bIsLoaded = 0;
-	}
+	if(!__gleGetSamplerParameterIuiv) bIsLoaded = 0;
 	glext_ARB_sampler_objects = 1;
 	__gleBindFragDataLocationIndexed = (PFNGLBINDFRAGDATALOCATIONINDEXEDPROC)gleIntGetProcAddress("glBindFragDataLocationIndexed");
-	if(!TestPointer((const void*)__gleBindFragDataLocationIndexed))
-	{
-		__gleBindFragDataLocationIndexed = (PFNGLBINDFRAGDATALOCATIONINDEXEDPROC)gle_CoreStruct.gleVarBindFragDataLocationIndexed;
-		if(!__gleBindFragDataLocationIndexed) bIsLoaded = 0;
-	}
+	if(!__gleBindFragDataLocationIndexed) bIsLoaded = 0;
 	__gleGetFragDataIndex = (PFNGLGETFRAGDATAINDEXPROC)gleIntGetProcAddress("glGetFragDataIndex");
-	if(!TestPointer((const void*)__gleGetFragDataIndex))
-	{
-		__gleGetFragDataIndex = (PFNGLGETFRAGDATAINDEXPROC)gle_CoreStruct.gleVarGetFragDataIndex;
-		if(!__gleGetFragDataIndex) bIsLoaded = 0;
-	}
+	if(!__gleGetFragDataIndex) bIsLoaded = 0;
 	glext_ARB_blend_func_extended = 1;
 	return bIsLoaded;
 }
@@ -16405,286 +13394,102 @@ static int gleIntLoadCore_4_0_Base()
 {
 	int bIsLoaded = 1;
 	__gleMinSampleShading = (PFNGLMINSAMPLESHADINGPROC)gleIntGetProcAddress("glMinSampleShading");
-	if(!TestPointer((const void*)__gleMinSampleShading))
-	{
-		__gleMinSampleShading = (PFNGLMINSAMPLESHADINGPROC)gle_CoreStruct.gleVarMinSampleShading;
-		if(!__gleMinSampleShading) bIsLoaded = 0;
-	}
+	if(!__gleMinSampleShading) bIsLoaded = 0;
 	__gleBlendEquationi = (PFNGLBLENDEQUATIONIPROC)gleIntGetProcAddress("glBlendEquationi");
-	if(!TestPointer((const void*)__gleBlendEquationi))
-	{
-		__gleBlendEquationi = (PFNGLBLENDEQUATIONIPROC)gle_CoreStruct.gleVarBlendEquationi;
-		if(!__gleBlendEquationi) bIsLoaded = 0;
-	}
+	if(!__gleBlendEquationi) bIsLoaded = 0;
 	__gleBlendEquationSeparatei = (PFNGLBLENDEQUATIONSEPARATEIPROC)gleIntGetProcAddress("glBlendEquationSeparatei");
-	if(!TestPointer((const void*)__gleBlendEquationSeparatei))
-	{
-		__gleBlendEquationSeparatei = (PFNGLBLENDEQUATIONSEPARATEIPROC)gle_CoreStruct.gleVarBlendEquationSeparatei;
-		if(!__gleBlendEquationSeparatei) bIsLoaded = 0;
-	}
+	if(!__gleBlendEquationSeparatei) bIsLoaded = 0;
 	__gleBlendFunci = (PFNGLBLENDFUNCIPROC)gleIntGetProcAddress("glBlendFunci");
-	if(!TestPointer((const void*)__gleBlendFunci))
-	{
-		__gleBlendFunci = (PFNGLBLENDFUNCIPROC)gle_CoreStruct.gleVarBlendFunci;
-		if(!__gleBlendFunci) bIsLoaded = 0;
-	}
+	if(!__gleBlendFunci) bIsLoaded = 0;
 	__gleBlendFuncSeparatei = (PFNGLBLENDFUNCSEPARATEIPROC)gleIntGetProcAddress("glBlendFuncSeparatei");
-	if(!TestPointer((const void*)__gleBlendFuncSeparatei))
-	{
-		__gleBlendFuncSeparatei = (PFNGLBLENDFUNCSEPARATEIPROC)gle_CoreStruct.gleVarBlendFuncSeparatei;
-		if(!__gleBlendFuncSeparatei) bIsLoaded = 0;
-	}
+	if(!__gleBlendFuncSeparatei) bIsLoaded = 0;
 	__gleBindTransformFeedback = (PFNGLBINDTRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glBindTransformFeedback");
-	if(!TestPointer((const void*)__gleBindTransformFeedback))
-	{
-		__gleBindTransformFeedback = (PFNGLBINDTRANSFORMFEEDBACKPROC)gle_CoreStruct.gleVarBindTransformFeedback;
-		if(!__gleBindTransformFeedback) bIsLoaded = 0;
-	}
+	if(!__gleBindTransformFeedback) bIsLoaded = 0;
 	__gleDeleteTransformFeedbacks = (PFNGLDELETETRANSFORMFEEDBACKSPROC)gleIntGetProcAddress("glDeleteTransformFeedbacks");
-	if(!TestPointer((const void*)__gleDeleteTransformFeedbacks))
-	{
-		__gleDeleteTransformFeedbacks = (PFNGLDELETETRANSFORMFEEDBACKSPROC)gle_CoreStruct.gleVarDeleteTransformFeedbacks;
-		if(!__gleDeleteTransformFeedbacks) bIsLoaded = 0;
-	}
+	if(!__gleDeleteTransformFeedbacks) bIsLoaded = 0;
 	__gleGenTransformFeedbacks = (PFNGLGENTRANSFORMFEEDBACKSPROC)gleIntGetProcAddress("glGenTransformFeedbacks");
-	if(!TestPointer((const void*)__gleGenTransformFeedbacks))
-	{
-		__gleGenTransformFeedbacks = (PFNGLGENTRANSFORMFEEDBACKSPROC)gle_CoreStruct.gleVarGenTransformFeedbacks;
-		if(!__gleGenTransformFeedbacks) bIsLoaded = 0;
-	}
+	if(!__gleGenTransformFeedbacks) bIsLoaded = 0;
 	__gleIsTransformFeedback = (PFNGLISTRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glIsTransformFeedback");
-	if(!TestPointer((const void*)__gleIsTransformFeedback))
-	{
-		__gleIsTransformFeedback = (PFNGLISTRANSFORMFEEDBACKPROC)gle_CoreStruct.gleVarIsTransformFeedback;
-		if(!__gleIsTransformFeedback) bIsLoaded = 0;
-	}
+	if(!__gleIsTransformFeedback) bIsLoaded = 0;
 	__glePauseTransformFeedback = (PFNGLPAUSETRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glPauseTransformFeedback");
-	if(!TestPointer((const void*)__glePauseTransformFeedback))
-	{
-		__glePauseTransformFeedback = (PFNGLPAUSETRANSFORMFEEDBACKPROC)gle_CoreStruct.gleVarPauseTransformFeedback;
-		if(!__glePauseTransformFeedback) bIsLoaded = 0;
-	}
+	if(!__glePauseTransformFeedback) bIsLoaded = 0;
 	__gleResumeTransformFeedback = (PFNGLRESUMETRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glResumeTransformFeedback");
-	if(!TestPointer((const void*)__gleResumeTransformFeedback))
-	{
-		__gleResumeTransformFeedback = (PFNGLRESUMETRANSFORMFEEDBACKPROC)gle_CoreStruct.gleVarResumeTransformFeedback;
-		if(!__gleResumeTransformFeedback) bIsLoaded = 0;
-	}
+	if(!__gleResumeTransformFeedback) bIsLoaded = 0;
 	__gleDrawTransformFeedback = (PFNGLDRAWTRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glDrawTransformFeedback");
-	if(!TestPointer((const void*)__gleDrawTransformFeedback))
-	{
-		__gleDrawTransformFeedback = (PFNGLDRAWTRANSFORMFEEDBACKPROC)gle_CoreStruct.gleVarDrawTransformFeedback;
-		if(!__gleDrawTransformFeedback) bIsLoaded = 0;
-	}
+	if(!__gleDrawTransformFeedback) bIsLoaded = 0;
 	glext_ARB_transform_feedback2 = 1;
 	__gleDrawTransformFeedbackStream = (PFNGLDRAWTRANSFORMFEEDBACKSTREAMPROC)gleIntGetProcAddress("glDrawTransformFeedbackStream");
-	if(!TestPointer((const void*)__gleDrawTransformFeedbackStream))
-	{
-		__gleDrawTransformFeedbackStream = (PFNGLDRAWTRANSFORMFEEDBACKSTREAMPROC)gle_CoreStruct.gleVarDrawTransformFeedbackStream;
-		if(!__gleDrawTransformFeedbackStream) bIsLoaded = 0;
-	}
+	if(!__gleDrawTransformFeedbackStream) bIsLoaded = 0;
 	__gleBeginQueryIndexed = (PFNGLBEGINQUERYINDEXEDPROC)gleIntGetProcAddress("glBeginQueryIndexed");
-	if(!TestPointer((const void*)__gleBeginQueryIndexed))
-	{
-		__gleBeginQueryIndexed = (PFNGLBEGINQUERYINDEXEDPROC)gle_CoreStruct.gleVarBeginQueryIndexed;
-		if(!__gleBeginQueryIndexed) bIsLoaded = 0;
-	}
+	if(!__gleBeginQueryIndexed) bIsLoaded = 0;
 	__gleEndQueryIndexed = (PFNGLENDQUERYINDEXEDPROC)gleIntGetProcAddress("glEndQueryIndexed");
-	if(!TestPointer((const void*)__gleEndQueryIndexed))
-	{
-		__gleEndQueryIndexed = (PFNGLENDQUERYINDEXEDPROC)gle_CoreStruct.gleVarEndQueryIndexed;
-		if(!__gleEndQueryIndexed) bIsLoaded = 0;
-	}
+	if(!__gleEndQueryIndexed) bIsLoaded = 0;
 	__gleGetQueryIndexediv = (PFNGLGETQUERYINDEXEDIVPROC)gleIntGetProcAddress("glGetQueryIndexediv");
-	if(!TestPointer((const void*)__gleGetQueryIndexediv))
-	{
-		__gleGetQueryIndexediv = (PFNGLGETQUERYINDEXEDIVPROC)gle_CoreStruct.gleVarGetQueryIndexediv;
-		if(!__gleGetQueryIndexediv) bIsLoaded = 0;
-	}
+	if(!__gleGetQueryIndexediv) bIsLoaded = 0;
 	glext_ARB_transform_feedback3 = 1;
 	__glePatchParameteri = (PFNGLPATCHPARAMETERIPROC)gleIntGetProcAddress("glPatchParameteri");
-	if(!TestPointer((const void*)__glePatchParameteri))
-	{
-		__glePatchParameteri = (PFNGLPATCHPARAMETERIPROC)gle_CoreStruct.gleVarPatchParameteri;
-		if(!__glePatchParameteri) bIsLoaded = 0;
-	}
+	if(!__glePatchParameteri) bIsLoaded = 0;
 	__glePatchParameterfv = (PFNGLPATCHPARAMETERFVPROC)gleIntGetProcAddress("glPatchParameterfv");
-	if(!TestPointer((const void*)__glePatchParameterfv))
-	{
-		__glePatchParameterfv = (PFNGLPATCHPARAMETERFVPROC)gle_CoreStruct.gleVarPatchParameterfv;
-		if(!__glePatchParameterfv) bIsLoaded = 0;
-	}
+	if(!__glePatchParameterfv) bIsLoaded = 0;
 	glext_ARB_tessellation_shader = 1;
 	__gleUniform1d = (PFNGLUNIFORM1DPROC)gleIntGetProcAddress("glUniform1d");
-	if(!TestPointer((const void*)__gleUniform1d))
-	{
-		__gleUniform1d = (PFNGLUNIFORM1DPROC)gle_CoreStruct.gleVarUniform1d;
-		if(!__gleUniform1d) bIsLoaded = 0;
-	}
+	if(!__gleUniform1d) bIsLoaded = 0;
 	__gleUniform2d = (PFNGLUNIFORM2DPROC)gleIntGetProcAddress("glUniform2d");
-	if(!TestPointer((const void*)__gleUniform2d))
-	{
-		__gleUniform2d = (PFNGLUNIFORM2DPROC)gle_CoreStruct.gleVarUniform2d;
-		if(!__gleUniform2d) bIsLoaded = 0;
-	}
+	if(!__gleUniform2d) bIsLoaded = 0;
 	__gleUniform3d = (PFNGLUNIFORM3DPROC)gleIntGetProcAddress("glUniform3d");
-	if(!TestPointer((const void*)__gleUniform3d))
-	{
-		__gleUniform3d = (PFNGLUNIFORM3DPROC)gle_CoreStruct.gleVarUniform3d;
-		if(!__gleUniform3d) bIsLoaded = 0;
-	}
+	if(!__gleUniform3d) bIsLoaded = 0;
 	__gleUniform4d = (PFNGLUNIFORM4DPROC)gleIntGetProcAddress("glUniform4d");
-	if(!TestPointer((const void*)__gleUniform4d))
-	{
-		__gleUniform4d = (PFNGLUNIFORM4DPROC)gle_CoreStruct.gleVarUniform4d;
-		if(!__gleUniform4d) bIsLoaded = 0;
-	}
+	if(!__gleUniform4d) bIsLoaded = 0;
 	__gleUniform1dv = (PFNGLUNIFORM1DVPROC)gleIntGetProcAddress("glUniform1dv");
-	if(!TestPointer((const void*)__gleUniform1dv))
-	{
-		__gleUniform1dv = (PFNGLUNIFORM1DVPROC)gle_CoreStruct.gleVarUniform1dv;
-		if(!__gleUniform1dv) bIsLoaded = 0;
-	}
+	if(!__gleUniform1dv) bIsLoaded = 0;
 	__gleUniform2dv = (PFNGLUNIFORM2DVPROC)gleIntGetProcAddress("glUniform2dv");
-	if(!TestPointer((const void*)__gleUniform2dv))
-	{
-		__gleUniform2dv = (PFNGLUNIFORM2DVPROC)gle_CoreStruct.gleVarUniform2dv;
-		if(!__gleUniform2dv) bIsLoaded = 0;
-	}
+	if(!__gleUniform2dv) bIsLoaded = 0;
 	__gleUniform3dv = (PFNGLUNIFORM3DVPROC)gleIntGetProcAddress("glUniform3dv");
-	if(!TestPointer((const void*)__gleUniform3dv))
-	{
-		__gleUniform3dv = (PFNGLUNIFORM3DVPROC)gle_CoreStruct.gleVarUniform3dv;
-		if(!__gleUniform3dv) bIsLoaded = 0;
-	}
+	if(!__gleUniform3dv) bIsLoaded = 0;
 	__gleUniform4dv = (PFNGLUNIFORM4DVPROC)gleIntGetProcAddress("glUniform4dv");
-	if(!TestPointer((const void*)__gleUniform4dv))
-	{
-		__gleUniform4dv = (PFNGLUNIFORM4DVPROC)gle_CoreStruct.gleVarUniform4dv;
-		if(!__gleUniform4dv) bIsLoaded = 0;
-	}
+	if(!__gleUniform4dv) bIsLoaded = 0;
 	__gleUniformMatrix2dv = (PFNGLUNIFORMMATRIX2DVPROC)gleIntGetProcAddress("glUniformMatrix2dv");
-	if(!TestPointer((const void*)__gleUniformMatrix2dv))
-	{
-		__gleUniformMatrix2dv = (PFNGLUNIFORMMATRIX2DVPROC)gle_CoreStruct.gleVarUniformMatrix2dv;
-		if(!__gleUniformMatrix2dv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix2dv) bIsLoaded = 0;
 	__gleUniformMatrix3dv = (PFNGLUNIFORMMATRIX3DVPROC)gleIntGetProcAddress("glUniformMatrix3dv");
-	if(!TestPointer((const void*)__gleUniformMatrix3dv))
-	{
-		__gleUniformMatrix3dv = (PFNGLUNIFORMMATRIX3DVPROC)gle_CoreStruct.gleVarUniformMatrix3dv;
-		if(!__gleUniformMatrix3dv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix3dv) bIsLoaded = 0;
 	__gleUniformMatrix4dv = (PFNGLUNIFORMMATRIX4DVPROC)gleIntGetProcAddress("glUniformMatrix4dv");
-	if(!TestPointer((const void*)__gleUniformMatrix4dv))
-	{
-		__gleUniformMatrix4dv = (PFNGLUNIFORMMATRIX4DVPROC)gle_CoreStruct.gleVarUniformMatrix4dv;
-		if(!__gleUniformMatrix4dv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix4dv) bIsLoaded = 0;
 	__gleUniformMatrix2x3dv = (PFNGLUNIFORMMATRIX2X3DVPROC)gleIntGetProcAddress("glUniformMatrix2x3dv");
-	if(!TestPointer((const void*)__gleUniformMatrix2x3dv))
-	{
-		__gleUniformMatrix2x3dv = (PFNGLUNIFORMMATRIX2X3DVPROC)gle_CoreStruct.gleVarUniformMatrix2x3dv;
-		if(!__gleUniformMatrix2x3dv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix2x3dv) bIsLoaded = 0;
 	__gleUniformMatrix2x4dv = (PFNGLUNIFORMMATRIX2X4DVPROC)gleIntGetProcAddress("glUniformMatrix2x4dv");
-	if(!TestPointer((const void*)__gleUniformMatrix2x4dv))
-	{
-		__gleUniformMatrix2x4dv = (PFNGLUNIFORMMATRIX2X4DVPROC)gle_CoreStruct.gleVarUniformMatrix2x4dv;
-		if(!__gleUniformMatrix2x4dv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix2x4dv) bIsLoaded = 0;
 	__gleUniformMatrix3x2dv = (PFNGLUNIFORMMATRIX3X2DVPROC)gleIntGetProcAddress("glUniformMatrix3x2dv");
-	if(!TestPointer((const void*)__gleUniformMatrix3x2dv))
-	{
-		__gleUniformMatrix3x2dv = (PFNGLUNIFORMMATRIX3X2DVPROC)gle_CoreStruct.gleVarUniformMatrix3x2dv;
-		if(!__gleUniformMatrix3x2dv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix3x2dv) bIsLoaded = 0;
 	__gleUniformMatrix3x4dv = (PFNGLUNIFORMMATRIX3X4DVPROC)gleIntGetProcAddress("glUniformMatrix3x4dv");
-	if(!TestPointer((const void*)__gleUniformMatrix3x4dv))
-	{
-		__gleUniformMatrix3x4dv = (PFNGLUNIFORMMATRIX3X4DVPROC)gle_CoreStruct.gleVarUniformMatrix3x4dv;
-		if(!__gleUniformMatrix3x4dv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix3x4dv) bIsLoaded = 0;
 	__gleUniformMatrix4x2dv = (PFNGLUNIFORMMATRIX4X2DVPROC)gleIntGetProcAddress("glUniformMatrix4x2dv");
-	if(!TestPointer((const void*)__gleUniformMatrix4x2dv))
-	{
-		__gleUniformMatrix4x2dv = (PFNGLUNIFORMMATRIX4X2DVPROC)gle_CoreStruct.gleVarUniformMatrix4x2dv;
-		if(!__gleUniformMatrix4x2dv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix4x2dv) bIsLoaded = 0;
 	__gleUniformMatrix4x3dv = (PFNGLUNIFORMMATRIX4X3DVPROC)gleIntGetProcAddress("glUniformMatrix4x3dv");
-	if(!TestPointer((const void*)__gleUniformMatrix4x3dv))
-	{
-		__gleUniformMatrix4x3dv = (PFNGLUNIFORMMATRIX4X3DVPROC)gle_CoreStruct.gleVarUniformMatrix4x3dv;
-		if(!__gleUniformMatrix4x3dv) bIsLoaded = 0;
-	}
+	if(!__gleUniformMatrix4x3dv) bIsLoaded = 0;
 	__gleGetUniformdv = (PFNGLGETUNIFORMDVPROC)gleIntGetProcAddress("glGetUniformdv");
-	if(!TestPointer((const void*)__gleGetUniformdv))
-	{
-		__gleGetUniformdv = (PFNGLGETUNIFORMDVPROC)gle_CoreStruct.gleVarGetUniformdv;
-		if(!__gleGetUniformdv) bIsLoaded = 0;
-	}
+	if(!__gleGetUniformdv) bIsLoaded = 0;
 	glext_ARB_gpu_shader_fp64 = 1;
 	__gleDrawArraysIndirect = (PFNGLDRAWARRAYSINDIRECTPROC)gleIntGetProcAddress("glDrawArraysIndirect");
-	if(!TestPointer((const void*)__gleDrawArraysIndirect))
-	{
-		__gleDrawArraysIndirect = (PFNGLDRAWARRAYSINDIRECTPROC)gle_CoreStruct.gleVarDrawArraysIndirect;
-		if(!__gleDrawArraysIndirect) bIsLoaded = 0;
-	}
+	if(!__gleDrawArraysIndirect) bIsLoaded = 0;
 	__gleDrawElementsIndirect = (PFNGLDRAWELEMENTSINDIRECTPROC)gleIntGetProcAddress("glDrawElementsIndirect");
-	if(!TestPointer((const void*)__gleDrawElementsIndirect))
-	{
-		__gleDrawElementsIndirect = (PFNGLDRAWELEMENTSINDIRECTPROC)gle_CoreStruct.gleVarDrawElementsIndirect;
-		if(!__gleDrawElementsIndirect) bIsLoaded = 0;
-	}
+	if(!__gleDrawElementsIndirect) bIsLoaded = 0;
 	glext_ARB_draw_indirect = 1;
 	__gleGetSubroutineUniformLocation = (PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC)gleIntGetProcAddress("glGetSubroutineUniformLocation");
-	if(!TestPointer((const void*)__gleGetSubroutineUniformLocation))
-	{
-		__gleGetSubroutineUniformLocation = (PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC)gle_CoreStruct.gleVarGetSubroutineUniformLocation;
-		if(!__gleGetSubroutineUniformLocation) bIsLoaded = 0;
-	}
+	if(!__gleGetSubroutineUniformLocation) bIsLoaded = 0;
 	__gleGetSubroutineIndex = (PFNGLGETSUBROUTINEINDEXPROC)gleIntGetProcAddress("glGetSubroutineIndex");
-	if(!TestPointer((const void*)__gleGetSubroutineIndex))
-	{
-		__gleGetSubroutineIndex = (PFNGLGETSUBROUTINEINDEXPROC)gle_CoreStruct.gleVarGetSubroutineIndex;
-		if(!__gleGetSubroutineIndex) bIsLoaded = 0;
-	}
+	if(!__gleGetSubroutineIndex) bIsLoaded = 0;
 	__gleGetActiveSubroutineUniformiv = (PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC)gleIntGetProcAddress("glGetActiveSubroutineUniformiv");
-	if(!TestPointer((const void*)__gleGetActiveSubroutineUniformiv))
-	{
-		__gleGetActiveSubroutineUniformiv = (PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC)gle_CoreStruct.gleVarGetActiveSubroutineUniformiv;
-		if(!__gleGetActiveSubroutineUniformiv) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveSubroutineUniformiv) bIsLoaded = 0;
 	__gleGetActiveSubroutineUniformName = (PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC)gleIntGetProcAddress("glGetActiveSubroutineUniformName");
-	if(!TestPointer((const void*)__gleGetActiveSubroutineUniformName))
-	{
-		__gleGetActiveSubroutineUniformName = (PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC)gle_CoreStruct.gleVarGetActiveSubroutineUniformName;
-		if(!__gleGetActiveSubroutineUniformName) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveSubroutineUniformName) bIsLoaded = 0;
 	__gleGetActiveSubroutineName = (PFNGLGETACTIVESUBROUTINENAMEPROC)gleIntGetProcAddress("glGetActiveSubroutineName");
-	if(!TestPointer((const void*)__gleGetActiveSubroutineName))
-	{
-		__gleGetActiveSubroutineName = (PFNGLGETACTIVESUBROUTINENAMEPROC)gle_CoreStruct.gleVarGetActiveSubroutineName;
-		if(!__gleGetActiveSubroutineName) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveSubroutineName) bIsLoaded = 0;
 	__gleUniformSubroutinesuiv = (PFNGLUNIFORMSUBROUTINESUIVPROC)gleIntGetProcAddress("glUniformSubroutinesuiv");
-	if(!TestPointer((const void*)__gleUniformSubroutinesuiv))
-	{
-		__gleUniformSubroutinesuiv = (PFNGLUNIFORMSUBROUTINESUIVPROC)gle_CoreStruct.gleVarUniformSubroutinesuiv;
-		if(!__gleUniformSubroutinesuiv) bIsLoaded = 0;
-	}
+	if(!__gleUniformSubroutinesuiv) bIsLoaded = 0;
 	__gleGetUniformSubroutineuiv = (PFNGLGETUNIFORMSUBROUTINEUIVPROC)gleIntGetProcAddress("glGetUniformSubroutineuiv");
-	if(!TestPointer((const void*)__gleGetUniformSubroutineuiv))
-	{
-		__gleGetUniformSubroutineuiv = (PFNGLGETUNIFORMSUBROUTINEUIVPROC)gle_CoreStruct.gleVarGetUniformSubroutineuiv;
-		if(!__gleGetUniformSubroutineuiv) bIsLoaded = 0;
-	}
+	if(!__gleGetUniformSubroutineuiv) bIsLoaded = 0;
 	__gleGetProgramStageiv = (PFNGLGETPROGRAMSTAGEIVPROC)gleIntGetProcAddress("glGetProgramStageiv");
-	if(!TestPointer((const void*)__gleGetProgramStageiv))
-	{
-		__gleGetProgramStageiv = (PFNGLGETPROGRAMSTAGEIVPROC)gle_CoreStruct.gleVarGetProgramStageiv;
-		if(!__gleGetProgramStageiv) bIsLoaded = 0;
-	}
+	if(!__gleGetProgramStageiv) bIsLoaded = 0;
 	glext_ARB_shader_subroutine = 1;
 	return bIsLoaded;
 }
@@ -16693,537 +13498,185 @@ static int gleIntLoadCore_4_1_Base()
 {
 	int bIsLoaded = 1;
 	__gleVertexAttribL1d = (PFNGLVERTEXATTRIBL1DPROC)gleIntGetProcAddress("glVertexAttribL1d");
-	if(!TestPointer((const void*)__gleVertexAttribL1d))
-	{
-		__gleVertexAttribL1d = (PFNGLVERTEXATTRIBL1DPROC)gle_CoreStruct.gleVarVertexAttribL1d;
-		if(!__gleVertexAttribL1d) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribL1d) bIsLoaded = 0;
 	__gleVertexAttribL2d = (PFNGLVERTEXATTRIBL2DPROC)gleIntGetProcAddress("glVertexAttribL2d");
-	if(!TestPointer((const void*)__gleVertexAttribL2d))
-	{
-		__gleVertexAttribL2d = (PFNGLVERTEXATTRIBL2DPROC)gle_CoreStruct.gleVarVertexAttribL2d;
-		if(!__gleVertexAttribL2d) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribL2d) bIsLoaded = 0;
 	__gleVertexAttribL3d = (PFNGLVERTEXATTRIBL3DPROC)gleIntGetProcAddress("glVertexAttribL3d");
-	if(!TestPointer((const void*)__gleVertexAttribL3d))
-	{
-		__gleVertexAttribL3d = (PFNGLVERTEXATTRIBL3DPROC)gle_CoreStruct.gleVarVertexAttribL3d;
-		if(!__gleVertexAttribL3d) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribL3d) bIsLoaded = 0;
 	__gleVertexAttribL4d = (PFNGLVERTEXATTRIBL4DPROC)gleIntGetProcAddress("glVertexAttribL4d");
-	if(!TestPointer((const void*)__gleVertexAttribL4d))
-	{
-		__gleVertexAttribL4d = (PFNGLVERTEXATTRIBL4DPROC)gle_CoreStruct.gleVarVertexAttribL4d;
-		if(!__gleVertexAttribL4d) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribL4d) bIsLoaded = 0;
 	__gleVertexAttribL1dv = (PFNGLVERTEXATTRIBL1DVPROC)gleIntGetProcAddress("glVertexAttribL1dv");
-	if(!TestPointer((const void*)__gleVertexAttribL1dv))
-	{
-		__gleVertexAttribL1dv = (PFNGLVERTEXATTRIBL1DVPROC)gle_CoreStruct.gleVarVertexAttribL1dv;
-		if(!__gleVertexAttribL1dv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribL1dv) bIsLoaded = 0;
 	__gleVertexAttribL2dv = (PFNGLVERTEXATTRIBL2DVPROC)gleIntGetProcAddress("glVertexAttribL2dv");
-	if(!TestPointer((const void*)__gleVertexAttribL2dv))
-	{
-		__gleVertexAttribL2dv = (PFNGLVERTEXATTRIBL2DVPROC)gle_CoreStruct.gleVarVertexAttribL2dv;
-		if(!__gleVertexAttribL2dv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribL2dv) bIsLoaded = 0;
 	__gleVertexAttribL3dv = (PFNGLVERTEXATTRIBL3DVPROC)gleIntGetProcAddress("glVertexAttribL3dv");
-	if(!TestPointer((const void*)__gleVertexAttribL3dv))
-	{
-		__gleVertexAttribL3dv = (PFNGLVERTEXATTRIBL3DVPROC)gle_CoreStruct.gleVarVertexAttribL3dv;
-		if(!__gleVertexAttribL3dv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribL3dv) bIsLoaded = 0;
 	__gleVertexAttribL4dv = (PFNGLVERTEXATTRIBL4DVPROC)gleIntGetProcAddress("glVertexAttribL4dv");
-	if(!TestPointer((const void*)__gleVertexAttribL4dv))
-	{
-		__gleVertexAttribL4dv = (PFNGLVERTEXATTRIBL4DVPROC)gle_CoreStruct.gleVarVertexAttribL4dv;
-		if(!__gleVertexAttribL4dv) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribL4dv) bIsLoaded = 0;
 	__gleVertexAttribLPointer = (PFNGLVERTEXATTRIBLPOINTERPROC)gleIntGetProcAddress("glVertexAttribLPointer");
-	if(!TestPointer((const void*)__gleVertexAttribLPointer))
-	{
-		__gleVertexAttribLPointer = (PFNGLVERTEXATTRIBLPOINTERPROC)gle_CoreStruct.gleVarVertexAttribLPointer;
-		if(!__gleVertexAttribLPointer) bIsLoaded = 0;
-	}
+	if(!__gleVertexAttribLPointer) bIsLoaded = 0;
 	__gleGetVertexAttribLdv = (PFNGLGETVERTEXATTRIBLDVPROC)gleIntGetProcAddress("glGetVertexAttribLdv");
-	if(!TestPointer((const void*)__gleGetVertexAttribLdv))
-	{
-		__gleGetVertexAttribLdv = (PFNGLGETVERTEXATTRIBLDVPROC)gle_CoreStruct.gleVarGetVertexAttribLdv;
-		if(!__gleGetVertexAttribLdv) bIsLoaded = 0;
-	}
+	if(!__gleGetVertexAttribLdv) bIsLoaded = 0;
 	glext_ARB_vertex_attrib_64bit = 1;
 	__gleViewportArrayv = (PFNGLVIEWPORTARRAYVPROC)gleIntGetProcAddress("glViewportArrayv");
-	if(!TestPointer((const void*)__gleViewportArrayv))
-	{
-		__gleViewportArrayv = (PFNGLVIEWPORTARRAYVPROC)gle_CoreStruct.gleVarViewportArrayv;
-		if(!__gleViewportArrayv) bIsLoaded = 0;
-	}
+	if(!__gleViewportArrayv) bIsLoaded = 0;
 	__gleViewportIndexedf = (PFNGLVIEWPORTINDEXEDFPROC)gleIntGetProcAddress("glViewportIndexedf");
-	if(!TestPointer((const void*)__gleViewportIndexedf))
-	{
-		__gleViewportIndexedf = (PFNGLVIEWPORTINDEXEDFPROC)gle_CoreStruct.gleVarViewportIndexedf;
-		if(!__gleViewportIndexedf) bIsLoaded = 0;
-	}
+	if(!__gleViewportIndexedf) bIsLoaded = 0;
 	__gleViewportIndexedfv = (PFNGLVIEWPORTINDEXEDFVPROC)gleIntGetProcAddress("glViewportIndexedfv");
-	if(!TestPointer((const void*)__gleViewportIndexedfv))
-	{
-		__gleViewportIndexedfv = (PFNGLVIEWPORTINDEXEDFVPROC)gle_CoreStruct.gleVarViewportIndexedfv;
-		if(!__gleViewportIndexedfv) bIsLoaded = 0;
-	}
+	if(!__gleViewportIndexedfv) bIsLoaded = 0;
 	__gleScissorArrayv = (PFNGLSCISSORARRAYVPROC)gleIntGetProcAddress("glScissorArrayv");
-	if(!TestPointer((const void*)__gleScissorArrayv))
-	{
-		__gleScissorArrayv = (PFNGLSCISSORARRAYVPROC)gle_CoreStruct.gleVarScissorArrayv;
-		if(!__gleScissorArrayv) bIsLoaded = 0;
-	}
+	if(!__gleScissorArrayv) bIsLoaded = 0;
 	__gleScissorIndexed = (PFNGLSCISSORINDEXEDPROC)gleIntGetProcAddress("glScissorIndexed");
-	if(!TestPointer((const void*)__gleScissorIndexed))
-	{
-		__gleScissorIndexed = (PFNGLSCISSORINDEXEDPROC)gle_CoreStruct.gleVarScissorIndexed;
-		if(!__gleScissorIndexed) bIsLoaded = 0;
-	}
+	if(!__gleScissorIndexed) bIsLoaded = 0;
 	__gleScissorIndexedv = (PFNGLSCISSORINDEXEDVPROC)gleIntGetProcAddress("glScissorIndexedv");
-	if(!TestPointer((const void*)__gleScissorIndexedv))
-	{
-		__gleScissorIndexedv = (PFNGLSCISSORINDEXEDVPROC)gle_CoreStruct.gleVarScissorIndexedv;
-		if(!__gleScissorIndexedv) bIsLoaded = 0;
-	}
+	if(!__gleScissorIndexedv) bIsLoaded = 0;
 	__gleDepthRangeArrayv = (PFNGLDEPTHRANGEARRAYVPROC)gleIntGetProcAddress("glDepthRangeArrayv");
-	if(!TestPointer((const void*)__gleDepthRangeArrayv))
-	{
-		__gleDepthRangeArrayv = (PFNGLDEPTHRANGEARRAYVPROC)gle_CoreStruct.gleVarDepthRangeArrayv;
-		if(!__gleDepthRangeArrayv) bIsLoaded = 0;
-	}
+	if(!__gleDepthRangeArrayv) bIsLoaded = 0;
 	__gleDepthRangeIndexed = (PFNGLDEPTHRANGEINDEXEDPROC)gleIntGetProcAddress("glDepthRangeIndexed");
-	if(!TestPointer((const void*)__gleDepthRangeIndexed))
-	{
-		__gleDepthRangeIndexed = (PFNGLDEPTHRANGEINDEXEDPROC)gle_CoreStruct.gleVarDepthRangeIndexed;
-		if(!__gleDepthRangeIndexed) bIsLoaded = 0;
-	}
+	if(!__gleDepthRangeIndexed) bIsLoaded = 0;
 	__gleGetFloati_v = (PFNGLGETFLOATI_VPROC)gleIntGetProcAddress("glGetFloati_v");
-	if(!TestPointer((const void*)__gleGetFloati_v))
-	{
-		__gleGetFloati_v = (PFNGLGETFLOATI_VPROC)gle_CoreStruct.gleVarGetFloati_v;
-		if(!__gleGetFloati_v) bIsLoaded = 0;
-	}
+	if(!__gleGetFloati_v) bIsLoaded = 0;
 	__gleGetDoublei_v = (PFNGLGETDOUBLEI_VPROC)gleIntGetProcAddress("glGetDoublei_v");
-	if(!TestPointer((const void*)__gleGetDoublei_v))
-	{
-		__gleGetDoublei_v = (PFNGLGETDOUBLEI_VPROC)gle_CoreStruct.gleVarGetDoublei_v;
-		if(!__gleGetDoublei_v) bIsLoaded = 0;
-	}
+	if(!__gleGetDoublei_v) bIsLoaded = 0;
 	glext_ARB_viewport_array = 1;
 	__gleUseProgramStages = (PFNGLUSEPROGRAMSTAGESPROC)gleIntGetProcAddress("glUseProgramStages");
-	if(!TestPointer((const void*)__gleUseProgramStages))
-	{
-		__gleUseProgramStages = (PFNGLUSEPROGRAMSTAGESPROC)gle_CoreStruct.gleVarUseProgramStages;
-		if(!__gleUseProgramStages) bIsLoaded = 0;
-	}
+	if(!__gleUseProgramStages) bIsLoaded = 0;
 	__gleActiveShaderProgram = (PFNGLACTIVESHADERPROGRAMPROC)gleIntGetProcAddress("glActiveShaderProgram");
-	if(!TestPointer((const void*)__gleActiveShaderProgram))
-	{
-		__gleActiveShaderProgram = (PFNGLACTIVESHADERPROGRAMPROC)gle_CoreStruct.gleVarActiveShaderProgram;
-		if(!__gleActiveShaderProgram) bIsLoaded = 0;
-	}
+	if(!__gleActiveShaderProgram) bIsLoaded = 0;
 	__gleCreateShaderProgramv = (PFNGLCREATESHADERPROGRAMVPROC)gleIntGetProcAddress("glCreateShaderProgramv");
-	if(!TestPointer((const void*)__gleCreateShaderProgramv))
-	{
-		__gleCreateShaderProgramv = (PFNGLCREATESHADERPROGRAMVPROC)gle_CoreStruct.gleVarCreateShaderProgramv;
-		if(!__gleCreateShaderProgramv) bIsLoaded = 0;
-	}
+	if(!__gleCreateShaderProgramv) bIsLoaded = 0;
 	__gleBindProgramPipeline = (PFNGLBINDPROGRAMPIPELINEPROC)gleIntGetProcAddress("glBindProgramPipeline");
-	if(!TestPointer((const void*)__gleBindProgramPipeline))
-	{
-		__gleBindProgramPipeline = (PFNGLBINDPROGRAMPIPELINEPROC)gle_CoreStruct.gleVarBindProgramPipeline;
-		if(!__gleBindProgramPipeline) bIsLoaded = 0;
-	}
+	if(!__gleBindProgramPipeline) bIsLoaded = 0;
 	__gleDeleteProgramPipelines = (PFNGLDELETEPROGRAMPIPELINESPROC)gleIntGetProcAddress("glDeleteProgramPipelines");
-	if(!TestPointer((const void*)__gleDeleteProgramPipelines))
-	{
-		__gleDeleteProgramPipelines = (PFNGLDELETEPROGRAMPIPELINESPROC)gle_CoreStruct.gleVarDeleteProgramPipelines;
-		if(!__gleDeleteProgramPipelines) bIsLoaded = 0;
-	}
+	if(!__gleDeleteProgramPipelines) bIsLoaded = 0;
 	__gleGenProgramPipelines = (PFNGLGENPROGRAMPIPELINESPROC)gleIntGetProcAddress("glGenProgramPipelines");
-	if(!TestPointer((const void*)__gleGenProgramPipelines))
-	{
-		__gleGenProgramPipelines = (PFNGLGENPROGRAMPIPELINESPROC)gle_CoreStruct.gleVarGenProgramPipelines;
-		if(!__gleGenProgramPipelines) bIsLoaded = 0;
-	}
+	if(!__gleGenProgramPipelines) bIsLoaded = 0;
 	__gleIsProgramPipeline = (PFNGLISPROGRAMPIPELINEPROC)gleIntGetProcAddress("glIsProgramPipeline");
-	if(!TestPointer((const void*)__gleIsProgramPipeline))
-	{
-		__gleIsProgramPipeline = (PFNGLISPROGRAMPIPELINEPROC)gle_CoreStruct.gleVarIsProgramPipeline;
-		if(!__gleIsProgramPipeline) bIsLoaded = 0;
-	}
+	if(!__gleIsProgramPipeline) bIsLoaded = 0;
 	__gleGetProgramPipelineiv = (PFNGLGETPROGRAMPIPELINEIVPROC)gleIntGetProcAddress("glGetProgramPipelineiv");
-	if(!TestPointer((const void*)__gleGetProgramPipelineiv))
-	{
-		__gleGetProgramPipelineiv = (PFNGLGETPROGRAMPIPELINEIVPROC)gle_CoreStruct.gleVarGetProgramPipelineiv;
-		if(!__gleGetProgramPipelineiv) bIsLoaded = 0;
-	}
+	if(!__gleGetProgramPipelineiv) bIsLoaded = 0;
 	__gleProgramUniform1i = (PFNGLPROGRAMUNIFORM1IPROC)gleIntGetProcAddress("glProgramUniform1i");
-	if(!TestPointer((const void*)__gleProgramUniform1i))
-	{
-		__gleProgramUniform1i = (PFNGLPROGRAMUNIFORM1IPROC)gle_CoreStruct.gleVarProgramUniform1i;
-		if(!__gleProgramUniform1i) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform1i) bIsLoaded = 0;
 	__gleProgramUniform1iv = (PFNGLPROGRAMUNIFORM1IVPROC)gleIntGetProcAddress("glProgramUniform1iv");
-	if(!TestPointer((const void*)__gleProgramUniform1iv))
-	{
-		__gleProgramUniform1iv = (PFNGLPROGRAMUNIFORM1IVPROC)gle_CoreStruct.gleVarProgramUniform1iv;
-		if(!__gleProgramUniform1iv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform1iv) bIsLoaded = 0;
 	__gleProgramUniform1f = (PFNGLPROGRAMUNIFORM1FPROC)gleIntGetProcAddress("glProgramUniform1f");
-	if(!TestPointer((const void*)__gleProgramUniform1f))
-	{
-		__gleProgramUniform1f = (PFNGLPROGRAMUNIFORM1FPROC)gle_CoreStruct.gleVarProgramUniform1f;
-		if(!__gleProgramUniform1f) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform1f) bIsLoaded = 0;
 	__gleProgramUniform1fv = (PFNGLPROGRAMUNIFORM1FVPROC)gleIntGetProcAddress("glProgramUniform1fv");
-	if(!TestPointer((const void*)__gleProgramUniform1fv))
-	{
-		__gleProgramUniform1fv = (PFNGLPROGRAMUNIFORM1FVPROC)gle_CoreStruct.gleVarProgramUniform1fv;
-		if(!__gleProgramUniform1fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform1fv) bIsLoaded = 0;
 	__gleProgramUniform1d = (PFNGLPROGRAMUNIFORM1DPROC)gleIntGetProcAddress("glProgramUniform1d");
-	if(!TestPointer((const void*)__gleProgramUniform1d))
-	{
-		__gleProgramUniform1d = (PFNGLPROGRAMUNIFORM1DPROC)gle_CoreStruct.gleVarProgramUniform1d;
-		if(!__gleProgramUniform1d) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform1d) bIsLoaded = 0;
 	__gleProgramUniform1dv = (PFNGLPROGRAMUNIFORM1DVPROC)gleIntGetProcAddress("glProgramUniform1dv");
-	if(!TestPointer((const void*)__gleProgramUniform1dv))
-	{
-		__gleProgramUniform1dv = (PFNGLPROGRAMUNIFORM1DVPROC)gle_CoreStruct.gleVarProgramUniform1dv;
-		if(!__gleProgramUniform1dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform1dv) bIsLoaded = 0;
 	__gleProgramUniform1ui = (PFNGLPROGRAMUNIFORM1UIPROC)gleIntGetProcAddress("glProgramUniform1ui");
-	if(!TestPointer((const void*)__gleProgramUniform1ui))
-	{
-		__gleProgramUniform1ui = (PFNGLPROGRAMUNIFORM1UIPROC)gle_CoreStruct.gleVarProgramUniform1ui;
-		if(!__gleProgramUniform1ui) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform1ui) bIsLoaded = 0;
 	__gleProgramUniform1uiv = (PFNGLPROGRAMUNIFORM1UIVPROC)gleIntGetProcAddress("glProgramUniform1uiv");
-	if(!TestPointer((const void*)__gleProgramUniform1uiv))
-	{
-		__gleProgramUniform1uiv = (PFNGLPROGRAMUNIFORM1UIVPROC)gle_CoreStruct.gleVarProgramUniform1uiv;
-		if(!__gleProgramUniform1uiv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform1uiv) bIsLoaded = 0;
 	__gleProgramUniform2i = (PFNGLPROGRAMUNIFORM2IPROC)gleIntGetProcAddress("glProgramUniform2i");
-	if(!TestPointer((const void*)__gleProgramUniform2i))
-	{
-		__gleProgramUniform2i = (PFNGLPROGRAMUNIFORM2IPROC)gle_CoreStruct.gleVarProgramUniform2i;
-		if(!__gleProgramUniform2i) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform2i) bIsLoaded = 0;
 	__gleProgramUniform2iv = (PFNGLPROGRAMUNIFORM2IVPROC)gleIntGetProcAddress("glProgramUniform2iv");
-	if(!TestPointer((const void*)__gleProgramUniform2iv))
-	{
-		__gleProgramUniform2iv = (PFNGLPROGRAMUNIFORM2IVPROC)gle_CoreStruct.gleVarProgramUniform2iv;
-		if(!__gleProgramUniform2iv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform2iv) bIsLoaded = 0;
 	__gleProgramUniform2f = (PFNGLPROGRAMUNIFORM2FPROC)gleIntGetProcAddress("glProgramUniform2f");
-	if(!TestPointer((const void*)__gleProgramUniform2f))
-	{
-		__gleProgramUniform2f = (PFNGLPROGRAMUNIFORM2FPROC)gle_CoreStruct.gleVarProgramUniform2f;
-		if(!__gleProgramUniform2f) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform2f) bIsLoaded = 0;
 	__gleProgramUniform2fv = (PFNGLPROGRAMUNIFORM2FVPROC)gleIntGetProcAddress("glProgramUniform2fv");
-	if(!TestPointer((const void*)__gleProgramUniform2fv))
-	{
-		__gleProgramUniform2fv = (PFNGLPROGRAMUNIFORM2FVPROC)gle_CoreStruct.gleVarProgramUniform2fv;
-		if(!__gleProgramUniform2fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform2fv) bIsLoaded = 0;
 	__gleProgramUniform2d = (PFNGLPROGRAMUNIFORM2DPROC)gleIntGetProcAddress("glProgramUniform2d");
-	if(!TestPointer((const void*)__gleProgramUniform2d))
-	{
-		__gleProgramUniform2d = (PFNGLPROGRAMUNIFORM2DPROC)gle_CoreStruct.gleVarProgramUniform2d;
-		if(!__gleProgramUniform2d) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform2d) bIsLoaded = 0;
 	__gleProgramUniform2dv = (PFNGLPROGRAMUNIFORM2DVPROC)gleIntGetProcAddress("glProgramUniform2dv");
-	if(!TestPointer((const void*)__gleProgramUniform2dv))
-	{
-		__gleProgramUniform2dv = (PFNGLPROGRAMUNIFORM2DVPROC)gle_CoreStruct.gleVarProgramUniform2dv;
-		if(!__gleProgramUniform2dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform2dv) bIsLoaded = 0;
 	__gleProgramUniform2ui = (PFNGLPROGRAMUNIFORM2UIPROC)gleIntGetProcAddress("glProgramUniform2ui");
-	if(!TestPointer((const void*)__gleProgramUniform2ui))
-	{
-		__gleProgramUniform2ui = (PFNGLPROGRAMUNIFORM2UIPROC)gle_CoreStruct.gleVarProgramUniform2ui;
-		if(!__gleProgramUniform2ui) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform2ui) bIsLoaded = 0;
 	__gleProgramUniform2uiv = (PFNGLPROGRAMUNIFORM2UIVPROC)gleIntGetProcAddress("glProgramUniform2uiv");
-	if(!TestPointer((const void*)__gleProgramUniform2uiv))
-	{
-		__gleProgramUniform2uiv = (PFNGLPROGRAMUNIFORM2UIVPROC)gle_CoreStruct.gleVarProgramUniform2uiv;
-		if(!__gleProgramUniform2uiv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform2uiv) bIsLoaded = 0;
 	__gleProgramUniform3i = (PFNGLPROGRAMUNIFORM3IPROC)gleIntGetProcAddress("glProgramUniform3i");
-	if(!TestPointer((const void*)__gleProgramUniform3i))
-	{
-		__gleProgramUniform3i = (PFNGLPROGRAMUNIFORM3IPROC)gle_CoreStruct.gleVarProgramUniform3i;
-		if(!__gleProgramUniform3i) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform3i) bIsLoaded = 0;
 	__gleProgramUniform3iv = (PFNGLPROGRAMUNIFORM3IVPROC)gleIntGetProcAddress("glProgramUniform3iv");
-	if(!TestPointer((const void*)__gleProgramUniform3iv))
-	{
-		__gleProgramUniform3iv = (PFNGLPROGRAMUNIFORM3IVPROC)gle_CoreStruct.gleVarProgramUniform3iv;
-		if(!__gleProgramUniform3iv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform3iv) bIsLoaded = 0;
 	__gleProgramUniform3f = (PFNGLPROGRAMUNIFORM3FPROC)gleIntGetProcAddress("glProgramUniform3f");
-	if(!TestPointer((const void*)__gleProgramUniform3f))
-	{
-		__gleProgramUniform3f = (PFNGLPROGRAMUNIFORM3FPROC)gle_CoreStruct.gleVarProgramUniform3f;
-		if(!__gleProgramUniform3f) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform3f) bIsLoaded = 0;
 	__gleProgramUniform3fv = (PFNGLPROGRAMUNIFORM3FVPROC)gleIntGetProcAddress("glProgramUniform3fv");
-	if(!TestPointer((const void*)__gleProgramUniform3fv))
-	{
-		__gleProgramUniform3fv = (PFNGLPROGRAMUNIFORM3FVPROC)gle_CoreStruct.gleVarProgramUniform3fv;
-		if(!__gleProgramUniform3fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform3fv) bIsLoaded = 0;
 	__gleProgramUniform3d = (PFNGLPROGRAMUNIFORM3DPROC)gleIntGetProcAddress("glProgramUniform3d");
-	if(!TestPointer((const void*)__gleProgramUniform3d))
-	{
-		__gleProgramUniform3d = (PFNGLPROGRAMUNIFORM3DPROC)gle_CoreStruct.gleVarProgramUniform3d;
-		if(!__gleProgramUniform3d) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform3d) bIsLoaded = 0;
 	__gleProgramUniform3dv = (PFNGLPROGRAMUNIFORM3DVPROC)gleIntGetProcAddress("glProgramUniform3dv");
-	if(!TestPointer((const void*)__gleProgramUniform3dv))
-	{
-		__gleProgramUniform3dv = (PFNGLPROGRAMUNIFORM3DVPROC)gle_CoreStruct.gleVarProgramUniform3dv;
-		if(!__gleProgramUniform3dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform3dv) bIsLoaded = 0;
 	__gleProgramUniform3ui = (PFNGLPROGRAMUNIFORM3UIPROC)gleIntGetProcAddress("glProgramUniform3ui");
-	if(!TestPointer((const void*)__gleProgramUniform3ui))
-	{
-		__gleProgramUniform3ui = (PFNGLPROGRAMUNIFORM3UIPROC)gle_CoreStruct.gleVarProgramUniform3ui;
-		if(!__gleProgramUniform3ui) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform3ui) bIsLoaded = 0;
 	__gleProgramUniform3uiv = (PFNGLPROGRAMUNIFORM3UIVPROC)gleIntGetProcAddress("glProgramUniform3uiv");
-	if(!TestPointer((const void*)__gleProgramUniform3uiv))
-	{
-		__gleProgramUniform3uiv = (PFNGLPROGRAMUNIFORM3UIVPROC)gle_CoreStruct.gleVarProgramUniform3uiv;
-		if(!__gleProgramUniform3uiv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform3uiv) bIsLoaded = 0;
 	__gleProgramUniform4i = (PFNGLPROGRAMUNIFORM4IPROC)gleIntGetProcAddress("glProgramUniform4i");
-	if(!TestPointer((const void*)__gleProgramUniform4i))
-	{
-		__gleProgramUniform4i = (PFNGLPROGRAMUNIFORM4IPROC)gle_CoreStruct.gleVarProgramUniform4i;
-		if(!__gleProgramUniform4i) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform4i) bIsLoaded = 0;
 	__gleProgramUniform4iv = (PFNGLPROGRAMUNIFORM4IVPROC)gleIntGetProcAddress("glProgramUniform4iv");
-	if(!TestPointer((const void*)__gleProgramUniform4iv))
-	{
-		__gleProgramUniform4iv = (PFNGLPROGRAMUNIFORM4IVPROC)gle_CoreStruct.gleVarProgramUniform4iv;
-		if(!__gleProgramUniform4iv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform4iv) bIsLoaded = 0;
 	__gleProgramUniform4f = (PFNGLPROGRAMUNIFORM4FPROC)gleIntGetProcAddress("glProgramUniform4f");
-	if(!TestPointer((const void*)__gleProgramUniform4f))
-	{
-		__gleProgramUniform4f = (PFNGLPROGRAMUNIFORM4FPROC)gle_CoreStruct.gleVarProgramUniform4f;
-		if(!__gleProgramUniform4f) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform4f) bIsLoaded = 0;
 	__gleProgramUniform4fv = (PFNGLPROGRAMUNIFORM4FVPROC)gleIntGetProcAddress("glProgramUniform4fv");
-	if(!TestPointer((const void*)__gleProgramUniform4fv))
-	{
-		__gleProgramUniform4fv = (PFNGLPROGRAMUNIFORM4FVPROC)gle_CoreStruct.gleVarProgramUniform4fv;
-		if(!__gleProgramUniform4fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform4fv) bIsLoaded = 0;
 	__gleProgramUniform4d = (PFNGLPROGRAMUNIFORM4DPROC)gleIntGetProcAddress("glProgramUniform4d");
-	if(!TestPointer((const void*)__gleProgramUniform4d))
-	{
-		__gleProgramUniform4d = (PFNGLPROGRAMUNIFORM4DPROC)gle_CoreStruct.gleVarProgramUniform4d;
-		if(!__gleProgramUniform4d) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform4d) bIsLoaded = 0;
 	__gleProgramUniform4dv = (PFNGLPROGRAMUNIFORM4DVPROC)gleIntGetProcAddress("glProgramUniform4dv");
-	if(!TestPointer((const void*)__gleProgramUniform4dv))
-	{
-		__gleProgramUniform4dv = (PFNGLPROGRAMUNIFORM4DVPROC)gle_CoreStruct.gleVarProgramUniform4dv;
-		if(!__gleProgramUniform4dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform4dv) bIsLoaded = 0;
 	__gleProgramUniform4ui = (PFNGLPROGRAMUNIFORM4UIPROC)gleIntGetProcAddress("glProgramUniform4ui");
-	if(!TestPointer((const void*)__gleProgramUniform4ui))
-	{
-		__gleProgramUniform4ui = (PFNGLPROGRAMUNIFORM4UIPROC)gle_CoreStruct.gleVarProgramUniform4ui;
-		if(!__gleProgramUniform4ui) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform4ui) bIsLoaded = 0;
 	__gleProgramUniform4uiv = (PFNGLPROGRAMUNIFORM4UIVPROC)gleIntGetProcAddress("glProgramUniform4uiv");
-	if(!TestPointer((const void*)__gleProgramUniform4uiv))
-	{
-		__gleProgramUniform4uiv = (PFNGLPROGRAMUNIFORM4UIVPROC)gle_CoreStruct.gleVarProgramUniform4uiv;
-		if(!__gleProgramUniform4uiv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniform4uiv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2fv = (PFNGLPROGRAMUNIFORMMATRIX2FVPROC)gleIntGetProcAddress("glProgramUniformMatrix2fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2fv))
-	{
-		__gleProgramUniformMatrix2fv = (PFNGLPROGRAMUNIFORMMATRIX2FVPROC)gle_CoreStruct.gleVarProgramUniformMatrix2fv;
-		if(!__gleProgramUniformMatrix2fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix2fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3fv = (PFNGLPROGRAMUNIFORMMATRIX3FVPROC)gleIntGetProcAddress("glProgramUniformMatrix3fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3fv))
-	{
-		__gleProgramUniformMatrix3fv = (PFNGLPROGRAMUNIFORMMATRIX3FVPROC)gle_CoreStruct.gleVarProgramUniformMatrix3fv;
-		if(!__gleProgramUniformMatrix3fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix3fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4fv = (PFNGLPROGRAMUNIFORMMATRIX4FVPROC)gleIntGetProcAddress("glProgramUniformMatrix4fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4fv))
-	{
-		__gleProgramUniformMatrix4fv = (PFNGLPROGRAMUNIFORMMATRIX4FVPROC)gle_CoreStruct.gleVarProgramUniformMatrix4fv;
-		if(!__gleProgramUniformMatrix4fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix4fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2dv = (PFNGLPROGRAMUNIFORMMATRIX2DVPROC)gleIntGetProcAddress("glProgramUniformMatrix2dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2dv))
-	{
-		__gleProgramUniformMatrix2dv = (PFNGLPROGRAMUNIFORMMATRIX2DVPROC)gle_CoreStruct.gleVarProgramUniformMatrix2dv;
-		if(!__gleProgramUniformMatrix2dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix2dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3dv = (PFNGLPROGRAMUNIFORMMATRIX3DVPROC)gleIntGetProcAddress("glProgramUniformMatrix3dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3dv))
-	{
-		__gleProgramUniformMatrix3dv = (PFNGLPROGRAMUNIFORMMATRIX3DVPROC)gle_CoreStruct.gleVarProgramUniformMatrix3dv;
-		if(!__gleProgramUniformMatrix3dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix3dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4dv = (PFNGLPROGRAMUNIFORMMATRIX4DVPROC)gleIntGetProcAddress("glProgramUniformMatrix4dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4dv))
-	{
-		__gleProgramUniformMatrix4dv = (PFNGLPROGRAMUNIFORMMATRIX4DVPROC)gle_CoreStruct.gleVarProgramUniformMatrix4dv;
-		if(!__gleProgramUniformMatrix4dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix4dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2x3fv = (PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC)gleIntGetProcAddress("glProgramUniformMatrix2x3fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2x3fv))
-	{
-		__gleProgramUniformMatrix2x3fv = (PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC)gle_CoreStruct.gleVarProgramUniformMatrix2x3fv;
-		if(!__gleProgramUniformMatrix2x3fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix2x3fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3x2fv = (PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC)gleIntGetProcAddress("glProgramUniformMatrix3x2fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3x2fv))
-	{
-		__gleProgramUniformMatrix3x2fv = (PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC)gle_CoreStruct.gleVarProgramUniformMatrix3x2fv;
-		if(!__gleProgramUniformMatrix3x2fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix3x2fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2x4fv = (PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC)gleIntGetProcAddress("glProgramUniformMatrix2x4fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2x4fv))
-	{
-		__gleProgramUniformMatrix2x4fv = (PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC)gle_CoreStruct.gleVarProgramUniformMatrix2x4fv;
-		if(!__gleProgramUniformMatrix2x4fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix2x4fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4x2fv = (PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC)gleIntGetProcAddress("glProgramUniformMatrix4x2fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4x2fv))
-	{
-		__gleProgramUniformMatrix4x2fv = (PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC)gle_CoreStruct.gleVarProgramUniformMatrix4x2fv;
-		if(!__gleProgramUniformMatrix4x2fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix4x2fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3x4fv = (PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC)gleIntGetProcAddress("glProgramUniformMatrix3x4fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3x4fv))
-	{
-		__gleProgramUniformMatrix3x4fv = (PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC)gle_CoreStruct.gleVarProgramUniformMatrix3x4fv;
-		if(!__gleProgramUniformMatrix3x4fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix3x4fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4x3fv = (PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC)gleIntGetProcAddress("glProgramUniformMatrix4x3fv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4x3fv))
-	{
-		__gleProgramUniformMatrix4x3fv = (PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC)gle_CoreStruct.gleVarProgramUniformMatrix4x3fv;
-		if(!__gleProgramUniformMatrix4x3fv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix4x3fv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2x3dv = (PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC)gleIntGetProcAddress("glProgramUniformMatrix2x3dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2x3dv))
-	{
-		__gleProgramUniformMatrix2x3dv = (PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC)gle_CoreStruct.gleVarProgramUniformMatrix2x3dv;
-		if(!__gleProgramUniformMatrix2x3dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix2x3dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3x2dv = (PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC)gleIntGetProcAddress("glProgramUniformMatrix3x2dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3x2dv))
-	{
-		__gleProgramUniformMatrix3x2dv = (PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC)gle_CoreStruct.gleVarProgramUniformMatrix3x2dv;
-		if(!__gleProgramUniformMatrix3x2dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix3x2dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix2x4dv = (PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC)gleIntGetProcAddress("glProgramUniformMatrix2x4dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix2x4dv))
-	{
-		__gleProgramUniformMatrix2x4dv = (PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC)gle_CoreStruct.gleVarProgramUniformMatrix2x4dv;
-		if(!__gleProgramUniformMatrix2x4dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix2x4dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4x2dv = (PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC)gleIntGetProcAddress("glProgramUniformMatrix4x2dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4x2dv))
-	{
-		__gleProgramUniformMatrix4x2dv = (PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC)gle_CoreStruct.gleVarProgramUniformMatrix4x2dv;
-		if(!__gleProgramUniformMatrix4x2dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix4x2dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix3x4dv = (PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC)gleIntGetProcAddress("glProgramUniformMatrix3x4dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix3x4dv))
-	{
-		__gleProgramUniformMatrix3x4dv = (PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC)gle_CoreStruct.gleVarProgramUniformMatrix3x4dv;
-		if(!__gleProgramUniformMatrix3x4dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix3x4dv) bIsLoaded = 0;
 	__gleProgramUniformMatrix4x3dv = (PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC)gleIntGetProcAddress("glProgramUniformMatrix4x3dv");
-	if(!TestPointer((const void*)__gleProgramUniformMatrix4x3dv))
-	{
-		__gleProgramUniformMatrix4x3dv = (PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC)gle_CoreStruct.gleVarProgramUniformMatrix4x3dv;
-		if(!__gleProgramUniformMatrix4x3dv) bIsLoaded = 0;
-	}
+	if(!__gleProgramUniformMatrix4x3dv) bIsLoaded = 0;
 	__gleValidateProgramPipeline = (PFNGLVALIDATEPROGRAMPIPELINEPROC)gleIntGetProcAddress("glValidateProgramPipeline");
-	if(!TestPointer((const void*)__gleValidateProgramPipeline))
-	{
-		__gleValidateProgramPipeline = (PFNGLVALIDATEPROGRAMPIPELINEPROC)gle_CoreStruct.gleVarValidateProgramPipeline;
-		if(!__gleValidateProgramPipeline) bIsLoaded = 0;
-	}
+	if(!__gleValidateProgramPipeline) bIsLoaded = 0;
 	__gleGetProgramPipelineInfoLog = (PFNGLGETPROGRAMPIPELINEINFOLOGPROC)gleIntGetProcAddress("glGetProgramPipelineInfoLog");
-	if(!TestPointer((const void*)__gleGetProgramPipelineInfoLog))
-	{
-		__gleGetProgramPipelineInfoLog = (PFNGLGETPROGRAMPIPELINEINFOLOGPROC)gle_CoreStruct.gleVarGetProgramPipelineInfoLog;
-		if(!__gleGetProgramPipelineInfoLog) bIsLoaded = 0;
-	}
+	if(!__gleGetProgramPipelineInfoLog) bIsLoaded = 0;
 	glext_ARB_separate_shader_objects = 1;
 	__gleGetProgramBinary = (PFNGLGETPROGRAMBINARYPROC)gleIntGetProcAddress("glGetProgramBinary");
-	if(!TestPointer((const void*)__gleGetProgramBinary))
-	{
-		__gleGetProgramBinary = (PFNGLGETPROGRAMBINARYPROC)gle_CoreStruct.gleVarGetProgramBinary;
-		if(!__gleGetProgramBinary) bIsLoaded = 0;
-	}
+	if(!__gleGetProgramBinary) bIsLoaded = 0;
 	__gleProgramBinary = (PFNGLPROGRAMBINARYPROC)gleIntGetProcAddress("glProgramBinary");
-	if(!TestPointer((const void*)__gleProgramBinary))
-	{
-		__gleProgramBinary = (PFNGLPROGRAMBINARYPROC)gle_CoreStruct.gleVarProgramBinary;
-		if(!__gleProgramBinary) bIsLoaded = 0;
-	}
+	if(!__gleProgramBinary) bIsLoaded = 0;
 	__gleProgramParameteri = (PFNGLPROGRAMPARAMETERIPROC)gleIntGetProcAddress("glProgramParameteri");
-	if(!TestPointer((const void*)__gleProgramParameteri))
-	{
-		__gleProgramParameteri = (PFNGLPROGRAMPARAMETERIPROC)gle_CoreStruct.gleVarProgramParameteri;
-		if(!__gleProgramParameteri) bIsLoaded = 0;
-	}
+	if(!__gleProgramParameteri) bIsLoaded = 0;
 	glext_ARB_get_program_binary = 1;
 	__gleReleaseShaderCompiler = (PFNGLRELEASESHADERCOMPILERPROC)gleIntGetProcAddress("glReleaseShaderCompiler");
-	if(!TestPointer((const void*)__gleReleaseShaderCompiler))
-	{
-		__gleReleaseShaderCompiler = (PFNGLRELEASESHADERCOMPILERPROC)gle_CoreStruct.gleVarReleaseShaderCompiler;
-		if(!__gleReleaseShaderCompiler) bIsLoaded = 0;
-	}
+	if(!__gleReleaseShaderCompiler) bIsLoaded = 0;
 	__gleShaderBinary = (PFNGLSHADERBINARYPROC)gleIntGetProcAddress("glShaderBinary");
-	if(!TestPointer((const void*)__gleShaderBinary))
-	{
-		__gleShaderBinary = (PFNGLSHADERBINARYPROC)gle_CoreStruct.gleVarShaderBinary;
-		if(!__gleShaderBinary) bIsLoaded = 0;
-	}
+	if(!__gleShaderBinary) bIsLoaded = 0;
 	__gleGetShaderPrecisionFormat = (PFNGLGETSHADERPRECISIONFORMATPROC)gleIntGetProcAddress("glGetShaderPrecisionFormat");
-	if(!TestPointer((const void*)__gleGetShaderPrecisionFormat))
-	{
-		__gleGetShaderPrecisionFormat = (PFNGLGETSHADERPRECISIONFORMATPROC)gle_CoreStruct.gleVarGetShaderPrecisionFormat;
-		if(!__gleGetShaderPrecisionFormat) bIsLoaded = 0;
-	}
+	if(!__gleGetShaderPrecisionFormat) bIsLoaded = 0;
 	__gleDepthRangef = (PFNGLDEPTHRANGEFPROC)gleIntGetProcAddress("glDepthRangef");
-	if(!TestPointer((const void*)__gleDepthRangef))
-	{
-		__gleDepthRangef = (PFNGLDEPTHRANGEFPROC)gle_CoreStruct.gleVarDepthRangef;
-		if(!__gleDepthRangef) bIsLoaded = 0;
-	}
+	if(!__gleDepthRangef) bIsLoaded = 0;
 	__gleClearDepthf = (PFNGLCLEARDEPTHFPROC)gleIntGetProcAddress("glClearDepthf");
-	if(!TestPointer((const void*)__gleClearDepthf))
-	{
-		__gleClearDepthf = (PFNGLCLEARDEPTHFPROC)gle_CoreStruct.gleVarClearDepthf;
-		if(!__gleClearDepthf) bIsLoaded = 0;
-	}
+	if(!__gleClearDepthf) bIsLoaded = 0;
 	glext_ARB_ES2_compatibility = 1;
 	return bIsLoaded;
 }
@@ -17232,100 +13685,40 @@ static int gleIntLoadCore_4_2_Base()
 {
 	int bIsLoaded = 1;
 	__gleGetActiveAtomicCounterBufferiv = (PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC)gleIntGetProcAddress("glGetActiveAtomicCounterBufferiv");
-	if(!TestPointer((const void*)__gleGetActiveAtomicCounterBufferiv))
-	{
-		__gleGetActiveAtomicCounterBufferiv = (PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC)gle_CoreStruct.gleVarGetActiveAtomicCounterBufferiv;
-		if(!__gleGetActiveAtomicCounterBufferiv) bIsLoaded = 0;
-	}
+	if(!__gleGetActiveAtomicCounterBufferiv) bIsLoaded = 0;
 	glext_ARB_shader_atomic_counters = 1;
 	__gleTexStorage1D = (PFNGLTEXSTORAGE1DPROC)gleIntGetProcAddress("glTexStorage1D");
-	if(!TestPointer((const void*)__gleTexStorage1D))
-	{
-		__gleTexStorage1D = (PFNGLTEXSTORAGE1DPROC)gle_CoreStruct.gleVarTexStorage1D;
-		if(!__gleTexStorage1D) bIsLoaded = 0;
-	}
+	if(!__gleTexStorage1D) bIsLoaded = 0;
 	__gleTexStorage2D = (PFNGLTEXSTORAGE2DPROC)gleIntGetProcAddress("glTexStorage2D");
-	if(!TestPointer((const void*)__gleTexStorage2D))
-	{
-		__gleTexStorage2D = (PFNGLTEXSTORAGE2DPROC)gle_CoreStruct.gleVarTexStorage2D;
-		if(!__gleTexStorage2D) bIsLoaded = 0;
-	}
+	if(!__gleTexStorage2D) bIsLoaded = 0;
 	__gleTexStorage3D = (PFNGLTEXSTORAGE3DPROC)gleIntGetProcAddress("glTexStorage3D");
-	if(!TestPointer((const void*)__gleTexStorage3D))
-	{
-		__gleTexStorage3D = (PFNGLTEXSTORAGE3DPROC)gle_CoreStruct.gleVarTexStorage3D;
-		if(!__gleTexStorage3D) bIsLoaded = 0;
-	}
+	if(!__gleTexStorage3D) bIsLoaded = 0;
 	__gleTextureStorage1DEXT = (PFNGLTEXTURESTORAGE1DEXTPROC)gleIntGetProcAddress("glTextureStorage1DEXT");
-	if(!TestPointer((const void*)__gleTextureStorage1DEXT))
-	{
-		__gleTextureStorage1DEXT = (PFNGLTEXTURESTORAGE1DEXTPROC)gle_CoreStruct.gleVarTextureStorage1DEXT;
-		if(!__gleTextureStorage1DEXT) bIsLoaded = 0;
-	}
+	if(!__gleTextureStorage1DEXT) bIsLoaded = 0;
 	__gleTextureStorage2DEXT = (PFNGLTEXTURESTORAGE2DEXTPROC)gleIntGetProcAddress("glTextureStorage2DEXT");
-	if(!TestPointer((const void*)__gleTextureStorage2DEXT))
-	{
-		__gleTextureStorage2DEXT = (PFNGLTEXTURESTORAGE2DEXTPROC)gle_CoreStruct.gleVarTextureStorage2DEXT;
-		if(!__gleTextureStorage2DEXT) bIsLoaded = 0;
-	}
+	if(!__gleTextureStorage2DEXT) bIsLoaded = 0;
 	__gleTextureStorage3DEXT = (PFNGLTEXTURESTORAGE3DEXTPROC)gleIntGetProcAddress("glTextureStorage3DEXT");
-	if(!TestPointer((const void*)__gleTextureStorage3DEXT))
-	{
-		__gleTextureStorage3DEXT = (PFNGLTEXTURESTORAGE3DEXTPROC)gle_CoreStruct.gleVarTextureStorage3DEXT;
-		if(!__gleTextureStorage3DEXT) bIsLoaded = 0;
-	}
+	if(!__gleTextureStorage3DEXT) bIsLoaded = 0;
 	glext_ARB_texture_storage = 1;
 	__gleGetInternalformativ = (PFNGLGETINTERNALFORMATIVPROC)gleIntGetProcAddress("glGetInternalformativ");
-	if(!TestPointer((const void*)__gleGetInternalformativ))
-	{
-		__gleGetInternalformativ = (PFNGLGETINTERNALFORMATIVPROC)gle_CoreStruct.gleVarGetInternalformativ;
-		if(!__gleGetInternalformativ) bIsLoaded = 0;
-	}
+	if(!__gleGetInternalformativ) bIsLoaded = 0;
 	glext_ARB_internalformat_query = 1;
 	__gleDrawTransformFeedbackInstanced = (PFNGLDRAWTRANSFORMFEEDBACKINSTANCEDPROC)gleIntGetProcAddress("glDrawTransformFeedbackInstanced");
-	if(!TestPointer((const void*)__gleDrawTransformFeedbackInstanced))
-	{
-		__gleDrawTransformFeedbackInstanced = (PFNGLDRAWTRANSFORMFEEDBACKINSTANCEDPROC)gle_CoreStruct.gleVarDrawTransformFeedbackInstanced;
-		if(!__gleDrawTransformFeedbackInstanced) bIsLoaded = 0;
-	}
+	if(!__gleDrawTransformFeedbackInstanced) bIsLoaded = 0;
 	__gleDrawTransformFeedbackStreamInstanced = (PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC)gleIntGetProcAddress("glDrawTransformFeedbackStreamInstanced");
-	if(!TestPointer((const void*)__gleDrawTransformFeedbackStreamInstanced))
-	{
-		__gleDrawTransformFeedbackStreamInstanced = (PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC)gle_CoreStruct.gleVarDrawTransformFeedbackStreamInstanced;
-		if(!__gleDrawTransformFeedbackStreamInstanced) bIsLoaded = 0;
-	}
+	if(!__gleDrawTransformFeedbackStreamInstanced) bIsLoaded = 0;
 	glext_ARB_transform_feedback_instanced = 1;
 	__gleDrawArraysInstancedBaseInstance = (PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC)gleIntGetProcAddress("glDrawArraysInstancedBaseInstance");
-	if(!TestPointer((const void*)__gleDrawArraysInstancedBaseInstance))
-	{
-		__gleDrawArraysInstancedBaseInstance = (PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC)gle_CoreStruct.gleVarDrawArraysInstancedBaseInstance;
-		if(!__gleDrawArraysInstancedBaseInstance) bIsLoaded = 0;
-	}
+	if(!__gleDrawArraysInstancedBaseInstance) bIsLoaded = 0;
 	__gleDrawElementsInstancedBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseInstance");
-	if(!TestPointer((const void*)__gleDrawElementsInstancedBaseInstance))
-	{
-		__gleDrawElementsInstancedBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC)gle_CoreStruct.gleVarDrawElementsInstancedBaseInstance;
-		if(!__gleDrawElementsInstancedBaseInstance) bIsLoaded = 0;
-	}
+	if(!__gleDrawElementsInstancedBaseInstance) bIsLoaded = 0;
 	__gleDrawElementsInstancedBaseVertexBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseVertexBaseInstance");
-	if(!TestPointer((const void*)__gleDrawElementsInstancedBaseVertexBaseInstance))
-	{
-		__gleDrawElementsInstancedBaseVertexBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC)gle_CoreStruct.gleVarDrawElementsInstancedBaseVertexBaseInstance;
-		if(!__gleDrawElementsInstancedBaseVertexBaseInstance) bIsLoaded = 0;
-	}
+	if(!__gleDrawElementsInstancedBaseVertexBaseInstance) bIsLoaded = 0;
 	glext_ARB_base_instance = 1;
 	__gleBindImageTexture = (PFNGLBINDIMAGETEXTUREPROC)gleIntGetProcAddress("glBindImageTexture");
-	if(!TestPointer((const void*)__gleBindImageTexture))
-	{
-		__gleBindImageTexture = (PFNGLBINDIMAGETEXTUREPROC)gle_CoreStruct.gleVarBindImageTexture;
-		if(!__gleBindImageTexture) bIsLoaded = 0;
-	}
+	if(!__gleBindImageTexture) bIsLoaded = 0;
 	__gleMemoryBarrier = (PFNGLMEMORYBARRIERPROC)gleIntGetProcAddress("glMemoryBarrier");
-	if(!TestPointer((const void*)__gleMemoryBarrier))
-	{
-		__gleMemoryBarrier = (PFNGLMEMORYBARRIERPROC)gle_CoreStruct.gleVarMemoryBarrier;
-		if(!__gleMemoryBarrier) bIsLoaded = 0;
-	}
+	if(!__gleMemoryBarrier) bIsLoaded = 0;
 	glext_ARB_shader_image_load_store = 1;
 	return bIsLoaded;
 }
@@ -17334,7 +13727,6 @@ int gleIntLoad_Version_2_1()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Base()) bIsLoaded = 0;
@@ -17350,7 +13742,6 @@ int gleIntLoad_Version_3_0()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Base()) bIsLoaded = 0;
@@ -17367,7 +13758,6 @@ int gleIntLoad_Version_3_1()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Version_3_1()) bIsLoaded = 0;
@@ -17385,7 +13775,6 @@ int gleIntLoad_Version_3_1_Comp()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Base()) bIsLoaded = 0;
@@ -17403,7 +13792,6 @@ int gleIntLoad_Version_3_2()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Version_3_1()) bIsLoaded = 0;
@@ -17422,7 +13810,6 @@ int gleIntLoad_Version_3_2_Comp()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Base()) bIsLoaded = 0;
@@ -17441,7 +13828,6 @@ int gleIntLoad_Version_3_3()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Version_3_1()) bIsLoaded = 0;
@@ -17461,7 +13847,6 @@ int gleIntLoad_Version_3_3_Comp()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Base()) bIsLoaded = 0;
@@ -17481,7 +13866,6 @@ int gleIntLoad_Version_4_0()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Version_3_1()) bIsLoaded = 0;
@@ -17502,7 +13886,6 @@ int gleIntLoad_Version_4_0_Comp()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Base()) bIsLoaded = 0;
@@ -17523,7 +13906,6 @@ int gleIntLoad_Version_4_1()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Version_3_1()) bIsLoaded = 0;
@@ -17545,7 +13927,6 @@ int gleIntLoad_Version_4_1_Comp()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Base()) bIsLoaded = 0;
@@ -17567,7 +13948,6 @@ int gleIntLoad_Version_4_2()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Version_3_1()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Version_3_1()) bIsLoaded = 0;
@@ -17590,7 +13970,6 @@ int gleIntLoad_Version_4_2_Comp()
 {
 	int bIsLoaded = 1;
 	gleIntClear();
-	gleIntCoreInit();
 	if(!gleIntLoadCore_1_1_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_2_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_1_3_Base()) bIsLoaded = 0;
@@ -17613,23 +13992,10 @@ int gleIntLoad_Version_4_2_Comp()
 void gleIntLoadBaseFuncs()
 {
 	int bIsLoaded = 1; //Unimportant here.
-	gleIntCoreInit();
 	__gleGetString = (PFNGLGETSTRINGPROC)gleIntGetProcAddress("glGetString");
-	if(!TestPointer((const void*)__gleGetString))
-	{
-		__gleGetString = (PFNGLGETSTRINGPROC)gle_CoreStruct.gleVarGetString;
-		if(!__gleGetString) bIsLoaded = 0;
-	}
+	if(!__gleGetString) bIsLoaded = 0;
 	__gleGetStringi = (PFNGLGETSTRINGIPROC)gleIntGetProcAddress("glGetStringi");
-	if(!TestPointer((const void*)__gleGetStringi))
-	{
-		__gleGetStringi = (PFNGLGETSTRINGIPROC)gle_CoreStruct.gleVarGetStringi;
-		if(!__gleGetStringi) bIsLoaded = 0;
-	}
+	if(!__gleGetStringi) bIsLoaded = 0;
 	__gleGetIntegerv = (PFNGLGETINTEGERVPROC)gleIntGetProcAddress("glGetIntegerv");
-	if(!TestPointer((const void*)__gleGetIntegerv))
-	{
-		__gleGetIntegerv = (PFNGLGETINTEGERVPROC)gle_CoreStruct.gleVarGetIntegerv;
-		if(!__gleGetIntegerv) bIsLoaded = 0;
-	}
+	if(!__gleGetIntegerv) bIsLoaded = 0;
 }

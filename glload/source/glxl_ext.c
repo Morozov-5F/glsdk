@@ -114,7 +114,7 @@ typedef unsigned __int64 uint64_t;
 #if defined(__APPLE__)
 #include <mach-o/dyld.h>
 
-void* AppleGLGetProcAddress (const GLubyte *name)
+static void* AppleGLGetProcAddress (const GLubyte *name)
 {
   static const struct mach_header* image = NULL;
   NSSymbol symbol;
@@ -140,7 +140,7 @@ void* AppleGLGetProcAddress (const GLubyte *name)
 #include <dlfcn.h>
 #include <stdio.h>
 
-void* SunGetProcAddress (const GLubyte* name)
+static void* SunGetProcAddress (const GLubyte* name)
 {
   static void* h = NULL;
   static void* gpa;
@@ -167,9 +167,23 @@ void* SunGetProcAddress (const GLubyte* name)
 		#undef APIENTRY
 	#endif //GLE_REMOVE_APIENTRY
 
-	#include <windows.h>
+#include <windows.h>
+
+#pragma warning(disable: 4055)
+#pragma warning(disable: 4054)
+static void *WinGetProcAddress(const char *name)
+{
+	HMODULE glMod = NULL;
+	void *pFunc = (void*)wglGetProcAddress((LPCSTR)name);
+	if(TestPointer(pFunc))
+	{
+		return pFunc;
+	}
+	glMod = GetModuleHandleA("OpenGL32.dll");
+	return (void*)GetProcAddress(glMod, (LPCSTR)name);
+}
 	
-	#define gleIntGetProcAddress(name) wglGetProcAddress((LPCSTR)name)
+#define gleIntGetProcAddress(name) WinGetProcAddress(name)
 #else
 	#if defined(__APPLE__)
 		#define gleIntGetProcAddress(name) AppleGLGetProcAddress(name)
@@ -298,7 +312,7 @@ static int glXeIntLoad_ARB_create_context()
 	int bIsLoaded = 1;
 #ifndef GLX_ARB_create_context
 	glXCreateContextAttribsARB = (PFNGLXCREATECONTEXTATTRIBSARBPROC)gleIntGetProcAddress("glXCreateContextAttribsARB");
-	if(!TestPointer((const void*)glXCreateContextAttribsARB)) bIsLoaded = 0;
+	if(!glXCreateContextAttribsARB) bIsLoaded = 0;
 #endif /*GLX_ARB_create_context*/
 	return bIsLoaded;
 }
@@ -317,7 +331,7 @@ static int glXeIntLoad_ARB_get_proc_address()
 	int bIsLoaded = 1;
 #ifndef GLX_ARB_get_proc_address
 	glXGetProcAddressARB = (PFNGLXGETPROCADDRESSARBPROC)gleIntGetProcAddress("glXGetProcAddressARB");
-	if(!TestPointer((const void*)glXGetProcAddressARB)) bIsLoaded = 0;
+	if(!glXGetProcAddressARB) bIsLoaded = 0;
 #endif /*GLX_ARB_get_proc_address*/
 	return bIsLoaded;
 }
@@ -345,15 +359,15 @@ static int glXeIntLoad_EXT_import_context()
 	int bIsLoaded = 1;
 #ifndef GLX_EXT_import_context
 	glXGetCurrentDisplayEXT = (PFNGLXGETCURRENTDISPLAYEXTPROC)gleIntGetProcAddress("glXGetCurrentDisplayEXT");
-	if(!TestPointer((const void*)glXGetCurrentDisplayEXT)) bIsLoaded = 0;
+	if(!glXGetCurrentDisplayEXT) bIsLoaded = 0;
 	glXQueryContextInfoEXT = (PFNGLXQUERYCONTEXTINFOEXTPROC)gleIntGetProcAddress("glXQueryContextInfoEXT");
-	if(!TestPointer((const void*)glXQueryContextInfoEXT)) bIsLoaded = 0;
+	if(!glXQueryContextInfoEXT) bIsLoaded = 0;
 	glXGetContextIDEXT = (PFNGLXGETCONTEXTIDEXTPROC)gleIntGetProcAddress("glXGetContextIDEXT");
-	if(!TestPointer((const void*)glXGetContextIDEXT)) bIsLoaded = 0;
+	if(!glXGetContextIDEXT) bIsLoaded = 0;
 	glXImportContextEXT = (PFNGLXIMPORTCONTEXTEXTPROC)gleIntGetProcAddress("glXImportContextEXT");
-	if(!TestPointer((const void*)glXImportContextEXT)) bIsLoaded = 0;
+	if(!glXImportContextEXT) bIsLoaded = 0;
 	glXFreeContextEXT = (PFNGLXFREECONTEXTEXTPROC)gleIntGetProcAddress("glXFreeContextEXT");
-	if(!TestPointer((const void*)glXFreeContextEXT)) bIsLoaded = 0;
+	if(!glXFreeContextEXT) bIsLoaded = 0;
 #endif /*GLX_EXT_import_context*/
 	return bIsLoaded;
 }
@@ -368,7 +382,7 @@ static int glXeIntLoad_EXT_swap_control()
 	int bIsLoaded = 1;
 #ifndef GLX_EXT_swap_control
 	glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)gleIntGetProcAddress("glXSwapIntervalEXT");
-	if(!TestPointer((const void*)glXSwapIntervalEXT)) bIsLoaded = 0;
+	if(!glXSwapIntervalEXT) bIsLoaded = 0;
 #endif /*GLX_EXT_swap_control*/
 	return bIsLoaded;
 }
@@ -385,9 +399,9 @@ static int glXeIntLoad_EXT_texture_from_pixmap()
 	int bIsLoaded = 1;
 #ifndef GLX_EXT_texture_from_pixmap
 	glXBindTexImageEXT = (PFNGLXBINDTEXIMAGEEXTPROC)gleIntGetProcAddress("glXBindTexImageEXT");
-	if(!TestPointer((const void*)glXBindTexImageEXT)) bIsLoaded = 0;
+	if(!glXBindTexImageEXT) bIsLoaded = 0;
 	glXReleaseTexImageEXT = (PFNGLXRELEASETEXIMAGEEXTPROC)gleIntGetProcAddress("glXReleaseTexImageEXT");
-	if(!TestPointer((const void*)glXReleaseTexImageEXT)) bIsLoaded = 0;
+	if(!glXReleaseTexImageEXT) bIsLoaded = 0;
 #endif /*GLX_EXT_texture_from_pixmap*/
 	return bIsLoaded;
 }
@@ -405,7 +419,7 @@ static int glXeIntLoad_MESA_agp_offset()
 	int bIsLoaded = 1;
 #ifndef GLX_MESA_agp_offset
 	glXGetAGPOffsetMESA = (PFNGLXGETAGPOFFSETMESAPROC)gleIntGetProcAddress("glXGetAGPOffsetMESA");
-	if(!TestPointer((const void*)glXGetAGPOffsetMESA)) bIsLoaded = 0;
+	if(!glXGetAGPOffsetMESA) bIsLoaded = 0;
 #endif /*GLX_MESA_agp_offset*/
 	return bIsLoaded;
 }
@@ -420,7 +434,7 @@ static int glXeIntLoad_MESA_copy_sub_buffer()
 	int bIsLoaded = 1;
 #ifndef GLX_MESA_copy_sub_buffer
 	glXCopySubBufferMESA = (PFNGLXCOPYSUBBUFFERMESAPROC)gleIntGetProcAddress("glXCopySubBufferMESA");
-	if(!TestPointer((const void*)glXCopySubBufferMESA)) bIsLoaded = 0;
+	if(!glXCopySubBufferMESA) bIsLoaded = 0;
 #endif /*GLX_MESA_copy_sub_buffer*/
 	return bIsLoaded;
 }
@@ -435,7 +449,7 @@ static int glXeIntLoad_MESA_pixmap_colormap()
 	int bIsLoaded = 1;
 #ifndef GLX_MESA_pixmap_colormap
 	glXCreateGLXPixmapMESA = (PFNGLXCREATEGLXPIXMAPMESAPROC)gleIntGetProcAddress("glXCreateGLXPixmapMESA");
-	if(!TestPointer((const void*)glXCreateGLXPixmapMESA)) bIsLoaded = 0;
+	if(!glXCreateGLXPixmapMESA) bIsLoaded = 0;
 #endif /*GLX_MESA_pixmap_colormap*/
 	return bIsLoaded;
 }
@@ -450,7 +464,7 @@ static int glXeIntLoad_MESA_release_buffers()
 	int bIsLoaded = 1;
 #ifndef GLX_MESA_release_buffers
 	glXReleaseBuffersMESA = (PFNGLXRELEASEBUFFERSMESAPROC)gleIntGetProcAddress("glXReleaseBuffersMESA");
-	if(!TestPointer((const void*)glXReleaseBuffersMESA)) bIsLoaded = 0;
+	if(!glXReleaseBuffersMESA) bIsLoaded = 0;
 #endif /*GLX_MESA_release_buffers*/
 	return bIsLoaded;
 }
@@ -465,7 +479,7 @@ static int glXeIntLoad_MESA_set_3dfx_mode()
 	int bIsLoaded = 1;
 #ifndef GLX_MESA_set_3dfx_mode
 	glXSet3DfxModeMESA = (PFNGLXSET3DFXMODEMESAPROC)gleIntGetProcAddress("glXSet3DfxModeMESA");
-	if(!TestPointer((const void*)glXSet3DfxModeMESA)) bIsLoaded = 0;
+	if(!glXSet3DfxModeMESA) bIsLoaded = 0;
 #endif /*GLX_MESA_set_3dfx_mode*/
 	return bIsLoaded;
 }
@@ -480,7 +494,7 @@ static int glXeIntLoad_NV_copy_image()
 	int bIsLoaded = 1;
 #ifndef GLX_NV_copy_image
 	glXCopyImageSubDataNV = (PFNGLXCOPYIMAGESUBDATANVPROC)gleIntGetProcAddress("glXCopyImageSubDataNV");
-	if(!TestPointer((const void*)glXCopyImageSubDataNV)) bIsLoaded = 0;
+	if(!glXCopyImageSubDataNV) bIsLoaded = 0;
 #endif /*GLX_NV_copy_image*/
 	return bIsLoaded;
 }
@@ -499,9 +513,9 @@ static int glXeIntLoad_NV_present_video()
 	int bIsLoaded = 1;
 #ifndef GLX_NV_present_video
 	glXEnumerateVideoDevicesNV = (PFNGLXENUMERATEVIDEODEVICESNVPROC)gleIntGetProcAddress("glXEnumerateVideoDevicesNV");
-	if(!TestPointer((const void*)glXEnumerateVideoDevicesNV)) bIsLoaded = 0;
+	if(!glXEnumerateVideoDevicesNV) bIsLoaded = 0;
 	glXBindVideoDeviceNV = (PFNGLXBINDVIDEODEVICENVPROC)gleIntGetProcAddress("glXBindVideoDeviceNV");
-	if(!TestPointer((const void*)glXBindVideoDeviceNV)) bIsLoaded = 0;
+	if(!glXBindVideoDeviceNV) bIsLoaded = 0;
 #endif /*GLX_NV_present_video*/
 	return bIsLoaded;
 }
@@ -526,17 +540,17 @@ static int glXeIntLoad_NV_swap_group()
 	int bIsLoaded = 1;
 #ifndef GLX_NV_swap_group
 	glXJoinSwapGroupNV = (PFNGLXJOINSWAPGROUPNVPROC)gleIntGetProcAddress("glXJoinSwapGroupNV");
-	if(!TestPointer((const void*)glXJoinSwapGroupNV)) bIsLoaded = 0;
+	if(!glXJoinSwapGroupNV) bIsLoaded = 0;
 	glXBindSwapBarrierNV = (PFNGLXBINDSWAPBARRIERNVPROC)gleIntGetProcAddress("glXBindSwapBarrierNV");
-	if(!TestPointer((const void*)glXBindSwapBarrierNV)) bIsLoaded = 0;
+	if(!glXBindSwapBarrierNV) bIsLoaded = 0;
 	glXQuerySwapGroupNV = (PFNGLXQUERYSWAPGROUPNVPROC)gleIntGetProcAddress("glXQuerySwapGroupNV");
-	if(!TestPointer((const void*)glXQuerySwapGroupNV)) bIsLoaded = 0;
+	if(!glXQuerySwapGroupNV) bIsLoaded = 0;
 	glXQueryMaxSwapGroupsNV = (PFNGLXQUERYMAXSWAPGROUPSNVPROC)gleIntGetProcAddress("glXQueryMaxSwapGroupsNV");
-	if(!TestPointer((const void*)glXQueryMaxSwapGroupsNV)) bIsLoaded = 0;
+	if(!glXQueryMaxSwapGroupsNV) bIsLoaded = 0;
 	glXQueryFrameCountNV = (PFNGLXQUERYFRAMECOUNTNVPROC)gleIntGetProcAddress("glXQueryFrameCountNV");
-	if(!TestPointer((const void*)glXQueryFrameCountNV)) bIsLoaded = 0;
+	if(!glXQueryFrameCountNV) bIsLoaded = 0;
 	glXResetFrameCountNV = (PFNGLXRESETFRAMECOUNTNVPROC)gleIntGetProcAddress("glXResetFrameCountNV");
-	if(!TestPointer((const void*)glXResetFrameCountNV)) bIsLoaded = 0;
+	if(!glXResetFrameCountNV) bIsLoaded = 0;
 #endif /*GLX_NV_swap_group*/
 	return bIsLoaded;
 }
@@ -559,15 +573,15 @@ static int glXeIntLoad_NV_video_capture()
 	int bIsLoaded = 1;
 #ifndef GLX_NV_video_capture
 	glXBindVideoCaptureDeviceNV = (PFNGLXBINDVIDEOCAPTUREDEVICENVPROC)gleIntGetProcAddress("glXBindVideoCaptureDeviceNV");
-	if(!TestPointer((const void*)glXBindVideoCaptureDeviceNV)) bIsLoaded = 0;
+	if(!glXBindVideoCaptureDeviceNV) bIsLoaded = 0;
 	glXEnumerateVideoCaptureDevicesNV = (PFNGLXENUMERATEVIDEOCAPTUREDEVICESNVPROC)gleIntGetProcAddress("glXEnumerateVideoCaptureDevicesNV");
-	if(!TestPointer((const void*)glXEnumerateVideoCaptureDevicesNV)) bIsLoaded = 0;
+	if(!glXEnumerateVideoCaptureDevicesNV) bIsLoaded = 0;
 	glXLockVideoCaptureDeviceNV = (PFNGLXLOCKVIDEOCAPTUREDEVICENVPROC)gleIntGetProcAddress("glXLockVideoCaptureDeviceNV");
-	if(!TestPointer((const void*)glXLockVideoCaptureDeviceNV)) bIsLoaded = 0;
+	if(!glXLockVideoCaptureDeviceNV) bIsLoaded = 0;
 	glXQueryVideoCaptureDeviceNV = (PFNGLXQUERYVIDEOCAPTUREDEVICENVPROC)gleIntGetProcAddress("glXQueryVideoCaptureDeviceNV");
-	if(!TestPointer((const void*)glXQueryVideoCaptureDeviceNV)) bIsLoaded = 0;
+	if(!glXQueryVideoCaptureDeviceNV) bIsLoaded = 0;
 	glXReleaseVideoCaptureDeviceNV = (PFNGLXRELEASEVIDEOCAPTUREDEVICENVPROC)gleIntGetProcAddress("glXReleaseVideoCaptureDeviceNV");
-	if(!TestPointer((const void*)glXReleaseVideoCaptureDeviceNV)) bIsLoaded = 0;
+	if(!glXReleaseVideoCaptureDeviceNV) bIsLoaded = 0;
 #endif /*GLX_NV_video_capture*/
 	return bIsLoaded;
 }
@@ -592,15 +606,15 @@ static int glXeIntLoad_OML_sync_control()
 	int bIsLoaded = 1;
 #ifndef GLX_OML_sync_control
 	glXGetSyncValuesOML = (PFNGLXGETSYNCVALUESOMLPROC)gleIntGetProcAddress("glXGetSyncValuesOML");
-	if(!TestPointer((const void*)glXGetSyncValuesOML)) bIsLoaded = 0;
+	if(!glXGetSyncValuesOML) bIsLoaded = 0;
 	glXGetMscRateOML = (PFNGLXGETMSCRATEOMLPROC)gleIntGetProcAddress("glXGetMscRateOML");
-	if(!TestPointer((const void*)glXGetMscRateOML)) bIsLoaded = 0;
+	if(!glXGetMscRateOML) bIsLoaded = 0;
 	glXSwapBuffersMscOML = (PFNGLXSWAPBUFFERSMSCOMLPROC)gleIntGetProcAddress("glXSwapBuffersMscOML");
-	if(!TestPointer((const void*)glXSwapBuffersMscOML)) bIsLoaded = 0;
+	if(!glXSwapBuffersMscOML) bIsLoaded = 0;
 	glXWaitForMscOML = (PFNGLXWAITFORMSCOMLPROC)gleIntGetProcAddress("glXWaitForMscOML");
-	if(!TestPointer((const void*)glXWaitForMscOML)) bIsLoaded = 0;
+	if(!glXWaitForMscOML) bIsLoaded = 0;
 	glXWaitForSbcOML = (PFNGLXWAITFORSBCOMLPROC)gleIntGetProcAddress("glXWaitForSbcOML");
-	if(!TestPointer((const void*)glXWaitForSbcOML)) bIsLoaded = 0;
+	if(!glXWaitForSbcOML) bIsLoaded = 0;
 #endif /*GLX_OML_sync_control*/
 	return bIsLoaded;
 }
@@ -628,17 +642,17 @@ static int glXeIntLoad_SGIX_fbconfig()
 	int bIsLoaded = 1;
 #ifndef GLX_SGIX_fbconfig
 	glXGetFBConfigAttribSGIX = (PFNGLXGETFBCONFIGATTRIBSGIXPROC)gleIntGetProcAddress("glXGetFBConfigAttribSGIX");
-	if(!TestPointer((const void*)glXGetFBConfigAttribSGIX)) bIsLoaded = 0;
+	if(!glXGetFBConfigAttribSGIX) bIsLoaded = 0;
 	glXChooseFBConfigSGIX = (PFNGLXCHOOSEFBCONFIGSGIXPROC)gleIntGetProcAddress("glXChooseFBConfigSGIX");
-	if(!TestPointer((const void*)glXChooseFBConfigSGIX)) bIsLoaded = 0;
+	if(!glXChooseFBConfigSGIX) bIsLoaded = 0;
 	glXCreateGLXPixmapWithConfigSGIX = (PFNGLXCREATEGLXPIXMAPWITHCONFIGSGIXPROC)gleIntGetProcAddress("glXCreateGLXPixmapWithConfigSGIX");
-	if(!TestPointer((const void*)glXCreateGLXPixmapWithConfigSGIX)) bIsLoaded = 0;
+	if(!glXCreateGLXPixmapWithConfigSGIX) bIsLoaded = 0;
 	glXCreateContextWithConfigSGIX = (PFNGLXCREATECONTEXTWITHCONFIGSGIXPROC)gleIntGetProcAddress("glXCreateContextWithConfigSGIX");
-	if(!TestPointer((const void*)glXCreateContextWithConfigSGIX)) bIsLoaded = 0;
+	if(!glXCreateContextWithConfigSGIX) bIsLoaded = 0;
 	glXGetVisualFromFBConfigSGIX = (PFNGLXGETVISUALFROMFBCONFIGSGIXPROC)gleIntGetProcAddress("glXGetVisualFromFBConfigSGIX");
-	if(!TestPointer((const void*)glXGetVisualFromFBConfigSGIX)) bIsLoaded = 0;
+	if(!glXGetVisualFromFBConfigSGIX) bIsLoaded = 0;
 	glXGetFBConfigFromVisualSGIX = (PFNGLXGETFBCONFIGFROMVISUALSGIXPROC)gleIntGetProcAddress("glXGetFBConfigFromVisualSGIX");
-	if(!TestPointer((const void*)glXGetFBConfigFromVisualSGIX)) bIsLoaded = 0;
+	if(!glXGetFBConfigFromVisualSGIX) bIsLoaded = 0;
 #endif /*GLX_SGIX_fbconfig*/
 	return bIsLoaded;
 }
@@ -661,15 +675,15 @@ static int glXeIntLoad_SGIX_pbuffer()
 	int bIsLoaded = 1;
 #ifndef GLX_SGIX_pbuffer
 	glXCreateGLXPbufferSGIX = (PFNGLXCREATEGLXPBUFFERSGIXPROC)gleIntGetProcAddress("glXCreateGLXPbufferSGIX");
-	if(!TestPointer((const void*)glXCreateGLXPbufferSGIX)) bIsLoaded = 0;
+	if(!glXCreateGLXPbufferSGIX) bIsLoaded = 0;
 	glXDestroyGLXPbufferSGIX = (PFNGLXDESTROYGLXPBUFFERSGIXPROC)gleIntGetProcAddress("glXDestroyGLXPbufferSGIX");
-	if(!TestPointer((const void*)glXDestroyGLXPbufferSGIX)) bIsLoaded = 0;
+	if(!glXDestroyGLXPbufferSGIX) bIsLoaded = 0;
 	glXQueryGLXPbufferSGIX = (PFNGLXQUERYGLXPBUFFERSGIXPROC)gleIntGetProcAddress("glXQueryGLXPbufferSGIX");
-	if(!TestPointer((const void*)glXQueryGLXPbufferSGIX)) bIsLoaded = 0;
+	if(!glXQueryGLXPbufferSGIX) bIsLoaded = 0;
 	glXSelectEventSGIX = (PFNGLXSELECTEVENTSGIXPROC)gleIntGetProcAddress("glXSelectEventSGIX");
-	if(!TestPointer((const void*)glXSelectEventSGIX)) bIsLoaded = 0;
+	if(!glXSelectEventSGIX) bIsLoaded = 0;
 	glXGetSelectedEventSGIX = (PFNGLXGETSELECTEDEVENTSGIXPROC)gleIntGetProcAddress("glXGetSelectedEventSGIX");
-	if(!TestPointer((const void*)glXGetSelectedEventSGIX)) bIsLoaded = 0;
+	if(!glXGetSelectedEventSGIX) bIsLoaded = 0;
 #endif /*GLX_SGIX_pbuffer*/
 	return bIsLoaded;
 }
@@ -686,9 +700,9 @@ static int glXeIntLoad_SGIX_swap_barrier()
 	int bIsLoaded = 1;
 #ifndef GLX_SGIX_swap_barrier
 	glXBindSwapBarrierSGIX = (PFNGLXBINDSWAPBARRIERSGIXPROC)gleIntGetProcAddress("glXBindSwapBarrierSGIX");
-	if(!TestPointer((const void*)glXBindSwapBarrierSGIX)) bIsLoaded = 0;
+	if(!glXBindSwapBarrierSGIX) bIsLoaded = 0;
 	glXQueryMaxSwapBarriersSGIX = (PFNGLXQUERYMAXSWAPBARRIERSSGIXPROC)gleIntGetProcAddress("glXQueryMaxSwapBarriersSGIX");
-	if(!TestPointer((const void*)glXQueryMaxSwapBarriersSGIX)) bIsLoaded = 0;
+	if(!glXQueryMaxSwapBarriersSGIX) bIsLoaded = 0;
 #endif /*GLX_SGIX_swap_barrier*/
 	return bIsLoaded;
 }
@@ -703,7 +717,7 @@ static int glXeIntLoad_SGIX_swap_group()
 	int bIsLoaded = 1;
 #ifndef GLX_SGIX_swap_group
 	glXJoinSwapGroupSGIX = (PFNGLXJOINSWAPGROUPSGIXPROC)gleIntGetProcAddress("glXJoinSwapGroupSGIX");
-	if(!TestPointer((const void*)glXJoinSwapGroupSGIX)) bIsLoaded = 0;
+	if(!glXJoinSwapGroupSGIX) bIsLoaded = 0;
 #endif /*GLX_SGIX_swap_group*/
 	return bIsLoaded;
 }
@@ -726,15 +740,15 @@ static int glXeIntLoad_SGIX_video_resize()
 	int bIsLoaded = 1;
 #ifndef GLX_SGIX_video_resize
 	glXBindChannelToWindowSGIX = (PFNGLXBINDCHANNELTOWINDOWSGIXPROC)gleIntGetProcAddress("glXBindChannelToWindowSGIX");
-	if(!TestPointer((const void*)glXBindChannelToWindowSGIX)) bIsLoaded = 0;
+	if(!glXBindChannelToWindowSGIX) bIsLoaded = 0;
 	glXChannelRectSGIX = (PFNGLXCHANNELRECTSGIXPROC)gleIntGetProcAddress("glXChannelRectSGIX");
-	if(!TestPointer((const void*)glXChannelRectSGIX)) bIsLoaded = 0;
+	if(!glXChannelRectSGIX) bIsLoaded = 0;
 	glXQueryChannelRectSGIX = (PFNGLXQUERYCHANNELRECTSGIXPROC)gleIntGetProcAddress("glXQueryChannelRectSGIX");
-	if(!TestPointer((const void*)glXQueryChannelRectSGIX)) bIsLoaded = 0;
+	if(!glXQueryChannelRectSGIX) bIsLoaded = 0;
 	glXQueryChannelDeltasSGIX = (PFNGLXQUERYCHANNELDELTASSGIXPROC)gleIntGetProcAddress("glXQueryChannelDeltasSGIX");
-	if(!TestPointer((const void*)glXQueryChannelDeltasSGIX)) bIsLoaded = 0;
+	if(!glXQueryChannelDeltasSGIX) bIsLoaded = 0;
 	glXChannelRectSyncSGIX = (PFNGLXCHANNELRECTSYNCSGIXPROC)gleIntGetProcAddress("glXChannelRectSyncSGIX");
-	if(!TestPointer((const void*)glXChannelRectSyncSGIX)) bIsLoaded = 0;
+	if(!glXChannelRectSyncSGIX) bIsLoaded = 0;
 #endif /*GLX_SGIX_video_resize*/
 	return bIsLoaded;
 }
@@ -750,7 +764,7 @@ static int glXeIntLoad_SGI_cushion()
 	int bIsLoaded = 1;
 #ifndef GLX_SGI_cushion
 	glXCushionSGI = (PFNGLXCUSHIONSGIPROC)gleIntGetProcAddress("glXCushionSGI");
-	if(!TestPointer((const void*)glXCushionSGI)) bIsLoaded = 0;
+	if(!glXCushionSGI) bIsLoaded = 0;
 #endif /*GLX_SGI_cushion*/
 	return bIsLoaded;
 }
@@ -767,9 +781,9 @@ static int glXeIntLoad_SGI_make_current_read()
 	int bIsLoaded = 1;
 #ifndef GLX_SGI_make_current_read
 	glXMakeCurrentReadSGI = (PFNGLXMAKECURRENTREADSGIPROC)gleIntGetProcAddress("glXMakeCurrentReadSGI");
-	if(!TestPointer((const void*)glXMakeCurrentReadSGI)) bIsLoaded = 0;
+	if(!glXMakeCurrentReadSGI) bIsLoaded = 0;
 	glXGetCurrentReadDrawableSGI = (PFNGLXGETCURRENTREADDRAWABLESGIPROC)gleIntGetProcAddress("glXGetCurrentReadDrawableSGI");
-	if(!TestPointer((const void*)glXGetCurrentReadDrawableSGI)) bIsLoaded = 0;
+	if(!glXGetCurrentReadDrawableSGI) bIsLoaded = 0;
 #endif /*GLX_SGI_make_current_read*/
 	return bIsLoaded;
 }
@@ -784,7 +798,7 @@ static int glXeIntLoad_SGI_swap_control()
 	int bIsLoaded = 1;
 #ifndef GLX_SGI_swap_control
 	glXSwapIntervalSGI = (PFNGLXSWAPINTERVALSGIPROC)gleIntGetProcAddress("glXSwapIntervalSGI");
-	if(!TestPointer((const void*)glXSwapIntervalSGI)) bIsLoaded = 0;
+	if(!glXSwapIntervalSGI) bIsLoaded = 0;
 #endif /*GLX_SGI_swap_control*/
 	return bIsLoaded;
 }
@@ -801,9 +815,9 @@ static int glXeIntLoad_SGI_video_sync()
 	int bIsLoaded = 1;
 #ifndef GLX_SGI_video_sync
 	glXGetVideoSyncSGI = (PFNGLXGETVIDEOSYNCSGIPROC)gleIntGetProcAddress("glXGetVideoSyncSGI");
-	if(!TestPointer((const void*)glXGetVideoSyncSGI)) bIsLoaded = 0;
+	if(!glXGetVideoSyncSGI) bIsLoaded = 0;
 	glXWaitVideoSyncSGI = (PFNGLXWAITVIDEOSYNCSGIPROC)gleIntGetProcAddress("glXWaitVideoSyncSGI");
-	if(!TestPointer((const void*)glXWaitVideoSyncSGI)) bIsLoaded = 0;
+	if(!glXWaitVideoSyncSGI) bIsLoaded = 0;
 #endif /*GLX_SGI_video_sync*/
 	return bIsLoaded;
 }
@@ -818,7 +832,7 @@ static int glXeIntLoad_SUN_get_transparent_index()
 	int bIsLoaded = 1;
 #ifndef GLX_SUN_get_transparent_index
 	glXGetTransparentIndexSUN = (PFNGLXGETTRANSPARENTINDEXSUNPROC)gleIntGetProcAddress("glXGetTransparentIndexSUN");
-	if(!TestPointer((const void*)glXGetTransparentIndexSUN)) bIsLoaded = 0;
+	if(!glXGetTransparentIndexSUN) bIsLoaded = 0;
 #endif /*GLX_SUN_get_transparent_index*/
 	return bIsLoaded;
 }
