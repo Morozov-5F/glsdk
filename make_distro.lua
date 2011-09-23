@@ -53,18 +53,24 @@ doxProc:wait(doxProc);
 
 ---------------------------------------------------------------
 -- Step 3: Apply Copyright Info
-
-
----------------------------------------------------------------
--- Step 4: Install the dependencies.
 local luaFilename = "lua.exe"
-local luaDepScriptName = "get_externals.lua"
 local pathLua = ufs.path(FindFileInPath(luaFilename))
+local luaCopyScriptName = "make_copyright.lua"
+
+ufs.current_path(pathDest);
 
 if(pathLua:empty()) then
 	print("Could not find Lua. Since this is a Lua script, that's kinda confusing...");
 	return;
 end
+
+local copyProc = ex.spawn(tostring(pathLua),
+	{args={luaCopyScriptName}});
+copyProc:wait(copyProc);
+
+---------------------------------------------------------------
+-- Step 4: Install the dependencies.
+local luaDepScriptName = "get_externals.lua"
 
 ufs.current_path(pathDest);
 
