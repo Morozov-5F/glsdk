@@ -7,6 +7,7 @@ local http = require("socket.http")
 local ltn12 = require("ltn12")
 require("ex")
 require "ufs"
+require "_FindFileInPath"
 
 
 local externals =
@@ -35,23 +36,7 @@ local externals =
 	},
 }
 
-local path = ex.getenv("PATH");
-
-local zipName = "7z.exe";
-local zipFullName;
-for pathname in path:gmatch("([^%;%\"]+)%;?") do
-	if(pathname:sub(-1) ~= "\\") then
-		pathname = pathname .. "\\"
-	end
-	
-	local testName = ufs.path(pathname .. zipName);
-	
-	if(ufs.exists(testName)) then
-		zipFullName = tostring(testName);
-		print(zipFullName);
-		break;
-	end
-end
+local zipFullName = FindFileInPath("7z.exe");
 
 if(zipFullName == nil) then
 	return

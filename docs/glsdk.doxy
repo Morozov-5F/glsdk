@@ -1,11 +1,14 @@
 
-
 /**
 \mainpage Unofficial OpenGL Software Development Kit
 
 The Unofficial OpenGL Software Development Kit is a collection of libraries and utilities that will help you get started working with OpenGL. It provides a unified, cross-platform build system to make compiling the disparate libraries easier.
 
 Many of the components of the SDK are C++ libraries.
+
+Each component of the SDK specifies the terms under which they are distributed. All licenses used by components are approximately like the MIT license in permissivity. The parts of the SDK responsible for maintaining the build, as well as all examples, are distributed under the <a href="http://www.opensource.org/licenses/MIT">MIT License</a>.
+
+The library components are:
  
 \li @ref module_glload "GL Load": Used to gain access to OpenGL's functions.
 \li @ref module_glimg "GL Image": Used for loading image files into OpenGL textures.
@@ -13,12 +16,21 @@ Many of the components of the SDK are C++ libraries.
 \li @ref module_glfw "GLFW": A tool for creating and managing an OpenGL window. It can be used to handle input.
 \li @ref module_freeglut "FreeGLUT": A tool for creating and managing an OpenGL window. It can be used to handle input, as well as render a few basic shapes.
 
-\li \subpage pg_build 
-\li \subpage pg_use
+The SDK also comes with a number of examples, which are in the <tt>examples</tt> directory.
 
-Example code can be found in the <tt>examples</tt> directory. The most recent download package can be found <a href="https://sourceforge.net/projects/glsdk/files/">on SourceForge</a>. The preferred location for filing bug reports is <a href="https://bitbucket.org/alfonse/unofficial-opengl-sdk/issues?status=new&status=open">on Bitbucket</a>, but bugs can be filed on the SourceForge issue tracker as well.
+\section mainpage_install Installation and Use
 
-\note The Unofficial GL SDK is still in Alpha at present. Currently, the SDK is missing the following libraries:
+Installation of the SDK is simple. <a href="https://sourceforge.net/projects/glsdk/files/">Download the most recent version of the distribution</a> and unzip the file to a directory of your choice. Then follow the @subpage pg_build "instructions for building the SDK components."
+
+Once the SDK has been successfully built. To use it, follow the @subpage pg_use "instructions for using the SDK."
+
+\section mainpage_support Support
+
+Bugs or feature requests should be filed in the <a href="https://bitbucket.org/alfonse/unofficial-opengl-sdk/issues?status=new&status=open">Bitbucket issue tracker</a> for the SDK. However, bugs can also be filed on the SourceForge issue tracker. Questions or other inquiries can be directed to the <a href="http://www.opengl.org/discussion_boards/">OpenGL forums</a>.
+
+\section mainpage_notation Notation
+
+The Unofficial GL SDK is still in Alpha at present. Currently, the SDK is missing the following libraries:
 
 \li Font rendering: A library for rendering glyphs from fonts and doing the most basic of text layout.
 \li Mesh rendering: A library for loading and rendering meshes.
@@ -26,6 +38,8 @@ Example code can be found in the <tt>examples</tt> directory. The most recent do
 The main issue is finding good, well-maintained libraries that can do these. Libraries that rely on compatibility profiles are not acceptable for the SDK, yet most of the available libraries that perform these tasks do.
 
 They do not have to be C++, but they should have no additional dependencies outside of the <em>absolutely necessary</em>. For instance, FreeType2 would be essential for any font library, as there's no way anyone should be expected to reinvent that wheel. But outside of that, there should be no extra dependencies.
+
+The MIT License is preferable, but similar BSD-style licenses are also accepted. Since the SDK uses static linking (for ease of use reasons), GPL and LGPL libraries are not acceptable.
 
 **/
 
@@ -126,6 +140,13 @@ project "MyProject"
 	language "c++"
 	files {"*.cpp", "*.h"}
 	
+	configuration "windows"
+		defines "WIN32"
+		links {"glu32", "opengl32", "gdi32", "winmm", "user32"}
+		
+	configuration "linux"
+		links {"GL"}
+	
 	configuration "Debug"
 		targetsuffix "D"
 		defines "_DEBUG"
@@ -146,6 +167,13 @@ project "MyProject"
 
 	UseLibs {"glload", "freeglut"}
 
+	configuration "windows"
+		defines "WIN32"
+		links {"glu32", "opengl32", "gdi32", "winmm", "user32"}
+		
+	configuration "linux"
+		links {"GL"}
+	
 	configuration "Debug"
 		targetsuffix "D"
 		defines "_DEBUG"
