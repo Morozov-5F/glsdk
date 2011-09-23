@@ -1,5 +1,7 @@
 
 #include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 #include <algorithm>
 #include "glimg/ImageSet.h"
 #include "glimg/ImageCreator.h"

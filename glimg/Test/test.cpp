@@ -1,4 +1,9 @@
+#include <string>
+#include <exception>
+#include <stdexcept>
 #include <stdio.h>
+#include <stdlib.h>
+
 #include <vector>
 #include <glload/gl_3_3_comp.h>
 

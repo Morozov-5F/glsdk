@@ -24,6 +24,9 @@ for i, dir in ipairs(dirs) do
 				defines "WIN32"
 				links {"glu32", "opengl32", "gdi32", "winmm", "user32"}
 				
+			configuration "linux"
+			    links {"GL"}
+				
 			configuration "Debug"
 				targetsuffix "D"
 				defines "_DEBUG"

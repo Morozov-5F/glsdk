@@ -1,4 +1,8 @@
 
+if(_ACTION == "gmake") then
+    os.execute("sh ./configure");
+end
+
 project "freeglut"
 	kind "StaticLib"
 	language "c"
@@ -10,6 +14,10 @@ project "freeglut"
 	
 	configuration "windows"
 		defines "WIN32"
+		
+	configuration "gmake"
+        defines {"HAVE_CONFIG_H", }
+        includedirs {"."}
 		
 	configuration "Debug"
 		targetsuffix "D"
