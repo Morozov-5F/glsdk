@@ -5,6 +5,21 @@
 #include "gll_gl_ext_base.h"
 #include "glload/gll.hpp"
 
+#ifdef WIN32
+#include <windows.h>
+#include "wgll_ext.h"
+#include "wgll_ext_base.h"
+#define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
+#endif
+
+#ifdef LOAD_X11
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <GL/glx.h>
+#include "glxl_ext.h"
+#endif
+
+
 #include "glload/gll.h"
 
 
