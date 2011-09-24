@@ -6,6 +6,7 @@
 #include "glload/gll.h"
 
 #ifdef WIN32
+#undef APIENTRY
 #include <windows.h>
 #include "wgll_ext.h"
 #include "wgll_ext_base.h"

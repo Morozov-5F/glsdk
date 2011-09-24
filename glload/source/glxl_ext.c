@@ -162,10 +162,7 @@ static void* SunGetProcAddress (const GLubyte* name)
 	#ifndef WIN32_LEAN_AND_MEAN
 		#define WIN32_LEAN_AND_MEAN
 	#endif //WIN32_LEAN_AND_MEAN
-	#ifdef GLE_REMOVE_APIENTRY
-		#undef GLE_REMOVE_APIENTRY
-		#undef APIENTRY
-	#endif //GLE_REMOVE_APIENTRY
+	#undef APIENTRY
 
 #include <windows.h>
 

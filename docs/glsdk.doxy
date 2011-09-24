@@ -246,6 +246,10 @@ For Windows, you will need to link to some of the following libraries. All of th
 \li <tt>winmm.lib</tt>: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
 \li <tt>user32.lib</tt>: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
 
-\todo Add a section for dealing with Linux manual linking.
+For Linux, you will need to link to some of the following libraries. All of them come with your build tools or are otherwise a part of your system:
+
+\li <tt>libGL</tt>: OpenGL's interface on Linux.
+\li <tt>libGLU</tt>: An old utility library for OpenGL. Needed by FreeGLUT and GLFW on Linux.
+\li <tt>Xrandr</tt>: An X-Windows extension that allows accessing low-level screen behavior. Needed by GLFW for full-screening applications.
 **/
 

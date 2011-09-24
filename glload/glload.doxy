@@ -127,6 +127,53 @@ int main(int argc, char *argv[])
 }
 \endcode
 
+\section module_glload_apientry APIENTRY Redefinition Warning
+
+On Windows, if you include one of the GL Load OpenGL headers in the same file that you include <tt>windows.h</tt> (or any file that includes it, such as <tt>GL/glfw.h</tt> or <tt>GL/freeglut.h</tt>), you will get a redefinition warning about APIENTRY.
+
+APIENTRY is a macro defined originally in <tt>windows.h</tt>. However, it has effectively become a part of OpenGL's API. The extensions GL_ARB_debug_output and GL_AMD_debug_output cannot be used without the definition. On Windows, it is defined to something, but on other platforms it is empty.
+
+Because APIENTRY is essentially part of OpenGL now, GL Load defines and exposes it in its headers. GL Load cannot simply undefine it at the end of its headers, because if it did so, you would have problems in source files that don't have to include <tt>windows.h</tt> (or files that include it).
+
+For example, you could have this scenario:
+
+\code
+//main.cpp
+#include <glload/gl_3_3.hpp>
+#include <glload/gll.hpp>
+#include <GL/glfw.h>
+
+int main(int argc, char *argv[])
+{
+  //Setup stuff.
+  DrawTheScreen();
+}
+
+//draw.cpp
+#include <glload/gl_3_3.hpp>
+
+void DrawTheScreen()
+{
+  //Do some drawing.
+}
+\endcode
+
+<tt>draw.cpp</tt> does not need to talk to GLFW, so it does not include that header. However, if it wanted to register a function with GL_ARB_debug_output, it would not be able to do so cross-platform without a define for APIENTRY.
+
+If the warning bothers you, you can undefine the enum just before including the file that includes <tt>windows.h</tt>:
+
+\code
+#include <glload/gl_3_3.hpp>
+#include <glload/gll.hpp>
+#undef APIENTRY
+#include <GL/glfw.h>
+
+int main(int argc, char *argv[])
+{
+  //Setup stuff.
+}
+\endcode
+
 **/
 
 /**

@@ -36,7 +36,7 @@ typedef double GLclampd;
 #define GLvoid void
 
 #ifndef APIENTRY
-	#define GLE_REMOVE_APIENTRY
+//	#define GLE_REMOVE_APIENTRY
 	#if defined(__MINGW32__)
 		#define APIENTRY __stdcall
 	#elif (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
@@ -46,15 +46,14 @@ typedef double GLclampd;
 	#endif
 #endif //APIENTRY
 
-#ifdef GLE_FUNCPTR
-#undef GLE_FUNCPTR
+#ifndef GLE_FUNCPTR
+	#define GLE_REMOVE_FUNCPTR
+	#if defined(_WIN32)
+		#define GLE_FUNCPTR APIENTRY
+	#else
+		#define GLE_FUNCPTR
+	#endif
 #endif //GLE_FUNCPTR
-
-#if defined(_WIN32)
-	#define GLE_FUNCPTR APIENTRY
-#else
-	#define GLE_FUNCPTR
-#endif
 
 #ifndef GLAPI
 	#define GLAPI extern
@@ -212,10 +211,7 @@ static void* SunGetProcAddress (const GLubyte* name)
 	#ifndef WIN32_LEAN_AND_MEAN
 		#define WIN32_LEAN_AND_MEAN
 	#endif //WIN32_LEAN_AND_MEAN
-	#ifdef GLE_REMOVE_APIENTRY
-		#undef GLE_REMOVE_APIENTRY
-		#undef APIENTRY
-	#endif //GLE_REMOVE_APIENTRY
+	#undef APIENTRY
 
 #include <windows.h>
 

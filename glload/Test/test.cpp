@@ -154,7 +154,7 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
-void GLE_FUNCPTR DebugFunc(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+void APIENTRY DebugFunc(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
 						const GLchar* message, GLvoid* userParam)
 {
 	std::string srcName;
