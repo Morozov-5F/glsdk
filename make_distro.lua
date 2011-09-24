@@ -11,7 +11,14 @@ require "_FindFileInPath"
 
 local baseDir, hgChangelist, versionNum = ...
 
-assert(#({...}) == 3, "Not enough commandline parameters. You provided: " .. #({...}));
+if(#({...}) ~= 3) then
+	print("Not enough commandline parameters. You provided: " .. #({...}));
+	print("Paramters:")
+	print("\tDestination dir, relative to this path.")
+	print("\tMercurial revision to archive.")
+	print("\tVersion number of the SDK.")
+	return
+end
 
 local buildDirname = "glsdk_" .. versionNum
 
