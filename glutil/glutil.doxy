@@ -1,0 +1,15 @@
+/**
+\defgroup module_glutil GL Util
+
+The OpenGL Utility Library (GL Util) is a collection of miscellaneous tools for doing common tasks. This includes shader and program compilation, and so forth.
+
+The GL Utility library is distributed under the <a href="http://www.opensource.org/licenses/MIT">MIT License</a>.
+
+Most of these functions interact with OpenGL directly. Therefore, they require an active OpenGL context. They also use GL Load to get to OpenGL, so they need it to have been initialized as well.
+**/
+
+/**
+\defgroup module_glutil_program Program Utilities
+
+\ingroup module_glutil
+**/

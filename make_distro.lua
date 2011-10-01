@@ -93,7 +93,7 @@ local toDelete =
 	"make_distro.lua", "get_externals.lua", ".hgignore", ".hgtags",
 	".hg_archival.txt", "glimg/premake4.lua", "glload/premake4.lua",
 	--directories
-	"glimg/Test", "glload/Test",
+	"glimg/Test", "glload/Test", "glutil/Test",
 	"glm/doc/build",
 	"caps",
 }
