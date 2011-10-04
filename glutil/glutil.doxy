@@ -13,3 +13,9 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 
 \ingroup module_glutil
 **/
+
+/**
+\defgroup module_glutil_debug Debug Output Utility
+
+\ingroup module glutil
+**/

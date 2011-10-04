@@ -9,6 +9,7 @@ local libPremakes =
 	"glimg/glimg.lua",
 	"glfw/glfw.lua",
 	"freeglut/freeglut.lua",
+	"glutil/glutil.lua",
 }
 
 for i, luaPremake in ipairs(libPremakes) do

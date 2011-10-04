@@ -12,6 +12,7 @@ The library components are:
  
 \li @ref module_glload "GL Load": Used to gain access to OpenGL's functions.
 \li @ref module_glimg "GL Image": Used for loading image files into OpenGL textures.
+\li @ref module_glutil "GL Utility": General-purpose utilities for OpenGL.
 \li @ref module_glm "OpenGL Mathematics": Provides useful math classes and functions for OpenGL, using a GLSL-like syntax.
 \li @ref module_glfw "GLFW": A tool for creating and managing an OpenGL window. It can be used to handle input.
 \li @ref module_freeglut "FreeGLUT": A tool for creating and managing an OpenGL window. It can be used to handle input, as well as render a few basic shapes.

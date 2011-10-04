@@ -22,6 +22,16 @@ local LinkFuncs =
 		configuration "Release"
 			links {"glimg"}
 	end,
+	glutil = function()
+		includedirs "glutil/include"
+		libdirs "glutil/lib"
+
+		configuration "Debug"
+			links {"glutilD"}
+
+		configuration "Release"
+			links {"glutil"}
+	end,
 	glm = function()
 		includedirs "glm"
 	end,
