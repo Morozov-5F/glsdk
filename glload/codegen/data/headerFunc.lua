@@ -8,11 +8,22 @@ The GLAPI part is to make glu.h work on certain platforms.
 
 return [[
 #ifndef APIENTRY
-//	#define GLE_REMOVE_APIENTRY
 	#if defined(__MINGW32__)
-		#define APIENTRY __stdcall
+		#ifndef WIN32_LEAN_AND_MEAN
+			#define WIN32_LEAN_AND_MEAN 1
+		#endif
+		#ifndef NOMINMAX
+			#define NOMINMAX
+		#endif
+		#include <windows.h>
 	#elif (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
-		#define APIENTRY __stdcall
+		#ifndef WIN32_LEAN_AND_MEAN
+			#define WIN32_LEAN_AND_MEAN 1
+		#endif
+		#ifndef NOMINMAX
+			#define NOMINMAX
+		#endif
+		#include <windows.h>
 	#else
 		#define APIENTRY
 	#endif

@@ -36,11 +36,22 @@ typedef double GLclampd;
 #define GLvoid void
 
 #ifndef APIENTRY
-//	#define GLE_REMOVE_APIENTRY
 	#if defined(__MINGW32__)
-		#define APIENTRY __stdcall
+		#ifndef WIN32_LEAN_AND_MEAN
+			#define WIN32_LEAN_AND_MEAN 1
+		#endif
+		#ifndef NOMINMAX
+			#define NOMINMAX
+		#endif
+		#include <windows.h>
 	#elif (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
-		#define APIENTRY __stdcall
+		#ifndef WIN32_LEAN_AND_MEAN
+			#define WIN32_LEAN_AND_MEAN 1
+		#endif
+		#ifndef NOMINMAX
+			#define NOMINMAX
+		#endif
+		#include <windows.h>
 	#else
 		#define APIENTRY
 	#endif
@@ -208,12 +219,6 @@ static void* SunGetProcAddress (const GLubyte* name)
 #endif /* __sgi || __sun */
 
 #if defined(_WIN32)
-	#ifndef WIN32_LEAN_AND_MEAN
-		#define WIN32_LEAN_AND_MEAN
-	#endif //WIN32_LEAN_AND_MEAN
-	#undef APIENTRY
-
-#include <windows.h>
 
 #pragma warning(disable: 4055)
 #pragma warning(disable: 4054)

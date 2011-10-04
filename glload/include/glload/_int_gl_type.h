@@ -36,11 +36,22 @@ typedef double GLclampd;
 #define GLvoid void
 
 #ifndef APIENTRY
-//	#define GLE_REMOVE_APIENTRY
 	#if defined(__MINGW32__)
-		#define APIENTRY __stdcall
+		#ifndef WIN32_LEAN_AND_MEAN
+			#define WIN32_LEAN_AND_MEAN 1
+		#endif
+		#ifndef NOMINMAX
+			#define NOMINMAX
+		#endif
+		#include <windows.h>
 	#elif (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
-		#define APIENTRY __stdcall
+		#ifndef WIN32_LEAN_AND_MEAN
+			#define WIN32_LEAN_AND_MEAN 1
+		#endif
+		#ifndef NOMINMAX
+			#define NOMINMAX
+		#endif
+		#include <windows.h>
 	#else
 		#define APIENTRY
 	#endif
@@ -146,17 +157,6 @@ typedef void (APIENTRY *GLDEBUGPROCAMD)(GLuint id,GLenum category,GLenum severit
 #ifndef GL_NV_vdpau_interop
 typedef GLintptr GLvdpauSurfaceNV;
 #endif
-
-#ifdef GLE_REMOVE_FUNCPTR
-	#undef GLE_REMOVE_FUNCPTR
-	#undef GLE_FUNPTR
-#endif //GLE_REMOVE_FUNCPTR
-/*
-#ifdef GLE_REMOVE_APIENTRY
-	#undef GLE_REMOVE_APIENTRY
-	#undef APIENTRY
-#endif //GLE_REMOVE_APIENTRY
-*/
 
 #endif //_INT_GL_TYPE_H
 

@@ -50,12 +50,6 @@ static void* SunGetProcAddress (const GLubyte* name)
 #endif /* __sgi || __sun */
 
 #if defined(_WIN32)
-	#ifndef WIN32_LEAN_AND_MEAN
-		#define WIN32_LEAN_AND_MEAN
-	#endif //WIN32_LEAN_AND_MEAN
-	#undef APIENTRY
-
-#include <windows.h>
 
 #pragma warning(disable: 4055)
 #pragma warning(disable: 4054)

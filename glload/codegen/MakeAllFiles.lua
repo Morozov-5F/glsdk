@@ -24,13 +24,10 @@ local specFileLoc = GetSpecFilePath();
 local specData = LoadLuaSpec(specFileLoc .. "glspec.lua");
 	
 local glPreceedData = {
-	dofile(GetDataFilePath() .. "headerGlProtect.lua"),
-	dofile(GetDataFilePath() .. "glDefStr.lua"),
-	dofile(GetDataFilePath() .. "headerFunc.lua"),
-	footer = {
-		dofile(GetDataFilePath() .. "footerFunc.lua"),
-	},
-}
+		dofile(GetDataFilePath() .. "headerGlProtect.lua"),
+		dofile(GetDataFilePath() .. "glDefStr.lua"),
+		dofile(GetDataFilePath() .. "headerFunc.lua"),
+	}
 
 --Write the external headers.
 local glOutputs = {
@@ -50,12 +47,7 @@ local glOutputs = {
 	{"gl_4_2_comp", "4.2", false},
 };
 
-local glTruncPreceedData = {
-	dofile(GetDataFilePath() .. "headerFunc.lua"),
-	footer = {
-		dofile(GetDataFilePath() .. "footerFunc.lua"),
-	},
-}
+local glTruncPreceedData = {}
 
 local removalVersions = { "3.1" }
 local listOfCoreVersions = dofile(GetDataFilePath() .. "listOfCoreVersions.lua");
