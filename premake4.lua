@@ -2,7 +2,19 @@ solution "glsdk"
 	configurations {"Debug", "Release"}
 	defines {"_CRT_SECURE_NO_WARNINGS", "_SCL_SECURE_NO_WARNINGS"}
 
-dofile("glload/glload.lua");
-dofile("glimg/glimg.lua");
-dofile("glfw/glfw.lua");
-dofile("freeglut/freeglut.lua");
+
+local libPremakes = 
+{
+	"glload/glload.lua",
+	"glimg/glimg.lua",
+	"glfw/glfw.lua",
+	"freeglut/freeglut.lua",
+}
+
+for i, luaPremake in ipairs(libPremakes) do
+	if(#os.matchfiles(luaPremake) ~= 0) then
+		dofile(luaPremake)
+	end
+end
+	
+
