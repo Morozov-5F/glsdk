@@ -8,10 +8,11 @@ namespace glutil
 	///\addtogroup module_glutil_debug
 	///@{
 
+	///Possible locations for debug outputs.
 	enum OutputLocation
 	{
-		STD_OUT,
-		STD_ERR,
+		STD_OUT,	///<Output to standard out.
+		STD_ERR,	///<Output to standard error.
 	};
 
 	/**

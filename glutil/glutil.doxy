@@ -9,13 +9,21 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 **/
 
 /**
-\defgroup module_glutil_program Program Utilities
+\defgroup module_glutil_program Program Compilation/Linking
 
 \ingroup module_glutil
 **/
 
 /**
-\defgroup module_glutil_debug Debug Output Utility
+\defgroup module_glutil_debug Debug Output
 
 \ingroup module glutil
 **/
+
+/**
+\defgroup module_glutil_wndpos Window Positioning
+
+\ingroup module glutil
+**/
+
+
