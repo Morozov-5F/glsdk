@@ -11,6 +11,7 @@
 #include "shader.h"
 #include "debug.h"
 #include "window_pos.h"
+#include "mouse_poles.h"
 
 
 namespace glutil

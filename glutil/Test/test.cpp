@@ -10,7 +10,7 @@
 #include <glm/glm.hpp>
 #include <glutil/glutil.h>
 
-GLuint positionBufferObject;
+GLuint objectBuffer;
 GLuint program;
 GLuint vao;
 
@@ -25,8 +25,8 @@ void init()
 		-0.75f, -0.75f, 0.0f, 1.0f,
 	};
 
-	gl::GenBuffers(1, &positionBufferObject);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, positionBufferObject);
+	gl::GenBuffers(1, &objectBuffer);
+	gl::BindBuffer(gl::GL_ARRAY_BUFFER, objectBuffer);
 	gl::BufferData(gl::GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, gl::GL_STATIC_DRAW);
 	gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
 
@@ -67,7 +67,7 @@ void display()
 
 	gl::UseProgram(program);
 
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, positionBufferObject);
+	gl::BindBuffer(gl::GL_ARRAY_BUFFER, objectBuffer);
 	gl::EnableVertexAttribArray(0);
 	gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, 0);
 

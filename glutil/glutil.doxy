@@ -26,4 +26,10 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 \ingroup module glutil
 **/
 
+/**
+\defgroup module_glutil_poles Mouse Poles
+
+\ingroup module glutil
+**/
+
 
