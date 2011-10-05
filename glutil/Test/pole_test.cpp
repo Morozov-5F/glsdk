@@ -107,8 +107,14 @@ void init()
 
 glm::ivec2 g_windowSize(0, 0);
 
-glutil::ObjectPole g_objectPole(glm::vec3(0.0f, 0.0f, -10.0f), glm::fquat(1.0f, 0.0f, 0.0f, 0.0f),
-								glutil::MB_LEFT_BTN, NULL);
+glm::vec3 g_objPos(0.0f, 3.0f, 0.0f);
+
+glutil::ObjectPole g_objectPole(g_objPos, glm::fquat(1.0f, 0.0f, 0.0f, 0.0f),
+								glutil::MB_RIGHT_BTN, NULL);
+
+glutil::RadiusDef g_radius = {10.0f, 1.0f, 50.0f, 0.5f, 0.1f};
+
+glutil::ViewPole g_viewPole(g_objPos, g_radius, glutil::MB_LEFT_BTN);
 
 void DrawGround(glutil::MatrixStack &matStack)
 {
@@ -162,17 +168,22 @@ void DrawObject(glutil::MatrixStack &matStack)
 void display()
 {
 	gl::ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	gl::Clear(gl::GL_COLOR_BUFFER_BIT);
+	gl::ClearDepth(1.0);
+	gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
+
+	gl::Enable(gl::GL_DEPTH_TEST);
+	gl::DepthFunc(gl::GL_LEQUAL);
+	gl::Enable(gl::GL_DEPTH_CLAMP);
 
 	gl::UseProgram(program);
 
 	glm::mat4 perspectiveMat = glm::perspective(50.0f, g_windowSize.x / (float)g_windowSize.y,
 		1.f, 100.0f);
-
 	gl::UniformMatrix4fv(unifCameraToClipMatrix, 1, gl::GL_FALSE,
 		glm::value_ptr(perspectiveMat));
 
 	glutil::MatrixStack matStack;
+	matStack *= g_viewPole.CalcMatrix();
 
 	{
 		glutil::PushStack pusher(matStack);
@@ -212,10 +223,11 @@ int calc_glfw_modifiers()
 	return ret;
 }
 
-void mouse_button_callback(int button, int action)
+void GLFWCALL mouse_button_callback(int button, int action)
 {
 	glm::ivec2 mousePos(0, 0);
 	glfwGetMousePos(&mousePos.x, &mousePos.y);
+	int modifiers = calc_glfw_modifiers();
 
 	int poleButton = 0;
 
@@ -227,12 +239,32 @@ void mouse_button_callback(int button, int action)
 	}
 
 	g_objectPole.MouseClick((glutil::MouseButtons)poleButton, action == GLFW_PRESS,
-		calc_glfw_modifiers(), mousePos);
+		modifiers, mousePos);
+
+	g_viewPole.MouseClick((glutil::MouseButtons)poleButton, action == GLFW_PRESS,
+		modifiers, mousePos);
 }
 
-void mouse_move_callback(int x, int y)
+void GLFWCALL mouse_move_callback(int x, int y)
 {
 	g_objectPole.MouseMove(glm::ivec2(x, y));
+	g_viewPole.MouseMove(glm::ivec2(x, y));
+}
+
+void GLFWCALL mouse_wheel_callback(int pos)
+{
+	static int lastPos = pos;
+
+	int delta = pos - lastPos;
+
+	glm::ivec2 mousePos(0, 0);
+	glfwGetMousePos(&mousePos.x, &mousePos.y);
+	int modifiers = calc_glfw_modifiers();
+
+	g_objectPole.MouseWheel(delta, modifiers, mousePos);
+	g_viewPole.MouseWheel(delta, modifiers, mousePos);
+
+	lastPos = pos;
 }
 
 int main(int argc, char** argv)
@@ -279,6 +311,7 @@ int main(int argc, char** argv)
 	glfwSetWindowSizeCallback(reshape);
 	glfwSetMouseButtonCallback(mouse_button_callback);
 	glfwSetMousePosCallback(mouse_move_callback);
+	glfwSetMouseWheelCallback(mouse_wheel_callback);
 
 	//Main loop
 	while(true)

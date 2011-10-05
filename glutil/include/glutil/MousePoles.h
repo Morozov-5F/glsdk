@@ -48,7 +48,7 @@ namespace glutil
 		void MouseMove(const glm::ivec2 &position);
 		void MouseClick(MouseButtons button, bool isPressed, int modifiers,
 			const glm::ivec2 &position);
-		void MouseWheel(int direction, const glm::ivec2 &position);
+		void MouseWheel(int direction, int modifiers, const glm::ivec2 &position);
 
 		bool IsDragging() const {return m_bIsDragging;}
 
@@ -84,6 +84,95 @@ namespace glutil
 		float m_rotateScale;
 	};
 
+	
+	struct RadiusDef
+	{
+		float fCurrRadius;
+		float fMinRadius;
+		float fMaxRadius;
+		float fLargeDelta;
+		float fSmallDelta;
+	};
+
+	class ViewPole : public ViewProvider
+	{
+	public:
+		ViewPole(const glm::vec3 &target, const RadiusDef &radiusDef,
+			MouseButtons eButton = MB_LEFT_BTN);
+		virtual ~ViewPole() {}
+
+		glm::mat4 CalcMatrix() const;
+
+		void SetScaleFactor(float rotateScale);
+		float GetScaleFactor() const {return m_rotateScale;}
+
+		glm::vec3 GetLookAtPos() const {return m_lookAt;}
+		float GetLookAtDistance() const {return m_radius.fCurrRadius;}
+
+		void MouseMove(const glm::ivec2 &position);
+		void MouseClick(MouseButtons button, bool isPressed, int modifiers, const glm::ivec2 &position);
+		void MouseWheel(int direction, int modifiers, const glm::ivec2 &position);
+		void CharPress(char key, float largeIncrement, float smallIncrement);
+
+		bool IsDragging() const {return m_bIsDragging;}
+
+		enum TargetOffsetDir
+		{
+			DIR_UP,
+			DIR_DOWN,
+			DIR_FORWARD,
+			DIR_BACKWARD,
+			DIR_RIGHT,
+			DIR_LEFT,
+		};
+
+		void OffsetTargetPos(TargetOffsetDir eDir, float worldDistance);
+		void OffsetTargetPos(const glm::vec3 &cameraOffset);
+
+
+	private:
+		enum RotateMode
+		{
+			RM_DUAL_AXIS_ROTATE,
+			RM_BIAXIAL_ROTATE,
+			RM_XZ_AXIS_ROTATE,
+			RM_Y_AXIS_ROTATE,
+			RM_SPIN_VIEW_AXIS,
+		};
+
+		glm::vec3 m_lookAt;
+
+		float m_radCurrXZAngle;	//Angle around the y-axis. In radians
+		float m_radCurrYAngle;		//Angle above the xz plane. In radians
+		float m_radCurrSpin;		//Angle spin around the look-at direction. Changes up-vector.
+		float m_fRadius;		//Camera distance
+		RadiusDef m_radius;
+
+		MouseButtons m_glutActionButton;
+
+		//Used when rotating.
+		RotateMode m_RotateMode;
+		bool m_bIsDragging;
+
+		glm::ivec2 m_initialPt;
+
+		float m_radInitXZAngle;
+		float m_radInitYAngle;
+		float m_radInitSpin;
+
+		float m_rotateScale;
+
+		void ProcessXChange(int iXDiff, bool bClearY = false);
+		void ProcessYChange(int iYDiff, bool bClearXZ = false);
+		void ProcessSpinAxis(int iXDiff, int iYDiff);
+
+		void BeginDragRotate(const glm::ivec2 &ptStart, RotateMode rotMode = RM_DUAL_AXIS_ROTATE);
+		void OnDragRotate(const glm::ivec2 &ptCurr);
+		void EndDragRotate(const glm::ivec2 &ptEnd, bool bKeepResults = true);
+
+		void MoveCloser(bool bLargeStep = true);
+		void MoveAway(bool bLargeStep = true);
+	};
 	///@}
 }
 
