@@ -1,7 +1,7 @@
 
 #include <glload/gl_all.hpp>
 #include <glload/gll.hpp>
-#include <glutil/shader.h>
+#include "glutil/Shader.h"
 
 namespace glutil
 {

@@ -8,10 +8,11 @@
 \brief Includes everything in the GL Utility library.
 **/
 
-#include "shader.h"
-#include "debug.h"
-#include "window_pos.h"
-#include "mouse_poles.h"
+#include "Shader.h"
+#include "Debug.h"
+#include "WindowPos.h"
+#include "MousePoles.h"
+#include "MatrixStack.h"
 
 
 namespace glutil

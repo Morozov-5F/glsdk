@@ -1,5 +1,5 @@
 
-#include "glutil/window_pos.h"
+#include "glutil/WindowPos.h"
 
 
 namespace glutil

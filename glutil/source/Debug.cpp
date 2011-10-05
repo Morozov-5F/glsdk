@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string>
 #include <glload/gl_all.hpp>
-#include "glutil/debug.h"
+#include "glutil/Debug.h"
 
 namespace glutil
 {

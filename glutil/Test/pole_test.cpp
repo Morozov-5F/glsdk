@@ -110,14 +110,12 @@ glm::ivec2 g_windowSize(0, 0);
 glutil::ObjectPole g_objectPole(glm::vec3(0.0f, 0.0f, -10.0f), glm::fquat(1.0f, 0.0f, 0.0f, 0.0f),
 								glutil::MB_LEFT_BTN, NULL);
 
-void DrawGround()
+void DrawGround(glutil::MatrixStack &matStack)
 {
 	gl::UseProgram(program);
 
-	glm::mat4 modelToCamera(1.0f);
-
 	gl::UniformMatrix4fv(unifModelToCameraMatrix, 1, gl::GL_FALSE,
-		glm::value_ptr(modelToCamera));
+		glm::value_ptr(matStack.Top()));
 
 	gl::BindBuffer(gl::GL_ARRAY_BUFFER, groundBuffer);
 	gl::EnableVertexAttribArray(0);
@@ -133,15 +131,16 @@ void DrawGround()
 	gl::UseProgram(0);
 }
 
-void DrawObject()
+void DrawObject(glutil::MatrixStack &matStack)
 {
 	gl::UseProgram(program);
 
-	glm::mat4 modelToCamera(1.0f);
-	modelToCamera = g_objectPole.CalcMatrix();
+	glutil::PushStack pusher(matStack);
+
+	matStack *= g_objectPole.CalcMatrix();
 
 	gl::UniformMatrix4fv(unifModelToCameraMatrix, 1, gl::GL_FALSE,
-		glm::value_ptr(modelToCamera));
+		glm::value_ptr(matStack.Top()));
 
 	gl::BindBuffer(gl::GL_ARRAY_BUFFER, objectBuffer);
 	gl::EnableVertexAttribArray(0);
@@ -173,8 +172,14 @@ void display()
 	gl::UniformMatrix4fv(unifCameraToClipMatrix, 1, gl::GL_FALSE,
 		glm::value_ptr(perspectiveMat));
 
-	DrawGround();
-	DrawObject();
+	glutil::MatrixStack matStack;
+
+	{
+		glutil::PushStack pusher(matStack);
+
+		DrawGround(matStack);
+		DrawObject(matStack);
+	}
 
 	glfwSwapBuffers();
 }
@@ -228,11 +233,6 @@ void mouse_button_callback(int button, int action)
 void mouse_move_callback(int x, int y)
 {
 	g_objectPole.MouseMove(glm::ivec2(x, y));
-
-/*
-	if(g_objectPole.IsDragging())
-		printf("%i, %i\n", x, y);
-*/
 }
 
 int main(int argc, char** argv)

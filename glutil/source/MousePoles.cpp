@@ -1,7 +1,7 @@
 
 #include <stdio.h>
-#include "glutil/mouse_poles.h"
 #include <glm/gtx/quaternion.hpp>
+#include "glutil/MousePoles.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265f
@@ -124,8 +124,6 @@ namespace glutil
 						eAxis = AXIS_X;
 						degAngle = iInitDiff.y * m_rotateScale;
 					}
-
-					printf("%f\n", degAngle);
 
 					glm::fquat rot = CalcRotationQuat(eAxis, degAngle);
 					RotateViewDegrees(rot, true);
