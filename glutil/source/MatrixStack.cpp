@@ -58,6 +58,22 @@ namespace glutil
 		m_currMatrix = glm::translate(m_currMatrix, offsetVec);
 	}
 
+	void MatrixStack::Perspective( float degFOV, float aspectRatio, float zNear, float zFar )
+	{
+		m_currMatrix *= glm::perspective(degFOV, aspectRatio, zNear, zFar);
+	}
+
+	void MatrixStack::Orthographic( float left, float right, float bottom, float top,
+		float zNear, float zFar )
+	{
+		m_currMatrix *= glm::ortho(left, right, bottom, top, zNear, zFar);
+	}
+
+	void MatrixStack::LookAt( const glm::vec3 &cameraPos, const glm::vec3 &lookatPos, const glm::vec3 &upDir )
+	{
+		m_currMatrix *= glm::lookAt(cameraPos, lookatPos, upDir);
+	}
+
 	void MatrixStack::ApplyMatrix( const glm::mat4 &theMatrix )
 	{
 		m_currMatrix *= theMatrix;
@@ -71,17 +87,6 @@ namespace glutil
 	void MatrixStack::SetIdentity()
 	{
 		m_currMatrix = glm::mat4(1.0f);
-	}
-
-	void MatrixStack::Perspective( float degFOV, float aspectRatio, float zNear, float zFar )
-	{
-		m_currMatrix *= glm::perspective(degFOV, aspectRatio, zNear, zFar);
-	}
-
-	void MatrixStack::Orthographic( float left, float right, float bottom, float top,
-		float zNear, float zFar )
-	{
-		m_currMatrix *= glm::ortho(left, right, bottom, top, zNear, zFar);
 	}
 }
 

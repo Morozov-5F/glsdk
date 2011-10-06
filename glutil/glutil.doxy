@@ -11,25 +11,57 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 /**
 \defgroup module_glutil_program Program Compilation/Linking
 
+\brief Helper functions for shader and program compiling and linking.
+
+\ref module_glload "GL Load" must have been successfully initialized for these functions to work.
+
 \ingroup module_glutil
 **/
 
 /**
 \defgroup module_glutil_debug Debug Output
 
-\ingroup module glutil
+\brief Helper function for registering a function to handle ARB_debug_output.
+
+\ingroup module_glutil
 **/
 
 /**
 \defgroup module_glutil_wndpos Window Positioning
 
-\ingroup module glutil
+\brief Helper function for positioning a window, based on the desktop size and the window's size.
+
+\note GLFW lacks the ability to get the window's actual size. The size you get back is always the size of the \em client area, not the whole window. As such, if you use this function to anchor the window to the right or bottom of the desktop, the window will be partially off-screen.
+
+\ingroup module_glutil
 **/
 
 /**
 \defgroup module_glutil_poles Mouse Poles
 
-\ingroup module glutil
+\brief Objects that allow mouse-based control over the position and orientation of objects and the camera.
+
+A "Pole" is a class that allows mouse-based control over an object's orientation, via clicking and dragging.
+
+In order to be platform-agnostic, the Pole classes are not dependent on input from any one windowing system. Instead, they rely on external code to provide input. When the user clicks the mouse, external code must detect this in whatever way it sees fit and translate it for the Pole class.
+
+All Pole classes have 4 input functions: MouseClick, MouseMove, MouseWheel, and CharPress.
+
+MouseClick must be called when a mouse button is pressed or released; it should not be called when the button is merely held. It should also be given the modifier keys that are currenlty being held down.
+
+MouseMove should be called anytime the mouse is moved. MouseWheel should be called when the mouse wheel is touched. CharPress should be called when a keyboard character is entered. It should only be called for presses; releases are irrelevant.
+
+When a Pole is created, it is given a specific mouse button to listen for and respond to. It must 
+
+\ingroup module_glutil
+**/
+
+/**
+\defgroup module_glutil_matrixstack Matrix Stack
+
+\brief MatrixStack class and utility classes.
+
+\ingroup module_glutil
 **/
 
 

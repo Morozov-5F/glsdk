@@ -18,6 +18,7 @@ namespace glutil
 		WH_RIGHT,		///<Horizontally position the window on the right edge of the screen.
 	};
 
+	///Vertical window positions.
 	enum VertWindowPos
 	{
 		WV_CENTER,		///<Vertically position the window in the center of the screen.

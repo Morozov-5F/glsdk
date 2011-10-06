@@ -5,7 +5,7 @@
 /**
 \file
 
-\brief Includes functions to help load and validate shaders and programs.
+\brief Includes functions to help load and validate shaders and programs. This header must be included after an OpenGL header.
 **/
 
 #include <exception>
@@ -57,6 +57,15 @@ namespace glutil
 	///\addtogroup module_glutil_program
 	///@{
 
+
+	/**
+	\name Shader Compilation
+	
+	These functions generate shaders from text strings. They will throw exceptions in the event
+	of compilation failure.
+	**/
+	///@{
+
 	/**
 	\brief Creates a shader object and compiles it with the given text string.
 
@@ -84,6 +93,15 @@ namespace glutil
 	\brief As CompileShader(GLenum, const char *), but with a list of strings.	
 	**/
 	GLuint CompileShader(GLenum shaderType, const std::vector<std::string> &shaderList);
+	///@}
+
+	/**
+	\name Program Linking
+
+	These functions take one or more shader objects and link them together into a program. In the event
+	of a linker error, they will throw an exception.
+	**/
+	///@{
 
 	/**
 	\brief Links the two shader objects into a single program.
@@ -134,6 +152,16 @@ namespace glutil
 	destroyed, and the error log will be stored in the exception.
 	**/
 	GLuint LinkProgram(GLuint program, const std::vector<GLuint> &shaders);
+	///@}
+
+	/**
+	\name Separable Program Creation
+	
+	These functions generate separable programs from text strings. They will throw exceptions
+	in the event that ARB_separate_shader_objects or GL 4.1+ are not available. Exceptions will
+	also be thrown if the compiling/linking fails.
+	**/
+	///@{
 
 	/**
 	\brief Creates a single-stage separable program from the given shader text.
@@ -161,6 +189,8 @@ namespace glutil
 	\brief As MakeSeparableProgram(GLenum, const char *), except with a list of strings.
 	**/
 	GLuint MakeSeparableProgram(GLenum shaderType, const std::vector<std::string> &shaderList);
+	///@}
+
 	///@}
 }
 

@@ -185,7 +185,7 @@ project "MyProject"
 		flags {"OptimizeSpeed", "NoFramePointer", "ExtraWarnings", "NoEditAndContinue"};
 \endcode
 
-The line <tt>UseLibs {"glload", "freeglut"}</tt> will bring in the GL Load and FreeGLUT libraries. The project will have the include paths added to the per-project include paths. The project will link to the debug and release libraries as appropriate. And any special <tt>#define</tt>s or other settings will also be provided.
+The line <tt>UseLibs {"glload", "freeglut"}</tt> will bring in the GL Load and FreeGLUT libraries. The project will have the include paths added to the per-project include paths. The project will link to the debug and release libraries as appropriate. And any special <tt>\#define</tt>s or other settings will also be provided.
 
 The names of the libraries used with <tt>UseLibs</tt> are as follows:
 
@@ -227,7 +227,7 @@ The include path you need to add to your build system for this library is <tt>"g
 
 The include path you need to add to your build system for this library is <tt>"freeglut/include"</tt>. The libraries are in the <tt>"freeglut/lib"</tt> directory. The debug and release libraries are called <tt>"freeglutD"</tt> and <tt>"freeglut"</tt>, respectively.
 
-You will also need to add some #defines to your command line. These are:
+You will also need to add some \#defines to your command line. These are:
 
 \li FREEGLUT_STATIC
 \li _LIB

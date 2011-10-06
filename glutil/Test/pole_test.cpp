@@ -109,12 +109,13 @@ glm::ivec2 g_windowSize(0, 0);
 
 glm::vec3 g_objPos(0.0f, 3.0f, 0.0f);
 
+glutil::ViewDef g_viewDef = {10.0f, 1.0f, 50.0f, 0.5f, 0.1f, 2.0f, 0.25f};
+
+glutil::ViewPole g_viewPole(g_objPos, g_viewDef, glutil::MB_LEFT_BTN);
+
 glutil::ObjectPole g_objectPole(g_objPos, glm::fquat(1.0f, 0.0f, 0.0f, 0.0f),
-								glutil::MB_RIGHT_BTN, NULL);
+								glutil::MB_RIGHT_BTN, &g_viewPole);
 
-glutil::RadiusDef g_radius = {10.0f, 1.0f, 50.0f, 0.5f, 0.1f};
-
-glutil::ViewPole g_viewPole(g_objPos, g_radius, glutil::MB_LEFT_BTN);
 
 void DrawGround(glutil::MatrixStack &matStack)
 {
@@ -267,6 +268,19 @@ void GLFWCALL mouse_wheel_callback(int pos)
 	lastPos = pos;
 }
 
+void GLFWCALL character_callback(int unicodePoint, int action)
+{
+	//Only interested in pressing.
+	if(action == GLFW_RELEASE)
+		return;
+
+	if(unicodePoint > 127)
+		return;
+
+	g_viewPole.CharPress((char)unicodePoint);
+}
+
+
 int main(int argc, char** argv)
 {
 	if(!glfwInit())
@@ -312,6 +326,7 @@ int main(int argc, char** argv)
 	glfwSetMouseButtonCallback(mouse_button_callback);
 	glfwSetMousePosCallback(mouse_move_callback);
 	glfwSetMouseWheelCallback(mouse_wheel_callback);
+	glfwSetCharCallback(character_callback);
 
 	//Main loop
 	while(true)

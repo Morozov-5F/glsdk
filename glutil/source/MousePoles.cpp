@@ -185,16 +185,19 @@ namespace glutil
 
 	}
 
+	void ObjectPole::CharPress( char key )
+	{
 
-	ViewPole::ViewPole( const glm::vec3 &target, const RadiusDef &radiusDef,
-		MouseButtons eButton )
+	}
+
+	ViewPole::ViewPole( const glm::vec3 &target, const ViewDef &viewDef,
+		MouseButtons actionButton )
 		: m_lookAt(target)
 		, m_radCurrXZAngle(0.0)
 		, m_radCurrYAngle(-PI_2 / 2.0f)
 		, m_radCurrSpin(0.0f)
-		, m_fRadius(20.0f)
-		, m_radius(radiusDef)
-		, m_glutActionButton(eButton)
+		, m_viewDef(radiusDef)
+		, m_actionButton(actionButton)
 		, m_bIsDragging(false)
 		, m_rotateScale(PI_2 / 250.0f)
 	{}
@@ -223,7 +226,7 @@ namespace glutil
 		currPos = glm::vec3(theStack.Top() * glm::vec4(currPos, 0.0));
 
 		//Set the position of the camera.
-		glm::vec3 tempVec = currPos * m_radius.fCurrRadius;
+		glm::vec3 tempVec = currPos * m_viewDef.fCurrRadius;
 		glm::vec3 cameraPosition = tempVec + m_lookAt;
 
 		//Now, compute the up-vector.
@@ -241,7 +244,7 @@ namespace glutil
 
 	void ViewPole::SetScaleFactor( float rotateScale )
 	{
-
+		m_rotateScale = rotateScale;
 	}
 
 	void ViewPole::ProcessXChange( int iXDiff, bool bClearY )
@@ -323,23 +326,23 @@ namespace glutil
 	void ViewPole::MoveCloser( bool bLargeStep )
 	{
 		if(bLargeStep)
-			m_radius.fCurrRadius -= m_radius.fLargeDelta;
+			m_viewDef.fCurrRadius -= m_viewDef.largeRadiusDelta;
 		else
-			m_radius.fCurrRadius -= m_radius.fSmallDelta;
+			m_viewDef.fCurrRadius -= m_viewDef.smallRadiusDelta;
 
-		if(m_radius.fCurrRadius < m_radius.fMinRadius)
-			m_radius.fCurrRadius = m_radius.fMinRadius;
+		if(m_viewDef.fCurrRadius < m_viewDef.fMinRadius)
+			m_viewDef.fCurrRadius = m_viewDef.fMinRadius;
 	}
 
 	void ViewPole::MoveAway( bool bLargeStep )
 	{
 		if(bLargeStep)
-			m_radius.fCurrRadius += m_radius.fLargeDelta;
+			m_viewDef.fCurrRadius += m_viewDef.largeRadiusDelta;
 		else
-			m_radius.fCurrRadius += m_radius.fSmallDelta;
+			m_viewDef.fCurrRadius += m_viewDef.smallRadiusDelta;
 
-		if(m_radius.fCurrRadius > m_radius.fMaxRadius)
-			m_radius.fCurrRadius = m_radius.fMaxRadius;
+		if(m_viewDef.fCurrRadius > m_viewDef.fMaxRadius)
+			m_viewDef.fCurrRadius = m_viewDef.fMaxRadius;
 	}
 
 	void ViewPole::MouseMove( const glm::ivec2 &position )
@@ -356,7 +359,7 @@ namespace glutil
 			//Ignore all other button presses when dragging.
 			if(!m_bIsDragging)
 			{
-				if(button == m_glutActionButton)
+				if(button == m_actionButton)
 				{
 					if(modifiers & MM_KEY_CTRL)
 						this->BeginDragRotate(position, ViewPole::RM_BIAXIAL_ROTATE);
@@ -372,7 +375,7 @@ namespace glutil
 			//Ignore all other button releases when not dragging
 			if(m_bIsDragging)
 			{
-				if(button == m_glutActionButton)
+				if(button == m_actionButton)
 				{
 					if(m_RotateMode == ViewPole::RM_DUAL_AXIS_ROTATE ||
 						m_RotateMode == ViewPole::RM_SPIN_VIEW_AXIS ||
@@ -393,23 +396,23 @@ namespace glutil
 
 	}
 
-	void ViewPole::CharPress( char key, float largeIncrement, float smallIncrement )
+	void ViewPole::CharPress( char key )
 	{
 		switch(key)
 		{
-		case 'w': OffsetTargetPos(ViewPole::DIR_FORWARD, largeIncrement); break;
-		case 's': OffsetTargetPos(ViewPole::DIR_BACKWARD, largeIncrement); break;
-		case 'd': OffsetTargetPos(ViewPole::DIR_RIGHT, largeIncrement); break;
-		case 'a': OffsetTargetPos(ViewPole::DIR_LEFT, largeIncrement); break;
-		case 'e': OffsetTargetPos(ViewPole::DIR_UP, largeIncrement); break;
-		case 'q': OffsetTargetPos(ViewPole::DIR_DOWN, largeIncrement); break;
+		case 'w': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewDef.largePosOffset); break;
+		case 's': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewDef.largePosOffset); break;
+		case 'd': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewDef.largePosOffset); break;
+		case 'a': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewDef.largePosOffset); break;
+		case 'e': OffsetTargetPos(ViewPole::DIR_UP, m_viewDef.largePosOffset); break;
+		case 'q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewDef.largePosOffset); break;
 
-		case 'W': OffsetTargetPos(ViewPole::DIR_FORWARD, smallIncrement); break;
-		case 'S': OffsetTargetPos(ViewPole::DIR_BACKWARD, smallIncrement); break;
-		case 'D': OffsetTargetPos(ViewPole::DIR_RIGHT, smallIncrement); break;
-		case 'A': OffsetTargetPos(ViewPole::DIR_LEFT, smallIncrement); break;
-		case 'E': OffsetTargetPos(ViewPole::DIR_UP, smallIncrement); break;
-		case 'Q': OffsetTargetPos(ViewPole::DIR_DOWN, smallIncrement); break;
+		case 'W': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewDef.smallPosOffset); break;
+		case 'S': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewDef.smallPosOffset); break;
+		case 'D': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewDef.smallPosOffset); break;
+		case 'A': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewDef.smallPosOffset); break;
+		case 'E': OffsetTargetPos(ViewPole::DIR_UP, m_viewDef.smallPosOffset); break;
+		case 'Q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewDef.smallPosOffset); break;
 		}
 	}
 
