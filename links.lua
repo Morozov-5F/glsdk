@@ -74,7 +74,6 @@ local function ProcTable(tbl)
 				os.chdir(prevDir)
 			end
 		elseif(type(lib) == "table") then
-			print("here!")
 			ProcTable(lib);
 		end
 	end
