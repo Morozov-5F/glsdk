@@ -196,7 +196,7 @@ namespace glutil
 		, m_radCurrXZAngle(0.0)
 		, m_radCurrYAngle(-PI_2 / 2.0f)
 		, m_radCurrSpin(0.0f)
-		, m_viewDef(radiusDef)
+		, m_viewDef(viewDef)
 		, m_actionButton(actionButton)
 		, m_bIsDragging(false)
 		, m_rotateScale(PI_2 / 250.0f)

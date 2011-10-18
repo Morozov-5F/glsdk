@@ -69,6 +69,20 @@ namespace glutil
 		m_currMatrix *= glm::ortho(left, right, bottom, top, zNear, zFar);
 	}
 
+	void MatrixStack::PixelPerfectOrtho( glm::ivec2 size, glm::vec2 depthRange, bool isTopLeft /*= true*/ )
+	{
+		if(isTopLeft)
+		{
+			Translate(-1.0f, 1.0f, (depthRange.x + depthRange.y) / 2.0f);
+			Scale(2.0f / size.x, -2.0f / size.y, 1.0f);
+		}
+		else
+		{
+			Translate(-1.0f, -1.0f, (depthRange.x + depthRange.y) / 2.0f);
+			Scale(2.0f / size.x, 2.0f / size.y, 2.0f / (depthRange.y - depthRange.x));
+		}
+	}
+
 	void MatrixStack::LookAt( const glm::vec3 &cameraPos, const glm::vec3 &lookatPos, const glm::vec3 &upDir )
 	{
 		m_currMatrix *= glm::lookAt(cameraPos, lookatPos, upDir);

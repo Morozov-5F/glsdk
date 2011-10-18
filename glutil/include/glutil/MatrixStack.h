@@ -5,6 +5,7 @@
 #include <stack>
 #include <vector>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace glutil
 {
@@ -16,14 +17,22 @@ namespace glutil
 
 	A matrix stack is a sequence of transforms which you can preserve and restore as needed. The
 	stack has the concept of a "current matrix", which can be retrieved with the Top() function.
-	The current matrix can be preserved on the stack with Push() and the most recently preserved matrix
-	can be restored with Pop().
+	The top matrix can even be obtained as a float array. The pointer returned will remain valid until
+	this object is destroyed (though its values will change). This is useful for uploading matrices
+	to OpenGL via glUniformMatrix4fv.
 
 	The other functions will right-multiply a transformation matrix with the current matrix, thus
 	changing the current matrix.
 
-	The best way to manage the stack is to use the PushStack object to do all pushing and popping.
-	That will ensure that overflows and underflows cannot not happen.
+	The main power of the matrix stack is the ability to preserve and restore matrices in a stack fashion.
+	The current matrix can be preserved on the stack with Push() and the most recently preserved matrix
+	can be restored with Pop(). You must ensure that you do not Pop() more times than you Push(). Also,
+	while this matrix stack does not have an explicit size limit, if you Push() more times than you Pop(),
+	then you can eventually run out of memory (unless you create and destroy the MatrixStack every frame).
+
+	The best way to manage the stack is to never use the Push() and Pop() methods directly.
+	Instead, use the PushStack object to do all pushing and popping. That will ensure that
+	overflows and underflows cannot not happen.
 	**/
 	class MatrixStack
 	{
@@ -173,14 +182,32 @@ namespace glutil
 		/**
 		\brief Applies a standard, OpenGL-style orthographic projection matrix.
 
-		\param left The smallest camera-space position in the X axis that will be captured within the projection.
-		\param right The largest camera-space position in the X axis that will be captured within the projection.
-		\param bottom The smallest camera-space position in the Y axis that will be captured within the projection.
-		\param top The largest camera-space position in the Y axis that will be captured within the projection.
-		\param zNear The smallest camera-space position in the Z axis that will be captured within the projection.
-		\param zFar The largest camera-space position in the Z axis that will be captured within the projection.
+		\param left The left camera-space position in the X axis that will be captured within the projection.
+		\param right The right camera-space position in the X axis that will be captured within the projection.
+		\param bottom The bottom camera-space position in the Y axis that will be captured within the projection.
+		\param top The top camera-space position in the Y axis that will be captured within the projection.
+		\param zNear The front camera-space position in the Z axis that will be captured within the projection.
+		\param zFar The rear camera-space position in the Z axis that will be captured within the projection.
 		**/
 		void Orthographic(float left, float right, float bottom, float top, float zNear = -1.0f, float zFar = 1.0f);
+
+		/**
+		\brief Applies an ortho matrix for pixel-accurate reproduction.
+
+		A common use for orthographic projections is to create an ortho matrix that allows for pixel-accurate
+		reproduction of textures. It allows you to provide vertices directly in window space.
+
+		The camera space that this function creates can have the origin at the top-left (with +y going down)
+		or bottom-left (with +y going up). Note that a top-left orientation will have to flip the Y coordinate,
+		which means that the winding order of any triangles are reversed.
+
+		The depth range is arbitrary and up to the user.
+
+		\param size The size of the window space.
+		\param depthRange The near and far depth range. The x coord is zNear, and the y coord is zFar.
+		\param isTopLeft True if this should be top-left orientation, false if it should be bottom-left.
+		**/
+		void PixelPerfectOrtho(glm::ivec2 size, glm::vec2 depthRange, bool isTopLeft = true);
 		///@}
 
 		/**
