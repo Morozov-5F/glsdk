@@ -322,6 +322,8 @@ int main(int argc, char** argv)
 
 	init();
 
+	glfwEnable(GLFW_KEY_REPEAT);
+
 	glfwSetWindowSizeCallback(reshape);
 	glfwSetMouseButtonCallback(mouse_button_callback);
 	glfwSetMousePosCallback(mouse_move_callback);

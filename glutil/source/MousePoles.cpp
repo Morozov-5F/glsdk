@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include "glutil/MousePoles.h"
-#include "glutil/MatrixStack.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265f
@@ -196,6 +196,7 @@ namespace glutil
 		, m_radCurrXZAngle(0.0)
 		, m_radCurrYAngle(-PI_2 / 2.0f)
 		, m_radCurrSpin(0.0f)
+		, m_currRadius(viewDef.initialRadius)
 		, m_viewDef(viewDef)
 		, m_actionButton(actionButton)
 		, m_bIsDragging(false)
@@ -204,42 +205,24 @@ namespace glutil
 
 	glm::mat4 ViewPole::CalcMatrix() const
 	{
-		//Compute the position vector along the xz plane.
-		float cosa = cosf(m_radCurrXZAngle);
-		float sina = sinf(m_radCurrXZAngle);
+		//Remember: these are in reverse order.
+		glm::mat4 theMat(1.0f);
 
-		glm::vec3 currPos(-sina, 0.0f, cosa);
+		//In this space, we are facing in the correct direction. Which means that the camera point
+		//is directly behind us by the radius number of units.
+		theMat = glm::translate(theMat, glm::vec3(0.0f, 0.0f, -m_currRadius));
 
-		//Compute the "up" rotation axis.
-		//This axis is a 90 degree rotation around the y axis. Just a component-swap and negate.
-		glm::vec3 UpRotAxis;
+		//Rotate the world to look in the right direction..
+		glm::fquat fullRotation = glm::angleAxis(m_radCurrSpin * 180.0f / 3.14159f,
+			glm::vec3(0.0f, 0.0f, 1.0f)) *
+			m_currViewFacing;
+		theMat = theMat * glm::mat4_cast(fullRotation);
 
-		UpRotAxis.x = currPos.z;
-		UpRotAxis.y = currPos.y;
-		UpRotAxis.z = -currPos.x;
+		//Translate the world by the negation of the lookat point, placing the origin at the
+		//lookat point.
+		theMat = glm::translate(theMat, -m_lookAt);
 
-		//Now, rotate around this axis by the angle.
-		glutil::MatrixStack theStack;
-
-		theStack.SetIdentity();
-		theStack.RotateRadians(UpRotAxis, m_radCurrYAngle);
-		currPos = glm::vec3(theStack.Top() * glm::vec4(currPos, 0.0));
-
-		//Set the position of the camera.
-		glm::vec3 tempVec = currPos * m_viewDef.fCurrRadius;
-		glm::vec3 cameraPosition = tempVec + m_lookAt;
-
-		//Now, compute the up-vector.
-		//The direction of the up-vector is the cross-product of currPos and UpRotAxis.
-		//Rotate this vector around the currPos axis given m_currSpin.
-		glm::vec3 upVec = glm::cross(currPos, UpRotAxis);
-
-		theStack.SetIdentity();
-		theStack.RotateRadians(currPos, m_radCurrSpin);
-		upVec = glm::vec3(theStack.Top() * glm::vec4(upVec, 0.0));
-
-//		return CalcLookAtMatrix(cameraPosition, m_lookAt, upVec);
-		return glm::lookAt(cameraPosition, m_lookAt, upVec);
+		return theMat;
 	}
 
 	void ViewPole::SetScaleFactor( float rotateScale )
@@ -249,16 +232,42 @@ namespace glutil
 
 	void ViewPole::ProcessXChange( int iXDiff, bool bClearY )
 	{
-		m_radCurrXZAngle = (iXDiff * m_rotateScale) + m_radInitXZAngle;
+		float radAngleDiff = (iXDiff * m_rotateScale);
+		m_radCurrXZAngle = radAngleDiff + m_radInitXZAngle;
 		if(bClearY)
 			m_radCurrYAngle = m_radInitYAngle;
+
+		radAngleDiff *= 180.0f / 3.14159f;
+
+		//Rotate about the world-space Y axis.
+		m_currViewFacing = m_initViewFacing * glm::angleAxis(radAngleDiff, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	void ViewPole::ProcessYChange( int iYDiff, bool bClearXZ )
 	{
-		m_radCurrYAngle = (-iYDiff * m_rotateScale) + m_radInitYAngle;
+		float radAngleDiff = (-iYDiff * m_rotateScale);
+		m_radCurrYAngle = radAngleDiff + m_radInitYAngle;
 		if(bClearXZ)
 			m_radCurrXZAngle = m_radInitXZAngle;
+
+		radAngleDiff *= 180.0f / 3.14159f;
+
+		//Rotate about the local-space X axis.
+		m_currViewFacing = glm::angleAxis(radAngleDiff, glm::vec3(1.0f, 0.0f, 0.0f)) * m_initViewFacing;
+	}
+
+	void ViewPole::ProcessXYChange( int iXDiff, int iYDiff )
+	{
+		float radXAngleDiff = (iXDiff * m_rotateScale);
+		float radYAngleDiff = (-iYDiff * m_rotateScale);
+
+		radXAngleDiff *= 180.0f / 3.14159f;
+		radYAngleDiff *= 180.0f / 3.14159f;
+
+		//Rotate about the world-space Y axis.
+		m_currViewFacing = m_initViewFacing * glm::angleAxis(radXAngleDiff, glm::vec3(0.0f, 1.0f, 0.0f));
+		//Rotate about the local-space X axis.
+		m_currViewFacing = glm::angleAxis(radYAngleDiff, glm::vec3(1.0f, 0.0f, 0.0f)) * m_currViewFacing;
 	}
 
 	void ViewPole::ProcessSpinAxis( int iXDiff, int iYDiff )
@@ -276,6 +285,8 @@ namespace glutil
 		m_radInitYAngle = m_radCurrYAngle;
 		m_radInitSpin = m_radCurrSpin;
 
+		m_initViewFacing = m_currViewFacing;
+
 		m_bIsDragging = true;
 	}
 
@@ -286,8 +297,7 @@ namespace glutil
 		switch(m_RotateMode)
 		{
 		case RM_DUAL_AXIS_ROTATE:
-			ProcessXChange(iDiff.x);
-			ProcessYChange(iDiff.y);
+			ProcessXYChange(iDiff.x, iDiff.y);
 			break;
 		case RM_BIAXIAL_ROTATE:
 			if(abs(iDiff.x) > abs(iDiff.y))
@@ -318,6 +328,7 @@ namespace glutil
 		{
 			m_radCurrXZAngle = m_radInitXZAngle;
 			m_radCurrYAngle = m_radInitYAngle;
+			m_currViewFacing = m_initViewFacing;
 		}
 
 		m_bIsDragging = false;
@@ -326,23 +337,23 @@ namespace glutil
 	void ViewPole::MoveCloser( bool bLargeStep )
 	{
 		if(bLargeStep)
-			m_viewDef.fCurrRadius -= m_viewDef.largeRadiusDelta;
+			m_currRadius -= m_viewDef.largeRadiusDelta;
 		else
-			m_viewDef.fCurrRadius -= m_viewDef.smallRadiusDelta;
+			m_currRadius -= m_viewDef.smallRadiusDelta;
 
-		if(m_viewDef.fCurrRadius < m_viewDef.fMinRadius)
-			m_viewDef.fCurrRadius = m_viewDef.fMinRadius;
+		if(m_currRadius < m_viewDef.minRadius)
+			m_currRadius = m_viewDef.minRadius;
 	}
 
 	void ViewPole::MoveAway( bool bLargeStep )
 	{
 		if(bLargeStep)
-			m_viewDef.fCurrRadius += m_viewDef.largeRadiusDelta;
+			m_currRadius += m_viewDef.largeRadiusDelta;
 		else
-			m_viewDef.fCurrRadius += m_viewDef.smallRadiusDelta;
+			m_currRadius += m_viewDef.smallRadiusDelta;
 
-		if(m_viewDef.fCurrRadius > m_viewDef.fMaxRadius)
-			m_viewDef.fCurrRadius = m_viewDef.fMaxRadius;
+		if(m_currRadius > m_viewDef.maxRadius)
+			m_currRadius = m_viewDef.maxRadius;
 	}
 
 	void ViewPole::MouseMove( const glm::ivec2 &position )

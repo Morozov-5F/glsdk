@@ -164,9 +164,9 @@ namespace glutil
 	///Utility object containing information about how the ViewPole can move around.
 	struct ViewDef
 	{
-		float fCurrRadius;		///<The initial radius of the view from the target point.
-		float fMinRadius;		///<The closest the radius to the target point can get.
-		float fMaxRadius;		///<The farthest the radius to the target point can get.
+		float initialRadius;	///<The initial radius of the view from the target point.
+		float minRadius;		///<The closest the radius to the target point can get.
+		float maxRadius;		///<The farthest the radius to the target point can get.
 		float largeRadiusDelta;	///<The radius change to use when the SHIFT key isn't held while mouse wheel scrolling.
 		float smallRadiusDelta;	///<The radius change to use when the SHIFT key \em is held while mouse wheel scrolling.
 		float largePosOffset;	///<The position offset to use when the SHIFT key isn't held while pressing a movement key.
@@ -223,7 +223,7 @@ namespace glutil
 		glm::vec3 GetLookAtPos() const {return m_lookAt;}
 
 		///Retrieves the world-space distance the camera currently is from the target point.
-		float GetLookAtDistance() const {return m_viewDef.fCurrRadius;}
+		float GetLookAtDistance() const {return m_currRadius;}
 
 		/**
 		\name Input Providers
@@ -266,10 +266,11 @@ namespace glutil
 
 		glm::vec3 m_lookAt;
 
-		float m_radCurrXZAngle;		//Angle around the y-axis. In radians
-		float m_radCurrYAngle;		//Angle above the xz plane. In radians
 		float m_radCurrSpin;		//Angle spin around the look-at direction. Changes up-vector.
+		glm::fquat m_currViewFacing;
+		float m_currRadius;
 		ViewDef m_viewDef;
+
 
 		MouseButtons m_actionButton;
 
@@ -279,14 +280,14 @@ namespace glutil
 
 		glm::ivec2 m_initialPt;
 
-		float m_radInitXZAngle;
-		float m_radInitYAngle;
 		float m_radInitSpin;
+		glm::fquat m_initViewFacing;
 
 		float m_rotateScale;
 
 		void ProcessXChange(int iXDiff, bool bClearY = false);
 		void ProcessYChange(int iYDiff, bool bClearXZ = false);
+		void ProcessXYChange(int iXDiff, int iYDiff);
 		void ProcessSpinAxis(int iXDiff, int iYDiff);
 
 		void BeginDragRotate(const glm::ivec2 &ptStart, RotateMode rotMode = RM_DUAL_AXIS_ROTATE);
