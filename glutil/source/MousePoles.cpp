@@ -16,33 +16,33 @@ const float PI_2 = 1.570796325f;
 
 namespace glutil
 {
-	ObjectPole::ObjectPole( const glm::vec3 &initialPos,
-		const glm::fquat &initialOrient,
-		MouseButtons actionButton,
-		const ViewProvider *pLookatProvider )
+	ObjectPole::ObjectPole( const ObjectData &initialData, float rotateScale,
+		MouseButtons actionButton, const ViewProvider *pLookatProvider )
 		: m_pView(pLookatProvider)
-		, m_orientation(initialOrient)
-		, m_objectPos(initialPos)
+		, m_po(initialData)
+		, m_initialPo(initialData)
+		, m_rotateScale(rotateScale)
 		, m_actionButton(actionButton)
-		, m_RotateMode()
 		, m_bIsDragging(false)
-		, m_prevPos(initialPos)
-		, m_initialPos(initialPos)
-		, m_initialOrient(initialOrient)
-		, m_rotateScale(PI_2 / 4.0f)
 	{}
-
-	void ObjectPole::SetScaleFactor( float rotateScale )
-	{
-		m_rotateScale = rotateScale;
-	}
 
 	glm::mat4 ObjectPole::CalcMatrix() const
 	{
 		glm::mat4 translateMat(1.0f);
-		translateMat[3] = glm::vec4(m_objectPos, 1.0f);
+		translateMat[3] = glm::vec4(m_po.position, 1.0f);
 
-		return translateMat * glm::mat4_cast(m_orientation);
+		return translateMat * glm::mat4_cast(m_po.orientation);
+	}
+
+	void ObjectPole::SetRotationScale( float rotateScale )
+	{
+		m_rotateScale = rotateScale;
+	}
+
+	void ObjectPole::Reset()
+	{
+		if(!m_bIsDragging)
+			m_po = m_initialPo;
 	}
 
 	namespace
@@ -67,7 +67,7 @@ namespace glutil
 		if(!m_bIsDragging)
 			bFromInitial = false;
 
-		m_orientation = glm::normalize(rot * (bFromInitial ? m_initialOrient : m_orientation));
+		m_po.orientation = glm::normalize(rot * (bFromInitial ? m_startDragOrient : m_po.orientation));
 	}
 
 	void ObjectPole::RotateLocalDegrees( const glm::fquat &rot, bool bFromInitial )
@@ -75,7 +75,7 @@ namespace glutil
 		if(!m_bIsDragging)
 			bFromInitial = false;
 
-		m_orientation = glm::normalize((bFromInitial ? m_initialOrient : m_orientation) * rot);
+		m_po.orientation = glm::normalize((bFromInitial ? m_startDragOrient : m_po.orientation) * rot);
 	}
 
 	void ObjectPole::RotateViewDegrees( const glm::fquat &rot, bool bFromInitial )
@@ -87,8 +87,8 @@ namespace glutil
 		{
 			glm::fquat viewQuat = glm::quat_cast(m_pView->CalcMatrix());
 			glm::fquat invViewQuat = glm::conjugate(viewQuat);
-			m_orientation = glm::normalize((invViewQuat * rot * viewQuat) *
-				(bFromInitial ? m_initialOrient : m_orientation));
+			m_po.orientation = glm::normalize((invViewQuat * rot * viewQuat) *
+				(bFromInitial ? m_startDragOrient : m_po.orientation));
 		}
 		else
 			RotateWorldDegrees(rot, bFromInitial);
@@ -98,7 +98,7 @@ namespace glutil
 	{
 		if(m_bIsDragging)
 		{
-			glm::ivec2 iDiff = position - m_prevPos;
+			glm::ivec2 iDiff = position - m_prevMousePos;
 
 			switch(m_RotateMode)
 			{
@@ -112,7 +112,7 @@ namespace glutil
 				break;
 			case RM_BIAXIAL:
 				{
-					glm::ivec2 iInitDiff = position - m_initialPos;
+					glm::ivec2 iInitDiff = position - m_startDragMousePos;
 
 					Axis eAxis;
 					float degAngle;
@@ -136,7 +136,7 @@ namespace glutil
 				break;
 			}
 
-			m_prevPos = position;
+			m_prevMousePos = position;
 		}
 	}
 
@@ -157,9 +157,9 @@ namespace glutil
 					else
 						m_RotateMode = RM_DUAL_AXIS;
 
-					m_prevPos = position;
-					m_initialPos = position;
-					m_initialOrient = m_orientation;
+					m_prevMousePos = position;
+					m_startDragMousePos = position;
+					m_startDragOrient = m_po.orientation;
 
 					m_bIsDragging = true;
 				}
@@ -190,109 +190,98 @@ namespace glutil
 
 	}
 
-	ViewPole::ViewPole( const glm::vec3 &target, const ViewDef &viewDef,
+	ViewPole::ViewPole( const ViewData &initialView, const ViewScale &viewScale,
 		MouseButtons actionButton )
-		: m_lookAt(target)
-		, m_radCurrXZAngle(0.0)
-		, m_radCurrYAngle(-PI_2 / 2.0f)
-		, m_radCurrSpin(0.0f)
-		, m_currRadius(viewDef.initialRadius)
-		, m_viewDef(viewDef)
+		: m_currView(initialView)
+		, m_viewScale(viewScale)
+		, m_initialView(initialView)
 		, m_actionButton(actionButton)
 		, m_bIsDragging(false)
-		, m_rotateScale(PI_2 / 250.0f)
 	{}
 
 	glm::mat4 ViewPole::CalcMatrix() const
 	{
-		//Remember: these are in reverse order.
 		glm::mat4 theMat(1.0f);
+
+		//Remember: these transforms are in reverse order.
 
 		//In this space, we are facing in the correct direction. Which means that the camera point
 		//is directly behind us by the radius number of units.
-		theMat = glm::translate(theMat, glm::vec3(0.0f, 0.0f, -m_currRadius));
+		theMat = glm::translate(theMat, glm::vec3(0.0f, 0.0f, -m_currView.radius));
 
 		//Rotate the world to look in the right direction..
-		glm::fquat fullRotation = glm::angleAxis(m_radCurrSpin * 180.0f / 3.14159f,
-			glm::vec3(0.0f, 0.0f, 1.0f)) *
-			m_currViewFacing;
+		glm::fquat fullRotation = glm::angleAxis(m_currView.degSpinRotation, glm::vec3(0.0f, 0.0f, 1.0f)) *
+			m_currView.orient;
 		theMat = theMat * glm::mat4_cast(fullRotation);
 
 		//Translate the world by the negation of the lookat point, placing the origin at the
 		//lookat point.
-		theMat = glm::translate(theMat, -m_lookAt);
+		theMat = glm::translate(theMat, -m_currView.targetPos);
 
 		return theMat;
 	}
 
-	void ViewPole::SetScaleFactor( float rotateScale )
+	void ViewPole::Reset()
 	{
-		m_rotateScale = rotateScale;
+		if(!m_bIsDragging)
+			m_currView = m_initialView;
+	}
+
+
+	void ViewPole::SetRotationScale( float rotateScale )
+	{
+		m_viewScale.rotationScale = rotateScale;
 	}
 
 	void ViewPole::ProcessXChange( int iXDiff, bool bClearY )
 	{
-		float radAngleDiff = (iXDiff * m_rotateScale);
-		m_radCurrXZAngle = radAngleDiff + m_radInitXZAngle;
-		if(bClearY)
-			m_radCurrYAngle = m_radInitYAngle;
-
-		radAngleDiff *= 180.0f / 3.14159f;
+		float degAngleDiff = (iXDiff * m_viewScale.rotationScale);
 
 		//Rotate about the world-space Y axis.
-		m_currViewFacing = m_initViewFacing * glm::angleAxis(radAngleDiff, glm::vec3(0.0f, 1.0f, 0.0f));
+		m_currView.orient = m_startDragOrient * glm::angleAxis(degAngleDiff, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	void ViewPole::ProcessYChange( int iYDiff, bool bClearXZ )
 	{
-		float radAngleDiff = (-iYDiff * m_rotateScale);
-		m_radCurrYAngle = radAngleDiff + m_radInitYAngle;
-		if(bClearXZ)
-			m_radCurrXZAngle = m_radInitXZAngle;
-
-		radAngleDiff *= 180.0f / 3.14159f;
+		float degAngleDiff = (iYDiff * m_viewScale.rotationScale);
 
 		//Rotate about the local-space X axis.
-		m_currViewFacing = glm::angleAxis(radAngleDiff, glm::vec3(1.0f, 0.0f, 0.0f)) * m_initViewFacing;
+		m_currView.orient = glm::angleAxis(degAngleDiff, glm::vec3(1.0f, 0.0f, 0.0f)) * m_startDragOrient;
 	}
 
 	void ViewPole::ProcessXYChange( int iXDiff, int iYDiff )
 	{
-		float radXAngleDiff = (iXDiff * m_rotateScale);
-		float radYAngleDiff = (-iYDiff * m_rotateScale);
-
-		radXAngleDiff *= 180.0f / 3.14159f;
-		radYAngleDiff *= 180.0f / 3.14159f;
+		float degXAngleDiff = (iXDiff * m_viewScale.rotationScale);
+		float degYAngleDiff = (iYDiff * m_viewScale.rotationScale);
 
 		//Rotate about the world-space Y axis.
-		m_currViewFacing = m_initViewFacing * glm::angleAxis(radXAngleDiff, glm::vec3(0.0f, 1.0f, 0.0f));
+		m_currView.orient = m_startDragOrient * glm::angleAxis(degXAngleDiff, glm::vec3(0.0f, 1.0f, 0.0f));
 		//Rotate about the local-space X axis.
-		m_currViewFacing = glm::angleAxis(radYAngleDiff, glm::vec3(1.0f, 0.0f, 0.0f)) * m_currViewFacing;
+		m_currView.orient = glm::angleAxis(degYAngleDiff, glm::vec3(1.0f, 0.0f, 0.0f)) * m_currView.orient;
 	}
 
 	void ViewPole::ProcessSpinAxis( int iXDiff, int iYDiff )
 	{
-		m_radCurrSpin = (iXDiff * m_rotateScale) + m_radInitSpin;
+		float degSpinDiff = (iXDiff * m_viewScale.rotationScale);
+		m_currView.degSpinRotation = degSpinDiff + m_degStarDragSpin;
 	}
 
 	void ViewPole::BeginDragRotate( const glm::ivec2 &ptStart, RotateMode rotMode )
 	{
 		m_RotateMode = rotMode;
 
-		m_initialPt = ptStart;
+		m_startDragMouseLoc = ptStart;
 
-		m_radInitXZAngle = m_radCurrXZAngle;
-		m_radInitYAngle = m_radCurrYAngle;
-		m_radInitSpin = m_radCurrSpin;
+		m_degStarDragSpin = m_currView.degSpinRotation;
 
-		m_initViewFacing = m_currViewFacing;
+		m_startDragOrient = m_currView.orient;
 
 		m_bIsDragging = true;
 	}
 
 	void ViewPole::OnDragRotate( const glm::ivec2 &ptCurr )
 	{
-		glm::ivec2 iDiff = ptCurr - m_initialPt;
+		glm::ivec2 iDiff = ptCurr - m_startDragMouseLoc;
 
 		switch(m_RotateMode)
 		{
@@ -326,9 +315,7 @@ namespace glutil
 		}
 		else
 		{
-			m_radCurrXZAngle = m_radInitXZAngle;
-			m_radCurrYAngle = m_radInitYAngle;
-			m_currViewFacing = m_initViewFacing;
+			m_currView.orient = m_startDragOrient;
 		}
 
 		m_bIsDragging = false;
@@ -337,23 +324,23 @@ namespace glutil
 	void ViewPole::MoveCloser( bool bLargeStep )
 	{
 		if(bLargeStep)
-			m_currRadius -= m_viewDef.largeRadiusDelta;
+			m_currView.radius -= m_viewScale.largeRadiusDelta;
 		else
-			m_currRadius -= m_viewDef.smallRadiusDelta;
+			m_currView.radius -= m_viewScale.smallRadiusDelta;
 
-		if(m_currRadius < m_viewDef.minRadius)
-			m_currRadius = m_viewDef.minRadius;
+		if(m_currView.radius < m_viewScale.minRadius)
+			m_currView.radius = m_viewScale.minRadius;
 	}
 
 	void ViewPole::MoveAway( bool bLargeStep )
 	{
 		if(bLargeStep)
-			m_currRadius += m_viewDef.largeRadiusDelta;
+			m_currView.radius += m_viewScale.largeRadiusDelta;
 		else
-			m_currRadius += m_viewDef.smallRadiusDelta;
+			m_currView.radius += m_viewScale.smallRadiusDelta;
 
-		if(m_currRadius > m_viewDef.maxRadius)
-			m_currRadius = m_viewDef.maxRadius;
+		if(m_currView.radius > m_viewScale.maxRadius)
+			m_currView.radius = m_viewScale.maxRadius;
 	}
 
 	void ViewPole::MouseMove( const glm::ivec2 &position )
@@ -411,19 +398,19 @@ namespace glutil
 	{
 		switch(key)
 		{
-		case 'w': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewDef.largePosOffset); break;
-		case 's': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewDef.largePosOffset); break;
-		case 'd': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewDef.largePosOffset); break;
-		case 'a': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewDef.largePosOffset); break;
-		case 'e': OffsetTargetPos(ViewPole::DIR_UP, m_viewDef.largePosOffset); break;
-		case 'q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewDef.largePosOffset); break;
+		case 'w': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewScale.largePosOffset); break;
+		case 's': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewScale.largePosOffset); break;
+		case 'd': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewScale.largePosOffset); break;
+		case 'a': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewScale.largePosOffset); break;
+		case 'e': OffsetTargetPos(ViewPole::DIR_UP, m_viewScale.largePosOffset); break;
+		case 'q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewScale.largePosOffset); break;
 
-		case 'W': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewDef.smallPosOffset); break;
-		case 'S': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewDef.smallPosOffset); break;
-		case 'D': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewDef.smallPosOffset); break;
-		case 'A': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewDef.smallPosOffset); break;
-		case 'E': OffsetTargetPos(ViewPole::DIR_UP, m_viewDef.smallPosOffset); break;
-		case 'Q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewDef.smallPosOffset); break;
+		case 'W': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewScale.smallPosOffset); break;
+		case 'S': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewScale.smallPosOffset); break;
+		case 'D': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewScale.smallPosOffset); break;
+		case 'A': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewScale.smallPosOffset); break;
+		case 'E': OffsetTargetPos(ViewPole::DIR_UP, m_viewScale.smallPosOffset); break;
+		case 'Q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewScale.smallPosOffset); break;
 		}
 	}
 
@@ -454,7 +441,7 @@ namespace glutil
 		glm::fquat invOrient = glm::conjugate(orientation);
 		glm::vec3 worldOffset = invOrient * cameraOffset;
 
-		m_lookAt += worldOffset;
+		m_currView.targetPos += worldOffset;
 	}
 }
 

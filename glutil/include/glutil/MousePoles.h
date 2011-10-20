@@ -36,13 +36,26 @@ namespace glutil
 		MM_KEY_ALT =	0x04,	///<One of the alt keys.
 	};
 
+	///Utility object containing the ObjectPole's position and orientation information.
+	struct ObjectData
+	{
+		glm::vec3 position;			///<The world-space position of the object.
+		glm::fquat orientation;		///<The world-space orientation of the object.
+	};
+
 	/**
 	\brief Mouse-based control over the orientation and position of an object.
 
 	This Pole speaks of three spaces: local, world, and view. Local refers to the coordinate system
 	of vertices given to the matrix that this Pole generates. World represents the \em output coordinate
-	system. So vertices enter in local and are transformed to world. View represents the space
-	provided by the ViewProvider given to the constructor.
+	system. So vertices enter in local and are transformed to world. Note that this does not have
+	to actually be the real world-space. It could be the space of some parent hierarchy, but
+	the ObjectPole is not really designed for that.
+	
+	View represents the space provided by the ViewProvider given to the constructor. The assumption
+	that this Pole makes when using the view space matrix is that the matrix the ObjectPole
+	generates will be multiplied by the view matrix given by the ViewProvider. So it is assumed
+	that there is no intermediate space.
 
 	This Pole is given an action button, which it will listen for click events from. When
 	the action button is held down and the mouse moved, the object's orientation will change,
@@ -64,22 +77,33 @@ namespace glutil
 		/**
 		\brief Creates an object pole with a given initial position and orientation.
 		
-		\param initialPos The starting position of the pole.
-		\param initialOrient The initial orientation of the pole.
+		\param initialData The starting position and orientation of the object in world space.
+		\param rotateScale The number of degrees to rotate the object per window space pixel
 		\param actionButton The mouse button to listen for. All other mouse buttons are ignored.
 		\param pLookatProvider An object that will compute a view matrix. This defines the view space
 		that orientations can be relative to. If it is NULL, then orientations will be relative to the world.
 		**/
-		ObjectPole(const glm::vec3 &initialPos, const glm::fquat &initialOrient,
+		ObjectPole(const ObjectData &initialData, float rotateScale,
 			MouseButtons actionButton, const ViewProvider *pLookatProvider);
 
 		///Generates the local-to-world matrix for this object.
 		glm::mat4 CalcMatrix() const;
 
-		///Sets the scaling factor for orientation changes.
-		void SetScaleFactor(float rotateScale);
+		/**
+		\brief Sets the scaling factor for orientation changes.
+		
+		The scaling factor is the number of degrees to rotate the object per window space pixel.
+		The scale is the same for all mouse movements.
+		**/
+		void SetRotationScale(float rotateScale);
 		///Gets the current scaling factor for orientation changes.
-		float GetScaleFactor() const {return m_rotateScale;}
+		float GetRotationScale() const {return m_rotateScale;}
+
+		///Retrieves the current position and orientation of the object.
+		const ObjectData &GetPosOrient() const {return m_po;}
+
+		///Resets the object to the initial position/orientation. Will fail if currently dragging.
+		void Reset();
 
 		/**
 		\name Input Providers
@@ -90,7 +114,7 @@ namespace glutil
 		///@{
 
 		/**
-		\brief Notifies the ObjectPole of a mouse button being pressed or released.
+		\brief Notifies the pole of a mouse button being pressed or released.
 		
 		\param button The button being pressed or released.
 		\param isPressed Set to true if \a button is being pressed.
@@ -100,11 +124,11 @@ namespace glutil
 		void MouseClick(MouseButtons button, bool isPressed, int modifiers,
 			const glm::ivec2 &position);
 
-		///Notifies the ObjectPole that the mouse has moved to the given absolute position.
+		///Notifies the pole that the mouse has moved to the given absolute position.
 		void MouseMove(const glm::ivec2 &position);
 
 		/**
-		\brief Notifies the ObjectPole that the mouse wheel has been rolled up or down.
+		\brief Notifies the pole that the mouse wheel has been rolled up or down.
 		
 		\param direction A positive number if the mouse wheel has moved up, otherwise it should be negative.
 		\param modifiers The modifiers currently being held down when the wheel was rolled.
@@ -113,9 +137,7 @@ namespace glutil
 		void MouseWheel(int direction, int modifiers, const glm::ivec2 &position);
 
 		/**
-		\brief Notifies the ObjectPole that a character has been entered.
-
-		Not yet used in the ObjectPole.
+		\brief Notifies the pole that a character has been entered.
 
 		\param key ASCII keycode.
 		**/
@@ -147,30 +169,40 @@ namespace glutil
 		void RotateViewDegrees(const glm::fquat &rot, bool bFromInitial = false);
 
 		const ViewProvider *m_pView;
-		glm::fquat m_orientation;
-		glm::vec3 m_objectPos;
+		ObjectData m_po;
+		ObjectData m_initialPo;
 
+		float m_rotateScale;
 		MouseButtons m_actionButton;
 
+		//Used when rotating.
 		RotateMode m_RotateMode;
 		bool m_bIsDragging;
 
-		glm::ivec2 m_prevPos;
-		glm::ivec2 m_initialPos;
-		glm::fquat m_initialOrient;
-		float m_rotateScale;
+		glm::ivec2 m_prevMousePos;
+		glm::ivec2 m_startDragMousePos;
+		glm::fquat m_startDragOrient;
 	};
 
-	///Utility object containing information about how the ViewPole can move around.
-	struct ViewDef
+	///Utility object containing the ViewPole's view information.
+	struct ViewData
 	{
-		float initialRadius;	///<The initial radius of the view from the target point.
+		glm::vec3 targetPos;	///<The starting target position position.
+		glm::fquat orient;		///<The initial orientation aroudn the target position.
+		float radius;			///<The initial radius of the camera from the target point.
+		float degSpinRotation;	///<The initial spin rotation of the "up" axis, relative to \a orient
+	};
+
+	///Utility object describing the scale of the ViewPole.
+	struct ViewScale
+	{
 		float minRadius;		///<The closest the radius to the target point can get.
 		float maxRadius;		///<The farthest the radius to the target point can get.
 		float largeRadiusDelta;	///<The radius change to use when the SHIFT key isn't held while mouse wheel scrolling.
 		float smallRadiusDelta;	///<The radius change to use when the SHIFT key \em is held while mouse wheel scrolling.
 		float largePosOffset;	///<The position offset to use when the SHIFT key isn't held while pressing a movement key.
 		float smallPosOffset;	///<The position offset to use when the SHIFT key \em is held while pressing a movement key.
+		float rotationScale;	///<The number of degrees to rotate the view per window space pixel the mouse moves when dragging.
 	};
 
 	/**
@@ -203,27 +235,33 @@ namespace glutil
 		/**
 		\brief Creates a view pole with the given initial target position, view definition, and action button.
 		
-		\param target The initial position of the target point around which the camera revolves.
+		\param initialView The starting state of the view.
 		\param viewDef The viewport definition to use.
 		\param actionButton The mouse button to listen for. All other mouse buttons are ignored.
 		**/
-		ViewPole(const glm::vec3 &target, const ViewDef &viewDef,
+		ViewPole(const ViewData &initialView, const ViewScale &viewScale,
 			MouseButtons actionButton = MB_LEFT_BTN);
 		virtual ~ViewPole() {}
 
 		///Generates the world-to-camera matrix for the view.
 		glm::mat4 CalcMatrix() const;
 
-		///Sets the scaling factor for orientation changes.
-		void SetScaleFactor(float rotateScale);
+		/**
+		\brief Sets the scaling factor for orientation changes.
+		
+		The scaling factor is the number of degrees to rotate the view per window space pixel.
+		The scale is the same for all mouse movements.
+		**/
+		void SetRotationScale(float rotateScale);
+
 		///Gets the current scaling factor for orientation changes.
-		float GetScaleFactor() const {return m_rotateScale;}
+		float GetRotationScale() const {return m_viewScale.rotationScale;}
 
-		///Retrieves the current world-space target point.
-		glm::vec3 GetLookAtPos() const {return m_lookAt;}
+		///Retrieves the current viewing information.
+		const ViewData &GetView() const {return m_currView;}
 
-		///Retrieves the world-space distance the camera currently is from the target point.
-		float GetLookAtDistance() const {return m_currRadius;}
+		///Resets the view to the initial view. Will fail if currently dragging.
+		void Reset();
 
 		/**
 		\name Input Providers
@@ -264,26 +302,19 @@ namespace glutil
 			RM_SPIN_VIEW_AXIS,
 		};
 
-		glm::vec3 m_lookAt;
+		ViewData m_currView;
+		ViewScale m_viewScale;
 
-		float m_radCurrSpin;		//Angle spin around the look-at direction. Changes up-vector.
-		glm::fquat m_currViewFacing;
-		float m_currRadius;
-		ViewDef m_viewDef;
-
-
+		ViewData m_initialView;
 		MouseButtons m_actionButton;
 
 		//Used when rotating.
-		RotateMode m_RotateMode;
 		bool m_bIsDragging;
+		RotateMode m_RotateMode;
 
-		glm::ivec2 m_initialPt;
-
-		float m_radInitSpin;
-		glm::fquat m_initViewFacing;
-
-		float m_rotateScale;
+		float m_degStarDragSpin;
+		glm::ivec2 m_startDragMouseLoc;
+		glm::fquat m_startDragOrient;
 
 		void ProcessXChange(int iXDiff, bool bClearY = false);
 		void ProcessYChange(int iYDiff, bool bClearXZ = false);
