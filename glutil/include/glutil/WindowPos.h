@@ -2,6 +2,10 @@
 #ifndef WINDOW_POSITION_UTIL_H
 #define WINDOW_POSITION_UTIL_H
 
+/**
+\file
+\brief Contains functions to \ref module_glutil_wndpos "position the window relative to the desktop".
+**/
 
 #include <glm/glm.hpp>
 

@@ -2,6 +2,11 @@
 #ifndef MATRIX_STACK_UTIL_H
 #define MATRIX_STACK_UTIL_H
 
+/**
+\file
+\brief Contains a \ref module_glutil_matrixstack "matrix stack and associated classes".
+**/
+
 #include <stack>
 #include <vector>
 #include <glm/glm.hpp>

@@ -4,18 +4,13 @@
 
 /**
 \file
-
-\brief Includes functions to help load and validate shaders and programs. This header must be included after an OpenGL header.
+\brief Includes \ref module_glutil_program "functions to help load and validate shaders and programs". This header must be included after an OpenGL header.
 **/
 
 #include <exception>
 #include <string>
 #include <vector>
 
-/**
-\brief foo
-
-**/
 namespace glutil
 {
 	///\addtogroup module_glimg_exceptions

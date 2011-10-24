@@ -2,6 +2,11 @@
 #ifndef MOUSE_POLES_UTIL_H
 #define MOUSE_POLES_UTIL_H
 
+/**
+\file
+\brief Header for \ref module_glutil_poles "mouse poles".
+**/
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
