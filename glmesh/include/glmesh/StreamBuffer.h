@@ -1,6 +1,6 @@
 
-#ifndef DATA_STORE_MESH_H
-#define DATA_STORE_MESH_H
+#ifndef STREAM_BUFFER_MESH_H
+#define STREAM_BUFFER_MESH_H
 
 /**
 \file
@@ -189,6 +189,10 @@ namespace glmesh
 			StreamBuffer *m_pData;
 			void *m_pCurrPtr;
 			size_t m_bytesMapped;
+
+			//No copying.
+			Map(const Map&);
+			Map& operator=(const Map&);
 		};
 
 	private:
@@ -206,4 +210,4 @@ namespace glmesh
 	///@}
 }
 
-#endif //DATA_STORE_MESH_H
+#endif //STREAM_BUFFER_MESH_H
