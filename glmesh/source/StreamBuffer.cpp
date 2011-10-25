@@ -75,6 +75,8 @@ namespace glmesh
 		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_bufferObject);
 		gl::BufferData(gl::GL_ARRAY_BUFFER, m_bufferSize, NULL, gl::GL_STREAM_DRAW);
 		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+
+		m_currOffset = 0;
 	}
 
 

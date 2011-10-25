@@ -143,6 +143,11 @@ namespace glmesh
 
 			When this function completes, the binding state of GL_ARRAY_BUFFER will be 0.
 
+			\note The mapping of the buffer can cause invalidation, as though by InvalidateBuffer.
+			Because of this, the current position can \em change due to this function. So if you
+			pass true for \a invalidateIfNotAvailable, then you should make sure to get the offset
+			\em after the mapping, but before the unmapping.
+
 			\throw ddd Thrown if \a numBytes is larger than the storage size of the buffer.
 			\throw ddd Thrown if \a numBytes is larger than the remaining space and
 			\a invalidateIfNotAvailable is false.
@@ -164,6 +169,8 @@ namespace glmesh
 			In OpenGL, unmapping a buffer can cause the buffer's contents to be lost. Destructors in C++
 			should never throw exceptions, so to be able to check for this condition, we allow for the
 			buffer to be unmapped manually.
+
+			The current position within the buffer will be advanced by the number of bytes mapped.
 
 			When this function completes, if the Map was not previously Release()'d,
 			the binding state of GL_ARRAY_BUFFER will be 0.

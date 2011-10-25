@@ -31,16 +31,8 @@ glutil::ObjectPole g_objectPole(g_objData, 90.0f/250.0f,
 //Called to update the display.
 //You should call glutSwapBuffers after all of your rendering to display what you rendered.
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
-void display(std::auto_ptr<Drawable> pDrawObj)
+void display(Drawable *pDrawObj)
 {
-	gl::ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	gl::ClearDepth(1.0);
-	gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
-
-	gl::Enable(gl::GL_DEPTH_TEST);
-	gl::DepthFunc(gl::GL_LEQUAL);
-	gl::Enable(gl::GL_DEPTH_CLAMP);
-
 	glm::mat4 perspectiveMat = glm::perspective(50.0f, g_windowSize.x / (float)g_windowSize.y,
 		1.f, 100.0f);
 
@@ -186,7 +178,7 @@ int main(int argc, char** argv)
 	//Main loop
 	while(true)
 	{
-		display(pDrawObj);
+		display(pDrawObj.get());
 
 		if(glfwGetKey(GLFW_KEY_ESC) || !glfwGetWindowParam(GLFW_OPENED))
 			break;
