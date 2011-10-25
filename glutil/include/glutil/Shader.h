@@ -94,6 +94,8 @@ namespace glutil
 
 	These functions take one or more shader objects and link them together into a program. In the event
 	of a linker error, they will throw an exception.
+
+	All shader objects are detached from the program that is returned.
 	**/
 	///@{
 
