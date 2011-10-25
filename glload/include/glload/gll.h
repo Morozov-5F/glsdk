@@ -1,6 +1,6 @@
 
-#ifndef GLE_FILE_H
-#define GLE_FILE_H
+#ifndef GLSDL_LOAD_H
+#define GLSDL_LOAD_H
 
 /**
 \file
@@ -73,5 +73,5 @@ int IsVersionGEQ(int iMajorVersion, int iMinorVersion);
 }
 #endif //__cplusplus
 
-#endif //GLE_FILE_H
+#endif //GLSDL_LOAD_H
 

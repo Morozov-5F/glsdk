@@ -1,5 +1,5 @@
-#ifndef GLIMG_GLIMG_H
-#define GLIMG_GLIMG_H
+#ifndef GLSDK_GLIMG_H
+#define GLSDK_GLIMG_H
 
 /**
 \file
@@ -26,4 +26,4 @@ namespace glimg
 	}
 }
 
-#endif //GLIMG_GLIMG_H
+#endif //GLSDK_GLIMG_H

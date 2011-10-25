@@ -1,6 +1,6 @@
 
-#ifndef GLUTIL_H
-#define GLUTIL_H
+#ifndef GLSDK_UTIL_H
+#define GLSDK_UTIL_H
 
 /**
 \file
@@ -22,4 +22,4 @@ namespace glutil
 	
 }
 
-#endif //GLUTIL_H
+#endif //GLSDK_UTIL_H

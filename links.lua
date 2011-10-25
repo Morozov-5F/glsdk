@@ -32,6 +32,16 @@ local LinkFuncs =
 		configuration "Release"
 			links {"glutil"}
 	end,
+	glmesh = function()
+		includedirs "glmesh/include"
+		libdirs "glmesh/lib"
+
+		configuration "Debug"
+			links {"glmeshD"}
+
+		configuration "Release"
+			links {"glmesh"}
+	end,
 	glm = function()
 		includedirs "glm"
 	end,

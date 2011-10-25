@@ -241,7 +241,7 @@ namespace glutil
 		\brief Creates a view pole with the given initial target position, view definition, and action button.
 		
 		\param initialView The starting state of the view.
-		\param viewDef The viewport definition to use.
+		\param viewScale The viewport definition to use.
 		\param actionButton The mouse button to listen for. All other mouse buttons are ignored.
 		**/
 		ViewPole(const ViewData &initialView, const ViewScale &viewScale,

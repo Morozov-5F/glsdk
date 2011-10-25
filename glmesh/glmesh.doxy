@@ -1,0 +1,13 @@
+/**
+\defgroup module_glmesh GL Mesh
+**/
+
+/**
+\defgroup module_glmesh_draw GL Mesh Drawing
+\ingroup module_glmesh
+
+It is often useful to send vertex data for objects on the fly. Immediate mode in OpenGL was the original way to do this, but GL 3.1 core and above removed that.
+
+These classes are a way to have a form of immediate drawing mode that internally
+uses buffer objects, but without exposing most of the details to the user.
+**/

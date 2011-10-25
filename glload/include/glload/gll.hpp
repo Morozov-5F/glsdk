@@ -1,6 +1,6 @@
 
-#ifndef GLE_FILE_HPP
-#define GLE_FILE_HPP
+#ifndef GLSDL_LOAD_HPP
+#define GLSDL_LOAD_HPP
 
 /**
 \file
@@ -69,5 +69,5 @@ namespace glload
 }
 ///@}
 
-#endif //GLE_FILE_HPP
+#endif //GLSDL_LOAD_HPP
 
