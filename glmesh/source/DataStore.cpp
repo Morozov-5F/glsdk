@@ -20,7 +20,7 @@ namespace glmesh
 	NotEnoughStorageForMap::NotEnoughStorageForMap( size_t requestedSize, size_t bufferSize )
 	{
 		std::ostringstream temp;
-		temp << "The DataStore was asked to map " << requestedSize << " bytes, but it only "
+		temp << "The StreamBuffer was asked to map " << requestedSize << " bytes, but it only "
 			"contains " << bufferSize << " bytes." << std::endl;
 		message = temp.str();
 	}
@@ -29,12 +29,12 @@ namespace glmesh
 		size_t requestedSize, size_t bufferSize )
 	{
 		std::ostringstream temp;
-		temp << "The DataStore, currently at offset " << pos << " was asked to map " <<
+		temp << "The StreamBuffer, currently at offset " << pos << " was asked to map " <<
 			requestedSize << " bytes, but there are only  " << bufferSize - pos << " bytes left." << std::endl;
 		message = temp.str();
 	}
 
-	DataStore::DataStore( size_t bufferSize )
+	StreamBuffer::StreamBuffer( size_t bufferSize )
 		: m_bufferObject(0)
 		, m_bufferSize(bufferSize)
 		, m_currOffset(0)
@@ -50,7 +50,7 @@ namespace glmesh
 			gl::GenVertexArrays(1, &m_vao);
 	}
 
-	DataStore::~DataStore()
+	StreamBuffer::~StreamBuffer()
 	{
 		if(m_vao)
 		{
@@ -62,12 +62,12 @@ namespace glmesh
 		m_bufferObject = 0;
 	}
 
-	size_t DataStore::GetSpaceRemaining() const
+	size_t StreamBuffer::GetSpaceRemaining() const
 	{
 		return m_bufferSize - m_currOffset;
 	}
 
-	void DataStore::InvalidateBuffer()
+	void StreamBuffer::InvalidateBuffer()
 	{
 		if(m_isMapped)
 			throw StoreAlreadyMapped();
@@ -78,7 +78,7 @@ namespace glmesh
 	}
 
 
-	DataStore::Map::Map( DataStore &storage, size_t numBytes, bool invalidateIfNotAvailable )
+	StreamBuffer::Map::Map( StreamBuffer &storage, size_t numBytes, bool invalidateIfNotAvailable )
 		: m_pData(&storage)
 		, m_pCurrPtr(NULL)
 		, m_bytesMapped(numBytes)
@@ -111,12 +111,12 @@ namespace glmesh
 		m_pData->m_isMapped = true;
 	}
 
-	DataStore::Map::~Map()
+	StreamBuffer::Map::~Map()
 	{
 		Release();
 	}
 
-	bool DataStore::Map::Release()
+	bool StreamBuffer::Map::Release()
 	{
 		if(!m_pData)
 			return false;

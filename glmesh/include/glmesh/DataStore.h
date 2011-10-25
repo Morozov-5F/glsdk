@@ -4,7 +4,7 @@
 
 /**
 \file
-\brief Declares the DataStore class. Include an OpenGL header before including this one.
+\brief Declares the StreamBuffer class. Include an OpenGL header before including this one.
 **/
 
 #include <string>
@@ -16,11 +16,11 @@ namespace glmesh
 	///\addtogroup module_glmesh_exceptions
 	///@{
 
-	///Base class for all exceptions thrown by DataStore and DataStore::Map.
-	class DataStoreException : public std::exception
+	///Base class for all exceptions thrown by StreamBuffer and StreamBuffer::Map.
+	class StreamBufferException : public std::exception
 	{
 	public:
-		virtual ~DataStoreException() throw() {}
+		virtual ~StreamBufferException() throw() {}
 
 		virtual const char *what() {return message.c_str();}
 
@@ -28,25 +28,25 @@ namespace glmesh
 		std::string message;
 	};
 
-	///Thrown when the DataStore is mapped and you attempt to call a function that requires the DataStore to not be mapped.
-	class StoreAlreadyMapped : public DataStoreException
+	///Thrown when the StreamBuffer is mapped and you attempt to call a function that requires the StreamBuffer to not be mapped.
+	class StoreAlreadyMapped : public StreamBufferException
 	{
 	public:
 		StoreAlreadyMapped()
 		{
-			message = "The DataStore is already mapped; this operation can only be performed if unmapped.";
+			message = "The StreamBuffer is already mapped; this operation can only be performed if unmapped.";
 		}
 	};
 
-	///Thrown when mapping a DataStore and it does not have enough room for the requested map size.
-	class NotEnoughStorageForMap : public DataStoreException
+	///Thrown when mapping a StreamBuffer and it does not have enough room for the requested map size.
+	class NotEnoughStorageForMap : public StreamBufferException
 	{
 	public:
 		NotEnoughStorageForMap(size_t requestedSize, size_t bufferSize);
 	};
 
-	///Thrown when mapping a DataStore and the current offset + range would exceed the size of the DataStore.
-	class NotEnoughRemainingStorageForMap : public DataStoreException
+	///Thrown when mapping a StreamBuffer and the current offset + range would exceed the size of the StreamBuffer.
+	class NotEnoughRemainingStorageForMap : public StreamBufferException
 	{
 	public:
 		NotEnoughRemainingStorageForMap(size_t pos, size_t requestedSize, size_t bufferSize);
@@ -65,23 +65,23 @@ namespace glmesh
 	can map some part of the buffer, invalidate the buffer, and so forth. It also stores a convenient
 	vertex array object, if VAO's are available.
 
-	The DataStore has the concept of a current position within the buffer. Each time the buffer
+	The StreamBuffer has the concept of a current position within the buffer. Each time the buffer
 	is mapped, the current position is advanced by the space mapped; the assumption being that
 	you have written to all of the data requested. The user can ask how much space is left
-	in the DataStore.
+	in the StreamBuffer.
 
-	DataStore cannot be copied, as performing a deep-copy would not be a good idea.
+	StreamBuffer cannot be copied, as performing a deep-copy would not be a good idea.
 	**/
-	class DataStore
+	class StreamBuffer
 	{
 	public:
 		/**
-		\brief Creates a DataStore with the given size. The size cannot be changed later.
+		\brief Creates a StreamBuffer with the given size. The size cannot be changed later.
 
 		When this function completes, the binding state of GL_ARRAY_BUFFER will be 0.
 		**/
-		DataStore(size_t bufferSize);
-		~DataStore();
+		StreamBuffer(size_t bufferSize);
+		~StreamBuffer();
 
 		/**
 		\brief Retrieve a communal VAO. If VAO is not defined, returns 0.
@@ -113,13 +113,13 @@ namespace glmesh
 
 		When this function completes, the binding state of GL_ARRAY_BUFFER will be 0.
 
-		\throw StoreAlreadyMapped Thrown if the DataStore is already mapped.
+		\throw StoreAlreadyMapped Thrown if the StreamBuffer is already mapped.
 		**/
 		void InvalidateBuffer();
 
 		/**
 		\ingroup module_glmesh_draw
-		\brief A RAII-style class for mapping a DataStore.
+		\brief A RAII-style class for mapping a StreamBuffer.
 		
 		This object is the proper way to update the buffer's storage. It maps the buffer, containing a
 		pointer to the buffer's contents that can only be written to. The user must ensure not to write
@@ -135,7 +135,7 @@ namespace glmesh
 
 			This function will change 
 
-			\param storage The DataStore to map.
+			\param storage The StreamBuffer to map.
 			\param numBytes The number of bytes to map. Must be less than the buffer's storage.
 			\param invalidateIfNotAvailable If \a numBytes is greater than storage.GetSpaceRemaining(),
 			if this parameter is true, then the buffer will be invalidated before mapping. If it is false,
@@ -148,7 +148,7 @@ namespace glmesh
 			\a invalidateIfNotAvailable is false.
 			\throw ddd Thrown if \a storage is already currently mapped.
 			**/
-			Map(DataStore &storage, size_t numBytes, bool invalidateIfNotAvailable = true);
+			Map(StreamBuffer &storage, size_t numBytes, bool invalidateIfNotAvailable = true);
 
 			/**
 			\brief Unmaps the buffer, if it has not already been unmapped.
@@ -179,7 +179,7 @@ namespace glmesh
 			void *GetPtr() {return m_pCurrPtr;}
 
 		private:
-			DataStore *m_pData;
+			StreamBuffer *m_pData;
 			void *m_pCurrPtr;
 			size_t m_bytesMapped;
 		};
@@ -193,8 +193,8 @@ namespace glmesh
 
 		GLuint m_vao;
 
-		DataStore(const DataStore &);
-		DataStore &operator=(const DataStore &);
+		StreamBuffer(const StreamBuffer &);
+		StreamBuffer &operator=(const StreamBuffer &);
 	};
 	///@}
 }
