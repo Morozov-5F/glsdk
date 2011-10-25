@@ -11,3 +11,8 @@ It is often useful to send vertex data for objects on the fly. Immediate mode in
 These classes are a way to have a form of immediate drawing mode that internally
 uses buffer objects, but without exposing most of the details to the user.
 **/
+
+/**
+\defgroup module_glmesh_exceptions GL Mesh Exceptions
+\ingroup module_glmesh
+**/

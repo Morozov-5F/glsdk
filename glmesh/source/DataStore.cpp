@@ -1,4 +1,5 @@
 
+#include <sstream>
 #include <glload/gl_all.hpp>
 #include <glload/gll.hpp>
 #include "glmesh/DataStore.h"
@@ -14,6 +15,23 @@ namespace glmesh
 
 			return false;
 		}
+	}
+
+	NotEnoughStorageForMap::NotEnoughStorageForMap( size_t requestedSize, size_t bufferSize )
+	{
+		std::ostringstream temp;
+		temp << "The DataStore was asked to map " << requestedSize << " bytes, but it only "
+			"contains " << bufferSize << " bytes." << std::endl;
+		message = temp.str();
+	}
+
+	NotEnoughRemainingStorageForMap::NotEnoughRemainingStorageForMap( size_t pos,
+		size_t requestedSize, size_t bufferSize )
+	{
+		std::ostringstream temp;
+		temp << "The DataStore, currently at offset " << pos << " was asked to map " <<
+			requestedSize << " bytes, but there are only  " << bufferSize - pos << " bytes left." << std::endl;
+		message = temp.str();
 	}
 
 	DataStore::DataStore( size_t bufferSize )
@@ -51,6 +69,9 @@ namespace glmesh
 
 	void DataStore::InvalidateBuffer()
 	{
+		if(m_isMapped)
+			throw StoreAlreadyMapped();
+
 		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_bufferObject);
 		gl::BufferData(gl::GL_ARRAY_BUFFER, m_bufferSize, NULL, gl::GL_STREAM_DRAW);
 		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
@@ -60,12 +81,58 @@ namespace glmesh
 	DataStore::Map::Map( DataStore &storage, size_t numBytes, bool invalidateIfNotAvailable )
 		: m_pData(&storage)
 		, m_pCurrPtr(NULL)
+		, m_bytesMapped(numBytes)
 	{
-		
+		if(m_pData->m_isMapped)
+			throw StoreAlreadyMapped();
+
+		if(numBytes > m_pData->GetTotalBufferSize())
+			throw NotEnoughStorageForMap(m_bytesMapped, m_pData->GetTotalBufferSize());
+
+		int bitfield = gl::GL_MAP_WRITE_BIT | gl::GL_MAP_UNSYNCHRONIZED_BIT;
+
+		if(numBytes > m_pData->GetSpaceRemaining())
+		{
+			if(!invalidateIfNotAvailable)
+			{
+				throw NotEnoughRemainingStorageForMap(m_pData->m_currOffset,
+					m_bytesMapped, m_pData->GetTotalBufferSize());
+			}
+
+			bitfield |= gl::GL_MAP_INVALIDATE_BUFFER_BIT;
+			m_pData->m_currOffset = 0;
+		}
+
+		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_pData->m_bufferObject);
+		m_pCurrPtr = gl::MapBufferRange(gl::GL_ARRAY_BUFFER, m_pData->m_currOffset,
+			m_bytesMapped, bitfield);
+		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+
+		m_pData->m_isMapped = true;
 	}
 
 	DataStore::Map::~Map()
 	{
+		Release();
+	}
 
+	bool DataStore::Map::Release()
+	{
+		if(!m_pData)
+			return false;
+
+		m_pData->m_isMapped = false;
+		m_pData->m_currOffset += m_bytesMapped;
+
+		bool ret = true;
+		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_pData->m_bufferObject);
+		if(gl::UnmapBuffer(gl::GL_ARRAY_BUFFER) == gl::GL_FALSE)
+			ret = false;
+		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+
+		m_pData = NULL;
+		m_pCurrPtr = NULL;
+
+		return ret;
 	}
 }

@@ -7,9 +7,53 @@
 \brief Declares the DataStore class. Include an OpenGL header before including this one.
 **/
 
+#include <string>
+#include <exception>
+
 
 namespace glmesh
 {
+	///\addtogroup module_glmesh_exceptions
+	///@{
+
+	///Base class for all exceptions thrown by DataStore and DataStore::Map.
+	class DataStoreException : public std::exception
+	{
+	public:
+		virtual ~DataStoreException() throw() {}
+
+		virtual const char *what() {return message.c_str();}
+
+	protected:
+		std::string message;
+	};
+
+	///Thrown when the DataStore is mapped and you attempt to call a function that requires the DataStore to not be mapped.
+	class StoreAlreadyMapped : public DataStoreException
+	{
+	public:
+		StoreAlreadyMapped()
+		{
+			message = "The DataStore is already mapped; this operation can only be performed if unmapped.";
+		}
+	};
+
+	///Thrown when mapping a DataStore and it does not have enough room for the requested map size.
+	class NotEnoughStorageForMap : public DataStoreException
+	{
+	public:
+		NotEnoughStorageForMap(size_t requestedSize, size_t bufferSize);
+	};
+
+	///Thrown when mapping a DataStore and the current offset + range would exceed the size of the DataStore.
+	class NotEnoughRemainingStorageForMap : public DataStoreException
+	{
+	public:
+		NotEnoughRemainingStorageForMap(size_t pos, size_t requestedSize, size_t bufferSize);
+	};
+
+	///@}
+
 
 	///\addtogroup module_glmesh_draw
 	///@{
@@ -69,7 +113,7 @@ namespace glmesh
 
 		When this function completes, the binding state of GL_ARRAY_BUFFER will be 0.
 
-		\throw ddd Thrown if the DataStore is already mapped.
+		\throw StoreAlreadyMapped Thrown if the DataStore is already mapped.
 		**/
 		void InvalidateBuffer();
 
@@ -132,11 +176,12 @@ namespace glmesh
 			/**
 			\brief Retrieve the mapped pointer. Will return NULL if Release() was called.
 			**/
-			void *GetPtr();
+			void *GetPtr() {return m_pCurrPtr;}
 
 		private:
 			DataStore *m_pData;
 			void *m_pCurrPtr;
+			size_t m_bytesMapped;
 		};
 
 	private:
