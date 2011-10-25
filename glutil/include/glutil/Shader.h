@@ -13,7 +13,7 @@
 
 namespace glutil
 {
-	///\addtogroup module_glimg_exceptions
+	///\addtogroup module_glutil_exceptions
 	///@{
 
 	///Base class for all exceptions thrown by shader and program creation functions.
@@ -51,7 +51,6 @@ namespace glutil
 
 	///\addtogroup module_glutil_program
 	///@{
-
 
 	/**
 	\name Shader Compilation
@@ -116,6 +115,32 @@ namespace glutil
 
 	///As LinkProgram(GLuint, GLuint), except that it is given a program to do the linking within.
 	GLuint LinkProgram(GLuint program, GLuint shaderOne, GLuint shaderTwo);
+
+	/**
+	\brief Creates a program from two shader strings, one for a vertex shader and one for a fragment shader.
+	
+	This is a convenience function for the common case of pairing a vertex shader with a fragment
+	shader. It takes the two shaders by string and links them together into a freshly-created program
+	object.
+
+	This function does not allow the user the chance to set pre-link parameters, like
+	transform-feedback, vertex attributes, fragment data locations, or the like. Most of these
+	can be hooked in via features like explicit_attrib_location and similar extensions.
+
+	\throw CompileLinkException Thrown if the shader compilation or program linking fails.
+	In all cases, any previously created shader/program objects will be destroyed.
+	**/
+	GLuint LinkProgram(const char *vertexShader, const char *fragmentShader);
+
+	/** \copydoc LinkProgram(const char *, const char *) **/
+	GLuint LinkProgram(const std::string &vertexShader, const std::string &fragmentShader);
+
+	///As LinkProgram(const char *, const char *), except that it is given a program to do the linking within.
+	GLuint LinkProgram(GLuint program, const char *vertexShader, const char *fragmentShader);
+
+	///As LinkProgram(const std::string &, const std::string &), except that it is given a program to do the linking within.
+	GLuint LinkProgram(GLuint program, const std::string &vertexShader, const std::string &fragmentShader);
+
 
 	/**
 	\brief Takes a single shader and links it into a program.

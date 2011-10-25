@@ -69,3 +69,8 @@ Since it is a very useful feature, the GL Util library provides the MatrixStack 
 **/
 
 
+/**
+\defgroup module_glutil_exceptions Utility Exceptions
+
+\ingroup module_glutil
+**/

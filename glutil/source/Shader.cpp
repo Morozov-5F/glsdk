@@ -145,6 +145,122 @@ namespace glutil
 		return program;
 	}
 
+	GLuint LinkProgram( const char *vertexShader, const char *fragmentShader )
+	{
+		GLuint vertShader = CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
+		GLuint fragShader = 0;
+		try
+		{
+			fragShader = CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+		}
+		catch(...)
+		{
+			gl::DeleteShader(vertShader);
+			throw;
+		}
+
+		try
+		{
+			GLuint program = LinkProgram(vertShader, fragShader);
+			gl::DeleteShader(vertShader);
+			gl::DeleteShader(fragShader);
+			return program;
+		}
+		catch(...)
+		{
+			gl::DeleteShader(vertShader);
+			gl::DeleteShader(fragShader);
+			throw;
+		}
+	}
+
+	GLuint LinkProgram( const std::string &vertexShader, const std::string &fragmentShader )
+	{
+		GLuint vertShader = CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
+		GLuint fragShader = 0;
+		try
+		{
+			fragShader = CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+		}
+		catch(...)
+		{
+			gl::DeleteShader(vertShader);
+			throw;
+		}
+
+		try
+		{
+			GLuint program = LinkProgram(vertShader, fragShader);
+			gl::DeleteShader(vertShader);
+			gl::DeleteShader(fragShader);
+			return program;
+		}
+		catch(...)
+		{
+			gl::DeleteShader(vertShader);
+			gl::DeleteShader(fragShader);
+			throw;
+		}
+	}
+
+	GLuint LinkProgram( GLuint program, const char *vertexShader, const char *fragmentShader )
+	{
+		GLuint vertShader = CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
+		GLuint fragShader = 0;
+		try
+		{
+			fragShader = CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+		}
+		catch(...)
+		{
+			gl::DeleteShader(vertShader);
+			throw;
+		}
+
+		try
+		{
+			LinkProgram(program, vertShader, fragShader);
+			gl::DeleteShader(vertShader);
+			gl::DeleteShader(fragShader);
+			return program;
+		}
+		catch(...)
+		{
+			gl::DeleteShader(vertShader);
+			gl::DeleteShader(fragShader);
+			throw;
+		}
+	}
+
+	GLuint LinkProgram( GLuint program, const std::string &vertexShader, const std::string &fragmentShader )
+	{
+		GLuint vertShader = CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
+		GLuint fragShader = 0;
+		try
+		{
+			fragShader = CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+		}
+		catch(...)
+		{
+			gl::DeleteShader(vertShader);
+			throw;
+		}
+
+		try
+		{
+			LinkProgram(program, vertShader, fragShader);
+			gl::DeleteShader(vertShader);
+			gl::DeleteShader(fragShader);
+			return program;
+		}
+		catch(...)
+		{
+			gl::DeleteShader(vertShader);
+			gl::DeleteShader(fragShader);
+			throw;
+		}
+	}
+
 	GLuint LinkProgram( GLuint shader, bool isSeparable )
 	{
 		if(isSeparable)
