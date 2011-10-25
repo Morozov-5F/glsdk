@@ -7,7 +7,7 @@
 \brief Includes everything in the \ref module_glmesh "GL Mesh library".
 **/
 
-#include "DataStore.h"
+#include "StreamBuffer.h"
 
 
 /**

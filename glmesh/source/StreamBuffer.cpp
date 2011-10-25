@@ -2,7 +2,7 @@
 #include <sstream>
 #include <glload/gl_all.hpp>
 #include <glload/gll.hpp>
-#include "glmesh/DataStore.h"
+#include "glmesh/StreamBuffer.h"
 
 namespace glmesh
 {
