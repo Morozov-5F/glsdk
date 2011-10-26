@@ -11,6 +11,7 @@
 #include <GL/glfw.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/half_float.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -102,8 +103,8 @@ public:
 		m_unifCameraToClipMatrix = gl::GetUniformLocation(m_program, "cameraToClipMatrix");
 
 		glmesh::AttributeList attribs;
-		attribs.push_back(glmesh::AttribDesc(0, 4, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
-		attribs.push_back(glmesh::AttribDesc(1, 4, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
+		attribs.push_back(glmesh::AttribDesc(0, 4, glmesh::VDT_HALF_FLOAT, glmesh::ADT_FLOAT));
+		attribs.push_back(glmesh::AttribDesc(1, 4, glmesh::VDT_UNSIGN_BYTE, glmesh::ADT_NORM_FLOAT));
 		m_vertFmt = glmesh::VertexFormat(attribs);
 	}
 
@@ -128,14 +129,14 @@ public:
 
 			glmesh::Draw immMode(gl::GL_TRIANGLES, 3, m_vertFmt, m_streamBuf);
 
-			immMode.Attrib<GLfloat>(0.75f, 0.75f, 0.0f, 1.0f);
-			immMode.Attrib<GLfloat>(0.6f, 0.8f, 0.0f, 1.0f);
+			immMode.Attrib<glm::half>(glm::hvec4(0.75f, 0.75f, 0.0f, 1.0f));
+			immMode.Attrib<GLubyte>(153, 204, 0, 255);
 
-			immMode.Attrib<GLfloat>(0.75f, -0.75f, 0.0f, 1.0f);
-			immMode.Attrib<GLfloat>(0.9f, 0.2f, 0.4f, 1.0f);
+			immMode.Attrib<glm::half>(glm::hvec4(0.75f, -0.75f, 0.0f, 1.0f));
+			immMode.Attrib<GLubyte>(230, 51, 0, 255);
 
-			immMode.Attrib<GLfloat>(-0.75f, -0.75f, 0.0f, 1.0f);
-			immMode.Attrib<GLfloat>(0.1f, 0.2f, 0.7f, 1.0f);
+			immMode.Attrib<glm::half>(glm::hvec4(-0.75f, -0.75f, 0.0f, 1.0f));
+			immMode.Attrib<GLubyte>(26, 51, 179, 255);
 
 			immMode.Render();
 		}
@@ -146,17 +147,17 @@ public:
 
 			glmesh::Draw immMode(gl::GL_TRIANGLE_STRIP, 4, m_vertFmt, m_streamBuf);
 
-			immMode.Attrib<GLfloat>(30.0f, 0.0f, 30.0f, 1.0f);
-			immMode.Attrib<GLfloat>(0.2f, 1.0f, 0.2f, 1.0f);
+			immMode.Attrib<glm::half>(glm::hvec4(30.0f, 0.0f, 30.0f, 1.0f));
+			immMode.Attrib<GLubyte>(51, 255, 51, 255);
 
-			immMode.Attrib<GLfloat>(30.0f, 0.0f, -30.0f, 1.0f);
-			immMode.Attrib<GLfloat>(0.2f, 1.0f, 0.2f, 1.0f);
+			immMode.Attrib<glm::half>(glm::hvec4(30.0f, 0.0f, -30.0f, 1.0f));
+			immMode.Attrib<GLubyte>(51, 255, 51, 255);
 
-			immMode.Attrib<GLfloat>(-30.0f, 0.0f, 30.0f, 1.0f);
-			immMode.Attrib<GLfloat>(0.2f, 1.0f, 0.2f, 1.0f);
+			immMode.Attrib<glm::half>(glm::hvec4(-30.0f, 0.0f, 30.0f, 1.0f));
+			immMode.Attrib<GLubyte>(51, 255, 51, 255);
 
-			immMode.Attrib<GLfloat>(-30.0f, 0.0f, -30.0f, 1.0f);
-			immMode.Attrib<GLfloat>(0.2f, 1.0f, 0.2f, 1.0f);
+			immMode.Attrib<glm::half>(glm::hvec4(-30.0f, 0.0f, -30.0f, 1.0f));
+			immMode.Attrib<GLubyte>(51, 255, 51, 255);
 
 			immMode.Render();
 		}

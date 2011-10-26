@@ -212,6 +212,18 @@ namespace glmesh
 		///@}
 
 		template<>
+		void Attrib<glm::half>(const glm::detail::tvec4<glm::half> &val)
+		{
+			VerifyType<glm::half>();
+			glm::half theData[4];
+			theData[0] = val[0];
+			theData[1] = val[1];
+			theData[2] = val[2];
+			theData[3] = val[3];
+			ProcessAttrib(theData, sizeof(glm::half));
+		}
+
+		template<>
 		void Attrib<GLfloat>(const glm::detail::tvec4<GLfloat> &val)
 		{
 			VerifyType<GLfloat>();
@@ -221,6 +233,90 @@ namespace glmesh
 			theData[2] = val[2];
 			theData[3] = val[3];
 			ProcessAttrib(theData, sizeof(GLfloat));
+		}
+
+		template<>
+		void Attrib<GLdouble>(const glm::detail::tvec4<GLdouble> &val)
+		{
+			VerifyType<GLdouble>();
+			GLdouble theData[4];
+			theData[0] = val[0];
+			theData[1] = val[1];
+			theData[2] = val[2];
+			theData[3] = val[3];
+			ProcessAttrib(theData, sizeof(GLdouble));
+		}
+
+		template<>
+		void Attrib<GLbyte>(const glm::detail::tvec4<GLbyte> &val)
+		{
+			VerifyType<GLbyte>();
+			GLbyte theData[4];
+			theData[0] = val[0];
+			theData[1] = val[1];
+			theData[2] = val[2];
+			theData[3] = val[3];
+			ProcessAttrib(theData, sizeof(GLbyte));
+		}
+
+		template<>
+		void Attrib<GLubyte>(const glm::detail::tvec4<GLubyte> &val)
+		{
+			VerifyType<GLubyte>();
+			GLubyte theData[4];
+			theData[0] = val[0];
+			theData[1] = val[1];
+			theData[2] = val[2];
+			theData[3] = val[3];
+			ProcessAttrib(theData, sizeof(GLubyte));
+		}
+
+		template<>
+		void Attrib<GLshort>(const glm::detail::tvec4<GLshort> &val)
+		{
+			VerifyType<GLshort>();
+			GLshort theData[4];
+			theData[0] = val[0];
+			theData[1] = val[1];
+			theData[2] = val[2];
+			theData[3] = val[3];
+			ProcessAttrib(theData, sizeof(GLshort));
+		}
+
+		template<>
+		void Attrib<GLushort>(const glm::detail::tvec4<GLushort> &val)
+		{
+			VerifyType<GLushort>();
+			GLushort theData[4];
+			theData[0] = val[0];
+			theData[1] = val[1];
+			theData[2] = val[2];
+			theData[3] = val[3];
+			ProcessAttrib(theData, sizeof(GLushort));
+		}
+
+		template<>
+		void Attrib<GLint>(const glm::detail::tvec4<GLint> &val)
+		{
+			VerifyType<GLint>();
+			GLint theData[4];
+			theData[0] = val[0];
+			theData[1] = val[1];
+			theData[2] = val[2];
+			theData[3] = val[3];
+			ProcessAttrib(theData, sizeof(GLint));
+		}
+
+		template<>
+		void Attrib<GLuint>(const glm::detail::tvec4<GLuint> &val)
+		{
+			VerifyType<GLuint>();
+			GLuint theData[4];
+			theData[0] = val[0];
+			theData[1] = val[1];
+			theData[2] = val[2];
+			theData[3] = val[3];
+			ProcessAttrib(theData, sizeof(GLuint));
 		}
 
 
@@ -249,11 +345,75 @@ namespace glmesh
 		void VerifyType();
 
 		template<>
+		void VerifyType<glm::half>()
+		{
+			VertexDataType eType = m_fmt.GetAttribDesc(m_currAttrib).GetVertexDataType();
+			if(eType != VDT_HALF_FLOAT)
+				throw MismatchDrawTypeException(eType, "half");
+		}
+
+		template<>
 		void VerifyType<GLfloat>()
 		{
 			VertexDataType eType = m_fmt.GetAttribDesc(m_currAttrib).GetVertexDataType();
 			if(eType != VDT_SINGLE_FLOAT)
 				throw MismatchDrawTypeException(eType, "float");
+		}
+
+		template<>
+		void VerifyType<GLdouble>()
+		{
+			VertexDataType eType = m_fmt.GetAttribDesc(m_currAttrib).GetVertexDataType();
+			if(eType != VDT_DOUBLE_FLOAT)
+				throw MismatchDrawTypeException(eType, "double");
+		}
+
+		template<>
+		void VerifyType<GLbyte>()
+		{
+			VertexDataType eType = m_fmt.GetAttribDesc(m_currAttrib).GetVertexDataType();
+			if(eType != VDT_SIGN_BYTE)
+				throw MismatchDrawTypeException(eType, "signed byte");
+		}
+
+		template<>
+		void VerifyType<GLubyte>()
+		{
+			VertexDataType eType = m_fmt.GetAttribDesc(m_currAttrib).GetVertexDataType();
+			if(eType != VDT_UNSIGN_BYTE)
+				throw MismatchDrawTypeException(eType, "unsigned byte");
+		}
+
+		template<>
+		void VerifyType<GLshort>()
+		{
+			VertexDataType eType = m_fmt.GetAttribDesc(m_currAttrib).GetVertexDataType();
+			if(eType != VDT_SIGN_SHORT)
+				throw MismatchDrawTypeException(eType, "signed short");
+		}
+
+		template<>
+		void VerifyType<GLushort>()
+		{
+			VertexDataType eType = m_fmt.GetAttribDesc(m_currAttrib).GetVertexDataType();
+			if(eType != VDT_UNSIGN_SHORT)
+				throw MismatchDrawTypeException(eType, "unsigned short");
+		}
+
+		template<>
+		void VerifyType<GLint>()
+		{
+			VertexDataType eType = m_fmt.GetAttribDesc(m_currAttrib).GetVertexDataType();
+			if(eType != VDT_SIGN_INT)
+				throw MismatchDrawTypeException(eType, "signed int");
+		}
+
+		template<>
+		void VerifyType<GLuint>()
+		{
+			VertexDataType eType = m_fmt.GetAttribDesc(m_currAttrib).GetVertexDataType();
+			if(eType != VDT_UNSIGN_INT)
+				throw MismatchDrawTypeException(eType, "unsigned int");
 		}
 
 		int InternalRender();
