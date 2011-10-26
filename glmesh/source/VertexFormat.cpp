@@ -68,6 +68,16 @@ namespace glmesh
 		if(m_attribIndex >= (GLuint)maxAttribs)
 			throw AttributeDataUnsupportedException(m_attribIndex, maxAttribs);
 
+		//Check for half-float support.
+		if(m_vertType == VDT_HALF_FLOAT)
+		{
+			if(!glload::IsVersionGEQ(3, 0) && !glext_ARB_half_float_vertex)
+			{
+				throw AttributeDataUnsupportedException(
+					"half-float attributes are not supported on this OpenGL implementation.");
+			}
+		}
+
 		switch(m_attribType)
 		{
 		case ADT_FLOAT:

@@ -133,7 +133,7 @@ namespace glmesh
 			/**
 			\brief Maps the number of bytes.
 
-			This function will change 
+			This function will cause the buffer to be mapped.
 
 			\param storage The StreamBuffer to map.
 			\param numBytes The number of bytes to map. Must be less than the buffer's storage.
@@ -143,23 +143,25 @@ namespace glmesh
 
 			When this function completes, the binding state of GL_ARRAY_BUFFER will be 0.
 
-			\note The mapping of the buffer can cause invalidation, as though by InvalidateBuffer.
-			Because of this, the current position can \em change due to this function. So if you
-			pass true for \a invalidateIfNotAvailable, then you should make sure to get the offset
-			\em after the mapping, but before the unmapping.
+			\note If \a invalidateIfNotAvailable is \c true, the buffer can be invalidated. This means
+			that the current position can \em change due to creating a Map. If you pass \c true
+			then you should get the offset \em after mapping but before unmapping. If you
+			pass \c false, the position will not be changed.
 
-			\throw ddd Thrown if \a numBytes is larger than the storage size of the buffer.
-			\throw ddd Thrown if \a numBytes is larger than the remaining space and
+			\throw NotEnoughStorageForMapException Thrown if \a numBytes is larger than the storage size of the buffer.
+			\throw NotEnoughRemainingStorageForMapException Thrown if \a numBytes is larger than the remaining space and
 			\a invalidateIfNotAvailable is false.
-			\throw ddd Thrown if \a storage is already currently mapped.
+			\throw StoreAlreadyMappedException Thrown if \a storage is already currently mapped.
+
+			In the event of any exceptions, the StreamBuffer is not altered.
 			**/
 			Map(StreamBuffer &storage, size_t numBytes, bool invalidateIfNotAvailable = true);
 
 			/**
 			\brief Unmaps the buffer, if it has not already been unmapped.
 			
-			When this function completes, if the Map was not previously Release()'d,
-			the binding state of GL_ARRAY_BUFFER will be 0.
+			If the Map has not previously been Release()'d, then this function effectively
+			calls Release(). If the buffer's storage was lost, you will be unable to tell.
 			**/
 			~Map();
 
@@ -204,6 +206,7 @@ namespace glmesh
 
 		GLuint m_vao;
 
+		//No copying.
 		StreamBuffer(const StreamBuffer &);
 		StreamBuffer &operator=(const StreamBuffer &);
 	};

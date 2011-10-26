@@ -5,7 +5,6 @@
 /**
 \file
 \brief Declares the VertexFormat class and its helper types. Include an OpenGL header before including this one.
-
 **/
 
 #include <vector>
@@ -99,7 +98,7 @@ namespace glmesh
 		ADT_FLOAT,			///<Values are used directly as floats. Integer types like 24 are converted to 24.0f floats.
 		ADT_NORM_FLOAT,		///<Integer values are normalized. So 128 as an unsigned byte becomes 0.502.
 		ADT_INTEGER,		///<Integer values are taken as integers. The shader must use an integral attribute to store it.
-		ADT_DOUBLE,			///<Values are used as double-precision. The shader must use \code double or \code dvec attributes.
+		ADT_DOUBLE,			///<Values are used as double-precision. The shader must use \c double or \c dvec attributes.
 
 		NUM_ATTRIB_DATA_TYPES,
 	};
@@ -120,8 +119,9 @@ namespace glmesh
 		\throw AttributeDataUnsupportedException If \a attribIndex is outside the allowed range of OpenGL.
 		\throw AttributeDataInvalidException If \a vertType and \a attribType do not match.
 		\throw AttributeDataInvalidException If \a numComponents is not on the range [1, 4].
-		\throw AttributeDataUnsupportedException If \a vertType is not supported (double for OpenGL implementations that don't allow them).
-		\throw AttributeDataUnsupportedException If \a attribType is not supported (integral data for OpenGL implementations that don't allow them).
+		\throw AttributeDataUnsupportedException If \a attribType is ADT_DOUBLE and the implementation doesn't support them.
+		\throw AttributeDataUnsupportedException If \a attribType is ADT_INTEGER and the implementation doesn't support them.
+		\throw AttributeDataUnsupportedException If \a vertType is VDT_HALF_FLOAT and the implementation doesn't support them.
 		**/
 		AttribDesc(unsigned int attribIndex, unsigned int numComponents,
 			VertexDataType vertType, AttribDataType attribType);

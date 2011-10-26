@@ -9,6 +9,7 @@
 
 #include "StreamBuffer.h"
 #include "VertexFormat.h"
+#include "Draw.h"
 
 
 /**
