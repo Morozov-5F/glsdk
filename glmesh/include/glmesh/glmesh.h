@@ -8,6 +8,7 @@
 **/
 
 #include "StreamBuffer.h"
+#include "VertexFormat.h"
 
 
 /**

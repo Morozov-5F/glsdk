@@ -29,27 +29,27 @@ namespace glmesh
 	};
 
 	///Thrown when the StreamBuffer is mapped and you attempt to call a function that requires the StreamBuffer to not be mapped.
-	class StoreAlreadyMapped : public StreamBufferException
+	class StoreAlreadyMappedException : public StreamBufferException
 	{
 	public:
-		StoreAlreadyMapped()
+		StoreAlreadyMappedException()
 		{
 			message = "The StreamBuffer is already mapped; this operation can only be performed if unmapped.";
 		}
 	};
 
 	///Thrown when mapping a StreamBuffer and it does not have enough room for the requested map size.
-	class NotEnoughStorageForMap : public StreamBufferException
+	class NotEnoughStorageForMapException : public StreamBufferException
 	{
 	public:
-		NotEnoughStorageForMap(size_t requestedSize, size_t bufferSize);
+		NotEnoughStorageForMapException(size_t requestedSize, size_t bufferSize);
 	};
 
 	///Thrown when mapping a StreamBuffer and the current offset + range would exceed the size of the StreamBuffer.
-	class NotEnoughRemainingStorageForMap : public StreamBufferException
+	class NotEnoughRemainingStorageForMapException : public StreamBufferException
 	{
 	public:
-		NotEnoughRemainingStorageForMap(size_t pos, size_t requestedSize, size_t bufferSize);
+		NotEnoughRemainingStorageForMapException(size_t pos, size_t requestedSize, size_t bufferSize);
 	};
 
 	///@}

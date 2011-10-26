@@ -17,7 +17,7 @@ namespace glmesh
 		}
 	}
 
-	NotEnoughStorageForMap::NotEnoughStorageForMap( size_t requestedSize, size_t bufferSize )
+	NotEnoughStorageForMapException::NotEnoughStorageForMapException( size_t requestedSize, size_t bufferSize )
 	{
 		std::ostringstream temp;
 		temp << "The StreamBuffer was asked to map " << requestedSize << " bytes, but it only "
@@ -25,7 +25,7 @@ namespace glmesh
 		message = temp.str();
 	}
 
-	NotEnoughRemainingStorageForMap::NotEnoughRemainingStorageForMap( size_t pos,
+	NotEnoughRemainingStorageForMapException::NotEnoughRemainingStorageForMapException( size_t pos,
 		size_t requestedSize, size_t bufferSize )
 	{
 		std::ostringstream temp;
@@ -70,7 +70,7 @@ namespace glmesh
 	void StreamBuffer::InvalidateBuffer()
 	{
 		if(m_isMapped)
-			throw StoreAlreadyMapped();
+			throw StoreAlreadyMappedException();
 
 		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_bufferObject);
 		gl::BufferData(gl::GL_ARRAY_BUFFER, m_bufferSize, NULL, gl::GL_STREAM_DRAW);
@@ -86,10 +86,10 @@ namespace glmesh
 		, m_bytesMapped(numBytes)
 	{
 		if(m_pData->m_isMapped)
-			throw StoreAlreadyMapped();
+			throw StoreAlreadyMappedException();
 
 		if(numBytes > m_pData->GetTotalBufferSize())
-			throw NotEnoughStorageForMap(m_bytesMapped, m_pData->GetTotalBufferSize());
+			throw NotEnoughStorageForMapException(m_bytesMapped, m_pData->GetTotalBufferSize());
 
 		int bitfield = gl::GL_MAP_WRITE_BIT | gl::GL_MAP_UNSYNCHRONIZED_BIT;
 
@@ -97,7 +97,7 @@ namespace glmesh
 		{
 			if(!invalidateIfNotAvailable)
 			{
-				throw NotEnoughRemainingStorageForMap(m_pData->m_currOffset,
+				throw NotEnoughRemainingStorageForMapException(m_pData->m_currOffset,
 					m_bytesMapped, m_pData->GetTotalBufferSize());
 			}
 
