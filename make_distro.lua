@@ -92,9 +92,11 @@ local toDelete =
 	--files
 	"make_distro.lua", "get_externals.lua", ".hgignore", ".hgtags",
 	"_FindFileInPath.lua", "make_copyright.lua",
-	".hg_archival.txt", "glimg/premake4.lua", "glload/premake4.lua",
+	".hg_archival.txt", "glimg/premake4.lua",
+	"glload/premake4.lua", "glmesh/premake4.lua",
 	--directories
 	"glimg/Test", "glload/Test", "glutil/Test",
+	"glmesh/Test",
 	"glm/doc/build",
 	"caps",
 }
