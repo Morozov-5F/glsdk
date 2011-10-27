@@ -205,6 +205,8 @@ namespace glmesh
 		if(!m_map.Release())
 			return UNMAP_FAILED_OR_PREV_DRAWN;
 
+		if(m_buffer.GetVao())
+			gl::BindVertexArray(m_buffer.GetVao());
 		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_buffer.GetBuffer());
 
 		{
@@ -214,6 +216,8 @@ namespace glmesh
 		}
 
 		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+		if(m_buffer.GetVao())
+			gl::BindVertexArray(0);
 
 		return RENDER_SUCCESS;
 	}

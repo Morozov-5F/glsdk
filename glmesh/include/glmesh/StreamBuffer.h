@@ -66,11 +66,13 @@ namespace glmesh
 	vertex array object, if VAO's are available.
 
 	The StreamBuffer has the concept of a current position within the buffer. Each time the buffer
-	is mapped, the current position is advanced by the space mapped; the assumption being that
-	you have written to all of the data requested. The user can ask how much space is left
-	in the StreamBuffer.
+	is finished being mapped, the current position is advanced by the space that was mapped;
+	the assumption being that you have written to all of the data requested. The user can ask
+	how much space is left in the StreamBuffer.
 
-	StreamBuffer cannot be copied, as performing a deep-copy would not be a good idea.
+	Invalidating the buffer resets the current position.
+
+	StreamBuffer cannot be copied, as performing a deep-copy would not be a reasonably fast operation.
 	**/
 	class StreamBuffer
 	{
@@ -78,9 +80,11 @@ namespace glmesh
 		/**
 		\brief Creates a StreamBuffer with the given size. The size cannot be changed later.
 
-		When this function completes, the binding state of GL_ARRAY_BUFFER will be 0.
+		When this function completes, the buffer bound to GL_ARRAY_BUFFER will be reset 0.
 		**/
 		StreamBuffer(size_t bufferSize);
+
+		///Destroys the stream buffer and the buffer object it stores.
 		~StreamBuffer();
 
 		/**
@@ -90,6 +94,8 @@ namespace glmesh
 
 		/**
 		\brief Retrieve the buffer object.
+
+		\return The OpenGL buffer object. <em>Do not destroy this;</em> it is owned by this class.
 		**/
 		GLuint GetBuffer() {return m_bufferObject;}
 

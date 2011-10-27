@@ -44,6 +44,8 @@ local searchPathsToMarkup =
 	"glimg/source",
 	"glutil/include/glutil",
 	"glutil/source",
+	"glmesh/include/glmesh",
+	"glmesh/source",
 	"glload/include/glload/gll.h",
 	"glload/include/glload/gl_core.h",
 	"glload/include/glload/gl_all.h",

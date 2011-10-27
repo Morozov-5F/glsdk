@@ -88,9 +88,9 @@ namespace glmesh
 
 	This type must match its corresponding VertexDataType or an error will result.
 
-	\li ADT_FLOAT can be used with anything except the VDT_*_INT types.
-	\li ADT_NORM_FLOAT can be used with any of the integer types except VDT_*_INT.
-	\li ADT_INTEGER can be used with any of the integer VDT types.
+	\li ADT_FLOAT can be used with anything.
+	\li ADT_NORM_FLOAT can only be used with the integer types, signed or unsigned.
+	\li ADT_INTEGER can only be used with the integer types, signed or unsigned.
 	\li ADT_DOUBLE can only be used with VDT_DOUBLE_FLOAT.
 	**/
 	enum AttribDataType
@@ -105,10 +105,10 @@ namespace glmesh
 
 
 	/**
-	\brief A basic description of the storage for a single vertex attribute.
+	\brief Describes the storage for a single vertex attribute.
 	
-	\note A valid OpenGL context must be active to create one of these objects. Do not make global variables
-	of these.
+	\note A valid OpenGL context must be active to create one of these objects.
+	Do not make global variables of these.
 	**/
 	class AttribDesc
 	{
@@ -153,6 +153,21 @@ namespace glmesh
 
 	/**
 	\brief Describes the layout for a sequence of vertex attributes, to be used for rendering.
+
+	VertexFormat creates an interleaved layout, where each attribute is interleaved with each
+	other. The attributes always have 4 byte alignment, as there are some hardware that
+	really doesn't like misaligned data. Double-precision attributes have 8-byte alignment.
+
+	The byte offset of each attribute from the beginning of the vertex can be queried.
+
+	Note that the order of the attribute sequence is the same as the order of the AttributeList.
+	This means that the order is \em not the order of the attribute indices. This is the order
+	of the attributes to be used in the buffer object.
+
+	You may use VertexFormat::Enable to perform all of the \c glEnableVertexAttribArray
+	and \c glVertexAttrib*Pointer calls to associate a buffer object with this format.
+	It is a RAII class, so the destructor will call \c glDisableVertexAttribArray to
+	disable the arrays.
 	**/
 	class VertexFormat
 	{
@@ -168,6 +183,8 @@ namespace glmesh
 
 		/**
 		\brief Creates a VertexFormat from a sequence of AttribDesc objects.
+
+		The order fo the sequence of attributes will match the order of \a attribs.
 		
 		\throw ddd If any of the \a attribs refer to the same attribute index as any of the others.
 		**/
@@ -191,13 +208,24 @@ namespace glmesh
 		\ingroup module_glmesh_draw
 		\brief RAII-style class for binding a VertexFormat to the OpenGL context. The destructor unbinds it.
 
-		This class assumes that a valid VAO is bound, as well as that all vertex data comes from a buffer
-		object which has also been bound to GL_ARRAY_BUFFER.
+		This class assumes that a valid VAO is bound (if one is needed), as well as that
+		all vertex data comes from a single buffer object which has also been bound to GL_ARRAY_BUFFER.
+
+		After creating one of these, you can use \c glDraw* functions to render from the previously
+		bound buffer object, using the VertexFormat given.
 		**/
 		class Enable
 		{
 		public:
-			///Binds the vertex format to the OpenGL context, given a byte offset to the first vertex.
+			/**
+			\brief Binds the vertex format to the OpenGL context, given a byte offset to the first vertex.
+			
+			\param fmt The format to bind to the context. Taken by reference; do not destroy
+			this before this object is destroyed.
+			\param baseOffset The byte offset from the beginning of the buffer to the first piece of
+			vertex data.
+
+			**/
 			Enable(const VertexFormat &fmt, size_t baseOffset);
 
 			///Unbinds the vertex format from the OpenGL context.

@@ -82,6 +82,16 @@ namespace glmesh
 	/**
 	\brief RAII-style class for immediate-mode type rendering through a VertexFormat and StreamBuffer.
 
+	The constructor of this class is given an OpenGL primitive type and the number of vertices to use.
+	You must then call one of the Attrib member functions for each vertex and for each attribute
+	in the VertexFormat. The order of attributes within a vertex corresponds to the order of
+	attributes in the VertexFormat.
+
+	The Attrib specialization must match the type of the attribute from the VertexFormat \em exactly.
+	The number of components however does not have to match.
+
+	\todo The 1.0 for the fourth value doesn't work right with normalized values.
+
 	\note This class cannot be copied.
 	**/
 	class Draw
@@ -93,8 +103,10 @@ namespace glmesh
 		\param primType The OpenGL primitive type to render.
 		\param vertexCount The number of vertices you will provide. This must work with \a primType
 		or an exception is thrown.
-		\param fmt The format of the attributes in each vertex.
-		\param buffer The streaming buffer that will be used to store the vertex data.
+		\param fmt The format of the attributes in each vertex. Taken by reference; do not destroy
+		this before this object is destroyed.
+		\param buffer The streaming buffer that will be used to store the vertex data. Taken by
+		reference; do not destroy this before this object is destroyed.
 
 		\throw PrimitiveTypeUnsupportedException If \a primType is not supported on the OpenGL implementation.
 		\throw VertexCountPrimMismatchException If \a vertexCount does not match \a primType's requirements.
