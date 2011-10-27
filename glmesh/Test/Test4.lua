@@ -19,9 +19,9 @@ function MakeDrawTest(filename)
 			defines {"WIN32"}
 			links {"glu32", "opengl32", "gdi32", "winmm", "user32"}
 
-		configuration "linux"
-			links { "GL" }
-		
+	    configuration "linux"
+		        links {"GL", "GLU", "Xrandr"}
+	
 		configuration "Debug"
 			flags "Unicode";
 			defines {"DEBUG", "_DEBUG", "MEMORY_DEBUGGING"};
