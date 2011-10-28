@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <utility>
+#include <memory>
 
 #include <glload/gl_3_3.hpp>
 #include <glload/gll.hpp>

@@ -24,7 +24,7 @@ local externals =
 		"glfw",			--The output directory to copy the component's data.
 		"glfw.zip",		--The filename that will be created in the download director.
 		"glfw-2.7.2",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
-		"http://downloads.sourceforge.net/project/glfw/glfw/2.7.2/glfw-2.7.2.zip?r=http%3A%2F%2Fwww.glfw.org%2Fdownload.html&ts=1315958342&use_mirror=iweb"
+		"https://downloads.sourceforge.net/project/glfw/glfw/2.7.2/glfw-2.7.2.zip?r=&ts=1319754828&use_mirror=surfnet"
 	},
 	
 	{
