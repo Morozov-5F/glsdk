@@ -22,7 +22,7 @@ namespace glmesh
 	public:
 		virtual ~VertexFormatException() throw() {}
 
-		virtual const char *what() {return message.c_str();}
+		virtual const char *what() const throw() {return message.c_str();}
 
 	protected:
 		std::string message;
