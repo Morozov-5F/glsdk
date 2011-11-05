@@ -21,6 +21,10 @@
 #endif //GLE_FUNCPTR
 #define GLE_FUNCPTR WINAPI
 
+
+#ifndef GLLOAD_BASIC_OPENGL_TYPEDEFS
+#define GLLOAD_BASIC_OPENGL_TYPEDEFS
+
 typedef unsigned int GLenum;
 typedef unsigned char GLboolean;
 typedef unsigned int GLbitfield;
@@ -36,6 +40,8 @@ typedef float GLclampf;
 typedef double GLdouble;
 typedef double GLclampd;
 #define GLvoid void
+
+#endif //GLLOAD_BASIC_OPENGL_TYPEDEFS
 
 #include <stddef.h>	
 	
