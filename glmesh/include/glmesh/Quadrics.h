@@ -1,0 +1,9 @@
+
+#ifndef GLSDK_MESH_QUADRICS_H
+#define GLSDK_MESH_QUADRICS_H
+
+
+
+
+
+#endif //GLSDK_MESH_QUADRICS_H

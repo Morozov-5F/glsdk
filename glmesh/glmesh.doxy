@@ -113,6 +113,13 @@ void RenderScene(glmesh::VertexFormat &vfmt, glmesh::StreamBuffer &streamBuf)
 **/
 
 /**
+\defgroup module_glmesh_mesh GL Static Mesh
+\ingroup module_glmesh
+
+
+**/
+
+/**
 \defgroup module_glmesh_exceptions GL Mesh Exceptions
 \ingroup module_glmesh
 

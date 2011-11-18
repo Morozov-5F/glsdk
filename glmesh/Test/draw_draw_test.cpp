@@ -116,6 +116,8 @@ public:
 	virtual void Draw(const glm::mat4 &cameraToClip, const glm::mat4 &worldToCamera,
 		const glm::mat4 &modelToWorld)
 	{
+		gl::ClearColor(0.9f, 0.9f, 0.9f, 1.0f);
+		gl::ClearDepth(1.0f);
 		gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
 		
 		//Set uniforms.
