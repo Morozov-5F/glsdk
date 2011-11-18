@@ -208,8 +208,13 @@ namespace glmesh
 		\ingroup module_glmesh_draw
 		\brief RAII-style class for binding a VertexFormat to the OpenGL context. The destructor unbinds it.
 
-		This class assumes that a valid VAO is bound (if one is needed), as well as that
+		This class assumes that a valid VAO is bound (if one is needed). It also assumes that
 		all vertex data comes from a single buffer object which has also been bound to GL_ARRAY_BUFFER.
+
+		The following OpenGL state is touched by constructing this object:
+
+		\li For each attribute in the given VertexFormat, that attributes state will be changed. After this
+		object is destroyed, all of the attributes used by this VertexFormat will be disabled.
 
 		After creating one of these, you can use \c glDraw* functions to render from the previously
 		bound buffer object, using the VertexFormat given.
@@ -224,7 +229,6 @@ namespace glmesh
 			this before this object is destroyed.
 			\param baseOffset The byte offset from the beginning of the buffer to the first piece of
 			vertex data.
-
 			**/
 			Enable(const VertexFormat &fmt, size_t baseOffset);
 

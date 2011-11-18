@@ -90,6 +90,16 @@ namespace glmesh
 	The Attrib specialization must match the type of the attribute from the VertexFormat \em exactly.
 	The number of components however does not have to match.
 
+	Successfully constructing an object of this type will affect the following OpenGL state (note: none
+	of this state will be touched in the event of an exception):
+
+	\li The current GL_ARRAY_BUFFER binding.
+	\li If VAOs are available, the current VAO will be affected. The current VAO after this object is
+	destroyed will be VAO 0. The VAO used to render will be the one stored in the StreamBuffer.
+	\li If VAOs are not available, the current attribute array state will be modified as
+	VertexFormat::Enable does. Note that you should make sure that all attributes are disabled
+	*before* rendering with this immediate mode. Otherwise, badness can result.
+
 	\todo The 1.0 for the fourth value doesn't work right with normalized values.
 
 	\note This class cannot be copied.

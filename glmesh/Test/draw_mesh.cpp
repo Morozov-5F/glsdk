@@ -5,12 +5,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <utility>
+#include <memory>
 
 #include <glload/gl_3_3.hpp>
 #include <glload/gll.hpp>
 #include <GL/glfw.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/half_float.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -20,34 +22,12 @@
 
 namespace
 {
-	const float g_vertexData[] = {
-		0.75f, 0.75f, 0.0f, 1.0f,
-		0.75f, -0.75f, 0.0f, 1.0f,
-		-0.75f, -0.75f, 0.0f, 1.0f,
-
-		0.6f, 0.8f, 0.0f, 1.0f,
-		0.9f, 0.2f, 0.4f, 1.0f,
-		0.1f, 0.2f, 0.7f, 1.0f,
-	};
-
-	const float g_groundData[] = {
-		30.0f, 0.0f, 30.0f, 1.0f,
-		30.0f, 0.0f, -30.0f, 1.0f,
-		-30.0f, 0.0f, 30.0f, 1.0f,
-		-30.0f, 0.0f, -30.0f, 1.0f,
-
-		0.2f, 1.0f, 0.2f, 1.0f,
-		0.2f, 1.0f, 0.2f, 1.0f,
-		0.2f, 1.0f, 0.2f, 1.0f,
-		0.2f, 1.0f, 0.2f, 1.0f,
-	};
 }
 
 class BasicDrawable : public Drawable
 {
 public:
 	BasicDrawable()
-		: m_streamBuf(1024)
 	{
 		gl::ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		gl::ClearDepth(1.0);
@@ -87,6 +67,19 @@ public:
 			"}\n"
 			);
 
+		GLfloat groundPlaneData[] =
+		{
+			30.0f, 0.0f, 30.0f, 1.0f,
+			30.0f, 0.0f, -30.0f, 1.0f,
+			-30.0f, 0.0f, 30.0f, 1.0f,
+			-30.0f, 0.0f, -30.0f, 1.0f,
+
+			0.2f, 1.0f, 0.2f, 1.0f,
+			0.9f, 0.5f, 0.3f, 1.0f,
+			0.2f, 1.0f, 0.2f, 1.0f,
+			0.9f, 0.5f, 0.3f, 1.0f,
+		};
+
 		GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
 		GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
 
@@ -97,6 +90,44 @@ public:
 
 		m_unifModelToCameraMatrix = gl::GetUniformLocation(m_program, "modelToCameraMatrix");
 		m_unifCameraToClipMatrix = gl::GetUniformLocation(m_program, "cameraToClipMatrix");
+
+		std::vector<GLuint> buffers(1);
+		gl::GenBuffers(1, &buffers[0]);
+
+		gl::BindBuffer(gl::GL_ARRAY_BUFFER, buffers[0]);
+		gl::BufferData(gl::GL_ARRAY_BUFFER, sizeof(groundPlaneData), groundPlaneData, gl::GL_STATIC_DRAW);
+
+		GLuint mainVao = 0;
+		gl::GenVertexArrays(1, &mainVao);
+
+		gl::BindVertexArray(mainVao);
+		gl::EnableVertexAttribArray(0);
+		gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, 0);
+		gl::EnableVertexAttribArray(1);
+		gl::VertexAttribPointer(1, 4, gl::GL_FLOAT, gl::GL_FALSE, 0,
+			reinterpret_cast<void*>(16 * sizeof(GLfloat)));
+
+		gl::BindVertexArray(0);
+
+		glmesh::RenderCmdList cmdList;
+		cmdList.DrawArrays(gl::GL_TRIANGLE_STRIP, 0, 4);
+
+		glmesh::MeshVariantMap variants;
+		glmesh::MeshVariantMap::value_type testVar("test", 0);
+		gl::GenVertexArrays(1, &testVar.second);
+
+		gl::BindVertexArray(testVar.second);
+		gl::EnableVertexAttribArray(0);
+		gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, 0);
+
+		gl::BindVertexArray(0);
+		
+		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+
+		variants.insert(testVar);
+		variants["main"] = mainVao;
+
+		m_pGroundPlane.reset(new glmesh::Mesh(buffers, mainVao, cmdList, variants));
 	}
 
 	~BasicDrawable()
@@ -110,68 +141,28 @@ public:
 		gl::ClearColor(0.9f, 0.9f, 0.9f, 1.0f);
 		gl::ClearDepth(1.0f);
 		gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
-		
-		//Update data in stream buffer.
-		size_t triOffset = 0;
-		{
-			glmesh::StreamBuffer::Map buffMap(m_streamBuf, sizeof(g_vertexData));
-			triOffset = m_streamBuf.GetBufferPosition();
-
-			memcpy(buffMap.GetPtr(), g_vertexData, sizeof(g_vertexData));
-		}
-		size_t groundOffset = 0;
-		{
-			glmesh::StreamBuffer::Map buffMap(m_streamBuf, sizeof(g_groundData));
-			groundOffset = m_streamBuf.GetBufferPosition();
-
-			memcpy(buffMap.GetPtr(), g_groundData, sizeof(g_groundData));
-		}
 
 		//Set uniforms.
 		gl::UseProgram(m_program);
 		gl::UniformMatrix4fv(m_unifCameraToClipMatrix, 1, gl::GL_FALSE,
 			glm::value_ptr(cameraToClip));
 
-		//Bind the buffer.
-		gl::BindVertexArray(m_streamBuf.GetVao());
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_streamBuf.GetBuffer());
+		{
+			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::GL_FALSE,
+				glm::value_ptr(worldToCamera));
 
-		gl::EnableVertexAttribArray(0);
-		gl::EnableVertexAttribArray(1);
+			m_pGroundPlane->Render("main");
+		}
 
-		//Draw mobile triangle.
-		gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, (void*)triOffset);
-		gl::VertexAttribPointer(1, 4, gl::GL_FLOAT, gl::GL_FALSE, 0,
-			(void*)(triOffset + (sizeof(g_vertexData) / 2)));
-
-		gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::GL_FALSE,
-			glm::value_ptr(worldToCamera * modelToWorld));
-
-		gl::DrawArrays(gl::GL_TRIANGLES, 0, 3);
-
-		//Draw ground plane.
-		gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, (void*)groundOffset);
-		gl::VertexAttribPointer(1, 4, gl::GL_FLOAT, gl::GL_FALSE, 0,
-			(void*)(groundOffset + (sizeof(g_groundData) / 2)));
-
-		gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::GL_FALSE,
-			glm::value_ptr(worldToCamera));
-
-		gl::DrawArrays(gl::GL_TRIANGLE_STRIP, 0, 4);
-
-		gl::DisableVertexAttribArray(0);
-		gl::DisableVertexAttribArray(1);
-
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
-		gl::BindVertexArray(0);
 		gl::UseProgram(0);
 	}
 
 private:
-	glmesh::StreamBuffer m_streamBuf;
 	GLuint m_program;
 	GLuint m_unifModelToCameraMatrix;
 	GLuint m_unifCameraToClipMatrix;
+
+	std::auto_ptr<glmesh::Mesh> m_pGroundPlane;
 };
 
 
