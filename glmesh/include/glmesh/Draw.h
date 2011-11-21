@@ -100,6 +100,9 @@ namespace glmesh
 	VertexFormat::Enable does. Note that you should make sure that all attributes are disabled
 	*before* rendering with this immediate mode. Otherwise, badness can result.
 
+	\note Do \em not attempt to change buffer binding state while an instance of this class is constructed.
+	Also, do not attempt to create two of these objects at the same time.
+
 	\todo The 1.0 for the fourth value doesn't work right with normalized values.
 
 	\note This class cannot be copied.

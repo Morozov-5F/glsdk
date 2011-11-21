@@ -116,6 +116,20 @@ void RenderScene(glmesh::VertexFormat &vfmt, glmesh::StreamBuffer &streamBuf)
 \defgroup module_glmesh_mesh GL Static Mesh
 \ingroup module_glmesh
 
+**/
+
+/**
+\defgroup module_glmesh_mesh_generator Mesh Generators
+\ingroup module_glmesh_mesh
+
+All generated meshes use the OpenGL default for their face orientation. Namely, counter-clockwise is front. The model space meshes are all in a right-handed coordinate system.
+
+The attribute indices used by the mesh generator functions are all standard. They are as follows:
+
+
+The main VAO of each mesh includes all attributes. There will be variants generated containing fewer attributes. The naming convention for generated mesh variants is as follows:
+
+
 
 **/
 

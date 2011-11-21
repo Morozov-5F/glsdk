@@ -22,6 +22,45 @@
 
 namespace
 {
+	struct ProgramData
+	{
+		GLuint program;
+		GLuint unifModelToCameraMatrix;
+		GLuint unifCameraToClipMatrix;
+
+		ProgramData()
+			: program(0)
+		{}
+
+		~ProgramData()
+		{
+			if(program)
+				gl::DeleteProgram(program);
+		}
+
+		void Load(const std::string &vertexShader, const std::string &fragmentShader)
+		{
+			try
+			{
+				GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
+				GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+
+				program = glutil::LinkProgram(vertShader, fragShader);
+
+				gl::DeleteShader(vertShader);
+				gl::DeleteShader(fragShader);
+			}
+			catch(glutil::ShaderException &e)
+			{
+				printf("%s\n", e.what());
+
+				throw;
+			}
+
+			unifModelToCameraMatrix = gl::GetUniformLocation(program, "modelToCameraMatrix");
+			unifCameraToClipMatrix = gl::GetUniformLocation(program, "cameraToClipMatrix");
+		}
+	};
 }
 
 class BasicDrawable : public Drawable
@@ -36,7 +75,9 @@ public:
 		gl::DepthFunc(gl::GL_LEQUAL);
 		gl::Enable(gl::GL_DEPTH_CLAMP);
 
-		const std::string vertexShader(
+		gl::Enable(gl::GL_CULL_FACE);
+
+		const std::string groundVertexShader(
 			"#version 330\n"
 			"\n"
 			"layout(location = 0) in vec4 position;\n"
@@ -55,7 +96,7 @@ public:
 			"}\n"
 			);
 
-		const std::string fragmentShader(
+		const std::string groundFragmentShader(
 			"#version 330\n"
 			"\n"
 			"smooth in vec4 theColor;\n"
@@ -66,6 +107,41 @@ public:
 			"	outputColor = theColor;\n"
 			"}\n"
 			);
+
+		m_ground.Load(groundVertexShader, groundFragmentShader);
+
+		const std::string objVertexShader(
+			"#version 330\n"
+			"\n"
+			"layout(location = 0) in vec4 position;\n"
+			"layout(location = 2) in vec3 normal;\n"
+			"\n"
+			"smooth out vec3 modelNormal;\n"
+			"\n"
+			"uniform mat4 cameraToClipMatrix;\n"
+			"uniform mat4 modelToCameraMatrix;\n"
+			"\n"
+			"void main()\n"
+			"{\n"
+			"	vec4 cameraPos = modelToCameraMatrix * position;\n"
+			"	gl_Position = cameraToClipMatrix * cameraPos;\n"
+			"	modelNormal = normal;\n"
+			"}\n"
+			);
+
+		const std::string objFragmentShader(
+			"#version 330\n"
+			"\n"
+			"smooth in vec3 modelNormal;\n"
+			"out vec4 outputColor;\n"
+			"\n"
+			"void main()\n"
+			"{\n"
+			"	outputColor = vec4(modelNormal, 1.0);\n"
+			"}\n"
+			);
+
+		m_object.Load(objVertexShader, objFragmentShader);
 
 		GLfloat groundPlaneData[] =
 		{
@@ -79,17 +155,6 @@ public:
 			0.2f, 1.0f, 0.2f, 1.0f,
 			0.9f, 0.5f, 0.3f, 1.0f,
 		};
-
-		GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
-		GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
-
-		m_program = glutil::LinkProgram(vertShader, fragShader);
-
-		gl::DeleteShader(vertShader);
-		gl::DeleteShader(fragShader);
-
-		m_unifModelToCameraMatrix = gl::GetUniformLocation(m_program, "modelToCameraMatrix");
-		m_unifCameraToClipMatrix = gl::GetUniformLocation(m_program, "cameraToClipMatrix");
 
 		std::vector<GLuint> buffers(1);
 		gl::GenBuffers(1, &buffers[0]);
@@ -125,15 +190,14 @@ public:
 		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
 
 		variants.insert(testVar);
-		variants["main"] = mainVao;
 
 		m_pGroundPlane.reset(new glmesh::Mesh(buffers, mainVao, cmdList, variants));
+
+		m_pSphere.reset(glmesh::gen::UnitSphere(6, 8, 0));
 	}
 
 	~BasicDrawable()
-	{
-		gl::DeleteProgram(m_program);
-	}
+	{}
 
 	virtual void Draw(const glm::mat4 &cameraToClip, const glm::mat4 &worldToCamera,
 		const glm::mat4 &modelToWorld)
@@ -143,26 +207,37 @@ public:
 		gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
 
 		//Set uniforms.
-		gl::UseProgram(m_program);
-		gl::UniformMatrix4fv(m_unifCameraToClipMatrix, 1, gl::GL_FALSE,
+		gl::UseProgram(m_ground.program);
+		gl::UniformMatrix4fv(m_ground.unifCameraToClipMatrix, 1, gl::GL_FALSE,
 			glm::value_ptr(cameraToClip));
 
 		{
-			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::GL_FALSE,
+			gl::UniformMatrix4fv(m_ground.unifModelToCameraMatrix, 1, gl::GL_FALSE,
 				glm::value_ptr(worldToCamera));
 
-			m_pGroundPlane->Render("main");
+			m_pGroundPlane->Render();
+		}
+
+		gl::UseProgram(m_object.program);
+		gl::UniformMatrix4fv(m_object.unifCameraToClipMatrix, 1, gl::GL_FALSE,
+			glm::value_ptr(cameraToClip));
+
+		{
+			gl::UniformMatrix4fv(m_object.unifModelToCameraMatrix, 1, gl::GL_FALSE,
+				glm::value_ptr(worldToCamera * modelToWorld));
+
+			m_pSphere->Render();
 		}
 
 		gl::UseProgram(0);
 	}
 
 private:
-	GLuint m_program;
-	GLuint m_unifModelToCameraMatrix;
-	GLuint m_unifCameraToClipMatrix;
+	ProgramData m_ground;
+	ProgramData m_object;
 
 	std::auto_ptr<glmesh::Mesh> m_pGroundPlane;
+	std::auto_ptr<glmesh::Mesh> m_pSphere;
 };
 
 

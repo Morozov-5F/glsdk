@@ -113,7 +113,7 @@ namespace glmesh
 	Rendering with this class (via any call to Render) will affect the following OpenGL state:
 
 	\li The current VAO binding. After the call, it will be reset to 0.
-	\li The current GL_PRIMITIVE_RESTART enable. After the call, it will de disabled.
+	\li The current GL_PRIMITIVE_RESTART enable. After the call, it will be disabled.
 
 	\note: This class requires the presence of ARB_vertex_array_object or OpenGL 3.0 or above.
 
@@ -150,6 +150,12 @@ namespace glmesh
 
 		///Renders a named variant. Does nothing if the named VAO does not exist.
 		void Render(const std::string &variantName) const;
+
+		///Returns true if there is a main VAO.
+		bool DoesMainExist() const;
+
+		///Returns true if the named variant exists.
+		bool DoesVariantExist(const std::string &variantName) const;
 
 	private:
 		std::auto_ptr<MeshData> m_pData;

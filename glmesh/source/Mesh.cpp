@@ -113,7 +113,7 @@ namespace glmesh
 	{
 		RenderCmd cmd;
 
-		cmd.isIndexedCmd = false;
+		cmd.isIndexedCmd = true;
 		cmd.ePrimType = primitive;
 		cmd.vertexCount = vertexCount;
 		cmd.dataType = dataType;
@@ -150,6 +150,7 @@ namespace glmesh
 		{
 			gl::BindVertexArray(m_pData->mainVao);
 			RenderWithCurrVao();
+			gl::BindVertexArray(0);
 		}
 	}
 
@@ -161,6 +162,7 @@ namespace glmesh
 
 		gl::BindVertexArray(currVariant->second);
 		RenderWithCurrVao();
+		gl::BindVertexArray(0);
 	}
 
 	void Mesh::RenderWithCurrVao() const
@@ -171,7 +173,10 @@ namespace glmesh
 			if(cmd.isIndexedCmd)
 			{
 				if(cmd.hasPrimRestart)
+				{
 					gl::Enable(gl::GL_PRIMITIVE_RESTART);
+					gl::PrimitiveRestartIndex(cmd.primRestart);
+				}
 				else
 					gl::Disable(gl::GL_PRIMITIVE_RESTART);
 
@@ -190,5 +195,22 @@ namespace glmesh
 		}
 
 		gl::Disable(gl::GL_PRIMITIVE_RESTART);
+	}
+
+	bool Mesh::DoesMainExist() const
+	{
+		if(m_pData->mainVao)
+			return true;
+
+		return false;
+	}
+
+	bool Mesh::DoesVariantExist( const std::string &variantName ) const
+	{
+		MeshVariantMap::iterator currVariant = m_pData->variants.find(variantName);
+		if(currVariant == m_pData->variants.end() || (currVariant->second == 0))
+			return false;
+
+		return true;
 	}
 }
