@@ -22,7 +22,7 @@ namespace glmesh
 		\brief Creates a sphere of radius 1 at the origin.
 		
 		**/
-		Mesh *UnitSphere(int numHorizSlices, int numVertSlices, int attribFlags);
+		Mesh *UnitSphere(int numHorizSlices, int numVertSlices);
 
 		///@}
 	}

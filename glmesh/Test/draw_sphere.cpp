@@ -115,8 +115,10 @@ public:
 			"\n"
 			"layout(location = 0) in vec4 position;\n"
 			"layout(location = 2) in vec3 normal;\n"
+			"layout(location = 5) in vec2 texCoord;\n"
 			"\n"
 			"smooth out vec3 modelNormal;\n"
+			"smooth out vec2 textureCoordinates;\n"
 			"\n"
 			"uniform mat4 cameraToClipMatrix;\n"
 			"uniform mat4 modelToCameraMatrix;\n"
@@ -126,6 +128,7 @@ public:
 			"	vec4 cameraPos = modelToCameraMatrix * position;\n"
 			"	gl_Position = cameraToClipMatrix * cameraPos;\n"
 			"	modelNormal = normal;\n"
+			"   textureCoordinates = texCoord;\n"
 			"}\n"
 			);
 
@@ -133,6 +136,7 @@ public:
 			"#version 330\n"
 			"\n"
 			"smooth in vec3 modelNormal;\n"
+			"smooth in vec2 textureCoordinates;\n"
 			"out vec4 outputColor;\n"
 			"\n"
 			"void main()\n"
@@ -193,7 +197,7 @@ public:
 
 		m_pGroundPlane.reset(new glmesh::Mesh(buffers, mainVao, cmdList, variants));
 
-		m_pSphere.reset(glmesh::gen::UnitSphere(6, 8, 0));
+		m_pSphere.reset(glmesh::gen::UnitSphere(6, 8));
 	}
 
 	~BasicDrawable()
