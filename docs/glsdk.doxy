@@ -192,6 +192,8 @@ The names of the libraries used with <tt>UseLibs</tt> are as follows:
 
 \li \a glload: GL Load
 \li \a glimage: GL Image
+\li \a glutil: GL Util
+\li \a glmesh: GL Mesh
 \li \a glfw: GLFW
 \li \a freeglut: FreeGLUT
 \li \a glm: GLM
@@ -215,6 +217,14 @@ The include path you need to add to your build system for this library is <tt>"g
 \subsection page_use_native_glimage GL Image Linking
 
 The include path you need to add to your build system for this library is <tt>"glimg/include"</tt>. The libraries are in the <tt>"glimg/lib"</tt> directory. The debug and release libraries are called <tt>"glimgD"</tt> and <tt>"glimg"</tt>, respectively.
+
+\subsection page_use_native_glutil GL Util Linking
+
+The include path you need to add to your build system for this library is <tt>"glutil/include"</tt>. The libraries are in the <tt>"glutil/lib"</tt> directory. The debug and release libraries are called <tt>"glutilD"</tt> and <tt>"glutil"</tt>, respectively.
+
+\subsection page_use_native_glmesh GL Mesh Linking
+
+The include path you need to add to your build system for this library is <tt>"glmesh/include"</tt>. The libraries are in the <tt>"glmesh/lib"</tt> directory. The debug and release libraries are called <tt>"glmeshD"</tt> and <tt>"glmesh"</tt>, respectively.
 
 \subsection page_use_native_glm GL Mathematics Linking
 
