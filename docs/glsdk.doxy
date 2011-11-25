@@ -124,6 +124,8 @@ The SDK is built around Premake, so you will find that it is much easier to make
 
 \section page_use_premake With Premake
 
+This section assumes that you are familiar with Premake4. You should know how to set up a <tt>premake4.lua</tt> build file. You should know how to link projects to static libraries and modify include directories. In short: you should use these instructions if you are reasonably proficient with Premake4.
+
 Usually when using Premake 4, you will have a file called <tt>premake4.lua</tt> in your directory. This file may call other files to generate the solutions and projects, or it may not.
 
 Regardless of whether the main <tt>premake4.lua</tt> file does all the work, the first thing you should do is execute this instruction:
