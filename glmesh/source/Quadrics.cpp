@@ -7,6 +7,7 @@
 
 #include "glmesh/Mesh.h"
 #include "glmesh/Quadrics.h"
+#include "GenHelper.h"
 #include <glm/glm.hpp>
 
 namespace glmesh
@@ -182,7 +183,7 @@ namespace glmesh
 			gl::BindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
 			gl::EnableVertexAttribArray(0);
 			gl::VertexAttribPointer(0, 3, gl::GL_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort), (void*)0);
-			variantMap["unlit"] = currVao;
+			AddVariantToMap(variantMap, currVao, 0);
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
@@ -192,7 +193,7 @@ namespace glmesh
 			gl::EnableVertexAttribArray(2);
 			gl::VertexAttribPointer(2, 3, gl::GL_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort),
 				(void*)(4 * sizeof(GLshort)));
-			variantMap["lit"] = currVao;
+			AddVariantToMap(variantMap, currVao, VAR_NORMAL);
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
@@ -202,7 +203,7 @@ namespace glmesh
 			gl::EnableVertexAttribArray(5);
 			gl::VertexAttribPointer(5, 3, gl::GL_UNSIGNED_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort),
 				(void*)(8 * sizeof(GLushort)));
-			variantMap["tex"] = currVao;
+			AddVariantToMap(variantMap, currVao, VAR_TEX_COORD);
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
@@ -215,7 +216,7 @@ namespace glmesh
 			gl::EnableVertexAttribArray(5);
 			gl::VertexAttribPointer(5, 3, gl::GL_UNSIGNED_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort),
 				(void*)(8 * sizeof(GLushort)));
-			variantMap["lit-tex"] = currVao;
+			AddVariantToMap(variantMap, currVao, VAR_TEX_COORD | VAR_NORMAL);
 
 			gl::BindVertexArray(0);
 			gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);

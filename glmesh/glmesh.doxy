@@ -122,14 +122,25 @@ void RenderScene(glmesh::VertexFormat &vfmt, glmesh::StreamBuffer &streamBuf)
 \defgroup module_glmesh_mesh_generator Mesh Generators
 \ingroup module_glmesh_mesh
 
-All generated meshes use the OpenGL default for their face orientation. Namely, counter-clockwise is front. The model space meshes are all in a right-handed coordinate system.
+All generated meshes use the OpenGL default for their face orientation. Namely, counter-clockwise is front. The model space meshes are all in a right-handed coordinate system, as is standard for OpenGL.
 
-The attribute indices used by the mesh generator functions are all standard. They are as follows:
+The attribute indices used by the mesh generator functions are standardized. They are as follows:
 
+\li 0: Position (three-dimensional, float)
+\li 1: Color, diffuse (four-dimensional, float)
+\li 2: Normal (three-dimensional, float)
+\li 3: Tangent, for establishing an NBT basis (three-dimensional, float)
+\li 4: Binormal, for establishing an NBT basis (three-dimensional, float)
+\li 5: Texture coordinate (two-dimensional, float)
 
 The main VAO of each mesh includes all attributes. There will be variants generated containing fewer attributes. The naming convention for generated mesh variants is as follows:
 
+\li <tt>unlit</tt> or <tt>flat</tt>: Position
+\li <tt>lit</tt>: Position+Normal
+\li <tt>tex</tt>: Position+TexCoord
+\li <tt>color</tt>: Position+Color
 
+These can be combined with <tt>-</tt> characters (except for <tt>unlit</tt>). So <tt>lit-tex</tt> means positions, normals, and texture coordinates. The order doesn't matter.
 
 **/
 

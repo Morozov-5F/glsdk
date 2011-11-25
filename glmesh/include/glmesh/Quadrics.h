@@ -19,7 +19,9 @@ namespace glmesh
 		///@{
 
 		/**
-		\brief Creates a sphere of radius 1 at the origin.
+		\brief Creates a unit sphere at the origin.
+
+		A unit sphere is a sphere of radius 1, so it extends from [-1, 1] in all three axes.
 		
 		**/
 		Mesh *UnitSphere(int numHorizSlices, int numVertSlices);
