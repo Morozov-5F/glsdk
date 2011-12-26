@@ -214,43 +214,30 @@ namespace dds
 			return lineWidth * bytesPerPixel;
 		}
 
-		//Computes the offset from the first image.
-		size_t CalcByteOffsetToImage(const UncheckedImageFormat &fmt, const glimg::Dimensions &dims,
-			int mipmapLevel, int faceIx, int arrayIx)
+		size_t CalcMipmapSize( const glimg::Dimensions & dims, int currLevel, const UncheckedImageFormat &fmt)
 		{
-			//TODO: remove
-			if(faceIx != 0 || arrayIx != 0)
-				throw DdsFileUnsupportedException("", "Cubemaps/array textures not yet supported.");
+			glimg::Dimensions mipmapDims = ModifySizeForMipmap(dims, currLevel);
 
-			size_t currOffset = 0;
+			size_t lineSize = CalcLineSize(fmt, mipmapDims.width);
 
-			for(int currLevel = 0; currLevel < mipmapLevel; currLevel++)
+			int effectiveHeight = 1;
+			if(mipmapDims.numDimensions > 1)
 			{
-				glimg::Dimensions mipmapDims = ModifySizeForMipmap(dims, currLevel);
-
-				size_t lineSize = CalcLineSize(fmt, mipmapDims.width);
-
-				int effectiveHeight = 1;
-				if(mipmapDims.numDimensions > 1)
-				{
-					effectiveHeight = mipmapDims.height;
-					if(fmt.eBitdepth == BD_COMPRESSED)
-						effectiveHeight = (effectiveHeight + 3) / 4;
-				}
-
-				int effectiveDepth = 1;
-				if(mipmapDims.numDimensions > 2)
-				{
-					effectiveDepth = mipmapDims.depth;
-					if(fmt.eBitdepth == BD_COMPRESSED)
-						effectiveDepth = (effectiveDepth + 3) / 4;
-				}
-
-				int numLines = effectiveHeight * effectiveDepth;
-				currOffset += numLines * lineSize;
+				effectiveHeight = mipmapDims.height;
+				if(fmt.eBitdepth == BD_COMPRESSED)
+					effectiveHeight = (effectiveHeight + 3) / 4;
 			}
 
-			return currOffset;
+			int effectiveDepth = 1;
+			if(mipmapDims.numDimensions > 2)
+			{
+				effectiveDepth = mipmapDims.depth;
+				if(fmt.eBitdepth == BD_COMPRESSED)
+					effectiveDepth = (effectiveDepth + 3) / 4;
+			}
+
+			int numLines = effectiveHeight * effectiveDepth;
+			return numLines * lineSize;
 		}
 
 		//Takes ownership of ddsData;
@@ -283,31 +270,20 @@ namespace dds
 
 			const size_t baseOffset = GetByteOffsetToData(header);
 
-			std::vector<size_t> imageOffsets;
-			imageOffsets.reserve(numMipmaps * numArrays * numFaces);
-
-			//TODO: remove
-			if(numArrays != 1 || numFaces != 1)
-				throw DdsFileUnsupportedException(filename, "foo");
-
-			for(int mipmapLevel = 0; mipmapLevel < numMipmaps; mipmapLevel++)
-			{
-				size_t offsetFromFirstImg = CalcByteOffsetToImage(fmt, dims, mipmapLevel, 0, 0);
-				imageOffsets.push_back(baseOffset + offsetFromFirstImg);
-			}
-
+			//TODO: support array textures
 			//Build the image creator. No more exceptions, except for those thrown by.
 			//the ImageCreator.
 			ImageCreator imgCreator(fmt, dims, numMipmaps, numArrays, numFaces);
-			std::vector<size_t>::const_iterator it = imageOffsets.begin();
+			size_t cumulativeOffset = baseOffset;
 			for(int arrayIx = 0; arrayIx < numArrays; arrayIx++)
 			{
 				for(int faceIx = 0; faceIx < numFaces; faceIx++)
 				{
 					for(int mipmapLevel = 0; mipmapLevel < numMipmaps; mipmapLevel++)
 					{
-						imgCreator.SetImageData(&ddsData[0] + *it, true, mipmapLevel, arrayIx, faceIx);
-						++it;
+						imgCreator.SetImageData(&ddsData[0] + cumulativeOffset,
+							true, mipmapLevel, arrayIx, faceIx);
+						cumulativeOffset += CalcMipmapSize(dims, mipmapLevel, fmt);
 					}
 				}
 			}

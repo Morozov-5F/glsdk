@@ -224,7 +224,7 @@ namespace glimg
 		if((faceIx < 0) || (m_faceCount <= faceIx))
 			throw FaceIndexOutOfBoundsException();
 
-		size_t imageOffset = arrayIx * faceIx * m_imageSizes[mipmapLevel];
+		size_t imageOffset = ((arrayIx * m_faceCount) + faceIx) * m_imageSizes[mipmapLevel];
 
 		unsigned char *pMipmapData = &m_imageData[mipmapLevel][0];
 		pMipmapData += imageOffset;
