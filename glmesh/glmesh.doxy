@@ -16,7 +16,7 @@ These classes provide a means for having functionality similar to immediate mode
 
 Before rendering can begin, some setup work needs to be done. Core OpenGL 3.1 and above can only render from buffer objects. Therefore, this drawing API must use a buffer object.
 
-This is provided by the StreamBuffer class. It provides an interface for sequentially adding vertex data to a buffer. It can invalidate the buffer automatically once the sequential access if there is not enough room to write a particular set of vertex data.
+This is provided by the StreamBuffer class. It provides an interface for sequentially adding vertex data to a buffer. It can invalidate the buffer automatically if there is not enough room left in the buffer to write a particular set of vertex data.
 
 The next setup is to declare a format for the vertex data. Unlike the original immediate mode, the drawing API requires an explicit format for vertex data. This is provided by the VertexFormat class, which defines a series of vertex attributes.
 
