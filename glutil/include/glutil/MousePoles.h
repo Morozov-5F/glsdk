@@ -230,9 +230,10 @@ namespace glutil
 	movement will be the ViewDef::smallRadiusDelta value instead.
 
 	The target point can be moved, relative to the current view, with the WASD keys. W/S move forward and
-	backwards, while A/D move left and right, respectively. Q and E move down and up, respectively. The
-	offset applied to the position is ViewDef::largePosOffset; if SHIFT is held, then ViewDef::smallPosOffset
-	is used instead.
+	backwards, while A/D move left and right, respectively. Q and E move down and up, respectively. If
+	the \a bRightKeyboardCtrls parameter of the constructor is set, then it uses the IJKLUO keys instead
+	of WASDQE. The offset applied to the position is ViewDef::largePosOffset; if SHIFT is held,
+	then ViewDef::smallPosOffset is used instead.
 	**/
 	class ViewPole : public ViewProvider
 	{
@@ -243,9 +244,10 @@ namespace glutil
 		\param initialView The starting state of the view.
 		\param viewScale The viewport definition to use.
 		\param actionButton The mouse button to listen for. All other mouse buttons are ignored.
+		\param bRightKeyboardCtrls If true, then it uses IJKLUO instead of WASDQE keys.
 		**/
 		ViewPole(const ViewData &initialView, const ViewScale &viewScale,
-			MouseButtons actionButton = MB_LEFT_BTN);
+			MouseButtons actionButton = MB_LEFT_BTN, bool bRightKeyboardCtrls = false);
 		virtual ~ViewPole() {}
 
 		///Generates the world-to-camera matrix for the view.
@@ -312,6 +314,7 @@ namespace glutil
 
 		ViewData m_initialView;
 		MouseButtons m_actionButton;
+		bool m_bRightKeyboardCtrls;
 
 		//Used when rotating.
 		bool m_bIsDragging;

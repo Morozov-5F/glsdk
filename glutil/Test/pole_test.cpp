@@ -113,7 +113,7 @@ glm::vec3 g_objPos(0.0f, 3.0f, 0.0f);
 
 glutil::ViewData g_viewData = {g_objPos, glm::angleAxis(0.0f, glm::vec3(1.0f, 0.0f, 0.0f)), 20.0f, 0.0f};
 glutil::ViewScale g_viewScale = {1.0f, 50.0f, 0.5f, 0.1f, 2.0f, 0.25f, 90.0f/250.0f};
-glutil::ViewPole g_viewPole(g_viewData, g_viewScale, glutil::MB_LEFT_BTN);
+glutil::ViewPole g_viewPole(g_viewData, g_viewScale, glutil::MB_LEFT_BTN, true);
 
 glutil::ObjectData g_objData = {g_objPos, glm::fquat(1.0f, 0.0f, 0.0f, 0.0f)};
 glutil::ObjectPole g_objectPole(g_objData, 90.0f/250.0f,

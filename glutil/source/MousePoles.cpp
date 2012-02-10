@@ -191,11 +191,12 @@ namespace glutil
 	}
 
 	ViewPole::ViewPole( const ViewData &initialView, const ViewScale &viewScale,
-		MouseButtons actionButton )
+		MouseButtons actionButton, bool bRightKeyboardCtrls )
 		: m_currView(initialView)
 		, m_viewScale(viewScale)
 		, m_initialView(initialView)
 		, m_actionButton(actionButton)
+		, m_bRightKeyboardCtrls(bRightKeyboardCtrls)
 		, m_bIsDragging(false)
 	{}
 
@@ -396,22 +397,45 @@ namespace glutil
 
 	void ViewPole::CharPress( char key )
 	{
-		switch(key)
+		if(m_bRightKeyboardCtrls)
 		{
-		case 'w': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewScale.largePosOffset); break;
-		case 's': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewScale.largePosOffset); break;
-		case 'd': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewScale.largePosOffset); break;
-		case 'a': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewScale.largePosOffset); break;
-		case 'e': OffsetTargetPos(ViewPole::DIR_UP, m_viewScale.largePosOffset); break;
-		case 'q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewScale.largePosOffset); break;
+			switch(key)
+			{
+			case 'i': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewScale.largePosOffset); break;
+			case 'k': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewScale.largePosOffset); break;
+			case 'l': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewScale.largePosOffset); break;
+			case 'j': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewScale.largePosOffset); break;
+			case 'o': OffsetTargetPos(ViewPole::DIR_UP, m_viewScale.largePosOffset); break;
+			case 'u': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewScale.largePosOffset); break;
 
-		case 'W': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewScale.smallPosOffset); break;
-		case 'S': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewScale.smallPosOffset); break;
-		case 'D': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewScale.smallPosOffset); break;
-		case 'A': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewScale.smallPosOffset); break;
-		case 'E': OffsetTargetPos(ViewPole::DIR_UP, m_viewScale.smallPosOffset); break;
-		case 'Q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewScale.smallPosOffset); break;
+			case 'I': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewScale.smallPosOffset); break;
+			case 'K': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewScale.smallPosOffset); break;
+			case 'L': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewScale.smallPosOffset); break;
+			case 'J': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewScale.smallPosOffset); break;
+			case 'O': OffsetTargetPos(ViewPole::DIR_UP, m_viewScale.smallPosOffset); break;
+			case 'U': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewScale.smallPosOffset); break;
+			}
 		}
+		else
+		{
+			switch(key)
+			{
+			case 'w': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewScale.largePosOffset); break;
+			case 's': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewScale.largePosOffset); break;
+			case 'd': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewScale.largePosOffset); break;
+			case 'a': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewScale.largePosOffset); break;
+			case 'e': OffsetTargetPos(ViewPole::DIR_UP, m_viewScale.largePosOffset); break;
+			case 'q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewScale.largePosOffset); break;
+
+			case 'W': OffsetTargetPos(ViewPole::DIR_FORWARD, m_viewScale.smallPosOffset); break;
+			case 'S': OffsetTargetPos(ViewPole::DIR_BACKWARD, m_viewScale.smallPosOffset); break;
+			case 'D': OffsetTargetPos(ViewPole::DIR_RIGHT, m_viewScale.smallPosOffset); break;
+			case 'A': OffsetTargetPos(ViewPole::DIR_LEFT, m_viewScale.smallPosOffset); break;
+			case 'E': OffsetTargetPos(ViewPole::DIR_UP, m_viewScale.smallPosOffset); break;
+			case 'Q': OffsetTargetPos(ViewPole::DIR_DOWN, m_viewScale.smallPosOffset); break;
+			}
+		}
+
 	}
 
 	namespace
