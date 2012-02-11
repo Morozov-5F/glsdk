@@ -1566,6 +1566,43 @@ namespace glimg
 		}
 	}
 
+	GLenum GetTextureType( const ImageSet *pImage, unsigned int forceConvertBits )
+	{
+		Dimensions dims = pImage->GetDimensions();
+
+		switch(dims.numDimensions)
+		{
+		case 1:
+			//May be 1D or 1D array.
+			if(IsArrayTexture(pImage, forceConvertBits))
+				return gl::GL_TEXTURE_1D_ARRAY;
+			else
+				return gl::GL_TEXTURE_1D;
+		case 2:
+			//2D, 2D array, 2D cube, or 2D array cube.
+			if(IsArrayTexture(pImage, forceConvertBits))
+			{
+				if(pImage->GetFaceCount() > 1)
+					return gl::GL_TEXTURE_CUBE_MAP_ARRAY;
+				else
+					return gl::GL_TEXTURE_2D_ARRAY;
+			}
+			else
+			{
+				if(pImage->GetFaceCount() > 1)
+					return gl::GL_TEXTURE_CUBE_MAP;
+				else
+					return gl::GL_TEXTURE_2D;
+			}
+			break;
+		case 3:
+			//3D.
+			return gl::GL_TEXTURE_3D;
+		}
+
+		return -1;
+	}
+
 	unsigned int CreateTexture( const ImageSet *pImage, unsigned int forceConvertBits )
 	{
 		GLuint textureName = 0;
@@ -1616,43 +1653,35 @@ namespace glimg
 		GLuint internalFormat = GetInternalFormat(format, forceConvertBits);
 		OpenGLPixelTransferParams upload = GetUploadFormatType(format, forceConvertBits);
 
-		Dimensions dims = pImage->GetDimensions();
-
-		switch(dims.numDimensions)
+		switch(GetTextureType(pImage, forceConvertBits))
 		{
-		case 1:
-			//May be 1D or 1D array.
-			if(IsArrayTexture(pImage, forceConvertBits))
-				Build1DArrayTexture(textureName, pImage->m_pImpl, forceConvertBits,
-					internalFormat, upload);
-			else
-				Build1DTexture(textureName, pImage->m_pImpl, forceConvertBits,
-					internalFormat, upload);
+		case gl::GL_TEXTURE_1D:
+			Build1DTexture(textureName, pImage->m_pImpl, forceConvertBits,
+				internalFormat, upload);
 			break;
-		case 2:
-			//2D, 2D array, 2D cube, or 2D array cube.
-			if(IsArrayTexture(pImage, forceConvertBits))
-			{
-				if(pImage->GetFaceCount() > 1)
-					Build2DCubeArrayTexture(textureName, pImage->m_pImpl, forceConvertBits,
-						internalFormat, upload);
-				else
-					Build2DArrayTexture(textureName, pImage->m_pImpl, forceConvertBits,
-						internalFormat, upload);
-			}
-			else
-			{
-				if(pImage->GetFaceCount() > 1)
-					Build2DCubeTexture(textureName, pImage->m_pImpl, forceConvertBits,
-						internalFormat, upload);
-				else
-					Build2DTexture(textureName, pImage->m_pImpl, forceConvertBits,
-						internalFormat, upload);
-			}
+		case gl::GL_TEXTURE_2D:
+			Build2DTexture(textureName, pImage->m_pImpl, forceConvertBits,
+				internalFormat, upload);
 			break;
-		case 3:
-			//3D.
-			Build3DTexture(textureName, pImage->m_pImpl, forceConvertBits, internalFormat, upload);
+		case gl::GL_TEXTURE_3D:
+			Build3DTexture(textureName, pImage->m_pImpl, forceConvertBits,
+				internalFormat, upload);
+			break;
+		case gl::GL_TEXTURE_1D_ARRAY:
+			Build1DArrayTexture(textureName, pImage->m_pImpl, forceConvertBits,
+				internalFormat, upload);
+			break;
+		case gl::GL_TEXTURE_2D_ARRAY:
+			Build2DArrayTexture(textureName, pImage->m_pImpl, forceConvertBits,
+				internalFormat, upload);
+			break;
+		case gl::GL_TEXTURE_CUBE_MAP:
+			Build2DCubeTexture(textureName, pImage->m_pImpl, forceConvertBits,
+				internalFormat, upload);
+			break;
+		case gl::GL_TEXTURE_CUBE_MAP_ARRAY:
+			Build2DCubeArrayTexture(textureName, pImage->m_pImpl, forceConvertBits,
+				internalFormat, upload);
 			break;
 		}
 	}
