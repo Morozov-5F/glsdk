@@ -124,6 +124,24 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	OpenGLPixelTransferParams GetUploadFormatType(const ImageFormat &format, unsigned int forceConvertBits);
 
 	/**
+	\brief Retrieves the texture type for the given ImageSet.
+
+	When the CreateTexture functions are called, they will create a texture with a specific
+	texture type. This is the target that the texture is bound to the context with, and this
+	information is baked into the texture object. It is vital to know what this type will actually
+	be, so that the texture object can be properly bound to the context.
+
+	This function will return the texture target that CreateTexture will create, given
+	\em exactly the same parameters as CreateTexture.
+
+	\param pImage The image that would be uploaded in a CreateTexture call.
+	\param forceConvertBits A bitfield containing values from ForcedConvertFlags.
+
+	\return The texture type for a texture that would be created with CreateTexture.
+	**/
+	GLenum GetTextureType(const ImageSet *pImage, unsigned int forceConvertBits);
+
+	/**
 	\brief Creates a texture object from the given ImageSet, with flags.
 
 	If an exception is thrown, no OpenGL state will be changed. If a texture was created with

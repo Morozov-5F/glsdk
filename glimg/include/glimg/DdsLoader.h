@@ -32,7 +32,7 @@ namespace glimg
 			
 			    virtual ~DdsLoaderException() throw() {}
 
-				virtual const char *what() {return message.c_str();}
+				virtual const char *what() const throw() {return message.c_str();}
 
 			protected:
 				std::string message;
@@ -99,7 +99,6 @@ namespace glimg
 
 			///As LoadFromFile, but from an already loaded buffer. The buffer pointer may be deleted after this call.
 			ImageSet *LoadFromMemory(const unsigned char *buffer, size_t bufSize);
-
 		}
 	}
 }

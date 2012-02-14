@@ -16,7 +16,7 @@ These classes provide a means for having functionality similar to immediate mode
 
 Before rendering can begin, some setup work needs to be done. Core OpenGL 3.1 and above can only render from buffer objects. Therefore, this drawing API must use a buffer object.
 
-This is provided by the StreamBuffer class. It provides an interface for sequentially adding vertex data to a buffer. It can invalidate the buffer automatically once the sequential access if there is not enough room to write a particular set of vertex data.
+This is provided by the StreamBuffer class. It provides an interface for sequentially adding vertex data to a buffer. It can invalidate the buffer automatically if there is not enough room left in the buffer to write a particular set of vertex data.
 
 The next setup is to declare a format for the vertex data. Unlike the original immediate mode, the drawing API requires an explicit format for vertex data. This is provided by the VertexFormat class, which defines a series of vertex attributes.
 
@@ -109,6 +109,38 @@ void RenderScene(glmesh::VertexFormat &vfmt, glmesh::StreamBuffer &streamBuf)
 	}
 }
 \endcode
+
+**/
+
+/**
+\defgroup module_glmesh_mesh GL Static Mesh
+\ingroup module_glmesh
+
+**/
+
+/**
+\defgroup module_glmesh_mesh_generator Mesh Generators
+\ingroup module_glmesh_mesh
+
+All generated meshes use the OpenGL default for their face orientation. Namely, counter-clockwise is front. The model space meshes are all in a right-handed coordinate system, as is standard for OpenGL.
+
+The attribute indices used by the mesh generator functions are standardized. They are as follows:
+
+\li 0: Position (three-dimensional, float)
+\li 1: Color, diffuse (four-dimensional, float)
+\li 2: Normal (three-dimensional, float)
+\li 3: Tangent, for establishing an NBT basis (three-dimensional, float)
+\li 4: Binormal, for establishing an NBT basis (three-dimensional, float)
+\li 5: Texture coordinate (two-dimensional, float)
+
+The main VAO of each mesh includes all attributes. There will be variants generated containing fewer attributes. The naming convention for generated mesh variants is as follows:
+
+\li <tt>unlit</tt> or <tt>flat</tt>: Position
+\li <tt>lit</tt>: Position+Normal
+\li <tt>tex</tt>: Position+TexCoord
+\li <tt>color</tt>: Position+Color
+
+These can be combined with <tt>-</tt> characters (except for <tt>unlit</tt>). So <tt>lit-tex</tt> means positions, normals, and texture coordinates. The order doesn't matter.
 
 **/
 

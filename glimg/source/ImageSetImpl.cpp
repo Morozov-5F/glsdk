@@ -25,7 +25,7 @@ namespace glimg
 
 	const void * detail::ImageSetImpl::GetImageData( int mipmapLevel, int arrayIx, int faceIx ) const
 	{
-		size_t imageOffset = arrayIx * faceIx * m_imageSizes[mipmapLevel];
+		size_t imageOffset = ((arrayIx * m_faceCount) + faceIx) * m_imageSizes[mipmapLevel];
 		return &m_imageData[mipmapLevel][0] + imageOffset;
 	}
 
