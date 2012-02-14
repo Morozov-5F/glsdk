@@ -27,3 +27,7 @@ gliConfig.ini
 gliInterceptLog.txt
 gliLog.txt
 OpenGL32.dll
+*.workspace
+*.cbp
+*.depend
+*.layout
