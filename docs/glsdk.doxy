@@ -202,11 +202,15 @@ The names of the libraries used with <tt>UseLibs</tt> are as follows:
 \li \a freeglut: FreeGLUT
 \li \a glm: GLM
 
+Note that all of the libraries are built linking non-statically to the C++ runtime libraries (where available on the platform). Therefore, you should not use the <tt>StaticRuntime</tt> flag in Premake4.
+
 \section page_use_native Native Build
 
 If you wish to natively link to the SDK libraries, but do not use Premake to generate your build files, you will have to do a bit of extra work. Each library has its own include paths and so forth.
 
 This section assumes that you are familiar with your build tools. You should know how to link to static library files, add directories to your include path, and add defines to your build on a per-project basis.
+
+All of the libraries are built linking non-statically to the C++ runtime libraries (where available on the platform). Therefore, any code using these libraries must do the same.
 
 The libraries use the same basic names for GCC-based builds as Visual Studio builds, but they have different extensions and prefixes. The VS libraries end in ".lib", while the GCC libraries end in ".a". The VS libraries have no prefix, while the GCC versions all begin with "lib".
 
