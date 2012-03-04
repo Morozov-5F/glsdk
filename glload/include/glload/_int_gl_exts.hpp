@@ -372,7 +372,7 @@ extern int glext_NV_transform_feedback2;
 extern int glext_ATI_meminfo;
 extern int glext_AMD_performance_monitor;
 extern int glext_AMD_texture_texture4;
-extern int glext_AMD_vertex_shader_tesselator;
+extern int glext_AMD_vertex_shader_tessellator;
 extern int glext_EXT_provoking_vertex;
 extern int glext_EXT_texture_snorm;
 extern int glext_AMD_draw_buffers_blend;
@@ -1180,6 +1180,8 @@ extern void (GLE_FUNCPTR *glCopyMultiTexSubImage3DEXT)(GLenum , GLenum , GLint ,
 extern void (GLE_FUNCPTR *glBindMultiTextureEXT)(GLenum , GLenum , GLuint );
 extern void (GLE_FUNCPTR *glEnableClientStateIndexedEXT)(GLenum , GLuint );
 extern void (GLE_FUNCPTR *glDisableClientStateIndexedEXT)(GLenum , GLuint );
+extern void (GLE_FUNCPTR *glEnableClientStateiEXT)(GLenum , GLuint );
+extern void (GLE_FUNCPTR *glDisableClientStateiEXT)(GLenum , GLuint );
 extern void (GLE_FUNCPTR *glMultiTexCoordPointerEXT)(GLenum , GLint , GLenum , GLsizei , const GLvoid *);
 extern void (GLE_FUNCPTR *glMultiTexEnvfEXT)(GLenum , GLenum , GLenum , GLfloat );
 extern void (GLE_FUNCPTR *glMultiTexEnvfvEXT)(GLenum , GLenum , GLenum , const GLfloat *);
@@ -1199,6 +1201,9 @@ extern void (GLE_FUNCPTR *glGetMultiTexGenivEXT)(GLenum , GLenum , GLenum , GLin
 extern void (GLE_FUNCPTR *glGetFloatIndexedvEXT)(GLenum , GLuint , GLfloat *);
 extern void (GLE_FUNCPTR *glGetDoubleIndexedvEXT)(GLenum , GLuint , GLdouble *);
 extern void (GLE_FUNCPTR *glGetPointerIndexedvEXT)(GLenum , GLuint , GLvoid* *);
+extern void (GLE_FUNCPTR *glGetFloati_vEXT)(GLenum , GLuint , GLfloat *);
+extern void (GLE_FUNCPTR *glGetDoublei_vEXT)(GLenum , GLuint , GLdouble *);
+extern void (GLE_FUNCPTR *glGetPointeri_vEXT)(GLenum , GLuint , GLvoid* *);
 extern void (GLE_FUNCPTR *glCompressedTextureImage3DEXT)(GLuint , GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
 extern void (GLE_FUNCPTR *glCompressedTextureImage2DEXT)(GLuint , GLenum , GLint , GLenum , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
 extern void (GLE_FUNCPTR *glCompressedTextureImage1DEXT)(GLuint , GLenum , GLint , GLenum , GLsizei , GLint , GLsizei , const GLvoid *);
@@ -1322,6 +1327,25 @@ extern void (GLE_FUNCPTR *glProgramUniformMatrix3x2dvEXT)(GLuint , GLint , GLsiz
 extern void (GLE_FUNCPTR *glProgramUniformMatrix3x4dvEXT)(GLuint , GLint , GLsizei , GLboolean , const GLdouble *);
 extern void (GLE_FUNCPTR *glProgramUniformMatrix4x2dvEXT)(GLuint , GLint , GLsizei , GLboolean , const GLdouble *);
 extern void (GLE_FUNCPTR *glProgramUniformMatrix4x3dvEXT)(GLuint , GLint , GLsizei , GLboolean , const GLdouble *);
+extern void (GLE_FUNCPTR *glEnableVertexArrayAttribEXT)(GLuint , GLuint );
+extern void (GLE_FUNCPTR *glDisableVertexArrayAttribEXT)(GLuint , GLuint );
+extern void (GLE_FUNCPTR *glEnableVertexArrayEXT)(GLuint , GLenum );
+extern void (GLE_FUNCPTR *glDisableVertexArrayEXT)(GLuint , GLenum );
+extern void (GLE_FUNCPTR *glVertexArrayColorOffsetEXT)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArrayEdgeFlagOffsetEXT)(GLuint , GLuint , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArrayFogCoordOffsetEXT)(GLuint , GLuint , GLenum , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArrayIndexOffsetEXT)(GLuint , GLuint , GLenum , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArrayMultiTexCoordOffsetEXT)(GLuint , GLuint , GLenum , GLint , GLenum , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArrayNormalOffsetEXT)(GLuint , GLuint , GLenum , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArraySecondaryColorOffsetEXT)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArrayTexCoordOffsetEXT)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArrayVertexOffsetEXT)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArrayVertexAttribIOffsetEXT)(GLuint , GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glglVertexArrayVertexAttribOffsetEXT)(GLuint , GLuint , GLuint , GLint , GLenum , GLboolean , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glGetVertexArrayIntegervEXT)(GLuint , GLenum , GLint *);
+extern void (GLE_FUNCPTR *glGetVertexArrayPointervEXT)(GLuint , GLenum , GLvoid* *);
+extern void (GLE_FUNCPTR *glGetVertexArrayIntegeri_vEXT)(GLuint , GLuint , GLenum , GLint *);
+extern void (GLE_FUNCPTR *glGetVertexArrayPointeri_vEXT)(GLuint , GLuint , GLenum , GLvoid* *);
 extern void (GLE_FUNCPTR *glColorMaskIndexedEXT)(GLuint , GLboolean , GLboolean , GLboolean , GLboolean );
 extern void (GLE_FUNCPTR *glGetBooleanIndexedvEXT)(GLenum , GLuint , GLboolean *);
 extern void (GLE_FUNCPTR *glGetIntegerIndexedvEXT)(GLenum , GLuint , GLint *);
@@ -1396,6 +1420,8 @@ extern void (GLE_FUNCPTR *glPixelTransformParameteriEXT)(GLenum , GLenum , GLint
 extern void (GLE_FUNCPTR *glPixelTransformParameterfEXT)(GLenum , GLenum , GLfloat );
 extern void (GLE_FUNCPTR *glPixelTransformParameterivEXT)(GLenum , GLenum , const GLint *);
 extern void (GLE_FUNCPTR *glPixelTransformParameterfvEXT)(GLenum , GLenum , const GLfloat *);
+extern void (GLE_FUNCPTR *glGetPixelTransformParameterivEXT)(GLenum , GLenum , GLint *);
+extern void (GLE_FUNCPTR *glGetPixelTransformParameterfvEXT)(GLenum , GLenum , GLfloat *);
 extern void (GLE_FUNCPTR *glPointParameterfEXT)(GLenum , GLfloat );
 extern void (GLE_FUNCPTR *glPointParameterfvEXT)(GLenum , const GLfloat *);
 extern void (GLE_FUNCPTR *glPolygonOffsetEXT)(GLfloat , GLfloat );
@@ -1515,7 +1541,7 @@ extern void (GLE_FUNCPTR *glGetLocalConstantIntegervEXT)(GLuint , GLenum , GLint
 extern void (GLE_FUNCPTR *glGetLocalConstantFloatvEXT)(GLuint , GLenum , GLfloat *);
 extern void (GLE_FUNCPTR *glVertexWeightfEXT)(GLfloat );
 extern void (GLE_FUNCPTR *glVertexWeightfvEXT)(const GLfloat *);
-extern void (GLE_FUNCPTR *glVertexWeightPointerEXT)(GLsizei , GLenum , GLsizei , const GLvoid *);
+extern void (GLE_FUNCPTR *glVertexWeightPointerEXT)(GLint , GLenum , GLsizei , const GLvoid *);
 extern GLsync (GLE_FUNCPTR *glImportSyncEXT)(GLenum , GLintptr , GLbitfield );
 extern void (GLE_FUNCPTR *glFrameTerminatorGREMEDY)();
 extern void (GLE_FUNCPTR *glStringMarkerGREMEDY)(GLsizei , const GLvoid *);
@@ -1757,7 +1783,7 @@ extern void (GLE_FUNCPTR *glTextureImage2DMultisampleCoverageNV)(GLuint , GLenum
 extern void (GLE_FUNCPTR *glTextureImage3DMultisampleCoverageNV)(GLuint , GLenum , GLsizei , GLsizei , GLint , GLsizei , GLsizei , GLsizei , GLboolean );
 extern void (GLE_FUNCPTR *glBeginTransformFeedbackNV)(GLenum );
 extern void (GLE_FUNCPTR *glEndTransformFeedbackNV)();
-extern void (GLE_FUNCPTR *glTransformFeedbackAttribsNV)(GLuint , const GLint *, GLenum );
+extern void (GLE_FUNCPTR *glTransformFeedbackAttribsNV)(GLsizei , const GLint *, GLenum );
 extern void (GLE_FUNCPTR *glBindBufferRangeNV)(GLenum , GLuint , GLuint , GLintptr , GLsizeiptr );
 extern void (GLE_FUNCPTR *glBindBufferOffsetNV)(GLenum , GLuint , GLuint , GLintptr );
 extern void (GLE_FUNCPTR *glBindBufferBaseNV)(GLenum , GLuint , GLuint );
@@ -1776,8 +1802,8 @@ extern void (GLE_FUNCPTR *glResumeTransformFeedbackNV)();
 extern void (GLE_FUNCPTR *glDrawTransformFeedbackNV)(GLenum , GLuint );
 extern void (GLE_FUNCPTR *glVDPAUInitNV)(const GLvoid *, const GLvoid *);
 extern void (GLE_FUNCPTR *glVDPAUFiniNV)();
-extern GLvdpauSurfaceNV (GLE_FUNCPTR *glVDPAURegisterVideoSurfaceNV)(GLvoid *, GLenum , GLsizei , const GLuint *);
-extern GLvdpauSurfaceNV (GLE_FUNCPTR *glVDPAURegisterOutputSurfaceNV)(GLvoid *, GLenum , GLsizei , const GLuint *);
+extern GLvdpauSurfaceNV (GLE_FUNCPTR *glVDPAURegisterVideoSurfaceNV)(GLvoid* , GLenum , GLsizei , const GLuint *);
+extern GLvdpauSurfaceNV (GLE_FUNCPTR *glVDPAURegisterOutputSurfaceNV)(GLvoid* , GLenum , GLsizei , const GLuint *);
 extern void (GLE_FUNCPTR *glVDPAUIsSurfaceNV)(GLvdpauSurfaceNV );
 extern void (GLE_FUNCPTR *glVDPAUUnregisterSurfaceNV)(GLvdpauSurfaceNV );
 extern void (GLE_FUNCPTR *glVDPAUGetSurfaceivNV)(GLvdpauSurfaceNV , GLenum , GLsizei , GLsizei *, GLint *);
@@ -2085,6 +2111,7 @@ namespace gl
 * Extension: GL_AMD_debug_output
 ******************************/
 		GL_MAX_DEBUG_LOGGED_MESSAGES_AMD = 0x9144,
+		GL_MAX_DEBUG_MESSAGE_LENGTH_AMD  = 0x9143,
 		GL_DEBUG_LOGGED_MESSAGES_AMD     = 0x9145,
 		GL_DEBUG_SEVERITY_HIGH_AMD       = 0x9146,
 		GL_DEBUG_SEVERITY_MEDIUM_AMD     = 0x9147,
@@ -2130,7 +2157,7 @@ namespace gl
 		GL_SUBSAMPLE_DISTANCE_AMD        = 0x883F,
 
 /******************************
-* Extension: GL_AMD_vertex_shader_tesselator
+* Extension: GL_AMD_vertex_shader_tessellator
 ******************************/
 		GL_SAMPLER_BUFFER_AMD            = 0x9001,
 		GL_INT_SAMPLER_BUFFER_AMD        = 0x9002,
@@ -2280,6 +2307,7 @@ namespace gl
 		GL_MEDIUM_INT                    = 0x8DF4,
 		GL_HIGH_INT                      = 0x8DF5,
 		GL_SHADER_COMPILER               = 0x8DFA,
+		GL_SHADER_BINARY_FORMATS         = 0x8DF8,
 		GL_NUM_SHADER_BINARY_FORMATS     = 0x8DF9,
 		GL_MAX_VERTEX_UNIFORM_VECTORS    = 0x8DFB,
 		GL_MAX_VARYING_VECTORS           = 0x8DFC,
@@ -3218,6 +3246,7 @@ namespace gl
 ******************************/
 		GL_MIN_PROGRAM_TEXTURE_GATHER_OFFSET_ARB = 0x8E5E,
 		GL_MAX_PROGRAM_TEXTURE_GATHER_OFFSET_ARB = 0x8E5F,
+		GL_MAX_PROGRAM_TEXTURE_GATHER_COMPONENTS_ARB = 0x8F9F,
 
 /******************************
 * Extension: GL_ARB_texture_mirrored_repeat
@@ -3751,7 +3780,7 @@ namespace gl
 /******************************
 * Extension: GL_ATI_pixel_format_float
 ******************************/
-		GL_TYPE_RGBA_FLOAT_ATI           = 0x8820,
+		GL_RGBA_FLOAT_MODE_ATI           = 0x8820,
 		GL_COLOR_CLEAR_UNCLAMPED_VALUE_ATI = 0x8835,
 
 /******************************
@@ -5600,7 +5629,7 @@ namespace gl
 		GL_PRIMITIVES_GENERATED_NV       = 0x8C87,
 		GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN_NV = 0x8C88,
 		GL_RASTERIZER_DISCARD_NV         = 0x8C89,
-		GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_ATTRIBS_NV = 0x8C8A,
+		GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS_NV = 0x8C8A,
 		GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS_NV = 0x8C8B,
 		GL_INTERLEAVED_ATTRIBS_NV        = 0x8C8C,
 		GL_SEPARATE_ATTRIBS_NV           = 0x8C8D,
@@ -5900,6 +5929,8 @@ namespace gl
 		GL_RGB4_S3TC                     = 0x83A1,
 		GL_RGBA_S3TC                     = 0x83A2,
 		GL_RGBA4_S3TC                    = 0x83A3,
+		GL_RGBA_DXT5_S3TC                = 0x83A4,
+		GL_RGBA4_DXT5_S3TC               = 0x83A5,
 
 /******************************
 * Extension: GL_SGIS_detail_texture
@@ -6489,7 +6520,7 @@ namespace gl
 	inline void SetMultisamplefvAMD(GLenum pname, GLuint index, const GLfloat *val) { ::glSetMultisamplefvAMD(pname, index, val); }
 
 /******************************
-* Extension: GL_AMD_vertex_shader_tesselator
+* Extension: GL_AMD_vertex_shader_tessellator
 ******************************/
 	inline void TessellationFactorAMD(GLfloat factor) { ::glTessellationFactorAMD(factor); }
 	inline void TessellationModeAMD(GLenum mode) { ::glTessellationModeAMD(mode); }
@@ -7576,6 +7607,8 @@ namespace gl
 	inline void BindMultiTextureEXT(GLenum texunit, GLenum target, GLuint texture) { ::glBindMultiTextureEXT(texunit, target, texture); }
 	inline void EnableClientStateIndexedEXT(GLenum ren_array, GLuint index) { ::glEnableClientStateIndexedEXT(ren_array, index); }
 	inline void DisableClientStateIndexedEXT(GLenum ren_array, GLuint index) { ::glDisableClientStateIndexedEXT(ren_array, index); }
+	inline void EnableClientStateiEXT(GLenum ren_array, GLuint index) { ::glEnableClientStateiEXT(ren_array, index); }
+	inline void DisableClientStateiEXT(GLenum ren_array, GLuint index) { ::glDisableClientStateiEXT(ren_array, index); }
 	inline void MultiTexCoordPointerEXT(GLenum texunit, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) { ::glMultiTexCoordPointerEXT(texunit, size, type, stride, pointer); }
 	inline void MultiTexEnvfEXT(GLenum texunit, GLenum target, GLenum pname, GLfloat param) { ::glMultiTexEnvfEXT(texunit, target, pname, param); }
 	inline void MultiTexEnvfvEXT(GLenum texunit, GLenum target, GLenum pname, const GLfloat *params) { ::glMultiTexEnvfvEXT(texunit, target, pname, params); }
@@ -7595,6 +7628,9 @@ namespace gl
 	inline void GetFloatIndexedvEXT(GLenum target, GLuint index, GLfloat *data) { ::glGetFloatIndexedvEXT(target, index, data); }
 	inline void GetDoubleIndexedvEXT(GLenum target, GLuint index, GLdouble *data) { ::glGetDoubleIndexedvEXT(target, index, data); }
 	inline void GetPointerIndexedvEXT(GLenum target, GLuint index, GLvoid* *data) { ::glGetPointerIndexedvEXT(target, index, data); }
+	inline void GetFloati_vEXT(GLenum target, GLuint index, GLfloat *data) { ::glGetFloati_vEXT(target, index, data); }
+	inline void GetDoublei_vEXT(GLenum target, GLuint index, GLdouble *data) { ::glGetDoublei_vEXT(target, index, data); }
+	inline void GetPointeri_vEXT(GLenum target, GLuint index, GLvoid* *data) { ::glGetPointeri_vEXT(target, index, data); }
 	inline void CompressedTextureImage3DEXT(GLuint texture, GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const GLvoid *bits) { ::glCompressedTextureImage3DEXT(texture, target, level, internalformat, width, height, depth, border, imageSize, bits); }
 	inline void CompressedTextureImage2DEXT(GLuint texture, GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *bits) { ::glCompressedTextureImage2DEXT(texture, target, level, internalformat, width, height, border, imageSize, bits); }
 	inline void CompressedTextureImage1DEXT(GLuint texture, GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid *bits) { ::glCompressedTextureImage1DEXT(texture, target, level, internalformat, width, border, imageSize, bits); }
@@ -7718,6 +7754,25 @@ namespace gl
 	inline void ProgramUniformMatrix3x4dvEXT(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLdouble *value) { ::glProgramUniformMatrix3x4dvEXT(program, location, count, transpose, value); }
 	inline void ProgramUniformMatrix4x2dvEXT(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLdouble *value) { ::glProgramUniformMatrix4x2dvEXT(program, location, count, transpose, value); }
 	inline void ProgramUniformMatrix4x3dvEXT(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLdouble *value) { ::glProgramUniformMatrix4x3dvEXT(program, location, count, transpose, value); }
+	inline void EnableVertexArrayAttribEXT(GLuint vaobj, GLuint index) { ::glEnableVertexArrayAttribEXT(vaobj, index); }
+	inline void DisableVertexArrayAttribEXT(GLuint vaobj, GLuint index) { ::glDisableVertexArrayAttribEXT(vaobj, index); }
+	inline void EnableVertexArrayEXT(GLuint vaobj, GLenum ren_array) { ::glEnableVertexArrayEXT(vaobj, ren_array); }
+	inline void DisableVertexArrayEXT(GLuint vaobj, GLenum ren_array) { ::glDisableVertexArrayEXT(vaobj, ren_array); }
+	inline void VertexArrayColorOffsetEXT(GLuint vaobj, GLuint buffer, GLint size, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayColorOffsetEXT(vaobj, buffer, size, type, stride, offset); }
+	inline void VertexArrayEdgeFlagOffsetEXT(GLuint vaobj, GLuint buffer, GLsizei stride, GLintptr offset) { ::glVertexArrayEdgeFlagOffsetEXT(vaobj, buffer, stride, offset); }
+	inline void VertexArrayFogCoordOffsetEXT(GLuint vaobj, GLuint buffer, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayFogCoordOffsetEXT(vaobj, buffer, type, stride, offset); }
+	inline void VertexArrayIndexOffsetEXT(GLuint vaobj, GLuint buffer, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayIndexOffsetEXT(vaobj, buffer, type, stride, offset); }
+	inline void VertexArrayMultiTexCoordOffsetEXT(GLuint vaobj, GLuint buffer, GLenum texunit, GLint size, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayMultiTexCoordOffsetEXT(vaobj, buffer, texunit, size, type, stride, offset); }
+	inline void VertexArrayNormalOffsetEXT(GLuint vaobj, GLuint buffer, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayNormalOffsetEXT(vaobj, buffer, type, stride, offset); }
+	inline void VertexArraySecondaryColorOffsetEXT(GLuint vaobj, GLuint buffer, GLint size, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArraySecondaryColorOffsetEXT(vaobj, buffer, size, type, stride, offset); }
+	inline void VertexArrayTexCoordOffsetEXT(GLuint vaobj, GLuint buffer, GLint size, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayTexCoordOffsetEXT(vaobj, buffer, size, type, stride, offset); }
+	inline void VertexArrayVertexOffsetEXT(GLuint vaobj, GLuint buffer, GLint size, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayVertexOffsetEXT(vaobj, buffer, size, type, stride, offset); }
+	inline void VertexArrayVertexAttribIOffsetEXT(GLuint vaobj, GLuint buffer, GLuint index, GLint size, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayVertexAttribIOffsetEXT(vaobj, buffer, index, size, type, stride, offset); }
+	inline void glVertexArrayVertexAttribOffsetEXT(GLuint vaobj, GLuint buffer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLintptr offset) { ::glglVertexArrayVertexAttribOffsetEXT(vaobj, buffer, index, size, type, normalized, stride, offset); }
+	inline void GetVertexArrayIntegervEXT(GLuint vaobj, GLenum pname, GLint *param) { ::glGetVertexArrayIntegervEXT(vaobj, pname, param); }
+	inline void GetVertexArrayPointervEXT(GLuint vaobj, GLenum pname, GLvoid* *param) { ::glGetVertexArrayPointervEXT(vaobj, pname, param); }
+	inline void GetVertexArrayIntegeri_vEXT(GLuint vaobj, GLuint index, GLenum pname, GLint *param) { ::glGetVertexArrayIntegeri_vEXT(vaobj, index, pname, param); }
+	inline void GetVertexArrayPointeri_vEXT(GLuint vaobj, GLuint index, GLenum pname, GLvoid* *param) { ::glGetVertexArrayPointeri_vEXT(vaobj, index, pname, param); }
 
 /******************************
 * Extension: GL_EXT_draw_buffers2
@@ -7864,6 +7919,8 @@ namespace gl
 	inline void PixelTransformParameterfEXT(GLenum target, GLenum pname, GLfloat param) { ::glPixelTransformParameterfEXT(target, pname, param); }
 	inline void PixelTransformParameterivEXT(GLenum target, GLenum pname, const GLint *params) { ::glPixelTransformParameterivEXT(target, pname, params); }
 	inline void PixelTransformParameterfvEXT(GLenum target, GLenum pname, const GLfloat *params) { ::glPixelTransformParameterfvEXT(target, pname, params); }
+	inline void GetPixelTransformParameterivEXT(GLenum target, GLenum pname, GLint *params) { ::glGetPixelTransformParameterivEXT(target, pname, params); }
+	inline void GetPixelTransformParameterfvEXT(GLenum target, GLenum pname, GLfloat *params) { ::glGetPixelTransformParameterfvEXT(target, pname, params); }
 
 /******************************
 * Extension: GL_EXT_point_parameters
@@ -8063,7 +8120,7 @@ namespace gl
 ******************************/
 	inline void VertexWeightfEXT(GLfloat weight) { ::glVertexWeightfEXT(weight); }
 	inline void VertexWeightfvEXT(const GLfloat *weight) { ::glVertexWeightfvEXT(weight); }
-	inline void VertexWeightPointerEXT(GLsizei size, GLenum type, GLsizei stride, const GLvoid *pointer) { ::glVertexWeightPointerEXT(size, type, stride, pointer); }
+	inline void VertexWeightPointerEXT(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) { ::glVertexWeightPointerEXT(size, type, stride, pointer); }
 
 /******************************
 * Extension: GL_EXT_x11_sync_object
@@ -8441,7 +8498,7 @@ namespace gl
 ******************************/
 	inline void BeginTransformFeedbackNV(GLenum primitiveMode) { ::glBeginTransformFeedbackNV(primitiveMode); }
 	inline void EndTransformFeedbackNV() { ::glEndTransformFeedbackNV(); }
-	inline void TransformFeedbackAttribsNV(GLuint count, const GLint *attribs, GLenum bufferMode) { ::glTransformFeedbackAttribsNV(count, attribs, bufferMode); }
+	inline void TransformFeedbackAttribsNV(GLsizei count, const GLint *attribs, GLenum bufferMode) { ::glTransformFeedbackAttribsNV(count, attribs, bufferMode); }
 	inline void BindBufferRangeNV(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size) { ::glBindBufferRangeNV(target, index, buffer, offset, size); }
 	inline void BindBufferOffsetNV(GLenum target, GLuint index, GLuint buffer, GLintptr offset) { ::glBindBufferOffsetNV(target, index, buffer, offset); }
 	inline void BindBufferBaseNV(GLenum target, GLuint index, GLuint buffer) { ::glBindBufferBaseNV(target, index, buffer); }
@@ -8468,8 +8525,8 @@ namespace gl
 ******************************/
 	inline void VDPAUInitNV(const GLvoid *vdpDevice, const GLvoid *getProcAddress) { ::glVDPAUInitNV(vdpDevice, getProcAddress); }
 	inline void VDPAUFiniNV() { ::glVDPAUFiniNV(); }
-	inline GLvdpauSurfaceNV VDPAURegisterVideoSurfaceNV(GLvoid *vdpSurface, GLenum target, GLsizei numTextureNames, const GLuint *textureNames) { return ::glVDPAURegisterVideoSurfaceNV(vdpSurface, target, numTextureNames, textureNames); }
-	inline GLvdpauSurfaceNV VDPAURegisterOutputSurfaceNV(GLvoid *vdpSurface, GLenum target, GLsizei numTextureNames, const GLuint *textureNames) { return ::glVDPAURegisterOutputSurfaceNV(vdpSurface, target, numTextureNames, textureNames); }
+	inline GLvdpauSurfaceNV VDPAURegisterVideoSurfaceNV(GLvoid* vdpSurface, GLenum target, GLsizei numTextureNames, const GLuint *textureNames) { return ::glVDPAURegisterVideoSurfaceNV(vdpSurface, target, numTextureNames, textureNames); }
+	inline GLvdpauSurfaceNV VDPAURegisterOutputSurfaceNV(GLvoid* vdpSurface, GLenum target, GLsizei numTextureNames, const GLuint *textureNames) { return ::glVDPAURegisterOutputSurfaceNV(vdpSurface, target, numTextureNames, textureNames); }
 	inline void VDPAUIsSurfaceNV(GLvdpauSurfaceNV surface) { ::glVDPAUIsSurfaceNV(surface); }
 	inline void VDPAUUnregisterSurfaceNV(GLvdpauSurfaceNV surface) { ::glVDPAUUnregisterSurfaceNV(surface); }
 	inline void VDPAUGetSurfaceivNV(GLvdpauSurfaceNV surface, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values) { ::glVDPAUGetSurfaceivNV(surface, pname, bufSize, length, values); }

@@ -227,9 +227,9 @@ extern void (GLE_FUNCPTR *__gleAlphaFunc)(GLenum , GLclampf );
 extern void (GLE_FUNCPTR *__glePixelZoom)(GLfloat , GLfloat );
 extern void (GLE_FUNCPTR *__glePixelTransferf)(GLenum , GLfloat );
 extern void (GLE_FUNCPTR *__glePixelTransferi)(GLenum , GLint );
-extern void (GLE_FUNCPTR *__glePixelMapfv)(GLenum , GLint , const GLfloat *);
-extern void (GLE_FUNCPTR *__glePixelMapuiv)(GLenum , GLint , const GLuint *);
-extern void (GLE_FUNCPTR *__glePixelMapusv)(GLenum , GLint , const GLushort *);
+extern void (GLE_FUNCPTR *__glePixelMapfv)(GLenum , GLsizei , const GLfloat *);
+extern void (GLE_FUNCPTR *__glePixelMapuiv)(GLenum , GLsizei , const GLuint *);
+extern void (GLE_FUNCPTR *__glePixelMapusv)(GLenum , GLsizei , const GLushort *);
 extern void (GLE_FUNCPTR *__gleCopyPixels)(GLint , GLint , GLsizei , GLsizei , GLenum );
 extern void (GLE_FUNCPTR *__gleDrawPixels)(GLsizei , GLsizei , GLenum , GLenum , const GLvoid *);
 extern void (GLE_FUNCPTR *__gleGetClipPlane)(GLenum , GLdouble *);
@@ -837,9 +837,9 @@ namespace gl
 	inline void PixelZoom(GLfloat xfactor, GLfloat yfactor) { ::__glePixelZoom(xfactor, yfactor); }
 	inline void PixelTransferf(GLenum pname, GLfloat param) { ::__glePixelTransferf(pname, param); }
 	inline void PixelTransferi(GLenum pname, GLint param) { ::__glePixelTransferi(pname, param); }
-	inline void PixelMapfv(GLenum map, GLint mapsize, const GLfloat *values) { ::__glePixelMapfv(map, mapsize, values); }
-	inline void PixelMapuiv(GLenum map, GLint mapsize, const GLuint *values) { ::__glePixelMapuiv(map, mapsize, values); }
-	inline void PixelMapusv(GLenum map, GLint mapsize, const GLushort *values) { ::__glePixelMapusv(map, mapsize, values); }
+	inline void PixelMapfv(GLenum map, GLsizei mapsize, const GLfloat *values) { ::__glePixelMapfv(map, mapsize, values); }
+	inline void PixelMapuiv(GLenum map, GLsizei mapsize, const GLuint *values) { ::__glePixelMapuiv(map, mapsize, values); }
+	inline void PixelMapusv(GLenum map, GLsizei mapsize, const GLushort *values) { ::__glePixelMapusv(map, mapsize, values); }
 	inline void CopyPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum type) { ::__gleCopyPixels(x, y, width, height, type); }
 	inline void DrawPixels(GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels) { ::__gleDrawPixels(width, height, format, type, pixels); }
 	inline void GetClipPlane(GLenum plane, GLdouble *equation) { ::__gleGetClipPlane(plane, equation); }

@@ -176,6 +176,7 @@ int wglext_ARB_create_context_robustness = 0;
 int wglext_EXT_make_current_read = 0;
 int wglext_EXT_pixel_format = 0;
 int wglext_EXT_pbuffer = 0;
+int wglext_EXT_swap_control = 0;
 int wglext_EXT_depth_float = 0;
 int wglext_3DFX_multisample = 0;
 int wglext_EXT_multisample = 0;
@@ -192,7 +193,7 @@ int wglext_3DL_stereo_control = 0;
 int wglext_EXT_pixel_format_packed_float = 0;
 int wglext_EXT_framebuffer_sRGB = 0;
 int wglext_NV_present_video = 0;
-int wglext_NV_video_out = 0;
+int wglext_NV_video_output = 0;
 int wglext_NV_swap_group = 0;
 int wglext_NV_gpu_affinity = 0;
 int wglext_AMD_gpu_association = 0;
@@ -220,6 +221,7 @@ void wgleIntClear()
 	wglext_EXT_make_current_read = 0;
 	wglext_EXT_pixel_format = 0;
 	wglext_EXT_pbuffer = 0;
+	wglext_EXT_swap_control = 0;
 	wglext_EXT_depth_float = 0;
 	wglext_3DFX_multisample = 0;
 	wglext_EXT_multisample = 0;
@@ -236,7 +238,7 @@ void wgleIntClear()
 	wglext_EXT_pixel_format_packed_float = 0;
 	wglext_EXT_framebuffer_sRGB = 0;
 	wglext_NV_present_video = 0;
-	wglext_NV_video_out = 0;
+	wglext_NV_video_output = 0;
 	wglext_NV_swap_group = 0;
 	wglext_NV_gpu_affinity = 0;
 	wglext_AMD_gpu_association = 0;
@@ -548,6 +550,25 @@ static int wgleIntLoad_EXT_pixel_format()
 	return bIsLoaded;
 }
 
+#ifndef WGL_EXT_swap_control
+typedef BOOL (GLE_FUNCPTR * PFNWGLSWAPINTERVALEXTPROC)(int );
+typedef int (GLE_FUNCPTR * PFNWGLGETSWAPINTERVALEXTPROC)();
+
+PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
+PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
+#endif /*WGL_EXT_swap_control*/
+
+static int wgleIntLoad_EXT_swap_control()
+{
+	int bIsLoaded = 1;
+#ifndef WGL_EXT_swap_control
+	wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)gleIntGetProcAddress("wglSwapIntervalEXT");
+	if(!wglSwapIntervalEXT) bIsLoaded = 0;
+	wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)gleIntGetProcAddress("wglGetSwapIntervalEXT");
+	if(!wglGetSwapIntervalEXT) bIsLoaded = 0;
+#endif /*WGL_EXT_swap_control*/
+	return bIsLoaded;
+}
 #ifndef WGL_I3D_digital_video_control
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETDIGITALVIDEOPARAMETERSI3DPROC)(HDC , int , int *);
 typedef BOOL (GLE_FUNCPTR * PFNWGLSETDIGITALVIDEOPARAMETERSI3DPROC)(HDC , int , const int *);
@@ -889,7 +910,41 @@ static int wgleIntLoad_NV_video_capture()
 #endif /*WGL_NV_video_capture*/
 	return bIsLoaded;
 }
+#ifndef WGL_NV_video_output
+typedef BOOL (GLE_FUNCPTR * PFNWGLGETVIDEODEVICENVPROC)(HDC , int , HPVIDEODEV *);
+typedef BOOL (GLE_FUNCPTR * PFNWGLRELEASEVIDEODEVICENVPROC)(HPVIDEODEV );
+typedef BOOL (GLE_FUNCPTR * PFNWGLBINDVIDEOIMAGENVPROC)(HPVIDEODEV , HPBUFFERARB , int );
+typedef BOOL (GLE_FUNCPTR * PFNWGLRELEASEVIDEOIMAGENVPROC)(HPBUFFERARB , int );
+typedef BOOL (GLE_FUNCPTR * PFNWGLSENDPBUFFERTOVIDEONVPROC)(HPBUFFERARB , int , unsigned long *, BOOL );
+typedef BOOL (GLE_FUNCPTR * PFNWGLGETVIDEOINFONVPROC)(HPVIDEODEV , unsigned long *, unsigned long *);
 
+PFNWGLGETVIDEODEVICENVPROC wglGetVideoDeviceNV;
+PFNWGLRELEASEVIDEODEVICENVPROC wglReleaseVideoDeviceNV;
+PFNWGLBINDVIDEOIMAGENVPROC wglBindVideoImageNV;
+PFNWGLRELEASEVIDEOIMAGENVPROC wglReleaseVideoImageNV;
+PFNWGLSENDPBUFFERTOVIDEONVPROC wglSendPbufferToVideoNV;
+PFNWGLGETVIDEOINFONVPROC wglGetVideoInfoNV;
+#endif /*WGL_NV_video_output*/
+
+static int wgleIntLoad_NV_video_output()
+{
+	int bIsLoaded = 1;
+#ifndef WGL_NV_video_output
+	wglGetVideoDeviceNV = (PFNWGLGETVIDEODEVICENVPROC)gleIntGetProcAddress("wglGetVideoDeviceNV");
+	if(!wglGetVideoDeviceNV) bIsLoaded = 0;
+	wglReleaseVideoDeviceNV = (PFNWGLRELEASEVIDEODEVICENVPROC)gleIntGetProcAddress("wglReleaseVideoDeviceNV");
+	if(!wglReleaseVideoDeviceNV) bIsLoaded = 0;
+	wglBindVideoImageNV = (PFNWGLBINDVIDEOIMAGENVPROC)gleIntGetProcAddress("wglBindVideoImageNV");
+	if(!wglBindVideoImageNV) bIsLoaded = 0;
+	wglReleaseVideoImageNV = (PFNWGLRELEASEVIDEOIMAGENVPROC)gleIntGetProcAddress("wglReleaseVideoImageNV");
+	if(!wglReleaseVideoImageNV) bIsLoaded = 0;
+	wglSendPbufferToVideoNV = (PFNWGLSENDPBUFFERTOVIDEONVPROC)gleIntGetProcAddress("wglSendPbufferToVideoNV");
+	if(!wglSendPbufferToVideoNV) bIsLoaded = 0;
+	wglGetVideoInfoNV = (PFNWGLGETVIDEOINFONVPROC)gleIntGetProcAddress("wglGetVideoInfoNV");
+	if(!wglGetVideoInfoNV) bIsLoaded = 0;
+#endif /*WGL_NV_video_output*/
+	return bIsLoaded;
+}
 StrToExtMap wgleIntExtensionMap[] = {
 	{"WGL_3DFX_multisample", &wglext_3DFX_multisample, NULL},
 	{"WGL_3DL_stereo_control", &wglext_3DL_stereo_control, wgleIntLoad_3DL_stereo_control},
@@ -915,6 +970,7 @@ StrToExtMap wgleIntExtensionMap[] = {
 	{"WGL_EXT_pbuffer", &wglext_EXT_pbuffer, wgleIntLoad_EXT_pbuffer},
 	{"WGL_EXT_pixel_format", &wglext_EXT_pixel_format, wgleIntLoad_EXT_pixel_format},
 	{"WGL_EXT_pixel_format_packed_float", &wglext_EXT_pixel_format_packed_float, NULL},
+	{"WGL_EXT_swap_control", &wglext_EXT_swap_control, wgleIntLoad_EXT_swap_control},
 	{"WGL_I3D_digital_video_control", &wglext_I3D_digital_video_control, wgleIntLoad_I3D_digital_video_control},
 	{"WGL_I3D_gamma", &wglext_I3D_gamma, wgleIntLoad_I3D_gamma},
 	{"WGL_I3D_genlock", &wglext_I3D_genlock, wgleIntLoad_I3D_genlock},
@@ -930,10 +986,10 @@ StrToExtMap wgleIntExtensionMap[] = {
 	{"WGL_NV_render_texture_rectangle", &wglext_NV_render_texture_rectangle, NULL},
 	{"WGL_NV_swap_group", &wglext_NV_swap_group, wgleIntLoad_NV_swap_group},
 	{"WGL_NV_video_capture", &wglext_NV_video_capture, wgleIntLoad_NV_video_capture},
-	{"WGL_NV_video_out", &wglext_NV_video_out, NULL},
+	{"WGL_NV_video_output", &wglext_NV_video_output, wgleIntLoad_NV_video_output},
 };
 
-int wgleIntExtensionMapSize = 40;
+int wgleIntExtensionMapSize = 41;
 
 
 
