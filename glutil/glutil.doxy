@@ -68,6 +68,14 @@ Since it is a very useful feature, the GL Util library provides the MatrixStack 
 \ingroup module_glutil
 **/
 
+/**
+\defgroup module_glutil_font Basic Font System
+
+\brief Classes for basic font rendering.
+
+\ingroup module_glutil
+**/
+
 
 /**
 \defgroup module_glutil_exceptions Utility Exceptions

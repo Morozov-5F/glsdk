@@ -22,28 +22,29 @@ void InitializeProgram()
 		"#version 330\n"
 		"\n"
 		"layout(location = 0) in vec4 position;\n"
-		"layout(location = 1) in vec4 color;\n"
+		"layout(location = 1) in vec4 texCoord;\n"
 		"\n"
-		"smooth out vec4 theColor;\n"
+		"smooth out vec2 glyphCoord;\n"
 		"\n"
 		"uniform mat4 cameraToClipMatrix;\n"
 		"\n"
 		"void main()\n"
 		"{\n"
 		"	gl_Position = cameraToClipMatrix * position;\n"
-		"	theColor = color;\n"
+		"	glyphCoord = texCoord.st;\n"
 		"}\n"
 		);
 
 	const std::string fragmentShader(
 		"#version 330\n"
 		"\n"
-		"smooth in vec4 theColor;\n"
+		"smooth in vec2 glyphCoord;\n"
 		"out vec4 outputColor;\n"
+		"uniform sampler2D glyphTex;"
 		"\n"
 		"void main()\n"
 		"{\n"
-		"	outputColor = theColor;\n"
+		"	outputColor = texture(glyphTex, glyphCoord).rrrr;\n"
 		"}\n"
 		);
 
@@ -56,6 +57,10 @@ void InitializeProgram()
 	gl::DeleteShader(fragShader);
 
 	g_cameraToClipMatrixUnif = gl::GetUniformLocation(g_program, "cameraToClipMatrix");
+	GLint samplerUnif = gl::GetUniformLocation(g_program, "glyphTex");
+	gl::UseProgram(g_program);
+	gl::Uniform1i(samplerUnif, 0);
+	gl::UseProgram(0);
 }
 
 GLuint g_dataBufferObject;
@@ -65,14 +70,14 @@ GLuint g_vao;
 void InitializeVertexData()
 {
 	const GLfloat vertexData[] = {
-		 90.0f,	 80.0f,	0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 1.0f,
-		 90.0f,	 16.0f,	0.0f, 1.0f,
-		0.0f, 1.0f, 0.0f, 1.0f,
-		410.0f,	 80.0f,	0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 1.0f,
-		410.0f,	 16.0f,	0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 1.0f,
+		256.0f,	256.0f,	0.0f, 1.0f,
+		0.796875f, 0.0078125f, 0.0f, 1.0f,
+		256.0f,	247.0f,	0.0f, 1.0f,
+		0.796875f, 0.078125f, 0.0f, 1.0f,
+		263.0f,	256.0f,	0.0f, 1.0f,
+		0.82421875f, 0.0078125f, 0.0f, 1.0f,
+		263.0f,	247.0f,	0.0f, 1.0f,
+		0.82421875f, 0.078125f, 0.0f, 1.0f,
 	};
 
 	gl::GenBuffers(1, &g_dataBufferObject);
@@ -94,10 +99,14 @@ void InitializeVertexData()
 }
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
+glutil::Font *g_pFont = NULL;
+
 void init()
 {
 	InitializeProgram();
 	InitializeVertexData();
+
+	g_pFont = glutil::CreateFont(glutil::FONT_SIZE_MEDIUM);
 }
 
 glm::ivec2 g_windowSize(500, 500);
@@ -111,6 +120,8 @@ void display()
 	gl::Clear(gl::GL_COLOR_BUFFER_BIT);
 
 	gl::UseProgram(g_program);
+	gl::ActiveTexture(gl::GL_TEXTURE0);
+	gl::BindTexture(gl::GL_TEXTURE_2D, g_pFont->GetTexture());
 
 	glutil::MatrixStack persMatrix;
 	persMatrix.PixelPerfectOrtho(g_windowSize, glm::vec2(-1.0f, 1.0f), false);
@@ -121,6 +132,7 @@ void display()
 	gl::DrawArrays(gl::GL_TRIANGLE_STRIP, 0, 4);
 
 	gl::BindVertexArray(0);
+	gl::BindTexture(gl::GL_TEXTURE_2D, 0);
 	gl::UseProgram(0);
 
 	glfwSwapBuffers();
@@ -128,10 +140,17 @@ void display()
 
 //Called whenever the window is resized. The new window size is given, in pixels.
 //This is an opportunity to call glViewport or glScissor to keep up with the change in size.
-void reshape (int w, int h)
+void GLFWCALL reshape(int w, int h)
 {
 	gl::Viewport(0, 0, (GLsizei) w, (GLsizei) h);
+}
 
+int GLFWCALL close_cb()
+{
+	delete g_pFont;
+	g_pFont = NULL;
+
+	return gl::GL_TRUE;
 }
 
 int main(int argc, char** argv)
@@ -174,13 +193,20 @@ int main(int argc, char** argv)
 	init();
 
 	glfwSetWindowSizeCallback(reshape);
+	glfwSetWindowCloseCallback(close_cb);
 
 	//Main loop
 	while(true)
 	{
 		display();
 
-		if(glfwGetKey(GLFW_KEY_ESC) || !glfwGetWindowParam(GLFW_OPENED))
+		if(glfwGetKey(GLFW_KEY_ESC))
+		{
+			close_cb();
+			glfwCloseWindow();
+		}
+
+		if(!glfwGetWindowParam(GLFW_OPENED))
 			break;
 
 		glfwSleep(0.010);
