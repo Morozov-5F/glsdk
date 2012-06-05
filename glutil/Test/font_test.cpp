@@ -4,6 +4,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+#include <fstream>
 #include <glload/gl_3_3.hpp>
 #include <glload/gll.hpp>
 #include <GL/glfw.h>
@@ -93,11 +95,25 @@ void AddGlyph(std::vector<GLfloat> &vecVertex, const glutil::GlyphQuad &theGlyph
 	PushGlyph(vecVertex, 2, positions, texCoords);
 }
 
+std::string GetString()
+{
+	std::ifstream theFile("UTF8Text.txt");
+
+	std::string ret;
+
+	std::getline(theFile, ret);
+
+	return ret;
+}
+
 void InitializeVertexData()
 {
 	std::vector<GLfloat> vecVertex;
-	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine("Hello, Jing!", 0, glm::vec2(50.0f, 250.0f),
-		glutil::REF_BASELINE);
+
+	std::string theText = GetString();
+
+	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine(theText.c_str(), theText.size(),
+		glm::vec2(50.0f, 250.0f), glutil::REF_BASELINE);
 
 	vecVertex.reserve(24 * glyphs.size());
 
@@ -129,7 +145,7 @@ void InitializeVertexData()
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-	g_pFont = glutil::CreateFont(glutil::FONT_SIZE_GIANT);
+	g_pFont = glutil::CreateFont(glutil::FONT_SIZE_MEDIUM);
 
 	InitializeProgram();
 	InitializeVertexData();

@@ -166,14 +166,41 @@ namespace glutil
 
 				glm::vec2 baseline = CalcBaseline(ptReference, eRef);
 
-				const char *currPos = text;
-				const char * const endPos = text + length;
+				const unsigned char *currPos = reinterpret_cast<const unsigned char*>(text);
+				const unsigned char * const endPos = currPos + length;
 				for(; currPos != endPos; ++currPos)
 				{
-					//Can't handle UTF-8 yet.
-					assert(*currPos <= 0x7F);
+					unsigned int codepoint = *currPos;
+					
+					//Parse UTF-8
+					if(codepoint & 0x80)
+					{
+						unsigned int build = codepoint;
+						int bit = 5;
+						for(; (codepoint & (0x1 << (bit + 1))) && (bit != 2); --bit)
+						{
+							++currPos;
+							if(!((*currPos & 0x80) && (~(*currPos) & 0x40)))
+								throw InvalidEncodingException();
 
-					unsigned int glyphIx = ConvertCodepointToGlyphIndex(*currPos);
+							//Set the top bits to 1's. Leave the last 6, since that's what we want
+							build <<= 6;
+							build += *currPos & 0x3F;
+						}
+
+						if((codepoint & (0x1 << bit)) != 0)
+							throw InvalidEncodingException();
+
+						unsigned int mask = 0x1 << (bit + 1);
+						//For each extra byte, we must shift by 6 bits.
+						mask <<= 6 * (6 - (bit + 1));
+
+						//Keep every bit below this point.
+						--mask;
+						codepoint = build & mask;
+					}
+
+					unsigned int glyphIx = ConvertCodepointToGlyphIndex(codepoint);
 
 					if(glyphIx == BAD_GLYPH_INDEX || glyphIx == IGNORE_GLYPH_INDEX)
 						continue;

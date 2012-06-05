@@ -7,6 +7,8 @@
 \brief Contains the \ref module_glutil_font "basic font rendering system" classes and functions.
 **/
 
+#include <exception>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 #include <glm/glm.hpp>
@@ -130,6 +132,15 @@ namespace glutil
 		REF_TOP,			///<The point is the top of the text; nothing above here will be touched.
 	};
 
+	/**
+	\brief Thrown if a supposedly UTF-8 encoded string is not valid UTF-8.
+	**/
+	class InvalidEncodingException : public std::runtime_error
+	{
+	public:
+		InvalidEncodingException() : std::runtime_error("UTF-8 text is not valid.") {}
+	};
+
 	//Deletion of this object must happen while OpenGL is still active.
 	/**
 	\brief The class that represents a series of glyphs as well as the information to layout a string of text.
@@ -198,6 +209,8 @@ namespace glutil
 		\param eRef Defines what the Y-component of \a ptReference means.
 
 		\return An ordered set of glyphs that represent the string of text.
+
+		\throw InvalidEncodingException Thrown if \a text is not valid UTF-8.
 		**/
 		std::vector<GlyphQuad> LayoutLine(const char *text, size_t length, const glm::vec2 &ptReference,
 			PointReference eRef = REF_BASELINE) const;
