@@ -1,5 +1,7 @@
 
 #include <vector>
+#include <limits>
+#include <string>
 #include <glload/gl_all.hpp>
 #include <glload/gll.hpp>
 #include "glutil/Font.h"
@@ -10,6 +12,45 @@ namespace glutil
 {
 	namespace detail
 	{
+		const unsigned int BAD_GLYPH_INDEX = std::numeric_limits<unsigned int>::max();
+		const unsigned int SPACE_GLYPH_INDEX = std::numeric_limits<unsigned int>::max() - 1;
+		const unsigned int IGNORE_GLYPH_INDEX = std::numeric_limits<unsigned int>::max() - 2;
+
+		unsigned int ConvertCodepointToGlyphIndex(unsigned int codepoint)
+		{
+			//Soft-hyphen. Should be handled at a higher level than this; for our sake, we ignore it.
+			if(codepoint == 0xAD)
+				return IGNORE_GLYPH_INDEX;
+
+			if(codepoint > 0xAD)
+				codepoint--;
+
+			//Latin-1 control characters.
+			if(0x7E < codepoint && codepoint < 0xA0)
+				return IGNORE_GLYPH_INDEX;
+
+			if(codepoint == 0xA0) //NBSP
+				return SPACE_GLYPH_INDEX;
+
+			if(codepoint > 0x7E)
+				codepoint -= (0xA1 - 0x7F);
+
+			//ASCII control characters.
+			if(codepoint < 0x20) 
+				return IGNORE_GLYPH_INDEX;
+
+			if(codepoint == 0x20) //Space
+				return SPACE_GLYPH_INDEX;
+
+			codepoint -= 0x21;
+
+			//Too high.
+			if(codepoint >= 188)
+				return BAD_GLYPH_INDEX;
+
+			return codepoint;
+		}
+
 		GLenum CalcInternalFormat()
 		{
 			return gl::GL_R8;
@@ -67,7 +108,7 @@ namespace glutil
 				{
 					gl::BindTexture(gl::GL_TEXTURE_2D, m_texture);
 
-					if(glext_ARB_texture_storage)
+					if(glext_ARB_texture_storage || glload::IsVersionGEQ(4, 2))
 					{
 						gl::TexStorage2D(gl::GL_TEXTURE_2D, 1, CalcInternalFormat(),
 							m_metrics.imageWidth, m_metrics.imageHeight);
@@ -98,12 +139,104 @@ namespace glutil
 				m_texture = 0;
 			}
 
+			std::pair<GlyphQuad, bool> GetSingleGlyph(unsigned int codepoint, const glm::vec2 &ptReference,
+				PointReference eRef = REF_BASELINE) const
+			{
+				unsigned int glyphIx = ConvertCodepointToGlyphIndex(codepoint);
+				if(glyphIx == BAD_GLYPH_INDEX ||
+					glyphIx == IGNORE_GLYPH_INDEX ||
+					glyphIx == SPACE_GLYPH_INDEX)
+				{
+					return std::make_pair(GlyphQuad(glm::vec2(0.0f), glm::vec2(0.0f),
+						glm::vec2(0.0f), glm::vec2(0.0f)), false);
+				}
+
+				glm::vec2 baseline = CalcBaseline(ptReference, eRef);
+
+				return std::make_pair(GetQuad(baseline, m_glyphs[glyphIx]), true);
+			}
+
+			std::vector<GlyphQuad> LayoutLine(const char *text, size_t length, const glm::vec2 &ptReference,
+				PointReference eRef = REF_BASELINE) const
+			{
+				std::vector<GlyphQuad> ret;
+
+				if(!length)
+					length = std::char_traits<char>::length(text);
+
+				glm::vec2 baseline = CalcBaseline(ptReference, eRef);
+
+				const char *currPos = text;
+				const char * const endPos = text + length;
+				for(; currPos != endPos; ++currPos)
+				{
+					//Can't handle UTF-8 yet.
+					assert(*currPos <= 0x7F);
+
+					unsigned int glyphIx = ConvertCodepointToGlyphIndex(*currPos);
+
+					if(glyphIx == BAD_GLYPH_INDEX || glyphIx == IGNORE_GLYPH_INDEX)
+						continue;
+
+					if(glyphIx == SPACE_GLYPH_INDEX)
+					{
+						baseline.x += m_metrics.advanceWidth;
+						continue;
+					}
+
+					ret.push_back(GetQuad(baseline, m_glyphs[glyphIx]));
+					baseline.x += m_metrics.advanceWidth;
+				}
+
+				return ret;
+			}
+
 		
 			GLuint GetTexture() const {return m_texture;}
+
+			int GetLinePixelHeight() const {return m_metrics.lineHeight;}
+			int GetGlyphAdvanceWidth() const {return m_metrics.advanceWidth;}
+
 		private:
 			TypefaceMetrics m_metrics;
 			const Glyph *m_glyphs;
 			GLuint m_texture;
+
+			GlyphQuad GetQuad(const glm::vec2 &baseline, const Glyph &theGlyph) const
+			{
+				glm::vec2 bottomLeft = baseline;
+				bottomLeft.x += theGlyph.baselineOffsetToLeft;
+				bottomLeft.y += theGlyph.baselineOffsetToTop - theGlyph.pixelHeight;	//Invert for top-left.
+
+				glm::vec2 topRight = bottomLeft;
+				topRight.x += theGlyph.pixelWidth;
+				topRight.y += theGlyph.pixelHeight;			//Invert for top-left.
+
+				return GlyphQuad(
+					bottomLeft,
+					glm::vec2(theGlyph.bottomLeftTexCoordS, theGlyph.bottomLeftTexCoordT),
+					topRight,
+					glm::vec2(theGlyph.topRightTexCoordS, theGlyph.topRightTexCoordT));
+
+			}
+
+			glm::vec2 CalcBaseline(const glm::vec2 &ptReference, PointReference eRef = REF_BASELINE) const
+			{
+				glm::vec2 baseline = ptReference;
+				switch(eRef)
+				{
+				case REF_BASELINE:
+					break;
+				case REF_TOP:
+					baseline.y -= m_metrics.maxGlyphBaselineOffsetToTop;	//Invert for top-left
+					break;
+				case REF_BOTTOM:
+					baseline.y += m_metrics.maxGlyphBaselineOffsetToBottom;		//Invert for top-left
+					break;
+				}
+
+				return baseline;
+			}
 		};
 	}
 
@@ -129,6 +262,32 @@ namespace glutil
 		return new Font(pImpl);
 	}
 
+	std::vector<glm::vec2> GlyphQuad::GetPositions() const
+	{
+		std::vector<glm::vec2> ret;
+		ret.reserve(4);
+
+		ret.push_back(glm::vec2(m_ptBottomLeft.x, m_ptTopRight.y));
+		ret.push_back(m_ptBottomLeft);
+		ret.push_back(m_ptTopRight);
+		ret.push_back(glm::vec2(m_ptTopRight.x, m_ptBottomLeft.y));
+
+		return ret;
+	}
+
+	std::vector<glm::vec2> GlyphQuad::GetTexCoords() const
+	{
+		std::vector<glm::vec2> ret;
+		ret.reserve(4);
+
+		ret.push_back(glm::vec2(m_tcBottomLeft.x, m_tcTopRight.y));
+		ret.push_back(m_tcBottomLeft);
+		ret.push_back(m_tcTopRight);
+		ret.push_back(glm::vec2(m_tcTopRight.x, m_tcBottomLeft.y));
+
+		return ret;
+	}
+
 	Font::Font( detail::FontImpl *pImpl )
 		: m_pImpl(pImpl)
 	{}
@@ -141,6 +300,28 @@ namespace glutil
 	GLuint Font::GetTexture() const
 	{
 		return m_pImpl->GetTexture();
+	}
+
+	std::pair<GlyphQuad, bool> Font::GetSingleGlyph( unsigned int codepoint, const glm::vec2 &ptReference,
+		PointReference eRef ) const
+	{
+		return m_pImpl->GetSingleGlyph(codepoint, ptReference, eRef);
+	}
+
+	std::vector<GlyphQuad> Font::LayoutLine( const char *text, size_t length,
+		const glm::vec2 &ptReference, PointReference eRef ) const
+	{
+		return m_pImpl->LayoutLine(text, length, ptReference, eRef);
+	}
+
+	int Font::GetLinePixelHeight() const
+	{
+		return m_pImpl->GetLinePixelHeight();
+	}
+
+	int Font::GetGlyphAdvanceWidth() const
+	{
+		return m_pImpl->GetGlyphAdvanceWidth();
 	}
 }
 

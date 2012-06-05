@@ -30,7 +30,7 @@ Once the SDK has been successfully built. To use it, follow the @subpage pg_use 
 
 Bugs or feature requests should be filed in the <a href="https://bitbucket.org/alfonse/unofficial-opengl-sdk/issues?status=new&status=open">Bitbucket issue tracker</a> for the SDK. However, bugs can also be filed on the SourceForge issue tracker. Questions or other inquiries can be directed to the <a href="http://www.opengl.org/discussion_boards/">OpenGL forums</a>.
 
-@ref You can look on the \ref module_troubleshooting "troubleshooting page" for information about combating common problems.
+You can look on the \ref module_troubleshooting "troubleshooting page" for information about combating common problems.
 
 \section mainpage_notation Request for Aid
 

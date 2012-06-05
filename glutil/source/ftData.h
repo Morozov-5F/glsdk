@@ -17,6 +17,8 @@ namespace glutil
 			
 			int maxGlyphBaselineOffsetToTop;
 			int maxGlyphBaselineOffsetToBottom;
+			
+			int numGlyphs;
 		};
 
 		struct Glyph

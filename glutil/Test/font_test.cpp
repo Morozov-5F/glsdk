@@ -66,47 +66,73 @@ void InitializeProgram()
 GLuint g_dataBufferObject;
 GLuint g_vao;
 
+glutil::Font *g_pFont = NULL;
+
+GLuint g_numGlyphsToDraw = 0;
+
+void PushGlyph( std::vector<GLfloat> &vecVertex, int loop, std::vector<glm::vec2> &positions,
+			   std::vector<glm::vec2> &texCoords )
+{
+	vecVertex.push_back(positions[loop].x);
+	vecVertex.push_back(positions[loop].y);
+	vecVertex.push_back(texCoords[loop].x);
+	vecVertex.push_back(texCoords[loop].y);
+}
+
+void AddGlyph(std::vector<GLfloat> &vecVertex, const glutil::GlyphQuad &theGlyph)
+{
+	std::vector<glm::vec2> positions = theGlyph.GetPositions();
+	std::vector<glm::vec2> texCoords = theGlyph.GetTexCoords();
+
+	PushGlyph(vecVertex, 0, positions, texCoords);
+	PushGlyph(vecVertex, 1, positions, texCoords);
+	PushGlyph(vecVertex, 2, positions, texCoords);
+
+	PushGlyph(vecVertex, 1, positions, texCoords);
+	PushGlyph(vecVertex, 3, positions, texCoords);
+	PushGlyph(vecVertex, 2, positions, texCoords);
+}
 
 void InitializeVertexData()
 {
-	const GLfloat vertexData[] = {
-		256.0f,	256.0f,	0.0f, 1.0f,
-		0.796875f, 0.0078125f, 0.0f, 1.0f,
-		256.0f,	247.0f,	0.0f, 1.0f,
-		0.796875f, 0.078125f, 0.0f, 1.0f,
-		263.0f,	256.0f,	0.0f, 1.0f,
-		0.82421875f, 0.0078125f, 0.0f, 1.0f,
-		263.0f,	247.0f,	0.0f, 1.0f,
-		0.82421875f, 0.078125f, 0.0f, 1.0f,
-	};
+	std::vector<GLfloat> vecVertex;
+	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine("Hello, Jing!", 0, glm::vec2(50.0f, 250.0f),
+		glutil::REF_BASELINE);
+
+	vecVertex.reserve(24 * glyphs.size());
+
+	assert(glyphs.size());
+
+	for(size_t loop = 0; loop < glyphs.size(); ++loop)
+		AddGlyph(vecVertex, glyphs[loop]);
+
+	g_numGlyphsToDraw = glyphs.size();
 
 	gl::GenBuffers(1, &g_dataBufferObject);
 
 	gl::BindBuffer(gl::GL_ARRAY_BUFFER, g_dataBufferObject);
-	gl::BufferData(gl::GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, gl::GL_STATIC_DRAW);
+	gl::BufferData(gl::GL_ARRAY_BUFFER, sizeof(GLfloat) * vecVertex.size(), &vecVertex[0], gl::GL_STATIC_DRAW);
 
 	gl::GenVertexArrays(1, &g_vao);
 
 	gl::BindVertexArray(g_vao);
 	gl::BindBuffer(gl::GL_ARRAY_BUFFER, g_dataBufferObject);
 	gl::EnableVertexAttribArray(0);
-	gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 32, (void*)0);
+	gl::VertexAttribPointer(0, 2, gl::GL_FLOAT, gl::GL_FALSE, 4 * sizeof(GLfloat), (void*)0);
 	gl::EnableVertexAttribArray(1);
-	gl::VertexAttribPointer(1, 4, gl::GL_FLOAT, gl::GL_FALSE, 32, (void*)16);
+	gl::VertexAttribPointer(1, 2, gl::GL_FLOAT, gl::GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
 
 	gl::BindVertexArray(0);
 	gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
 }
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
-glutil::Font *g_pFont = NULL;
-
 void init()
 {
+	g_pFont = glutil::CreateFont(glutil::FONT_SIZE_GIANT);
+
 	InitializeProgram();
 	InitializeVertexData();
-
-	g_pFont = glutil::CreateFont(glutil::FONT_SIZE_MEDIUM);
 }
 
 glm::ivec2 g_windowSize(500, 500);
@@ -116,8 +142,12 @@ glm::ivec2 g_windowSize(500, 500);
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
 void display()
 {
-	gl::ClearColor(0.0f, 0.8f, 0.3f, 0.0f);
+	gl::ClearColor(0.0f, 0.3f, 0.05f, 0.0f);
 	gl::Clear(gl::GL_COLOR_BUFFER_BIT);
+
+	gl::Enable(gl::GL_BLEND);
+	gl::BlendEquation(gl::GL_FUNC_ADD);
+	gl::BlendFunc(gl::GL_ONE, gl::GL_ONE_MINUS_SRC_ALPHA);
 
 	gl::UseProgram(g_program);
 	gl::ActiveTexture(gl::GL_TEXTURE0);
@@ -129,7 +159,7 @@ void display()
 	gl::UniformMatrix4fv(g_cameraToClipMatrixUnif, 1, gl::GL_FALSE, glm::value_ptr(persMatrix.Top()));
 	gl::BindVertexArray(g_vao);
 
-	gl::DrawArrays(gl::GL_TRIANGLE_STRIP, 0, 4);
+	gl::DrawArrays(gl::GL_TRIANGLES, 0, 6 * g_numGlyphsToDraw);
 
 	gl::BindVertexArray(0);
 	gl::BindTexture(gl::GL_TEXTURE_2D, 0);
@@ -143,6 +173,8 @@ void display()
 void GLFWCALL reshape(int w, int h)
 {
 	gl::Viewport(0, 0, (GLsizei) w, (GLsizei) h);
+
+	printf("%i, %i\n", w, h);
 }
 
 int GLFWCALL close_cb()
@@ -176,7 +208,7 @@ int main(int argc, char** argv)
 
 	glm::ivec2 desktopSize(desktopMode.Width, desktopMode.Height);
 	glm::ivec2 wndPos = glutil::CalcWindowPosition(g_windowSize, desktopSize,
-		glutil::WH_RIGHT, glutil::WV_CENTER);
+		glutil::WH_LEFT, glutil::WV_CENTER);
 
 	glfwSetWindowPos(wndPos.x, wndPos.y);
 
