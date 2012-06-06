@@ -9,16 +9,6 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 **/
 
 /**
-\defgroup module_glutil_program Program Compilation/Linking
-
-\brief Helper functions for shader and program compiling and linking.
-
-\ref module_glload "GL Load" must have been successfully initialized for these functions to work.
-
-\ingroup module_glutil
-**/
-
-/**
 \defgroup module_glutil_debug Debug Output
 
 \brief Helper function for registering a function to handle ARB_debug_output.
@@ -27,11 +17,33 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 **/
 
 /**
-\defgroup module_glutil_wndpos Window Positioning
+\defgroup module_glutil_font Basic Font System
 
-\brief Helper function for positioning a window, based on the desktop size and the window's size.
+\brief Classes for basic font rendering.
 
-\note GLFW lacks the ability to get the window's actual size. The size you get back is always the size of the \em client area, not the whole window. As such, if you use this function to anchor the window to the right or bottom of the desktop, the window will be partially off-screen.
+This SDK module provides basic font rendering services. It is important to emphasize that this is \em basic font rendering. This is not intended to be a serious font handling system. Therefore, you will notice that some of the amenities one might find in a more significant font system are not present.
+
+The fonts themselves are hard-coded directly into the executable. Among other things, this means that the executable's size will be noticably bigger by including the font system (~500KB). Note that if you don't call glutil::CreateFont, your executable size will be unaffected.
+
+The font used here is called Inconsolata, a free font available online. It is used here as a raster font, with several pre-defined font sizes. The font is a fixed-width font, which makes text layout much easier.
+
+This system provides \em limited Unicode support. Specifically, these fonts provide the first 256 Unicode codepoints, which is commonly called Latin-1. All other codepoints are ignored. As such, this avoids complex text layout system and other concepts that are well outside of a basic font system.
+
+A glutil::Font object can only be created by calling glutil::CreateFont. The Font class provides methods for getting size information about the font (since it is fixed-width, all of the characters have the same size characteristics). It also has a function that will layout a single string of text (horizontally), without line-breaks or anything of that nature.
+
+More complex text layout, like paragraphs and line breaks, is beyond this system.
+
+\ingroup module_glutil
+**/
+
+/**
+\defgroup module_glutil_matrixstack Matrix Stack
+
+\brief Class and utility classes for matrix stacks.
+
+A common task in OpenGL programs is to have a stack of transforms. This is useful for hierarchial rendering and for traversing a scene graph. Indeed, OpenGL before 3.1's removal of old features had matrix stacks built in.
+
+Since it is a very useful feature, the GL Util library provides the MatrixStack class. It also provides the PushStack class for RAII-style pushing and poping operations.
 
 \ingroup module_glutil
 **/
@@ -57,21 +69,21 @@ When a Pole is created, it is given a specific mouse button to listen for and re
 **/
 
 /**
-\defgroup module_glutil_matrixstack Matrix Stack
+\defgroup module_glutil_program Program Compilation/Linking
 
-\brief Class and utility classes for matrix stacks.
+\brief Helper functions for shader and program compiling and linking.
 
-A common task in OpenGL programs is to have a stack of transforms. This is useful for hierarchial rendering and for traversing a scene graph. Indeed, OpenGL before 3.1's removal of old features had matrix stacks built in.
-
-Since it is a very useful feature, the GL Util library provides the MatrixStack class. It also provides the PushStack class for RAII-style pushing and poping operations.
+\ref module_glload "GL Load" must have been successfully initialized for these functions to work.
 
 \ingroup module_glutil
 **/
 
 /**
-\defgroup module_glutil_font Basic Font System
+\defgroup module_glutil_wndpos Window Positioning
 
-\brief Classes for basic font rendering.
+\brief Helper function for positioning a window, based on the desktop size and the window's size.
+
+\note GLFW lacks the ability to get the window's actual size. The size you get back is always the size of the \em client area, not the whole window. As such, if you use this function to anchor the window to the right or bottom of the desktop, the window will be partially off-screen.
 
 \ingroup module_glutil
 **/
