@@ -61,7 +61,7 @@ namespace glutil
 	\param eSize Particular font size.
 	\return The created Font.
 	**/
-	Font *CreateFont(FontSizes eSize);
+	Font *GenerateFont(FontSizes eSize);
 
 	/**
 	\brief Data type for a single glyph.
@@ -153,12 +153,12 @@ namespace glutil
 
 	This font is a "bitmap" font; the glyphs are stores as images in a texture.
 
-	This class's constructor's are private; you must use glutil::CreateFont to create an instance of this class. The
+	This class's constructor's are private; you must use glutil::GenerateFont to create an instance of this class. The
 	destructor is not private; you can (and \em should) call delete on this pointer.
 
 	This class contains and manages an OpenGL texture. This means that deleting this class will destroy that texture.
 	Most important of all, you must ensure that this object does not outlive the OpenGL context that was active when
-	glutil::CreateFont was called.
+	glutil::GenerateFont was called.
 
 	All layout functions of this class assume the standard OpenGL coordinate system: +Y goes up and +X right.
 	If you want to have a top-down coordinate system, you will need to adjust the glyphs manually.
@@ -226,7 +226,7 @@ namespace glutil
 
 		explicit Font(detail::FontImpl *pImpl);
 
-		friend Font *CreateFont(FontSizes eSize);
+		friend Font *GenerateFont(FontSizes eSize);
 
 		//Prevent copying
 		Font(const Font &);

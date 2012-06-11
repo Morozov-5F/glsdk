@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 	while(true)
 	{
 		//check for exit; otherwise, draw frame.
-		Render(vfmt, streamBuf);
+		RenderScene(vfmt, streamBuf);
 	}
 	
 }
@@ -74,15 +74,15 @@ void RenderScene(glmesh::VertexFormat &vfmt, glmesh::StreamBuffer &streamBuf)
 	
 	{
 		//Draw a single triangle
-		glmesh::Draw imm(GL_TRIANGLES, 3, m_vertFmt, m_streamBuf);
-		immMode.Attrib(0.75f, 0.75f, 0.0f, 1.0f);
-		immMode.Attrib<GLubyte>(153, 204, 0, 255);
+		glmesh::Draw imm(gl::GL_TRIANGLES, 3, m_vertFmt, m_streamBuf);
+		imm.Attrib(0.75f, 0.75f, 0.0f, 1.0f);
+		imm.Attrib<GLubyte>(153, 204, 0, 255);
 
-		immMode.Attrib(0.75f, -0.75f, 0.0f, 1.0f);
-		immMode.Attrib<GLubyte>(230, 51, 0, 255);
+		imm.Attrib(0.75f, -0.75f, 0.0f, 1.0f);
+		imm.Attrib<GLubyte>(230, 51, 0, 255);
 
-		immMode.Attrib(-0.75f, -0.75f, 0.0f, 1.0f);
-		immMode.Attrib<GLubyte>(26, 51, 179, 255);
+		imm.Attrib(-0.75f, -0.75f, 0.0f, 1.0f);
+		imm.Attrib<GLubyte>(26, 51, 179, 255);
 	
 		//The destructor causes the actual rendering.
 	}

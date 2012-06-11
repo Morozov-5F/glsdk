@@ -23,13 +23,13 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 
 This SDK module provides basic font rendering services. It is important to emphasize that this is \em basic font rendering. This is not intended to be a serious font handling system. Therefore, you will notice that some of the amenities one might find in a more significant font system are not present.
 
-The fonts themselves are hard-coded directly into the executable. Among other things, this means that the executable's size will be noticably bigger by including the font system (~500KB). Note that if you don't call glutil::CreateFont, your executable size will be unaffected.
+The fonts themselves are hard-coded directly into the executable. Among other things, this means that the executable's size will be noticably bigger by including the font system (~500KB). Note that if you don't call glutil::GenerateFont, your executable size will be unaffected.
 
 The font used here is called Inconsolata, a free font available online. It is used here as a raster font, with several pre-defined font sizes. The font is a fixed-width font, which makes text layout much easier.
 
 This system provides \em limited Unicode support. Specifically, these fonts provide the first 256 Unicode codepoints, which is commonly called Latin-1. All other codepoints are ignored. As such, this avoids complex text layout system and other concepts that are well outside of a basic font system.
 
-A glutil::Font object can only be created by calling glutil::CreateFont. The Font class provides methods for getting size information about the font (since it is fixed-width, all of the characters have the same size characteristics). It also has a function that will layout a single string of text (horizontally), without line-breaks or anything of that nature.
+A glutil::Font object can only be created by calling glutil::GenerateFont. The Font class provides methods for getting size information about the font (since it is fixed-width, all of the characters have the same size characteristics). It also has a function that will layout a single string of text (horizontally), without line-breaks or anything of that nature.
 
 More complex text layout, like paragraphs and line breaks, is beyond this system.
 

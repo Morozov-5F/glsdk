@@ -267,7 +267,7 @@ namespace glutil
 		};
 	}
 
-	Font *CreateFont( FontSizes eSize )
+	Font *GenerateFont( FontSizes eSize )
 	{
 		detail::FontImpl *pImpl = NULL;
 		switch(eSize)

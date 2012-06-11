@@ -1,6 +1,7 @@
 
 #include <string>
 #include <vector>
+#include <deque>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,6 +14,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glutil/glutil.h>
+#include <glmesh/glmesh.h>
 
 GLint g_cameraToClipMatrixUnif = 0;
 
@@ -69,6 +71,8 @@ GLuint g_dataBufferObject;
 GLuint g_vao;
 
 glutil::Font *g_pFont = NULL;
+glmesh::VertexFormat *g_pVertFmt = NULL;
+glmesh::StreamBuffer *g_pStreamBuf = NULL;
 
 GLuint g_numGlyphsToDraw = 0;
 
@@ -95,19 +99,45 @@ void AddGlyph(std::vector<GLfloat> &vecVertex, const glutil::GlyphQuad &theGlyph
 	PushGlyph(vecVertex, 2, positions, texCoords);
 }
 
+void SendVerts(glmesh::Draw &imm, int index, std::vector<glm::vec2> &positions,
+			   std::vector<glm::vec2> &texCoords)
+{
+	imm.Attrib(positions[index]);
+	imm.Attrib(texCoords[index]);
+}
+
+void DrawGlyph(glmesh::Draw &imm, const glutil::GlyphQuad &theGlyph)
+{
+	std::vector<glm::vec2> positions = theGlyph.GetPositions();
+	std::vector<glm::vec2> texCoords = theGlyph.GetTexCoords();
+
+	SendVerts(imm, 0, positions, texCoords);
+	SendVerts(imm, 1, positions, texCoords);
+	SendVerts(imm, 2, positions, texCoords);
+
+	SendVerts(imm, 1, positions, texCoords);
+	SendVerts(imm, 3, positions, texCoords);
+	SendVerts(imm, 2, positions, texCoords);
+}
+
 std::string GetString()
 {
-	std::ifstream theFile("UTF8Text.txt");
-
-	std::string ret;
-
-	std::getline(theFile, ret);
-
-	return ret;
+	return "Test string";
 }
 
 void InitializeVertexData()
 {
+	glmesh::AttributeList attribs;
+	//First attribute is attribute index 0, a vec4 of floats.
+	attribs.push_back(glmesh::AttribDesc(0, 2, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
+	//Second attribute is attribute index 1, a vec4 of normalized, unsigned bytes.
+	attribs.push_back(glmesh::AttribDesc(1, 2, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
+
+	g_pVertFmt = new glmesh::VertexFormat(attribs);
+	g_pStreamBuf = new glmesh::StreamBuffer(1024 * 1024);
+
+	
+
 	std::vector<GLfloat> vecVertex;
 
 	std::string theText = GetString();
@@ -145,7 +175,7 @@ void InitializeVertexData()
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-	g_pFont = glutil::GenerateFont(glutil::FONT_SIZE_MEDIUM);
+	g_pFont = glutil::GenerateFont(glutil::FONT_SIZE_LARGE);
 
 	InitializeProgram();
 	InitializeVertexData();
@@ -153,12 +183,30 @@ void init()
 
 glm::ivec2 g_windowSize(500, 500);
 
+typedef std::deque<std::string> StringQueue;
+
+std::string g_currString;
+StringQueue g_strings;
+
+void DrawTextString(const std::string &text, const glm::vec2 &location)
+{
+	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine(text.c_str(), text.size(),
+		location, glutil::REF_BOTTOM);
+
+	glmesh::Draw imm(gl::GL_TRIANGLES, glyphs.size() * 6, *g_pVertFmt, *g_pStreamBuf);
+
+	for(size_t loop = 0; loop < glyphs.size(); ++loop)
+	{
+		DrawGlyph(imm, glyphs[loop]);
+	}
+}
+
 //Called to update the display.
 //You should call glutSwapBuffers after all of your rendering to display what you rendered.
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
 void display()
 {
-	gl::ClearColor(0.0f, 0.3f, 0.05f, 0.0f);
+	gl::ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	gl::Clear(gl::GL_COLOR_BUFFER_BIT);
 
 	gl::Enable(gl::GL_BLEND);
@@ -173,11 +221,26 @@ void display()
 	persMatrix.PixelPerfectOrtho(g_windowSize, glm::vec2(-1.0f, 1.0f), false);
 
 	gl::UniformMatrix4fv(g_cameraToClipMatrixUnif, 1, gl::GL_FALSE, glm::value_ptr(persMatrix.Top()));
+
+	glm::vec2 currPt(50.0f, 5.0f);
+	if(!g_currString.empty())
+		DrawTextString(g_currString, currPt);
+
+	for(StringQueue::const_iterator startIt = g_strings.begin();
+		startIt != g_strings.end();
+		++startIt)
+	{
+		currPt.y += g_pFont->GetLinePixelHeight();
+
+		DrawTextString(*startIt, currPt);
+	}
+
+/*
 	gl::BindVertexArray(g_vao);
-
 	gl::DrawArrays(gl::GL_TRIANGLES, 0, 6 * g_numGlyphsToDraw);
-
 	gl::BindVertexArray(0);
+*/
+
 	gl::BindTexture(gl::GL_TEXTURE_2D, 0);
 	gl::UseProgram(0);
 
@@ -190,7 +253,8 @@ void GLFWCALL reshape(int w, int h)
 {
 	gl::Viewport(0, 0, (GLsizei) w, (GLsizei) h);
 
-	printf("%i, %i\n", w, h);
+	g_windowSize.x = w;
+	g_windowSize.y = h;
 }
 
 int GLFWCALL close_cb()
@@ -198,7 +262,47 @@ int GLFWCALL close_cb()
 	delete g_pFont;
 	g_pFont = NULL;
 
+	delete g_pVertFmt;
+	g_pVertFmt = NULL;
+
+	delete g_pStreamBuf;
+	g_pStreamBuf = NULL;
+
 	return gl::GL_TRUE;
+}
+
+void GLFWCALL CharFunc(int unicodepoint, int action)
+{
+	if(action == GLFW_RELEASE)
+		return;
+
+	if(unicodepoint < 128)
+		g_currString.push_back(static_cast<char>(unicodepoint));
+}
+
+void GLFWCALL KeyFunc(int key, int action)
+{
+	if(action == GLFW_PRESS)
+		return;
+
+	switch(key)
+	{
+	case GLFW_KEY_ENTER:
+	case GLFW_KEY_KP_ENTER:
+		if(!g_currString.empty())
+		{
+			g_strings.push_front(std::string());
+			std::swap(g_strings.front(), g_currString);
+			if(g_strings.size() > 10)
+				g_strings.pop_back();
+		}
+
+		std::cout << g_strings.size() << std::endl;
+		break;
+	case GLFW_KEY_BACKSPACE:
+		g_currString.erase(g_currString.size() - 1, 1);
+		break;
+	}
 }
 
 int main(int argc, char** argv)
@@ -224,7 +328,7 @@ int main(int argc, char** argv)
 
 	glm::ivec2 desktopSize(desktopMode.Width, desktopMode.Height);
 	glm::ivec2 wndPos = glutil::CalcWindowPosition(g_windowSize, desktopSize,
-		glutil::WH_LEFT, glutil::WV_CENTER);
+		glutil::WH_CENTER, glutil::WV_CENTER);
 
 	glfwSetWindowPos(wndPos.x, wndPos.y);
 
@@ -242,6 +346,9 @@ int main(int argc, char** argv)
 
 	glfwSetWindowSizeCallback(reshape);
 	glfwSetWindowCloseCallback(close_cb);
+	glfwSetCharCallback(CharFunc);
+	glfwSetKeyCallback(KeyFunc);
+	glfwEnable(GLFW_KEY_REPEAT);
 
 	//Main loop
 	while(true)
