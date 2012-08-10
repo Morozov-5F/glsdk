@@ -202,6 +202,8 @@ int wglext_NV_copy_image = 0;
 int wglext_NV_multisample_coverage = 0;
 int wglext_EXT_create_context_es2_profile = 0;
 int wglext_NV_DX_interop = 0;
+int wglext_NV_DX_interop2 = 0;
+int wglext_EXT_swap_control_tear = 0;
 
 
 void wgleIntClear()
@@ -247,6 +249,8 @@ void wgleIntClear()
 	wglext_NV_multisample_coverage = 0;
 	wglext_EXT_create_context_es2_profile = 0;
 	wglext_NV_DX_interop = 0;
+	wglext_NV_DX_interop2 = 0;
+	wglext_EXT_swap_control_tear = 0;
 }
 
 
@@ -569,6 +573,7 @@ static int wgleIntLoad_EXT_swap_control()
 #endif /*WGL_EXT_swap_control*/
 	return bIsLoaded;
 }
+
 #ifndef WGL_I3D_digital_video_control
 typedef BOOL (GLE_FUNCPTR * PFNWGLGETDIGITALVIDEOPARAMETERSI3DPROC)(HDC , int , int *);
 typedef BOOL (GLE_FUNCPTR * PFNWGLSETDIGITALVIDEOPARAMETERSI3DPROC)(HDC , int , const int *);
@@ -771,6 +776,7 @@ static int wgleIntLoad_NV_DX_interop()
 #endif /*WGL_NV_DX_interop*/
 	return bIsLoaded;
 }
+
 #ifndef WGL_NV_copy_image
 typedef BOOL (GLE_FUNCPTR * PFNWGLCOPYIMAGESUBDATANVPROC)(HGLRC , GLuint , GLenum , GLint , GLint , GLint , GLint , HGLRC , GLuint , GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei );
 
@@ -971,12 +977,14 @@ StrToExtMap wgleIntExtensionMap[] = {
 	{"WGL_EXT_pixel_format", &wglext_EXT_pixel_format, wgleIntLoad_EXT_pixel_format},
 	{"WGL_EXT_pixel_format_packed_float", &wglext_EXT_pixel_format_packed_float, NULL},
 	{"WGL_EXT_swap_control", &wglext_EXT_swap_control, wgleIntLoad_EXT_swap_control},
+	{"WGL_EXT_swap_control_tear", &wglext_EXT_swap_control_tear, NULL},
 	{"WGL_I3D_digital_video_control", &wglext_I3D_digital_video_control, wgleIntLoad_I3D_digital_video_control},
 	{"WGL_I3D_gamma", &wglext_I3D_gamma, wgleIntLoad_I3D_gamma},
 	{"WGL_I3D_genlock", &wglext_I3D_genlock, wgleIntLoad_I3D_genlock},
 	{"WGL_I3D_image_buffer", &wglext_I3D_image_buffer, wgleIntLoad_I3D_image_buffer},
 	{"WGL_I3D_swap_frame_lock", &wglext_I3D_swap_frame_lock, wgleIntLoad_I3D_swap_frame_lock},
 	{"WGL_NV_DX_interop", &wglext_NV_DX_interop, wgleIntLoad_NV_DX_interop},
+	{"WGL_NV_DX_interop2", &wglext_NV_DX_interop2, NULL},
 	{"WGL_NV_copy_image", &wglext_NV_copy_image, wgleIntLoad_NV_copy_image},
 	{"WGL_NV_float_buffer", &wglext_NV_float_buffer, NULL},
 	{"WGL_NV_gpu_affinity", &wglext_NV_gpu_affinity, wgleIntLoad_NV_gpu_affinity},
@@ -989,7 +997,7 @@ StrToExtMap wgleIntExtensionMap[] = {
 	{"WGL_NV_video_output", &wglext_NV_video_output, wgleIntLoad_NV_video_output},
 };
 
-int wgleIntExtensionMapSize = 41;
+int wgleIntExtensionMapSize = 43;
 
 
 

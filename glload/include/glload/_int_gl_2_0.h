@@ -122,7 +122,7 @@ typedef void (GLE_FUNCPTR * PFNGLGETVERTEXATTRIBPOINTERVPROC)(GLuint , GLenum , 
 typedef GLboolean (GLE_FUNCPTR * PFNGLISPROGRAMPROC)(GLuint );
 typedef GLboolean (GLE_FUNCPTR * PFNGLISSHADERPROC)(GLuint );
 typedef void (GLE_FUNCPTR * PFNGLLINKPROGRAMPROC)(GLuint );
-typedef void (GLE_FUNCPTR * PFNGLSHADERSOURCEPROC)(GLuint , GLsizei , const GLchar* *, const GLint *);
+typedef void (GLE_FUNCPTR * PFNGLSHADERSOURCEPROC)(GLuint , GLsizei , const GLchar* const *, const GLint *);
 typedef void (GLE_FUNCPTR * PFNGLUSEPROGRAMPROC)(GLuint );
 typedef void (GLE_FUNCPTR * PFNGLUNIFORM1FPROC)(GLint , GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLUNIFORM2FPROC)(GLint , GLfloat , GLfloat );

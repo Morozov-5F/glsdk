@@ -80,6 +80,33 @@ local coreExts4_2 = {
 	"ARB_texture_storage",
 };
 
+local coreExts4_3 = {
+	"KHR_debug",
+	"ARB_arrays_of_arrays",
+	"ARB_clear_buffer_object",
+	"ARB_compute_shader",
+	"ARB_copy_image",
+	"ARB_debug_group",
+	"ARB_debug_label",
+	"ARB_debug_output2",
+	"ARB_ES3_compatibility",
+	"ARB_explicit_uniform_location",
+	"ARB_fragment_layer_viewport",
+	"ARB_framebuffer_no_attachments",
+	"ARB_internalformat_query2",
+	"ARB_invalidate_subdata",
+	"ARB_multi_draw_indirect",
+	"ARB_program_interface_query",
+	"ARB_shader_image_size",
+	"ARB_shader_storage_buffer_object",
+	"ARB_stencil_texturing",
+	"ARB_texture_buffer_range",
+	"ARB_texture_query_levels",
+	"ARB_texture_storage_multisample",
+	"ARB_texture_view",
+	"ARB_vertex_attrib_binding",
+};
+
 local masterTable = {
 	["3.0"] = coreExts3_0,
 	["3.1"] = coreExts3_1,
@@ -88,6 +115,7 @@ local masterTable = {
 	["4.0"] = coreExts4_0,
 	["4.1"] = coreExts4_1,
 	["4.2"] = coreExts4_2,
+	["4.3"] = coreExts4_3,
 };
 
 

@@ -45,6 +45,8 @@ local glOutputs = {
 	{"gl_4_1_comp", "4.1", false},
 	{"gl_4_2", "4.2", true},
 	{"gl_4_2_comp", "4.2", false},
+	{"gl_4_3", "4.3", true},
+	{"gl_4_3_comp", "4.3", false},
 };
 
 local glTruncPreceedData = {}

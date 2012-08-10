@@ -102,8 +102,6 @@ extern "C" {
 #define GL_MAX_TEXTURE_SIZE 0x0D33
 #define GL_MAX_VIEWPORT_DIMS 0x0D3A
 #define GL_SUBPIXEL_BITS 0x0D50
-#define GL_TEXTURE_1D 0x0DE0
-#define GL_TEXTURE_2D 0x0DE1
 #define GL_POLYGON_OFFSET_UNITS 0x2A00
 #define GL_POLYGON_OFFSET_POINT 0x2A01
 #define GL_POLYGON_OFFSET_LINE 0x2A02
@@ -210,9 +208,9 @@ typedef void (GLE_FUNCPTR * PFNGLTEXIMAGE1DPROC)(GLenum , GLint , GLint , GLsize
 typedef void (GLE_FUNCPTR * PFNGLTEXIMAGE2DPROC)(GLenum , GLint , GLint , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLDRAWBUFFERPROC)(GLenum );
 typedef void (GLE_FUNCPTR * PFNGLCLEARPROC)(GLbitfield );
-typedef void (GLE_FUNCPTR * PFNGLCLEARCOLORPROC)(GLclampf , GLclampf , GLclampf , GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLCLEARCOLORPROC)(GLfloat , GLfloat , GLfloat , GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLCLEARSTENCILPROC)(GLint );
-typedef void (GLE_FUNCPTR * PFNGLCLEARDEPTHPROC)(GLclampd );
+typedef void (GLE_FUNCPTR * PFNGLCLEARDEPTHPROC)(GLdouble );
 typedef void (GLE_FUNCPTR * PFNGLSTENCILMASKPROC)(GLuint );
 typedef void (GLE_FUNCPTR * PFNGLCOLORMASKPROC)(GLboolean , GLboolean , GLboolean , GLboolean );
 typedef void (GLE_FUNCPTR * PFNGLDEPTHMASKPROC)(GLboolean );
@@ -241,7 +239,7 @@ typedef void (GLE_FUNCPTR * PFNGLGETTEXPARAMETERIVPROC)(GLenum , GLenum , GLint 
 typedef void (GLE_FUNCPTR * PFNGLGETTEXLEVELPARAMETERFVPROC)(GLenum , GLint , GLenum , GLfloat *);
 typedef void (GLE_FUNCPTR * PFNGLGETTEXLEVELPARAMETERIVPROC)(GLenum , GLint , GLenum , GLint *);
 typedef GLboolean (GLE_FUNCPTR * PFNGLISENABLEDPROC)(GLenum );
-typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEPROC)(GLclampd , GLclampd );
+typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEPROC)(GLdouble , GLdouble );
 typedef void (GLE_FUNCPTR * PFNGLVIEWPORTPROC)(GLint , GLint , GLsizei , GLsizei );
 typedef void (GLE_FUNCPTR * PFNGLDRAWARRAYSPROC)(GLenum , GLint , GLsizei );
 typedef void (GLE_FUNCPTR * PFNGLDRAWELEMENTSPROC)(GLenum , GLsizei , GLenum , const GLvoid *);

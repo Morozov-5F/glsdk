@@ -156,6 +156,7 @@ extern int glXext_INTEL_swap_event;
 extern int glXext_NV_multisample_coverage;
 extern int glXext_AMD_gpu_association;
 extern int glXext_EXT_create_context_es2_profile;
+extern int glXext_EXT_swap_control_tear;
 
 
 /******************************
@@ -392,10 +393,17 @@ extern PFNGLXFREECONTEXTEXTPROC glXFreeContextEXT;
 #ifndef GLX_EXT_swap_control
 #define GLX_EXT_swap_control 1
 
-typedef int (GLE_FUNCPTR * PFNGLXSWAPINTERVALEXTPROC)(Display *, GLXDrawable , int );
+typedef void (GLE_FUNCPTR * PFNGLXSWAPINTERVALEXTPROC)(Display *, GLXDrawable , int );
 
 extern PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT;
 #endif /*GLX_EXT_swap_control*/
+
+/******************************
+* Extension: GLX_EXT_swap_control_tear
+******************************/
+
+#define GLX_LATE_SWAPS_TEAR_EXT 0x20F3
+
 
 /******************************
 * Extension: GLX_EXT_texture_from_pixmap

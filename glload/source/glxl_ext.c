@@ -242,6 +242,7 @@ int glXext_INTEL_swap_event = 0;
 int glXext_NV_multisample_coverage = 0;
 int glXext_AMD_gpu_association = 0;
 int glXext_EXT_create_context_es2_profile = 0;
+int glXext_EXT_swap_control_tear = 0;
 
 
 void glXeIntClear()
@@ -293,6 +294,7 @@ void glXeIntClear()
 	glXext_NV_multisample_coverage = 0;
 	glXext_AMD_gpu_association = 0;
 	glXext_EXT_create_context_es2_profile = 0;
+	glXext_EXT_swap_control_tear = 0;
 }
 
 
@@ -369,7 +371,7 @@ static int glXeIntLoad_EXT_import_context()
 	return bIsLoaded;
 }
 #ifndef GLX_EXT_swap_control
-typedef int (GLE_FUNCPTR * PFNGLXSWAPINTERVALEXTPROC)(Display *, GLXDrawable , int );
+typedef void (GLE_FUNCPTR * PFNGLXSWAPINTERVALEXTPROC)(Display *, GLXDrawable , int );
 
 PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT;
 #endif /*GLX_EXT_swap_control*/
@@ -383,6 +385,7 @@ static int glXeIntLoad_EXT_swap_control()
 #endif /*GLX_EXT_swap_control*/
 	return bIsLoaded;
 }
+
 #ifndef GLX_EXT_texture_from_pixmap
 typedef void (GLE_FUNCPTR * PFNGLXBINDTEXIMAGEEXTPROC)(Display *, GLXDrawable , int , const int *);
 typedef void (GLE_FUNCPTR * PFNGLXRELEASETEXIMAGEEXTPROC)(Display *, GLXDrawable , int );
@@ -849,6 +852,7 @@ StrToExtMap glXeIntExtensionMap[] = {
 	{"GLX_EXT_framebuffer_sRGB", &glXext_EXT_framebuffer_sRGB, NULL},
 	{"GLX_EXT_import_context", &glXext_EXT_import_context, glXeIntLoad_EXT_import_context},
 	{"GLX_EXT_swap_control", &glXext_EXT_swap_control, glXeIntLoad_EXT_swap_control},
+	{"GLX_EXT_swap_control_tear", &glXext_EXT_swap_control_tear, NULL},
 	{"GLX_EXT_texture_from_pixmap", &glXext_EXT_texture_from_pixmap, glXeIntLoad_EXT_texture_from_pixmap},
 	{"GLX_EXT_visual_info", &glXext_EXT_visual_info, NULL},
 	{"GLX_EXT_visual_rating", &glXext_EXT_visual_rating, NULL},
@@ -883,7 +887,7 @@ StrToExtMap glXeIntExtensionMap[] = {
 	{"GLX_SUN_get_transparent_index", &glXext_SUN_get_transparent_index, glXeIntLoad_SUN_get_transparent_index},
 };
 
-int glXeIntExtensionMapSize = 47;
+int glXeIntExtensionMapSize = 48;
 
 
 

@@ -116,6 +116,8 @@ extern int wglext_NV_copy_image;
 extern int wglext_NV_multisample_coverage;
 extern int wglext_EXT_create_context_es2_profile;
 extern int wglext_NV_DX_interop;
+extern int wglext_NV_DX_interop2;
+extern int wglext_EXT_swap_control_tear;
 
 
 
@@ -625,6 +627,10 @@ extern PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
 #endif /*WGL_EXT_swap_control*/
 
 /******************************
+* Extension: WGL_EXT_swap_control_tear
+******************************/
+
+/******************************
 * Extension: WGL_I3D_digital_video_control
 ******************************/
 
@@ -781,6 +787,10 @@ extern PFNWGLDXOBJECTACCESSNVPROC wglDXObjectAccessNV;
 extern PFNWGLDXLOCKOBJECTSNVPROC wglDXLockObjectsNV;
 extern PFNWGLDXUNLOCKOBJECTSNVPROC wglDXUnlockObjectsNV;
 #endif /*WGL_NV_DX_interop*/
+
+/******************************
+* Extension: WGL_NV_DX_interop2
+******************************/
 
 /******************************
 * Extension: WGL_NV_copy_image

@@ -8,6 +8,7 @@ extern "C" {
 #endif //__cplusplus
 
 
+extern void (GLE_FUNCPTR *__gleTexImage3D)(GLenum , GLint , GLint , GLsizei , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *);
 extern void (GLE_FUNCPTR *__gleColorTable)(GLenum , GLenum , GLsizei , GLenum , GLenum , const GLvoid *);
 extern void (GLE_FUNCPTR *__gleColorTableParameterfv)(GLenum , GLenum , const GLfloat *);
 extern void (GLE_FUNCPTR *__gleColorTableParameteriv)(GLenum , GLenum , const GLint *);
@@ -57,6 +58,7 @@ namespace gl
 		GL_ALIASED_POINT_SIZE_RANGE      = 0x846D,
 	};
 
+	inline void TexImage3D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels) { ::__gleTexImage3D(target, level, internalformat, width, height, depth, border, format, type, pixels); }
 	inline void ColorTable(GLenum target, GLenum internalformat, GLsizei width, GLenum format, GLenum type, const GLvoid *table) { ::__gleColorTable(target, internalformat, width, format, type, table); }
 	inline void ColorTableParameterfv(GLenum target, GLenum pname, const GLfloat *params) { ::__gleColorTableParameterfv(target, pname, params); }
 	inline void ColorTableParameteriv(GLenum target, GLenum pname, const GLint *params) { ::__gleColorTableParameteriv(target, pname, params); }

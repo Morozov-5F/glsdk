@@ -26,7 +26,7 @@ extern "C" {
 #define GL_TEXTURE_COMPARE_FUNC 0x884D
 typedef void (GLE_FUNCPTR * PFNGLBLENDFUNCSEPARATEPROC)(GLenum , GLenum , GLenum , GLenum );
 typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWARRAYSPROC)(GLenum , const GLint *, const GLsizei *, GLsizei );
-typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWELEMENTSPROC)(GLenum , const GLsizei *, GLenum , const GLvoid* *, GLsizei );
+typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWELEMENTSPROC)(GLenum , const GLsizei *, GLenum , const GLvoid* const *, GLsizei );
 typedef void (GLE_FUNCPTR * PFNGLPOINTPARAMETERFPROC)(GLenum , GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLPOINTPARAMETERFVPROC)(GLenum , const GLfloat *);
 typedef void (GLE_FUNCPTR * PFNGLPOINTPARAMETERIPROC)(GLenum , GLint );

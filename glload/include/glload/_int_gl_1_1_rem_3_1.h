@@ -40,8 +40,6 @@ extern "C" {
 #define GL_AUX1 0x040A
 #define GL_AUX2 0x040B
 #define GL_AUX3 0x040C
-#define GL_STACK_OVERFLOW 0x0503
-#define GL_STACK_UNDERFLOW 0x0504
 #define GL_2D 0x0600
 #define GL_3D 0x0601
 #define GL_3D_COLOR 0x0602
@@ -216,7 +214,6 @@ extern "C" {
 #define GL_FEEDBACK_BUFFER_SIZE 0x0DF1
 #define GL_FEEDBACK_BUFFER_TYPE 0x0DF2
 #define GL_SELECTION_BUFFER_SIZE 0x0DF4
-#define GL_VERTEX_ARRAY 0x8074
 #define GL_NORMAL_ARRAY 0x8075
 #define GL_COLOR_ARRAY 0x8076
 #define GL_INDEX_ARRAY 0x8077
@@ -549,7 +546,7 @@ typedef void (GLE_FUNCPTR * PFNGLEVALMESH1PROC)(GLenum , GLint , GLint );
 typedef void (GLE_FUNCPTR * PFNGLEVALPOINT1PROC)(GLint );
 typedef void (GLE_FUNCPTR * PFNGLEVALMESH2PROC)(GLenum , GLint , GLint , GLint , GLint );
 typedef void (GLE_FUNCPTR * PFNGLEVALPOINT2PROC)(GLint , GLint );
-typedef void (GLE_FUNCPTR * PFNGLALPHAFUNCPROC)(GLenum , GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLALPHAFUNCPROC)(GLenum , GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLPIXELZOOMPROC)(GLfloat , GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLPIXELTRANSFERFPROC)(GLenum , GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLPIXELTRANSFERIPROC)(GLenum , GLint );
@@ -603,7 +600,7 @@ typedef void (GLE_FUNCPTR * PFNGLNORMALPOINTERPROC)(GLenum , GLsizei , const GLv
 typedef void (GLE_FUNCPTR * PFNGLTEXCOORDPOINTERPROC)(GLint , GLenum , GLsizei , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLVERTEXPOINTERPROC)(GLint , GLenum , GLsizei , const GLvoid *);
 typedef GLboolean (GLE_FUNCPTR * PFNGLARETEXTURESRESIDENTPROC)(GLsizei , const GLuint *, GLboolean *);
-typedef void (GLE_FUNCPTR * PFNGLPRIORITIZETEXTURESPROC)(GLsizei , const GLuint *, const GLclampf *);
+typedef void (GLE_FUNCPTR * PFNGLPRIORITIZETEXTURESPROC)(GLsizei , const GLuint *, const GLfloat *);
 typedef void (GLE_FUNCPTR * PFNGLPOPCLIENTATTRIBPROC)();
 typedef void (GLE_FUNCPTR * PFNGLPUSHCLIENTATTRIBPROC)(GLbitfield );
 
