@@ -93025,7 +93025,7 @@ return {
 		{
 			["copy"] = true,
 			["name"] = [==[MAX_COMBINED_SHADER_OUTPUT_RESOURCES]==],
-			["value"] = [==[COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS]==],
+			["value"] = [==[MAX_COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS]==],
 			["extensions"] = {
 				[==[ARB_shader_storage_buffer_object]==],
 			},
