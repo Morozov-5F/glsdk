@@ -23,9 +23,9 @@ extern void (GLE_FUNCPTR *__gleTexImage1D)(GLenum , GLint , GLint , GLsizei , GL
 extern void (GLE_FUNCPTR *__gleTexImage2D)(GLenum , GLint , GLint , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *);
 extern void (GLE_FUNCPTR *__gleDrawBuffer)(GLenum );
 extern void (GLE_FUNCPTR *__gleClear)(GLbitfield );
-extern void (GLE_FUNCPTR *__gleClearColor)(GLclampf , GLclampf , GLclampf , GLclampf );
+extern void (GLE_FUNCPTR *__gleClearColor)(GLfloat , GLfloat , GLfloat , GLfloat );
 extern void (GLE_FUNCPTR *__gleClearStencil)(GLint );
-extern void (GLE_FUNCPTR *__gleClearDepth)(GLclampd );
+extern void (GLE_FUNCPTR *__gleClearDepth)(GLdouble );
 extern void (GLE_FUNCPTR *__gleStencilMask)(GLuint );
 extern void (GLE_FUNCPTR *__gleColorMask)(GLboolean , GLboolean , GLboolean , GLboolean );
 extern void (GLE_FUNCPTR *__gleDepthMask)(GLboolean );
@@ -54,7 +54,7 @@ extern void (GLE_FUNCPTR *__gleGetTexParameteriv)(GLenum , GLenum , GLint *);
 extern void (GLE_FUNCPTR *__gleGetTexLevelParameterfv)(GLenum , GLint , GLenum , GLfloat *);
 extern void (GLE_FUNCPTR *__gleGetTexLevelParameteriv)(GLenum , GLint , GLenum , GLint *);
 extern GLboolean (GLE_FUNCPTR *__gleIsEnabled)(GLenum );
-extern void (GLE_FUNCPTR *__gleDepthRange)(GLclampd , GLclampd );
+extern void (GLE_FUNCPTR *__gleDepthRange)(GLdouble , GLdouble );
 extern void (GLE_FUNCPTR *__gleViewport)(GLint , GLint , GLsizei , GLsizei );
 extern void (GLE_FUNCPTR *__gleDrawArrays)(GLenum , GLint , GLsizei );
 extern void (GLE_FUNCPTR *__gleDrawElements)(GLenum , GLsizei , GLenum , const GLvoid *);
@@ -176,8 +176,6 @@ namespace gl
 		GL_MAX_TEXTURE_SIZE              = 0x0D33,
 		GL_MAX_VIEWPORT_DIMS             = 0x0D3A,
 		GL_SUBPIXEL_BITS                 = 0x0D50,
-		GL_TEXTURE_1D                    = 0x0DE0,
-		GL_TEXTURE_2D                    = 0x0DE1,
 		GL_POLYGON_OFFSET_UNITS          = 0x2A00,
 		GL_POLYGON_OFFSET_POINT          = 0x2A01,
 		GL_POLYGON_OFFSET_LINE           = 0x2A02,
@@ -286,9 +284,9 @@ namespace gl
 	inline void TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels) { ::__gleTexImage2D(target, level, internalformat, width, height, border, format, type, pixels); }
 	inline void DrawBuffer(GLenum mode) { ::__gleDrawBuffer(mode); }
 	inline void Clear(GLbitfield mask) { ::__gleClear(mask); }
-	inline void ClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha) { ::__gleClearColor(red, green, blue, alpha); }
+	inline void ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) { ::__gleClearColor(red, green, blue, alpha); }
 	inline void ClearStencil(GLint s) { ::__gleClearStencil(s); }
-	inline void ClearDepth(GLclampd depth) { ::__gleClearDepth(depth); }
+	inline void ClearDepth(GLdouble depth) { ::__gleClearDepth(depth); }
 	inline void StencilMask(GLuint mask) { ::__gleStencilMask(mask); }
 	inline void ColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha) { ::__gleColorMask(red, green, blue, alpha); }
 	inline void DepthMask(GLboolean flag) { ::__gleDepthMask(flag); }
@@ -317,7 +315,7 @@ namespace gl
 	inline void GetTexLevelParameterfv(GLenum target, GLint level, GLenum pname, GLfloat *params) { ::__gleGetTexLevelParameterfv(target, level, pname, params); }
 	inline void GetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, GLint *params) { ::__gleGetTexLevelParameteriv(target, level, pname, params); }
 	inline GLboolean IsEnabled(GLenum cap) { return ::__gleIsEnabled(cap); }
-	inline void DepthRange(GLclampd ren_near, GLclampd ren_far) { ::__gleDepthRange(ren_near, ren_far); }
+	inline void DepthRange(GLdouble ren_near, GLdouble ren_far) { ::__gleDepthRange(ren_near, ren_far); }
 	inline void Viewport(GLint x, GLint y, GLsizei width, GLsizei height) { ::__gleViewport(x, y, width, height); }
 	inline void DrawArrays(GLenum mode, GLint first, GLsizei count) { ::__gleDrawArrays(mode, first, count); }
 	inline void DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices) { ::__gleDrawElements(mode, count, type, indices); }

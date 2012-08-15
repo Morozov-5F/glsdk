@@ -2941,8 +2941,9 @@ return {
 				},
 			},
 			{
+				["glxvendorglx"] = [==[1416]==],
 				["name"] = [==[SwapIntervalEXT]==],
-				["return"] = [==[int]==],
+				["return"] = [==[void]==],
 				["param"] = [==[interval]==],
 				["category"] = [==[EXT_swap_control]==],
 				["glxflags"] = [==[client-handcode]==],
@@ -3137,6 +3138,7 @@ return {
 		[==[NV_multisample_coverage]==],
 		[==[AMD_gpu_association]==],
 		[==[EXT_create_context_es2_profile]==],
+		[==[EXT_swap_control_tear]==],
 	},
 	["enumerations"] = {
 		{
@@ -4864,6 +4866,14 @@ return {
 				[==[EXT_create_context_es2_profile]==],
 			},
 			["name"] = [==[CONTEXT_ES2_PROFILE_BIT_EXT]==],
+		},
+		{
+			["value"] = [==[0x20F3]==],
+			["copy"] = false,
+			["extensions"] = {
+				[==[EXT_swap_control_tear]==],
+			},
+			["name"] = [==[LATE_SWAPS_TEAR_EXT]==],
 		},
 	},
 };

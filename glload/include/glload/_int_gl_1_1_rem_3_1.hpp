@@ -223,13 +223,13 @@ extern void (GLE_FUNCPTR *__gleEvalMesh1)(GLenum , GLint , GLint );
 extern void (GLE_FUNCPTR *__gleEvalPoint1)(GLint );
 extern void (GLE_FUNCPTR *__gleEvalMesh2)(GLenum , GLint , GLint , GLint , GLint );
 extern void (GLE_FUNCPTR *__gleEvalPoint2)(GLint , GLint );
-extern void (GLE_FUNCPTR *__gleAlphaFunc)(GLenum , GLclampf );
+extern void (GLE_FUNCPTR *__gleAlphaFunc)(GLenum , GLfloat );
 extern void (GLE_FUNCPTR *__glePixelZoom)(GLfloat , GLfloat );
 extern void (GLE_FUNCPTR *__glePixelTransferf)(GLenum , GLfloat );
 extern void (GLE_FUNCPTR *__glePixelTransferi)(GLenum , GLint );
-extern void (GLE_FUNCPTR *__glePixelMapfv)(GLenum , GLint , const GLfloat *);
-extern void (GLE_FUNCPTR *__glePixelMapuiv)(GLenum , GLint , const GLuint *);
-extern void (GLE_FUNCPTR *__glePixelMapusv)(GLenum , GLint , const GLushort *);
+extern void (GLE_FUNCPTR *__glePixelMapfv)(GLenum , GLsizei , const GLfloat *);
+extern void (GLE_FUNCPTR *__glePixelMapuiv)(GLenum , GLsizei , const GLuint *);
+extern void (GLE_FUNCPTR *__glePixelMapusv)(GLenum , GLsizei , const GLushort *);
 extern void (GLE_FUNCPTR *__gleCopyPixels)(GLint , GLint , GLsizei , GLsizei , GLenum );
 extern void (GLE_FUNCPTR *__gleDrawPixels)(GLsizei , GLsizei , GLenum , GLenum , const GLvoid *);
 extern void (GLE_FUNCPTR *__gleGetClipPlane)(GLenum , GLdouble *);
@@ -277,7 +277,7 @@ extern void (GLE_FUNCPTR *__gleNormalPointer)(GLenum , GLsizei , const GLvoid *)
 extern void (GLE_FUNCPTR *__gleTexCoordPointer)(GLint , GLenum , GLsizei , const GLvoid *);
 extern void (GLE_FUNCPTR *__gleVertexPointer)(GLint , GLenum , GLsizei , const GLvoid *);
 extern GLboolean (GLE_FUNCPTR *__gleAreTexturesResident)(GLsizei , const GLuint *, GLboolean *);
-extern void (GLE_FUNCPTR *__glePrioritizeTextures)(GLsizei , const GLuint *, const GLclampf *);
+extern void (GLE_FUNCPTR *__glePrioritizeTextures)(GLsizei , const GLuint *, const GLfloat *);
 extern void (GLE_FUNCPTR *__glePopClientAttrib)();
 extern void (GLE_FUNCPTR *__glePushClientAttrib)(GLbitfield );
 #ifdef __cplusplus
@@ -322,8 +322,6 @@ namespace gl
 		GL_AUX1                          = 0x040A,
 		GL_AUX2                          = 0x040B,
 		GL_AUX3                          = 0x040C,
-		GL_STACK_OVERFLOW                = 0x0503,
-		GL_STACK_UNDERFLOW               = 0x0504,
 		GL_2D                            = 0x0600,
 		GL_3D                            = 0x0601,
 		GL_3D_COLOR                      = 0x0602,
@@ -833,13 +831,13 @@ namespace gl
 	inline void EvalPoint1(GLint i) { ::__gleEvalPoint1(i); }
 	inline void EvalMesh2(GLenum mode, GLint i1, GLint i2, GLint j1, GLint j2) { ::__gleEvalMesh2(mode, i1, i2, j1, j2); }
 	inline void EvalPoint2(GLint i, GLint j) { ::__gleEvalPoint2(i, j); }
-	inline void AlphaFunc(GLenum func, GLclampf ref) { ::__gleAlphaFunc(func, ref); }
+	inline void AlphaFunc(GLenum func, GLfloat ref) { ::__gleAlphaFunc(func, ref); }
 	inline void PixelZoom(GLfloat xfactor, GLfloat yfactor) { ::__glePixelZoom(xfactor, yfactor); }
 	inline void PixelTransferf(GLenum pname, GLfloat param) { ::__glePixelTransferf(pname, param); }
 	inline void PixelTransferi(GLenum pname, GLint param) { ::__glePixelTransferi(pname, param); }
-	inline void PixelMapfv(GLenum map, GLint mapsize, const GLfloat *values) { ::__glePixelMapfv(map, mapsize, values); }
-	inline void PixelMapuiv(GLenum map, GLint mapsize, const GLuint *values) { ::__glePixelMapuiv(map, mapsize, values); }
-	inline void PixelMapusv(GLenum map, GLint mapsize, const GLushort *values) { ::__glePixelMapusv(map, mapsize, values); }
+	inline void PixelMapfv(GLenum map, GLsizei mapsize, const GLfloat *values) { ::__glePixelMapfv(map, mapsize, values); }
+	inline void PixelMapuiv(GLenum map, GLsizei mapsize, const GLuint *values) { ::__glePixelMapuiv(map, mapsize, values); }
+	inline void PixelMapusv(GLenum map, GLsizei mapsize, const GLushort *values) { ::__glePixelMapusv(map, mapsize, values); }
 	inline void CopyPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum type) { ::__gleCopyPixels(x, y, width, height, type); }
 	inline void DrawPixels(GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels) { ::__gleDrawPixels(width, height, format, type, pixels); }
 	inline void GetClipPlane(GLenum plane, GLdouble *equation) { ::__gleGetClipPlane(plane, equation); }
@@ -887,7 +885,7 @@ namespace gl
 	inline void TexCoordPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) { ::__gleTexCoordPointer(size, type, stride, pointer); }
 	inline void VertexPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) { ::__gleVertexPointer(size, type, stride, pointer); }
 	inline GLboolean AreTexturesResident(GLsizei n, const GLuint *textures, GLboolean *residences) { return ::__gleAreTexturesResident(n, textures, residences); }
-	inline void PrioritizeTextures(GLsizei n, const GLuint *textures, const GLclampf *priorities) { ::__glePrioritizeTextures(n, textures, priorities); }
+	inline void PrioritizeTextures(GLsizei n, const GLuint *textures, const GLfloat *priorities) { ::__glePrioritizeTextures(n, textures, priorities); }
 	inline void PopClientAttrib() { ::__glePopClientAttrib(); }
 	inline void PushClientAttrib(GLbitfield mask) { ::__glePushClientAttrib(mask); }
 

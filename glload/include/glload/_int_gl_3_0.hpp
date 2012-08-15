@@ -18,7 +18,7 @@ extern void (GLE_FUNCPTR *__gleBeginTransformFeedback)(GLenum );
 extern void (GLE_FUNCPTR *__gleEndTransformFeedback)();
 extern void (GLE_FUNCPTR *__gleBindBufferRange)(GLenum , GLuint , GLuint , GLintptr , GLsizeiptr );
 extern void (GLE_FUNCPTR *__gleBindBufferBase)(GLenum , GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleTransformFeedbackVaryings)(GLuint , GLsizei , const GLchar* *, GLenum );
+extern void (GLE_FUNCPTR *__gleTransformFeedbackVaryings)(GLuint , GLsizei , const GLchar* const *, GLenum );
 extern void (GLE_FUNCPTR *__gleGetTransformFeedbackVarying)(GLuint , GLuint , GLsizei , GLsizei *, GLsizei *, GLenum *, GLchar *);
 extern void (GLE_FUNCPTR *__gleClampColor)(GLenum , GLenum );
 extern void (GLE_FUNCPTR *__gleBeginConditionalRender)(GLuint , GLenum );
@@ -90,8 +90,6 @@ namespace gl
 		GL_MINOR_VERSION                 = 0x821C,
 		GL_NUM_EXTENSIONS                = 0x821D,
 		GL_CONTEXT_FLAGS                 = 0x821E,
-		GL_DEPTH_BUFFER                  = 0x8223,
-		GL_STENCIL_BUFFER                = 0x8224,
 		GL_COMPRESSED_RED                = 0x8225,
 		GL_COMPRESSED_RG                 = 0x8226,
 		GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT = 0x0001,
@@ -104,9 +102,7 @@ namespace gl
 		GL_MAX_PROGRAM_TEXEL_OFFSET      = 0x8905,
 		GL_CLAMP_READ_COLOR              = 0x891C,
 		GL_FIXED_ONLY                    = 0x891D,
-		GL_TEXTURE_1D_ARRAY              = 0x8C18,
 		GL_PROXY_TEXTURE_1D_ARRAY        = 0x8C19,
-		GL_TEXTURE_2D_ARRAY              = 0x8C1A,
 		GL_PROXY_TEXTURE_2D_ARRAY        = 0x8C1B,
 		GL_TEXTURE_BINDING_1D_ARRAY      = 0x8C1C,
 		GL_TEXTURE_BINDING_2D_ARRAY      = 0x8C1D,
@@ -186,7 +182,7 @@ namespace gl
 	inline void EndTransformFeedback() { ::__gleEndTransformFeedback(); }
 	inline void BindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size) { ::__gleBindBufferRange(target, index, buffer, offset, size); }
 	inline void BindBufferBase(GLenum target, GLuint index, GLuint buffer) { ::__gleBindBufferBase(target, index, buffer); }
-	inline void TransformFeedbackVaryings(GLuint program, GLsizei count, const GLchar* *varyings, GLenum bufferMode) { ::__gleTransformFeedbackVaryings(program, count, varyings, bufferMode); }
+	inline void TransformFeedbackVaryings(GLuint program, GLsizei count, const GLchar* const *varyings, GLenum bufferMode) { ::__gleTransformFeedbackVaryings(program, count, varyings, bufferMode); }
 	inline void GetTransformFeedbackVarying(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name) { ::__gleGetTransformFeedbackVarying(program, index, bufSize, length, size, type, name); }
 	inline void ClampColor(GLenum target, GLenum clamp) { ::__gleClampColor(target, clamp); }
 	inline void BeginConditionalRender(GLuint id, GLenum mode) { ::__gleBeginConditionalRender(id, mode); }

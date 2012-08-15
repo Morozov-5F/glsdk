@@ -42,7 +42,7 @@ extern void (GLE_FUNCPTR *__gleGetVertexAttribPointerv)(GLuint , GLenum , GLvoid
 extern GLboolean (GLE_FUNCPTR *__gleIsProgram)(GLuint );
 extern GLboolean (GLE_FUNCPTR *__gleIsShader)(GLuint );
 extern void (GLE_FUNCPTR *__gleLinkProgram)(GLuint );
-extern void (GLE_FUNCPTR *__gleShaderSource)(GLuint , GLsizei , const GLchar* *, const GLint *);
+extern void (GLE_FUNCPTR *__gleShaderSource)(GLuint , GLsizei , const GLchar* const *, const GLint *);
 extern void (GLE_FUNCPTR *__gleUseProgram)(GLuint );
 extern void (GLE_FUNCPTR *__gleUniform1f)(GLint , GLfloat );
 extern void (GLE_FUNCPTR *__gleUniform2f)(GLint , GLfloat , GLfloat );
@@ -191,7 +191,7 @@ namespace gl
 	inline GLboolean IsProgram(GLuint program) { return ::__gleIsProgram(program); }
 	inline GLboolean IsShader(GLuint shader) { return ::__gleIsShader(shader); }
 	inline void LinkProgram(GLuint program) { ::__gleLinkProgram(program); }
-	inline void ShaderSource(GLuint shader, GLsizei count, const GLchar* *string, const GLint *length) { ::__gleShaderSource(shader, count, string, length); }
+	inline void ShaderSource(GLuint shader, GLsizei count, const GLchar* const *string, const GLint *length) { ::__gleShaderSource(shader, count, string, length); }
 	inline void UseProgram(GLuint program) { ::__gleUseProgram(program); }
 	inline void Uniform1f(GLint location, GLfloat v0) { ::__gleUniform1f(location, v0); }
 	inline void Uniform2f(GLint location, GLfloat v0, GLfloat v1) { ::__gleUniform2f(location, v0, v1); }

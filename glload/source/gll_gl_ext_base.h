@@ -165,6 +165,9 @@ typedef void (APIENTRY *GLDEBUGPROCARB)(GLenum source,GLenum type,GLuint id,GLen
 #ifndef GL_AMD_debug_output
 typedef void (APIENTRY *GLDEBUGPROCAMD)(GLuint id,GLenum category,GLenum severity,GLsizei length,const GLchar *message,GLvoid *userParam);
 #endif
+#ifndef GL_KHR_debug
+typedef void (APIENTRY *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,GLvoid *userParam);
+#endif
 #ifndef GL_NV_vdpau_interop
 typedef GLintptr GLvdpauSurfaceNV;
 #endif

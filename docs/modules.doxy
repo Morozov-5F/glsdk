@@ -32,3 +32,26 @@ GLFW is distributed under the <a href="http://www.opensource.org/licenses/Zlib">
 
 **/
 
+/**
+\defgroup module_troubleshooting Troubleshooting
+
+@section trouble_headers Header Inclusion Order
+
+Headers must be included in certain orders. GLFW and FreeGLUT headers must be included \em after including one of the GL Load OpenGL headers. For example, if you want to use OpenGL 3.3 core with FreeGLUT, you must include them in this order:
+
+\code
+#include <glload/gl_3_3.h>
+#include <GL/freeglut.h>
+\endcode
+
+This is because FreeGLUT requires some of the types defined in the GL Load headers. Normally, it would include <tt>GL/gl.h</tt> directly, but since GL Load cannot work with the old header, we have to forcibly include it outselves first.
+
+The same goes for GLEW.
+
+The GLimg library headers <em>do not</em> require the inclusion of any GL Load headers. Some of the Texture Generation functions return <tt>unsigned int</tt> instead of actual GLenum values in order to support this.
+
+GL Util and GL Mesh headers can require GL Load inclusion on a case-by-case basis. Each file that requires it will have a notation in the documentation for that particular header file. Thus, if you include glutil.h or glmesh.h, you \em need to include a GL Load header first.
+
+A good rule of thumb is to simply include the GL Load headers before including \em anything else from the SDK.
+**/
+

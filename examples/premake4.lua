@@ -30,7 +30,7 @@ for i, currDir in ipairs(dirs) do
 			files {"*.hpp"}
 			files {"*.h"}
 
-			UseLibs {"glload", "glimage", "glutil",
+			UseLibs {"glload", "glimage", "glutil", "glmesh",
 				"glm", "freeglut", "glfw"}
 			
 			configuration "windows"

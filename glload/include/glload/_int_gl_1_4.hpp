@@ -10,7 +10,7 @@ extern "C" {
 
 extern void (GLE_FUNCPTR *__gleBlendFuncSeparate)(GLenum , GLenum , GLenum , GLenum );
 extern void (GLE_FUNCPTR *__gleMultiDrawArrays)(GLenum , const GLint *, const GLsizei *, GLsizei );
-extern void (GLE_FUNCPTR *__gleMultiDrawElements)(GLenum , const GLsizei *, GLenum , const GLvoid* *, GLsizei );
+extern void (GLE_FUNCPTR *__gleMultiDrawElements)(GLenum , const GLsizei *, GLenum , const GLvoid* const *, GLsizei );
 extern void (GLE_FUNCPTR *__glePointParameterf)(GLenum , GLfloat );
 extern void (GLE_FUNCPTR *__glePointParameterfv)(GLenum , const GLfloat *);
 extern void (GLE_FUNCPTR *__glePointParameteri)(GLenum , GLint );
@@ -44,8 +44,8 @@ namespace gl
 	};
 
 	inline void BlendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha) { ::__gleBlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha); }
-	inline void MultiDrawArrays(GLenum mode, const GLint *first, const GLsizei *count, GLsizei primcount) { ::__gleMultiDrawArrays(mode, first, count, primcount); }
-	inline void MultiDrawElements(GLenum mode, const GLsizei *count, GLenum type, const GLvoid* *indices, GLsizei primcount) { ::__gleMultiDrawElements(mode, count, type, indices, primcount); }
+	inline void MultiDrawArrays(GLenum mode, const GLint *first, const GLsizei *count, GLsizei drawcount) { ::__gleMultiDrawArrays(mode, first, count, drawcount); }
+	inline void MultiDrawElements(GLenum mode, const GLsizei *count, GLenum type, const GLvoid* const *indices, GLsizei drawcount) { ::__gleMultiDrawElements(mode, count, type, indices, drawcount); }
 	inline void PointParameterf(GLenum pname, GLfloat param) { ::__glePointParameterf(pname, param); }
 	inline void PointParameterfv(GLenum pname, const GLfloat *params) { ::__glePointParameterfv(pname, params); }
 	inline void PointParameteri(GLenum pname, GLint param) { ::__glePointParameteri(pname, param); }

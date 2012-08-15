@@ -156,7 +156,21 @@ static int iMajorVersion = 0;
 static int iMinorVersion = 0;
 
 
+#define LOAD_FUNCS_FROM_CORE(major, minor)\
+	if((iMajorVersion == major) && (iMinorVersion == minor))\
+	{\
+		found = 1;\
+		if(!gleIntLoad_Version_ ## major ## _ ## minor ())\
+			eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;\
+	}
 
+#define LOAD_FUNCS_FROM_COMPATIBILITY(major, minor)\
+	if((iMajorVersion == major) && (iMinorVersion == minor))\
+	{\
+		found = 1;\
+		if(!gleIntLoad_Version_ ## major ## _ ## minor ## _Comp ())\
+			eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;\
+	}
 
 int LoadFunctions()
 {
@@ -203,27 +217,43 @@ int LoadFunctions()
 	{
 		int iProfileMask = 0;
 		glGetIntegerv(GL_CONTEXT_PROFILE_MASK, &iProfileMask);
-		if(iProfileMask)
+
+		if(!iProfileMask)
 		{
-			if(iProfileMask & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT)
-			{
-				if(!gleIntLoad_Version_3_2_Comp()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
-			}
+			if(CheckCompatibilityExt())
+				iProfileMask &= GL_CONTEXT_COMPATIBILITY_PROFILE_BIT;
 			else
+				iProfileMask &= GL_CONTEXT_CORE_PROFILE_BIT;
+		}
+
+		if(iProfileMask & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT)
+		{
+			int found = 0;
+			LOAD_FUNCS_FROM_COMPATIBILITY(3, 2);
+			LOAD_FUNCS_FROM_COMPATIBILITY(3, 3);
+			LOAD_FUNCS_FROM_COMPATIBILITY(4, 0);
+			LOAD_FUNCS_FROM_COMPATIBILITY(4, 1);
+			LOAD_FUNCS_FROM_COMPATIBILITY(4, 2);
+			LOAD_FUNCS_FROM_COMPATIBILITY(4, 3);
+			if(!found)
 			{
-				if(!gleIntLoad_Version_3_2()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
+				//Unknown OpenGL version. Just load the latest.
+				if(!gleIntLoad_Version_4_3_Comp()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 			}
 		}
 		else
 		{
-			//Hack to fix NVIDIA stupidity.
-			if(CheckCompatibilityExt())
+			int found = 0;
+			LOAD_FUNCS_FROM_CORE(3, 2);
+			LOAD_FUNCS_FROM_CORE(3, 3);
+			LOAD_FUNCS_FROM_CORE(4, 0);
+			LOAD_FUNCS_FROM_CORE(4, 1);
+			LOAD_FUNCS_FROM_CORE(4, 2);
+			LOAD_FUNCS_FROM_CORE(4, 3);
+			if(!found)
 			{
-				if(!gleIntLoad_Version_3_2_Comp()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
-			}
-			else
-			{
-				if(!gleIntLoad_Version_3_2()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
+				//Unknown OpenGL version. Just load the latest.
+				if(!gleIntLoad_Version_4_3()) eCurrLoadStatus = LS_LOAD_FUNCTIONS_SOME;
 			}
 		}
 	}

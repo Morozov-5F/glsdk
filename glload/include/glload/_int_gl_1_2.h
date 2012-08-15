@@ -18,7 +18,6 @@ extern "C" {
 #define GL_PACK_IMAGE_HEIGHT 0x806C
 #define GL_UNPACK_SKIP_IMAGES 0x806D
 #define GL_UNPACK_IMAGE_HEIGHT 0x806E
-#define GL_TEXTURE_3D 0x806F
 #define GL_PROXY_TEXTURE_3D 0x8070
 #define GL_TEXTURE_DEPTH 0x8071
 #define GL_TEXTURE_WRAP_R 0x8072
@@ -42,10 +41,9 @@ extern "C" {
 #define GL_SMOOTH_LINE_WIDTH_RANGE 0x0B22
 #define GL_SMOOTH_LINE_WIDTH_GRANULARITY 0x0B23
 #define GL_ALIASED_LINE_WIDTH_RANGE 0x846E
-typedef void (GLE_FUNCPTR * PFNGLBLENDCOLORPROC)(GLclampf , GLclampf , GLclampf , GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLBLENDCOLORPROC)(GLfloat , GLfloat , GLfloat , GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLBLENDEQUATIONPROC)(GLenum );
 typedef void (GLE_FUNCPTR * PFNGLDRAWRANGEELEMENTSPROC)(GLenum , GLuint , GLuint , GLsizei , GLenum , const GLvoid *);
-typedef void (GLE_FUNCPTR * PFNGLTEXIMAGE3DPROC)(GLenum , GLint , GLint , GLsizei , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLTEXSUBIMAGE3DPROC)(GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei , GLenum , GLenum , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLCOPYTEXSUBIMAGE3DPROC)(GLenum , GLint , GLint , GLint , GLint , GLint , GLint , GLsizei , GLsizei );
 
@@ -55,8 +53,6 @@ extern PFNGLBLENDEQUATIONPROC __gleBlendEquation;
 #define glBlendEquation __gleBlendEquation
 extern PFNGLDRAWRANGEELEMENTSPROC __gleDrawRangeElements;
 #define glDrawRangeElements __gleDrawRangeElements
-extern PFNGLTEXIMAGE3DPROC __gleTexImage3D;
-#define glTexImage3D __gleTexImage3D
 extern PFNGLTEXSUBIMAGE3DPROC __gleTexSubImage3D;
 #define glTexSubImage3D __gleTexSubImage3D
 extern PFNGLCOPYTEXSUBIMAGE3DPROC __gleCopyTexSubImage3D;

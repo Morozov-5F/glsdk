@@ -46,7 +46,7 @@ namespace glimg
 		\brief Creates an ImageCreator factory for making ImageSet objects.
 
 		This constructor will initialize all pixel data to 0. All memory allocation is done by the constructor;
-		this ensures that there will be data for images that was asked for even if the user does not specify them.
+		this ensures that there will be data for images that were asked for even if the user does not specify them.
 
 		\param format The ImageFormat for the ImageSet to be created.
 		\param dimensions The dimensionality of the base layer of the image.
@@ -89,7 +89,7 @@ namespace glimg
 		faces are ordered as defined by the ARB_texture_cube_map_array extension.
 
 		If \a faceCount was 1, then there will only be one face instead of the 6. If \a arrayCount was 1
-		then there will only be one set of faces. And if they were both 1, then there is only one image.
+		then there will only be one set of faces. And if they were both 1, then there is only one image per mipmap level.
 
 		\param pixelData The pixel data for the mipmap. It is expected to be formatted exactly as specified
 		by the ImageFormat given to this ImageCreator at creation time. It must contain all of the pixel data
@@ -105,7 +105,7 @@ namespace glimg
 		void SetFullMipmapLevel(const void *pixelData, bool isTopLeft, int mipmapLevel);
 
 		/**
-		\brief Creates an ImageSet from the stored data. The ImageCreator object is now dead.
+		\brief Creates an ImageSet from the stored data. After the completion of this function, this ImageCreator object is now dead.
 
 		Do not use the ImageCreator object after calling this. Deleting it is fine, but the data
 		has been \em transferred to the ImageSet, and no longer resides in the ImageCreator. Any attempt

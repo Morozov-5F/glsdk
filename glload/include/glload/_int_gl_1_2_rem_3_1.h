@@ -13,6 +13,7 @@ extern "C" {
 #define GL_SINGLE_COLOR 0x81F9
 #define GL_SEPARATE_SPECULAR_COLOR 0x81FA
 #define GL_ALIASED_POINT_SIZE_RANGE 0x846D
+typedef void (GLE_FUNCPTR * PFNGLTEXIMAGE3DPROC)(GLenum , GLint , GLint , GLsizei , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLCOLORTABLEPROC)(GLenum , GLenum , GLsizei , GLenum , GLenum , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLCOLORTABLEPARAMETERFVPROC)(GLenum , GLenum , const GLfloat *);
 typedef void (GLE_FUNCPTR * PFNGLCOLORTABLEPARAMETERIVPROC)(GLenum , GLenum , const GLint *);
@@ -46,6 +47,8 @@ typedef void (GLE_FUNCPTR * PFNGLMINMAXPROC)(GLenum , GLenum , GLboolean );
 typedef void (GLE_FUNCPTR * PFNGLRESETHISTOGRAMPROC)(GLenum );
 typedef void (GLE_FUNCPTR * PFNGLRESETMINMAXPROC)(GLenum );
 
+extern PFNGLTEXIMAGE3DPROC __gleTexImage3D;
+#define glTexImage3D __gleTexImage3D
 extern PFNGLCOLORTABLEPROC __gleColorTable;
 #define glColorTable __gleColorTable
 extern PFNGLCOLORTABLEPARAMETERFVPROC __gleColorTableParameterfv;

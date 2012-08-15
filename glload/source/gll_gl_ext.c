@@ -173,6 +173,9 @@ typedef void (APIENTRY *GLDEBUGPROCARB)(GLenum source,GLenum type,GLuint id,GLen
 #ifndef GL_AMD_debug_output
 typedef void (APIENTRY *GLDEBUGPROCAMD)(GLuint id,GLenum category,GLenum severity,GLsizei length,const GLchar *message,GLvoid *userParam);
 #endif
+#ifndef GL_KHR_debug
+typedef void (APIENTRY *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,GLvoid *userParam);
+#endif
 #ifndef GL_NV_vdpau_interop
 typedef GLintptr GLvdpauSurfaceNV;
 #endif
@@ -360,6 +363,30 @@ int glext_ARB_shader_atomic_counters = 0;
 int glext_ARB_shader_image_load_store = 0;
 int glext_ARB_shading_language_packing = 0;
 int glext_ARB_texture_storage = 0;
+int glext_KHR_texture_compression_astc_ldr = 0;
+int glext_KHR_debug = 0;
+int glext_ARB_arrays_of_arrays = 0;
+int glext_ARB_clear_buffer_object = 0;
+int glext_ARB_compute_shader = 0;
+int glext_ARB_copy_image = 0;
+int glext_ARB_texture_view = 0;
+int glext_ARB_vertex_attrib_binding = 0;
+int glext_ARB_robustness_isolation = 0;
+int glext_ARB_ES3_compatibility = 0;
+int glext_ARB_explicit_uniform_location = 0;
+int glext_ARB_fragment_layer_viewport = 0;
+int glext_ARB_framebuffer_no_attachments = 0;
+int glext_ARB_internalformat_query2 = 0;
+int glext_ARB_invalidate_subdata = 0;
+int glext_ARB_multi_draw_indirect = 0;
+int glext_ARB_program_interface_query = 0;
+int glext_ARB_robust_buffer_access_behavior = 0;
+int glext_ARB_shader_image_size = 0;
+int glext_ARB_shader_storage_buffer_object = 0;
+int glext_ARB_stencil_texturing = 0;
+int glext_ARB_texture_buffer_range = 0;
+int glext_ARB_texture_query_levels = 0;
+int glext_ARB_texture_storage_multisample = 0;
 int glext_EXT_abgr = 0;
 int glext_EXT_blend_color = 0;
 int glext_EXT_polygon_offset = 0;
@@ -619,7 +646,7 @@ int glext_NV_transform_feedback2 = 0;
 int glext_ATI_meminfo = 0;
 int glext_AMD_performance_monitor = 0;
 int glext_AMD_texture_texture4 = 0;
-int glext_AMD_vertex_shader_tesselator = 0;
+int glext_AMD_vertex_shader_tessellator = 0;
 int glext_EXT_provoking_vertex = 0;
 int glext_EXT_texture_snorm = 0;
 int glext_AMD_draw_buffers_blend = 0;
@@ -660,6 +687,14 @@ int glext_AMD_sample_positions = 0;
 int glext_EXT_x11_sync_object = 0;
 int glext_AMD_multi_draw_indirect = 0;
 int glext_EXT_framebuffer_multisample_blit_scaled = 0;
+int glext_NV_path_rendering = 0;
+int glext_AMD_pinned_memory = 0;
+int glext_AMD_stencil_operation_extended = 0;
+int glext_AMD_vertex_shader_viewport_index = 0;
+int glext_AMD_vertex_shader_layer = 0;
+int glext_NV_bindless_texture = 0;
+int glext_NV_shader_atomic_float = 0;
+int glext_AMD_query_buffer_object = 0;
 
 
 void gleIntClear()
@@ -769,6 +804,30 @@ void gleIntClear()
 	glext_ARB_shader_image_load_store = 0;
 	glext_ARB_shading_language_packing = 0;
 	glext_ARB_texture_storage = 0;
+	glext_KHR_texture_compression_astc_ldr = 0;
+	glext_KHR_debug = 0;
+	glext_ARB_arrays_of_arrays = 0;
+	glext_ARB_clear_buffer_object = 0;
+	glext_ARB_compute_shader = 0;
+	glext_ARB_copy_image = 0;
+	glext_ARB_texture_view = 0;
+	glext_ARB_vertex_attrib_binding = 0;
+	glext_ARB_robustness_isolation = 0;
+	glext_ARB_ES3_compatibility = 0;
+	glext_ARB_explicit_uniform_location = 0;
+	glext_ARB_fragment_layer_viewport = 0;
+	glext_ARB_framebuffer_no_attachments = 0;
+	glext_ARB_internalformat_query2 = 0;
+	glext_ARB_invalidate_subdata = 0;
+	glext_ARB_multi_draw_indirect = 0;
+	glext_ARB_program_interface_query = 0;
+	glext_ARB_robust_buffer_access_behavior = 0;
+	glext_ARB_shader_image_size = 0;
+	glext_ARB_shader_storage_buffer_object = 0;
+	glext_ARB_stencil_texturing = 0;
+	glext_ARB_texture_buffer_range = 0;
+	glext_ARB_texture_query_levels = 0;
+	glext_ARB_texture_storage_multisample = 0;
 	glext_EXT_abgr = 0;
 	glext_EXT_blend_color = 0;
 	glext_EXT_polygon_offset = 0;
@@ -1028,7 +1087,7 @@ void gleIntClear()
 	glext_ATI_meminfo = 0;
 	glext_AMD_performance_monitor = 0;
 	glext_AMD_texture_texture4 = 0;
-	glext_AMD_vertex_shader_tesselator = 0;
+	glext_AMD_vertex_shader_tessellator = 0;
 	glext_EXT_provoking_vertex = 0;
 	glext_EXT_texture_snorm = 0;
 	glext_AMD_draw_buffers_blend = 0;
@@ -1069,6 +1128,14 @@ void gleIntClear()
 	glext_EXT_x11_sync_object = 0;
 	glext_AMD_multi_draw_indirect = 0;
 	glext_EXT_framebuffer_multisample_blit_scaled = 0;
+	glext_NV_path_rendering = 0;
+	glext_AMD_pinned_memory = 0;
+	glext_AMD_stencil_operation_extended = 0;
+	glext_AMD_vertex_shader_viewport_index = 0;
+	glext_AMD_vertex_shader_layer = 0;
+	glext_NV_bindless_texture = 0;
+	glext_NV_shader_atomic_float = 0;
+	glext_AMD_query_buffer_object = 0;
 }
 
 
@@ -1243,6 +1310,8 @@ static int gleIntLoad_AMD_performance_monitor()
 #endif /*GL_AMD_performance_monitor*/
 	return bIsLoaded;
 }
+
+
 #ifndef GL_AMD_sample_positions
 typedef void (GLE_FUNCPTR * PFNGLSETMULTISAMPLEFVAMDPROC)(GLenum , GLuint , const GLfloat *);
 
@@ -1260,27 +1329,44 @@ static int gleIntLoad_AMD_sample_positions()
 }
 
 
+#ifndef GL_AMD_stencil_operation_extended
+typedef void (GLE_FUNCPTR * PFNGLSTENCILOPVALUEAMDPROC)(GLenum , GLuint );
+
+PFNGLSTENCILOPVALUEAMDPROC glStencilOpValueAMD;
+#endif /*GL_AMD_stencil_operation_extended*/
+
+static int gleIntLoad_AMD_stencil_operation_extended()
+{
+	int bIsLoaded = 1;
+#ifndef GL_AMD_stencil_operation_extended
+	glStencilOpValueAMD = (PFNGLSTENCILOPVALUEAMDPROC)gleIntGetProcAddress("glStencilOpValueAMD");
+	if(!glStencilOpValueAMD) bIsLoaded = 0;
+#endif /*GL_AMD_stencil_operation_extended*/
+	return bIsLoaded;
+}
 
 
-#ifndef GL_AMD_vertex_shader_tesselator
+
+#ifndef GL_AMD_vertex_shader_tessellator
 typedef void (GLE_FUNCPTR * PFNGLTESSELLATIONFACTORAMDPROC)(GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLTESSELLATIONMODEAMDPROC)(GLenum );
 
 PFNGLTESSELLATIONFACTORAMDPROC glTessellationFactorAMD;
 PFNGLTESSELLATIONMODEAMDPROC glTessellationModeAMD;
-#endif /*GL_AMD_vertex_shader_tesselator*/
+#endif /*GL_AMD_vertex_shader_tessellator*/
 
-static int gleIntLoad_AMD_vertex_shader_tesselator()
+static int gleIntLoad_AMD_vertex_shader_tessellator()
 {
 	int bIsLoaded = 1;
-#ifndef GL_AMD_vertex_shader_tesselator
+#ifndef GL_AMD_vertex_shader_tessellator
 	glTessellationFactorAMD = (PFNGLTESSELLATIONFACTORAMDPROC)gleIntGetProcAddress("glTessellationFactorAMD");
 	if(!glTessellationFactorAMD) bIsLoaded = 0;
 	glTessellationModeAMD = (PFNGLTESSELLATIONMODEAMDPROC)gleIntGetProcAddress("glTessellationModeAMD");
 	if(!glTessellationModeAMD) bIsLoaded = 0;
-#endif /*GL_AMD_vertex_shader_tesselator*/
+#endif /*GL_AMD_vertex_shader_tessellator*/
 	return bIsLoaded;
 }
+
 
 
 #ifndef GL_APPLE_element_array
@@ -1517,8 +1603,8 @@ static int gleIntLoad_APPLE_vertex_program_evaluators()
 typedef void (GLE_FUNCPTR * PFNGLRELEASESHADERCOMPILERPROC)();
 typedef void (GLE_FUNCPTR * PFNGLSHADERBINARYPROC)(GLsizei , const GLuint *, GLenum , const GLvoid *, GLsizei );
 typedef void (GLE_FUNCPTR * PFNGLGETSHADERPRECISIONFORMATPROC)(GLenum , GLenum , GLint *, GLint *);
-typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEFPROC)(GLclampf , GLclampf );
-typedef void (GLE_FUNCPTR * PFNGLCLEARDEPTHFPROC)(GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEFPROC)(GLfloat , GLfloat );
+typedef void (GLE_FUNCPTR * PFNGLCLEARDEPTHFPROC)(GLfloat );
 
 PFNGLRELEASESHADERCOMPILERPROC __gleReleaseShaderCompiler;
 PFNGLSHADERBINARYPROC __gleShaderBinary;
@@ -1544,6 +1630,8 @@ static int gleIntLoad_ARB_ES2_compatibility()
 #endif /*GL_ARB_ES2_compatibility*/
 	return bIsLoaded;
 }
+
+
 #ifndef GL_ARB_base_instance
 typedef void (GLE_FUNCPTR * PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC)(GLenum , GLint , GLsizei , GLsizei , GLuint );
 typedef void (GLE_FUNCPTR * PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC)(GLenum , GLsizei , GLenum , const void *, GLsizei , GLuint );
@@ -1601,6 +1689,33 @@ static int gleIntLoad_ARB_cl_event()
 #endif /*GL_ARB_cl_event*/
 	return bIsLoaded;
 }
+#ifndef GL_ARB_clear_buffer_object
+typedef void (GLE_FUNCPTR * PFNGLCLEARBUFFERDATAPROC)(GLenum , GLenum , GLenum , GLenum , const void *);
+typedef void (GLE_FUNCPTR * PFNGLCLEARBUFFERSUBDATAPROC)(GLenum , GLenum , GLintptr , GLsizeiptr , GLenum , GLenum , const void *);
+typedef void (GLE_FUNCPTR * PFNGLCLEARNAMEDBUFFERDATAEXTPROC)(GLuint , GLenum , GLenum , GLenum , const void *);
+typedef void (GLE_FUNCPTR * PFNGLCLEARNAMEDBUFFERSUBDATAEXTPROC)(GLuint , GLenum , GLenum , GLenum , GLsizeiptr , GLsizeiptr , const void *);
+
+PFNGLCLEARBUFFERDATAPROC __gleClearBufferData;
+PFNGLCLEARBUFFERSUBDATAPROC __gleClearBufferSubData;
+PFNGLCLEARNAMEDBUFFERDATAEXTPROC __gleClearNamedBufferDataEXT;
+PFNGLCLEARNAMEDBUFFERSUBDATAEXTPROC __gleClearNamedBufferSubDataEXT;
+#endif /*GL_ARB_clear_buffer_object*/
+
+static int gleIntLoad_ARB_clear_buffer_object()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_clear_buffer_object
+	__gleClearBufferData = (PFNGLCLEARBUFFERDATAPROC)gleIntGetProcAddress("glClearBufferData");
+	if(!__gleClearBufferData) bIsLoaded = 0;
+	__gleClearBufferSubData = (PFNGLCLEARBUFFERSUBDATAPROC)gleIntGetProcAddress("glClearBufferSubData");
+	if(!__gleClearBufferSubData) bIsLoaded = 0;
+	__gleClearNamedBufferDataEXT = (PFNGLCLEARNAMEDBUFFERDATAEXTPROC)gleIntGetProcAddress("glClearNamedBufferDataEXT");
+	if(!__gleClearNamedBufferDataEXT) bIsLoaded = 0;
+	__gleClearNamedBufferSubDataEXT = (PFNGLCLEARNAMEDBUFFERSUBDATAEXTPROC)gleIntGetProcAddress("glClearNamedBufferSubDataEXT");
+	if(!__gleClearNamedBufferSubDataEXT) bIsLoaded = 0;
+#endif /*GL_ARB_clear_buffer_object*/
+	return bIsLoaded;
+}
 #ifndef GL_ARB_color_buffer_float
 typedef void (GLE_FUNCPTR * PFNGLCLAMPCOLORARBPROC)(GLenum , GLenum );
 
@@ -1618,6 +1733,25 @@ static int gleIntLoad_ARB_color_buffer_float()
 }
 
 
+#ifndef GL_ARB_compute_shader
+typedef void (GLE_FUNCPTR * PFNGLDISPATCHCOMPUTEPROC)(GLuint , GLuint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLDISPATCHCOMPUTEINDIRECTPROC)(GLintptr );
+
+PFNGLDISPATCHCOMPUTEPROC __gleDispatchCompute;
+PFNGLDISPATCHCOMPUTEINDIRECTPROC __gleDispatchComputeIndirect;
+#endif /*GL_ARB_compute_shader*/
+
+static int gleIntLoad_ARB_compute_shader()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_compute_shader
+	__gleDispatchCompute = (PFNGLDISPATCHCOMPUTEPROC)gleIntGetProcAddress("glDispatchCompute");
+	if(!__gleDispatchCompute) bIsLoaded = 0;
+	__gleDispatchComputeIndirect = (PFNGLDISPATCHCOMPUTEINDIRECTPROC)gleIntGetProcAddress("glDispatchComputeIndirect");
+	if(!__gleDispatchComputeIndirect) bIsLoaded = 0;
+#endif /*GL_ARB_compute_shader*/
+	return bIsLoaded;
+}
 
 #ifndef GL_ARB_copy_buffer
 typedef void (GLE_FUNCPTR * PFNGLCOPYBUFFERSUBDATAPROC)(GLenum , GLenum , GLintptr , GLintptr , GLsizeiptr );
@@ -1632,6 +1766,21 @@ static int gleIntLoad_ARB_copy_buffer()
 	__gleCopyBufferSubData = (PFNGLCOPYBUFFERSUBDATAPROC)gleIntGetProcAddress("glCopyBufferSubData");
 	if(!__gleCopyBufferSubData) bIsLoaded = 0;
 #endif /*GL_ARB_copy_buffer*/
+	return bIsLoaded;
+}
+#ifndef GL_ARB_copy_image
+typedef void (GLE_FUNCPTR * PFNGLCOPYIMAGESUBDATAPROC)(GLuint , GLenum , GLint , GLint , GLint , GLint , GLuint , GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei );
+
+PFNGLCOPYIMAGESUBDATAPROC __gleCopyImageSubData;
+#endif /*GL_ARB_copy_image*/
+
+static int gleIntLoad_ARB_copy_image()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_copy_image
+	__gleCopyImageSubData = (PFNGLCOPYIMAGESUBDATAPROC)gleIntGetProcAddress("glCopyImageSubData");
+	if(!__gleCopyImageSubData) bIsLoaded = 0;
+#endif /*GL_ARB_copy_image*/
 	return bIsLoaded;
 }
 #ifndef GL_ARB_debug_output
@@ -1710,7 +1859,7 @@ static int gleIntLoad_ARB_draw_buffers_blend()
 typedef void (GLE_FUNCPTR * PFNGLDRAWELEMENTSBASEVERTEXPROC)(GLenum , GLsizei , GLenum , const GLvoid *, GLint );
 typedef void (GLE_FUNCPTR * PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC)(GLenum , GLuint , GLuint , GLsizei , GLenum , const GLvoid *, GLint );
 typedef void (GLE_FUNCPTR * PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC)(GLenum , GLsizei , GLenum , const GLvoid *, GLsizei , GLint );
-typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWELEMENTSBASEVERTEXPROC)(GLenum , const GLsizei *, GLenum , const GLvoid* *, GLsizei , const GLint *);
+typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWELEMENTSBASEVERTEXPROC)(GLenum , const GLsizei *, GLenum , const GLvoid* const *, GLsizei , const GLint *);
 
 PFNGLDRAWELEMENTSBASEVERTEXPROC __gleDrawElementsBaseVertex;
 PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC __gleDrawRangeElementsBaseVertex;
@@ -1776,6 +1925,35 @@ static int gleIntLoad_ARB_draw_instanced()
 
 
 
+
+
+#ifndef GL_ARB_framebuffer_no_attachments
+typedef void (GLE_FUNCPTR * PFNGLFRAMEBUFFERPARAMETERIPROC)(GLenum , GLenum , GLint );
+typedef void (GLE_FUNCPTR * PFNGLGETFRAMEBUFFERPARAMETERIVPROC)(GLenum , GLenum , GLint *);
+typedef void (GLE_FUNCPTR * PFNGLNAMEDFRAMEBUFFERPARAMETERIEXTPROC)(GLuint , GLenum , GLint );
+typedef void (GLE_FUNCPTR * PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVEXTPROC)(GLuint , GLenum , GLint *);
+
+PFNGLFRAMEBUFFERPARAMETERIPROC __gleFramebufferParameteri;
+PFNGLGETFRAMEBUFFERPARAMETERIVPROC __gleGetFramebufferParameteriv;
+PFNGLNAMEDFRAMEBUFFERPARAMETERIEXTPROC __gleNamedFramebufferParameteriEXT;
+PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVEXTPROC __gleGetNamedFramebufferParameterivEXT;
+#endif /*GL_ARB_framebuffer_no_attachments*/
+
+static int gleIntLoad_ARB_framebuffer_no_attachments()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_framebuffer_no_attachments
+	__gleFramebufferParameteri = (PFNGLFRAMEBUFFERPARAMETERIPROC)gleIntGetProcAddress("glFramebufferParameteri");
+	if(!__gleFramebufferParameteri) bIsLoaded = 0;
+	__gleGetFramebufferParameteriv = (PFNGLGETFRAMEBUFFERPARAMETERIVPROC)gleIntGetProcAddress("glGetFramebufferParameteriv");
+	if(!__gleGetFramebufferParameteriv) bIsLoaded = 0;
+	__gleNamedFramebufferParameteriEXT = (PFNGLNAMEDFRAMEBUFFERPARAMETERIEXTPROC)gleIntGetProcAddress("glNamedFramebufferParameteriEXT");
+	if(!__gleNamedFramebufferParameteriEXT) bIsLoaded = 0;
+	__gleGetNamedFramebufferParameterivEXT = (PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetNamedFramebufferParameterivEXT");
+	if(!__gleGetNamedFramebufferParameterivEXT) bIsLoaded = 0;
+#endif /*GL_ARB_framebuffer_no_attachments*/
+	return bIsLoaded;
+}
 #ifndef GL_ARB_framebuffer_object
 typedef GLboolean (GLE_FUNCPTR * PFNGLISRENDERBUFFERPROC)(GLuint );
 typedef void (GLE_FUNCPTR * PFNGLBINDRENDERBUFFERPROC)(GLenum , GLuint );
@@ -2035,6 +2213,56 @@ static int gleIntLoad_ARB_internalformat_query()
 #endif /*GL_ARB_internalformat_query*/
 	return bIsLoaded;
 }
+#ifndef GL_ARB_internalformat_query2
+typedef void (GLE_FUNCPTR * PFNGLGETINTERNALFORMATI64VPROC)(GLenum , GLenum , GLenum , GLsizei , GLint64 *);
+
+PFNGLGETINTERNALFORMATI64VPROC __gleGetInternalformati64v;
+#endif /*GL_ARB_internalformat_query2*/
+
+static int gleIntLoad_ARB_internalformat_query2()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_internalformat_query2
+	__gleGetInternalformati64v = (PFNGLGETINTERNALFORMATI64VPROC)gleIntGetProcAddress("glGetInternalformati64v");
+	if(!__gleGetInternalformati64v) bIsLoaded = 0;
+#endif /*GL_ARB_internalformat_query2*/
+	return bIsLoaded;
+}
+#ifndef GL_ARB_invalidate_subdata
+typedef void (GLE_FUNCPTR * PFNGLINVALIDATETEXSUBIMAGEPROC)(GLuint , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei );
+typedef void (GLE_FUNCPTR * PFNGLINVALIDATETEXIMAGEPROC)(GLuint , GLint );
+typedef void (GLE_FUNCPTR * PFNGLINVALIDATEBUFFERSUBDATAPROC)(GLuint , GLintptr , GLsizeiptr );
+typedef void (GLE_FUNCPTR * PFNGLINVALIDATEBUFFERDATAPROC)(GLuint );
+typedef void (GLE_FUNCPTR * PFNGLINVALIDATEFRAMEBUFFERPROC)(GLenum , GLsizei , const GLenum *);
+typedef void (GLE_FUNCPTR * PFNGLINVALIDATESUBFRAMEBUFFERPROC)(GLenum , GLsizei , const GLenum *, GLint , GLint , GLsizei , GLsizei );
+
+PFNGLINVALIDATETEXSUBIMAGEPROC __gleInvalidateTexSubImage;
+PFNGLINVALIDATETEXIMAGEPROC __gleInvalidateTexImage;
+PFNGLINVALIDATEBUFFERSUBDATAPROC __gleInvalidateBufferSubData;
+PFNGLINVALIDATEBUFFERDATAPROC __gleInvalidateBufferData;
+PFNGLINVALIDATEFRAMEBUFFERPROC __gleInvalidateFramebuffer;
+PFNGLINVALIDATESUBFRAMEBUFFERPROC __gleInvalidateSubFramebuffer;
+#endif /*GL_ARB_invalidate_subdata*/
+
+static int gleIntLoad_ARB_invalidate_subdata()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_invalidate_subdata
+	__gleInvalidateTexSubImage = (PFNGLINVALIDATETEXSUBIMAGEPROC)gleIntGetProcAddress("glInvalidateTexSubImage");
+	if(!__gleInvalidateTexSubImage) bIsLoaded = 0;
+	__gleInvalidateTexImage = (PFNGLINVALIDATETEXIMAGEPROC)gleIntGetProcAddress("glInvalidateTexImage");
+	if(!__gleInvalidateTexImage) bIsLoaded = 0;
+	__gleInvalidateBufferSubData = (PFNGLINVALIDATEBUFFERSUBDATAPROC)gleIntGetProcAddress("glInvalidateBufferSubData");
+	if(!__gleInvalidateBufferSubData) bIsLoaded = 0;
+	__gleInvalidateBufferData = (PFNGLINVALIDATEBUFFERDATAPROC)gleIntGetProcAddress("glInvalidateBufferData");
+	if(!__gleInvalidateBufferData) bIsLoaded = 0;
+	__gleInvalidateFramebuffer = (PFNGLINVALIDATEFRAMEBUFFERPROC)gleIntGetProcAddress("glInvalidateFramebuffer");
+	if(!__gleInvalidateFramebuffer) bIsLoaded = 0;
+	__gleInvalidateSubFramebuffer = (PFNGLINVALIDATESUBFRAMEBUFFERPROC)gleIntGetProcAddress("glInvalidateSubFramebuffer");
+	if(!__gleInvalidateSubFramebuffer) bIsLoaded = 0;
+#endif /*GL_ARB_invalidate_subdata*/
+	return bIsLoaded;
+}
 
 #ifndef GL_ARB_map_buffer_range
 typedef GLvoid* (GLE_FUNCPTR * PFNGLMAPBUFFERRANGEPROC)(GLenum , GLintptr , GLsizeiptr , GLbitfield );
@@ -2086,8 +2314,27 @@ static int gleIntLoad_ARB_matrix_palette()
 #endif /*GL_ARB_matrix_palette*/
 	return bIsLoaded;
 }
+#ifndef GL_ARB_multi_draw_indirect
+typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWARRAYSINDIRECTPROC)(GLenum , const void *, GLsizei , GLsizei );
+typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWELEMENTSINDIRECTPROC)(GLenum , GLenum , const void *, GLsizei , GLsizei );
+
+PFNGLMULTIDRAWARRAYSINDIRECTPROC __gleMultiDrawArraysIndirect;
+PFNGLMULTIDRAWELEMENTSINDIRECTPROC __gleMultiDrawElementsIndirect;
+#endif /*GL_ARB_multi_draw_indirect*/
+
+static int gleIntLoad_ARB_multi_draw_indirect()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_multi_draw_indirect
+	__gleMultiDrawArraysIndirect = (PFNGLMULTIDRAWARRAYSINDIRECTPROC)gleIntGetProcAddress("glMultiDrawArraysIndirect");
+	if(!__gleMultiDrawArraysIndirect) bIsLoaded = 0;
+	__gleMultiDrawElementsIndirect = (PFNGLMULTIDRAWELEMENTSINDIRECTPROC)gleIntGetProcAddress("glMultiDrawElementsIndirect");
+	if(!__gleMultiDrawElementsIndirect) bIsLoaded = 0;
+#endif /*GL_ARB_multi_draw_indirect*/
+	return bIsLoaded;
+}
 #ifndef GL_ARB_multisample
-typedef void (GLE_FUNCPTR * PFNGLSAMPLECOVERAGEARBPROC)(GLclampf , GLboolean );
+typedef void (GLE_FUNCPTR * PFNGLSAMPLECOVERAGEARBPROC)(GLfloat , GLboolean );
 
 PFNGLSAMPLECOVERAGEARBPROC glSampleCoverageARB;
 #endif /*GL_ARB_multisample*/
@@ -2313,6 +2560,41 @@ static int gleIntLoad_ARB_point_parameters()
 	return bIsLoaded;
 }
 
+#ifndef GL_ARB_program_interface_query
+typedef void (GLE_FUNCPTR * PFNGLGETPROGRAMINTERFACEIVPROC)(GLuint , GLenum , GLenum , GLint *);
+typedef GLuint (GLE_FUNCPTR * PFNGLGETPROGRAMRESOURCEINDEXPROC)(GLuint , GLenum , const GLchar *);
+typedef void (GLE_FUNCPTR * PFNGLGETPROGRAMRESOURCENAMEPROC)(GLuint , GLenum , GLuint , GLsizei , GLsizei *, GLchar *);
+typedef void (GLE_FUNCPTR * PFNGLGETPROGRAMRESOURCEIVPROC)(GLuint , GLenum , GLuint , GLsizei , const GLenum *, GLsizei , GLsizei *, GLint *);
+typedef GLint (GLE_FUNCPTR * PFNGLGETPROGRAMRESOURCELOCATIONPROC)(GLuint , GLenum , const GLchar *);
+typedef GLint (GLE_FUNCPTR * PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC)(GLuint , GLenum , const GLchar *);
+
+PFNGLGETPROGRAMINTERFACEIVPROC __gleGetProgramInterfaceiv;
+PFNGLGETPROGRAMRESOURCEINDEXPROC __gleGetProgramResourceIndex;
+PFNGLGETPROGRAMRESOURCENAMEPROC __gleGetProgramResourceName;
+PFNGLGETPROGRAMRESOURCEIVPROC __gleGetProgramResourceiv;
+PFNGLGETPROGRAMRESOURCELOCATIONPROC __gleGetProgramResourceLocation;
+PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC __gleGetProgramResourceLocationIndex;
+#endif /*GL_ARB_program_interface_query*/
+
+static int gleIntLoad_ARB_program_interface_query()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_program_interface_query
+	__gleGetProgramInterfaceiv = (PFNGLGETPROGRAMINTERFACEIVPROC)gleIntGetProcAddress("glGetProgramInterfaceiv");
+	if(!__gleGetProgramInterfaceiv) bIsLoaded = 0;
+	__gleGetProgramResourceIndex = (PFNGLGETPROGRAMRESOURCEINDEXPROC)gleIntGetProcAddress("glGetProgramResourceIndex");
+	if(!__gleGetProgramResourceIndex) bIsLoaded = 0;
+	__gleGetProgramResourceName = (PFNGLGETPROGRAMRESOURCENAMEPROC)gleIntGetProcAddress("glGetProgramResourceName");
+	if(!__gleGetProgramResourceName) bIsLoaded = 0;
+	__gleGetProgramResourceiv = (PFNGLGETPROGRAMRESOURCEIVPROC)gleIntGetProcAddress("glGetProgramResourceiv");
+	if(!__gleGetProgramResourceiv) bIsLoaded = 0;
+	__gleGetProgramResourceLocation = (PFNGLGETPROGRAMRESOURCELOCATIONPROC)gleIntGetProcAddress("glGetProgramResourceLocation");
+	if(!__gleGetProgramResourceLocation) bIsLoaded = 0;
+	__gleGetProgramResourceLocationIndex = (PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC)gleIntGetProcAddress("glGetProgramResourceLocationIndex");
+	if(!__gleGetProgramResourceLocationIndex) bIsLoaded = 0;
+#endif /*GL_ARB_program_interface_query*/
+	return bIsLoaded;
+}
 #ifndef GL_ARB_provoking_vertex
 typedef void (GLE_FUNCPTR * PFNGLPROVOKINGVERTEXPROC)(GLenum );
 
@@ -2328,6 +2610,7 @@ static int gleIntLoad_ARB_provoking_vertex()
 #endif /*GL_ARB_provoking_vertex*/
 	return bIsLoaded;
 }
+
 #ifndef GL_ARB_robustness
 typedef GLenum (GLE_FUNCPTR * PFNGLGETGRAPHICSRESETSTATUSARBPROC)();
 typedef void (GLE_FUNCPTR * PFNGLGETNMAPDVARBPROC)(GLenum , GLenum , GLsizei , GLdouble *);
@@ -2419,8 +2702,9 @@ static int gleIntLoad_ARB_robustness()
 #endif /*GL_ARB_robustness*/
 	return bIsLoaded;
 }
+
 #ifndef GL_ARB_sample_shading
-typedef void (GLE_FUNCPTR * PFNGLMINSAMPLESHADINGARBPROC)(GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLMINSAMPLESHADINGARBPROC)(GLfloat );
 
 PFNGLMINSAMPLESHADINGARBPROC glMinSampleShadingARB;
 #endif /*GL_ARB_sample_shading*/
@@ -2505,7 +2789,7 @@ static int gleIntLoad_ARB_sampler_objects()
 #ifndef GL_ARB_separate_shader_objects
 typedef void (GLE_FUNCPTR * PFNGLUSEPROGRAMSTAGESPROC)(GLuint , GLbitfield , GLuint );
 typedef void (GLE_FUNCPTR * PFNGLACTIVESHADERPROGRAMPROC)(GLuint , GLuint );
-typedef GLuint (GLE_FUNCPTR * PFNGLCREATESHADERPROGRAMVPROC)(GLenum , GLsizei , const GLchar* *);
+typedef GLuint (GLE_FUNCPTR * PFNGLCREATESHADERPROGRAMVPROC)(GLenum , GLsizei , const GLchar* const *);
 typedef void (GLE_FUNCPTR * PFNGLBINDPROGRAMPIPELINEPROC)(GLuint );
 typedef void (GLE_FUNCPTR * PFNGLDELETEPROGRAMPIPELINESPROC)(GLsizei , const GLuint *);
 typedef void (GLE_FUNCPTR * PFNGLGENPROGRAMPIPELINESPROC)(GLsizei , GLuint *);
@@ -2788,6 +3072,7 @@ static int gleIntLoad_ARB_shader_image_load_store()
 #endif /*GL_ARB_shader_image_load_store*/
 	return bIsLoaded;
 }
+
 #ifndef GL_ARB_shader_objects
 typedef void (GLE_FUNCPTR * PFNGLDELETEOBJECTARBPROC)(GLhandleARB );
 typedef GLhandleARB (GLE_FUNCPTR * PFNGLGETHANDLEARBPROC)(GLenum );
@@ -2957,6 +3242,21 @@ static int gleIntLoad_ARB_shader_objects()
 }
 
 
+#ifndef GL_ARB_shader_storage_buffer_object
+typedef void (GLE_FUNCPTR * PFNGLSHADERSTORAGEBLOCKBINDINGPROC)(GLuint , GLuint , GLuint );
+
+PFNGLSHADERSTORAGEBLOCKBINDINGPROC __gleShaderStorageBlockBinding;
+#endif /*GL_ARB_shader_storage_buffer_object*/
+
+static int gleIntLoad_ARB_shader_storage_buffer_object()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_shader_storage_buffer_object
+	__gleShaderStorageBlockBinding = (PFNGLSHADERSTORAGEBLOCKBINDINGPROC)gleIntGetProcAddress("glShaderStorageBlockBinding");
+	if(!__gleShaderStorageBlockBinding) bIsLoaded = 0;
+#endif /*GL_ARB_shader_storage_buffer_object*/
+	return bIsLoaded;
+}
 #ifndef GL_ARB_shader_subroutine
 typedef GLint (GLE_FUNCPTR * PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC)(GLuint , GLenum , const GLchar *);
 typedef GLuint (GLE_FUNCPTR * PFNGLGETSUBROUTINEINDEXPROC)(GLuint , GLenum , const GLchar *);
@@ -3041,6 +3341,7 @@ static int gleIntLoad_ARB_shading_language_include()
 
 
 
+
 #ifndef GL_ARB_sync
 typedef GLsync (GLE_FUNCPTR * PFNGLFENCESYNCPROC)(GLenum , GLbitfield );
 typedef GLboolean (GLE_FUNCPTR * PFNGLISSYNCPROC)(GLsync );
@@ -3116,6 +3417,25 @@ static int gleIntLoad_ARB_texture_buffer_object()
 	return bIsLoaded;
 }
 
+#ifndef GL_ARB_texture_buffer_range
+typedef void (GLE_FUNCPTR * PFNGLTEXBUFFERRANGEPROC)(GLenum , GLenum , GLuint , GLintptr , GLsizeiptr );
+typedef void (GLE_FUNCPTR * PFNGLTEXTUREBUFFERRANGEEXTPROC)(GLuint , GLenum , GLenum , GLuint , GLintptr , GLsizeiptr );
+
+PFNGLTEXBUFFERRANGEPROC __gleTexBufferRange;
+PFNGLTEXTUREBUFFERRANGEEXTPROC __gleTextureBufferRangeEXT;
+#endif /*GL_ARB_texture_buffer_range*/
+
+static int gleIntLoad_ARB_texture_buffer_range()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_texture_buffer_range
+	__gleTexBufferRange = (PFNGLTEXBUFFERRANGEPROC)gleIntGetProcAddress("glTexBufferRange");
+	if(!__gleTexBufferRange) bIsLoaded = 0;
+	__gleTextureBufferRangeEXT = (PFNGLTEXTUREBUFFERRANGEEXTPROC)gleIntGetProcAddress("glTextureBufferRangeEXT");
+	if(!__gleTextureBufferRangeEXT) bIsLoaded = 0;
+#endif /*GL_ARB_texture_buffer_range*/
+	return bIsLoaded;
+}
 #ifndef GL_ARB_texture_compression
 typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXIMAGE3DARBPROC)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXIMAGE2DARBPROC)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
@@ -3198,6 +3518,7 @@ static int gleIntLoad_ARB_texture_multisample()
 
 
 
+
 #ifndef GL_ARB_texture_storage
 typedef void (GLE_FUNCPTR * PFNGLTEXSTORAGE1DPROC)(GLenum , GLsizei , GLenum , GLsizei );
 typedef void (GLE_FUNCPTR * PFNGLTEXSTORAGE2DPROC)(GLenum , GLsizei , GLenum , GLsizei , GLsizei );
@@ -3233,7 +3554,49 @@ static int gleIntLoad_ARB_texture_storage()
 #endif /*GL_ARB_texture_storage*/
 	return bIsLoaded;
 }
+#ifndef GL_ARB_texture_storage_multisample
+typedef void (GLE_FUNCPTR * PFNGLTEXSTORAGE2DMULTISAMPLEPROC)(GLenum , GLsizei , GLenum , GLsizei , GLsizei , GLboolean );
+typedef void (GLE_FUNCPTR * PFNGLTEXSTORAGE3DMULTISAMPLEPROC)(GLenum , GLsizei , GLenum , GLsizei , GLsizei , GLsizei , GLboolean );
+typedef void (GLE_FUNCPTR * PFNGLTEXTURESTORAGE2DMULTISAMPLEEXTPROC)(GLuint , GLenum , GLsizei , GLenum , GLsizei , GLsizei , GLboolean );
+typedef void (GLE_FUNCPTR * PFNGLTEXTURESTORAGE3DMULTISAMPLEEXTPROC)(GLuint , GLenum , GLsizei , GLenum , GLsizei , GLsizei , GLsizei , GLboolean );
 
+PFNGLTEXSTORAGE2DMULTISAMPLEPROC __gleTexStorage2DMultisample;
+PFNGLTEXSTORAGE3DMULTISAMPLEPROC __gleTexStorage3DMultisample;
+PFNGLTEXTURESTORAGE2DMULTISAMPLEEXTPROC __gleTextureStorage2DMultisampleEXT;
+PFNGLTEXTURESTORAGE3DMULTISAMPLEEXTPROC __gleTextureStorage3DMultisampleEXT;
+#endif /*GL_ARB_texture_storage_multisample*/
+
+static int gleIntLoad_ARB_texture_storage_multisample()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_texture_storage_multisample
+	__gleTexStorage2DMultisample = (PFNGLTEXSTORAGE2DMULTISAMPLEPROC)gleIntGetProcAddress("glTexStorage2DMultisample");
+	if(!__gleTexStorage2DMultisample) bIsLoaded = 0;
+	__gleTexStorage3DMultisample = (PFNGLTEXSTORAGE3DMULTISAMPLEPROC)gleIntGetProcAddress("glTexStorage3DMultisample");
+	if(!__gleTexStorage3DMultisample) bIsLoaded = 0;
+	__gleTextureStorage2DMultisampleEXT = (PFNGLTEXTURESTORAGE2DMULTISAMPLEEXTPROC)gleIntGetProcAddress("glTextureStorage2DMultisampleEXT");
+	if(!__gleTextureStorage2DMultisampleEXT) bIsLoaded = 0;
+	__gleTextureStorage3DMultisampleEXT = (PFNGLTEXTURESTORAGE3DMULTISAMPLEEXTPROC)gleIntGetProcAddress("glTextureStorage3DMultisampleEXT");
+	if(!__gleTextureStorage3DMultisampleEXT) bIsLoaded = 0;
+#endif /*GL_ARB_texture_storage_multisample*/
+	return bIsLoaded;
+}
+
+#ifndef GL_ARB_texture_view
+typedef void (GLE_FUNCPTR * PFNGLTEXTUREVIEWPROC)(GLuint , GLenum , GLuint , GLenum , GLuint , GLuint , GLuint , GLuint );
+
+PFNGLTEXTUREVIEWPROC __gleTextureView;
+#endif /*GL_ARB_texture_view*/
+
+static int gleIntLoad_ARB_texture_view()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_texture_view
+	__gleTextureView = (PFNGLTEXTUREVIEWPROC)gleIntGetProcAddress("glTextureView");
+	if(!__gleTextureView) bIsLoaded = 0;
+#endif /*GL_ARB_texture_view*/
+	return bIsLoaded;
+}
 #ifndef GL_ARB_timer_query
 typedef void (GLE_FUNCPTR * PFNGLQUERYCOUNTERPROC)(GLuint , GLenum );
 typedef void (GLE_FUNCPTR * PFNGLGETQUERYOBJECTI64VPROC)(GLuint , GLenum , GLint64 *);
@@ -3370,7 +3733,7 @@ static int gleIntLoad_ARB_transpose_matrix()
 	return bIsLoaded;
 }
 #ifndef GL_ARB_uniform_buffer_object
-typedef void (GLE_FUNCPTR * PFNGLGETUNIFORMINDICESPROC)(GLuint , GLsizei , const GLchar* *, GLuint *);
+typedef void (GLE_FUNCPTR * PFNGLGETUNIFORMINDICESPROC)(GLuint , GLsizei , const GLchar* const *, GLuint *);
 typedef void (GLE_FUNCPTR * PFNGLGETACTIVEUNIFORMSIVPROC)(GLuint , GLsizei , const GLuint *, GLenum , GLint *);
 typedef void (GLE_FUNCPTR * PFNGLGETACTIVEUNIFORMNAMEPROC)(GLuint , GLuint , GLsizei , GLsizei *, GLchar *);
 typedef GLuint (GLE_FUNCPTR * PFNGLGETUNIFORMBLOCKINDEXPROC)(GLuint , const GLchar *);
@@ -3485,6 +3848,65 @@ static int gleIntLoad_ARB_vertex_attrib_64bit()
 	__gleGetVertexAttribLdv = (PFNGLGETVERTEXATTRIBLDVPROC)gleIntGetProcAddress("glGetVertexAttribLdv");
 	if(!__gleGetVertexAttribLdv) bIsLoaded = 0;
 #endif /*GL_ARB_vertex_attrib_64bit*/
+	return bIsLoaded;
+}
+#ifndef GL_ARB_vertex_attrib_binding
+typedef void (GLE_FUNCPTR * PFNGLBINDVERTEXBUFFERPROC)(GLuint , GLuint , GLintptr , GLsizei );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXATTRIBFORMATPROC)(GLuint , GLint , GLenum , GLboolean , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXATTRIBIFORMATPROC)(GLuint , GLint , GLenum , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXATTRIBLFORMATPROC)(GLuint , GLint , GLenum , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXATTRIBBINDINGPROC)(GLuint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXBINDINGDIVISORPROC)(GLuint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYBINDVERTEXBUFFEREXTPROC)(GLuint , GLuint , GLuint , GLintptr , GLsizei );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBFORMATEXTPROC)(GLuint , GLuint , GLint , GLenum , GLboolean , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBIFORMATEXTPROC)(GLuint , GLuint , GLint , GLenum , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBLFORMATEXTPROC)(GLuint , GLuint , GLint , GLenum , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBBINDINGEXTPROC)(GLuint , GLuint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXBINDINGDIVISOREXTPROC)(GLuint , GLuint , GLuint );
+
+PFNGLBINDVERTEXBUFFERPROC __gleBindVertexBuffer;
+PFNGLVERTEXATTRIBFORMATPROC __gleVertexAttribFormat;
+PFNGLVERTEXATTRIBIFORMATPROC __gleVertexAttribIFormat;
+PFNGLVERTEXATTRIBLFORMATPROC __gleVertexAttribLFormat;
+PFNGLVERTEXATTRIBBINDINGPROC __gleVertexAttribBinding;
+PFNGLVERTEXBINDINGDIVISORPROC __gleVertexBindingDivisor;
+PFNGLVERTEXARRAYBINDVERTEXBUFFEREXTPROC __gleVertexArrayBindVertexBufferEXT;
+PFNGLVERTEXARRAYVERTEXATTRIBFORMATEXTPROC __gleVertexArrayVertexAttribFormatEXT;
+PFNGLVERTEXARRAYVERTEXATTRIBIFORMATEXTPROC __gleVertexArrayVertexAttribIFormatEXT;
+PFNGLVERTEXARRAYVERTEXATTRIBLFORMATEXTPROC __gleVertexArrayVertexAttribLFormatEXT;
+PFNGLVERTEXARRAYVERTEXATTRIBBINDINGEXTPROC __gleVertexArrayVertexAttribBindingEXT;
+PFNGLVERTEXARRAYVERTEXBINDINGDIVISOREXTPROC __gleVertexArrayVertexBindingDivisorEXT;
+#endif /*GL_ARB_vertex_attrib_binding*/
+
+static int gleIntLoad_ARB_vertex_attrib_binding()
+{
+	int bIsLoaded = 1;
+#ifndef GL_ARB_vertex_attrib_binding
+	__gleBindVertexBuffer = (PFNGLBINDVERTEXBUFFERPROC)gleIntGetProcAddress("glBindVertexBuffer");
+	if(!__gleBindVertexBuffer) bIsLoaded = 0;
+	__gleVertexAttribFormat = (PFNGLVERTEXATTRIBFORMATPROC)gleIntGetProcAddress("glVertexAttribFormat");
+	if(!__gleVertexAttribFormat) bIsLoaded = 0;
+	__gleVertexAttribIFormat = (PFNGLVERTEXATTRIBIFORMATPROC)gleIntGetProcAddress("glVertexAttribIFormat");
+	if(!__gleVertexAttribIFormat) bIsLoaded = 0;
+	__gleVertexAttribLFormat = (PFNGLVERTEXATTRIBLFORMATPROC)gleIntGetProcAddress("glVertexAttribLFormat");
+	if(!__gleVertexAttribLFormat) bIsLoaded = 0;
+	__gleVertexAttribBinding = (PFNGLVERTEXATTRIBBINDINGPROC)gleIntGetProcAddress("glVertexAttribBinding");
+	if(!__gleVertexAttribBinding) bIsLoaded = 0;
+	__gleVertexBindingDivisor = (PFNGLVERTEXBINDINGDIVISORPROC)gleIntGetProcAddress("glVertexBindingDivisor");
+	if(!__gleVertexBindingDivisor) bIsLoaded = 0;
+	__gleVertexArrayBindVertexBufferEXT = (PFNGLVERTEXARRAYBINDVERTEXBUFFEREXTPROC)gleIntGetProcAddress("glVertexArrayBindVertexBufferEXT");
+	if(!__gleVertexArrayBindVertexBufferEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexAttribFormatEXT = (PFNGLVERTEXARRAYVERTEXATTRIBFORMATEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribFormatEXT");
+	if(!__gleVertexArrayVertexAttribFormatEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexAttribIFormatEXT = (PFNGLVERTEXARRAYVERTEXATTRIBIFORMATEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribIFormatEXT");
+	if(!__gleVertexArrayVertexAttribIFormatEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexAttribLFormatEXT = (PFNGLVERTEXARRAYVERTEXATTRIBLFORMATEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribLFormatEXT");
+	if(!__gleVertexArrayVertexAttribLFormatEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexAttribBindingEXT = (PFNGLVERTEXARRAYVERTEXATTRIBBINDINGEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribBindingEXT");
+	if(!__gleVertexArrayVertexAttribBindingEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexBindingDivisorEXT = (PFNGLVERTEXARRAYVERTEXBINDINGDIVISOREXTPROC)gleIntGetProcAddress("glVertexArrayVertexBindingDivisorEXT");
+	if(!__gleVertexArrayVertexBindingDivisorEXT) bIsLoaded = 0;
+#endif /*GL_ARB_vertex_attrib_binding*/
 	return bIsLoaded;
 }
 #ifndef GL_ARB_vertex_blend
@@ -4045,8 +4467,8 @@ typedef void (GLE_FUNCPTR * PFNGLVIEWPORTINDEXEDFVPROC)(GLuint , const GLfloat *
 typedef void (GLE_FUNCPTR * PFNGLSCISSORARRAYVPROC)(GLuint , GLsizei , const GLint *);
 typedef void (GLE_FUNCPTR * PFNGLSCISSORINDEXEDPROC)(GLuint , GLint , GLint , GLsizei , GLsizei );
 typedef void (GLE_FUNCPTR * PFNGLSCISSORINDEXEDVPROC)(GLuint , const GLint *);
-typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEARRAYVPROC)(GLuint , GLsizei , const GLclampd *);
-typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEINDEXEDPROC)(GLuint , GLclampd , GLclampd );
+typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEARRAYVPROC)(GLuint , GLsizei , const GLdouble *);
+typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEINDEXEDPROC)(GLuint , GLdouble , GLdouble );
 typedef void (GLE_FUNCPTR * PFNGLGETFLOATI_VPROC)(GLenum , GLuint , GLfloat *);
 typedef void (GLE_FUNCPTR * PFNGLGETDOUBLEI_VPROC)(GLenum , GLuint , GLdouble *);
 
@@ -4659,7 +5081,7 @@ static int gleIntLoad_EXT_bindable_uniform()
 	return bIsLoaded;
 }
 #ifndef GL_EXT_blend_color
-typedef void (GLE_FUNCPTR * PFNGLBLENDCOLOREXTPROC)(GLclampf , GLclampf , GLclampf , GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLBLENDCOLOREXTPROC)(GLfloat , GLfloat , GLfloat , GLfloat );
 
 PFNGLBLENDCOLOREXTPROC glBlendColorEXT;
 #endif /*GL_EXT_blend_color*/
@@ -5052,6 +5474,8 @@ typedef void (GLE_FUNCPTR * PFNGLCOPYMULTITEXSUBIMAGE3DEXTPROC)(GLenum , GLenum 
 typedef void (GLE_FUNCPTR * PFNGLBINDMULTITEXTUREEXTPROC)(GLenum , GLenum , GLuint );
 typedef void (GLE_FUNCPTR * PFNGLENABLECLIENTSTATEINDEXEDEXTPROC)(GLenum , GLuint );
 typedef void (GLE_FUNCPTR * PFNGLDISABLECLIENTSTATEINDEXEDEXTPROC)(GLenum , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLENABLECLIENTSTATEIEXTPROC)(GLenum , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLDISABLECLIENTSTATEIEXTPROC)(GLenum , GLuint );
 typedef void (GLE_FUNCPTR * PFNGLMULTITEXCOORDPOINTEREXTPROC)(GLenum , GLint , GLenum , GLsizei , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLMULTITEXENVFEXTPROC)(GLenum , GLenum , GLenum , GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLMULTITEXENVFVEXTPROC)(GLenum , GLenum , GLenum , const GLfloat *);
@@ -5071,6 +5495,9 @@ typedef void (GLE_FUNCPTR * PFNGLGETMULTITEXGENIVEXTPROC)(GLenum , GLenum , GLen
 typedef void (GLE_FUNCPTR * PFNGLGETFLOATINDEXEDVEXTPROC)(GLenum , GLuint , GLfloat *);
 typedef void (GLE_FUNCPTR * PFNGLGETDOUBLEINDEXEDVEXTPROC)(GLenum , GLuint , GLdouble *);
 typedef void (GLE_FUNCPTR * PFNGLGETPOINTERINDEXEDVEXTPROC)(GLenum , GLuint , GLvoid* *);
+typedef void (GLE_FUNCPTR * PFNGLGETFLOATI_VEXTPROC)(GLenum , GLuint , GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETDOUBLEI_VEXTPROC)(GLenum , GLuint , GLdouble *);
+typedef void (GLE_FUNCPTR * PFNGLGETPOINTERI_VEXTPROC)(GLenum , GLuint , GLvoid* *);
 typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXTUREIMAGE3DEXTPROC)(GLuint , GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXTUREIMAGE2DEXTPROC)(GLuint , GLenum , GLint , GLenum , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXTUREIMAGE1DEXTPROC)(GLuint , GLenum , GLint , GLenum , GLsizei , GLint , GLsizei , const GLvoid *);
@@ -5194,6 +5621,25 @@ typedef void (GLE_FUNCPTR * PFNGLPROGRAMUNIFORMMATRIX3X2DVEXTPROC)(GLuint , GLin
 typedef void (GLE_FUNCPTR * PFNGLPROGRAMUNIFORMMATRIX3X4DVEXTPROC)(GLuint , GLint , GLsizei , GLboolean , const GLdouble *);
 typedef void (GLE_FUNCPTR * PFNGLPROGRAMUNIFORMMATRIX4X2DVEXTPROC)(GLuint , GLint , GLsizei , GLboolean , const GLdouble *);
 typedef void (GLE_FUNCPTR * PFNGLPROGRAMUNIFORMMATRIX4X3DVEXTPROC)(GLuint , GLint , GLsizei , GLboolean , const GLdouble *);
+typedef void (GLE_FUNCPTR * PFNGLENABLEVERTEXARRAYATTRIBEXTPROC)(GLuint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLDISABLEVERTEXARRAYATTRIBEXTPROC)(GLuint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLENABLEVERTEXARRAYEXTPROC)(GLuint , GLenum );
+typedef void (GLE_FUNCPTR * PFNGLDISABLEVERTEXARRAYEXTPROC)(GLuint , GLenum );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYCOLOROFFSETEXTPROC)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYEDGEFLAGOFFSETEXTPROC)(GLuint , GLuint , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYFOGCOORDOFFSETEXTPROC)(GLuint , GLuint , GLenum , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYINDEXOFFSETEXTPROC)(GLuint , GLuint , GLenum , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYMULTITEXCOORDOFFSETEXTPROC)(GLuint , GLuint , GLenum , GLint , GLenum , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYNORMALOFFSETEXTPROC)(GLuint , GLuint , GLenum , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYSECONDARYCOLOROFFSETEXTPROC)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYTEXCOORDOFFSETEXTPROC)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXOFFSETEXTPROC)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBIOFFSETEXTPROC)(GLuint , GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC)(GLuint , GLuint , GLuint , GLint , GLenum , GLboolean , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYINTEGERVEXTPROC)(GLuint , GLenum , GLint *);
+typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYPOINTERVEXTPROC)(GLuint , GLenum , GLvoid* *);
+typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYINTEGERI_VEXTPROC)(GLuint , GLuint , GLenum , GLint *);
+typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYPOINTERI_VEXTPROC)(GLuint , GLuint , GLenum , GLvoid* *);
 
 PFNGLCLIENTATTRIBDEFAULTEXTPROC glClientAttribDefaultEXT;
 PFNGLPUSHCLIENTATTRIBDEFAULTEXTPROC glPushClientAttribDefaultEXT;
@@ -5259,6 +5705,8 @@ PFNGLCOPYMULTITEXSUBIMAGE3DEXTPROC glCopyMultiTexSubImage3DEXT;
 PFNGLBINDMULTITEXTUREEXTPROC glBindMultiTextureEXT;
 PFNGLENABLECLIENTSTATEINDEXEDEXTPROC glEnableClientStateIndexedEXT;
 PFNGLDISABLECLIENTSTATEINDEXEDEXTPROC glDisableClientStateIndexedEXT;
+PFNGLENABLECLIENTSTATEIEXTPROC glEnableClientStateiEXT;
+PFNGLDISABLECLIENTSTATEIEXTPROC glDisableClientStateiEXT;
 PFNGLMULTITEXCOORDPOINTEREXTPROC glMultiTexCoordPointerEXT;
 PFNGLMULTITEXENVFEXTPROC glMultiTexEnvfEXT;
 PFNGLMULTITEXENVFVEXTPROC glMultiTexEnvfvEXT;
@@ -5278,6 +5726,9 @@ PFNGLGETMULTITEXGENIVEXTPROC glGetMultiTexGenivEXT;
 PFNGLGETFLOATINDEXEDVEXTPROC glGetFloatIndexedvEXT;
 PFNGLGETDOUBLEINDEXEDVEXTPROC glGetDoubleIndexedvEXT;
 PFNGLGETPOINTERINDEXEDVEXTPROC glGetPointerIndexedvEXT;
+PFNGLGETFLOATI_VEXTPROC glGetFloati_vEXT;
+PFNGLGETDOUBLEI_VEXTPROC glGetDoublei_vEXT;
+PFNGLGETPOINTERI_VEXTPROC glGetPointeri_vEXT;
 PFNGLCOMPRESSEDTEXTUREIMAGE3DEXTPROC glCompressedTextureImage3DEXT;
 PFNGLCOMPRESSEDTEXTUREIMAGE2DEXTPROC glCompressedTextureImage2DEXT;
 PFNGLCOMPRESSEDTEXTUREIMAGE1DEXTPROC glCompressedTextureImage1DEXT;
@@ -5401,6 +5852,25 @@ PFNGLPROGRAMUNIFORMMATRIX3X2DVEXTPROC glProgramUniformMatrix3x2dvEXT;
 PFNGLPROGRAMUNIFORMMATRIX3X4DVEXTPROC glProgramUniformMatrix3x4dvEXT;
 PFNGLPROGRAMUNIFORMMATRIX4X2DVEXTPROC glProgramUniformMatrix4x2dvEXT;
 PFNGLPROGRAMUNIFORMMATRIX4X3DVEXTPROC glProgramUniformMatrix4x3dvEXT;
+PFNGLENABLEVERTEXARRAYATTRIBEXTPROC glEnableVertexArrayAttribEXT;
+PFNGLDISABLEVERTEXARRAYATTRIBEXTPROC glDisableVertexArrayAttribEXT;
+PFNGLENABLEVERTEXARRAYEXTPROC glEnableVertexArrayEXT;
+PFNGLDISABLEVERTEXARRAYEXTPROC glDisableVertexArrayEXT;
+PFNGLVERTEXARRAYCOLOROFFSETEXTPROC glVertexArrayColorOffsetEXT;
+PFNGLVERTEXARRAYEDGEFLAGOFFSETEXTPROC glVertexArrayEdgeFlagOffsetEXT;
+PFNGLVERTEXARRAYFOGCOORDOFFSETEXTPROC glVertexArrayFogCoordOffsetEXT;
+PFNGLVERTEXARRAYINDEXOFFSETEXTPROC glVertexArrayIndexOffsetEXT;
+PFNGLVERTEXARRAYMULTITEXCOORDOFFSETEXTPROC glVertexArrayMultiTexCoordOffsetEXT;
+PFNGLVERTEXARRAYNORMALOFFSETEXTPROC glVertexArrayNormalOffsetEXT;
+PFNGLVERTEXARRAYSECONDARYCOLOROFFSETEXTPROC glVertexArraySecondaryColorOffsetEXT;
+PFNGLVERTEXARRAYTEXCOORDOFFSETEXTPROC glVertexArrayTexCoordOffsetEXT;
+PFNGLVERTEXARRAYVERTEXOFFSETEXTPROC glVertexArrayVertexOffsetEXT;
+PFNGLVERTEXARRAYVERTEXATTRIBIOFFSETEXTPROC glVertexArrayVertexAttribIOffsetEXT;
+PFNGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC glVertexArrayVertexAttribOffsetEXT;
+PFNGLGETVERTEXARRAYINTEGERVEXTPROC glGetVertexArrayIntegervEXT;
+PFNGLGETVERTEXARRAYPOINTERVEXTPROC glGetVertexArrayPointervEXT;
+PFNGLGETVERTEXARRAYINTEGERI_VEXTPROC glGetVertexArrayIntegeri_vEXT;
+PFNGLGETVERTEXARRAYPOINTERI_VEXTPROC glGetVertexArrayPointeri_vEXT;
 #endif /*GL_EXT_direct_state_access*/
 
 static int gleIntLoad_EXT_direct_state_access()
@@ -5535,6 +6005,10 @@ static int gleIntLoad_EXT_direct_state_access()
 	if(!glEnableClientStateIndexedEXT) bIsLoaded = 0;
 	glDisableClientStateIndexedEXT = (PFNGLDISABLECLIENTSTATEINDEXEDEXTPROC)gleIntGetProcAddress("glDisableClientStateIndexedEXT");
 	if(!glDisableClientStateIndexedEXT) bIsLoaded = 0;
+	glEnableClientStateiEXT = (PFNGLENABLECLIENTSTATEIEXTPROC)gleIntGetProcAddress("glEnableClientStateiEXT");
+	if(!glEnableClientStateiEXT) bIsLoaded = 0;
+	glDisableClientStateiEXT = (PFNGLDISABLECLIENTSTATEIEXTPROC)gleIntGetProcAddress("glDisableClientStateiEXT");
+	if(!glDisableClientStateiEXT) bIsLoaded = 0;
 	glMultiTexCoordPointerEXT = (PFNGLMULTITEXCOORDPOINTEREXTPROC)gleIntGetProcAddress("glMultiTexCoordPointerEXT");
 	if(!glMultiTexCoordPointerEXT) bIsLoaded = 0;
 	glMultiTexEnvfEXT = (PFNGLMULTITEXENVFEXTPROC)gleIntGetProcAddress("glMultiTexEnvfEXT");
@@ -5573,6 +6047,12 @@ static int gleIntLoad_EXT_direct_state_access()
 	if(!glGetDoubleIndexedvEXT) bIsLoaded = 0;
 	glGetPointerIndexedvEXT = (PFNGLGETPOINTERINDEXEDVEXTPROC)gleIntGetProcAddress("glGetPointerIndexedvEXT");
 	if(!glGetPointerIndexedvEXT) bIsLoaded = 0;
+	glGetFloati_vEXT = (PFNGLGETFLOATI_VEXTPROC)gleIntGetProcAddress("glGetFloati_vEXT");
+	if(!glGetFloati_vEXT) bIsLoaded = 0;
+	glGetDoublei_vEXT = (PFNGLGETDOUBLEI_VEXTPROC)gleIntGetProcAddress("glGetDoublei_vEXT");
+	if(!glGetDoublei_vEXT) bIsLoaded = 0;
+	glGetPointeri_vEXT = (PFNGLGETPOINTERI_VEXTPROC)gleIntGetProcAddress("glGetPointeri_vEXT");
+	if(!glGetPointeri_vEXT) bIsLoaded = 0;
 	glCompressedTextureImage3DEXT = (PFNGLCOMPRESSEDTEXTUREIMAGE3DEXTPROC)gleIntGetProcAddress("glCompressedTextureImage3DEXT");
 	if(!glCompressedTextureImage3DEXT) bIsLoaded = 0;
 	glCompressedTextureImage2DEXT = (PFNGLCOMPRESSEDTEXTUREIMAGE2DEXTPROC)gleIntGetProcAddress("glCompressedTextureImage2DEXT");
@@ -5819,6 +6299,44 @@ static int gleIntLoad_EXT_direct_state_access()
 	if(!glProgramUniformMatrix4x2dvEXT) bIsLoaded = 0;
 	glProgramUniformMatrix4x3dvEXT = (PFNGLPROGRAMUNIFORMMATRIX4X3DVEXTPROC)gleIntGetProcAddress("glProgramUniformMatrix4x3dvEXT");
 	if(!glProgramUniformMatrix4x3dvEXT) bIsLoaded = 0;
+	glEnableVertexArrayAttribEXT = (PFNGLENABLEVERTEXARRAYATTRIBEXTPROC)gleIntGetProcAddress("glEnableVertexArrayAttribEXT");
+	if(!glEnableVertexArrayAttribEXT) bIsLoaded = 0;
+	glDisableVertexArrayAttribEXT = (PFNGLDISABLEVERTEXARRAYATTRIBEXTPROC)gleIntGetProcAddress("glDisableVertexArrayAttribEXT");
+	if(!glDisableVertexArrayAttribEXT) bIsLoaded = 0;
+	glEnableVertexArrayEXT = (PFNGLENABLEVERTEXARRAYEXTPROC)gleIntGetProcAddress("glEnableVertexArrayEXT");
+	if(!glEnableVertexArrayEXT) bIsLoaded = 0;
+	glDisableVertexArrayEXT = (PFNGLDISABLEVERTEXARRAYEXTPROC)gleIntGetProcAddress("glDisableVertexArrayEXT");
+	if(!glDisableVertexArrayEXT) bIsLoaded = 0;
+	glVertexArrayColorOffsetEXT = (PFNGLVERTEXARRAYCOLOROFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayColorOffsetEXT");
+	if(!glVertexArrayColorOffsetEXT) bIsLoaded = 0;
+	glVertexArrayEdgeFlagOffsetEXT = (PFNGLVERTEXARRAYEDGEFLAGOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayEdgeFlagOffsetEXT");
+	if(!glVertexArrayEdgeFlagOffsetEXT) bIsLoaded = 0;
+	glVertexArrayFogCoordOffsetEXT = (PFNGLVERTEXARRAYFOGCOORDOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayFogCoordOffsetEXT");
+	if(!glVertexArrayFogCoordOffsetEXT) bIsLoaded = 0;
+	glVertexArrayIndexOffsetEXT = (PFNGLVERTEXARRAYINDEXOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayIndexOffsetEXT");
+	if(!glVertexArrayIndexOffsetEXT) bIsLoaded = 0;
+	glVertexArrayMultiTexCoordOffsetEXT = (PFNGLVERTEXARRAYMULTITEXCOORDOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayMultiTexCoordOffsetEXT");
+	if(!glVertexArrayMultiTexCoordOffsetEXT) bIsLoaded = 0;
+	glVertexArrayNormalOffsetEXT = (PFNGLVERTEXARRAYNORMALOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayNormalOffsetEXT");
+	if(!glVertexArrayNormalOffsetEXT) bIsLoaded = 0;
+	glVertexArraySecondaryColorOffsetEXT = (PFNGLVERTEXARRAYSECONDARYCOLOROFFSETEXTPROC)gleIntGetProcAddress("glVertexArraySecondaryColorOffsetEXT");
+	if(!glVertexArraySecondaryColorOffsetEXT) bIsLoaded = 0;
+	glVertexArrayTexCoordOffsetEXT = (PFNGLVERTEXARRAYTEXCOORDOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayTexCoordOffsetEXT");
+	if(!glVertexArrayTexCoordOffsetEXT) bIsLoaded = 0;
+	glVertexArrayVertexOffsetEXT = (PFNGLVERTEXARRAYVERTEXOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayVertexOffsetEXT");
+	if(!glVertexArrayVertexOffsetEXT) bIsLoaded = 0;
+	glVertexArrayVertexAttribIOffsetEXT = (PFNGLVERTEXARRAYVERTEXATTRIBIOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribIOffsetEXT");
+	if(!glVertexArrayVertexAttribIOffsetEXT) bIsLoaded = 0;
+	glVertexArrayVertexAttribOffsetEXT = (PFNGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribOffsetEXT");
+	if(!glVertexArrayVertexAttribOffsetEXT) bIsLoaded = 0;
+	glGetVertexArrayIntegervEXT = (PFNGLGETVERTEXARRAYINTEGERVEXTPROC)gleIntGetProcAddress("glGetVertexArrayIntegervEXT");
+	if(!glGetVertexArrayIntegervEXT) bIsLoaded = 0;
+	glGetVertexArrayPointervEXT = (PFNGLGETVERTEXARRAYPOINTERVEXTPROC)gleIntGetProcAddress("glGetVertexArrayPointervEXT");
+	if(!glGetVertexArrayPointervEXT) bIsLoaded = 0;
+	glGetVertexArrayIntegeri_vEXT = (PFNGLGETVERTEXARRAYINTEGERI_VEXTPROC)gleIntGetProcAddress("glGetVertexArrayIntegeri_vEXT");
+	if(!glGetVertexArrayIntegeri_vEXT) bIsLoaded = 0;
+	glGetVertexArrayPointeri_vEXT = (PFNGLGETVERTEXARRAYPOINTERI_VEXTPROC)gleIntGetProcAddress("glGetVertexArrayPointeri_vEXT");
+	if(!glGetVertexArrayPointeri_vEXT) bIsLoaded = 0;
 #endif /*GL_EXT_direct_state_access*/
 	return bIsLoaded;
 }
@@ -6303,11 +6821,15 @@ typedef void (GLE_FUNCPTR * PFNGLPIXELTRANSFORMPARAMETERIEXTPROC)(GLenum , GLenu
 typedef void (GLE_FUNCPTR * PFNGLPIXELTRANSFORMPARAMETERFEXTPROC)(GLenum , GLenum , GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLPIXELTRANSFORMPARAMETERIVEXTPROC)(GLenum , GLenum , const GLint *);
 typedef void (GLE_FUNCPTR * PFNGLPIXELTRANSFORMPARAMETERFVEXTPROC)(GLenum , GLenum , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETPIXELTRANSFORMPARAMETERIVEXTPROC)(GLenum , GLenum , GLint *);
+typedef void (GLE_FUNCPTR * PFNGLGETPIXELTRANSFORMPARAMETERFVEXTPROC)(GLenum , GLenum , GLfloat *);
 
 PFNGLPIXELTRANSFORMPARAMETERIEXTPROC glPixelTransformParameteriEXT;
 PFNGLPIXELTRANSFORMPARAMETERFEXTPROC glPixelTransformParameterfEXT;
 PFNGLPIXELTRANSFORMPARAMETERIVEXTPROC glPixelTransformParameterivEXT;
 PFNGLPIXELTRANSFORMPARAMETERFVEXTPROC glPixelTransformParameterfvEXT;
+PFNGLGETPIXELTRANSFORMPARAMETERIVEXTPROC glGetPixelTransformParameterivEXT;
+PFNGLGETPIXELTRANSFORMPARAMETERFVEXTPROC glGetPixelTransformParameterfvEXT;
 #endif /*GL_EXT_pixel_transform*/
 
 static int gleIntLoad_EXT_pixel_transform()
@@ -6322,6 +6844,10 @@ static int gleIntLoad_EXT_pixel_transform()
 	if(!glPixelTransformParameterivEXT) bIsLoaded = 0;
 	glPixelTransformParameterfvEXT = (PFNGLPIXELTRANSFORMPARAMETERFVEXTPROC)gleIntGetProcAddress("glPixelTransformParameterfvEXT");
 	if(!glPixelTransformParameterfvEXT) bIsLoaded = 0;
+	glGetPixelTransformParameterivEXT = (PFNGLGETPIXELTRANSFORMPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetPixelTransformParameterivEXT");
+	if(!glGetPixelTransformParameterivEXT) bIsLoaded = 0;
+	glGetPixelTransformParameterfvEXT = (PFNGLGETPIXELTRANSFORMPARAMETERFVEXTPROC)gleIntGetProcAddress("glGetPixelTransformParameterfvEXT");
+	if(!glGetPixelTransformParameterfvEXT) bIsLoaded = 0;
 #endif /*GL_EXT_pixel_transform*/
 	return bIsLoaded;
 }
@@ -7029,7 +7555,7 @@ static int gleIntLoad_EXT_vertex_shader()
 #ifndef GL_EXT_vertex_weighting
 typedef void (GLE_FUNCPTR * PFNGLVERTEXWEIGHTFEXTPROC)(GLfloat );
 typedef void (GLE_FUNCPTR * PFNGLVERTEXWEIGHTFVEXTPROC)(const GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLVERTEXWEIGHTPOINTEREXTPROC)(GLsizei , GLenum , GLsizei , const GLvoid *);
+typedef void (GLE_FUNCPTR * PFNGLVERTEXWEIGHTPOINTEREXTPROC)(GLint , GLenum , GLsizei , const GLvoid *);
 
 PFNGLVERTEXWEIGHTFEXTPROC glVertexWeightfEXT;
 PFNGLVERTEXWEIGHTFVEXTPROC glVertexWeightfvEXT;
@@ -7229,6 +7755,58 @@ static int gleIntLoad_INTEL_parallel_arrays()
 	return bIsLoaded;
 }
 
+#ifndef GL_KHR_debug
+typedef void (GLE_FUNCPTR * PFNGLDEBUGMESSAGECONTROLPROC)(GLenum , GLenum , GLenum , GLsizei , const GLuint *, GLboolean );
+typedef void (GLE_FUNCPTR * PFNGLDEBUGMESSAGEINSERTPROC)(GLenum , GLenum , GLuint , GLenum , GLsizei , const GLchar *);
+typedef void (GLE_FUNCPTR * PFNGLDEBUGMESSAGECALLBACKPROC)(GLDEBUGPROC , const void *);
+typedef GLuint (GLE_FUNCPTR * PFNGLGETDEBUGMESSAGELOGPROC)(GLuint , GLsizei , GLenum *, GLenum *, GLuint *, GLenum *, GLsizei *, GLchar *);
+typedef void (GLE_FUNCPTR * PFNGLPUSHDEBUGGROUPPROC)(GLenum , GLuint , GLsizei , const GLchar *);
+typedef void (GLE_FUNCPTR * PFNGLPOPDEBUGGROUPPROC)();
+typedef void (GLE_FUNCPTR * PFNGLOBJECTLABELPROC)(GLenum , GLuint , GLsizei , const GLchar *);
+typedef void (GLE_FUNCPTR * PFNGLGETOBJECTLABELPROC)(GLenum , GLuint , GLsizei , GLsizei *, GLchar *);
+typedef void (GLE_FUNCPTR * PFNGLOBJECTPTRLABELPROC)(const void *, GLsizei , const GLchar *);
+typedef void (GLE_FUNCPTR * PFNGLGETOBJECTPTRLABELPROC)(const void *, GLsizei , GLsizei *, GLchar *);
+
+PFNGLDEBUGMESSAGECONTROLPROC __gleDebugMessageControl;
+PFNGLDEBUGMESSAGEINSERTPROC __gleDebugMessageInsert;
+PFNGLDEBUGMESSAGECALLBACKPROC __gleDebugMessageCallback;
+PFNGLGETDEBUGMESSAGELOGPROC __gleGetDebugMessageLog;
+PFNGLPUSHDEBUGGROUPPROC __glePushDebugGroup;
+PFNGLPOPDEBUGGROUPPROC __glePopDebugGroup;
+PFNGLOBJECTLABELPROC __gleObjectLabel;
+PFNGLGETOBJECTLABELPROC __gleGetObjectLabel;
+PFNGLOBJECTPTRLABELPROC __gleObjectPtrLabel;
+PFNGLGETOBJECTPTRLABELPROC __gleGetObjectPtrLabel;
+#endif /*GL_KHR_debug*/
+
+static int gleIntLoad_KHR_debug()
+{
+	int bIsLoaded = 1;
+#ifndef GL_KHR_debug
+	__gleDebugMessageControl = (PFNGLDEBUGMESSAGECONTROLPROC)gleIntGetProcAddress("glDebugMessageControl");
+	if(!__gleDebugMessageControl) bIsLoaded = 0;
+	__gleDebugMessageInsert = (PFNGLDEBUGMESSAGEINSERTPROC)gleIntGetProcAddress("glDebugMessageInsert");
+	if(!__gleDebugMessageInsert) bIsLoaded = 0;
+	__gleDebugMessageCallback = (PFNGLDEBUGMESSAGECALLBACKPROC)gleIntGetProcAddress("glDebugMessageCallback");
+	if(!__gleDebugMessageCallback) bIsLoaded = 0;
+	__gleGetDebugMessageLog = (PFNGLGETDEBUGMESSAGELOGPROC)gleIntGetProcAddress("glGetDebugMessageLog");
+	if(!__gleGetDebugMessageLog) bIsLoaded = 0;
+	__glePushDebugGroup = (PFNGLPUSHDEBUGGROUPPROC)gleIntGetProcAddress("glPushDebugGroup");
+	if(!__glePushDebugGroup) bIsLoaded = 0;
+	__glePopDebugGroup = (PFNGLPOPDEBUGGROUPPROC)gleIntGetProcAddress("glPopDebugGroup");
+	if(!__glePopDebugGroup) bIsLoaded = 0;
+	__gleObjectLabel = (PFNGLOBJECTLABELPROC)gleIntGetProcAddress("glObjectLabel");
+	if(!__gleObjectLabel) bIsLoaded = 0;
+	__gleGetObjectLabel = (PFNGLGETOBJECTLABELPROC)gleIntGetProcAddress("glGetObjectLabel");
+	if(!__gleGetObjectLabel) bIsLoaded = 0;
+	__gleObjectPtrLabel = (PFNGLOBJECTPTRLABELPROC)gleIntGetProcAddress("glObjectPtrLabel");
+	if(!__gleObjectPtrLabel) bIsLoaded = 0;
+	__gleGetObjectPtrLabel = (PFNGLGETOBJECTPTRLABELPROC)gleIntGetProcAddress("glGetObjectPtrLabel");
+	if(!__gleGetObjectPtrLabel) bIsLoaded = 0;
+#endif /*GL_KHR_debug*/
+	return bIsLoaded;
+}
+
 
 
 #ifndef GL_MESA_resize_buffers
@@ -7354,6 +7932,69 @@ static int gleIntLoad_MESA_window_pos()
 	return bIsLoaded;
 }
 
+#ifndef GL_NV_bindless_texture
+typedef GLuint64 (GLE_FUNCPTR * PFNGLGETTEXTUREHANDLENVPROC)(GLuint );
+typedef GLuint64 (GLE_FUNCPTR * PFNGLGETTEXTURESAMPLERHANDLENVPROC)(GLuint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLMAKETEXTUREHANDLERESIDENTNVPROC)(GLuint64 );
+typedef void (GLE_FUNCPTR * PFNGLMAKETEXTUREHANDLENONRESIDENTNVPROC)(GLuint64 );
+typedef GLuint64 (GLE_FUNCPTR * PFNGLGETIMAGEHANDLENVPROC)(GLuint , GLint , GLboolean , GLint , GLenum );
+typedef void (GLE_FUNCPTR * PFNGLMAKEIMAGEHANDLERESIDENTNVPROC)(GLuint64 , GLenum );
+typedef void (GLE_FUNCPTR * PFNGLMAKEIMAGEHANDLENONRESIDENTNVPROC)(GLuint64 );
+typedef void (GLE_FUNCPTR * PFNGLUNIFORMHANDLEUI64NVPROC)(GLint , GLuint64 );
+typedef void (GLE_FUNCPTR * PFNGLUNIFORMHANDLEUI64VNVPROC)(GLint , GLsizei , const GLuint64 *);
+typedef void (GLE_FUNCPTR * PFNGLPROGRAMUNIFORMHANDLEUI64NVPROC)(GLuint , GLint , GLuint64 );
+typedef void (GLE_FUNCPTR * PFNGLPROGRAMUNIFORMHANDLEUI64VNVPROC)(GLuint , GLint , GLsizei , const GLuint64 *);
+typedef GLboolean (GLE_FUNCPTR * PFNGLISTEXTUREHANDLERESIDENTNVPROC)(GLuint64 );
+typedef GLboolean (GLE_FUNCPTR * PFNGLISIMAGEHANDLERESIDENTNVPROC)(GLuint64 );
+
+PFNGLGETTEXTUREHANDLENVPROC glGetTextureHandleNV;
+PFNGLGETTEXTURESAMPLERHANDLENVPROC glGetTextureSamplerHandleNV;
+PFNGLMAKETEXTUREHANDLERESIDENTNVPROC glMakeTextureHandleResidentNV;
+PFNGLMAKETEXTUREHANDLENONRESIDENTNVPROC glMakeTextureHandleNonResidentNV;
+PFNGLGETIMAGEHANDLENVPROC glGetImageHandleNV;
+PFNGLMAKEIMAGEHANDLERESIDENTNVPROC glMakeImageHandleResidentNV;
+PFNGLMAKEIMAGEHANDLENONRESIDENTNVPROC glMakeImageHandleNonResidentNV;
+PFNGLUNIFORMHANDLEUI64NVPROC glUniformHandleui64NV;
+PFNGLUNIFORMHANDLEUI64VNVPROC glUniformHandleui64vNV;
+PFNGLPROGRAMUNIFORMHANDLEUI64NVPROC glProgramUniformHandleui64NV;
+PFNGLPROGRAMUNIFORMHANDLEUI64VNVPROC glProgramUniformHandleui64vNV;
+PFNGLISTEXTUREHANDLERESIDENTNVPROC glIsTextureHandleResidentNV;
+PFNGLISIMAGEHANDLERESIDENTNVPROC glIsImageHandleResidentNV;
+#endif /*GL_NV_bindless_texture*/
+
+static int gleIntLoad_NV_bindless_texture()
+{
+	int bIsLoaded = 1;
+#ifndef GL_NV_bindless_texture
+	glGetTextureHandleNV = (PFNGLGETTEXTUREHANDLENVPROC)gleIntGetProcAddress("glGetTextureHandleNV");
+	if(!glGetTextureHandleNV) bIsLoaded = 0;
+	glGetTextureSamplerHandleNV = (PFNGLGETTEXTURESAMPLERHANDLENVPROC)gleIntGetProcAddress("glGetTextureSamplerHandleNV");
+	if(!glGetTextureSamplerHandleNV) bIsLoaded = 0;
+	glMakeTextureHandleResidentNV = (PFNGLMAKETEXTUREHANDLERESIDENTNVPROC)gleIntGetProcAddress("glMakeTextureHandleResidentNV");
+	if(!glMakeTextureHandleResidentNV) bIsLoaded = 0;
+	glMakeTextureHandleNonResidentNV = (PFNGLMAKETEXTUREHANDLENONRESIDENTNVPROC)gleIntGetProcAddress("glMakeTextureHandleNonResidentNV");
+	if(!glMakeTextureHandleNonResidentNV) bIsLoaded = 0;
+	glGetImageHandleNV = (PFNGLGETIMAGEHANDLENVPROC)gleIntGetProcAddress("glGetImageHandleNV");
+	if(!glGetImageHandleNV) bIsLoaded = 0;
+	glMakeImageHandleResidentNV = (PFNGLMAKEIMAGEHANDLERESIDENTNVPROC)gleIntGetProcAddress("glMakeImageHandleResidentNV");
+	if(!glMakeImageHandleResidentNV) bIsLoaded = 0;
+	glMakeImageHandleNonResidentNV = (PFNGLMAKEIMAGEHANDLENONRESIDENTNVPROC)gleIntGetProcAddress("glMakeImageHandleNonResidentNV");
+	if(!glMakeImageHandleNonResidentNV) bIsLoaded = 0;
+	glUniformHandleui64NV = (PFNGLUNIFORMHANDLEUI64NVPROC)gleIntGetProcAddress("glUniformHandleui64NV");
+	if(!glUniformHandleui64NV) bIsLoaded = 0;
+	glUniformHandleui64vNV = (PFNGLUNIFORMHANDLEUI64VNVPROC)gleIntGetProcAddress("glUniformHandleui64vNV");
+	if(!glUniformHandleui64vNV) bIsLoaded = 0;
+	glProgramUniformHandleui64NV = (PFNGLPROGRAMUNIFORMHANDLEUI64NVPROC)gleIntGetProcAddress("glProgramUniformHandleui64NV");
+	if(!glProgramUniformHandleui64NV) bIsLoaded = 0;
+	glProgramUniformHandleui64vNV = (PFNGLPROGRAMUNIFORMHANDLEUI64VNVPROC)gleIntGetProcAddress("glProgramUniformHandleui64vNV");
+	if(!glProgramUniformHandleui64vNV) bIsLoaded = 0;
+	glIsTextureHandleResidentNV = (PFNGLISTEXTUREHANDLERESIDENTNVPROC)gleIntGetProcAddress("glIsTextureHandleResidentNV");
+	if(!glIsTextureHandleResidentNV) bIsLoaded = 0;
+	glIsImageHandleResidentNV = (PFNGLISIMAGEHANDLERESIDENTNVPROC)gleIntGetProcAddress("glIsImageHandleResidentNV");
+	if(!glIsImageHandleResidentNV) bIsLoaded = 0;
+#endif /*GL_NV_bindless_texture*/
+	return bIsLoaded;
+}
 
 #ifndef GL_NV_conditional_render
 typedef void (GLE_FUNCPTR * PFNGLBEGINCONDITIONALRENDERNVPROC)(GLuint , GLenum );
@@ -8105,8 +8746,215 @@ static int gleIntLoad_NV_parameter_buffer_object()
 	return bIsLoaded;
 }
 
+#ifndef GL_NV_path_rendering
+typedef GLuint (GLE_FUNCPTR * PFNGLGENPATHSNVPROC)(GLsizei );
+typedef void (GLE_FUNCPTR * PFNGLDELETEPATHSNVPROC)(GLuint , GLsizei );
+typedef GLboolean (GLE_FUNCPTR * PFNGLISPATHNVPROC)(GLuint );
+typedef void (GLE_FUNCPTR * PFNGLPATHCOMMANDSNVPROC)(GLuint , GLsizei , const GLubyte *, GLsizei , GLenum , const GLvoid *);
+typedef void (GLE_FUNCPTR * PFNGLPATHCOORDSNVPROC)(GLuint , GLsizei , GLenum , const GLvoid *);
+typedef void (GLE_FUNCPTR * PFNGLPATHSUBCOMMANDSNVPROC)(GLuint , GLsizei , GLsizei , GLsizei , const GLubyte *, GLsizei , GLenum , const GLvoid *);
+typedef void (GLE_FUNCPTR * PFNGLPATHSUBCOORDSNVPROC)(GLuint , GLsizei , GLsizei , GLenum , const GLvoid *);
+typedef void (GLE_FUNCPTR * PFNGLPATHSTRINGNVPROC)(GLuint , GLenum , GLsizei , const GLvoid *);
+typedef void (GLE_FUNCPTR * PFNGLPATHGLYPHSNVPROC)(GLuint , GLenum , const GLvoid *, GLbitfield , GLsizei , GLenum , const GLvoid *, GLenum , GLuint , GLfloat );
+typedef void (GLE_FUNCPTR * PFNGLPATHGLYPHRANGENVPROC)(GLuint , GLenum , const GLvoid *, GLbitfield , GLuint , GLsizei , GLenum , GLuint , GLfloat );
+typedef void (GLE_FUNCPTR * PFNGLWEIGHTPATHSNVPROC)(GLuint , GLsizei , const GLuint *, const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLCOPYPATHNVPROC)(GLuint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLINTERPOLATEPATHSNVPROC)(GLuint , GLuint , GLuint , GLfloat );
+typedef void (GLE_FUNCPTR * PFNGLTRANSFORMPATHNVPROC)(GLuint , GLuint , GLenum , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLPATHPARAMETERIVNVPROC)(GLuint , GLenum , const GLint *);
+typedef void (GLE_FUNCPTR * PFNGLPATHPARAMETERINVPROC)(GLuint , GLenum , GLint );
+typedef void (GLE_FUNCPTR * PFNGLPATHPARAMETERFVNVPROC)(GLuint , GLenum , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLPATHPARAMETERFNVPROC)(GLuint , GLenum , GLfloat );
+typedef void (GLE_FUNCPTR * PFNGLPATHDASHARRAYNVPROC)(GLuint , GLsizei , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLPATHSTENCILFUNCNVPROC)(GLenum , GLint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLPATHSTENCILDEPTHOFFSETNVPROC)(GLfloat , GLfloat );
+typedef void (GLE_FUNCPTR * PFNGLSTENCILFILLPATHNVPROC)(GLuint , GLenum , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLSTENCILSTROKEPATHNVPROC)(GLuint , GLint , GLuint );
+typedef void (GLE_FUNCPTR * PFNGLSTENCILFILLPATHINSTANCEDNVPROC)(GLsizei , GLenum , const GLvoid *, GLuint , GLenum , GLuint , GLenum , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLSTENCILSTROKEPATHINSTANCEDNVPROC)(GLsizei , GLenum , const GLvoid *, GLuint , GLint , GLuint , GLenum , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLPATHCOVERDEPTHFUNCNVPROC)(GLenum );
+typedef void (GLE_FUNCPTR * PFNGLPATHCOLORGENNVPROC)(GLenum , GLenum , GLenum , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLPATHTEXGENNVPROC)(GLenum , GLenum , GLint , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLPATHFOGGENNVPROC)(GLenum );
+typedef void (GLE_FUNCPTR * PFNGLCOVERFILLPATHNVPROC)(GLuint , GLenum );
+typedef void (GLE_FUNCPTR * PFNGLCOVERSTROKEPATHNVPROC)(GLuint , GLenum );
+typedef void (GLE_FUNCPTR * PFNGLCOVERFILLPATHINSTANCEDNVPROC)(GLsizei , GLenum , const GLvoid *, GLuint , GLenum , GLenum , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLCOVERSTROKEPATHINSTANCEDNVPROC)(GLsizei , GLenum , const GLvoid *, GLuint , GLenum , GLenum , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHPARAMETERIVNVPROC)(GLuint , GLenum , GLint *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHPARAMETERFVNVPROC)(GLuint , GLenum , GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHCOMMANDSNVPROC)(GLuint , GLubyte *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHCOORDSNVPROC)(GLuint , GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHDASHARRAYNVPROC)(GLuint , GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHMETRICSNVPROC)(GLbitfield , GLsizei , GLenum , const GLvoid *, GLuint , GLsizei , GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHMETRICRANGENVPROC)(GLbitfield , GLuint , GLsizei , GLsizei , GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHSPACINGNVPROC)(GLenum , GLsizei , GLenum , const GLvoid *, GLuint , GLfloat , GLfloat , GLenum , GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHCOLORGENIVNVPROC)(GLenum , GLenum , GLint *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHCOLORGENFVNVPROC)(GLenum , GLenum , GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHTEXGENIVNVPROC)(GLenum , GLenum , GLint *);
+typedef void (GLE_FUNCPTR * PFNGLGETPATHTEXGENFVNVPROC)(GLenum , GLenum , GLfloat *);
+typedef GLboolean (GLE_FUNCPTR * PFNGLISPOINTINFILLPATHNVPROC)(GLuint , GLuint , GLfloat , GLfloat );
+typedef GLboolean (GLE_FUNCPTR * PFNGLISPOINTINSTROKEPATHNVPROC)(GLuint , GLfloat , GLfloat );
+typedef GLfloat (GLE_FUNCPTR * PFNGLGETPATHLENGTHNVPROC)(GLuint , GLsizei , GLsizei );
+typedef GLboolean (GLE_FUNCPTR * PFNGLPOINTALONGPATHNVPROC)(GLuint , GLsizei , GLsizei , GLfloat , GLfloat *, GLfloat *, GLfloat *, GLfloat *);
+
+PFNGLGENPATHSNVPROC glGenPathsNV;
+PFNGLDELETEPATHSNVPROC glDeletePathsNV;
+PFNGLISPATHNVPROC glIsPathNV;
+PFNGLPATHCOMMANDSNVPROC glPathCommandsNV;
+PFNGLPATHCOORDSNVPROC glPathCoordsNV;
+PFNGLPATHSUBCOMMANDSNVPROC glPathSubCommandsNV;
+PFNGLPATHSUBCOORDSNVPROC glPathSubCoordsNV;
+PFNGLPATHSTRINGNVPROC glPathStringNV;
+PFNGLPATHGLYPHSNVPROC glPathGlyphsNV;
+PFNGLPATHGLYPHRANGENVPROC glPathGlyphRangeNV;
+PFNGLWEIGHTPATHSNVPROC glWeightPathsNV;
+PFNGLCOPYPATHNVPROC glCopyPathNV;
+PFNGLINTERPOLATEPATHSNVPROC glInterpolatePathsNV;
+PFNGLTRANSFORMPATHNVPROC glTransformPathNV;
+PFNGLPATHPARAMETERIVNVPROC glPathParameterivNV;
+PFNGLPATHPARAMETERINVPROC glPathParameteriNV;
+PFNGLPATHPARAMETERFVNVPROC glPathParameterfvNV;
+PFNGLPATHPARAMETERFNVPROC glPathParameterfNV;
+PFNGLPATHDASHARRAYNVPROC glPathDashArrayNV;
+PFNGLPATHSTENCILFUNCNVPROC glPathStencilFuncNV;
+PFNGLPATHSTENCILDEPTHOFFSETNVPROC glPathStencilDepthOffsetNV;
+PFNGLSTENCILFILLPATHNVPROC glStencilFillPathNV;
+PFNGLSTENCILSTROKEPATHNVPROC glStencilStrokePathNV;
+PFNGLSTENCILFILLPATHINSTANCEDNVPROC glStencilFillPathInstancedNV;
+PFNGLSTENCILSTROKEPATHINSTANCEDNVPROC glStencilStrokePathInstancedNV;
+PFNGLPATHCOVERDEPTHFUNCNVPROC glPathCoverDepthFuncNV;
+PFNGLPATHCOLORGENNVPROC glPathColorGenNV;
+PFNGLPATHTEXGENNVPROC glPathTexGenNV;
+PFNGLPATHFOGGENNVPROC glPathFogGenNV;
+PFNGLCOVERFILLPATHNVPROC glCoverFillPathNV;
+PFNGLCOVERSTROKEPATHNVPROC glCoverStrokePathNV;
+PFNGLCOVERFILLPATHINSTANCEDNVPROC glCoverFillPathInstancedNV;
+PFNGLCOVERSTROKEPATHINSTANCEDNVPROC glCoverStrokePathInstancedNV;
+PFNGLGETPATHPARAMETERIVNVPROC glGetPathParameterivNV;
+PFNGLGETPATHPARAMETERFVNVPROC glGetPathParameterfvNV;
+PFNGLGETPATHCOMMANDSNVPROC glGetPathCommandsNV;
+PFNGLGETPATHCOORDSNVPROC glGetPathCoordsNV;
+PFNGLGETPATHDASHARRAYNVPROC glGetPathDashArrayNV;
+PFNGLGETPATHMETRICSNVPROC glGetPathMetricsNV;
+PFNGLGETPATHMETRICRANGENVPROC glGetPathMetricRangeNV;
+PFNGLGETPATHSPACINGNVPROC glGetPathSpacingNV;
+PFNGLGETPATHCOLORGENIVNVPROC glGetPathColorGenivNV;
+PFNGLGETPATHCOLORGENFVNVPROC glGetPathColorGenfvNV;
+PFNGLGETPATHTEXGENIVNVPROC glGetPathTexGenivNV;
+PFNGLGETPATHTEXGENFVNVPROC glGetPathTexGenfvNV;
+PFNGLISPOINTINFILLPATHNVPROC glIsPointInFillPathNV;
+PFNGLISPOINTINSTROKEPATHNVPROC glIsPointInStrokePathNV;
+PFNGLGETPATHLENGTHNVPROC glGetPathLengthNV;
+PFNGLPOINTALONGPATHNVPROC glPointAlongPathNV;
+#endif /*GL_NV_path_rendering*/
+
+static int gleIntLoad_NV_path_rendering()
+{
+	int bIsLoaded = 1;
+#ifndef GL_NV_path_rendering
+	glGenPathsNV = (PFNGLGENPATHSNVPROC)gleIntGetProcAddress("glGenPathsNV");
+	if(!glGenPathsNV) bIsLoaded = 0;
+	glDeletePathsNV = (PFNGLDELETEPATHSNVPROC)gleIntGetProcAddress("glDeletePathsNV");
+	if(!glDeletePathsNV) bIsLoaded = 0;
+	glIsPathNV = (PFNGLISPATHNVPROC)gleIntGetProcAddress("glIsPathNV");
+	if(!glIsPathNV) bIsLoaded = 0;
+	glPathCommandsNV = (PFNGLPATHCOMMANDSNVPROC)gleIntGetProcAddress("glPathCommandsNV");
+	if(!glPathCommandsNV) bIsLoaded = 0;
+	glPathCoordsNV = (PFNGLPATHCOORDSNVPROC)gleIntGetProcAddress("glPathCoordsNV");
+	if(!glPathCoordsNV) bIsLoaded = 0;
+	glPathSubCommandsNV = (PFNGLPATHSUBCOMMANDSNVPROC)gleIntGetProcAddress("glPathSubCommandsNV");
+	if(!glPathSubCommandsNV) bIsLoaded = 0;
+	glPathSubCoordsNV = (PFNGLPATHSUBCOORDSNVPROC)gleIntGetProcAddress("glPathSubCoordsNV");
+	if(!glPathSubCoordsNV) bIsLoaded = 0;
+	glPathStringNV = (PFNGLPATHSTRINGNVPROC)gleIntGetProcAddress("glPathStringNV");
+	if(!glPathStringNV) bIsLoaded = 0;
+	glPathGlyphsNV = (PFNGLPATHGLYPHSNVPROC)gleIntGetProcAddress("glPathGlyphsNV");
+	if(!glPathGlyphsNV) bIsLoaded = 0;
+	glPathGlyphRangeNV = (PFNGLPATHGLYPHRANGENVPROC)gleIntGetProcAddress("glPathGlyphRangeNV");
+	if(!glPathGlyphRangeNV) bIsLoaded = 0;
+	glWeightPathsNV = (PFNGLWEIGHTPATHSNVPROC)gleIntGetProcAddress("glWeightPathsNV");
+	if(!glWeightPathsNV) bIsLoaded = 0;
+	glCopyPathNV = (PFNGLCOPYPATHNVPROC)gleIntGetProcAddress("glCopyPathNV");
+	if(!glCopyPathNV) bIsLoaded = 0;
+	glInterpolatePathsNV = (PFNGLINTERPOLATEPATHSNVPROC)gleIntGetProcAddress("glInterpolatePathsNV");
+	if(!glInterpolatePathsNV) bIsLoaded = 0;
+	glTransformPathNV = (PFNGLTRANSFORMPATHNVPROC)gleIntGetProcAddress("glTransformPathNV");
+	if(!glTransformPathNV) bIsLoaded = 0;
+	glPathParameterivNV = (PFNGLPATHPARAMETERIVNVPROC)gleIntGetProcAddress("glPathParameterivNV");
+	if(!glPathParameterivNV) bIsLoaded = 0;
+	glPathParameteriNV = (PFNGLPATHPARAMETERINVPROC)gleIntGetProcAddress("glPathParameteriNV");
+	if(!glPathParameteriNV) bIsLoaded = 0;
+	glPathParameterfvNV = (PFNGLPATHPARAMETERFVNVPROC)gleIntGetProcAddress("glPathParameterfvNV");
+	if(!glPathParameterfvNV) bIsLoaded = 0;
+	glPathParameterfNV = (PFNGLPATHPARAMETERFNVPROC)gleIntGetProcAddress("glPathParameterfNV");
+	if(!glPathParameterfNV) bIsLoaded = 0;
+	glPathDashArrayNV = (PFNGLPATHDASHARRAYNVPROC)gleIntGetProcAddress("glPathDashArrayNV");
+	if(!glPathDashArrayNV) bIsLoaded = 0;
+	glPathStencilFuncNV = (PFNGLPATHSTENCILFUNCNVPROC)gleIntGetProcAddress("glPathStencilFuncNV");
+	if(!glPathStencilFuncNV) bIsLoaded = 0;
+	glPathStencilDepthOffsetNV = (PFNGLPATHSTENCILDEPTHOFFSETNVPROC)gleIntGetProcAddress("glPathStencilDepthOffsetNV");
+	if(!glPathStencilDepthOffsetNV) bIsLoaded = 0;
+	glStencilFillPathNV = (PFNGLSTENCILFILLPATHNVPROC)gleIntGetProcAddress("glStencilFillPathNV");
+	if(!glStencilFillPathNV) bIsLoaded = 0;
+	glStencilStrokePathNV = (PFNGLSTENCILSTROKEPATHNVPROC)gleIntGetProcAddress("glStencilStrokePathNV");
+	if(!glStencilStrokePathNV) bIsLoaded = 0;
+	glStencilFillPathInstancedNV = (PFNGLSTENCILFILLPATHINSTANCEDNVPROC)gleIntGetProcAddress("glStencilFillPathInstancedNV");
+	if(!glStencilFillPathInstancedNV) bIsLoaded = 0;
+	glStencilStrokePathInstancedNV = (PFNGLSTENCILSTROKEPATHINSTANCEDNVPROC)gleIntGetProcAddress("glStencilStrokePathInstancedNV");
+	if(!glStencilStrokePathInstancedNV) bIsLoaded = 0;
+	glPathCoverDepthFuncNV = (PFNGLPATHCOVERDEPTHFUNCNVPROC)gleIntGetProcAddress("glPathCoverDepthFuncNV");
+	if(!glPathCoverDepthFuncNV) bIsLoaded = 0;
+	glPathColorGenNV = (PFNGLPATHCOLORGENNVPROC)gleIntGetProcAddress("glPathColorGenNV");
+	if(!glPathColorGenNV) bIsLoaded = 0;
+	glPathTexGenNV = (PFNGLPATHTEXGENNVPROC)gleIntGetProcAddress("glPathTexGenNV");
+	if(!glPathTexGenNV) bIsLoaded = 0;
+	glPathFogGenNV = (PFNGLPATHFOGGENNVPROC)gleIntGetProcAddress("glPathFogGenNV");
+	if(!glPathFogGenNV) bIsLoaded = 0;
+	glCoverFillPathNV = (PFNGLCOVERFILLPATHNVPROC)gleIntGetProcAddress("glCoverFillPathNV");
+	if(!glCoverFillPathNV) bIsLoaded = 0;
+	glCoverStrokePathNV = (PFNGLCOVERSTROKEPATHNVPROC)gleIntGetProcAddress("glCoverStrokePathNV");
+	if(!glCoverStrokePathNV) bIsLoaded = 0;
+	glCoverFillPathInstancedNV = (PFNGLCOVERFILLPATHINSTANCEDNVPROC)gleIntGetProcAddress("glCoverFillPathInstancedNV");
+	if(!glCoverFillPathInstancedNV) bIsLoaded = 0;
+	glCoverStrokePathInstancedNV = (PFNGLCOVERSTROKEPATHINSTANCEDNVPROC)gleIntGetProcAddress("glCoverStrokePathInstancedNV");
+	if(!glCoverStrokePathInstancedNV) bIsLoaded = 0;
+	glGetPathParameterivNV = (PFNGLGETPATHPARAMETERIVNVPROC)gleIntGetProcAddress("glGetPathParameterivNV");
+	if(!glGetPathParameterivNV) bIsLoaded = 0;
+	glGetPathParameterfvNV = (PFNGLGETPATHPARAMETERFVNVPROC)gleIntGetProcAddress("glGetPathParameterfvNV");
+	if(!glGetPathParameterfvNV) bIsLoaded = 0;
+	glGetPathCommandsNV = (PFNGLGETPATHCOMMANDSNVPROC)gleIntGetProcAddress("glGetPathCommandsNV");
+	if(!glGetPathCommandsNV) bIsLoaded = 0;
+	glGetPathCoordsNV = (PFNGLGETPATHCOORDSNVPROC)gleIntGetProcAddress("glGetPathCoordsNV");
+	if(!glGetPathCoordsNV) bIsLoaded = 0;
+	glGetPathDashArrayNV = (PFNGLGETPATHDASHARRAYNVPROC)gleIntGetProcAddress("glGetPathDashArrayNV");
+	if(!glGetPathDashArrayNV) bIsLoaded = 0;
+	glGetPathMetricsNV = (PFNGLGETPATHMETRICSNVPROC)gleIntGetProcAddress("glGetPathMetricsNV");
+	if(!glGetPathMetricsNV) bIsLoaded = 0;
+	glGetPathMetricRangeNV = (PFNGLGETPATHMETRICRANGENVPROC)gleIntGetProcAddress("glGetPathMetricRangeNV");
+	if(!glGetPathMetricRangeNV) bIsLoaded = 0;
+	glGetPathSpacingNV = (PFNGLGETPATHSPACINGNVPROC)gleIntGetProcAddress("glGetPathSpacingNV");
+	if(!glGetPathSpacingNV) bIsLoaded = 0;
+	glGetPathColorGenivNV = (PFNGLGETPATHCOLORGENIVNVPROC)gleIntGetProcAddress("glGetPathColorGenivNV");
+	if(!glGetPathColorGenivNV) bIsLoaded = 0;
+	glGetPathColorGenfvNV = (PFNGLGETPATHCOLORGENFVNVPROC)gleIntGetProcAddress("glGetPathColorGenfvNV");
+	if(!glGetPathColorGenfvNV) bIsLoaded = 0;
+	glGetPathTexGenivNV = (PFNGLGETPATHTEXGENIVNVPROC)gleIntGetProcAddress("glGetPathTexGenivNV");
+	if(!glGetPathTexGenivNV) bIsLoaded = 0;
+	glGetPathTexGenfvNV = (PFNGLGETPATHTEXGENFVNVPROC)gleIntGetProcAddress("glGetPathTexGenfvNV");
+	if(!glGetPathTexGenfvNV) bIsLoaded = 0;
+	glIsPointInFillPathNV = (PFNGLISPOINTINFILLPATHNVPROC)gleIntGetProcAddress("glIsPointInFillPathNV");
+	if(!glIsPointInFillPathNV) bIsLoaded = 0;
+	glIsPointInStrokePathNV = (PFNGLISPOINTINSTROKEPATHNVPROC)gleIntGetProcAddress("glIsPointInStrokePathNV");
+	if(!glIsPointInStrokePathNV) bIsLoaded = 0;
+	glGetPathLengthNV = (PFNGLGETPATHLENGTHNVPROC)gleIntGetProcAddress("glGetPathLengthNV");
+	if(!glGetPathLengthNV) bIsLoaded = 0;
+	glPointAlongPathNV = (PFNGLPOINTALONGPATHNVPROC)gleIntGetProcAddress("glPointAlongPathNV");
+	if(!glPointAlongPathNV) bIsLoaded = 0;
+#endif /*GL_NV_path_rendering*/
+	return bIsLoaded;
+}
 #ifndef GL_NV_pixel_data_range
-typedef void (GLE_FUNCPTR * PFNGLPIXELDATARANGENVPROC)(GLenum , GLsizei , GLvoid *);
+typedef void (GLE_FUNCPTR * PFNGLPIXELDATARANGENVPROC)(GLenum , GLsizei , const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLFLUSHPIXELDATARANGENVPROC)(GLenum );
 
 PFNGLPIXELDATARANGENVPROC glPixelDataRangeNV;
@@ -8279,6 +9127,7 @@ static int gleIntLoad_NV_register_combiners2()
 #endif /*GL_NV_register_combiners2*/
 	return bIsLoaded;
 }
+
 #ifndef GL_NV_shader_buffer_load
 typedef void (GLE_FUNCPTR * PFNGLMAKEBUFFERRESIDENTNVPROC)(GLenum , GLenum );
 typedef void (GLE_FUNCPTR * PFNGLMAKEBUFFERNONRESIDENTNVPROC)(GLenum );
@@ -8410,7 +9259,7 @@ static int gleIntLoad_NV_texture_multisample()
 #ifndef GL_NV_transform_feedback
 typedef void (GLE_FUNCPTR * PFNGLBEGINTRANSFORMFEEDBACKNVPROC)(GLenum );
 typedef void (GLE_FUNCPTR * PFNGLENDTRANSFORMFEEDBACKNVPROC)();
-typedef void (GLE_FUNCPTR * PFNGLTRANSFORMFEEDBACKATTRIBSNVPROC)(GLuint , const GLint *, GLenum );
+typedef void (GLE_FUNCPTR * PFNGLTRANSFORMFEEDBACKATTRIBSNVPROC)(GLsizei , const GLint *, GLenum );
 typedef void (GLE_FUNCPTR * PFNGLBINDBUFFERRANGENVPROC)(GLenum , GLuint , GLuint , GLintptr , GLsizeiptr );
 typedef void (GLE_FUNCPTR * PFNGLBINDBUFFEROFFSETNVPROC)(GLenum , GLuint , GLuint , GLintptr );
 typedef void (GLE_FUNCPTR * PFNGLBINDBUFFERBASENVPROC)(GLenum , GLuint , GLuint );
@@ -8508,8 +9357,8 @@ static int gleIntLoad_NV_transform_feedback2()
 #ifndef GL_NV_vdpau_interop
 typedef void (GLE_FUNCPTR * PFNGLVDPAUINITNVPROC)(const GLvoid *, const GLvoid *);
 typedef void (GLE_FUNCPTR * PFNGLVDPAUFININVPROC)();
-typedef GLvdpauSurfaceNV (GLE_FUNCPTR * PFNGLVDPAUREGISTERVIDEOSURFACENVPROC)(GLvoid *, GLenum , GLsizei , const GLuint *);
-typedef GLvdpauSurfaceNV (GLE_FUNCPTR * PFNGLVDPAUREGISTEROUTPUTSURFACENVPROC)(GLvoid *, GLenum , GLsizei , const GLuint *);
+typedef GLvdpauSurfaceNV (GLE_FUNCPTR * PFNGLVDPAUREGISTERVIDEOSURFACENVPROC)(GLvoid* , GLenum , GLsizei , const GLuint *);
+typedef GLvdpauSurfaceNV (GLE_FUNCPTR * PFNGLVDPAUREGISTEROUTPUTSURFACENVPROC)(GLvoid* , GLenum , GLsizei , const GLuint *);
 typedef void (GLE_FUNCPTR * PFNGLVDPAUISSURFACENVPROC)(GLvdpauSurfaceNV );
 typedef void (GLE_FUNCPTR * PFNGLVDPAUUNREGISTERSURFACENVPROC)(GLvdpauSurfaceNV );
 typedef void (GLE_FUNCPTR * PFNGLVDPAUGETSURFACEIVNVPROC)(GLvdpauSurfaceNV , GLenum , GLsizei , GLsizei *, GLint *);
@@ -10051,12 +10900,17 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_AMD_multi_draw_indirect", &glext_AMD_multi_draw_indirect, gleIntLoad_AMD_multi_draw_indirect},
 	{"GL_AMD_name_gen_delete", &glext_AMD_name_gen_delete, gleIntLoad_AMD_name_gen_delete},
 	{"GL_AMD_performance_monitor", &glext_AMD_performance_monitor, gleIntLoad_AMD_performance_monitor},
+	{"GL_AMD_pinned_memory", &glext_AMD_pinned_memory, NULL},
+	{"GL_AMD_query_buffer_object", &glext_AMD_query_buffer_object, NULL},
 	{"GL_AMD_sample_positions", &glext_AMD_sample_positions, gleIntLoad_AMD_sample_positions},
 	{"GL_AMD_seamless_cubemap_per_texture", &glext_AMD_seamless_cubemap_per_texture, NULL},
 	{"GL_AMD_shader_stencil_export", &glext_AMD_shader_stencil_export, NULL},
+	{"GL_AMD_stencil_operation_extended", &glext_AMD_stencil_operation_extended, gleIntLoad_AMD_stencil_operation_extended},
 	{"GL_AMD_texture_texture4", &glext_AMD_texture_texture4, NULL},
 	{"GL_AMD_transform_feedback3_lines_triangles", &glext_AMD_transform_feedback3_lines_triangles, NULL},
-	{"GL_AMD_vertex_shader_tesselator", &glext_AMD_vertex_shader_tesselator, gleIntLoad_AMD_vertex_shader_tesselator},
+	{"GL_AMD_vertex_shader_layer", &glext_AMD_vertex_shader_layer, NULL},
+	{"GL_AMD_vertex_shader_tessellator", &glext_AMD_vertex_shader_tessellator, gleIntLoad_AMD_vertex_shader_tessellator},
+	{"GL_AMD_vertex_shader_viewport_index", &glext_AMD_vertex_shader_viewport_index, NULL},
 	{"GL_APPLE_aux_depth_stencil", &glext_APPLE_aux_depth_stencil, NULL},
 	{"GL_APPLE_client_storage", &glext_APPLE_client_storage, NULL},
 	{"GL_APPLE_element_array", &glext_APPLE_element_array, gleIntLoad_APPLE_element_array},
@@ -10074,14 +10928,19 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_APPLE_vertex_program_evaluators", &glext_APPLE_vertex_program_evaluators, gleIntLoad_APPLE_vertex_program_evaluators},
 	{"GL_APPLE_ycbcr_422", &glext_APPLE_ycbcr_422, NULL},
 	{"GL_ARB_ES2_compatibility", &glext_ARB_ES2_compatibility, gleIntLoad_ARB_ES2_compatibility},
+	{"GL_ARB_ES3_compatibility", &glext_ARB_ES3_compatibility, NULL},
+	{"GL_ARB_arrays_of_arrays", &glext_ARB_arrays_of_arrays, NULL},
 	{"GL_ARB_base_instance", &glext_ARB_base_instance, gleIntLoad_ARB_base_instance},
 	{"GL_ARB_blend_func_extended", &glext_ARB_blend_func_extended, gleIntLoad_ARB_blend_func_extended},
 	{"GL_ARB_cl_event", &glext_ARB_cl_event, gleIntLoad_ARB_cl_event},
+	{"GL_ARB_clear_buffer_object", &glext_ARB_clear_buffer_object, gleIntLoad_ARB_clear_buffer_object},
 	{"GL_ARB_color_buffer_float", &glext_ARB_color_buffer_float, gleIntLoad_ARB_color_buffer_float},
 	{"GL_ARB_compatibility", &glext_ARB_compatibility, NULL},
 	{"GL_ARB_compressed_texture_pixel_storage", &glext_ARB_compressed_texture_pixel_storage, NULL},
+	{"GL_ARB_compute_shader", &glext_ARB_compute_shader, gleIntLoad_ARB_compute_shader},
 	{"GL_ARB_conservative_depth", &glext_ARB_conservative_depth, NULL},
 	{"GL_ARB_copy_buffer", &glext_ARB_copy_buffer, gleIntLoad_ARB_copy_buffer},
+	{"GL_ARB_copy_image", &glext_ARB_copy_image, gleIntLoad_ARB_copy_image},
 	{"GL_ARB_debug_output", &glext_ARB_debug_output, gleIntLoad_ARB_debug_output},
 	{"GL_ARB_depth_buffer_float", &glext_ARB_depth_buffer_float, NULL},
 	{"GL_ARB_depth_clamp", &glext_ARB_depth_clamp, NULL},
@@ -10092,10 +10951,13 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_ARB_draw_indirect", &glext_ARB_draw_indirect, gleIntLoad_ARB_draw_indirect},
 	{"GL_ARB_draw_instanced", &glext_ARB_draw_instanced, gleIntLoad_ARB_draw_instanced},
 	{"GL_ARB_explicit_attrib_location", &glext_ARB_explicit_attrib_location, NULL},
+	{"GL_ARB_explicit_uniform_location", &glext_ARB_explicit_uniform_location, NULL},
 	{"GL_ARB_fragment_coord_conventions", &glext_ARB_fragment_coord_conventions, NULL},
+	{"GL_ARB_fragment_layer_viewport", &glext_ARB_fragment_layer_viewport, NULL},
 	{"GL_ARB_fragment_program", &glext_ARB_fragment_program, NULL},
 	{"GL_ARB_fragment_program_shadow", &glext_ARB_fragment_program_shadow, NULL},
 	{"GL_ARB_fragment_shader", &glext_ARB_fragment_shader, NULL},
+	{"GL_ARB_framebuffer_no_attachments", &glext_ARB_framebuffer_no_attachments, gleIntLoad_ARB_framebuffer_no_attachments},
 	{"GL_ARB_framebuffer_object", &glext_ARB_framebuffer_object, gleIntLoad_ARB_framebuffer_object},
 	{"GL_ARB_framebuffer_sRGB", &glext_ARB_framebuffer_sRGB, NULL},
 	{"GL_ARB_geometry_shader4", &glext_ARB_geometry_shader4, gleIntLoad_ARB_geometry_shader4},
@@ -10107,9 +10969,12 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_ARB_imaging", &glext_ARB_imaging, NULL},
 	{"GL_ARB_instanced_arrays", &glext_ARB_instanced_arrays, gleIntLoad_ARB_instanced_arrays},
 	{"GL_ARB_internalformat_query", &glext_ARB_internalformat_query, gleIntLoad_ARB_internalformat_query},
+	{"GL_ARB_internalformat_query2", &glext_ARB_internalformat_query2, gleIntLoad_ARB_internalformat_query2},
+	{"GL_ARB_invalidate_subdata", &glext_ARB_invalidate_subdata, gleIntLoad_ARB_invalidate_subdata},
 	{"GL_ARB_map_buffer_alignment", &glext_ARB_map_buffer_alignment, NULL},
 	{"GL_ARB_map_buffer_range", &glext_ARB_map_buffer_range, gleIntLoad_ARB_map_buffer_range},
 	{"GL_ARB_matrix_palette", &glext_ARB_matrix_palette, gleIntLoad_ARB_matrix_palette},
+	{"GL_ARB_multi_draw_indirect", &glext_ARB_multi_draw_indirect, gleIntLoad_ARB_multi_draw_indirect},
 	{"GL_ARB_multisample", &glext_ARB_multisample, gleIntLoad_ARB_multisample},
 	{"GL_ARB_multitexture", &glext_ARB_multitexture, gleIntLoad_ARB_multitexture},
 	{"GL_ARB_occlusion_query", &glext_ARB_occlusion_query, gleIntLoad_ARB_occlusion_query},
@@ -10117,8 +10982,11 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_ARB_pixel_buffer_object", &glext_ARB_pixel_buffer_object, NULL},
 	{"GL_ARB_point_parameters", &glext_ARB_point_parameters, gleIntLoad_ARB_point_parameters},
 	{"GL_ARB_point_sprite", &glext_ARB_point_sprite, NULL},
+	{"GL_ARB_program_interface_query", &glext_ARB_program_interface_query, gleIntLoad_ARB_program_interface_query},
 	{"GL_ARB_provoking_vertex", &glext_ARB_provoking_vertex, gleIntLoad_ARB_provoking_vertex},
+	{"GL_ARB_robust_buffer_access_behavior", &glext_ARB_robust_buffer_access_behavior, NULL},
 	{"GL_ARB_robustness", &glext_ARB_robustness, gleIntLoad_ARB_robustness},
+	{"GL_ARB_robustness_isolation", &glext_ARB_robustness_isolation, NULL},
 	{"GL_ARB_sample_shading", &glext_ARB_sample_shading, gleIntLoad_ARB_sample_shading},
 	{"GL_ARB_sampler_objects", &glext_ARB_sampler_objects, gleIntLoad_ARB_sampler_objects},
 	{"GL_ARB_seamless_cube_map", &glext_ARB_seamless_cube_map, NULL},
@@ -10126,9 +10994,11 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_ARB_shader_atomic_counters", &glext_ARB_shader_atomic_counters, gleIntLoad_ARB_shader_atomic_counters},
 	{"GL_ARB_shader_bit_encoding", &glext_ARB_shader_bit_encoding, NULL},
 	{"GL_ARB_shader_image_load_store", &glext_ARB_shader_image_load_store, gleIntLoad_ARB_shader_image_load_store},
+	{"GL_ARB_shader_image_size", &glext_ARB_shader_image_size, NULL},
 	{"GL_ARB_shader_objects", &glext_ARB_shader_objects, gleIntLoad_ARB_shader_objects},
 	{"GL_ARB_shader_precision", &glext_ARB_shader_precision, NULL},
 	{"GL_ARB_shader_stencil_export", &glext_ARB_shader_stencil_export, NULL},
+	{"GL_ARB_shader_storage_buffer_object", &glext_ARB_shader_storage_buffer_object, gleIntLoad_ARB_shader_storage_buffer_object},
 	{"GL_ARB_shader_subroutine", &glext_ARB_shader_subroutine, gleIntLoad_ARB_shader_subroutine},
 	{"GL_ARB_shader_texture_lod", &glext_ARB_shader_texture_lod, NULL},
 	{"GL_ARB_shading_language_100", &glext_ARB_shading_language_100, NULL},
@@ -10137,11 +11007,13 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_ARB_shading_language_packing", &glext_ARB_shading_language_packing, NULL},
 	{"GL_ARB_shadow", &glext_ARB_shadow, NULL},
 	{"GL_ARB_shadow_ambient", &glext_ARB_shadow_ambient, NULL},
+	{"GL_ARB_stencil_texturing", &glext_ARB_stencil_texturing, NULL},
 	{"GL_ARB_sync", &glext_ARB_sync, gleIntLoad_ARB_sync},
 	{"GL_ARB_tessellation_shader", &glext_ARB_tessellation_shader, gleIntLoad_ARB_tessellation_shader},
 	{"GL_ARB_texture_border_clamp", &glext_ARB_texture_border_clamp, NULL},
 	{"GL_ARB_texture_buffer_object", &glext_ARB_texture_buffer_object, gleIntLoad_ARB_texture_buffer_object},
 	{"GL_ARB_texture_buffer_object_rgb32", &glext_ARB_texture_buffer_object_rgb32, NULL},
+	{"GL_ARB_texture_buffer_range", &glext_ARB_texture_buffer_range, gleIntLoad_ARB_texture_buffer_range},
 	{"GL_ARB_texture_compression", &glext_ARB_texture_compression, gleIntLoad_ARB_texture_compression},
 	{"GL_ARB_texture_compression_bptc", &glext_ARB_texture_compression_bptc, NULL},
 	{"GL_ARB_texture_compression_rgtc", &glext_ARB_texture_compression_rgtc, NULL},
@@ -10156,12 +11028,15 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_ARB_texture_mirrored_repeat", &glext_ARB_texture_mirrored_repeat, NULL},
 	{"GL_ARB_texture_multisample", &glext_ARB_texture_multisample, gleIntLoad_ARB_texture_multisample},
 	{"GL_ARB_texture_non_power_of_two", &glext_ARB_texture_non_power_of_two, NULL},
+	{"GL_ARB_texture_query_levels", &glext_ARB_texture_query_levels, NULL},
 	{"GL_ARB_texture_query_lod", &glext_ARB_texture_query_lod, NULL},
 	{"GL_ARB_texture_rectangle", &glext_ARB_texture_rectangle, NULL},
 	{"GL_ARB_texture_rg", &glext_ARB_texture_rg, NULL},
 	{"GL_ARB_texture_rgb10_a2ui", &glext_ARB_texture_rgb10_a2ui, NULL},
 	{"GL_ARB_texture_storage", &glext_ARB_texture_storage, gleIntLoad_ARB_texture_storage},
+	{"GL_ARB_texture_storage_multisample", &glext_ARB_texture_storage_multisample, gleIntLoad_ARB_texture_storage_multisample},
 	{"GL_ARB_texture_swizzle", &glext_ARB_texture_swizzle, NULL},
+	{"GL_ARB_texture_view", &glext_ARB_texture_view, gleIntLoad_ARB_texture_view},
 	{"GL_ARB_timer_query", &glext_ARB_timer_query, gleIntLoad_ARB_timer_query},
 	{"GL_ARB_transform_feedback2", &glext_ARB_transform_feedback2, gleIntLoad_ARB_transform_feedback2},
 	{"GL_ARB_transform_feedback3", &glext_ARB_transform_feedback3, gleIntLoad_ARB_transform_feedback3},
@@ -10171,6 +11046,7 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_ARB_vertex_array_bgra", &glext_ARB_vertex_array_bgra, NULL},
 	{"GL_ARB_vertex_array_object", &glext_ARB_vertex_array_object, gleIntLoad_ARB_vertex_array_object},
 	{"GL_ARB_vertex_attrib_64bit", &glext_ARB_vertex_attrib_64bit, gleIntLoad_ARB_vertex_attrib_64bit},
+	{"GL_ARB_vertex_attrib_binding", &glext_ARB_vertex_attrib_binding, gleIntLoad_ARB_vertex_attrib_binding},
 	{"GL_ARB_vertex_blend", &glext_ARB_vertex_blend, gleIntLoad_ARB_vertex_blend},
 	{"GL_ARB_vertex_buffer_object", &glext_ARB_vertex_buffer_object, gleIntLoad_ARB_vertex_buffer_object},
 	{"GL_ARB_vertex_program", &glext_ARB_vertex_program, gleIntLoad_ARB_vertex_program},
@@ -10303,11 +11179,14 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_INGR_palette_buffer", &glext_INGR_palette_buffer, NULL},
 	{"GL_INTEL_parallel_arrays", &glext_INTEL_parallel_arrays, gleIntLoad_INTEL_parallel_arrays},
 	{"GL_INTEL_texture_scissor", &glext_INTEL_texture_scissor, NULL},
+	{"GL_KHR_debug", &glext_KHR_debug, gleIntLoad_KHR_debug},
+	{"GL_KHR_texture_compression_astc_ldr", &glext_KHR_texture_compression_astc_ldr, NULL},
 	{"GL_MESAX_texture_stack", &glext_MESAX_texture_stack, NULL},
 	{"GL_MESA_pack_invert", &glext_MESA_pack_invert, NULL},
 	{"GL_MESA_resize_buffers", &glext_MESA_resize_buffers, gleIntLoad_MESA_resize_buffers},
 	{"GL_MESA_window_pos", &glext_MESA_window_pos, gleIntLoad_MESA_window_pos},
 	{"GL_MESA_ycbcr_texture", &glext_MESA_ycbcr_texture, NULL},
+	{"GL_NV_bindless_texture", &glext_NV_bindless_texture, gleIntLoad_NV_bindless_texture},
 	{"GL_NV_blend_square", &glext_NV_blend_square, NULL},
 	{"GL_NV_conditional_render", &glext_NV_conditional_render, gleIntLoad_NV_conditional_render},
 	{"GL_NV_copy_depth_to_color", &glext_NV_copy_depth_to_color, NULL},
@@ -10337,12 +11216,14 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_NV_packed_depth_stencil", &glext_NV_packed_depth_stencil, NULL},
 	{"GL_NV_parameter_buffer_object", &glext_NV_parameter_buffer_object, gleIntLoad_NV_parameter_buffer_object},
 	{"GL_NV_parameter_buffer_object2", &glext_NV_parameter_buffer_object2, NULL},
+	{"GL_NV_path_rendering", &glext_NV_path_rendering, gleIntLoad_NV_path_rendering},
 	{"GL_NV_pixel_data_range", &glext_NV_pixel_data_range, gleIntLoad_NV_pixel_data_range},
 	{"GL_NV_point_sprite", &glext_NV_point_sprite, gleIntLoad_NV_point_sprite},
 	{"GL_NV_present_video", &glext_NV_present_video, gleIntLoad_NV_present_video},
 	{"GL_NV_primitive_restart", &glext_NV_primitive_restart, gleIntLoad_NV_primitive_restart},
 	{"GL_NV_register_combiners", &glext_NV_register_combiners, gleIntLoad_NV_register_combiners},
 	{"GL_NV_register_combiners2", &glext_NV_register_combiners2, gleIntLoad_NV_register_combiners2},
+	{"GL_NV_shader_atomic_float", &glext_NV_shader_atomic_float, NULL},
 	{"GL_NV_shader_buffer_load", &glext_NV_shader_buffer_load, gleIntLoad_NV_shader_buffer_load},
 	{"GL_NV_shader_buffer_store", &glext_NV_shader_buffer_store, NULL},
 	{"GL_NV_tessellation_program5", &glext_NV_tessellation_program5, NULL},
@@ -10447,7 +11328,7 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_WIN_specular_fog", &glext_WIN_specular_fog, NULL},
 };
 
-int gleIntExtensionMapSize = 405;
+int gleIntExtensionMapSize = 437;
 
 typedef void (GLE_FUNCPTR * PFNGLCULLFACEPROC)(GLenum );
 PFNGLCULLFACEPROC __gleCullFace;
@@ -10479,11 +11360,11 @@ typedef void (GLE_FUNCPTR * PFNGLDRAWBUFFERPROC)(GLenum );
 PFNGLDRAWBUFFERPROC __gleDrawBuffer;
 typedef void (GLE_FUNCPTR * PFNGLCLEARPROC)(GLbitfield );
 PFNGLCLEARPROC __gleClear;
-typedef void (GLE_FUNCPTR * PFNGLCLEARCOLORPROC)(GLclampf , GLclampf , GLclampf , GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLCLEARCOLORPROC)(GLfloat , GLfloat , GLfloat , GLfloat );
 PFNGLCLEARCOLORPROC __gleClearColor;
 typedef void (GLE_FUNCPTR * PFNGLCLEARSTENCILPROC)(GLint );
 PFNGLCLEARSTENCILPROC __gleClearStencil;
-typedef void (GLE_FUNCPTR * PFNGLCLEARDEPTHPROC)(GLclampd );
+typedef void (GLE_FUNCPTR * PFNGLCLEARDEPTHPROC)(GLdouble );
 PFNGLCLEARDEPTHPROC __gleClearDepth;
 typedef void (GLE_FUNCPTR * PFNGLSTENCILMASKPROC)(GLuint );
 PFNGLSTENCILMASKPROC __gleStencilMask;
@@ -10541,7 +11422,7 @@ typedef void (GLE_FUNCPTR * PFNGLGETTEXLEVELPARAMETERIVPROC)(GLenum , GLint , GL
 PFNGLGETTEXLEVELPARAMETERIVPROC __gleGetTexLevelParameteriv;
 typedef GLboolean (GLE_FUNCPTR * PFNGLISENABLEDPROC)(GLenum );
 PFNGLISENABLEDPROC __gleIsEnabled;
-typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEPROC)(GLclampd , GLclampd );
+typedef void (GLE_FUNCPTR * PFNGLDEPTHRANGEPROC)(GLdouble , GLdouble );
 PFNGLDEPTHRANGEPROC __gleDepthRange;
 typedef void (GLE_FUNCPTR * PFNGLVIEWPORTPROC)(GLint , GLint , GLsizei , GLsizei );
 PFNGLVIEWPORTPROC __gleViewport;
@@ -10975,7 +11856,7 @@ typedef void (GLE_FUNCPTR * PFNGLEVALMESH2PROC)(GLenum , GLint , GLint , GLint ,
 PFNGLEVALMESH2PROC __gleEvalMesh2;
 typedef void (GLE_FUNCPTR * PFNGLEVALPOINT2PROC)(GLint , GLint );
 PFNGLEVALPOINT2PROC __gleEvalPoint2;
-typedef void (GLE_FUNCPTR * PFNGLALPHAFUNCPROC)(GLenum , GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLALPHAFUNCPROC)(GLenum , GLfloat );
 PFNGLALPHAFUNCPROC __gleAlphaFunc;
 typedef void (GLE_FUNCPTR * PFNGLPIXELZOOMPROC)(GLfloat , GLfloat );
 PFNGLPIXELZOOMPROC __glePixelZoom;
@@ -10983,11 +11864,11 @@ typedef void (GLE_FUNCPTR * PFNGLPIXELTRANSFERFPROC)(GLenum , GLfloat );
 PFNGLPIXELTRANSFERFPROC __glePixelTransferf;
 typedef void (GLE_FUNCPTR * PFNGLPIXELTRANSFERIPROC)(GLenum , GLint );
 PFNGLPIXELTRANSFERIPROC __glePixelTransferi;
-typedef void (GLE_FUNCPTR * PFNGLPIXELMAPFVPROC)(GLenum , GLint , const GLfloat *);
+typedef void (GLE_FUNCPTR * PFNGLPIXELMAPFVPROC)(GLenum , GLsizei , const GLfloat *);
 PFNGLPIXELMAPFVPROC __glePixelMapfv;
-typedef void (GLE_FUNCPTR * PFNGLPIXELMAPUIVPROC)(GLenum , GLint , const GLuint *);
+typedef void (GLE_FUNCPTR * PFNGLPIXELMAPUIVPROC)(GLenum , GLsizei , const GLuint *);
 PFNGLPIXELMAPUIVPROC __glePixelMapuiv;
-typedef void (GLE_FUNCPTR * PFNGLPIXELMAPUSVPROC)(GLenum , GLint , const GLushort *);
+typedef void (GLE_FUNCPTR * PFNGLPIXELMAPUSVPROC)(GLenum , GLsizei , const GLushort *);
 PFNGLPIXELMAPUSVPROC __glePixelMapusv;
 typedef void (GLE_FUNCPTR * PFNGLCOPYPIXELSPROC)(GLint , GLint , GLsizei , GLsizei , GLenum );
 PFNGLCOPYPIXELSPROC __gleCopyPixels;
@@ -11111,7 +11992,7 @@ typedef void (GLE_FUNCPTR * PFNGLVERTEXPOINTERPROC)(GLint , GLenum , GLsizei , c
 PFNGLVERTEXPOINTERPROC __gleVertexPointer;
 typedef GLboolean (GLE_FUNCPTR * PFNGLARETEXTURESRESIDENTPROC)(GLsizei , const GLuint *, GLboolean *);
 PFNGLARETEXTURESRESIDENTPROC __gleAreTexturesResident;
-typedef void (GLE_FUNCPTR * PFNGLPRIORITIZETEXTURESPROC)(GLsizei , const GLuint *, const GLclampf *);
+typedef void (GLE_FUNCPTR * PFNGLPRIORITIZETEXTURESPROC)(GLsizei , const GLuint *, const GLfloat *);
 PFNGLPRIORITIZETEXTURESPROC __glePrioritizeTextures;
 typedef void (GLE_FUNCPTR * PFNGLINDEXUBPROC)(GLubyte );
 PFNGLINDEXUBPROC __gleIndexub;
@@ -11121,7 +12002,7 @@ typedef void (GLE_FUNCPTR * PFNGLPOPCLIENTATTRIBPROC)();
 PFNGLPOPCLIENTATTRIBPROC __glePopClientAttrib;
 typedef void (GLE_FUNCPTR * PFNGLPUSHCLIENTATTRIBPROC)(GLbitfield );
 PFNGLPUSHCLIENTATTRIBPROC __glePushClientAttrib;
-typedef void (GLE_FUNCPTR * PFNGLBLENDCOLORPROC)(GLclampf , GLclampf , GLclampf , GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLBLENDCOLORPROC)(GLfloat , GLfloat , GLfloat , GLfloat );
 PFNGLBLENDCOLORPROC __gleBlendColor;
 typedef void (GLE_FUNCPTR * PFNGLBLENDEQUATIONPROC)(GLenum );
 PFNGLBLENDEQUATIONPROC __gleBlendEquation;
@@ -11199,7 +12080,7 @@ typedef void (GLE_FUNCPTR * PFNGLRESETMINMAXPROC)(GLenum );
 PFNGLRESETMINMAXPROC __gleResetMinmax;
 typedef void (GLE_FUNCPTR * PFNGLACTIVETEXTUREPROC)(GLenum );
 PFNGLACTIVETEXTUREPROC __gleActiveTexture;
-typedef void (GLE_FUNCPTR * PFNGLSAMPLECOVERAGEPROC)(GLclampf , GLboolean );
+typedef void (GLE_FUNCPTR * PFNGLSAMPLECOVERAGEPROC)(GLfloat , GLboolean );
 PFNGLSAMPLECOVERAGEPROC __gleSampleCoverage;
 typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXIMAGE3DPROC)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
 PFNGLCOMPRESSEDTEXIMAGE3DPROC __gleCompressedTexImage3D;
@@ -11293,7 +12174,7 @@ typedef void (GLE_FUNCPTR * PFNGLBLENDFUNCSEPARATEPROC)(GLenum , GLenum , GLenum
 PFNGLBLENDFUNCSEPARATEPROC __gleBlendFuncSeparate;
 typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWARRAYSPROC)(GLenum , const GLint *, const GLsizei *, GLsizei );
 PFNGLMULTIDRAWARRAYSPROC __gleMultiDrawArrays;
-typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWELEMENTSPROC)(GLenum , const GLsizei *, GLenum , const GLvoid* *, GLsizei );
+typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWELEMENTSPROC)(GLenum , const GLsizei *, GLenum , const GLvoid* const *, GLsizei );
 PFNGLMULTIDRAWELEMENTSPROC __gleMultiDrawElements;
 typedef void (GLE_FUNCPTR * PFNGLPOINTPARAMETERFPROC)(GLenum , GLfloat );
 PFNGLPOINTPARAMETERFPROC __glePointParameterf;
@@ -11485,7 +12366,7 @@ typedef GLboolean (GLE_FUNCPTR * PFNGLISSHADERPROC)(GLuint );
 PFNGLISSHADERPROC __gleIsShader;
 typedef void (GLE_FUNCPTR * PFNGLLINKPROGRAMPROC)(GLuint );
 PFNGLLINKPROGRAMPROC __gleLinkProgram;
-typedef void (GLE_FUNCPTR * PFNGLSHADERSOURCEPROC)(GLuint , GLsizei , const GLchar* *, const GLint *);
+typedef void (GLE_FUNCPTR * PFNGLSHADERSOURCEPROC)(GLuint , GLsizei , const GLchar* const *, const GLint *);
 PFNGLSHADERSOURCEPROC __gleShaderSource;
 typedef void (GLE_FUNCPTR * PFNGLUSEPROGRAMPROC)(GLuint );
 PFNGLUSEPROGRAMPROC __gleUseProgram;
@@ -11635,7 +12516,7 @@ typedef void (GLE_FUNCPTR * PFNGLBINDBUFFERRANGEPROC)(GLenum , GLuint , GLuint ,
 PFNGLBINDBUFFERRANGEPROC __gleBindBufferRange;
 typedef void (GLE_FUNCPTR * PFNGLBINDBUFFERBASEPROC)(GLenum , GLuint , GLuint );
 PFNGLBINDBUFFERBASEPROC __gleBindBufferBase;
-typedef void (GLE_FUNCPTR * PFNGLTRANSFORMFEEDBACKVARYINGSPROC)(GLuint , GLsizei , const GLchar* *, GLenum );
+typedef void (GLE_FUNCPTR * PFNGLTRANSFORMFEEDBACKVARYINGSPROC)(GLuint , GLsizei , const GLchar* const *, GLenum );
 PFNGLTRANSFORMFEEDBACKVARYINGSPROC __gleTransformFeedbackVaryings;
 typedef void (GLE_FUNCPTR * PFNGLGETTRANSFORMFEEDBACKVARYINGPROC)(GLuint , GLuint , GLsizei , GLsizei *, GLsizei *, GLenum *, GLchar *);
 PFNGLGETTRANSFORMFEEDBACKVARYINGPROC __gleGetTransformFeedbackVarying;
@@ -11747,7 +12628,7 @@ typedef void (GLE_FUNCPTR * PFNGLFRAMEBUFFERTEXTUREPROC)(GLenum , GLenum , GLuin
 PFNGLFRAMEBUFFERTEXTUREPROC __gleFramebufferTexture;
 typedef void (GLE_FUNCPTR * PFNGLVERTEXATTRIBDIVISORPROC)(GLuint , GLuint );
 PFNGLVERTEXATTRIBDIVISORPROC __gleVertexAttribDivisor;
-typedef void (GLE_FUNCPTR * PFNGLMINSAMPLESHADINGPROC)(GLclampf );
+typedef void (GLE_FUNCPTR * PFNGLMINSAMPLESHADINGPROC)(GLfloat );
 PFNGLMINSAMPLESHADINGPROC __gleMinSampleShading;
 typedef void (GLE_FUNCPTR * PFNGLBLENDEQUATIONIPROC)(GLuint , GLenum );
 PFNGLBLENDEQUATIONIPROC __gleBlendEquationi;
@@ -11901,8 +12782,6 @@ static int gleIntLoadCore_1_2_Version_3_1()
 	if(!__gleBlendEquation) bIsLoaded = 0;
 	__gleDrawRangeElements = (PFNGLDRAWRANGEELEMENTSPROC)gleIntGetProcAddress("glDrawRangeElements");
 	if(!__gleDrawRangeElements) bIsLoaded = 0;
-	__gleTexImage3D = (PFNGLTEXIMAGE3DPROC)gleIntGetProcAddress("glTexImage3D");
-	if(!__gleTexImage3D) bIsLoaded = 0;
 	__gleTexSubImage3D = (PFNGLTEXSUBIMAGE3DPROC)gleIntGetProcAddress("glTexSubImage3D");
 	if(!__gleTexSubImage3D) bIsLoaded = 0;
 	__gleCopyTexSubImage3D = (PFNGLCOPYTEXSUBIMAGE3DPROC)gleIntGetProcAddress("glCopyTexSubImage3D");
@@ -12866,6 +13745,8 @@ static int gleIntLoadCore_1_1_Base()
 static int gleIntLoadCore_1_2_Base()
 {
 	int bIsLoaded = gleIntLoadCore_1_2_Version_3_1();
+	__gleTexImage3D = (PFNGLTEXIMAGE3DPROC)gleIntGetProcAddress("glTexImage3D");
+	if(!__gleTexImage3D) bIsLoaded = 0;
 	__gleColorTable = (PFNGLCOLORTABLEPROC)gleIntGetProcAddress("glColorTable");
 	if(!__gleColorTable) bIsLoaded = 0;
 	__gleColorTableParameterfv = (PFNGLCOLORTABLEPARAMETERFVPROC)gleIntGetProcAddress("glColorTableParameterfv");
@@ -13276,6 +14157,11 @@ static int gleIntLoadCore_3_3_Base()
 	int bIsLoaded = 1;
 	__gleVertexAttribDivisor = (PFNGLVERTEXATTRIBDIVISORPROC)gleIntGetProcAddress("glVertexAttribDivisor");
 	if(!__gleVertexAttribDivisor) bIsLoaded = 0;
+	__gleBindFragDataLocationIndexed = (PFNGLBINDFRAGDATALOCATIONINDEXEDPROC)gleIntGetProcAddress("glBindFragDataLocationIndexed");
+	if(!__gleBindFragDataLocationIndexed) bIsLoaded = 0;
+	__gleGetFragDataIndex = (PFNGLGETFRAGDATAINDEXPROC)gleIntGetProcAddress("glGetFragDataIndex");
+	if(!__gleGetFragDataIndex) bIsLoaded = 0;
+	glext_ARB_blend_func_extended = 1;
 	__gleQueryCounter = (PFNGLQUERYCOUNTERPROC)gleIntGetProcAddress("glQueryCounter");
 	if(!__gleQueryCounter) bIsLoaded = 0;
 	__gleGetQueryObjecti64v = (PFNGLGETQUERYOBJECTI64VPROC)gleIntGetProcAddress("glGetQueryObjecti64v");
@@ -13389,11 +14275,6 @@ static int gleIntLoadCore_3_3_Base()
 	__gleGetSamplerParameterIuiv = (PFNGLGETSAMPLERPARAMETERIUIVPROC)gleIntGetProcAddress("glGetSamplerParameterIuiv");
 	if(!__gleGetSamplerParameterIuiv) bIsLoaded = 0;
 	glext_ARB_sampler_objects = 1;
-	__gleBindFragDataLocationIndexed = (PFNGLBINDFRAGDATALOCATIONINDEXEDPROC)gleIntGetProcAddress("glBindFragDataLocationIndexed");
-	if(!__gleBindFragDataLocationIndexed) bIsLoaded = 0;
-	__gleGetFragDataIndex = (PFNGLGETFRAGDATAINDEXPROC)gleIntGetProcAddress("glGetFragDataIndex");
-	if(!__gleGetFragDataIndex) bIsLoaded = 0;
-	glext_ARB_blend_func_extended = 1;
 	return bIsLoaded;
 }
 
@@ -13425,6 +14306,16 @@ static int gleIntLoadCore_4_0_Base()
 	__gleDrawTransformFeedback = (PFNGLDRAWTRANSFORMFEEDBACKPROC)gleIntGetProcAddress("glDrawTransformFeedback");
 	if(!__gleDrawTransformFeedback) bIsLoaded = 0;
 	glext_ARB_transform_feedback2 = 1;
+	__glePatchParameteri = (PFNGLPATCHPARAMETERIPROC)gleIntGetProcAddress("glPatchParameteri");
+	if(!__glePatchParameteri) bIsLoaded = 0;
+	__glePatchParameterfv = (PFNGLPATCHPARAMETERFVPROC)gleIntGetProcAddress("glPatchParameterfv");
+	if(!__glePatchParameterfv) bIsLoaded = 0;
+	glext_ARB_tessellation_shader = 1;
+	__gleDrawArraysIndirect = (PFNGLDRAWARRAYSINDIRECTPROC)gleIntGetProcAddress("glDrawArraysIndirect");
+	if(!__gleDrawArraysIndirect) bIsLoaded = 0;
+	__gleDrawElementsIndirect = (PFNGLDRAWELEMENTSINDIRECTPROC)gleIntGetProcAddress("glDrawElementsIndirect");
+	if(!__gleDrawElementsIndirect) bIsLoaded = 0;
+	glext_ARB_draw_indirect = 1;
 	__gleDrawTransformFeedbackStream = (PFNGLDRAWTRANSFORMFEEDBACKSTREAMPROC)gleIntGetProcAddress("glDrawTransformFeedbackStream");
 	if(!__gleDrawTransformFeedbackStream) bIsLoaded = 0;
 	__gleBeginQueryIndexed = (PFNGLBEGINQUERYINDEXEDPROC)gleIntGetProcAddress("glBeginQueryIndexed");
@@ -13434,11 +14325,6 @@ static int gleIntLoadCore_4_0_Base()
 	__gleGetQueryIndexediv = (PFNGLGETQUERYINDEXEDIVPROC)gleIntGetProcAddress("glGetQueryIndexediv");
 	if(!__gleGetQueryIndexediv) bIsLoaded = 0;
 	glext_ARB_transform_feedback3 = 1;
-	__glePatchParameteri = (PFNGLPATCHPARAMETERIPROC)gleIntGetProcAddress("glPatchParameteri");
-	if(!__glePatchParameteri) bIsLoaded = 0;
-	__glePatchParameterfv = (PFNGLPATCHPARAMETERFVPROC)gleIntGetProcAddress("glPatchParameterfv");
-	if(!__glePatchParameterfv) bIsLoaded = 0;
-	glext_ARB_tessellation_shader = 1;
 	__gleUniform1d = (PFNGLUNIFORM1DPROC)gleIntGetProcAddress("glUniform1d");
 	if(!__gleUniform1d) bIsLoaded = 0;
 	__gleUniform2d = (PFNGLUNIFORM2DPROC)gleIntGetProcAddress("glUniform2d");
@@ -13476,11 +14362,6 @@ static int gleIntLoadCore_4_0_Base()
 	__gleGetUniformdv = (PFNGLGETUNIFORMDVPROC)gleIntGetProcAddress("glGetUniformdv");
 	if(!__gleGetUniformdv) bIsLoaded = 0;
 	glext_ARB_gpu_shader_fp64 = 1;
-	__gleDrawArraysIndirect = (PFNGLDRAWARRAYSINDIRECTPROC)gleIntGetProcAddress("glDrawArraysIndirect");
-	if(!__gleDrawArraysIndirect) bIsLoaded = 0;
-	__gleDrawElementsIndirect = (PFNGLDRAWELEMENTSINDIRECTPROC)gleIntGetProcAddress("glDrawElementsIndirect");
-	if(!__gleDrawElementsIndirect) bIsLoaded = 0;
-	glext_ARB_draw_indirect = 1;
 	__gleGetSubroutineUniformLocation = (PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC)gleIntGetProcAddress("glGetSubroutineUniformLocation");
 	if(!__gleGetSubroutineUniformLocation) bIsLoaded = 0;
 	__gleGetSubroutineIndex = (PFNGLGETSUBROUTINEINDEXPROC)gleIntGetProcAddress("glGetSubroutineIndex");
@@ -13525,27 +14406,6 @@ static int gleIntLoadCore_4_1_Base()
 	__gleGetVertexAttribLdv = (PFNGLGETVERTEXATTRIBLDVPROC)gleIntGetProcAddress("glGetVertexAttribLdv");
 	if(!__gleGetVertexAttribLdv) bIsLoaded = 0;
 	glext_ARB_vertex_attrib_64bit = 1;
-	__gleViewportArrayv = (PFNGLVIEWPORTARRAYVPROC)gleIntGetProcAddress("glViewportArrayv");
-	if(!__gleViewportArrayv) bIsLoaded = 0;
-	__gleViewportIndexedf = (PFNGLVIEWPORTINDEXEDFPROC)gleIntGetProcAddress("glViewportIndexedf");
-	if(!__gleViewportIndexedf) bIsLoaded = 0;
-	__gleViewportIndexedfv = (PFNGLVIEWPORTINDEXEDFVPROC)gleIntGetProcAddress("glViewportIndexedfv");
-	if(!__gleViewportIndexedfv) bIsLoaded = 0;
-	__gleScissorArrayv = (PFNGLSCISSORARRAYVPROC)gleIntGetProcAddress("glScissorArrayv");
-	if(!__gleScissorArrayv) bIsLoaded = 0;
-	__gleScissorIndexed = (PFNGLSCISSORINDEXEDPROC)gleIntGetProcAddress("glScissorIndexed");
-	if(!__gleScissorIndexed) bIsLoaded = 0;
-	__gleScissorIndexedv = (PFNGLSCISSORINDEXEDVPROC)gleIntGetProcAddress("glScissorIndexedv");
-	if(!__gleScissorIndexedv) bIsLoaded = 0;
-	__gleDepthRangeArrayv = (PFNGLDEPTHRANGEARRAYVPROC)gleIntGetProcAddress("glDepthRangeArrayv");
-	if(!__gleDepthRangeArrayv) bIsLoaded = 0;
-	__gleDepthRangeIndexed = (PFNGLDEPTHRANGEINDEXEDPROC)gleIntGetProcAddress("glDepthRangeIndexed");
-	if(!__gleDepthRangeIndexed) bIsLoaded = 0;
-	__gleGetFloati_v = (PFNGLGETFLOATI_VPROC)gleIntGetProcAddress("glGetFloati_v");
-	if(!__gleGetFloati_v) bIsLoaded = 0;
-	__gleGetDoublei_v = (PFNGLGETDOUBLEI_VPROC)gleIntGetProcAddress("glGetDoublei_v");
-	if(!__gleGetDoublei_v) bIsLoaded = 0;
-	glext_ARB_viewport_array = 1;
 	__gleUseProgramStages = (PFNGLUSEPROGRAMSTAGESPROC)gleIntGetProcAddress("glUseProgramStages");
 	if(!__gleUseProgramStages) bIsLoaded = 0;
 	__gleActiveShaderProgram = (PFNGLACTIVESHADERPROGRAMPROC)gleIntGetProcAddress("glActiveShaderProgram");
@@ -13674,6 +14534,27 @@ static int gleIntLoadCore_4_1_Base()
 	__gleProgramParameteri = (PFNGLPROGRAMPARAMETERIPROC)gleIntGetProcAddress("glProgramParameteri");
 	if(!__gleProgramParameteri) bIsLoaded = 0;
 	glext_ARB_get_program_binary = 1;
+	__gleViewportArrayv = (PFNGLVIEWPORTARRAYVPROC)gleIntGetProcAddress("glViewportArrayv");
+	if(!__gleViewportArrayv) bIsLoaded = 0;
+	__gleViewportIndexedf = (PFNGLVIEWPORTINDEXEDFPROC)gleIntGetProcAddress("glViewportIndexedf");
+	if(!__gleViewportIndexedf) bIsLoaded = 0;
+	__gleViewportIndexedfv = (PFNGLVIEWPORTINDEXEDFVPROC)gleIntGetProcAddress("glViewportIndexedfv");
+	if(!__gleViewportIndexedfv) bIsLoaded = 0;
+	__gleScissorArrayv = (PFNGLSCISSORARRAYVPROC)gleIntGetProcAddress("glScissorArrayv");
+	if(!__gleScissorArrayv) bIsLoaded = 0;
+	__gleScissorIndexed = (PFNGLSCISSORINDEXEDPROC)gleIntGetProcAddress("glScissorIndexed");
+	if(!__gleScissorIndexed) bIsLoaded = 0;
+	__gleScissorIndexedv = (PFNGLSCISSORINDEXEDVPROC)gleIntGetProcAddress("glScissorIndexedv");
+	if(!__gleScissorIndexedv) bIsLoaded = 0;
+	__gleDepthRangeArrayv = (PFNGLDEPTHRANGEARRAYVPROC)gleIntGetProcAddress("glDepthRangeArrayv");
+	if(!__gleDepthRangeArrayv) bIsLoaded = 0;
+	__gleDepthRangeIndexed = (PFNGLDEPTHRANGEINDEXEDPROC)gleIntGetProcAddress("glDepthRangeIndexed");
+	if(!__gleDepthRangeIndexed) bIsLoaded = 0;
+	__gleGetFloati_v = (PFNGLGETFLOATI_VPROC)gleIntGetProcAddress("glGetFloati_v");
+	if(!__gleGetFloati_v) bIsLoaded = 0;
+	__gleGetDoublei_v = (PFNGLGETDOUBLEI_VPROC)gleIntGetProcAddress("glGetDoublei_v");
+	if(!__gleGetDoublei_v) bIsLoaded = 0;
+	glext_ARB_viewport_array = 1;
 	__gleReleaseShaderCompiler = (PFNGLRELEASESHADERCOMPILERPROC)gleIntGetProcAddress("glReleaseShaderCompiler");
 	if(!__gleReleaseShaderCompiler) bIsLoaded = 0;
 	__gleShaderBinary = (PFNGLSHADERBINARYPROC)gleIntGetProcAddress("glShaderBinary");
@@ -13691,6 +14572,13 @@ static int gleIntLoadCore_4_1_Base()
 static int gleIntLoadCore_4_2_Base()
 {
 	int bIsLoaded = 1;
+	__gleDrawArraysInstancedBaseInstance = (PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC)gleIntGetProcAddress("glDrawArraysInstancedBaseInstance");
+	if(!__gleDrawArraysInstancedBaseInstance) bIsLoaded = 0;
+	__gleDrawElementsInstancedBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseInstance");
+	if(!__gleDrawElementsInstancedBaseInstance) bIsLoaded = 0;
+	__gleDrawElementsInstancedBaseVertexBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseVertexBaseInstance");
+	if(!__gleDrawElementsInstancedBaseVertexBaseInstance) bIsLoaded = 0;
+	glext_ARB_base_instance = 1;
 	__gleGetActiveAtomicCounterBufferiv = (PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC)gleIntGetProcAddress("glGetActiveAtomicCounterBufferiv");
 	if(!__gleGetActiveAtomicCounterBufferiv) bIsLoaded = 0;
 	glext_ARB_shader_atomic_counters = 1;
@@ -13707,6 +14595,11 @@ static int gleIntLoadCore_4_2_Base()
 	__gleTextureStorage3DEXT = (PFNGLTEXTURESTORAGE3DEXTPROC)gleIntGetProcAddress("glTextureStorage3DEXT");
 	if(!__gleTextureStorage3DEXT) bIsLoaded = 0;
 	glext_ARB_texture_storage = 1;
+	__gleBindImageTexture = (PFNGLBINDIMAGETEXTUREPROC)gleIntGetProcAddress("glBindImageTexture");
+	if(!__gleBindImageTexture) bIsLoaded = 0;
+	__gleMemoryBarrier = (PFNGLMEMORYBARRIERPROC)gleIntGetProcAddress("glMemoryBarrier");
+	if(!__gleMemoryBarrier) bIsLoaded = 0;
+	glext_ARB_shader_image_load_store = 1;
 	__gleGetInternalformativ = (PFNGLGETINTERNALFORMATIVPROC)gleIntGetProcAddress("glGetInternalformativ");
 	if(!__gleGetInternalformativ) bIsLoaded = 0;
 	glext_ARB_internalformat_query = 1;
@@ -13715,18 +14608,138 @@ static int gleIntLoadCore_4_2_Base()
 	__gleDrawTransformFeedbackStreamInstanced = (PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC)gleIntGetProcAddress("glDrawTransformFeedbackStreamInstanced");
 	if(!__gleDrawTransformFeedbackStreamInstanced) bIsLoaded = 0;
 	glext_ARB_transform_feedback_instanced = 1;
-	__gleDrawArraysInstancedBaseInstance = (PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC)gleIntGetProcAddress("glDrawArraysInstancedBaseInstance");
-	if(!__gleDrawArraysInstancedBaseInstance) bIsLoaded = 0;
-	__gleDrawElementsInstancedBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseInstance");
-	if(!__gleDrawElementsInstancedBaseInstance) bIsLoaded = 0;
-	__gleDrawElementsInstancedBaseVertexBaseInstance = (PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC)gleIntGetProcAddress("glDrawElementsInstancedBaseVertexBaseInstance");
-	if(!__gleDrawElementsInstancedBaseVertexBaseInstance) bIsLoaded = 0;
-	glext_ARB_base_instance = 1;
-	__gleBindImageTexture = (PFNGLBINDIMAGETEXTUREPROC)gleIntGetProcAddress("glBindImageTexture");
-	if(!__gleBindImageTexture) bIsLoaded = 0;
-	__gleMemoryBarrier = (PFNGLMEMORYBARRIERPROC)gleIntGetProcAddress("glMemoryBarrier");
-	if(!__gleMemoryBarrier) bIsLoaded = 0;
-	glext_ARB_shader_image_load_store = 1;
+	return bIsLoaded;
+}
+
+static int gleIntLoadCore_4_3_Base()
+{
+	int bIsLoaded = 1;
+	__gleCopyImageSubData = (PFNGLCOPYIMAGESUBDATAPROC)gleIntGetProcAddress("glCopyImageSubData");
+	if(!__gleCopyImageSubData) bIsLoaded = 0;
+	glext_ARB_copy_image = 1;
+	__gleGetProgramInterfaceiv = (PFNGLGETPROGRAMINTERFACEIVPROC)gleIntGetProcAddress("glGetProgramInterfaceiv");
+	if(!__gleGetProgramInterfaceiv) bIsLoaded = 0;
+	__gleGetProgramResourceIndex = (PFNGLGETPROGRAMRESOURCEINDEXPROC)gleIntGetProcAddress("glGetProgramResourceIndex");
+	if(!__gleGetProgramResourceIndex) bIsLoaded = 0;
+	__gleGetProgramResourceName = (PFNGLGETPROGRAMRESOURCENAMEPROC)gleIntGetProcAddress("glGetProgramResourceName");
+	if(!__gleGetProgramResourceName) bIsLoaded = 0;
+	__gleGetProgramResourceiv = (PFNGLGETPROGRAMRESOURCEIVPROC)gleIntGetProcAddress("glGetProgramResourceiv");
+	if(!__gleGetProgramResourceiv) bIsLoaded = 0;
+	__gleGetProgramResourceLocation = (PFNGLGETPROGRAMRESOURCELOCATIONPROC)gleIntGetProcAddress("glGetProgramResourceLocation");
+	if(!__gleGetProgramResourceLocation) bIsLoaded = 0;
+	__gleGetProgramResourceLocationIndex = (PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC)gleIntGetProcAddress("glGetProgramResourceLocationIndex");
+	if(!__gleGetProgramResourceLocationIndex) bIsLoaded = 0;
+	glext_ARB_program_interface_query = 1;
+	__gleTexBufferRange = (PFNGLTEXBUFFERRANGEPROC)gleIntGetProcAddress("glTexBufferRange");
+	if(!__gleTexBufferRange) bIsLoaded = 0;
+	__gleTextureBufferRangeEXT = (PFNGLTEXTUREBUFFERRANGEEXTPROC)gleIntGetProcAddress("glTextureBufferRangeEXT");
+	if(!__gleTextureBufferRangeEXT) bIsLoaded = 0;
+	glext_ARB_texture_buffer_range = 1;
+	__gleDispatchCompute = (PFNGLDISPATCHCOMPUTEPROC)gleIntGetProcAddress("glDispatchCompute");
+	if(!__gleDispatchCompute) bIsLoaded = 0;
+	__gleDispatchComputeIndirect = (PFNGLDISPATCHCOMPUTEINDIRECTPROC)gleIntGetProcAddress("glDispatchComputeIndirect");
+	if(!__gleDispatchComputeIndirect) bIsLoaded = 0;
+	glext_ARB_compute_shader = 1;
+	__gleTexStorage2DMultisample = (PFNGLTEXSTORAGE2DMULTISAMPLEPROC)gleIntGetProcAddress("glTexStorage2DMultisample");
+	if(!__gleTexStorage2DMultisample) bIsLoaded = 0;
+	__gleTexStorage3DMultisample = (PFNGLTEXSTORAGE3DMULTISAMPLEPROC)gleIntGetProcAddress("glTexStorage3DMultisample");
+	if(!__gleTexStorage3DMultisample) bIsLoaded = 0;
+	__gleTextureStorage2DMultisampleEXT = (PFNGLTEXTURESTORAGE2DMULTISAMPLEEXTPROC)gleIntGetProcAddress("glTextureStorage2DMultisampleEXT");
+	if(!__gleTextureStorage2DMultisampleEXT) bIsLoaded = 0;
+	__gleTextureStorage3DMultisampleEXT = (PFNGLTEXTURESTORAGE3DMULTISAMPLEEXTPROC)gleIntGetProcAddress("glTextureStorage3DMultisampleEXT");
+	if(!__gleTextureStorage3DMultisampleEXT) bIsLoaded = 0;
+	glext_ARB_texture_storage_multisample = 1;
+	__gleInvalidateTexSubImage = (PFNGLINVALIDATETEXSUBIMAGEPROC)gleIntGetProcAddress("glInvalidateTexSubImage");
+	if(!__gleInvalidateTexSubImage) bIsLoaded = 0;
+	__gleInvalidateTexImage = (PFNGLINVALIDATETEXIMAGEPROC)gleIntGetProcAddress("glInvalidateTexImage");
+	if(!__gleInvalidateTexImage) bIsLoaded = 0;
+	__gleInvalidateBufferSubData = (PFNGLINVALIDATEBUFFERSUBDATAPROC)gleIntGetProcAddress("glInvalidateBufferSubData");
+	if(!__gleInvalidateBufferSubData) bIsLoaded = 0;
+	__gleInvalidateBufferData = (PFNGLINVALIDATEBUFFERDATAPROC)gleIntGetProcAddress("glInvalidateBufferData");
+	if(!__gleInvalidateBufferData) bIsLoaded = 0;
+	__gleInvalidateFramebuffer = (PFNGLINVALIDATEFRAMEBUFFERPROC)gleIntGetProcAddress("glInvalidateFramebuffer");
+	if(!__gleInvalidateFramebuffer) bIsLoaded = 0;
+	__gleInvalidateSubFramebuffer = (PFNGLINVALIDATESUBFRAMEBUFFERPROC)gleIntGetProcAddress("glInvalidateSubFramebuffer");
+	if(!__gleInvalidateSubFramebuffer) bIsLoaded = 0;
+	glext_ARB_invalidate_subdata = 1;
+	__gleClearBufferData = (PFNGLCLEARBUFFERDATAPROC)gleIntGetProcAddress("glClearBufferData");
+	if(!__gleClearBufferData) bIsLoaded = 0;
+	__gleClearBufferSubData = (PFNGLCLEARBUFFERSUBDATAPROC)gleIntGetProcAddress("glClearBufferSubData");
+	if(!__gleClearBufferSubData) bIsLoaded = 0;
+	__gleClearNamedBufferDataEXT = (PFNGLCLEARNAMEDBUFFERDATAEXTPROC)gleIntGetProcAddress("glClearNamedBufferDataEXT");
+	if(!__gleClearNamedBufferDataEXT) bIsLoaded = 0;
+	__gleClearNamedBufferSubDataEXT = (PFNGLCLEARNAMEDBUFFERSUBDATAEXTPROC)gleIntGetProcAddress("glClearNamedBufferSubDataEXT");
+	if(!__gleClearNamedBufferSubDataEXT) bIsLoaded = 0;
+	glext_ARB_clear_buffer_object = 1;
+	__gleDebugMessageControl = (PFNGLDEBUGMESSAGECONTROLPROC)gleIntGetProcAddress("glDebugMessageControl");
+	if(!__gleDebugMessageControl) bIsLoaded = 0;
+	__gleDebugMessageInsert = (PFNGLDEBUGMESSAGEINSERTPROC)gleIntGetProcAddress("glDebugMessageInsert");
+	if(!__gleDebugMessageInsert) bIsLoaded = 0;
+	__gleDebugMessageCallback = (PFNGLDEBUGMESSAGECALLBACKPROC)gleIntGetProcAddress("glDebugMessageCallback");
+	if(!__gleDebugMessageCallback) bIsLoaded = 0;
+	__gleGetDebugMessageLog = (PFNGLGETDEBUGMESSAGELOGPROC)gleIntGetProcAddress("glGetDebugMessageLog");
+	if(!__gleGetDebugMessageLog) bIsLoaded = 0;
+	__glePushDebugGroup = (PFNGLPUSHDEBUGGROUPPROC)gleIntGetProcAddress("glPushDebugGroup");
+	if(!__glePushDebugGroup) bIsLoaded = 0;
+	__glePopDebugGroup = (PFNGLPOPDEBUGGROUPPROC)gleIntGetProcAddress("glPopDebugGroup");
+	if(!__glePopDebugGroup) bIsLoaded = 0;
+	__gleObjectLabel = (PFNGLOBJECTLABELPROC)gleIntGetProcAddress("glObjectLabel");
+	if(!__gleObjectLabel) bIsLoaded = 0;
+	__gleGetObjectLabel = (PFNGLGETOBJECTLABELPROC)gleIntGetProcAddress("glGetObjectLabel");
+	if(!__gleGetObjectLabel) bIsLoaded = 0;
+	__gleObjectPtrLabel = (PFNGLOBJECTPTRLABELPROC)gleIntGetProcAddress("glObjectPtrLabel");
+	if(!__gleObjectPtrLabel) bIsLoaded = 0;
+	__gleGetObjectPtrLabel = (PFNGLGETOBJECTPTRLABELPROC)gleIntGetProcAddress("glGetObjectPtrLabel");
+	if(!__gleGetObjectPtrLabel) bIsLoaded = 0;
+	glext_KHR_debug = 1;
+	__gleFramebufferParameteri = (PFNGLFRAMEBUFFERPARAMETERIPROC)gleIntGetProcAddress("glFramebufferParameteri");
+	if(!__gleFramebufferParameteri) bIsLoaded = 0;
+	__gleGetFramebufferParameteriv = (PFNGLGETFRAMEBUFFERPARAMETERIVPROC)gleIntGetProcAddress("glGetFramebufferParameteriv");
+	if(!__gleGetFramebufferParameteriv) bIsLoaded = 0;
+	__gleNamedFramebufferParameteriEXT = (PFNGLNAMEDFRAMEBUFFERPARAMETERIEXTPROC)gleIntGetProcAddress("glNamedFramebufferParameteriEXT");
+	if(!__gleNamedFramebufferParameteriEXT) bIsLoaded = 0;
+	__gleGetNamedFramebufferParameterivEXT = (PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVEXTPROC)gleIntGetProcAddress("glGetNamedFramebufferParameterivEXT");
+	if(!__gleGetNamedFramebufferParameterivEXT) bIsLoaded = 0;
+	glext_ARB_framebuffer_no_attachments = 1;
+	__gleShaderStorageBlockBinding = (PFNGLSHADERSTORAGEBLOCKBINDINGPROC)gleIntGetProcAddress("glShaderStorageBlockBinding");
+	if(!__gleShaderStorageBlockBinding) bIsLoaded = 0;
+	glext_ARB_shader_storage_buffer_object = 1;
+	__gleBindVertexBuffer = (PFNGLBINDVERTEXBUFFERPROC)gleIntGetProcAddress("glBindVertexBuffer");
+	if(!__gleBindVertexBuffer) bIsLoaded = 0;
+	__gleVertexAttribFormat = (PFNGLVERTEXATTRIBFORMATPROC)gleIntGetProcAddress("glVertexAttribFormat");
+	if(!__gleVertexAttribFormat) bIsLoaded = 0;
+	__gleVertexAttribIFormat = (PFNGLVERTEXATTRIBIFORMATPROC)gleIntGetProcAddress("glVertexAttribIFormat");
+	if(!__gleVertexAttribIFormat) bIsLoaded = 0;
+	__gleVertexAttribLFormat = (PFNGLVERTEXATTRIBLFORMATPROC)gleIntGetProcAddress("glVertexAttribLFormat");
+	if(!__gleVertexAttribLFormat) bIsLoaded = 0;
+	__gleVertexAttribBinding = (PFNGLVERTEXATTRIBBINDINGPROC)gleIntGetProcAddress("glVertexAttribBinding");
+	if(!__gleVertexAttribBinding) bIsLoaded = 0;
+	__gleVertexBindingDivisor = (PFNGLVERTEXBINDINGDIVISORPROC)gleIntGetProcAddress("glVertexBindingDivisor");
+	if(!__gleVertexBindingDivisor) bIsLoaded = 0;
+	__gleVertexArrayBindVertexBufferEXT = (PFNGLVERTEXARRAYBINDVERTEXBUFFEREXTPROC)gleIntGetProcAddress("glVertexArrayBindVertexBufferEXT");
+	if(!__gleVertexArrayBindVertexBufferEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexAttribFormatEXT = (PFNGLVERTEXARRAYVERTEXATTRIBFORMATEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribFormatEXT");
+	if(!__gleVertexArrayVertexAttribFormatEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexAttribIFormatEXT = (PFNGLVERTEXARRAYVERTEXATTRIBIFORMATEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribIFormatEXT");
+	if(!__gleVertexArrayVertexAttribIFormatEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexAttribLFormatEXT = (PFNGLVERTEXARRAYVERTEXATTRIBLFORMATEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribLFormatEXT");
+	if(!__gleVertexArrayVertexAttribLFormatEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexAttribBindingEXT = (PFNGLVERTEXARRAYVERTEXATTRIBBINDINGEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribBindingEXT");
+	if(!__gleVertexArrayVertexAttribBindingEXT) bIsLoaded = 0;
+	__gleVertexArrayVertexBindingDivisorEXT = (PFNGLVERTEXARRAYVERTEXBINDINGDIVISOREXTPROC)gleIntGetProcAddress("glVertexArrayVertexBindingDivisorEXT");
+	if(!__gleVertexArrayVertexBindingDivisorEXT) bIsLoaded = 0;
+	glext_ARB_vertex_attrib_binding = 1;
+	__gleTextureView = (PFNGLTEXTUREVIEWPROC)gleIntGetProcAddress("glTextureView");
+	if(!__gleTextureView) bIsLoaded = 0;
+	glext_ARB_texture_view = 1;
+	__gleGetInternalformati64v = (PFNGLGETINTERNALFORMATI64VPROC)gleIntGetProcAddress("glGetInternalformati64v");
+	if(!__gleGetInternalformati64v) bIsLoaded = 0;
+	glext_ARB_internalformat_query2 = 1;
+	__gleMultiDrawArraysIndirect = (PFNGLMULTIDRAWARRAYSINDIRECTPROC)gleIntGetProcAddress("glMultiDrawArraysIndirect");
+	if(!__gleMultiDrawArraysIndirect) bIsLoaded = 0;
+	__gleMultiDrawElementsIndirect = (PFNGLMULTIDRAWELEMENTSINDIRECTPROC)gleIntGetProcAddress("glMultiDrawElementsIndirect");
+	if(!__gleMultiDrawElementsIndirect) bIsLoaded = 0;
+	glext_ARB_multi_draw_indirect = 1;
 	return bIsLoaded;
 }
 
@@ -13991,6 +15004,52 @@ int gleIntLoad_Version_4_2_Comp()
 	if(!gleIntLoadCore_4_0_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_4_1_Base()) bIsLoaded = 0;
 	if(!gleIntLoadCore_4_2_Base()) bIsLoaded = 0;
+
+	return bIsLoaded;
+}
+
+int gleIntLoad_Version_4_3()
+{
+	int bIsLoaded = 1;
+	gleIntClear();
+	if(!gleIntLoadCore_1_1_Version_3_1()) bIsLoaded = 0;
+	if(!gleIntLoadCore_1_2_Version_3_1()) bIsLoaded = 0;
+	if(!gleIntLoadCore_1_3_Version_3_1()) bIsLoaded = 0;
+	if(!gleIntLoadCore_1_4_Version_3_1()) bIsLoaded = 0;
+	if(!gleIntLoadCore_1_5_Version_3_1()) bIsLoaded = 0;
+	if(!gleIntLoadCore_2_0_Version_3_1()) bIsLoaded = 0;
+	if(!gleIntLoadCore_2_1_Version_3_1()) bIsLoaded = 0;
+	if(!gleIntLoadCore_3_0_Version_3_1()) bIsLoaded = 0;
+	if(!gleIntLoadCore_3_1_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_3_2_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_3_3_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_4_0_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_4_1_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_4_2_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_4_3_Base()) bIsLoaded = 0;
+
+	return bIsLoaded;
+}
+
+int gleIntLoad_Version_4_3_Comp()
+{
+	int bIsLoaded = 1;
+	gleIntClear();
+	if(!gleIntLoadCore_1_1_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_1_2_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_1_3_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_1_4_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_1_5_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_2_0_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_2_1_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_3_0_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_3_1_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_3_2_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_3_3_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_4_0_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_4_1_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_4_2_Base()) bIsLoaded = 0;
+	if(!gleIntLoadCore_4_3_Base()) bIsLoaded = 0;
 
 	return bIsLoaded;
 }

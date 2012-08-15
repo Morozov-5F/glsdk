@@ -35,3 +35,4 @@ end
 MakeProject("Test", "test.cpp");
 MakeProject("PoleTest", "pole_test.cpp");
 MakeProject("PixelCoord", "pixel_test.cpp");
+MakeProject("FontDraw", "font_test.cpp");

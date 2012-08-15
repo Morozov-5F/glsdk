@@ -10,9 +10,10 @@ return {
 		["BOOL"] = [==[BOOL]==],
 		["HPGPUNV"] = [==[HPGPUNV]==],
 		["PGPU_DEVICE"] = [==[PGPU_DEVICE]==],
+		["PROC"] = [==[PROC]==],
 		["USHORT"] = [==[USHORT]==],
 		["String"] = [==[const char *]==],
-		["VoidPointer"] = [==[void*]==],
+		["GLint"] = [==[GLint]==],
 		["GLuint"] = [==[GLuint]==],
 		["INT"] = [==[INT]==],
 		["DWORD"] = [==[DWORD]==],
@@ -25,13 +26,13 @@ return {
 		["void"] = [==[*]==],
 		["HDC"] = [==[HDC]==],
 		["GLsizei"] = [==[GLsizei]==],
-		["GLenum"] = [==[GLenum]==],
+		["UINT"] = [==[UINT]==],
 		["int"] = [==[int]==],
 		["HPBUFFEREXT"] = [==[HPBUFFEREXT]==],
 		["VOID"] = [==[VOID]==],
-		["UINT"] = [==[UINT]==],
+		["VoidPointer"] = [==[void*]==],
 		["HANDLE"] = [==[HANDLE]==],
-		["GLint"] = [==[GLint]==],
+		["GLenum"] = [==[GLenum]==],
 		["uint"] = [==[unsigned int]==],
 		["HGPUNV"] = [==[HGPUNV]==],
 		["INT32"] = [==[INT32]==],
@@ -3023,6 +3024,7 @@ return {
 		[==[EXT_make_current_read]==],
 		[==[EXT_pixel_format]==],
 		[==[EXT_pbuffer]==],
+		[==[EXT_swap_control]==],
 		[==[EXT_depth_float]==],
 		[==[3DFX_multisample]==],
 		[==[EXT_multisample]==],
@@ -3039,7 +3041,7 @@ return {
 		[==[EXT_pixel_format_packed_float]==],
 		[==[EXT_framebuffer_sRGB]==],
 		[==[NV_present_video]==],
-		[==[NV_video_out]==],
+		[==[NV_video_output]==],
 		[==[NV_swap_group]==],
 		[==[NV_gpu_affinity]==],
 		[==[AMD_gpu_association]==],
@@ -3048,6 +3050,8 @@ return {
 		[==[NV_multisample_coverage]==],
 		[==[EXT_create_context_es2_profile]==],
 		[==[NV_DX_interop]==],
+		[==[NV_DX_interop2]==],
+		[==[EXT_swap_control_tear]==],
 	},
 	["enumerations"] = {
 		{
@@ -4517,7 +4521,7 @@ return {
 			["extensions"] = {
 				[==[I3D_genlock]==],
 			},
-			["name"] = [==[GENLOCK_SOURCE_EXTENAL_SYNC_I3D]==],
+			["name"] = [==[GENLOCK_SOURCE_EXTERNAL_SYNC_I3D]==],
 		},
 		{
 			["value"] = [==[0x2046]==],
@@ -4525,7 +4529,7 @@ return {
 			["extensions"] = {
 				[==[I3D_genlock]==],
 			},
-			["name"] = [==[GENLOCK_SOURCE_EXTENAL_FIELD_I3D]==],
+			["name"] = [==[GENLOCK_SOURCE_EXTERNAL_FIELD_I3D]==],
 		},
 		{
 			["value"] = [==[0x2047]==],
@@ -4533,7 +4537,7 @@ return {
 			["extensions"] = {
 				[==[I3D_genlock]==],
 			},
-			["name"] = [==[GENLOCK_SOURCE_EXTENAL_TTL_I3D]==],
+			["name"] = [==[GENLOCK_SOURCE_EXTERNAL_TTL_I3D]==],
 		},
 		{
 			["value"] = [==[0x2048]==],
@@ -4795,7 +4799,7 @@ return {
 			["value"] = [==[0x20C0]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[BIND_TO_VIDEO_RGB_NV]==],
 		},
@@ -4803,7 +4807,7 @@ return {
 			["value"] = [==[0x20C1]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[BIND_TO_VIDEO_RGBA_NV]==],
 		},
@@ -4811,7 +4815,7 @@ return {
 			["value"] = [==[0x20C2]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[BIND_TO_VIDEO_RGB_AND_DEPTH_NV]==],
 		},
@@ -4819,7 +4823,7 @@ return {
 			["value"] = [==[0x20C3]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_COLOR_NV]==],
 		},
@@ -4827,7 +4831,7 @@ return {
 			["value"] = [==[0x20C4]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_ALPHA_NV]==],
 		},
@@ -4835,7 +4839,7 @@ return {
 			["value"] = [==[0x20C5]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_DEPTH_NV]==],
 		},
@@ -4843,7 +4847,7 @@ return {
 			["value"] = [==[0x20C6]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_COLOR_AND_ALPHA_NV]==],
 		},
@@ -4851,7 +4855,7 @@ return {
 			["value"] = [==[0x20C7]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_COLOR_AND_DEPTH_NV]==],
 		},
@@ -4859,7 +4863,7 @@ return {
 			["value"] = [==[0x20C8]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_FRAME]==],
 		},
@@ -4867,7 +4871,7 @@ return {
 			["value"] = [==[0x20C9]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_FIELD_1]==],
 		},
@@ -4875,7 +4879,7 @@ return {
 			["value"] = [==[0x20CA]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_FIELD_2]==],
 		},
@@ -4883,7 +4887,7 @@ return {
 			["value"] = [==[0x20CB]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_STACKED_FIELDS_1_2]==],
 		},
@@ -4891,7 +4895,7 @@ return {
 			["value"] = [==[0x20CC]==],
 			["copy"] = false,
 			["extensions"] = {
-				[==[NV_video_out]==],
+				[==[NV_video_output]==],
 			},
 			["name"] = [==[VIDEO_OUT_STACKED_FIELDS_2_1]==],
 		},

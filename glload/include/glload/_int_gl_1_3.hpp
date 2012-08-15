@@ -9,7 +9,7 @@ extern "C" {
 
 
 extern void (GLE_FUNCPTR *__gleActiveTexture)(GLenum );
-extern void (GLE_FUNCPTR *__gleSampleCoverage)(GLclampf , GLboolean );
+extern void (GLE_FUNCPTR *__gleSampleCoverage)(GLfloat , GLboolean );
 extern void (GLE_FUNCPTR *__gleCompressedTexImage3D)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
 extern void (GLE_FUNCPTR *__gleCompressedTexImage2D)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
 extern void (GLE_FUNCPTR *__gleCompressedTexImage1D)(GLenum , GLint , GLenum , GLsizei , GLint , GLsizei , const GLvoid *);
@@ -65,10 +65,8 @@ namespace gl
 		GL_SAMPLE_ALPHA_TO_ONE           = 0x809F,
 		GL_SAMPLE_COVERAGE               = 0x80A0,
 		GL_SAMPLE_BUFFERS                = 0x80A8,
-		GL_SAMPLES                       = 0x80A9,
 		GL_SAMPLE_COVERAGE_VALUE         = 0x80AA,
 		GL_SAMPLE_COVERAGE_INVERT        = 0x80AB,
-		GL_TEXTURE_CUBE_MAP              = 0x8513,
 		GL_TEXTURE_BINDING_CUBE_MAP      = 0x8514,
 		GL_TEXTURE_CUBE_MAP_POSITIVE_X   = 0x8515,
 		GL_TEXTURE_CUBE_MAP_NEGATIVE_X   = 0x8516,
@@ -82,14 +80,13 @@ namespace gl
 		GL_COMPRESSED_RGBA               = 0x84EE,
 		GL_TEXTURE_COMPRESSION_HINT      = 0x84EF,
 		GL_TEXTURE_COMPRESSED_IMAGE_SIZE = 0x86A0,
-		GL_TEXTURE_COMPRESSED            = 0x86A1,
 		GL_NUM_COMPRESSED_TEXTURE_FORMATS = 0x86A2,
 		GL_COMPRESSED_TEXTURE_FORMATS    = 0x86A3,
 		GL_CLAMP_TO_BORDER               = 0x812D,
 	};
 
 	inline void ActiveTexture(GLenum texture) { ::__gleActiveTexture(texture); }
-	inline void SampleCoverage(GLclampf value, GLboolean invert) { ::__gleSampleCoverage(value, invert); }
+	inline void SampleCoverage(GLfloat value, GLboolean invert) { ::__gleSampleCoverage(value, invert); }
 	inline void CompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const GLvoid *data) { ::__gleCompressedTexImage3D(target, level, internalformat, width, height, depth, border, imageSize, data); }
 	inline void CompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data) { ::__gleCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data); }
 	inline void CompressedTexImage1D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid *data) { ::__gleCompressedTexImage1D(target, level, internalformat, width, border, imageSize, data); }

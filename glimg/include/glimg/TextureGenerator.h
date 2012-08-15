@@ -137,9 +137,9 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	\param pImage The image that would be uploaded in a CreateTexture call.
 	\param forceConvertBits A bitfield containing values from ForcedConvertFlags.
 
-	\return The texture type for a texture that would be created with CreateTexture.
+	\return A GLenum for the texture type for a texture that would be created by CreateTexture.
 	**/
-	GLenum GetTextureType(const ImageSet *pImage, unsigned int forceConvertBits);
+	unsigned int GetTextureType(const ImageSet *pImage, unsigned int forceConvertBits);
 
 	/**
 	\brief Creates a texture object from the given ImageSet, with flags.

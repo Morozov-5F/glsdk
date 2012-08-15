@@ -1566,7 +1566,7 @@ namespace glimg
 		}
 	}
 
-	GLenum GetTextureType( const ImageSet *pImage, unsigned int forceConvertBits )
+	unsigned int GetTextureType( const ImageSet *pImage, unsigned int forceConvertBits )
 	{
 		Dimensions dims = pImage->GetDimensions();
 
@@ -1600,7 +1600,7 @@ namespace glimg
 			return gl::GL_TEXTURE_3D;
 		}
 
-		return -1;
+		return 0xFFFFFFFF;
 	}
 
 	unsigned int CreateTexture( const ImageSet *pImage, unsigned int forceConvertBits )
