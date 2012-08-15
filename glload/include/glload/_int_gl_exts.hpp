@@ -119,9 +119,9 @@ extern int glext_ARB_arrays_of_arrays;
 extern int glext_ARB_clear_buffer_object;
 extern int glext_ARB_compute_shader;
 extern int glext_ARB_copy_image;
-extern int glext_ARB_debug_group;
-extern int glext_ARB_debug_label;
-extern int glext_ARB_debug_output2;
+extern int glext_ARB_texture_view;
+extern int glext_ARB_vertex_attrib_binding;
+extern int glext_ARB_robustness_isolation;
 extern int glext_ARB_ES3_compatibility;
 extern int glext_ARB_explicit_uniform_location;
 extern int glext_ARB_fragment_layer_viewport;
@@ -137,9 +137,6 @@ extern int glext_ARB_stencil_texturing;
 extern int glext_ARB_texture_buffer_range;
 extern int glext_ARB_texture_query_levels;
 extern int glext_ARB_texture_storage_multisample;
-extern int glext_ARB_texture_view;
-extern int glext_ARB_vertex_attrib_binding;
-extern int glext_ARB_robustness_isolation;
 extern int glext_EXT_abgr;
 extern int glext_EXT_blend_color;
 extern int glext_EXT_polygon_offset;
@@ -1423,7 +1420,7 @@ extern void (GLE_FUNCPTR *glVertexArraySecondaryColorOffsetEXT)(GLuint , GLuint 
 extern void (GLE_FUNCPTR *glVertexArrayTexCoordOffsetEXT)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
 extern void (GLE_FUNCPTR *glVertexArrayVertexOffsetEXT)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
 extern void (GLE_FUNCPTR *glVertexArrayVertexAttribIOffsetEXT)(GLuint , GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
-extern void (GLE_FUNCPTR *glglVertexArrayVertexAttribOffsetEXT)(GLuint , GLuint , GLuint , GLint , GLenum , GLboolean , GLsizei , GLintptr );
+extern void (GLE_FUNCPTR *glVertexArrayVertexAttribOffsetEXT)(GLuint , GLuint , GLuint , GLint , GLenum , GLboolean , GLsizei , GLintptr );
 extern void (GLE_FUNCPTR *glGetVertexArrayIntegervEXT)(GLuint , GLenum , GLint *);
 extern void (GLE_FUNCPTR *glGetVertexArrayPointervEXT)(GLuint , GLenum , GLvoid* *);
 extern void (GLE_FUNCPTR *glGetVertexArrayIntegeri_vEXT)(GLuint , GLuint , GLenum , GLint *);
@@ -2572,31 +2569,6 @@ namespace gl
 		GL_COPY_WRITE_BUFFER_BINDING     = 0x8F37,
 
 /******************************
-* Extension: GL_ARB_debug_group
-******************************/
-		GL_STACK_OVERFLOW                = 0x0503,
-		GL_STACK_UNDERFLOW               = 0x0504,
-		GL_DEBUG_TYPE_MARKER             = 0x8268,
-		GL_DEBUG_TYPE_PUSH_GROUP         = 0x8269,
-		GL_DEBUG_TYPE_POP_GROUP          = 0x826A,
-		GL_DEBUG_SEVERITY_NOTIFICATION   = 0x826B,
-		GL_MAX_DEBUG_GROUP_STACK_DEPTH   = 0x826C,
-		GL_DEBUG_GROUP_STACK_DEPTH       = 0x826D,
-
-/******************************
-* Extension: GL_ARB_debug_label
-******************************/
-		GL_VERTEX_ARRAY                  = 0x8074,
-		GL_BUFFER                        = 0x82E0,
-		GL_SHADER                        = 0x82E1,
-		GL_PROGRAM                       = 0x82E2,
-		GL_QUERY                         = 0x82E3,
-		GL_PROGRAM_PIPELINE              = 0x82E4,
-		GL_SAMPLER                       = 0x82E6,
-		GL_DISPLAY_LIST                  = 0x82E7,
-		GL_MAX_LABEL_LENGTH              = 0x82E8,
-
-/******************************
 * Extension: GL_ARB_debug_output
 ******************************/
 		GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB  = 0x8242,
@@ -2621,12 +2593,6 @@ namespace gl
 		GL_DEBUG_SEVERITY_HIGH_ARB       = 0x9146,
 		GL_DEBUG_SEVERITY_MEDIUM_ARB     = 0x9147,
 		GL_DEBUG_SEVERITY_LOW_ARB        = 0x9148,
-
-/******************************
-* Extension: GL_ARB_debug_output2
-******************************/
-		GL_DEBUG_OUTPUT                  = 0x92E0,
-		GL_CONTEXT_FLAG_DEBUG_BIT        = 0x00000002,
 
 /******************************
 * Extension: GL_ARB_depth_buffer_float
@@ -5564,8 +5530,8 @@ namespace gl
 /******************************
 * Extension: GL_KHR_debug
 ******************************/
-//		GL_STACK_OVERFLOW                = 0x0503, From: ARB_debug_group
-//		GL_STACK_UNDERFLOW               = 0x0504, From: ARB_debug_group
+		GL_STACK_OVERFLOW                = 0x0503,
+		GL_STACK_UNDERFLOW               = 0x0504,
 		GL_DEBUG_OUTPUT_SYNCHRONOUS      = 0x8242,
 		GL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH = 0x8243,
 		GL_DEBUG_CALLBACK_FUNCTION       = 0x8244,
@@ -5588,22 +5554,22 @@ namespace gl
 		GL_DEBUG_SEVERITY_HIGH           = 0x9146,
 		GL_DEBUG_SEVERITY_MEDIUM         = 0x9147,
 		GL_DEBUG_SEVERITY_LOW            = 0x9148,
-//		GL_DEBUG_TYPE_MARKER             = 0x8268, From: ARB_debug_group
-//		GL_DEBUG_TYPE_PUSH_GROUP         = 0x8269, From: ARB_debug_group
-//		GL_DEBUG_TYPE_POP_GROUP          = 0x826A, From: ARB_debug_group
-//		GL_DEBUG_SEVERITY_NOTIFICATION   = 0x826B, From: ARB_debug_group
-//		GL_MAX_DEBUG_GROUP_STACK_DEPTH   = 0x826C, From: ARB_debug_group
-//		GL_DEBUG_GROUP_STACK_DEPTH       = 0x826D, From: ARB_debug_group
-//		GL_BUFFER                        = 0x82E0, From: ARB_debug_label
-//		GL_SHADER                        = 0x82E1, From: ARB_debug_label
-//		GL_PROGRAM                       = 0x82E2, From: ARB_debug_label
-//		GL_QUERY                         = 0x82E3, From: ARB_debug_label
-//		GL_PROGRAM_PIPELINE              = 0x82E4, From: ARB_debug_label
-//		GL_SAMPLER                       = 0x82E6, From: ARB_debug_label
-//		GL_DISPLAY_LIST                  = 0x82E7, From: ARB_debug_label
-//		GL_MAX_LABEL_LENGTH              = 0x82E8, From: ARB_debug_label
-//		GL_DEBUG_OUTPUT                  = 0x92E0, From: ARB_debug_output2
-//		GL_CONTEXT_FLAG_DEBUG_BIT        = 0x00000002, From: ARB_debug_output2
+		GL_DEBUG_TYPE_MARKER             = 0x8268,
+		GL_DEBUG_TYPE_PUSH_GROUP         = 0x8269,
+		GL_DEBUG_TYPE_POP_GROUP          = 0x826A,
+		GL_DEBUG_SEVERITY_NOTIFICATION   = 0x826B,
+		GL_MAX_DEBUG_GROUP_STACK_DEPTH   = 0x826C,
+		GL_DEBUG_GROUP_STACK_DEPTH       = 0x826D,
+		GL_BUFFER                        = 0x82E0,
+		GL_SHADER                        = 0x82E1,
+		GL_PROGRAM                       = 0x82E2,
+		GL_QUERY                         = 0x82E3,
+		GL_PROGRAM_PIPELINE              = 0x82E4,
+		GL_SAMPLER                       = 0x82E6,
+		GL_DISPLAY_LIST                  = 0x82E7,
+		GL_MAX_LABEL_LENGTH              = 0x82E8,
+		GL_DEBUG_OUTPUT                  = 0x92E0,
+		GL_CONTEXT_FLAG_DEBUG_BIT        = 0x00000002,
 
 /******************************
 * Extension: GL_KHR_texture_compression_astc_ldr
@@ -8579,7 +8545,7 @@ namespace gl
 	inline void VertexArrayTexCoordOffsetEXT(GLuint vaobj, GLuint buffer, GLint size, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayTexCoordOffsetEXT(vaobj, buffer, size, type, stride, offset); }
 	inline void VertexArrayVertexOffsetEXT(GLuint vaobj, GLuint buffer, GLint size, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayVertexOffsetEXT(vaobj, buffer, size, type, stride, offset); }
 	inline void VertexArrayVertexAttribIOffsetEXT(GLuint vaobj, GLuint buffer, GLuint index, GLint size, GLenum type, GLsizei stride, GLintptr offset) { ::glVertexArrayVertexAttribIOffsetEXT(vaobj, buffer, index, size, type, stride, offset); }
-	inline void glVertexArrayVertexAttribOffsetEXT(GLuint vaobj, GLuint buffer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLintptr offset) { ::glglVertexArrayVertexAttribOffsetEXT(vaobj, buffer, index, size, type, normalized, stride, offset); }
+	inline void VertexArrayVertexAttribOffsetEXT(GLuint vaobj, GLuint buffer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLintptr offset) { ::glVertexArrayVertexAttribOffsetEXT(vaobj, buffer, index, size, type, normalized, stride, offset); }
 	inline void GetVertexArrayIntegervEXT(GLuint vaobj, GLenum pname, GLint *param) { ::glGetVertexArrayIntegervEXT(vaobj, pname, param); }
 	inline void GetVertexArrayPointervEXT(GLuint vaobj, GLenum pname, GLvoid* *param) { ::glGetVertexArrayPointervEXT(vaobj, pname, param); }
 	inline void GetVertexArrayIntegeri_vEXT(GLuint vaobj, GLuint index, GLenum pname, GLint *param) { ::glGetVertexArrayIntegeri_vEXT(vaobj, index, pname, param); }

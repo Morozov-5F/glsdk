@@ -369,9 +369,9 @@ int glext_ARB_arrays_of_arrays = 0;
 int glext_ARB_clear_buffer_object = 0;
 int glext_ARB_compute_shader = 0;
 int glext_ARB_copy_image = 0;
-int glext_ARB_debug_group = 0;
-int glext_ARB_debug_label = 0;
-int glext_ARB_debug_output2 = 0;
+int glext_ARB_texture_view = 0;
+int glext_ARB_vertex_attrib_binding = 0;
+int glext_ARB_robustness_isolation = 0;
 int glext_ARB_ES3_compatibility = 0;
 int glext_ARB_explicit_uniform_location = 0;
 int glext_ARB_fragment_layer_viewport = 0;
@@ -387,9 +387,6 @@ int glext_ARB_stencil_texturing = 0;
 int glext_ARB_texture_buffer_range = 0;
 int glext_ARB_texture_query_levels = 0;
 int glext_ARB_texture_storage_multisample = 0;
-int glext_ARB_texture_view = 0;
-int glext_ARB_vertex_attrib_binding = 0;
-int glext_ARB_robustness_isolation = 0;
 int glext_EXT_abgr = 0;
 int glext_EXT_blend_color = 0;
 int glext_EXT_polygon_offset = 0;
@@ -813,9 +810,9 @@ void gleIntClear()
 	glext_ARB_clear_buffer_object = 0;
 	glext_ARB_compute_shader = 0;
 	glext_ARB_copy_image = 0;
-	glext_ARB_debug_group = 0;
-	glext_ARB_debug_label = 0;
-	glext_ARB_debug_output2 = 0;
+	glext_ARB_texture_view = 0;
+	glext_ARB_vertex_attrib_binding = 0;
+	glext_ARB_robustness_isolation = 0;
 	glext_ARB_ES3_compatibility = 0;
 	glext_ARB_explicit_uniform_location = 0;
 	glext_ARB_fragment_layer_viewport = 0;
@@ -831,9 +828,6 @@ void gleIntClear()
 	glext_ARB_texture_buffer_range = 0;
 	glext_ARB_texture_query_levels = 0;
 	glext_ARB_texture_storage_multisample = 0;
-	glext_ARB_texture_view = 0;
-	glext_ARB_vertex_attrib_binding = 0;
-	glext_ARB_robustness_isolation = 0;
 	glext_EXT_abgr = 0;
 	glext_EXT_blend_color = 0;
 	glext_EXT_polygon_offset = 0;
@@ -1789,8 +1783,6 @@ static int gleIntLoad_ARB_copy_image()
 #endif /*GL_ARB_copy_image*/
 	return bIsLoaded;
 }
-
-
 #ifndef GL_ARB_debug_output
 typedef void (GLE_FUNCPTR * PFNGLDEBUGMESSAGECONTROLARBPROC)(GLenum , GLenum , GLenum , GLsizei , const GLuint *, GLboolean );
 typedef void (GLE_FUNCPTR * PFNGLDEBUGMESSAGEINSERTARBPROC)(GLenum , GLenum , GLuint , GLenum , GLsizei , const GLchar *);
@@ -1818,7 +1810,6 @@ static int gleIntLoad_ARB_debug_output()
 #endif /*GL_ARB_debug_output*/
 	return bIsLoaded;
 }
-
 
 
 
@@ -5644,7 +5635,7 @@ typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYSECONDARYCOLOROFFSETEXTPROC)(GLuint 
 typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYTEXCOORDOFFSETEXTPROC)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
 typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXOFFSETEXTPROC)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
 typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBIOFFSETEXTPROC)(GLuint , GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
-typedef void (GLE_FUNCPTR * PFNGLGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC)(GLuint , GLuint , GLuint , GLint , GLenum , GLboolean , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC)(GLuint , GLuint , GLuint , GLint , GLenum , GLboolean , GLsizei , GLintptr );
 typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYINTEGERVEXTPROC)(GLuint , GLenum , GLint *);
 typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYPOINTERVEXTPROC)(GLuint , GLenum , GLvoid* *);
 typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYINTEGERI_VEXTPROC)(GLuint , GLuint , GLenum , GLint *);
@@ -5875,7 +5866,7 @@ PFNGLVERTEXARRAYSECONDARYCOLOROFFSETEXTPROC glVertexArraySecondaryColorOffsetEXT
 PFNGLVERTEXARRAYTEXCOORDOFFSETEXTPROC glVertexArrayTexCoordOffsetEXT;
 PFNGLVERTEXARRAYVERTEXOFFSETEXTPROC glVertexArrayVertexOffsetEXT;
 PFNGLVERTEXARRAYVERTEXATTRIBIOFFSETEXTPROC glVertexArrayVertexAttribIOffsetEXT;
-PFNGLGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC glglVertexArrayVertexAttribOffsetEXT;
+PFNGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC glVertexArrayVertexAttribOffsetEXT;
 PFNGLGETVERTEXARRAYINTEGERVEXTPROC glGetVertexArrayIntegervEXT;
 PFNGLGETVERTEXARRAYPOINTERVEXTPROC glGetVertexArrayPointervEXT;
 PFNGLGETVERTEXARRAYINTEGERI_VEXTPROC glGetVertexArrayIntegeri_vEXT;
@@ -6336,8 +6327,8 @@ static int gleIntLoad_EXT_direct_state_access()
 	if(!glVertexArrayVertexOffsetEXT) bIsLoaded = 0;
 	glVertexArrayVertexAttribIOffsetEXT = (PFNGLVERTEXARRAYVERTEXATTRIBIOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribIOffsetEXT");
 	if(!glVertexArrayVertexAttribIOffsetEXT) bIsLoaded = 0;
-	glglVertexArrayVertexAttribOffsetEXT = (PFNGLGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC)gleIntGetProcAddress("glglVertexArrayVertexAttribOffsetEXT");
-	if(!glglVertexArrayVertexAttribOffsetEXT) bIsLoaded = 0;
+	glVertexArrayVertexAttribOffsetEXT = (PFNGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC)gleIntGetProcAddress("glVertexArrayVertexAttribOffsetEXT");
+	if(!glVertexArrayVertexAttribOffsetEXT) bIsLoaded = 0;
 	glGetVertexArrayIntegervEXT = (PFNGLGETVERTEXARRAYINTEGERVEXTPROC)gleIntGetProcAddress("glGetVertexArrayIntegervEXT");
 	if(!glGetVertexArrayIntegervEXT) bIsLoaded = 0;
 	glGetVertexArrayPointervEXT = (PFNGLGETVERTEXARRAYPOINTERVEXTPROC)gleIntGetProcAddress("glGetVertexArrayPointervEXT");
@@ -10950,10 +10941,7 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_ARB_conservative_depth", &glext_ARB_conservative_depth, NULL},
 	{"GL_ARB_copy_buffer", &glext_ARB_copy_buffer, gleIntLoad_ARB_copy_buffer},
 	{"GL_ARB_copy_image", &glext_ARB_copy_image, gleIntLoad_ARB_copy_image},
-	{"GL_ARB_debug_group", &glext_ARB_debug_group, NULL},
-	{"GL_ARB_debug_label", &glext_ARB_debug_label, NULL},
 	{"GL_ARB_debug_output", &glext_ARB_debug_output, gleIntLoad_ARB_debug_output},
-	{"GL_ARB_debug_output2", &glext_ARB_debug_output2, NULL},
 	{"GL_ARB_depth_buffer_float", &glext_ARB_depth_buffer_float, NULL},
 	{"GL_ARB_depth_clamp", &glext_ARB_depth_clamp, NULL},
 	{"GL_ARB_depth_texture", &glext_ARB_depth_texture, NULL},
@@ -11340,7 +11328,7 @@ StrToExtMap gleIntExtensionMap[] = {
 	{"GL_WIN_specular_fog", &glext_WIN_specular_fog, NULL},
 };
 
-int gleIntExtensionMapSize = 440;
+int gleIntExtensionMapSize = 437;
 
 typedef void (GLE_FUNCPTR * PFNGLCULLFACEPROC)(GLenum );
 PFNGLCULLFACEPROC __gleCullFace;

@@ -209,9 +209,9 @@ extern int glext_ARB_arrays_of_arrays;
 extern int glext_ARB_clear_buffer_object;
 extern int glext_ARB_compute_shader;
 extern int glext_ARB_copy_image;
-extern int glext_ARB_debug_group;
-extern int glext_ARB_debug_label;
-extern int glext_ARB_debug_output2;
+extern int glext_ARB_texture_view;
+extern int glext_ARB_vertex_attrib_binding;
+extern int glext_ARB_robustness_isolation;
 extern int glext_ARB_ES3_compatibility;
 extern int glext_ARB_explicit_uniform_location;
 extern int glext_ARB_fragment_layer_viewport;
@@ -227,9 +227,6 @@ extern int glext_ARB_stencil_texturing;
 extern int glext_ARB_texture_buffer_range;
 extern int glext_ARB_texture_query_levels;
 extern int glext_ARB_texture_storage_multisample;
-extern int glext_ARB_texture_view;
-extern int glext_ARB_vertex_attrib_binding;
-extern int glext_ARB_robustness_isolation;
 extern int glext_EXT_abgr;
 extern int glext_EXT_blend_color;
 extern int glext_EXT_polygon_offset;
@@ -1347,35 +1344,6 @@ extern PFNGLCOPYIMAGESUBDATAPROC __gleCopyImageSubData;
 #endif /*GL_ARB_copy_image*/
 
 /******************************
-* Extension: GL_ARB_debug_group
-******************************/
-
-#define GL_STACK_OVERFLOW 0x0503
-#define GL_STACK_UNDERFLOW 0x0504
-#define GL_DEBUG_TYPE_MARKER 0x8268
-#define GL_DEBUG_TYPE_PUSH_GROUP 0x8269
-#define GL_DEBUG_TYPE_POP_GROUP 0x826A
-#define GL_DEBUG_SEVERITY_NOTIFICATION 0x826B
-#define GL_MAX_DEBUG_GROUP_STACK_DEPTH 0x826C
-#define GL_DEBUG_GROUP_STACK_DEPTH 0x826D
-
-
-/******************************
-* Extension: GL_ARB_debug_label
-******************************/
-
-#define GL_VERTEX_ARRAY 0x8074
-#define GL_BUFFER 0x82E0
-#define GL_SHADER 0x82E1
-#define GL_PROGRAM 0x82E2
-#define GL_QUERY 0x82E3
-#define GL_PROGRAM_PIPELINE 0x82E4
-#define GL_SAMPLER 0x82E6
-#define GL_DISPLAY_LIST 0x82E7
-#define GL_MAX_LABEL_LENGTH 0x82E8
-
-
-/******************************
 * Extension: GL_ARB_debug_output
 ******************************/
 
@@ -1416,14 +1384,6 @@ extern PFNGLDEBUGMESSAGEINSERTARBPROC glDebugMessageInsertARB;
 extern PFNGLDEBUGMESSAGECALLBACKARBPROC glDebugMessageCallbackARB;
 extern PFNGLGETDEBUGMESSAGELOGARBPROC glGetDebugMessageLogARB;
 #endif /*GL_ARB_debug_output*/
-
-/******************************
-* Extension: GL_ARB_debug_output2
-******************************/
-
-#define GL_DEBUG_OUTPUT 0x92E0
-#define GL_CONTEXT_FLAG_DEBUG_BIT 0x00000002
-
 
 /******************************
 * Extension: GL_ARB_depth_buffer_float
@@ -5972,7 +5932,7 @@ typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYSECONDARYCOLOROFFSETEXTPROC)(GLuint 
 typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYTEXCOORDOFFSETEXTPROC)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
 typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXOFFSETEXTPROC)(GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
 typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBIOFFSETEXTPROC)(GLuint , GLuint , GLuint , GLint , GLenum , GLsizei , GLintptr );
-typedef void (GLE_FUNCPTR * PFNGLGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC)(GLuint , GLuint , GLuint , GLint , GLenum , GLboolean , GLsizei , GLintptr );
+typedef void (GLE_FUNCPTR * PFNGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC)(GLuint , GLuint , GLuint , GLint , GLenum , GLboolean , GLsizei , GLintptr );
 typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYINTEGERVEXTPROC)(GLuint , GLenum , GLint *);
 typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYPOINTERVEXTPROC)(GLuint , GLenum , GLvoid* *);
 typedef void (GLE_FUNCPTR * PFNGLGETVERTEXARRAYINTEGERI_VEXTPROC)(GLuint , GLuint , GLenum , GLint *);
@@ -6203,7 +6163,7 @@ extern PFNGLVERTEXARRAYSECONDARYCOLOROFFSETEXTPROC glVertexArraySecondaryColorOf
 extern PFNGLVERTEXARRAYTEXCOORDOFFSETEXTPROC glVertexArrayTexCoordOffsetEXT;
 extern PFNGLVERTEXARRAYVERTEXOFFSETEXTPROC glVertexArrayVertexOffsetEXT;
 extern PFNGLVERTEXARRAYVERTEXATTRIBIOFFSETEXTPROC glVertexArrayVertexAttribIOffsetEXT;
-extern PFNGLGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC glglVertexArrayVertexAttribOffsetEXT;
+extern PFNGLVERTEXARRAYVERTEXATTRIBOFFSETEXTPROC glVertexArrayVertexAttribOffsetEXT;
 extern PFNGLGETVERTEXARRAYINTEGERVEXTPROC glGetVertexArrayIntegervEXT;
 extern PFNGLGETVERTEXARRAYPOINTERVEXTPROC glGetVertexArrayPointervEXT;
 extern PFNGLGETVERTEXARRAYINTEGERI_VEXTPROC glGetVertexArrayIntegeri_vEXT;

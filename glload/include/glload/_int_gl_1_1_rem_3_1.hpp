@@ -496,6 +496,7 @@ namespace gl
 		GL_FEEDBACK_BUFFER_SIZE          = 0x0DF1,
 		GL_FEEDBACK_BUFFER_TYPE          = 0x0DF2,
 		GL_SELECTION_BUFFER_SIZE         = 0x0DF4,
+		GL_VERTEX_ARRAY                  = 0x8074,
 		GL_NORMAL_ARRAY                  = 0x8075,
 		GL_COLOR_ARRAY                   = 0x8076,
 		GL_INDEX_ARRAY                   = 0x8077,
