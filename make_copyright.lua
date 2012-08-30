@@ -3,7 +3,7 @@
 require "lfs"
 require "ufs"
 
-local copywriteText = "Copyright (C) 2011 by Jason L. McKesson";
+local copywriteText = "Copyright (C) 2011-2012 by Jason L. McKesson";
 local licenseText = "This file is licensed by the MIT License."
 
 local alwaysIgnorePattern =
