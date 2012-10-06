@@ -55,12 +55,12 @@ namespace glload
 #endif
 
 	/**
-	This function retrieves the major GL version number. Only works after LoadFunctions has been called.
+	This function retrieves the major GL version number of the OpenGL context. Only works after LoadFunctions has been called.
 	**/
 	int GetMajorVersion();
 
 	/**
-	This function retrieves the minor GL version number. Only works after LoadFunctions has been called.
+	This function retrieves the minor GL version number of the OpenGL context. Only works after LoadFunctions has been called.
 	**/
 	int GetMinorVersion();
 
