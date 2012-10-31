@@ -90,7 +90,6 @@ namespace glimg
 
 			\todo Flip the textures, or allow the user to decide not to.
 			\todo Get 3D textures working.
-			\todo Get cubemap textures working. With mipmaps.
 			\todo Implement the D3D10 format.
 			\todo Get array textures working. With mipmaps.
 			\todo Get cubemap array textures working.

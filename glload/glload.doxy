@@ -14,10 +14,9 @@ SDK's build process, and link to them as is normal for your build system.
 
 There are two interfaces for GL Load: the C interface and the C++ interface. Files that end in <tt>.hpp</tt> are for C++, and files that end in <tt>.h</tt> are for C. C++ programs can freely include and use the C interface files.
 
-All header files except <tt>glload/gll.h</tt> and <tt>glload/gll.hpp</tt> expose OpenGL functions or functions in WGL/GLX. For regular OpenGL functions, you need to include one of the headers of the form <tt>glload/gl_*.h</tt> or <tt>.hpp</tt>, where * is the version of OpenGL that you are coding against. For example, <tt>glload/gl_3_3.h</tt> represents the header for OpenGL version 3.3. There are also <tt>_comp</tt> verisons, such as <tt>glload/gl_3_3_comp.hpp</tt>, which includes the C++ headers for the OpenGL 3.3 compatibility profile.
+All header files except <tt>glload/gll.h</tt> and <tt>glload/gll.hpp</tt> expose OpenGL functions or functions in WGL/GLX. For regular OpenGL functions, you need to include one of the headers of the form <tt>glload/gl_*.h</tt> or <tt>.hpp</tt>, where * is the version of OpenGL that you are coding against. For example, <tt>glload/gl_3_3.h</tt> represents the header for OpenGL version 3.3. There are also <tt>_comp</tt> verisons. For example: <tt>glload/gl_3_3_comp.hpp</tt> includes the C++ headers for the OpenGL 3.3 compatibility profile.
 
-Regardless of version number or core/compatibility issues, all OpenGL headers contain
-function for every extension.
+Regardless of version number or core/compatibility issues, all OpenGL headers contain function for every extension.
 
 The headers <tt>glload/gl_all.h</tt> and <tt>glload/gl_all.hpp</tt> contain every function and enum definition for everything that has ever been in OpenGL, core or compatibility. The headers <tt>glload/gl_core.h</tt> and <tt>glload/gl_core.hpp</tt> contain all core functions and enums for the most recent version of OpenGL, as well as those for extensions. These will be updated as OpenGL is updated.
 
@@ -25,9 +24,9 @@ You should not use <tt>GL/gl.h</tt> in conjunction with these headers. Nor shoul
 
 Also, for each source file, you should pick @em one GL Load header and include only that. A single source file should not include both <tt>glload/gl_3_3_comp.hpp</tt> and <tt>glload/gl_4_2.hpp</tt>, for example.
 
-It \em is allowable to include different headers in different files. The GL Load initialization process will load only the available entrypoints. Which functions are loaded is independent of the header included. So, if your implementation supports 3.3, you can freely use a 2.1 header in one source file, and a 3.2 header in another. Attempting to use a 4.2 header if the implementation only supports 3.3 is asking for trouble.
+It \em is allowable to include different headers in different source files. The GL Load initialization process will load the available entrypoints, so which functions are loaded is independent of the header included. So, if your implementation supports 3.3, you can freely use a 2.1 header in one source file, and a 3.2 header in another. Attempting to use a 4.2 header if the implementation only supports 3.3 is asking for trouble.
 
-For WGL or GLX extensions, there are <tt>glload/wgl_exts.h</tt> and <tt>glload/glx_exts.h</tt>. These provide the extensions for these APIs, but not the non-extension functions. So unlike regular OpenGL, you will still need to include <tt>GL/glx.h</tt> and <tt>wgl.h</tt>
+For WGL or GLX extensions, there are <tt>glload/wgl_all.h</tt> and <tt>glload/glx_all.h</tt>, as well as <tt>.hpp</tt> versions. These provide the extensions for these APIs, but not the non-extension functions. So unlike regular OpenGL, you will still need to include <tt>GL/glx.h</tt> and <tt>wgl.h</tt>.
 
 @section glload_initialization Initialization
 
@@ -35,47 +34,65 @@ The headers themselves are not useful unless GL Load has been initialized. That 
 
 GL Load relies on mechanisms that are part of OpenGL to function. Therefore, you must have a valid OpenGL context that has been made current before you can initialize GL Load.
 
-The headers that contain the functions to initialize GL Load are <tt>glload/gll.h</tt> and <tt>glload/gll.hpp</tt>. These are the C and C++ interfaces to GL Load initialization. You will only need to include the header of your choice in your initialization code; you don't need to include it everywhere that you use OpenGL.
+The headers that contain the functions to initialize GL Load are <tt>glload/gl_load.h</tt> and <tt>glload/gl_load.hpp</tt>. These are the C and C++ interfaces to GL Load initialization. If you want to use the C++ API, you should use the C++ interface, and vice-versa.
 
-The two interface function identically, and have the exact same parameters and return values. The only difference is that the C++ functions are in the @ref glload namespace and the C ones are global.
+To initialize the OpenGL functions, call ::ogl_LoadFunctions for C or glload::LoadFunctions for C++. This function will respect the context's version number as well as its core/compatibility flags (for contexts that make such a distinction). If you create a core 3.3 context, then GL Load will only load functions that are available in that context. And similarly for compatibility.
 
-To initialize the OpenGL functions, call LoadFunctions. This function will respect the context's version number as well as its core/compatibility flags (for contexts that make such a distinction). If you create a core 3.3 context, then GL Load will only load functions that are available in that context. And similarly for compatibility.
+The platform-specific extension loading functions are in different files: <tt>glload/wgl_load.h</tt> and <tt>glload/glx_load.h</tt>, along with their <tt>.hpp</tt> counterparts.
 
-Platform-specific extensions can be loaded with LoadWinFunctions/LoadGLXFunctions, for WGL or GLX respectively.
+There are also some convenience functions for the OpenGL interface, to make dealing with versions slightly easier. The ::ogl_GetMajorVersion and ::ogl_GetMinorVersion functions retrieve the major and minor OpenGL functions. These can @em only be called after a successful call to ::ogl_LoadFunctions. The C++ interface has similar functions.
 
-There are also some convenience functions, to make dealing with versions slightly easier. The GetMajorVersion and GetMinorVersion functions retrieve the major and minor OpenGL functions. These can @em only be called after a successful call to LoadFunctions.
-
-The function IsVersionGEQ can be used to test if the current OpenGL version is at least the given version. This is useful for testing to see if functionality from a particular version is available.
+The function ::ogl_IsVersionGEQ can be used to test if the current OpenGL version is at least the given version. This is useful for testing to see if functionality from a particular version is available. The C++ interface again has its analog.
 
 @section glload_extensions Extensions
 
 GL Load has support for OpenGL extensions. The initialization routines will initialize OpenGL extensions just as it includes the core functions. The OpenGL (and WGL/GLX) headers have some additional, extension-specific functionality.
 
-Integer variables are provided to query whether an extension is available. These variables are of the form:
+Variables are provided to query whether an extension is available. These variables are of the form:
 
 <code>
 glext_<em>extension_name</em>
 </code>
 
-For example, if you wish to check to see if the GL_ARB_vertex_array_object extension is defined, you would test <tt>glext_ARB_vertex_array_object</tt> after initializing GL Load. If it is non-zero, then the extension is present. If it is 0, then it is not. This works the same between C and C++. For WGL/GLX extensions, this becomes wglext/glxext_*.
+For WGL/GLX, this becomes <tt>wglext_/glXext_</tt> respectively.
+
+In C++, the variables are named:
+
+<code>
+gl::exts::var_<em>extension_name</em>
+</code>
+
+Again, with the namespace changes for WGL/GLX.
+
+The contents of these variables describe the same information in both C and C++, but they provide this data in very different ways.
+
+There are three possibilities for an extension in this system. If the extension was not found in the extension string, then nothing will be loaded for that extension. If it was found, then either the loading worked perfectly (all functions, if any, are loaded) or some expected functions are missing.
+
+In C, the extension variables are integers, but they're not a simple boolean true/false. A value of 0 means that the extension was not present in the extension string. A value other than 0 means that the extension was present in the string. If the value is exactly 1, then the extension was present and all of its functions (if any) were successfully loaded. If it is greater than 1, then the value - 1 is the number of functions that *failed* to load in this extension.
+
+For example, take GL_ARB_texture_storage. If the value of <tt>glext_ARB_texture_storage</tt> is 0, then the extension string was not found. If its value is 1, then all of its functions were loaded, *including* functions that depend on GL_EXT_direct_state_access. If the value is, for example, 4, then 3 functions failed to load (most likely, the EXT_DSA-dependent ones).
+
+The C++ variables are a type, glload::LoadTest. It is convertible to <tt>bool</tt>, which is how you determine if the extension was found in the extension string or not. It has a function, LoadTest::GetNumMissing, that returns the number of functions that failed to load if the extension string was found.
 
 These variables only gain valid values @em after GL Load has been properly initialized.
 
 @section glload_interface C and C++ Interface Headers
 
-As previously stated, there are two interfaces: C and C++. The C interface looks identical to the OpenGL definitions. All of the functions and enums are at global scope, as are all of the various internal declarations that are needed to make GL Load work.
+As previously stated, there are two interfaces: C and C++. The C interface looks identical to the traditional OpenGL definitions. All of the functions and enums are at global scope, as are all of the various internal declarations that are needed to make GL Load work.
 
-The C interface defines function pointers as extern variables prefixed by <tt>__glext</tt> or <tt>glext</tt>.
+The C interface defines function pointers as extern variables prefixed by <tt>_funcptr_</tt>.
 
-C++ programs may freely use the C interface; this makes them more compatible with source code you would find online. However, they may use the C++ interface as well. This pushes as much of OpenGL as possible into the <tt>gl</tt> namespace. All OpenGL enumerators are actual members of an enumeration in the <tt>gl</tt> namespace. All of the OpenGL functions are in the <tt>gl</tt> namespace.
+C++ programs may freely use the C interface; this makes them more compatible with source code you would find online. However, they may use the C++ interface as well. This pushes as much of OpenGL as possible into a namespace. For OpenGL, <tt>gl</tt> is used. For the platform-specific APIs, <tt>wgl/glx</tt> is used. All enumerators are actual members of an enumeration in this namespace. All of the OpenGL functions are there too.
 
-The function names are different as well. Since they are in the gl namespace, the function names are not prefixed with "gl" Therefore, this interface does not. Therefore, the function that is usually seen as <tt>glVertexAttribPointer</tt> becomes <tt>gl::VertexAttribPointer</tt>.
+The function names are different as well. Since they are in a namespace, the function names do not need the traditional "gl/wgl/glX" prefix. Therefore, this interface does not prefix them. The function that is usually seen as <tt>glVertexAttribPointer</tt> becomes <tt>gl::VertexAttribPointer</tt>.
 
-Note that this is purely for convenience. OpenGL is still exposed directly, at a low level, to the user. There are no C++ classes or other types, nor does this interface provide overloaded functions for functions like <tt>glVertex3f</tt>, <tt>glVertex4f</tt>, etc. It does not change the actual OpenGL interface; it just makes OpenGL clutter the global namespace much less, as well as make tool parsing a bit easier due to not having to use \#defines.
+Note that this does not make OpenGL object-oriented or anything. The C++ API is \em only about moving OpenGL definitions into namespaces. OpenGL is still exposed directly, at a low level, to the user. There are no C++ classes or other types, nor does this interface provide overloaded functions for functions like <tt>glVertex3f</tt>, <tt>glVertex4f</tt>, etc. The main purpose of this is to make it easier to dedicated code completion tools to find names and their declarations.
 
-There are some declarations that cannot be moved to a namespace. The glext_ variables cannot be moved to the <tt>gl</tt> namespace. The OpenGL defined types (GLfloat, GLint, etc) also are not placed in the namespace.
+The extension variables are in the <tt>exts</tt> namespace within the main namespace.
 
-Note that the two interfaces all ultimately call the same functions. So you can use them interchangeably (though this is not suggested). You could use the C interface to glload to initialize GL Load, and use C++ headers to access the functions. Or vice-versa.
+There are some declarations that cannot be moved to a namespace. The OpenGL defined types (GLfloat, GLint, etc) are not placed in the namespace.
+
+Note that if you use the C++ interface, you \em must use the C++ interface to initialize GL Load.
 
 @section glload_example Example
 
@@ -83,7 +100,7 @@ Here is an example of using the C interface.
 
 \code
 #include <glload/gl_3_3.h>
-#include <glload/gll.h>
+#include <glload/gl_load.h>
 
 //Include headers for FreeGLUT/GLFW/other GL tools.
 
@@ -91,7 +108,7 @@ int main(int argc, char *argv[])
 {
   //Initialize OpenGL and bind the context
   
-  if(LoadFunctions() == LS_LOAD_FAILED)
+  if(LoadFunctions() == 0)
     //exit in some way
 	
   //Loading succeeded. Now use OpenGL functions.
@@ -107,7 +124,7 @@ Here is the same code, but written for the C++ interface.
 
 \code
 #include <glload/gl_3_3.hpp>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 
 //Include headers for FreeGLUT/GLFW/other GL tools.
 
@@ -115,7 +132,7 @@ int main(int argc, char *argv[])
 {
   //Initialize OpenGL and bind the context
   
-  if(glload::LoadFunctions() == glload::LS_LOAD_FAILED)
+  if(!glload::LoadFunctions())
     //exit in some way
 	
   //Loading succeeded. Now use OpenGL functions.
