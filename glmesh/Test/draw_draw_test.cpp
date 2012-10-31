@@ -56,9 +56,9 @@ public:
 		gl::ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		gl::ClearDepth(1.0);
 
-		gl::Enable(gl::GL_DEPTH_TEST);
-		gl::DepthFunc(gl::GL_LEQUAL);
-		gl::Enable(gl::GL_DEPTH_CLAMP);
+		gl::Enable(gl::DEPTH_TEST);
+		gl::DepthFunc(gl::LEQUAL);
+		gl::Enable(gl::DEPTH_CLAMP);
 
 		const std::string vertexShader(
 			"#version 330\n"
@@ -91,8 +91,8 @@ public:
 			"}\n"
 			);
 
-		GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
-		GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+		GLuint vertShader = glutil::CompileShader(gl::VERTEX_SHADER, vertexShader);
+		GLuint fragShader = glutil::CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 
 		m_program = glutil::LinkProgram(vertShader, fragShader);
 
@@ -118,18 +118,18 @@ public:
 	{
 		gl::ClearColor(0.9f, 0.9f, 0.9f, 1.0f);
 		gl::ClearDepth(1.0f);
-		gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
+		gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
 		
 		//Set uniforms.
 		gl::UseProgram(m_program);
-		gl::UniformMatrix4fv(m_unifCameraToClipMatrix, 1, gl::GL_FALSE,
+		gl::UniformMatrix4fv(m_unifCameraToClipMatrix, 1, gl::FALSE_,
 			glm::value_ptr(cameraToClip));
 
 		{
-			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::GL_FALSE,
+			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::FALSE_,
 				glm::value_ptr(worldToCamera * modelToWorld));
 
-			glmesh::Draw immMode(gl::GL_TRIANGLES, 3, m_vertFmt, m_streamBuf);
+			glmesh::Draw immMode(gl::TRIANGLES, 3, m_vertFmt, m_streamBuf);
 
 			immMode.Attrib<glm::half>(glm::hvec4(0.75f, 0.75f, 0.0f, 1.0f));
 			immMode.Attrib<GLubyte>(153, 204, 0, 255);
@@ -144,10 +144,10 @@ public:
 		}
 
 		{
-			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::GL_FALSE,
+			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::FALSE_,
 				glm::value_ptr(worldToCamera));
 
-			glmesh::Draw immMode(gl::GL_TRIANGLE_STRIP, 4, m_vertFmt, m_streamBuf);
+			glmesh::Draw immMode(gl::TRIANGLE_STRIP, 4, m_vertFmt, m_streamBuf);
 
 			immMode.Attrib<glm::half>(glm::hvec4(30.0f, 0.0f, 30.0f, 1.0f));
 			immMode.Attrib<GLubyte>(51, 255, 51, 255);

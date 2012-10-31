@@ -6,13 +6,13 @@ namespace gl
 {
 	enum
 	{
-		//CURRENT_RASTER_SECONDARY_COLOR taken from 2.1
-		//SLUMINANCE_ALPHA taken from 2.1
-		//SLUMINANCE8_ALPHA8 taken from 2.1
-		//SLUMINANCE taken from 2.1
-		//SLUMINANCE8 taken from 2.1
-		//COMPRESSED_SLUMINANCE taken from 2.1
-		//COMPRESSED_SLUMINANCE_ALPHA taken from 2.1
+		CURRENT_RASTER_SECONDARY_COLOR   = 0x845F,
+		SLUMINANCE_ALPHA                 = 0x8C44,
+		SLUMINANCE8_ALPHA8               = 0x8C45,
+		SLUMINANCE                       = 0x8C46,
+		SLUMINANCE8                      = 0x8C47,
+		COMPRESSED_SLUMINANCE            = 0x8C4A,
+		COMPRESSED_SLUMINANCE_ALPHA      = 0x8C4B,
 	};
 	
 	namespace _detail

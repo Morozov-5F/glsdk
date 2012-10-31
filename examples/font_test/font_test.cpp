@@ -52,8 +52,8 @@ void InitializeProgram()
 		"}\n"
 		);
 
-	GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
-	GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+	GLuint vertShader = glutil::CompileShader(gl::VERTEX_SHADER, vertexShader);
+	GLuint fragShader = glutil::CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 
 	g_program = glutil::LinkProgram(vertShader, fragShader);
 
@@ -156,20 +156,20 @@ void InitializeVertexData()
 
 	gl::GenBuffers(1, &g_dataBufferObject);
 
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, g_dataBufferObject);
-	gl::BufferData(gl::GL_ARRAY_BUFFER, sizeof(GLfloat) * vecVertex.size(), &vecVertex[0], gl::GL_STATIC_DRAW);
+	gl::BindBuffer(gl::ARRAY_BUFFER, g_dataBufferObject);
+	gl::BufferData(gl::ARRAY_BUFFER, sizeof(GLfloat) * vecVertex.size(), &vecVertex[0], gl::STATIC_DRAW);
 
 	gl::GenVertexArrays(1, &g_vao);
 
 	gl::BindVertexArray(g_vao);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, g_dataBufferObject);
+	gl::BindBuffer(gl::ARRAY_BUFFER, g_dataBufferObject);
 	gl::EnableVertexAttribArray(0);
-	gl::VertexAttribPointer(0, 2, gl::GL_FLOAT, gl::GL_FALSE, 4 * sizeof(GLfloat), (void*)0);
+	gl::VertexAttribPointer(0, 2, gl::FLOAT, gl::FALSE_, 4 * sizeof(GLfloat), (void*)0);
 	gl::EnableVertexAttribArray(1);
-	gl::VertexAttribPointer(1, 2, gl::GL_FLOAT, gl::GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+	gl::VertexAttribPointer(1, 2, gl::FLOAT, gl::FALSE_, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
 
 	gl::BindVertexArray(0);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+	gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 }
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
@@ -193,7 +193,7 @@ void DrawTextString(const std::string &text, const glm::vec2 &location)
 	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine(text.c_str(), text.size(),
 		location, glutil::REF_BOTTOM);
 
-	glmesh::Draw imm(gl::GL_TRIANGLES, glyphs.size() * 6, *g_pVertFmt, *g_pStreamBuf);
+	glmesh::Draw imm(gl::TRIANGLES, glyphs.size() * 6, *g_pVertFmt, *g_pStreamBuf);
 
 	for(size_t loop = 0; loop < glyphs.size(); ++loop)
 	{
@@ -207,20 +207,20 @@ void DrawTextString(const std::string &text, const glm::vec2 &location)
 void display()
 {
 	gl::ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	gl::Clear(gl::GL_COLOR_BUFFER_BIT);
+	gl::Clear(gl::COLOR_BUFFER_BIT);
 
-	gl::Enable(gl::GL_BLEND);
-	gl::BlendEquation(gl::GL_FUNC_ADD);
-	gl::BlendFunc(gl::GL_ONE, gl::GL_ONE_MINUS_SRC_ALPHA);
+	gl::Enable(gl::BLEND);
+	gl::BlendEquation(gl::FUNC_ADD);
+	gl::BlendFunc(gl::ONE, gl::ONE_MINUS_SRC_ALPHA);
 
 	gl::UseProgram(g_program);
-	gl::ActiveTexture(gl::GL_TEXTURE0);
-	gl::BindTexture(gl::GL_TEXTURE_2D, g_pFont->GetTexture());
+	gl::ActiveTexture(gl::TEXTURE0);
+	gl::BindTexture(gl::TEXTURE_2D, g_pFont->GetTexture());
 
 	glutil::MatrixStack persMatrix;
 	persMatrix.PixelPerfectOrtho(g_windowSize, glm::vec2(-1.0f, 1.0f), false);
 
-	gl::UniformMatrix4fv(g_cameraToClipMatrixUnif, 1, gl::GL_FALSE, glm::value_ptr(persMatrix.Top()));
+	gl::UniformMatrix4fv(g_cameraToClipMatrixUnif, 1, gl::FALSE_, glm::value_ptr(persMatrix.Top()));
 
 	glm::vec2 currPt(50.0f, 5.0f);
 	if(!g_currString.empty())
@@ -237,11 +237,11 @@ void display()
 
 /*
 	gl::BindVertexArray(g_vao);
-	gl::DrawArrays(gl::GL_TRIANGLES, 0, 6 * g_numGlyphsToDraw);
+	gl::DrawArrays(gl::TRIANGLES, 0, 6 * g_numGlyphsToDraw);
 	gl::BindVertexArray(0);
 */
 
-	gl::BindTexture(gl::GL_TEXTURE_2D, 0);
+	gl::BindTexture(gl::TEXTURE_2D, 0);
 	gl::UseProgram(0);
 
 	glfwSwapBuffers();
@@ -268,7 +268,7 @@ int GLFWCALL close_cb()
 	delete g_pStreamBuf;
 	g_pStreamBuf = NULL;
 
-	return gl::GL_TRUE;
+	return gl::TRUE_;
 }
 
 void GLFWCALL CharFunc(int unicodepoint, int action)
@@ -314,7 +314,7 @@ int main(int argc, char** argv)
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef DEBUG
-	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::GL_TRUE);
+	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::TRUE_);
 #endif
 
 	if(!glfwOpenWindow(g_windowSize.x, g_windowSize.y, 8, 8, 8, 8, 24, 8, GLFW_WINDOW))
@@ -332,7 +332,7 @@ int main(int argc, char** argv)
 
 	glfwSetWindowPos(wndPos.x, wndPos.y);
 
-	if(glload::LoadFunctions() == glload::LS_LOAD_FAILED)
+	if(!glload::LoadFunctions())
 	{
 		glfwTerminate();
 		return -1;

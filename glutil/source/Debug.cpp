@@ -14,12 +14,12 @@ namespace glutil
 		{
 			switch(source)
 			{
-			case gl::GL_DEBUG_SOURCE_API_ARB: return "API";
-			case gl::GL_DEBUG_SOURCE_WINDOW_SYSTEM_ARB: return "Window System";
-			case gl::GL_DEBUG_SOURCE_SHADER_COMPILER_ARB: return "Shader Compiler";
-			case gl::GL_DEBUG_SOURCE_THIRD_PARTY_ARB: return "Third Party";
-			case gl::GL_DEBUG_SOURCE_APPLICATION_ARB: return "Application";
-			case gl::GL_DEBUG_SOURCE_OTHER_ARB: return "Other";
+			case gl::DEBUG_SOURCE_API_ARB: return "API";
+			case gl::DEBUG_SOURCE_WINDOW_SYSTEM_ARB: return "Window System";
+			case gl::DEBUG_SOURCE_SHADER_COMPILER_ARB: return "Shader Compiler";
+			case gl::DEBUG_SOURCE_THIRD_PARTY_ARB: return "Third Party";
+			case gl::DEBUG_SOURCE_APPLICATION_ARB: return "Application";
+			case gl::DEBUG_SOURCE_OTHER_ARB: return "Other";
 			default: return "WTF?";
 			}
 		}
@@ -28,12 +28,12 @@ namespace glutil
 		{
 			switch(type)
 			{
-			case gl::GL_DEBUG_TYPE_ERROR_ARB: return "Error";
-			case gl::GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB: return "Deprecated Functionality";
-			case gl::GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB: return "Undefined Behavior";
-			case gl::GL_DEBUG_TYPE_PORTABILITY_ARB: return "Portability";
-			case gl::GL_DEBUG_TYPE_PERFORMANCE_ARB: return "Performance";
-			case gl::GL_DEBUG_TYPE_OTHER_ARB: return "Other";
+			case gl::DEBUG_TYPE_ERROR_ARB: return "Error";
+			case gl::DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB: return "Deprecated Functionality";
+			case gl::DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB: return "Undefined Behavior";
+			case gl::DEBUG_TYPE_PORTABILITY_ARB: return "Portability";
+			case gl::DEBUG_TYPE_PERFORMANCE_ARB: return "Performance";
+			case gl::DEBUG_TYPE_OTHER_ARB: return "Other";
 			default: return "WTF?";
 			}
 		}
@@ -42,9 +42,9 @@ namespace glutil
 		{
 			switch(severity)
 			{
-			case gl::GL_DEBUG_SEVERITY_HIGH_ARB: return "High";
-			case gl::GL_DEBUG_SEVERITY_MEDIUM_ARB: return "Medium";
-			case gl::GL_DEBUG_SEVERITY_LOW_ARB: return "Low";
+			case gl::DEBUG_SEVERITY_HIGH_ARB: return "High";
+			case gl::DEBUG_SEVERITY_MEDIUM_ARB: return "Medium";
+			case gl::DEBUG_SEVERITY_LOW_ARB: return "Low";
 			default: return "WTF?";
 			}
 		}
@@ -80,15 +80,15 @@ namespace glutil
 
 	bool RegisterDebugOutput( OutputLocation eLoc )
 	{
-		if(!glext_ARB_debug_output)
+		if(!gl::exts::var_ARB_debug_output)
 			return false;
 
 		void *pData = NULL;
-		gl::GetPointerv(gl::GL_DEBUG_CALLBACK_FUNCTION_ARB, (void**)(&oldProc));
+		gl::GetPointerv(gl::DEBUG_CALLBACK_FUNCTION_ARB, (void**)(&oldProc));
 		if(oldProc)
-			gl::GetPointerv(gl::GL_DEBUG_CALLBACK_USER_PARAM_ARB, &pData);
+			gl::GetPointerv(gl::DEBUG_CALLBACK_USER_PARAM_ARB, &pData);
 
-		gl::Enable(gl::GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
+		gl::Enable(gl::DEBUG_OUTPUT_SYNCHRONOUS_ARB);
 
 		switch(eLoc)
 		{

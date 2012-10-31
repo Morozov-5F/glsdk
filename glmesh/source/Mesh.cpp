@@ -174,11 +174,11 @@ namespace glmesh
 			{
 				if(cmd.hasPrimRestart)
 				{
-					gl::Enable(gl::GL_PRIMITIVE_RESTART);
+					gl::Enable(gl::PRIMITIVE_RESTART);
 					gl::PrimitiveRestartIndex(cmd.primRestart);
 				}
 				else
-					gl::Disable(gl::GL_PRIMITIVE_RESTART);
+					gl::Disable(gl::PRIMITIVE_RESTART);
 
 				if(cmd.baseVertex)
 					gl::DrawElementsBaseVertex(cmd.ePrimType, cmd.vertexCount, cmd.dataType,
@@ -189,12 +189,12 @@ namespace glmesh
 			}
 			else
 			{
-				gl::Disable(gl::GL_PRIMITIVE_RESTART);
+				gl::Disable(gl::PRIMITIVE_RESTART);
 				gl::DrawArrays(cmd.ePrimType, cmd.startIndex, cmd.vertexCount);
 			}
 		}
 
-		gl::Disable(gl::GL_PRIMITIVE_RESTART);
+		gl::Disable(gl::PRIMITIVE_RESTART);
 	}
 
 	bool Mesh::DoesMainExist() const

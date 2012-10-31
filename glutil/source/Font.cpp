@@ -53,12 +53,12 @@ namespace glutil
 
 		GLenum CalcInternalFormat()
 		{
-			return gl::GL_R8;
+			return gl::R8;
 		}
 
 		GLenum CalcFormat()
 		{
-			return gl::GL_RED;
+			return gl::RED;
 		}
 
 		class FontImpl
@@ -71,65 +71,65 @@ namespace glutil
 			{
 				gl::GenTextures(1, &m_texture);
 
-				gl::PixelStorei(gl::GL_UNPACK_SWAP_BYTES, gl::GL_FALSE);
-				gl::PixelStorei(gl::GL_UNPACK_LSB_FIRST, gl::GL_FALSE);
-				gl::PixelStorei(gl::GL_UNPACK_ROW_LENGTH, 0);
-				gl::PixelStorei(gl::GL_UNPACK_SKIP_ROWS, 0);
-				gl::PixelStorei(gl::GL_UNPACK_SKIP_PIXELS, 0);
-				gl::PixelStorei(gl::GL_UNPACK_IMAGE_HEIGHT, 0);
-				gl::PixelStorei(gl::GL_UNPACK_SKIP_IMAGES, 0);
-				gl::PixelStorei(gl::GL_UNPACK_ALIGNMENT, 1);
+				gl::PixelStorei(gl::UNPACK_SWAP_BYTES, gl::FALSE_);
+				gl::PixelStorei(gl::UNPACK_LSB_FIRST, gl::FALSE_);
+				gl::PixelStorei(gl::UNPACK_ROW_LENGTH, 0);
+				gl::PixelStorei(gl::UNPACK_SKIP_ROWS, 0);
+				gl::PixelStorei(gl::UNPACK_SKIP_PIXELS, 0);
+				gl::PixelStorei(gl::UNPACK_IMAGE_HEIGHT, 0);
+				gl::PixelStorei(gl::UNPACK_SKIP_IMAGES, 0);
+				gl::PixelStorei(gl::UNPACK_ALIGNMENT, 1);
 
 /*
-				if(glext_EXT_direct_state_access)
+				if(gl::exts::var_EXT_direct_state_access)
 				{
-					if(glext_ARB_texture_storage)
+					if(gl::exts::var_ARB_texture_storage)
 					{
-						gl::TextureStorage2DEXT(m_texture, gl::GL_TEXTURE_2D, 1, CalcInternalFormat(),
+						gl::TextureStorage2DEXT(m_texture, gl::TEXTURE_2D, 1, CalcInternalFormat(),
 							m_metrics.imageWidth, m_metrics.imageHeight);
 					}
 					else
 					{
-						gl::TextureImage2DEXT(m_texture, gl::GL_TEXTURE_2D, 0, CalcInternalFormat(),
+						gl::TextureImage2DEXT(m_texture, gl::TEXTURE_2D, 0, CalcInternalFormat(),
 							m_metrics.imageWidth, m_metrics.imageHeight, 0, CalcFormat(),
-							gl::GL_UNSIGNED_BYTE, NULL);
-						gl::TextureParameteriEXT(m_texture, gl::GL_TEXTURE_2D,
-							gl::GL_TEXTURE_BASE_LEVEL, 0);
-						gl::TextureParameteriEXT(m_texture, gl::GL_TEXTURE_2D,
-							gl::GL_TEXTURE_MAX_LEVEL, 0);
+							gl::UNSIGNED_BYTE, NULL);
+						gl::TextureParameteriEXT(m_texture, gl::TEXTURE_2D,
+							gl::TEXTURE_BASE_LEVEL, 0);
+						gl::TextureParameteriEXT(m_texture, gl::TEXTURE_2D,
+							gl::TEXTURE_MAX_LEVEL, 0);
 					}
 
-					gl::TextureSubImage2DEXT(m_texture, gl::GL_TEXTURE_2D, 0, 0, 0,
+					gl::TextureSubImage2DEXT(m_texture, gl::TEXTURE_2D, 0, 0, 0,
 						m_metrics.imageWidth, m_metrics.imageHeight, CalcFormat(),
-						gl::GL_UNSIGNED_BYTE, imageData);
+						gl::UNSIGNED_BYTE, imageData);
 				}
 				else
 */
 				{
-					gl::BindTexture(gl::GL_TEXTURE_2D, m_texture);
+					gl::BindTexture(gl::TEXTURE_2D, m_texture);
 
-					if(glext_ARB_texture_storage || glload::IsVersionGEQ(4, 2))
+					if(gl::exts::var_ARB_texture_storage || glload::IsVersionGEQ(4, 2))
 					{
-						gl::TexStorage2D(gl::GL_TEXTURE_2D, 1, CalcInternalFormat(),
+						gl::TexStorage2D(gl::TEXTURE_2D, 1, CalcInternalFormat(),
 							m_metrics.imageWidth, m_metrics.imageHeight);
 					}
 					else
 					{
-						gl::TexImage2D(gl::GL_TEXTURE_2D, 0, CalcInternalFormat(),
+						gl::TexImage2D(gl::TEXTURE_2D, 0, CalcInternalFormat(),
 							m_metrics.imageWidth, m_metrics.imageHeight, 0, CalcFormat(),
-							gl::GL_UNSIGNED_BYTE, NULL);
-						gl::TexParameteri(gl::GL_TEXTURE_2D, gl::GL_TEXTURE_BASE_LEVEL, 0);
-						gl::TexParameteri(gl::GL_TEXTURE_2D, gl::GL_TEXTURE_MAX_LEVEL, 0);
+							gl::UNSIGNED_BYTE, NULL);
+						gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_BASE_LEVEL, 0);
+						gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAX_LEVEL, 0);
 					}
 
-					gl::TexParameteri(gl::GL_TEXTURE_2D, gl::GL_TEXTURE_MAG_FILTER, gl::GL_NEAREST);
-					gl::TexParameteri(gl::GL_TEXTURE_2D, gl::GL_TEXTURE_MIN_FILTER, gl::GL_NEAREST);
+					gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::NEAREST);
+					gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::NEAREST);
 
-					gl::TexSubImage2D(gl::GL_TEXTURE_2D, 0, 0, 0,
+					gl::TexSubImage2D(gl::TEXTURE_2D, 0, 0, 0,
 						m_metrics.imageWidth, m_metrics.imageHeight, CalcFormat(),
-						gl::GL_UNSIGNED_BYTE, imageData);
+						gl::UNSIGNED_BYTE, imageData);
 
-					gl::BindTexture(gl::GL_TEXTURE_2D, 0);
+					gl::BindTexture(gl::TEXTURE_2D, 0);
 				}
 			}
 

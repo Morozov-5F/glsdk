@@ -63,7 +63,7 @@ namespace glmesh
 
 		static GLint maxAttribs = 0;
 		if(maxAttribs == 0)
-			gl::GetIntegerv(gl::GL_MAX_VERTEX_ATTRIBS, &maxAttribs);
+			gl::GetIntegerv(gl::MAX_VERTEX_ATTRIBS, &maxAttribs);
 
 		if(m_attribIndex >= (GLuint)maxAttribs)
 			throw AttributeDataUnsupportedException(m_attribIndex, maxAttribs);
@@ -71,7 +71,7 @@ namespace glmesh
 		//Check for half-float support.
 		if(m_vertType == VDT_HALF_FLOAT)
 		{
-			if(!glload::IsVersionGEQ(3, 0) && !glext_ARB_half_float_vertex)
+			if(!glload::IsVersionGEQ(3, 0) && !gl::exts::var_ARB_half_float_vertex)
 			{
 				throw AttributeDataUnsupportedException(
 					"half-float attributes are not supported on this OpenGL implementation.");
@@ -91,7 +91,7 @@ namespace glmesh
 				throw AttributeDataInvalidException("Integer ADTs cannot be used with floats");
 
 			//Check for integer support.
-			if(!glload::IsVersionGEQ(3, 0) && !glext_EXT_gpu_shader4)
+			if(!glload::IsVersionGEQ(3, 0) && !gl::exts::var_EXT_gpu_shader4)
 			{
 				throw AttributeDataUnsupportedException(
 					"Integer attributes are not supported on this OpenGL implementation.");
@@ -102,7 +102,7 @@ namespace glmesh
 				throw AttributeDataInvalidException("Only VDT_DOUBLE_FLOAT can be paired with ADT_DOUBLE.");
 
 			//Check for double-precision support.
-			if(!glload::IsVersionGEQ(4, 0) && !glext_ARB_vertex_attrib_64bit)
+			if(!glload::IsVersionGEQ(4, 0) && !gl::exts::var_ARB_vertex_attrib_64bit)
 			{
 				throw AttributeDataUnsupportedException(
 					"Double attributes are not supported on this OpenGL implementation.");
@@ -168,16 +168,16 @@ namespace glmesh
 	{
 		GLenum t_vertexUploadType[] =
 		{
-			gl::GL_HALF_FLOAT,
-			gl::GL_FLOAT,
-			gl::GL_DOUBLE,
+			gl::HALF_FLOAT,
+			gl::FLOAT,
+			gl::DOUBLE,
 
-			gl::GL_BYTE,
-			gl::GL_UNSIGNED_BYTE,
-			gl::GL_SHORT,
-			gl::GL_UNSIGNED_SHORT,
-			gl::GL_INT,
-			gl::GL_UNSIGNED_INT,
+			gl::BYTE,
+			gl::UNSIGNED_BYTE,
+			gl::SHORT,
+			gl::UNSIGNED_SHORT,
+			gl::INT,
+			gl::UNSIGNED_INT,
 		};
 	}
 
@@ -197,12 +197,12 @@ namespace glmesh
 			{
 			case ADT_FLOAT:
 				gl::VertexAttribPointer(attribute.GetAttribIndex(),
-					numComponents, type, gl::GL_FALSE, fmt.GetVertexByteSize(),
+					numComponents, type, gl::FALSE_, fmt.GetVertexByteSize(),
 					reinterpret_cast<void*>(baseOffset + offset));
 				break;
 			case ADT_NORM_FLOAT:
 				gl::VertexAttribPointer(attribute.GetAttribIndex(),
-					numComponents, type, gl::GL_TRUE, fmt.GetVertexByteSize(),
+					numComponents, type, gl::TRUE_, fmt.GetVertexByteSize(),
 					reinterpret_cast<void*>(baseOffset + offset));
 				break;
 			case ADT_INTEGER:

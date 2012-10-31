@@ -55,9 +55,9 @@ public:
 		gl::ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		gl::ClearDepth(1.0);
 
-		gl::Enable(gl::GL_DEPTH_TEST);
-		gl::DepthFunc(gl::GL_LEQUAL);
-		gl::Enable(gl::GL_DEPTH_CLAMP);
+		gl::Enable(gl::DEPTH_TEST);
+		gl::DepthFunc(gl::LEQUAL);
+		gl::Enable(gl::DEPTH_CLAMP);
 
 		const std::string vertexShader(
 			"#version 330\n"
@@ -90,8 +90,8 @@ public:
 			"}\n"
 			);
 
-		GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
-		GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+		GLuint vertShader = glutil::CompileShader(gl::VERTEX_SHADER, vertexShader);
+		GLuint fragShader = glutil::CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 
 		m_program = glutil::LinkProgram(vertShader, fragShader);
 
@@ -117,7 +117,7 @@ public:
 	{
 		gl::ClearColor(0.9f, 0.9f, 0.9f, 1.0f);
 		gl::ClearDepth(1.0f);
-		gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
+		gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
 		
 		//Update data in stream buffer.
 		size_t triOffset = 0;
@@ -137,32 +137,32 @@ public:
 
 		//Set uniforms.
 		gl::UseProgram(m_program);
-		gl::UniformMatrix4fv(m_unifCameraToClipMatrix, 1, gl::GL_FALSE,
+		gl::UniformMatrix4fv(m_unifCameraToClipMatrix, 1, gl::FALSE_,
 			glm::value_ptr(cameraToClip));
 
 		//Bind the buffer.
 		gl::BindVertexArray(m_streamBuf.GetVao());
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_streamBuf.GetBuffer());
+		gl::BindBuffer(gl::ARRAY_BUFFER, m_streamBuf.GetBuffer());
 
 		{
 			//Draw the triangle.
 			glmesh::VertexFormat::Enable bind(m_vertFmt, triOffset);
-			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::GL_FALSE,
+			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::FALSE_,
 				glm::value_ptr(worldToCamera * modelToWorld));
 
-			gl::DrawArrays(gl::GL_TRIANGLES, 0, 3);
+			gl::DrawArrays(gl::TRIANGLES, 0, 3);
 		}
 		{
 			//Draw ground plane.
 			glmesh::VertexFormat::Enable bind(m_vertFmt, groundOffset);
 
-			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::GL_FALSE,
+			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::FALSE_,
 				glm::value_ptr(worldToCamera));
 
-			gl::DrawArrays(gl::GL_TRIANGLE_STRIP, 0, 4);
+			gl::DrawArrays(gl::TRIANGLE_STRIP, 0, 4);
 		}
 
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+		gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 		gl::BindVertexArray(0);
 		gl::UseProgram(0);
 	}

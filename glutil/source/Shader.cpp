@@ -10,16 +10,16 @@ namespace glutil
 		void ThrowIfShaderCompileFailed(GLuint shader)
 		{
 			GLint status;
-			gl::GetShaderiv(shader, gl::GL_COMPILE_STATUS, &status);
-			if (status == gl::GL_FALSE)
+			gl::GetShaderiv(shader, gl::COMPILE_STATUS, &status);
+			if (status == gl::FALSE_)
 				throw CompileLinkException(shader);
 		}
 
 		void ThrowIfProgramLinkFailed(GLuint program)
 		{
 			GLint status;
-			gl::GetProgramiv (program, gl::GL_LINK_STATUS, &status);
-			if (status == gl::GL_FALSE)
+			gl::GetProgramiv (program, gl::LINK_STATUS, &status);
+			if (status == gl::FALSE_)
 			{
 				throw CompileLinkException(program, true);
 			}
@@ -29,7 +29,7 @@ namespace glutil
 		{
 			if(!glload::IsVersionGEQ(4, 1))
 			{
-				if(!glext_ARB_separate_shader_objects)
+				if(!gl::exts::var_ARB_separate_shader_objects)
 					throw SeparateShaderNotSupported();
 			}
 		}
@@ -38,7 +38,7 @@ namespace glutil
 	CompileLinkException::CompileLinkException( GLuint shader )
 	{
 		GLint infoLogLength;
-		gl::GetShaderiv(shader, gl::GL_INFO_LOG_LENGTH, &infoLogLength);
+		gl::GetShaderiv(shader, gl::INFO_LOG_LENGTH, &infoLogLength);
 
 		GLchar *strInfoLog = new GLchar[infoLogLength + 1];
 		gl::GetShaderInfoLog(shader, infoLogLength, NULL, strInfoLog);
@@ -53,7 +53,7 @@ namespace glutil
 	CompileLinkException::CompileLinkException( GLuint program, bool )
 	{
 		GLint infoLogLength;
-		gl::GetProgramiv(program, gl::GL_INFO_LOG_LENGTH, &infoLogLength);
+		gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &infoLogLength);
 
 		GLchar *strInfoLog = new GLchar[infoLogLength + 1];
 		gl::GetProgramInfoLog(program, infoLogLength, NULL, strInfoLog);
@@ -147,11 +147,11 @@ namespace glutil
 
 	GLuint LinkProgram( const char *vertexShader, const char *fragmentShader )
 	{
-		GLuint vertShader = CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
+		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
 		GLuint fragShader = 0;
 		try
 		{
-			fragShader = CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+			fragShader = CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 		}
 		catch(...)
 		{
@@ -176,11 +176,11 @@ namespace glutil
 
 	GLuint LinkProgram( const std::string &vertexShader, const std::string &fragmentShader )
 	{
-		GLuint vertShader = CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
+		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
 		GLuint fragShader = 0;
 		try
 		{
-			fragShader = CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+			fragShader = CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 		}
 		catch(...)
 		{
@@ -205,11 +205,11 @@ namespace glutil
 
 	GLuint LinkProgram( GLuint program, const char *vertexShader, const char *fragmentShader )
 	{
-		GLuint vertShader = CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
+		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
 		GLuint fragShader = 0;
 		try
 		{
-			fragShader = CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+			fragShader = CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 		}
 		catch(...)
 		{
@@ -234,11 +234,11 @@ namespace glutil
 
 	GLuint LinkProgram( GLuint program, const std::string &vertexShader, const std::string &fragmentShader )
 	{
-		GLuint vertShader = CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
+		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
 		GLuint fragShader = 0;
 		try
 		{
-			fragShader = CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+			fragShader = CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 		}
 		catch(...)
 		{
@@ -268,7 +268,7 @@ namespace glutil
 
 		GLuint program = gl::CreateProgram();
 		if(isSeparable)
-			gl::ProgramParameteri(program, gl::GL_PROGRAM_SEPARABLE, gl::GL_TRUE);
+			gl::ProgramParameteri(program, gl::PROGRAM_SEPARABLE, gl::TRUE_);
 
 		gl::AttachShader(program, shader);
 
@@ -285,7 +285,7 @@ namespace glutil
 
 		GLuint program = gl::CreateProgram();
 		if(isSeparable)
-			gl::ProgramParameteri(program, gl::GL_PROGRAM_SEPARABLE, gl::GL_TRUE);
+			gl::ProgramParameteri(program, gl::PROGRAM_SEPARABLE, gl::TRUE_);
 
 		return LinkProgram(program, shaders);
 	}

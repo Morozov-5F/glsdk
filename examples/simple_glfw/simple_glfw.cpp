@@ -197,7 +197,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	if(glload::LoadFunctions() == glload::LS_LOAD_FAILED)
+	if(!glload::LoadFunctions())
 	{
 		glfwTerminate();
 		return -1;

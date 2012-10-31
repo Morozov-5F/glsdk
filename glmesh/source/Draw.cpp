@@ -44,13 +44,13 @@ namespace glmesh
 			if(glload::IsVersionGEQ(3, 2))
 			{
 				GLint iProfileMask = 0;
-				gl::GetIntegerv(gl::GL_CONTEXT_PROFILE_MASK, &iProfileMask);
-				if(iProfileMask & gl::GL_CONTEXT_CORE_PROFILE_BIT)
+				gl::GetIntegerv(gl::CONTEXT_PROFILE_MASK, &iProfileMask);
+				if(iProfileMask & gl::CONTEXT_CORE_PROFILE_BIT)
 					throw PrimitiveTypeUnsupportedException(quadTypename);
 			}
 			else if(glload::IsVersionGEQ(3, 1))
 			{
-				if(!glext_ARB_compatibility)
+				if(!gl::exts::var_ARB_compatibility)
 					throw PrimitiveTypeUnsupportedException(quadTypename);
 			}
 		}
@@ -63,39 +63,39 @@ namespace glmesh
 
 			switch(primType)
 			{
-			case gl::GL_TRIANGLES:
+			case gl::TRIANGLES:
 				if(vertexCount % 3 != 0)
 				{
 					throw VertexCountPrimMismatchException("GL_TRIANGLES",
 						"Must be divisible by 3.", vertexCount);
 				}
 				break;
-			case gl::GL_TRIANGLE_STRIP:
-			case gl::GL_TRIANGLE_FAN:
+			case gl::TRIANGLE_STRIP:
+			case gl::TRIANGLE_FAN:
 				if(vertexCount < 3)
 				{
 					throw VertexCountPrimMismatchException("GL_TRIANGLES_STRIP/FAN",
 						"Must be >= 3.", vertexCount);
 				}
 				break;
-			case gl::GL_POINTS:
+			case gl::POINTS:
 				break;
-			case gl::GL_LINES:
+			case gl::LINES:
 				if(vertexCount % 2 != 0)
 				{
 					throw VertexCountPrimMismatchException("GL_LINES",
 						"Must be divisible by 2.", vertexCount);
 				}
 				break;
-			case gl::GL_LINE_LOOP:
-			case gl::GL_LINE_STRIP:
+			case gl::LINE_LOOP:
+			case gl::LINE_STRIP:
 				if(vertexCount < 2)
 				{
 					throw VertexCountPrimMismatchException("GL_LINE_LOOP/STRIP",
 						"Must be >= 2.", vertexCount);
 				}
 				break;
-			case gl::GL_QUADS:
+			case gl::QUADS:
 				ThrowIfNoQuads("GL_QUADS");
 				if(vertexCount % 4)
 				{
@@ -103,7 +103,7 @@ namespace glmesh
 						"Must be divisible by 4.", vertexCount);
 				}
 				break;
-			case gl::GL_QUAD_STRIP:
+			case gl::QUAD_STRIP:
 				ThrowIfNoQuads("GL_QUAD_STRIP");
 				if(vertexCount < 4)
 				{
@@ -208,7 +208,7 @@ namespace glmesh
 
 		if(m_buffer.GetVao())
 			gl::BindVertexArray(m_buffer.GetVao());
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_buffer.GetBuffer());
+		gl::BindBuffer(gl::ARRAY_BUFFER, m_buffer.GetBuffer());
 
 		{
 			VertexFormat::Enable bind(m_fmt, m_bufferOffset);
@@ -216,7 +216,7 @@ namespace glmesh
 			gl::DrawArrays(m_primType, 0, m_vertexCount);
 		}
 
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+		gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 		if(m_buffer.GetVao())
 			gl::BindVertexArray(0);
 

@@ -6,11 +6,11 @@ namespace gl
 {
 	enum
 	{
-		//RESCALE_NORMAL taken from 1.2
-		//LIGHT_MODEL_COLOR_CONTROL taken from 1.2
-		//SINGLE_COLOR taken from 1.2
-		//SEPARATE_SPECULAR_COLOR taken from 1.2
-		//ALIASED_POINT_SIZE_RANGE taken from 1.2
+		RESCALE_NORMAL                   = 0x803A,
+		LIGHT_MODEL_COLOR_CONTROL        = 0x81F8,
+		SINGLE_COLOR                     = 0x81F9,
+		SEPARATE_SPECULAR_COLOR          = 0x81FA,
+		ALIASED_POINT_SIZE_RANGE         = 0x846D,
 	};
 	
 	namespace _detail

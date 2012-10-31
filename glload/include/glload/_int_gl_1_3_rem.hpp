@@ -6,43 +6,43 @@ namespace gl
 {
 	enum
 	{
-		//CLIENT_ACTIVE_TEXTURE taken from 1.3
-		//MAX_TEXTURE_UNITS taken from 1.3
-		//TRANSPOSE_MODELVIEW_MATRIX taken from 1.3
-		//TRANSPOSE_PROJECTION_MATRIX taken from 1.3
-		//TRANSPOSE_TEXTURE_MATRIX taken from 1.3
-		//TRANSPOSE_COLOR_MATRIX taken from 1.3
-		//MULTISAMPLE_BIT taken from 1.3
-		//NORMAL_MAP taken from 1.3
-		//REFLECTION_MAP taken from 1.3
-		//COMPRESSED_ALPHA taken from 1.3
-		//COMPRESSED_LUMINANCE taken from 1.3
-		//COMPRESSED_LUMINANCE_ALPHA taken from 1.3
-		//COMPRESSED_INTENSITY taken from 1.3
-		//COMBINE taken from 1.3
-		//COMBINE_RGB taken from 1.3
-		//COMBINE_ALPHA taken from 1.3
-		//SOURCE0_RGB taken from 1.3
-		//SOURCE1_RGB taken from 1.3
-		//SOURCE2_RGB taken from 1.3
-		//SOURCE0_ALPHA taken from 1.3
-		//SOURCE1_ALPHA taken from 1.3
-		//SOURCE2_ALPHA taken from 1.3
-		//OPERAND0_RGB taken from 1.3
-		//OPERAND1_RGB taken from 1.3
-		//OPERAND2_RGB taken from 1.3
-		//OPERAND0_ALPHA taken from 1.3
-		//OPERAND1_ALPHA taken from 1.3
-		//OPERAND2_ALPHA taken from 1.3
-		//RGB_SCALE taken from 1.3
-		//ADD_SIGNED taken from 1.3
-		//INTERPOLATE taken from 1.3
-		//SUBTRACT taken from 1.3
-		//CONSTANT taken from 1.3
-		//PRIMARY_COLOR taken from 1.3
-		//PREVIOUS taken from 1.3
-		//DOT3_RGB taken from 1.3
-		//DOT3_RGBA taken from 1.3
+		CLIENT_ACTIVE_TEXTURE            = 0x84E1,
+		MAX_TEXTURE_UNITS                = 0x84E2,
+		TRANSPOSE_MODELVIEW_MATRIX       = 0x84E3,
+		TRANSPOSE_PROJECTION_MATRIX      = 0x84E4,
+		TRANSPOSE_TEXTURE_MATRIX         = 0x84E5,
+		TRANSPOSE_COLOR_MATRIX           = 0x84E6,
+		MULTISAMPLE_BIT                  = 0x20000000,
+		NORMAL_MAP                       = 0x8511,
+		REFLECTION_MAP                   = 0x8512,
+		COMPRESSED_ALPHA                 = 0x84E9,
+		COMPRESSED_LUMINANCE             = 0x84EA,
+		COMPRESSED_LUMINANCE_ALPHA       = 0x84EB,
+		COMPRESSED_INTENSITY             = 0x84EC,
+		COMBINE                          = 0x8570,
+		COMBINE_RGB                      = 0x8571,
+		COMBINE_ALPHA                    = 0x8572,
+		SOURCE0_RGB                      = 0x8580,
+		SOURCE1_RGB                      = 0x8581,
+		SOURCE2_RGB                      = 0x8582,
+		SOURCE0_ALPHA                    = 0x8588,
+		SOURCE1_ALPHA                    = 0x8589,
+		SOURCE2_ALPHA                    = 0x858A,
+		OPERAND0_RGB                     = 0x8590,
+		OPERAND1_RGB                     = 0x8591,
+		OPERAND2_RGB                     = 0x8592,
+		OPERAND0_ALPHA                   = 0x8598,
+		OPERAND1_ALPHA                   = 0x8599,
+		OPERAND2_ALPHA                   = 0x859A,
+		RGB_SCALE                        = 0x8573,
+		ADD_SIGNED                       = 0x8574,
+		INTERPOLATE                      = 0x8575,
+		SUBTRACT                         = 0x84E7,
+		CONSTANT                         = 0x8576,
+		PRIMARY_COLOR                    = 0x8577,
+		PREVIOUS                         = 0x8578,
+		DOT3_RGB                         = 0x86AE,
+		DOT3_RGBA                        = 0x86AF,
 	};
 	
 	namespace _detail

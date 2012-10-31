@@ -47,8 +47,8 @@ void InitializeProgram()
 		"}\n"
 		);
 
-	GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
-	GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+	GLuint vertShader = glutil::CompileShader(gl::VERTEX_SHADER, vertexShader);
+	GLuint fragShader = glutil::CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 
 	g_program = glutil::LinkProgram(vertShader, fragShader);
 
@@ -77,20 +77,20 @@ void InitializeVertexData()
 
 	gl::GenBuffers(1, &g_dataBufferObject);
 
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, g_dataBufferObject);
-	gl::BufferData(gl::GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, gl::GL_STATIC_DRAW);
+	gl::BindBuffer(gl::ARRAY_BUFFER, g_dataBufferObject);
+	gl::BufferData(gl::ARRAY_BUFFER, sizeof(vertexData), vertexData, gl::STATIC_DRAW);
 
 	gl::GenVertexArrays(1, &g_vao);
 
 	gl::BindVertexArray(g_vao);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, g_dataBufferObject);
+	gl::BindBuffer(gl::ARRAY_BUFFER, g_dataBufferObject);
 	gl::EnableVertexAttribArray(0);
-	gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 32, (void*)0);
+	gl::VertexAttribPointer(0, 4, gl::FLOAT, gl::FALSE_, 32, (void*)0);
 	gl::EnableVertexAttribArray(1);
-	gl::VertexAttribPointer(1, 4, gl::GL_FLOAT, gl::GL_FALSE, 32, (void*)16);
+	gl::VertexAttribPointer(1, 4, gl::FLOAT, gl::FALSE_, 32, (void*)16);
 
 	gl::BindVertexArray(0);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+	gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 }
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
@@ -108,17 +108,17 @@ glm::ivec2 g_windowSize(500, 500);
 void display()
 {
 	gl::ClearColor(0.0f, 0.8f, 0.3f, 0.0f);
-	gl::Clear(gl::GL_COLOR_BUFFER_BIT);
+	gl::Clear(gl::COLOR_BUFFER_BIT);
 
 	gl::UseProgram(g_program);
 
 	glutil::MatrixStack persMatrix;
 	persMatrix.PixelPerfectOrtho(g_windowSize, glm::vec2(-1.0f, 1.0f), false);
 
-	gl::UniformMatrix4fv(g_cameraToClipMatrixUnif, 1, gl::GL_FALSE, glm::value_ptr(persMatrix.Top()));
+	gl::UniformMatrix4fv(g_cameraToClipMatrixUnif, 1, gl::FALSE_, glm::value_ptr(persMatrix.Top()));
 	gl::BindVertexArray(g_vao);
 
-	gl::DrawArrays(gl::GL_TRIANGLE_STRIP, 0, 4);
+	gl::DrawArrays(gl::TRIANGLE_STRIP, 0, 4);
 
 	gl::BindVertexArray(0);
 	gl::UseProgram(0);
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef DEBUG
-	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::GL_TRUE);
+	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::TRUE_);
 #endif
 
 	if(!glfwOpenWindow(g_windowSize.x, g_windowSize.y, 8, 8, 8, 8, 24, 8, GLFW_WINDOW))
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
 
 	glfwSetWindowPos(wndPos.x, wndPos.y);
 
-	if(glload::LoadFunctions() == glload::LS_LOAD_FAILED)
+	if(!glload::LoadFunctions())
 	{
 		glfwTerminate();
 		return -1;

@@ -1,7 +1,7 @@
 
 #include <assert.h>
 #include <glload/gl_all.hpp>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #include "glimg/TextureGeneratorExceptions.h"
 #include "glimg/TextureGenerator.h"
 #include "ImageSetImpl.h"
@@ -17,13 +17,13 @@ namespace glimg
 	{
 		void ThrowIfS3TCNotSupported()
 		{
-			if(!glext_EXT_texture_compression_s3tc)
+			if(!gl::exts::var_EXT_texture_compression_s3tc)
 				throw ImageFormatUnsupportedException("S3TC not supported.");
 		}
 
 		void ThrowIfLATCNotSupported()
 		{
-			if(!glext_EXT_texture_compression_latc)
+			if(!gl::exts::var_EXT_texture_compression_latc)
 				throw ImageFormatUnsupportedException("LATC not supported.");
 		}
 
@@ -31,14 +31,14 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!(glext_ARB_texture_compression_rgtc || glext_EXT_texture_compression_rgtc))
+				if(!(gl::exts::var_ARB_texture_compression_rgtc || gl::exts::var_EXT_texture_compression_rgtc))
 					throw ImageFormatUnsupportedException("RGTC, part of GL 3.0 and above, is not supported.");
 			}
 		}
 
 		void ThrowIfBPTCNotSupported()
 		{
-			if(!glext_ARB_texture_compression_bptc)
+			if(!gl::exts::var_ARB_texture_compression_bptc)
 				throw ImageFormatUnsupportedException("PBTC not supported.");
 		}
 
@@ -46,14 +46,14 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(2, 1))
 			{
-				if(!glext_EXT_texture_sRGB)
+				if(!gl::exts::var_EXT_texture_sRGB)
 					throw ImageFormatUnsupportedException("sRGB textures not supported.");
 			}
 		}
 
 		void ThrowIfEXT_SRGBNotSupported()
 		{
-				if(!glext_EXT_texture_sRGB)
+				if(!gl::exts::var_EXT_texture_sRGB)
 					throw ImageFormatUnsupportedException("sRGB and S3TC textures not supported.");
 		}
 
@@ -61,7 +61,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!glext_EXT_texture_shared_exponent)
+				if(!gl::exts::var_EXT_texture_shared_exponent)
 					throw ImageFormatUnsupportedException("Shared exponent texture format not supported.");
 			}
 		}
@@ -70,14 +70,14 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!glext_ARB_texture_float)
+				if(!gl::exts::var_ARB_texture_float)
 					throw ImageFormatUnsupportedException("Float textures not supported.");
 			}
 		}
 
 		void ThrowIfEXT_FloatNotSupported()
 		{
-			if(!glext_ARB_texture_float)
+			if(!gl::exts::var_ARB_texture_float)
 				throw ImageFormatUnsupportedException("ARB Float textures not supported.");
 		}
 
@@ -85,7 +85,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!glext_ARB_half_float_pixel)
+				if(!gl::exts::var_ARB_half_float_pixel)
 					throw ImageFormatUnsupportedException("Half floats textures not supported.");
 			}
 		}
@@ -94,14 +94,14 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 1))
 			{
-				if(!glext_EXT_texture_snorm)
+				if(!gl::exts::var_EXT_texture_snorm)
 					throw ImageFormatUnsupportedException("Signed normalized textures not supported.");
 			}
 		}
 
 		void ThrowIfEXT_SnormNotSupported()
 		{
-			if(!glext_EXT_texture_snorm)
+			if(!gl::exts::var_EXT_texture_snorm)
 				throw ImageFormatUnsupportedException("Signed normalized texture extension not supported.");
 		}
 
@@ -109,7 +109,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!glext_EXT_packed_float)
+				if(!gl::exts::var_EXT_packed_float)
 					throw ImageFormatUnsupportedException("Packed 11, 11, 10 float textures not supported.");
 			}
 		}
@@ -118,14 +118,14 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!glext_EXT_texture_integer)
+				if(!gl::exts::var_EXT_texture_integer)
 					throw ImageFormatUnsupportedException("Integral textures not supported.");
 			}
 		}
 
 		void ThrowIfEXT_IntegralNotSupported()
 		{
-			if(!glext_EXT_texture_integer)
+			if(!gl::exts::var_EXT_texture_integer)
 				throw ImageFormatUnsupportedException("Integral texture extension not supported.");
 		}
 
@@ -133,7 +133,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!glext_ARB_texture_rg)
+				if(!gl::exts::var_ARB_texture_rg)
 					throw ImageFormatUnsupportedException("RG textures not supported.");
 			}
 		}
@@ -144,14 +144,14 @@ namespace glimg
 				return;
 			if(!glload::IsVersionGEQ(3,2))
 			{
-				if(!glext_ARB_compatibility)
+				if(!gl::exts::var_ARB_compatibility)
 					throw ImageFormatUnsupportedException("Core OpenGL contexts cannot use Luminance/alpha.");
 			}
 			else
 			{
 				GLint profileMask = 0;
-				gl::GetIntegerv(gl::GL_CONTEXT_PROFILE_MASK, &profileMask);
-				if(profileMask & gl::GL_CONTEXT_CORE_PROFILE_BIT)
+				gl::GetIntegerv(gl::CONTEXT_PROFILE_MASK, &profileMask);
+				if(profileMask & gl::CONTEXT_CORE_PROFILE_BIT)
 					throw ImageFormatUnsupportedException("Core OpenGL contexts cannot use Luminance/alpha.");
 			}
 		}
@@ -166,7 +166,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(1, 4)) //Yes, really. Depth textures are old.
 			{
-				if(!glext_ARB_depth_texture)
+				if(!gl::exts::var_ARB_depth_texture)
 					throw ImageFormatUnsupportedException("Depth textures not supported.");
 			}
 		}
@@ -175,7 +175,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!(glext_EXT_packed_depth_stencil || glext_ARB_framebuffer_object))
+				if(!(gl::exts::var_EXT_packed_depth_stencil || gl::exts::var_ARB_framebuffer_object))
 					throw ImageFormatUnsupportedException("Depth/stencil textures not supported.");
 			}
 		}
@@ -184,7 +184,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!glext_NV_depth_buffer_float)
+				if(!gl::exts::var_NV_depth_buffer_float)
 					throw ImageFormatUnsupportedException("Floating-point depth buffers not supported.");
 			}
 		}
@@ -335,16 +335,16 @@ namespace glimg
 		//Ordered by BaseDataFormat*2. The first is 16-bit, the second is 32-bit.
 		GLenum g_floatFormats[] =
 		{
-			gl::GL_R16F,
-			gl::GL_R32F,
-			gl::GL_RG16F,
-			gl::GL_RG32F,
-			gl::GL_RGB16F,
-			gl::GL_RGB32F,
-			gl::GL_RGB16F,
-			gl::GL_RGB32F,
-			gl::GL_RGBA16F,
-			gl::GL_RGBA32F,
+			gl::R16F,
+			gl::R32F,
+			gl::RG16F,
+			gl::RG32F,
+			gl::RGB16F,
+			gl::RGB32F,
+			gl::RGB16F,
+			gl::RGB32F,
+			gl::RGBA16F,
+			gl::RGBA32F,
 			0,			//sRGB
 			0,			//sRGB
 			0,			//sRGB
@@ -352,35 +352,35 @@ namespace glimg
 			0,			//sRGB
 			0,			//sRGB
 			0,			//16-bit float depth buffer. 
-			gl::GL_DEPTH_COMPONENT32F,
+			gl::DEPTH_COMPONENT32F,
 			0,			//UNorm+stencil.
 		};
 
 		//Ordered by number of components * size (8, 16, 32=>0, 1, 2).
 		GLenum g_signIntegralFormats[] =
 		{
-			gl::GL_R8I,			gl::GL_R16I,			gl::GL_R32I,
-			gl::GL_RG8I,		gl::GL_RG16I,			gl::GL_RG32I,
-			gl::GL_RGB8I,		gl::GL_RGB16I,			gl::GL_RGB32I,
-			gl::GL_RGBA8I,		gl::GL_RGBA16I,			gl::GL_RGBA32I,
+			gl::R8I,			gl::R16I,			gl::R32I,
+			gl::RG8I,		gl::RG16I,			gl::RG32I,
+			gl::RGB8I,		gl::RGB16I,			gl::RGB32I,
+			gl::RGBA8I,		gl::RGBA16I,			gl::RGBA32I,
 		};
 
 		//Ordered by number of components * size (8, 16, 32=>0, 1, 2).
 		GLenum g_unsignIntegralFormats[] =
 		{
-			gl::GL_R8UI,		gl::GL_R16UI,			gl::GL_R32UI,
-			gl::GL_RG8UI,		gl::GL_RG16UI,			gl::GL_RG32UI,
-			gl::GL_RGB8UI,		gl::GL_RGB16UI,			gl::GL_RGB32UI,
-			gl::GL_RGBA8UI,		gl::GL_RGBA16UI,		gl::GL_RGBA32UI,
+			gl::R8UI,		gl::R16UI,			gl::R32UI,
+			gl::RG8UI,		gl::RG16UI,			gl::RG32UI,
+			gl::RGB8UI,		gl::RGB16UI,			gl::RGB32UI,
+			gl::RGBA8UI,		gl::RGBA16UI,		gl::RGBA32UI,
 		};
 
 		//Ordered by number of components * size (8, 16=>0, 1, 2).
 		GLenum g_signedNormFormats[] =
 		{
-			gl::GL_R8_SNORM,		gl::GL_R16_SNORM,
-			gl::GL_RG8_SNORM,		gl::GL_RG16_SNORM,
-			gl::GL_RGB8_SNORM,		gl::GL_RGB16_SNORM,
-			gl::GL_RGBA8_SNORM,		gl::GL_RGBA16_SNORM,
+			gl::R8_SNORM,		gl::R16_SNORM,
+			gl::RG8_SNORM,		gl::RG16_SNORM,
+			gl::RGB8_SNORM,		gl::RGB16_SNORM,
+			gl::RGBA8_SNORM,		gl::RGBA16_SNORM,
 		};
 
 		GLenum ThrowInvalidFormatIfZero(GLenum input)
@@ -402,14 +402,14 @@ namespace glimg
 				if(format.Components() == FMT_DEPTH)
 				{
 					ThrowIfDepthNotSupported();
-					return gl::GL_DEPTH_COMPONENT16;
+					return gl::DEPTH_COMPONENT16;
 				}
 
 				//Only 24x8 for this.
 				if(format.Components() == FMT_DEPTH_X)
 				{
 					ThrowIfDepthStencilNotSupported();
-					return gl::GL_DEPTH24_STENCIL8;
+					return gl::DEPTH24_STENCIL8;
 				}
 
 				//Color formats.
@@ -417,23 +417,23 @@ namespace glimg
 				{
 					ThrowIfSRGBNotSupported();
 					if(ComponentCount(format, forceConvertBits) == 3)
-						return gl::GL_SRGB8;
+						return gl::SRGB8;
 					else
-						return gl::GL_SRGB8_ALPHA8;
+						return gl::SRGB8_ALPHA8;
 				}
 
 				switch(format.Depth())
 				{
 				case BD_PER_COMP_8:
 					{
-						GLenum components[] = {gl::GL_R8, gl::GL_RG8, gl::GL_RGB8, gl::GL_RGBA8};
+						GLenum components[] = {gl::R8, gl::RG8, gl::RGB8, gl::RGBA8};
 						int numComponents = ComponentCount(format, forceConvertBits);
 
 						return components[numComponents - 1];
 					}
 				case BD_PER_COMP_16:
 					{
-						GLenum components[] = {gl::GL_R16, gl::GL_RG16, gl::GL_RGB16, gl::GL_RGBA16};
+						GLenum components[] = {gl::R16, gl::RG16, gl::RGB16, gl::RGBA16};
 						int numComponents = ComponentCount(format, forceConvertBits);
 
 						return components[numComponents - 1];
@@ -441,23 +441,23 @@ namespace glimg
 
 				case BD_PACKED_16_BIT_565:
 				case BD_PACKED_16_BIT_565_REV:
-					return gl::GL_RGB8;
+					return gl::RGB8;
 
 				case BD_PACKED_16_BIT_5551:
 				case BD_PACKED_16_BIT_1555_REV:
-					return gl::GL_RGB5_A1;
+					return gl::RGB5_A1;
 
 				case BD_PACKED_16_BIT_4444:
 				case BD_PACKED_16_BIT_4444_REV:
-					return gl::GL_RGBA4;
+					return gl::RGBA4;
 
 				case BD_PACKED_32_BIT_8888:
 				case BD_PACKED_32_BIT_8888_REV:
-					return gl::GL_RGBA8;
+					return gl::RGBA8;
 
 				case BD_PACKED_32_BIT_1010102:
 				case BD_PACKED_32_BIT_2101010_REV:
-					return gl::GL_RGB10_A2;
+					return gl::RGB10_A2;
 				}
 
 				throw ImageFormatUnsupportedException("Unisgned normalize integer doesn't match accepted bitdepths.");
@@ -510,13 +510,13 @@ namespace glimg
 				{
 					//Only one packed format.
 					ThrowIfPackedFloatNotSupported();
-					return gl::GL_R11F_G11F_B10F;
+					return gl::R11F_G11F_B10F;
 				}
 
 			case DT_SHARED_EXP_FLOAT:
 				ThrowIfSharedExpNotSupported();
 				ThrowIfForceRendertarget(forceConvertBits);
-				return gl::GL_RGB9_E5;
+				return gl::RGB9_E5;
 
 			case DT_COMPRESSED_BC1:
 				ThrowIfS3TCNotSupported();
@@ -524,25 +524,25 @@ namespace glimg
 				{
 					ThrowIfEXT_SRGBNotSupported();
 					if(forceConvertBits & FORCE_BC1_ALPHA_FMT)
-						return gl::GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT;
+						return gl::COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT;
 					else
 					{
 						if(ComponentCount(format, forceConvertBits) == 3)
-							return gl::GL_COMPRESSED_SRGB_S3TC_DXT1_EXT;
+							return gl::COMPRESSED_SRGB_S3TC_DXT1_EXT;
 						else
-							return gl::GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT;
+							return gl::COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT;
 					}
 				}
 				else
 				{
 					if(forceConvertBits & FORCE_BC1_ALPHA_FMT)
-						return gl::GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+						return gl::COMPRESSED_RGBA_S3TC_DXT1_EXT;
 					else
 					{
 						if(ComponentCount(format, forceConvertBits) == 3)
-							return gl::GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+							return gl::COMPRESSED_RGB_S3TC_DXT1_EXT;
 						else
-							return gl::GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+							return gl::COMPRESSED_RGBA_S3TC_DXT1_EXT;
 					}
 				}
 
@@ -551,45 +551,45 @@ namespace glimg
 				if(IsSRGBFormat(format, forceConvertBits))
 				{
 					ThrowIfEXT_SRGBNotSupported();
-					return gl::GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT;
+					return gl::COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT;
 				}
 				else
-					return gl::GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+					return gl::COMPRESSED_RGBA_S3TC_DXT3_EXT;
 
 			case DT_COMPRESSED_BC3:
 				ThrowIfS3TCNotSupported();
 				if(IsSRGBFormat(format, forceConvertBits))
 				{
 					ThrowIfEXT_SRGBNotSupported();
-					return gl::GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT;
+					return gl::COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT;
 				}
 				else
-					return gl::GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+					return gl::COMPRESSED_RGBA_S3TC_DXT5_EXT;
 
 			case DT_COMPRESSED_UNSIGNED_BC4:
-				return gl::GL_COMPRESSED_RED_RGTC1;
+				return gl::COMPRESSED_RED_RGTC1;
 			case DT_COMPRESSED_SIGNED_BC4:
-				return gl::GL_COMPRESSED_SIGNED_RED_RGTC1;
+				return gl::COMPRESSED_SIGNED_RED_RGTC1;
 
 			case DT_COMPRESSED_UNSIGNED_BC5:
-				return gl::GL_COMPRESSED_RG_RGTC2;
+				return gl::COMPRESSED_RG_RGTC2;
 			case DT_COMPRESSED_SIGNED_BC5:
-				return gl::GL_COMPRESSED_SIGNED_RG_RGTC2;
+				return gl::COMPRESSED_SIGNED_RG_RGTC2;
 
 			case DT_COMPRESSED_UNSIGNED_BC6H:
 				ThrowIfBPTCNotSupported();
-				return gl::GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
+				return gl::COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
 
 			case DT_COMPRESSED_SIGNED_BC6H:
 				ThrowIfBPTCNotSupported();
-				return gl::GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
+				return gl::COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB;
 
 			case DT_COMPRESSED_BC7:
 				ThrowIfBPTCNotSupported();
 				if(IsSRGBFormat(format, forceConvertBits))
-					return gl::GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB;
+					return gl::COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB;
 				else
-					return gl::GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
+					return gl::COMPRESSED_RGBA_BPTC_UNORM_ARB;
 			}
 
 			throw ImageFormatUnsupportedException("???");
@@ -653,14 +653,14 @@ namespace glimg
 		break;
 
 
-#define ONE_COMP_RG(size, suffix) gl::GL_R ## size ## suffix
-#define TWO_COMP_RG(size, suffix) gl::GL_RG ## size ## suffix
-#define ONE_COMP_LA(size, suffix) gl::GL_LUMINANCE ## size ## suffix ## _EXT
-#define TWO_COMP_LA(size, suffix) gl::GL_LUMINANCE_ALPHA ## size ## suffix ## _EXT
-#define ONE_ARB_LA(size, suffix) gl::GL_LUMINANCE ## size ## suffix ## _ARB
-#define TWO_ARB_LA(size, suffix) gl::GL_LUMINANCE_ALPHA ## size ## suffix ## _ARB
-#define ONE_SNORM_LA(size, suffix) gl::GL_LUMINANCE ## size ## suffix
-#define TWO_SNORM_LA(size, suffix) gl::GL_LUMINANCE ## size ## _ALPHA ## size ## suffix
+#define ONE_COMP_RG(size, suffix) gl::R ## size ## suffix
+#define TWO_COMP_RG(size, suffix) gl::RG ## size ## suffix
+#define ONE_COMP_LA(size, suffix) gl::LUMINANCE ## size ## suffix ## _EXT
+#define TWO_COMP_LA(size, suffix) gl::LUMINANCE_ALPHA ## size ## suffix ## _EXT
+#define ONE_ARB_LA(size, suffix) gl::LUMINANCE ## size ## suffix ## _ARB
+#define TWO_ARB_LA(size, suffix) gl::LUMINANCE_ALPHA ## size ## suffix ## _ARB
+#define ONE_SNORM_LA(size, suffix) gl::LUMINANCE ## size ## suffix
+#define TWO_SNORM_LA(size, suffix) gl::LUMINANCE ## size ## _ALPHA ## size ## suffix
 
 	unsigned int GetOpenGLType( const ImageFormat &format, OpenGLPixelTransferParams &ret, PixelDataType eType, GLenum g_packedTypes );
 	unsigned int GetInternalFormat( const ImageFormat &format, unsigned int forceConvertBits )
@@ -672,10 +672,10 @@ namespace glimg
 		//Convert any R or RG formats to L or LA formats.
 		switch(internalFormat)
 		{
-			LARG_COMPRESSED_CONV(gl::GL_COMPRESSED_RED_RGTC1, gl::GL_COMPRESSED_LUMINANCE_LATC1_EXT);
-			LARG_COMPRESSED_CONV(gl::GL_COMPRESSED_SIGNED_RED_RGTC1, gl::GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT);
-			LARG_COMPRESSED_CONV(gl::GL_COMPRESSED_RG_RGTC2, gl::GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT);
-			LARG_COMPRESSED_CONV(gl::GL_COMPRESSED_SIGNED_RG_RGTC2, gl::GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT);
+			LARG_COMPRESSED_CONV(gl::COMPRESSED_RED_RGTC1, gl::COMPRESSED_LUMINANCE_LATC1_EXT);
+			LARG_COMPRESSED_CONV(gl::COMPRESSED_SIGNED_RED_RGTC1, gl::COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT);
+			LARG_COMPRESSED_CONV(gl::COMPRESSED_RG_RGTC2, gl::COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT);
+			LARG_COMPRESSED_CONV(gl::COMPRESSED_SIGNED_RG_RGTC2, gl::COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT);
 
 			LARG_INTEGRAL_CONV(ONE_COMP_RG(8, I), ONE_COMP_LA(8, I));
 			LARG_INTEGRAL_CONV(ONE_COMP_RG(16, I), ONE_COMP_LA(16, I));
@@ -701,10 +701,10 @@ namespace glimg
 			LARG_SNORM_CONV(TWO_COMP_RG(8, _SNORM), TWO_SNORM_LA(8, _SNORM));
 			LARG_SNORM_CONV(TWO_COMP_RG(16, _SNORM), TWO_SNORM_LA(16, _SNORM));
 
-			LARG_NORM_CONV(gl::GL_R8, gl::GL_LUMINANCE8);
-			LARG_NORM_CONV(gl::GL_R16, gl::GL_LUMINANCE16);
-			LARG_NORM_CONV(gl::GL_RG8, gl::GL_LUMINANCE8_ALPHA8);
-			LARG_NORM_CONV(gl::GL_RG16, gl::GL_LUMINANCE16_ALPHA16);
+			LARG_NORM_CONV(gl::R8, gl::LUMINANCE8);
+			LARG_NORM_CONV(gl::R16, gl::LUMINANCE16);
+			LARG_NORM_CONV(gl::RG8, gl::LUMINANCE8_ALPHA8);
+			LARG_NORM_CONV(gl::RG16, gl::LUMINANCE16_ALPHA16);
 		}
 
 		return internalFormat;
@@ -728,22 +728,22 @@ namespace glimg
 
 		GLenum g_packedTypes[] =
 		{
-			gl::GL_UNSIGNED_SHORT_5_6_5,			//BD_PACKED_16_BIT_565
-			gl::GL_UNSIGNED_SHORT_5_5_5_1,			//BD_PACKED_16_BIT_5551
-			gl::GL_UNSIGNED_SHORT_4_4_4_4,			//BD_PACKED_16_BIT_4444
+			gl::UNSIGNED_SHORT_5_6_5,			//BD_PACKED_16_BIT_565
+			gl::UNSIGNED_SHORT_5_5_5_1,			//BD_PACKED_16_BIT_5551
+			gl::UNSIGNED_SHORT_4_4_4_4,			//BD_PACKED_16_BIT_4444
 
-			gl::GL_UNSIGNED_INT_8_8_8_8,			//BD_PACKED_32_BIT_8888
-			gl::GL_UNSIGNED_INT_10_10_10_2,			//BD_PACKED_32_BIT_1010102
-			gl::GL_UNSIGNED_INT_24_8,				//BD_PACKED_32_BIT_248
+			gl::UNSIGNED_INT_8_8_8_8,			//BD_PACKED_32_BIT_8888
+			gl::UNSIGNED_INT_10_10_10_2,			//BD_PACKED_32_BIT_1010102
+			gl::UNSIGNED_INT_24_8,				//BD_PACKED_32_BIT_248
 
-			gl::GL_UNSIGNED_SHORT_5_6_5_REV,		//BD_PACKED_16_BIT_565_REV
-			gl::GL_UNSIGNED_SHORT_1_5_5_5_REV,		//BD_PACKED_16_BIT_1555_REV
-			gl::GL_UNSIGNED_SHORT_4_4_4_4_REV,		//BD_PACKED_16_BIT_4444_REV
+			gl::UNSIGNED_SHORT_5_6_5_REV,		//BD_PACKED_16_BIT_565_REV
+			gl::UNSIGNED_SHORT_1_5_5_5_REV,		//BD_PACKED_16_BIT_1555_REV
+			gl::UNSIGNED_SHORT_4_4_4_4_REV,		//BD_PACKED_16_BIT_4444_REV
 
-			gl::GL_UNSIGNED_INT_8_8_8_8_REV,		//BD_PACKED_32_BIT_8888_REV
-			gl::GL_UNSIGNED_INT_2_10_10_10_REV,		//BD_PACKED_32_BIT_2101010_REV
-			gl::GL_UNSIGNED_INT_10F_11F_11F_REV,	//BD_PACKED_32_BIT_101111_REV
-			gl::GL_UNSIGNED_INT_5_9_9_9_REV,		//BD_PACKED_32_BIT_5999_REV
+			gl::UNSIGNED_INT_8_8_8_8_REV,		//BD_PACKED_32_BIT_8888_REV
+			gl::UNSIGNED_INT_2_10_10_10_REV,		//BD_PACKED_32_BIT_2101010_REV
+			gl::UNSIGNED_INT_10F_11F_11F_REV,	//BD_PACKED_32_BIT_101111_REV
+			gl::UNSIGNED_INT_5_9_9_9_REV,		//BD_PACKED_32_BIT_5999_REV
 		};
 
 		GLenum GetOpenGLType( const ImageFormat &format, PixelDataType eType, unsigned int forceConvertBits )
@@ -754,36 +754,36 @@ namespace glimg
 				return 0xFFFFFFFF;
 			case BD_PER_COMP_8:
 				if(IsTypeSigned(eType))
-					return gl::GL_BYTE;
+					return gl::BYTE;
 				else
-					return gl::GL_UNSIGNED_BYTE;
+					return gl::UNSIGNED_BYTE;
 				break;
 			case BD_PER_COMP_16:
 				if(eType == DT_FLOAT)
 				{
 					ThrowIfHalfFloatNotSupported();
-					return gl::GL_HALF_FLOAT;
+					return gl::HALF_FLOAT;
 				}
 				else
 				{
 					if(IsTypeSigned(eType))
-						return gl::GL_SHORT;
+						return gl::SHORT;
 					else
-						return gl::GL_UNSIGNED_SHORT;
+						return gl::UNSIGNED_SHORT;
 				}
 				break;
 			case BD_PER_COMP_32:
 				if(eType == DT_FLOAT)
 				{
 					ThrowIfFloatNotSupported();
-					return gl::GL_FLOAT;
+					return gl::FLOAT;
 				}
 				else
 				{
 					if(IsTypeSigned(eType))
-						return gl::GL_INT;
+						return gl::INT;
 					else
-						return gl::GL_UNSIGNED_INT;
+						return gl::UNSIGNED_INT;
 				}
 				break;
 			default:
@@ -797,10 +797,10 @@ namespace glimg
 					//Test for implemented features.
 					switch(testType)
 					{
-					case gl::GL_UNSIGNED_INT_10F_11F_11F_REV:
+					case gl::UNSIGNED_INT_10F_11F_11F_REV:
 						ThrowIfPackedFloatNotSupported();
 						break;
-					case gl::GL_UNSIGNED_INT_5_9_9_9_REV:
+					case gl::UNSIGNED_INT_5_9_9_9_REV:
 						ThrowIfSharedExpNotSupported();
 						break;
 					}
@@ -813,38 +813,38 @@ namespace glimg
 		//Starts from FMT_COLOR_RGB. non-integral vs. integral.
 		GLenum g_bgraFormats[] =
 		{
-			gl::GL_BGR,			gl::GL_BGR_INTEGER,		//FMT_COLOR_RGB
-			gl::GL_BGRA,		gl::GL_BGRA_INTEGER,	//FMT_COLOR_RGBX
-			gl::GL_BGRA,		gl::GL_BGRA_INTEGER,	//FMT_COLOR_RGBA
-			gl::GL_BGR,			gl::GL_BGR_INTEGER,		//FMT_COLOR_RGB_sRGB
-			gl::GL_BGRA,		gl::GL_BGRA_INTEGER,	//FMT_COLOR_RGBX_sRGB
-			gl::GL_BGRA,		gl::GL_BGRA_INTEGER,	//FMT_COLOR_RGBA_sRGB
+			gl::BGR,			gl::BGR_INTEGER,		//FMT_COLOR_RGB
+			gl::BGRA,		gl::BGRA_INTEGER,	//FMT_COLOR_RGBX
+			gl::BGRA,		gl::BGRA_INTEGER,	//FMT_COLOR_RGBA
+			gl::BGR,			gl::BGR_INTEGER,		//FMT_COLOR_RGB_sRGB
+			gl::BGRA,		gl::BGRA_INTEGER,	//FMT_COLOR_RGBX_sRGB
+			gl::BGRA,		gl::BGRA_INTEGER,	//FMT_COLOR_RGBA_sRGB
 		};
 
 		//Non-integral vs. integral.
 		GLenum g_rgbaFormats[] =
 		{
-			gl::GL_RED,			gl::GL_RED_INTEGER,		//FMT_COLOR_RED
-			gl::GL_RG,			gl::GL_RG_INTEGER,		//FMT_COLOR_RG
-			gl::GL_RGB,			gl::GL_RGB_INTEGER,		//FMT_COLOR_RGB
-			gl::GL_RGBA,		gl::GL_RGBA_INTEGER,	//FMT_COLOR_RGBX
-			gl::GL_RGBA,		gl::GL_RGBA_INTEGER,	//FMT_COLOR_RGBA
-			gl::GL_RGB,			gl::GL_RGB_INTEGER,		//FMT_COLOR_RGB_sRGB
-			gl::GL_RGBA,		gl::GL_RGBA_INTEGER,	//FMT_COLOR_RGBX_sRGB
-			gl::GL_RGBA,		gl::GL_RGBA_INTEGER,	//FMT_COLOR_RGBA_sRGB
+			gl::RED,			gl::RED_INTEGER,		//FMT_COLOR_RED
+			gl::RG,			gl::RG_INTEGER,		//FMT_COLOR_RG
+			gl::RGB,			gl::RGB_INTEGER,		//FMT_COLOR_RGB
+			gl::RGBA,		gl::RGBA_INTEGER,	//FMT_COLOR_RGBX
+			gl::RGBA,		gl::RGBA_INTEGER,	//FMT_COLOR_RGBA
+			gl::RGB,			gl::RGB_INTEGER,		//FMT_COLOR_RGB_sRGB
+			gl::RGBA,		gl::RGBA_INTEGER,	//FMT_COLOR_RGBX_sRGB
+			gl::RGBA,		gl::RGBA_INTEGER,	//FMT_COLOR_RGBA_sRGB
 		};
 
 		//Non-integral vs. integral.
 		GLenum g_rgbaLuminanceFormats[] =
 		{
-			gl::GL_LUMINANCE,			gl::GL_LUMINANCE_INTEGER_EXT,				//FMT_COLOR_RED
-			gl::GL_LUMINANCE_ALPHA,		gl::GL_LUMINANCE_ALPHA_INTEGER_EXT,			//FMT_COLOR_RG
-			gl::GL_RGB,					gl::GL_RGB_INTEGER,		//FMT_COLOR_RGB
-			gl::GL_RGBA,				gl::GL_RGBA_INTEGER,	//FMT_COLOR_RGBX
-			gl::GL_RGBA,				gl::GL_RGBA_INTEGER,	//FMT_COLOR_RGBA
-			gl::GL_RGB,					gl::GL_RGB_INTEGER,		//FMT_COLOR_RGB_sRGB
-			gl::GL_RGBA,				gl::GL_RGBA_INTEGER,	//FMT_COLOR_RGBX_sRGB
-			gl::GL_RGBA,				gl::GL_RGBA_INTEGER,	//FMT_COLOR_RGBA_sRGB
+			gl::LUMINANCE,			gl::LUMINANCE_INTEGER_EXT,				//FMT_COLOR_RED
+			gl::LUMINANCE_ALPHA,		gl::LUMINANCE_ALPHA_INTEGER_EXT,			//FMT_COLOR_RG
+			gl::RGB,					gl::RGB_INTEGER,		//FMT_COLOR_RGB
+			gl::RGBA,				gl::RGBA_INTEGER,	//FMT_COLOR_RGBX
+			gl::RGBA,				gl::RGBA_INTEGER,	//FMT_COLOR_RGBA
+			gl::RGB,					gl::RGB_INTEGER,		//FMT_COLOR_RGB_sRGB
+			gl::RGBA,				gl::RGBA_INTEGER,	//FMT_COLOR_RGBX_sRGB
+			gl::RGBA,				gl::RGBA_INTEGER,	//FMT_COLOR_RGBA_sRGB
 		};
 
 		GLenum GetOpenGLFormat(const ImageFormat &format, PixelDataType eType, unsigned int forceConvertBits)
@@ -852,13 +852,13 @@ namespace glimg
 			if(format.Components() == FMT_DEPTH)
 			{
 				ThrowIfDepthNotSupported();
-				return gl::GL_DEPTH_COMPONENT;
+				return gl::DEPTH_COMPONENT;
 			}
 
 			if(format.Components() == FMT_DEPTH_X)
 			{
 				ThrowIfDepthStencilNotSupported();
-				return gl::GL_DEPTH_STENCIL;
+				return gl::DEPTH_STENCIL;
 			}
 
 			if(IsTypeIntegral(eType))
@@ -930,11 +930,11 @@ namespace glimg
 			}
 
 			//Provide reasonable parameters.
-			ret.format = gl::GL_RGBA;
+			ret.format = gl::RGBA;
 			if(eType != DT_COMPRESSED_UNSIGNED_BC6H || eType != DT_COMPRESSED_SIGNED_BC6H)
-				ret.type = gl::GL_FLOAT;
+				ret.type = gl::FLOAT;
 			else
-				ret.type = gl::GL_UNSIGNED_BYTE;
+				ret.type = gl::UNSIGNED_BYTE;
 			return ret;
 		}
 
@@ -953,34 +953,34 @@ namespace glimg
 	{
 		void SetupUploadState(const ImageFormat &format, unsigned int forceConvertBits)
 		{
-			gl::PixelStorei(gl::GL_UNPACK_SWAP_BYTES, gl::GL_FALSE);
-			gl::PixelStorei(gl::GL_UNPACK_LSB_FIRST, gl::GL_FALSE);
-			gl::PixelStorei(gl::GL_UNPACK_ROW_LENGTH, 0);
-			gl::PixelStorei(gl::GL_UNPACK_SKIP_ROWS, 0);
-			gl::PixelStorei(gl::GL_UNPACK_SKIP_PIXELS, 0);
-			gl::PixelStorei(gl::GL_UNPACK_IMAGE_HEIGHT, 0);
-			gl::PixelStorei(gl::GL_UNPACK_SKIP_IMAGES, 0);
-			gl::PixelStorei(gl::GL_UNPACK_ALIGNMENT, format.LineAlign());
+			gl::PixelStorei(gl::UNPACK_SWAP_BYTES, gl::FALSE_);
+			gl::PixelStorei(gl::UNPACK_LSB_FIRST, gl::FALSE_);
+			gl::PixelStorei(gl::UNPACK_ROW_LENGTH, 0);
+			gl::PixelStorei(gl::UNPACK_SKIP_ROWS, 0);
+			gl::PixelStorei(gl::UNPACK_SKIP_PIXELS, 0);
+			gl::PixelStorei(gl::UNPACK_IMAGE_HEIGHT, 0);
+			gl::PixelStorei(gl::UNPACK_SKIP_IMAGES, 0);
+			gl::PixelStorei(gl::UNPACK_ALIGNMENT, format.LineAlign());
 		}
 
 		//Texture must be bound to the target.
 		void FinalizeTexture(GLenum texTarget, const detail::ImageSetImpl *pImage)
 		{
 			int numMipmaps = pImage->GetMipmapCount();
-			gl::TexParameteri(texTarget, gl::GL_TEXTURE_BASE_LEVEL, 0);
-			gl::TexParameteri(texTarget, gl::GL_TEXTURE_MAX_LEVEL, numMipmaps - 1);
+			gl::TexParameteri(texTarget, gl::TEXTURE_BASE_LEVEL, 0);
+			gl::TexParameteri(texTarget, gl::TEXTURE_MAX_LEVEL, numMipmaps - 1);
 
 			//Ensure the texture is texture-complete.
 			const ImageFormat &format = pImage->GetFormat();
 			if(IsTypeIntegral(format.Type()))
 			{
-				gl::TexParameteri(texTarget, gl::GL_TEXTURE_MAG_FILTER, gl::GL_NEAREST);
-				gl::TexParameteri(texTarget, gl::GL_TEXTURE_MIN_FILTER, gl::GL_NEAREST);
+				gl::TexParameteri(texTarget, gl::TEXTURE_MAG_FILTER, gl::NEAREST);
+				gl::TexParameteri(texTarget, gl::TEXTURE_MIN_FILTER, gl::NEAREST);
 			}
 			else
 			{
-				gl::TexParameteri(texTarget, gl::GL_TEXTURE_MAG_FILTER, gl::GL_LINEAR);
-				gl::TexParameteri(texTarget, gl::GL_TEXTURE_MIN_FILTER, gl::GL_LINEAR);
+				gl::TexParameteri(texTarget, gl::TEXTURE_MAG_FILTER, gl::LINEAR);
+				gl::TexParameteri(texTarget, gl::TEXTURE_MIN_FILTER, gl::LINEAR);
 			}
 		}
 
@@ -994,20 +994,20 @@ namespace glimg
 			}
 
 			int numMipmaps = pImage->GetMipmapCount();
-			gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_BASE_LEVEL, 0);
-			gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MAX_LEVEL, numMipmaps - 1);
+			gl::TextureParameteriEXT(texture, texTarget, gl::TEXTURE_BASE_LEVEL, 0);
+			gl::TextureParameteriEXT(texture, texTarget, gl::TEXTURE_MAX_LEVEL, numMipmaps - 1);
 
 			//Ensure the texture is texture-complete.
 			const ImageFormat &format = pImage->GetFormat();
 			if(IsTypeIntegral(format.Type()))
 			{
-				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MAG_FILTER, gl::GL_NEAREST);
-				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MIN_FILTER, gl::GL_NEAREST);
+				gl::TextureParameteriEXT(texture, texTarget, gl::TEXTURE_MAG_FILTER, gl::NEAREST);
+				gl::TextureParameteriEXT(texture, texTarget, gl::TEXTURE_MIN_FILTER, gl::NEAREST);
 			}
 			else
 			{
-				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MAG_FILTER, gl::GL_LINEAR);
-				gl::TextureParameteriEXT(texture, texTarget, gl::GL_TEXTURE_MIN_FILTER, gl::GL_LINEAR);
+				gl::TextureParameteriEXT(texture, texTarget, gl::TEXTURE_MAG_FILTER, gl::LINEAR);
+				gl::TextureParameteriEXT(texture, texTarget, gl::TEXTURE_MIN_FILTER, gl::LINEAR);
 			}
 		}
 
@@ -1015,7 +1015,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(3, 0))
 			{
-				if(!glext_EXT_texture_array)
+				if(!gl::exts::var_EXT_texture_array)
 					throw TextureUnsupportedException("No Array texture support.");
 			}
 		}
@@ -1024,7 +1024,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(4, 0))
 			{
-				if(!glext_ARB_texture_cube_map_array)
+				if(!gl::exts::var_ARB_texture_cube_map_array)
 					throw TextureUnsupportedException("No cube-map array texture support.");
 			}
 		}
@@ -1033,7 +1033,7 @@ namespace glimg
 		{
 			if(!glload::IsVersionGEQ(4, 2))
 			{
-				if(!glext_ARB_texture_storage)
+				if(!gl::exts::var_ARB_texture_storage)
 					return false;
 			}
 
@@ -1042,7 +1042,7 @@ namespace glimg
 
 		bool IsDirectStateAccessSupported()
 		{
-			if(!glext_EXT_direct_state_access)
+			if(!gl::exts::var_EXT_direct_state_access)
 				return false;
 
 			return true;
@@ -1143,7 +1143,7 @@ namespace glimg
 						upload.format, upload.type, NULL);
 					break;
 				case 2:
-					if(texTarget == gl::GL_TEXTURE_CUBE_MAP_ARRAY)
+					if(texTarget == gl::TEXTURE_CUBE_MAP_ARRAY)
 						arrayCount *= 6;
 
 					gl::TexImage3D(texTarget, mipmap, internalFormat, levelDims.width, levelDims.height, arrayCount,
@@ -1161,17 +1161,17 @@ namespace glimg
 			for(GLuint mipmap = 0; mipmap < numMipmaps; ++mipmap)
 			{
 				Dimensions levelDims = ModifySizeForMipmap(dims, mipmap);
-				gl::TexImage2D(gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X, mipmap, internalFormat,
+				gl::TexImage2D(gl::TEXTURE_CUBE_MAP_POSITIVE_X, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TexImage2D(gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X, mipmap, internalFormat,
+				gl::TexImage2D(gl::TEXTURE_CUBE_MAP_NEGATIVE_X, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TexImage2D(gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Y, mipmap, internalFormat,
+				gl::TexImage2D(gl::TEXTURE_CUBE_MAP_POSITIVE_Y, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TexImage2D(gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, mipmap, internalFormat,
+				gl::TexImage2D(gl::TEXTURE_CUBE_MAP_NEGATIVE_Y, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TexImage2D(gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z, mipmap, internalFormat,
+				gl::TexImage2D(gl::TEXTURE_CUBE_MAP_POSITIVE_Z, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TexImage2D(gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, mipmap, internalFormat,
+				gl::TexImage2D(gl::TEXTURE_CUBE_MAP_NEGATIVE_Z, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
 			}
 		}
@@ -1253,17 +1253,17 @@ namespace glimg
 			for(GLuint mipmap = 0; mipmap < numMipmaps; ++mipmap)
 			{
 				Dimensions levelDims = ModifySizeForMipmap(dims, mipmap);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X, mipmap, internalFormat,
+				gl::TextureImage2DEXT(texture, gl::TEXTURE_CUBE_MAP_POSITIVE_X, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_X, mipmap, internalFormat,
+				gl::TextureImage2DEXT(texture, gl::TEXTURE_CUBE_MAP_NEGATIVE_X, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Y, mipmap, internalFormat,
+				gl::TextureImage2DEXT(texture, gl::TEXTURE_CUBE_MAP_POSITIVE_Y, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, mipmap, internalFormat,
+				gl::TextureImage2DEXT(texture, gl::TEXTURE_CUBE_MAP_NEGATIVE_Y, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_Z, mipmap, internalFormat,
+				gl::TextureImage2DEXT(texture, gl::TEXTURE_CUBE_MAP_POSITIVE_Z, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
-				gl::TextureImage2DEXT(texture, gl::GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, mipmap, internalFormat,
+				gl::TextureImage2DEXT(texture, gl::TEXTURE_CUBE_MAP_NEGATIVE_Z, mipmap, internalFormat,
 					levelDims.width, levelDims.height, 0, upload.format, upload.type, NULL);
 			}
 		}
@@ -1430,12 +1430,12 @@ namespace glimg
 			TextureBinder bind;
 			if(!(forceConvertBits & USE_DSA))
 			{
-				bind.Bind(gl::GL_TEXTURE_1D, textureName);
+				bind.Bind(gl::TEXTURE_1D, textureName);
 				textureName = 0;
 			}
 
 			const int numMipmaps = pImage->GetMipmapCount();
-			TexStorageBase(gl::GL_TEXTURE_1D, forceConvertBits, pImage->GetDimensions(),
+			TexStorageBase(gl::TEXTURE_1D, forceConvertBits, pImage->GetDimensions(),
 				numMipmaps, internalFormat, upload, textureName);
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
@@ -1443,11 +1443,11 @@ namespace glimg
 				Dimensions dims = pImage->GetDimensions(mipmap);
 				const void *pPixelData = pImage->GetImageData(mipmap, 0, 0);
 
-				TexSubImage(textureName, gl::GL_TEXTURE_1D, mipmap, internalFormat, dims, upload,
+				TexSubImage(textureName, gl::TEXTURE_1D, mipmap, internalFormat, dims, upload,
 					pPixelData, pImage->GetImageByteSize(mipmap));
 			}
 
-			FinalizeTexture(textureName, gl::GL_TEXTURE_1D, pImage);
+			FinalizeTexture(textureName, gl::TEXTURE_1D, pImage);
 		}
 
 		void Build2DCubeArrayTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
@@ -1474,12 +1474,12 @@ namespace glimg
 			TextureBinder bind;
 			if(!(forceConvertBits & USE_DSA))
 			{
-				bind.Bind(gl::GL_TEXTURE_CUBE_MAP, textureName);
+				bind.Bind(gl::TEXTURE_CUBE_MAP, textureName);
 				textureName = 0;
 			}
 
 			const int numMipmaps = pImage->GetMipmapCount();
-			TexStorageCube(gl::GL_TEXTURE_CUBE_MAP, forceConvertBits, pImage->GetDimensions(),
+			TexStorageCube(gl::TEXTURE_CUBE_MAP, forceConvertBits, pImage->GetDimensions(),
 				numMipmaps, internalFormat, upload, textureName);
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
@@ -1490,13 +1490,13 @@ namespace glimg
 				{
 					const void *pPixelData = pImage->GetImageData(mipmap, 0, faceIx);
 
-					TexSubImage(textureName, gl::GL_TEXTURE_CUBE_MAP_POSITIVE_X + faceIx,
+					TexSubImage(textureName, gl::TEXTURE_CUBE_MAP_POSITIVE_X + faceIx,
 						mipmap, internalFormat, dims, upload,
 						pPixelData, pImage->GetImageByteSize(mipmap));
 				}
 			}
 
-			FinalizeTexture(textureName, gl::GL_TEXTURE_CUBE_MAP, pImage);
+			FinalizeTexture(textureName, gl::TEXTURE_CUBE_MAP, pImage);
 		}
 
 		void Build2DTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
@@ -1506,12 +1506,12 @@ namespace glimg
 			TextureBinder bind;
 			if(!(forceConvertBits & USE_DSA))
 			{
-				bind.Bind(gl::GL_TEXTURE_2D, textureName);
+				bind.Bind(gl::TEXTURE_2D, textureName);
 				textureName = 0;
 			}
 
 			const int numMipmaps = pImage->GetMipmapCount();
-			TexStorageBase(gl::GL_TEXTURE_2D, forceConvertBits, pImage->GetDimensions(),
+			TexStorageBase(gl::TEXTURE_2D, forceConvertBits, pImage->GetDimensions(),
 				numMipmaps, internalFormat, upload, textureName);
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
@@ -1519,11 +1519,11 @@ namespace glimg
 				Dimensions dims = pImage->GetDimensions(mipmap);
 				const void *pPixelData = pImage->GetImageData(mipmap);
 
-				TexSubImage(textureName, gl::GL_TEXTURE_2D, mipmap, internalFormat, dims, upload,
+				TexSubImage(textureName, gl::TEXTURE_2D, mipmap, internalFormat, dims, upload,
 					pPixelData, pImage->GetImageByteSize(mipmap));
 			}
 
-			FinalizeTexture(textureName, gl::GL_TEXTURE_2D, pImage);
+			FinalizeTexture(textureName, gl::TEXTURE_2D, pImage);
 		}
 
 		void Build3DTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
@@ -1533,12 +1533,12 @@ namespace glimg
 			TextureBinder bind;
 			if(!(forceConvertBits & USE_DSA))
 			{
-				bind.Bind(gl::GL_TEXTURE_3D, textureName);
+				bind.Bind(gl::TEXTURE_3D, textureName);
 				textureName = 0;
 			}
 
 			const int numMipmaps = pImage->GetMipmapCount();
-			TexStorageBase(gl::GL_TEXTURE_3D, forceConvertBits, pImage->GetDimensions(),
+			TexStorageBase(gl::TEXTURE_3D, forceConvertBits, pImage->GetDimensions(),
 				numMipmaps, internalFormat, upload, textureName);
 
 			for(int mipmap = 0; mipmap < numMipmaps; mipmap++)
@@ -1546,11 +1546,11 @@ namespace glimg
 				Dimensions dims = pImage->GetDimensions(mipmap);
 				const void *pPixelData = pImage->GetImageData(mipmap);
 
-				TexSubImage(textureName, gl::GL_TEXTURE_3D, mipmap, internalFormat, dims, upload, pPixelData,
+				TexSubImage(textureName, gl::TEXTURE_3D, mipmap, internalFormat, dims, upload, pPixelData,
 					pImage->GetImageByteSize(mipmap));
 			}
 
-			FinalizeTexture(textureName, gl::GL_TEXTURE_3D, pImage);
+			FinalizeTexture(textureName, gl::TEXTURE_3D, pImage);
 		}
 
 		bool IsArrayTexture(const ImageSet *pImage, unsigned int forceConvertBits)
@@ -1575,29 +1575,29 @@ namespace glimg
 		case 1:
 			//May be 1D or 1D array.
 			if(IsArrayTexture(pImage, forceConvertBits))
-				return gl::GL_TEXTURE_1D_ARRAY;
+				return gl::TEXTURE_1D_ARRAY;
 			else
-				return gl::GL_TEXTURE_1D;
+				return gl::TEXTURE_1D;
 		case 2:
 			//2D, 2D array, 2D cube, or 2D array cube.
 			if(IsArrayTexture(pImage, forceConvertBits))
 			{
 				if(pImage->GetFaceCount() > 1)
-					return gl::GL_TEXTURE_CUBE_MAP_ARRAY;
+					return gl::TEXTURE_CUBE_MAP_ARRAY;
 				else
-					return gl::GL_TEXTURE_2D_ARRAY;
+					return gl::TEXTURE_2D_ARRAY;
 			}
 			else
 			{
 				if(pImage->GetFaceCount() > 1)
-					return gl::GL_TEXTURE_CUBE_MAP;
+					return gl::TEXTURE_CUBE_MAP;
 				else
-					return gl::GL_TEXTURE_2D;
+					return gl::TEXTURE_2D;
 			}
 			break;
 		case 3:
 			//3D.
-			return gl::GL_TEXTURE_3D;
+			return gl::TEXTURE_3D;
 		}
 
 		return 0xFFFFFFFF;
@@ -1655,31 +1655,31 @@ namespace glimg
 
 		switch(GetTextureType(pImage, forceConvertBits))
 		{
-		case gl::GL_TEXTURE_1D:
+		case gl::TEXTURE_1D:
 			Build1DTexture(textureName, pImage->m_pImpl, forceConvertBits,
 				internalFormat, upload);
 			break;
-		case gl::GL_TEXTURE_2D:
+		case gl::TEXTURE_2D:
 			Build2DTexture(textureName, pImage->m_pImpl, forceConvertBits,
 				internalFormat, upload);
 			break;
-		case gl::GL_TEXTURE_3D:
+		case gl::TEXTURE_3D:
 			Build3DTexture(textureName, pImage->m_pImpl, forceConvertBits,
 				internalFormat, upload);
 			break;
-		case gl::GL_TEXTURE_1D_ARRAY:
+		case gl::TEXTURE_1D_ARRAY:
 			Build1DArrayTexture(textureName, pImage->m_pImpl, forceConvertBits,
 				internalFormat, upload);
 			break;
-		case gl::GL_TEXTURE_2D_ARRAY:
+		case gl::TEXTURE_2D_ARRAY:
 			Build2DArrayTexture(textureName, pImage->m_pImpl, forceConvertBits,
 				internalFormat, upload);
 			break;
-		case gl::GL_TEXTURE_CUBE_MAP:
+		case gl::TEXTURE_CUBE_MAP:
 			Build2DCubeTexture(textureName, pImage->m_pImpl, forceConvertBits,
 				internalFormat, upload);
 			break;
-		case gl::GL_TEXTURE_CUBE_MAP_ARRAY:
+		case gl::TEXTURE_CUBE_MAP_ARRAY:
 			Build2DCubeArrayTexture(textureName, pImage->m_pImpl, forceConvertBits,
 				internalFormat, upload);
 			break;

@@ -26,9 +26,9 @@ void init()
 	};
 
 	gl::GenBuffers(1, &objectBuffer);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, objectBuffer);
-	gl::BufferData(gl::GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, gl::GL_STATIC_DRAW);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+	gl::BindBuffer(gl::ARRAY_BUFFER, objectBuffer);
+	gl::BufferData(gl::ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, gl::STATIC_DRAW);
+	gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 	const std::string vertexShader(
 		"#version 330\n"
@@ -48,8 +48,8 @@ void init()
 		"}\n"
 		);
 
-	GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
-	GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+	GLuint vertShader = glutil::CompileShader(gl::VERTEX_SHADER, vertexShader);
+	GLuint fragShader = glutil::CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 
 	program = glutil::LinkProgram(vertShader, fragShader);
 
@@ -63,15 +63,15 @@ void init()
 void display()
 {
 	gl::ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	gl::Clear(gl::GL_COLOR_BUFFER_BIT);
+	gl::Clear(gl::COLOR_BUFFER_BIT);
 
 	gl::UseProgram(program);
 
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, objectBuffer);
+	gl::BindBuffer(gl::ARRAY_BUFFER, objectBuffer);
 	gl::EnableVertexAttribArray(0);
-	gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, 0);
+	gl::VertexAttribPointer(0, 4, gl::FLOAT, gl::FALSE_, 0, 0);
 
-	gl::DrawArrays(gl::GL_TRIANGLES, 0, 3);
+	gl::DrawArrays(gl::TRIANGLES, 0, 3);
 
 	gl::DisableVertexAttribArray(0);
 	gl::UseProgram(0);
@@ -95,7 +95,7 @@ int main(int argc, char** argv)
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef DEBUG
-	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::GL_TRUE);
+	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::TRUE_);
 #endif
 
 	glm::ivec2 wndSize(500, 500);
@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 
 	glfwSetWindowPos(wndPos.x, wndPos.y);
 
-	if(glload::LoadFunctions() == glload::LS_LOAD_FAILED)
+	if(!glload::LoadFunctions())
 	{
 		glfwTerminate();
 		return -1;

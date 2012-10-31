@@ -32,9 +32,9 @@ public:
 		gl::ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		gl::ClearDepth(1.0);
 
-		gl::Enable(gl::GL_DEPTH_TEST);
-		gl::DepthFunc(gl::GL_LEQUAL);
-		gl::Enable(gl::GL_DEPTH_CLAMP);
+		gl::Enable(gl::DEPTH_TEST);
+		gl::DepthFunc(gl::LEQUAL);
+		gl::Enable(gl::DEPTH_CLAMP);
 
 		const std::string vertexShader(
 			"#version 330\n"
@@ -80,8 +80,8 @@ public:
 			0.9f, 0.5f, 0.3f, 1.0f,
 		};
 
-		GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
-		GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+		GLuint vertShader = glutil::CompileShader(gl::VERTEX_SHADER, vertexShader);
+		GLuint fragShader = glutil::CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 
 		m_program = glutil::LinkProgram(vertShader, fragShader);
 
@@ -94,23 +94,23 @@ public:
 		std::vector<GLuint> buffers(1);
 		gl::GenBuffers(1, &buffers[0]);
 
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, buffers[0]);
-		gl::BufferData(gl::GL_ARRAY_BUFFER, sizeof(groundPlaneData), groundPlaneData, gl::GL_STATIC_DRAW);
+		gl::BindBuffer(gl::ARRAY_BUFFER, buffers[0]);
+		gl::BufferData(gl::ARRAY_BUFFER, sizeof(groundPlaneData), groundPlaneData, gl::STATIC_DRAW);
 
 		GLuint mainVao = 0;
 		gl::GenVertexArrays(1, &mainVao);
 
 		gl::BindVertexArray(mainVao);
 		gl::EnableVertexAttribArray(0);
-		gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, 0);
+		gl::VertexAttribPointer(0, 4, gl::FLOAT, gl::FALSE_, 0, 0);
 		gl::EnableVertexAttribArray(1);
-		gl::VertexAttribPointer(1, 4, gl::GL_FLOAT, gl::GL_FALSE, 0,
+		gl::VertexAttribPointer(1, 4, gl::FLOAT, gl::FALSE_, 0,
 			reinterpret_cast<void*>(16 * sizeof(GLfloat)));
 
 		gl::BindVertexArray(0);
 
 		glmesh::RenderCmdList cmdList;
-		cmdList.DrawArrays(gl::GL_TRIANGLE_STRIP, 0, 4);
+		cmdList.DrawArrays(gl::TRIANGLE_STRIP, 0, 4);
 
 		glmesh::MeshVariantMap variants;
 		glmesh::MeshVariantMap::value_type testVar("test", 0);
@@ -118,11 +118,11 @@ public:
 
 		gl::BindVertexArray(testVar.second);
 		gl::EnableVertexAttribArray(0);
-		gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, 0);
+		gl::VertexAttribPointer(0, 4, gl::FLOAT, gl::FALSE_, 0, 0);
 
 		gl::BindVertexArray(0);
 		
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+		gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 		variants.insert(testVar);
 		variants["main"] = mainVao;
@@ -140,15 +140,15 @@ public:
 	{
 		gl::ClearColor(0.9f, 0.9f, 0.9f, 1.0f);
 		gl::ClearDepth(1.0f);
-		gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
+		gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
 
 		//Set uniforms.
 		gl::UseProgram(m_program);
-		gl::UniformMatrix4fv(m_unifCameraToClipMatrix, 1, gl::GL_FALSE,
+		gl::UniformMatrix4fv(m_unifCameraToClipMatrix, 1, gl::FALSE_,
 			glm::value_ptr(cameraToClip));
 
 		{
-			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::GL_FALSE,
+			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::FALSE_,
 				glm::value_ptr(worldToCamera));
 
 			m_pGroundPlane->Render("main");

@@ -162,64 +162,64 @@ namespace glmesh
 			std::vector<GLuint> buffers(2);
 
 			gl::GenBuffers(2, &buffers[0]);
-			gl::BindBuffer(gl::GL_ARRAY_BUFFER, buffers[0]);
-			gl::BufferData(gl::GL_ARRAY_BUFFER, data.size(), &data[0], gl::GL_STATIC_DRAW);
+			gl::BindBuffer(gl::ARRAY_BUFFER, buffers[0]);
+			gl::BufferData(gl::ARRAY_BUFFER, data.size(), &data[0], gl::STATIC_DRAW);
 
 			//vertex data done. Now build the index buffer.
-			gl::BindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
-			gl::BufferData(gl::GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint),
-				&indices[0], gl::GL_STATIC_DRAW);
-			gl::BindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, 0);
+			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
+			gl::BufferData(gl::ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint),
+				&indices[0], gl::STATIC_DRAW);
+			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);
 
 			//Create VAOs.
 			MeshVariantMap variantMap;
 
-			gl::BindBuffer(gl::GL_ARRAY_BUFFER, buffers[0]);
+			gl::BindBuffer(gl::ARRAY_BUFFER, buffers[0]);
 
 			GLuint currVao = 0;
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
-			gl::BindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
 			gl::EnableVertexAttribArray(0);
-			gl::VertexAttribPointer(0, 3, gl::GL_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort), (void*)0);
+			gl::VertexAttribPointer(0, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort), (void*)0);
 			AddVariantToMap(variantMap, currVao, 0);
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
-			gl::BindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
 			gl::EnableVertexAttribArray(0);
-			gl::VertexAttribPointer(0, 3, gl::GL_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort), (void*)0);
+			gl::VertexAttribPointer(0, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort), (void*)0);
 			gl::EnableVertexAttribArray(2);
-			gl::VertexAttribPointer(2, 3, gl::GL_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort),
+			gl::VertexAttribPointer(2, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort),
 				(void*)(4 * sizeof(GLshort)));
 			AddVariantToMap(variantMap, currVao, VAR_NORMAL);
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
-			gl::BindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
 			gl::EnableVertexAttribArray(0);
-			gl::VertexAttribPointer(0, 3, gl::GL_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort), (void*)0);
+			gl::VertexAttribPointer(0, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort), (void*)0);
 			gl::EnableVertexAttribArray(5);
-			gl::VertexAttribPointer(5, 3, gl::GL_UNSIGNED_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort),
+			gl::VertexAttribPointer(5, 3, gl::UNSIGNED_SHORT, gl::TRUE_, 10 * sizeof(GLshort),
 				(void*)(8 * sizeof(GLushort)));
 			AddVariantToMap(variantMap, currVao, VAR_TEX_COORD);
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
-			gl::BindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
 			gl::EnableVertexAttribArray(0);
-			gl::VertexAttribPointer(0, 3, gl::GL_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort), (void*)0);
+			gl::VertexAttribPointer(0, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort), (void*)0);
 			gl::EnableVertexAttribArray(2);
-			gl::VertexAttribPointer(2, 3, gl::GL_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort),
+			gl::VertexAttribPointer(2, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort),
 				(void*)(4 * sizeof(GLshort)));
 			gl::EnableVertexAttribArray(5);
-			gl::VertexAttribPointer(5, 3, gl::GL_UNSIGNED_SHORT, gl::GL_TRUE, 10 * sizeof(GLshort),
+			gl::VertexAttribPointer(5, 3, gl::UNSIGNED_SHORT, gl::TRUE_, 10 * sizeof(GLshort),
 				(void*)(8 * sizeof(GLushort)));
 			AddVariantToMap(variantMap, currVao, VAR_TEX_COORD | VAR_NORMAL);
 
 			gl::BindVertexArray(0);
-			gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+			gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 			//////////////////////////////////////////////////////////////////////////
 			//Create rendering commands.
@@ -228,7 +228,7 @@ namespace glmesh
 			{
 				//Has primitive restart. Therefore, can draw two fans as one.
 				renderCmds.PrimitiveRestartIndex(restartIndex);
-				renderCmds.DrawElements(gl::GL_TRIANGLE_STRIP, numIndices, gl::GL_UNSIGNED_INT, 0);
+				renderCmds.DrawElements(gl::TRIANGLE_STRIP, numIndices, gl::UNSIGNED_INT, 0);
 				renderCmds.PrimitiveRestartIndex();
 			}
 			else
@@ -238,7 +238,7 @@ namespace glmesh
 				{
 					GLuint stripStart = strip * (stripSize + 1);
 
-					renderCmds.DrawElements(gl::GL_TRIANGLE_STRIP, stripSize, gl::GL_UNSIGNED_INT,
+					renderCmds.DrawElements(gl::TRIANGLE_STRIP, stripSize, gl::UNSIGNED_INT,
 						stripStart * sizeof(GLuint));
 				}
 			}

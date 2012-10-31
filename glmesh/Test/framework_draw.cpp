@@ -136,7 +136,7 @@ int main(int argc, char** argv)
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef DEBUG
-	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::GL_TRUE);
+	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::TRUE_);
 #endif
 
 	glm::ivec2 wndSize(500, 500);
@@ -156,7 +156,7 @@ int main(int argc, char** argv)
 
 	glfwSetWindowPos(wndPos.x, wndPos.y);
 
-	if(glload::LoadFunctions() == glload::LS_LOAD_FAILED)
+	if(!glload::LoadFunctions())
 	{
 		glfwTerminate();
 		return -1;

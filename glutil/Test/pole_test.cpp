@@ -54,14 +54,14 @@ void init()
 	g_sizeGroundBuffer = sizeof(groundData);
 
 	gl::GenBuffers(1, &objectBuffer);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, objectBuffer);
-	gl::BufferData(gl::GL_ARRAY_BUFFER, g_sizeObjectBuffer, vertexData, gl::GL_STATIC_DRAW);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+	gl::BindBuffer(gl::ARRAY_BUFFER, objectBuffer);
+	gl::BufferData(gl::ARRAY_BUFFER, g_sizeObjectBuffer, vertexData, gl::STATIC_DRAW);
+	gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 	gl::GenBuffers(1, &groundBuffer);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, groundBuffer);
-	gl::BufferData(gl::GL_ARRAY_BUFFER, g_sizeGroundBuffer, groundData, gl::GL_STATIC_DRAW);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+	gl::BindBuffer(gl::ARRAY_BUFFER, groundBuffer);
+	gl::BufferData(gl::ARRAY_BUFFER, g_sizeGroundBuffer, groundData, gl::STATIC_DRAW);
+	gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 
 	const std::string vertexShader(
@@ -95,8 +95,8 @@ void init()
 		"}\n"
 		);
 
-	GLuint vertShader = glutil::CompileShader(gl::GL_VERTEX_SHADER, vertexShader);
-	GLuint fragShader = glutil::CompileShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+	GLuint vertShader = glutil::CompileShader(gl::VERTEX_SHADER, vertexShader);
+	GLuint fragShader = glutil::CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 
 	program = glutil::LinkProgram(vertShader, fragShader);
 
@@ -124,17 +124,17 @@ void DrawGround(glutil::MatrixStack &matStack)
 {
 	gl::UseProgram(program);
 
-	gl::UniformMatrix4fv(unifModelToCameraMatrix, 1, gl::GL_FALSE,
+	gl::UniformMatrix4fv(unifModelToCameraMatrix, 1, gl::FALSE_,
 		glm::value_ptr(matStack.Top()));
 
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, groundBuffer);
+	gl::BindBuffer(gl::ARRAY_BUFFER, groundBuffer);
 	gl::EnableVertexAttribArray(0);
 	gl::EnableVertexAttribArray(1);
 
-	gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, 0);
-	gl::VertexAttribPointer(1, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, (void*)(g_sizeGroundBuffer / 2));
+	gl::VertexAttribPointer(0, 4, gl::FLOAT, gl::FALSE_, 0, 0);
+	gl::VertexAttribPointer(1, 4, gl::FLOAT, gl::FALSE_, 0, (void*)(g_sizeGroundBuffer / 2));
 
-	gl::DrawArrays(gl::GL_TRIANGLE_STRIP, 0, 4);
+	gl::DrawArrays(gl::TRIANGLE_STRIP, 0, 4);
 
 	gl::DisableVertexAttribArray(0);
 	gl::DisableVertexAttribArray(1);
@@ -149,17 +149,17 @@ void DrawObject(glutil::MatrixStack &matStack)
 
 	matStack *= g_objectPole.CalcMatrix();
 
-	gl::UniformMatrix4fv(unifModelToCameraMatrix, 1, gl::GL_FALSE,
+	gl::UniformMatrix4fv(unifModelToCameraMatrix, 1, gl::FALSE_,
 		glm::value_ptr(matStack.Top()));
 
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, objectBuffer);
+	gl::BindBuffer(gl::ARRAY_BUFFER, objectBuffer);
 	gl::EnableVertexAttribArray(0);
 	gl::EnableVertexAttribArray(1);
 
-	gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, 0);
-	gl::VertexAttribPointer(1, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, (void*)(g_sizeObjectBuffer / 2));
+	gl::VertexAttribPointer(0, 4, gl::FLOAT, gl::FALSE_, 0, 0);
+	gl::VertexAttribPointer(1, 4, gl::FLOAT, gl::FALSE_, 0, (void*)(g_sizeObjectBuffer / 2));
 
-	gl::DrawArrays(gl::GL_TRIANGLES, 0, 3);
+	gl::DrawArrays(gl::TRIANGLES, 0, 3);
 
 	gl::DisableVertexAttribArray(0);
 	gl::DisableVertexAttribArray(1);
@@ -173,17 +173,17 @@ void display()
 {
 	gl::ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	gl::ClearDepth(1.0);
-	gl::Clear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
+	gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
 
-	gl::Enable(gl::GL_DEPTH_TEST);
-	gl::DepthFunc(gl::GL_LEQUAL);
-	gl::Enable(gl::GL_DEPTH_CLAMP);
+	gl::Enable(gl::DEPTH_TEST);
+	gl::DepthFunc(gl::LEQUAL);
+	gl::Enable(gl::DEPTH_CLAMP);
 
 	gl::UseProgram(program);
 
 	glm::mat4 perspectiveMat = glm::perspective(50.0f, g_windowSize.x / (float)g_windowSize.y,
 		1.f, 100.0f);
-	gl::UniformMatrix4fv(unifCameraToClipMatrix, 1, gl::GL_FALSE,
+	gl::UniformMatrix4fv(unifCameraToClipMatrix, 1, gl::FALSE_,
 		glm::value_ptr(perspectiveMat));
 
 	glutil::MatrixStack matStack;
@@ -293,7 +293,7 @@ int main(int argc, char** argv)
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef DEBUG
-	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::GL_TRUE);
+	glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, gl::TRUE_);
 #endif
 
 	glm::ivec2 wndSize(500, 500);
@@ -313,7 +313,7 @@ int main(int argc, char** argv)
 
 	glfwSetWindowPos(wndPos.x, wndPos.y);
 
-	if(glload::LoadFunctions() == glload::LS_LOAD_FAILED)
+	if(!glload::LoadFunctions())
 	{
 		glfwTerminate();
 		return -1;

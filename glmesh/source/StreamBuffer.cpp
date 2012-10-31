@@ -10,7 +10,7 @@ namespace glmesh
 	{
 		bool HasVAO()
 		{
-			if(glload::IsVersionGEQ(3, 0) || glext_ARB_vertex_array_object)
+			if(glload::IsVersionGEQ(3, 0) || gl::exts::var_ARB_vertex_array_object)
 				return true;
 
 			return false;
@@ -42,9 +42,9 @@ namespace glmesh
 		, m_vao(0)
 	{
 		gl::GenBuffers(1, &m_bufferObject);
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_bufferObject);
-		gl::BufferData(gl::GL_ARRAY_BUFFER, bufferSize, NULL, gl::GL_STREAM_DRAW);
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+		gl::BindBuffer(gl::ARRAY_BUFFER, m_bufferObject);
+		gl::BufferData(gl::ARRAY_BUFFER, bufferSize, NULL, gl::STREAM_DRAW);
+		gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 		if(HasVAO())
 			gl::GenVertexArrays(1, &m_vao);
@@ -72,9 +72,9 @@ namespace glmesh
 		if(m_isMapped)
 			throw StoreAlreadyMappedException();
 
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_bufferObject);
-		gl::BufferData(gl::GL_ARRAY_BUFFER, m_bufferSize, NULL, gl::GL_STREAM_DRAW);
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+		gl::BindBuffer(gl::ARRAY_BUFFER, m_bufferObject);
+		gl::BufferData(gl::ARRAY_BUFFER, m_bufferSize, NULL, gl::STREAM_DRAW);
+		gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 		m_currOffset = 0;
 	}
@@ -91,7 +91,7 @@ namespace glmesh
 		if(numBytes > m_pData->GetTotalBufferSize())
 			throw NotEnoughStorageForMapException(m_bytesMapped, m_pData->GetTotalBufferSize());
 
-		int bitfield = gl::GL_MAP_WRITE_BIT | gl::GL_MAP_UNSYNCHRONIZED_BIT;
+		int bitfield = gl::MAP_WRITE_BIT | gl::MAP_UNSYNCHRONIZED_BIT;
 
 		if(numBytes > m_pData->GetSpaceRemaining())
 		{
@@ -101,14 +101,14 @@ namespace glmesh
 					m_bytesMapped, m_pData->GetTotalBufferSize());
 			}
 
-			bitfield |= gl::GL_MAP_INVALIDATE_BUFFER_BIT;
+			bitfield |= gl::MAP_INVALIDATE_BUFFER_BIT;
 			m_pData->m_currOffset = 0;
 		}
 
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_pData->m_bufferObject);
-		m_pCurrPtr = gl::MapBufferRange(gl::GL_ARRAY_BUFFER, m_pData->m_currOffset,
+		gl::BindBuffer(gl::ARRAY_BUFFER, m_pData->m_bufferObject);
+		m_pCurrPtr = gl::MapBufferRange(gl::ARRAY_BUFFER, m_pData->m_currOffset,
 			m_bytesMapped, bitfield);
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+		gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 		m_pData->m_isMapped = true;
 	}
@@ -127,10 +127,10 @@ namespace glmesh
 		m_pData->m_currOffset += m_bytesMapped;
 
 		bool ret = true;
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, m_pData->m_bufferObject);
-		if(gl::UnmapBuffer(gl::GL_ARRAY_BUFFER) == gl::GL_FALSE)
+		gl::BindBuffer(gl::ARRAY_BUFFER, m_pData->m_bufferObject);
+		if(gl::UnmapBuffer(gl::ARRAY_BUFFER) == gl::FALSE_)
 			ret = false;
-		gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+		gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 		m_pData = NULL;
 		m_pCurrPtr = NULL;

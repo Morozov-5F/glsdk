@@ -6,29 +6,29 @@ namespace gl
 {
 	enum
 	{
-		//POINT_SIZE_MIN taken from 1.4
-		//POINT_SIZE_MAX taken from 1.4
-		//POINT_DISTANCE_ATTENUATION taken from 1.4
-		//GENERATE_MIPMAP taken from 1.4
-		//GENERATE_MIPMAP_HINT taken from 1.4
-		//FOG_COORDINATE_SOURCE taken from 1.4
-		//FOG_COORDINATE taken from 1.4
-		//FRAGMENT_DEPTH taken from 1.4
-		//CURRENT_FOG_COORDINATE taken from 1.4
-		//FOG_COORDINATE_ARRAY_TYPE taken from 1.4
-		//FOG_COORDINATE_ARRAY_STRIDE taken from 1.4
-		//FOG_COORDINATE_ARRAY_POINTER taken from 1.4
-		//FOG_COORDINATE_ARRAY taken from 1.4
-		//COLOR_SUM taken from 1.4
-		//CURRENT_SECONDARY_COLOR taken from 1.4
-		//SECONDARY_COLOR_ARRAY_SIZE taken from 1.4
-		//SECONDARY_COLOR_ARRAY_TYPE taken from 1.4
-		//SECONDARY_COLOR_ARRAY_STRIDE taken from 1.4
-		//SECONDARY_COLOR_ARRAY_POINTER taken from 1.4
-		//SECONDARY_COLOR_ARRAY taken from 1.4
-		//TEXTURE_FILTER_CONTROL taken from 1.4
-		//DEPTH_TEXTURE_MODE taken from 1.4
-		//COMPARE_R_TO_TEXTURE taken from 1.4
+		POINT_SIZE_MIN                   = 0x8126,
+		POINT_SIZE_MAX                   = 0x8127,
+		POINT_DISTANCE_ATTENUATION       = 0x8129,
+		GENERATE_MIPMAP                  = 0x8191,
+		GENERATE_MIPMAP_HINT             = 0x8192,
+		FOG_COORDINATE_SOURCE            = 0x8450,
+		FOG_COORDINATE                   = 0x8451,
+		FRAGMENT_DEPTH                   = 0x8452,
+		CURRENT_FOG_COORDINATE           = 0x8453,
+		FOG_COORDINATE_ARRAY_TYPE        = 0x8454,
+		FOG_COORDINATE_ARRAY_STRIDE      = 0x8455,
+		FOG_COORDINATE_ARRAY_POINTER     = 0x8456,
+		FOG_COORDINATE_ARRAY             = 0x8457,
+		COLOR_SUM                        = 0x8458,
+		CURRENT_SECONDARY_COLOR          = 0x8459,
+		SECONDARY_COLOR_ARRAY_SIZE       = 0x845A,
+		SECONDARY_COLOR_ARRAY_TYPE       = 0x845B,
+		SECONDARY_COLOR_ARRAY_STRIDE     = 0x845C,
+		SECONDARY_COLOR_ARRAY_POINTER    = 0x845D,
+		SECONDARY_COLOR_ARRAY            = 0x845E,
+		TEXTURE_FILTER_CONTROL           = 0x8500,
+		DEPTH_TEXTURE_MODE               = 0x884B,
+		COMPARE_R_TO_TEXTURE             = 0x884E,
 	};
 	
 	namespace _detail

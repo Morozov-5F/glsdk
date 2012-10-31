@@ -6,10 +6,10 @@ namespace gl
 {
 	enum
 	{
-		//VERTEX_PROGRAM_TWO_SIDE taken from 2.0
-		//POINT_SPRITE taken from 2.0
-		//COORD_REPLACE taken from 2.0
-		//MAX_TEXTURE_COORDS taken from 2.0
+		VERTEX_PROGRAM_TWO_SIDE          = 0x8643,
+		POINT_SPRITE                     = 0x8861,
+		COORD_REPLACE                    = 0x8862,
+		MAX_TEXTURE_COORDS               = 0x8871,
 	};
 	
 	namespace _detail

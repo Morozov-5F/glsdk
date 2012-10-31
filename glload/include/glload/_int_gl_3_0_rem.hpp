@@ -6,9 +6,9 @@ namespace gl
 {
 	enum
 	{
-		//CLAMP_VERTEX_COLOR taken from 3.0
-		//CLAMP_FRAGMENT_COLOR taken from 3.0
-		//ALPHA_INTEGER taken from 3.0
+		CLAMP_VERTEX_COLOR               = 0x891A,
+		CLAMP_FRAGMENT_COLOR             = 0x891B,
+		ALPHA_INTEGER                    = 0x8D97,
 	};
 	
 	namespace _detail
