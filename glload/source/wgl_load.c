@@ -795,7 +795,9 @@ static void ProcExtsFromExtString(const char *strExtList)
 	}
 }
 
-int wgl_LoadFunctions(HDC hdc)
+void wgl_CopyFromC();
+
+static int InternalLoad(HDC hdc)
 {
 	ClearExtensionVars();
 	
@@ -805,5 +807,13 @@ int wgl_LoadFunctions(HDC hdc)
 	ProcExtsFromExtString((const char *)_funcptr_wglGetExtensionsStringARB(hdc));
 	
 	return wgl_LOAD_SUCCEEDED;
+}
+
+int wgl_LoadFunctions(HDC hdc)
+{
+	int numFailed = 0;
+	numFailed = InternalLoad(hdc);
+	wgl_CopyFromC();
+	return numFailed;
 }
 

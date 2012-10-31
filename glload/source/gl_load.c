@@ -11584,10 +11584,12 @@ static void ProcExtsFromExtString(const char *strExtList)
 	}
 }
 
+void ogl_CopyFromC();
+
 static int g_majorVersion = 0;
 static int g_minorVersion = 0;
 
-int ogl_LoadFunctions()
+static int InternalLoad()
 {
 	int numFailed = 0;
 	int compProfile = 0;
@@ -11654,6 +11656,14 @@ int ogl_LoadFunctions()
 	}
 	
 	return ogl_LOAD_SUCCEEDED + numFailed;
+}
+
+int ogl_LoadFunctions()
+{
+	int numFailed = 0;
+	numFailed = InternalLoad();
+	ogl_CopyFromC();
+	return numFailed;
 }
 
 int ogl_GetMajorVersion() { return g_majorVersion; }

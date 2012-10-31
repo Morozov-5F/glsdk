@@ -690,7 +690,9 @@ static void ProcExtsFromExtString(const char *strExtList)
 	}
 }
 
-int glx_LoadFunctions(Display *display, int screen)
+void glx_CopyFromC();
+
+static int InternalLoad(Display *display, int screen)
 {
 	ClearExtensionVars();
 	
@@ -698,5 +700,13 @@ int glx_LoadFunctions(Display *display, int screen)
 	ProcExtsFromExtString((const char *)glXQueryExtensionsString(display, screen));
 	
 	return glx_LOAD_SUCCEEDED;
+}
+
+int glx_LoadFunctions(Display *display, int screen)
+{
+	int numFailed = 0;
+	numFailed = InternalLoad(display, screen);
+	glx_CopyFromC();
+	return numFailed;
 }
 
