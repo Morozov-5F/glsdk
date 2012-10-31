@@ -23,7 +23,7 @@ GLuint BuildShader(GLenum eShaderType, const std::string &shaderText)
 	if (status == gl::FALSE_)
 	{
 		//With ARB_debug_output, we already get the info log on compile failure.
-		if(!gl::exts::glext_ARB_debug_output)
+//		if(!gl::exts::var_ARB_debug_output)
 		{
 			GLint infoLogLength;
 			gl::GetShaderiv(shader, gl::INFO_LOG_LENGTH, &infoLogLength);
@@ -96,7 +96,7 @@ void init()
 	gl::GetProgramiv (program, gl::LINK_STATUS, &status);
 	if (status == gl::FALSE_)
 	{
-		if(!gl::exts::glext_ARB_debug_output)
+//		if(!gl::exts::var_ARB_debug_output)
 		{
 			GLint infoLogLength;
 			gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &infoLogLength);
@@ -209,11 +209,13 @@ int main(int argc, char** argv)
 	glutInitWindowPosition (300, 200);
 	glutCreateWindow (argv[0]);
 
+	printf("foo\n");
+
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 
 	glload::LoadTest test = glload::LoadFunctions();
 
-	if(gl::exts::glext_ARB_debug_output)
+	if(gl::exts::var_ARB_debug_output)
 	{
 		gl::Enable(gl::DEBUG_OUTPUT_SYNCHRONOUS_ARB);
 		gl::DebugMessageCallbackARB(DebugFunc, (void*)15);
