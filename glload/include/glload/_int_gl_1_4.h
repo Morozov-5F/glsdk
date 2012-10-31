@@ -1,13 +1,9 @@
-#ifndef _INT_GL_1_4_H
-#define _INT_GL_1_4_H
-
-
+#ifndef OPENGL_GEN_CORE_1_4_H
+#define OPENGL_GEN_CORE_1_4_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
-
-
+#endif /*__cplusplus*/
 #define GL_BLEND_DST_RGB 0x80C8
 #define GL_BLEND_SRC_RGB 0x80C9
 #define GL_BLEND_DST_ALPHA 0x80CA
@@ -24,34 +20,31 @@ extern "C" {
 #define GL_TEXTURE_DEPTH_SIZE 0x884A
 #define GL_TEXTURE_COMPARE_MODE 0x884C
 #define GL_TEXTURE_COMPARE_FUNC 0x884D
-typedef void (GLE_FUNCPTR * PFNGLBLENDFUNCSEPARATEPROC)(GLenum , GLenum , GLenum , GLenum );
-typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWARRAYSPROC)(GLenum , const GLint *, const GLsizei *, GLsizei );
-typedef void (GLE_FUNCPTR * PFNGLMULTIDRAWELEMENTSPROC)(GLenum , const GLsizei *, GLenum , const GLvoid* const *, GLsizei );
-typedef void (GLE_FUNCPTR * PFNGLPOINTPARAMETERFPROC)(GLenum , GLfloat );
-typedef void (GLE_FUNCPTR * PFNGLPOINTPARAMETERFVPROC)(GLenum , const GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLPOINTPARAMETERIPROC)(GLenum , GLint );
-typedef void (GLE_FUNCPTR * PFNGLPOINTPARAMETERIVPROC)(GLenum , const GLint *);
 
-extern PFNGLBLENDFUNCSEPARATEPROC __gleBlendFuncSeparate;
-#define glBlendFuncSeparate __gleBlendFuncSeparate
-extern PFNGLMULTIDRAWARRAYSPROC __gleMultiDrawArrays;
-#define glMultiDrawArrays __gleMultiDrawArrays
-extern PFNGLMULTIDRAWELEMENTSPROC __gleMultiDrawElements;
-#define glMultiDrawElements __gleMultiDrawElements
-extern PFNGLPOINTPARAMETERFPROC __glePointParameterf;
-#define glPointParameterf __glePointParameterf
-extern PFNGLPOINTPARAMETERFVPROC __glePointParameterfv;
-#define glPointParameterfv __glePointParameterfv
-extern PFNGLPOINTPARAMETERIPROC __glePointParameteri;
-#define glPointParameteri __glePointParameteri
-extern PFNGLPOINTPARAMETERIVPROC __glePointParameteriv;
-#define glPointParameteriv __glePointParameteriv
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDFUNCSEPARATEPROC)(GLenum , GLenum , GLenum , GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLMULTIDRAWARRAYSPROC)(GLenum , const GLint *, const GLsizei *, GLsizei );
+typedef void (CODEGEN_FUNCPTR * PFNGLMULTIDRAWELEMENTSPROC)(GLenum , const GLsizei *, GLenum , const GLvoid* const *, GLsizei );
+typedef void (CODEGEN_FUNCPTR * PFNGLPOINTPARAMETERFPROC)(GLenum , GLfloat );
+typedef void (CODEGEN_FUNCPTR * PFNGLPOINTPARAMETERFVPROC)(GLenum , const GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLPOINTPARAMETERIPROC)(GLenum , GLint );
+typedef void (CODEGEN_FUNCPTR * PFNGLPOINTPARAMETERIVPROC)(GLenum , const GLint *);
 
+extern PFNGLBLENDFUNCSEPARATEPROC _funcptr_glBlendFuncSeparate;
+#define glBlendFuncSeparate _funcptr_glBlendFuncSeparate
+extern PFNGLMULTIDRAWARRAYSPROC _funcptr_glMultiDrawArrays;
+#define glMultiDrawArrays _funcptr_glMultiDrawArrays
+extern PFNGLMULTIDRAWELEMENTSPROC _funcptr_glMultiDrawElements;
+#define glMultiDrawElements _funcptr_glMultiDrawElements
+extern PFNGLPOINTPARAMETERFPROC _funcptr_glPointParameterf;
+#define glPointParameterf _funcptr_glPointParameterf
+extern PFNGLPOINTPARAMETERFVPROC _funcptr_glPointParameterfv;
+#define glPointParameterfv _funcptr_glPointParameterfv
+extern PFNGLPOINTPARAMETERIPROC _funcptr_glPointParameteri;
+#define glPointParameteri _funcptr_glPointParameteri
+extern PFNGLPOINTPARAMETERIVPROC _funcptr_glPointParameteriv;
+#define glPointParameteriv _funcptr_glPointParameteriv
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
-
-
-#endif //_INT_GL_1_4_H
-
+#endif /*__cplusplus*/
+#endif /*OPENGL_GEN_CORE_1_4_H*/

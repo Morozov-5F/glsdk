@@ -1,8 +1,9 @@
-#ifndef GL_3_1_HPP
-#define GL_3_1_HPP
+#ifndef OPENGL_GEN_3_1_HPP
+#define OPENGL_GEN_3_1_HPP
 
-#include "_int_gl_type.h"
+#include "_int_gl_type.hpp"
 #include "_int_gl_exts.hpp"
+
 #include "_int_gl_1_1.hpp"
 #include "_int_gl_1_2.hpp"
 #include "_int_gl_1_3.hpp"
@@ -12,6 +13,4 @@
 #include "_int_gl_2_1.hpp"
 #include "_int_gl_3_0.hpp"
 #include "_int_gl_3_1.hpp"
-
-#endif //GL_3_1_HPP
-
+#endif /*OPENGL_GEN_3_1_HPP*/

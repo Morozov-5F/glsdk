@@ -1,8 +1,28 @@
-#ifndef GLLOAD_GL_ALL_H
-#define GLLOAD_GL_ALL_H
+#ifndef OPENGL_GEN_ALL_H
+#define OPENGL_GEN_ALL_H
 
-#include "gl_4_3_comp.h"
+#include "_int_gl_type.h"
+#include "_int_gl_exts.h"
 
-
-
-#endif //GLLOAD_GL_ALL_H
+#include "_int_gl_1_1.h"
+#include "_int_gl_1_1_rem.h"
+#include "_int_gl_1_2.h"
+#include "_int_gl_1_2_rem.h"
+#include "_int_gl_1_3.h"
+#include "_int_gl_1_3_rem.h"
+#include "_int_gl_1_4.h"
+#include "_int_gl_1_4_rem.h"
+#include "_int_gl_1_5.h"
+#include "_int_gl_1_5_rem.h"
+#include "_int_gl_2_0.h"
+#include "_int_gl_2_0_rem.h"
+#include "_int_gl_2_1.h"
+#include "_int_gl_2_1_rem.h"
+#include "_int_gl_3_0.h"
+#include "_int_gl_3_0_rem.h"
+#include "_int_gl_3_1.h"
+#include "_int_gl_3_2.h"
+#include "_int_gl_3_3.h"
+#include "_int_gl_4_0.h"
+#include "_int_gl_4_3.h"
+#endif /*OPENGL_GEN_ALL_H*/

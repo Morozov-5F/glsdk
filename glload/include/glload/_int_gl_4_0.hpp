@@ -1,48 +1,38 @@
-#ifndef _INT_GL_4_0_HPP
-#define _INT_GL_4_0_HPP
+#ifndef OPENGL_GEN_CORE_4_0_HPP
+#define OPENGL_GEN_CORE_4_0_HPP
 
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif //__cplusplus
-
-
-extern void (GLE_FUNCPTR *__gleMinSampleShading)(GLfloat );
-extern void (GLE_FUNCPTR *__gleBlendEquationi)(GLuint , GLenum );
-extern void (GLE_FUNCPTR *__gleBlendEquationSeparatei)(GLuint , GLenum , GLenum );
-extern void (GLE_FUNCPTR *__gleBlendFunci)(GLuint , GLenum , GLenum );
-extern void (GLE_FUNCPTR *__gleBlendFuncSeparatei)(GLuint , GLenum , GLenum , GLenum , GLenum );
-#ifdef __cplusplus
-}
-#endif //__cplusplus
-
-
-
+#include "_int_load_test.hpp"
 namespace gl
 {
-	enum _int_gl_4_0
+	enum
 	{
-		GL_SAMPLE_SHADING                = 0x8C36,
-		GL_MIN_SAMPLE_SHADING_VALUE      = 0x8C37,
-		GL_MIN_PROGRAM_TEXTURE_GATHER_OFFSET = 0x8E5E,
-		GL_MAX_PROGRAM_TEXTURE_GATHER_OFFSET = 0x8E5F,
-		GL_MAX_PROGRAM_TEXTURE_GATHER_COMPONENTS = 0x8F9F,
-		GL_TEXTURE_BINDING_CUBE_MAP_ARRAY = 0x900A,
-		GL_PROXY_TEXTURE_CUBE_MAP_ARRAY  = 0x900B,
-		GL_SAMPLER_CUBE_MAP_ARRAY        = 0x900C,
-		GL_SAMPLER_CUBE_MAP_ARRAY_SHADOW = 0x900D,
-		GL_INT_SAMPLER_CUBE_MAP_ARRAY    = 0x900E,
-		GL_UNSIGNED_INT_SAMPLER_CUBE_MAP_ARRAY = 0x900F,
+		SAMPLE_SHADING                   = 0x8C36,
+		MIN_SAMPLE_SHADING_VALUE         = 0x8C37,
+		MIN_PROGRAM_TEXTURE_GATHER_OFFSET = 0x8E5E,
+		MAX_PROGRAM_TEXTURE_GATHER_OFFSET = 0x8E5F,
+		MAX_PROGRAM_TEXTURE_GATHER_COMPONENTS = 0x8F9F,
+		TEXTURE_BINDING_CUBE_MAP_ARRAY   = 0x900A,
+		PROXY_TEXTURE_CUBE_MAP_ARRAY     = 0x900B,
+		SAMPLER_CUBE_MAP_ARRAY           = 0x900C,
+		SAMPLER_CUBE_MAP_ARRAY_SHADOW    = 0x900D,
+		INT_SAMPLER_CUBE_MAP_ARRAY       = 0x900E,
+		UNSIGNED_INT_SAMPLER_CUBE_MAP_ARRAY = 0x900F,
 	};
-
-	inline void MinSampleShading(GLfloat value) { ::__gleMinSampleShading(value); }
-	inline void BlendEquationi(GLuint buf, GLenum mode) { ::__gleBlendEquationi(buf, mode); }
-	inline void BlendEquationSeparatei(GLuint buf, GLenum modeRGB, GLenum modeAlpha) { ::__gleBlendEquationSeparatei(buf, modeRGB, modeAlpha); }
-	inline void BlendFunci(GLuint buf, GLenum src, GLenum dst) { ::__gleBlendFunci(buf, src, dst); }
-	inline void BlendFuncSeparatei(GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha) { ::__gleBlendFuncSeparatei(buf, srcRGB, dstRGB, srcAlpha, dstAlpha); }
-
+	
+	namespace _detail
+	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glMinSampleShading)(GLfloat );
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquationi)(GLuint , GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquationSeparatei)(GLuint , GLenum , GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendFunci)(GLuint , GLenum , GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendFuncSeparatei)(GLuint , GLenum , GLenum , GLenum , GLenum );
+	}
+	
+	extern _detail::Proc_glMinSampleShading MinSampleShading;
+	extern _detail::Proc_glBlendEquationi BlendEquationi;
+	extern _detail::Proc_glBlendEquationSeparatei BlendEquationSeparatei;
+	extern _detail::Proc_glBlendFunci BlendFunci;
+	extern _detail::Proc_glBlendFuncSeparatei BlendFuncSeparatei;
+	
 }
-
-#endif //_INT_GL_4_0_HPP
-
+#endif /*OPENGL_GEN_CORE_4_0_HPP*/

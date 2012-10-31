@@ -1,55 +1,45 @@
-#ifndef _INT_GL_3_2_HPP
-#define _INT_GL_3_2_HPP
+#ifndef OPENGL_GEN_CORE_3_2_HPP
+#define OPENGL_GEN_CORE_3_2_HPP
 
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif //__cplusplus
-
-
-extern void (GLE_FUNCPTR *__gleGetInteger64i_v)(GLenum , GLuint , GLint64 *);
-extern void (GLE_FUNCPTR *__gleGetBufferParameteri64v)(GLenum , GLenum , GLint64 *);
-extern void (GLE_FUNCPTR *__gleFramebufferTexture)(GLenum , GLenum , GLuint , GLint );
-#ifdef __cplusplus
-}
-#endif //__cplusplus
-
-
-
+#include "_int_load_test.hpp"
 namespace gl
 {
-	enum _int_gl_3_2
+	enum
 	{
-		GL_CONTEXT_CORE_PROFILE_BIT      = 0x00000001,
-		GL_CONTEXT_COMPATIBILITY_PROFILE_BIT = 0x00000002,
-		GL_LINES_ADJACENCY               = 0x000A,
-		GL_LINE_STRIP_ADJACENCY          = 0x000B,
-		GL_TRIANGLES_ADJACENCY           = 0x000C,
-		GL_TRIANGLE_STRIP_ADJACENCY      = 0x000D,
-		GL_PROGRAM_POINT_SIZE            = 0x8642,
-		GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS = 0x8C29,
-		GL_FRAMEBUFFER_ATTACHMENT_LAYERED = 0x8DA7,
-		GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS = 0x8DA8,
-		GL_GEOMETRY_SHADER               = 0x8DD9,
-		GL_GEOMETRY_VERTICES_OUT         = 0x8916,
-		GL_GEOMETRY_INPUT_TYPE           = 0x8917,
-		GL_GEOMETRY_OUTPUT_TYPE          = 0x8918,
-		GL_MAX_GEOMETRY_UNIFORM_COMPONENTS = 0x8DDF,
-		GL_MAX_GEOMETRY_OUTPUT_VERTICES  = 0x8DE0,
-		GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS = 0x8DE1,
-		GL_MAX_VERTEX_OUTPUT_COMPONENTS  = 0x9122,
-		GL_MAX_GEOMETRY_INPUT_COMPONENTS = 0x9123,
-		GL_MAX_GEOMETRY_OUTPUT_COMPONENTS = 0x9124,
-		GL_MAX_FRAGMENT_INPUT_COMPONENTS = 0x9125,
-		GL_CONTEXT_PROFILE_MASK          = 0x9126,
+		CONTEXT_CORE_PROFILE_BIT         = 0x00000001,
+		CONTEXT_COMPATIBILITY_PROFILE_BIT = 0x00000002,
+		LINES_ADJACENCY                  = 0x000A,
+		LINE_STRIP_ADJACENCY             = 0x000B,
+		TRIANGLES_ADJACENCY              = 0x000C,
+		TRIANGLE_STRIP_ADJACENCY         = 0x000D,
+		PROGRAM_POINT_SIZE               = 0x8642,
+		MAX_GEOMETRY_TEXTURE_IMAGE_UNITS = 0x8C29,
+		FRAMEBUFFER_ATTACHMENT_LAYERED   = 0x8DA7,
+		FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS = 0x8DA8,
+		GEOMETRY_SHADER                  = 0x8DD9,
+		GEOMETRY_VERTICES_OUT            = 0x8916,
+		GEOMETRY_INPUT_TYPE              = 0x8917,
+		GEOMETRY_OUTPUT_TYPE             = 0x8918,
+		MAX_GEOMETRY_UNIFORM_COMPONENTS  = 0x8DDF,
+		MAX_GEOMETRY_OUTPUT_VERTICES     = 0x8DE0,
+		MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS = 0x8DE1,
+		MAX_VERTEX_OUTPUT_COMPONENTS     = 0x9122,
+		MAX_GEOMETRY_INPUT_COMPONENTS    = 0x9123,
+		MAX_GEOMETRY_OUTPUT_COMPONENTS   = 0x9124,
+		MAX_FRAGMENT_INPUT_COMPONENTS    = 0x9125,
+		CONTEXT_PROFILE_MASK             = 0x9126,
 	};
-
-	inline void GetInteger64i_v(GLenum target, GLuint index, GLint64 *data) { ::__gleGetInteger64i_v(target, index, data); }
-	inline void GetBufferParameteri64v(GLenum target, GLenum pname, GLint64 *params) { ::__gleGetBufferParameteri64v(target, pname, params); }
-	inline void FramebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLint level) { ::__gleFramebufferTexture(target, attachment, texture, level); }
-
+	
+	namespace _detail
+	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetInteger64i_v)(GLenum , GLuint , GLint64 *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetBufferParameteri64v)(GLenum , GLenum , GLint64 *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glFramebufferTexture)(GLenum , GLenum , GLuint , GLint );
+	}
+	
+	extern _detail::Proc_glGetInteger64i_v GetInteger64i_v;
+	extern _detail::Proc_glGetBufferParameteri64v GetBufferParameteri64v;
+	extern _detail::Proc_glFramebufferTexture FramebufferTexture;
+	
 }
-
-#endif //_INT_GL_3_2_HPP
-
+#endif /*OPENGL_GEN_CORE_3_2_HPP*/

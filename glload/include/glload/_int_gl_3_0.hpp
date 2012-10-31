@@ -1,237 +1,227 @@
-#ifndef _INT_GL_3_0_HPP
-#define _INT_GL_3_0_HPP
+#ifndef OPENGL_GEN_CORE_3_0_HPP
+#define OPENGL_GEN_CORE_3_0_HPP
 
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif //__cplusplus
-
-
-extern void (GLE_FUNCPTR *__gleColorMaski)(GLuint , GLboolean , GLboolean , GLboolean , GLboolean );
-extern void (GLE_FUNCPTR *__gleGetBooleani_v)(GLenum , GLuint , GLboolean *);
-extern void (GLE_FUNCPTR *__gleGetIntegeri_v)(GLenum , GLuint , GLint *);
-extern void (GLE_FUNCPTR *__gleEnablei)(GLenum , GLuint );
-extern void (GLE_FUNCPTR *__gleDisablei)(GLenum , GLuint );
-extern GLboolean (GLE_FUNCPTR *__gleIsEnabledi)(GLenum , GLuint );
-extern void (GLE_FUNCPTR *__gleBeginTransformFeedback)(GLenum );
-extern void (GLE_FUNCPTR *__gleEndTransformFeedback)();
-extern void (GLE_FUNCPTR *__gleBindBufferRange)(GLenum , GLuint , GLuint , GLintptr , GLsizeiptr );
-extern void (GLE_FUNCPTR *__gleBindBufferBase)(GLenum , GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleTransformFeedbackVaryings)(GLuint , GLsizei , const GLchar* const *, GLenum );
-extern void (GLE_FUNCPTR *__gleGetTransformFeedbackVarying)(GLuint , GLuint , GLsizei , GLsizei *, GLsizei *, GLenum *, GLchar *);
-extern void (GLE_FUNCPTR *__gleClampColor)(GLenum , GLenum );
-extern void (GLE_FUNCPTR *__gleBeginConditionalRender)(GLuint , GLenum );
-extern void (GLE_FUNCPTR *__gleEndConditionalRender)();
-extern void (GLE_FUNCPTR *__gleVertexAttribIPointer)(GLuint , GLint , GLenum , GLsizei , const GLvoid *);
-extern void (GLE_FUNCPTR *__gleGetVertexAttribIiv)(GLuint , GLenum , GLint *);
-extern void (GLE_FUNCPTR *__gleGetVertexAttribIuiv)(GLuint , GLenum , GLuint *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI1i)(GLuint , GLint );
-extern void (GLE_FUNCPTR *__gleVertexAttribI2i)(GLuint , GLint , GLint );
-extern void (GLE_FUNCPTR *__gleVertexAttribI3i)(GLuint , GLint , GLint , GLint );
-extern void (GLE_FUNCPTR *__gleVertexAttribI4i)(GLuint , GLint , GLint , GLint , GLint );
-extern void (GLE_FUNCPTR *__gleVertexAttribI1ui)(GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleVertexAttribI2ui)(GLuint , GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleVertexAttribI3ui)(GLuint , GLuint , GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleVertexAttribI4ui)(GLuint , GLuint , GLuint , GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleVertexAttribI1iv)(GLuint , const GLint *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI2iv)(GLuint , const GLint *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI3iv)(GLuint , const GLint *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI4iv)(GLuint , const GLint *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI1uiv)(GLuint , const GLuint *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI2uiv)(GLuint , const GLuint *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI3uiv)(GLuint , const GLuint *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI4uiv)(GLuint , const GLuint *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI4bv)(GLuint , const GLbyte *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI4sv)(GLuint , const GLshort *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI4ubv)(GLuint , const GLubyte *);
-extern void (GLE_FUNCPTR *__gleVertexAttribI4usv)(GLuint , const GLushort *);
-extern void (GLE_FUNCPTR *__gleGetUniformuiv)(GLuint , GLint , GLuint *);
-extern void (GLE_FUNCPTR *__gleBindFragDataLocation)(GLuint , GLuint , const GLchar *);
-extern GLint (GLE_FUNCPTR *__gleGetFragDataLocation)(GLuint , const GLchar *);
-extern void (GLE_FUNCPTR *__gleUniform1ui)(GLint , GLuint );
-extern void (GLE_FUNCPTR *__gleUniform2ui)(GLint , GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleUniform3ui)(GLint , GLuint , GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleUniform4ui)(GLint , GLuint , GLuint , GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleUniform1uiv)(GLint , GLsizei , const GLuint *);
-extern void (GLE_FUNCPTR *__gleUniform2uiv)(GLint , GLsizei , const GLuint *);
-extern void (GLE_FUNCPTR *__gleUniform3uiv)(GLint , GLsizei , const GLuint *);
-extern void (GLE_FUNCPTR *__gleUniform4uiv)(GLint , GLsizei , const GLuint *);
-extern void (GLE_FUNCPTR *__gleTexParameterIiv)(GLenum , GLenum , const GLint *);
-extern void (GLE_FUNCPTR *__gleTexParameterIuiv)(GLenum , GLenum , const GLuint *);
-extern void (GLE_FUNCPTR *__gleGetTexParameterIiv)(GLenum , GLenum , GLint *);
-extern void (GLE_FUNCPTR *__gleGetTexParameterIuiv)(GLenum , GLenum , GLuint *);
-extern void (GLE_FUNCPTR *__gleClearBufferiv)(GLenum , GLint , const GLint *);
-extern void (GLE_FUNCPTR *__gleClearBufferuiv)(GLenum , GLint , const GLuint *);
-extern void (GLE_FUNCPTR *__gleClearBufferfv)(GLenum , GLint , const GLfloat *);
-extern void (GLE_FUNCPTR *__gleClearBufferfi)(GLenum , GLint , GLfloat , GLint );
-extern const GLubyte * (GLE_FUNCPTR *__gleGetStringi)(GLenum , GLuint );
-#ifdef __cplusplus
-}
-#endif //__cplusplus
-
-
-
+#include "_int_load_test.hpp"
 namespace gl
 {
-	enum _int_gl_3_0
+	enum
 	{
-		GL_COMPARE_REF_TO_TEXTURE        = 0x884E,
-		GL_CLIP_DISTANCE0                = 0x3000,
-		GL_CLIP_DISTANCE1                = 0x3001,
-		GL_CLIP_DISTANCE2                = 0x3002,
-		GL_CLIP_DISTANCE3                = 0x3003,
-		GL_CLIP_DISTANCE4                = 0x3004,
-		GL_CLIP_DISTANCE5                = 0x3005,
-		GL_CLIP_DISTANCE6                = 0x3006,
-		GL_CLIP_DISTANCE7                = 0x3007,
-		GL_MAX_CLIP_DISTANCES            = 0x0D32,
-		GL_MAJOR_VERSION                 = 0x821B,
-		GL_MINOR_VERSION                 = 0x821C,
-		GL_NUM_EXTENSIONS                = 0x821D,
-		GL_CONTEXT_FLAGS                 = 0x821E,
-		GL_COMPRESSED_RED                = 0x8225,
-		GL_COMPRESSED_RG                 = 0x8226,
-		GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT = 0x0001,
-		GL_RGBA32F                       = 0x8814,
-		GL_RGBA16F                       = 0x881A,
-		GL_RGB16F                        = 0x881B,
-		GL_VERTEX_ATTRIB_ARRAY_INTEGER   = 0x88FD,
-		GL_MAX_ARRAY_TEXTURE_LAYERS      = 0x88FF,
-		GL_MIN_PROGRAM_TEXEL_OFFSET      = 0x8904,
-		GL_MAX_PROGRAM_TEXEL_OFFSET      = 0x8905,
-		GL_CLAMP_READ_COLOR              = 0x891C,
-		GL_FIXED_ONLY                    = 0x891D,
-		GL_PROXY_TEXTURE_1D_ARRAY        = 0x8C19,
-		GL_PROXY_TEXTURE_2D_ARRAY        = 0x8C1B,
-		GL_TEXTURE_BINDING_1D_ARRAY      = 0x8C1C,
-		GL_TEXTURE_BINDING_2D_ARRAY      = 0x8C1D,
-		GL_R11F_G11F_B10F                = 0x8C3A,
-		GL_UNSIGNED_INT_10F_11F_11F_REV  = 0x8C3B,
-		GL_RGB9_E5                       = 0x8C3D,
-		GL_UNSIGNED_INT_5_9_9_9_REV      = 0x8C3E,
-		GL_TEXTURE_SHARED_SIZE           = 0x8C3F,
-		GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH = 0x8C76,
-		GL_TRANSFORM_FEEDBACK_BUFFER_MODE = 0x8C7F,
-		GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS = 0x8C80,
-		GL_TRANSFORM_FEEDBACK_VARYINGS   = 0x8C83,
-		GL_TRANSFORM_FEEDBACK_BUFFER_START = 0x8C84,
-		GL_TRANSFORM_FEEDBACK_BUFFER_SIZE = 0x8C85,
-		GL_PRIMITIVES_GENERATED          = 0x8C87,
-		GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN = 0x8C88,
-		GL_RASTERIZER_DISCARD            = 0x8C89,
-		GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS = 0x8C8A,
-		GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS = 0x8C8B,
-		GL_INTERLEAVED_ATTRIBS           = 0x8C8C,
-		GL_SEPARATE_ATTRIBS              = 0x8C8D,
-		GL_TRANSFORM_FEEDBACK_BUFFER     = 0x8C8E,
-		GL_TRANSFORM_FEEDBACK_BUFFER_BINDING = 0x8C8F,
-		GL_RGBA32UI                      = 0x8D70,
-		GL_RGBA16UI                      = 0x8D76,
-		GL_RGB16UI                       = 0x8D77,
-		GL_RGBA8UI                       = 0x8D7C,
-		GL_RGB8UI                        = 0x8D7D,
-		GL_RGBA32I                       = 0x8D82,
-		GL_RGBA16I                       = 0x8D88,
-		GL_RGB16I                        = 0x8D89,
-		GL_RGBA8I                        = 0x8D8E,
-		GL_RGB8I                         = 0x8D8F,
-		GL_RED_INTEGER                   = 0x8D94,
-		GL_GREEN_INTEGER                 = 0x8D95,
-		GL_BLUE_INTEGER                  = 0x8D96,
-		GL_RGB_INTEGER                   = 0x8D98,
-		GL_RGBA_INTEGER                  = 0x8D99,
-		GL_BGR_INTEGER                   = 0x8D9A,
-		GL_BGRA_INTEGER                  = 0x8D9B,
-		GL_SAMPLER_1D_ARRAY              = 0x8DC0,
-		GL_SAMPLER_2D_ARRAY              = 0x8DC1,
-		GL_SAMPLER_1D_ARRAY_SHADOW       = 0x8DC3,
-		GL_SAMPLER_2D_ARRAY_SHADOW       = 0x8DC4,
-		GL_SAMPLER_CUBE_SHADOW           = 0x8DC5,
-		GL_UNSIGNED_INT_VEC2             = 0x8DC6,
-		GL_UNSIGNED_INT_VEC3             = 0x8DC7,
-		GL_UNSIGNED_INT_VEC4             = 0x8DC8,
-		GL_INT_SAMPLER_1D                = 0x8DC9,
-		GL_INT_SAMPLER_2D                = 0x8DCA,
-		GL_INT_SAMPLER_3D                = 0x8DCB,
-		GL_INT_SAMPLER_CUBE              = 0x8DCC,
-		GL_INT_SAMPLER_1D_ARRAY          = 0x8DCE,
-		GL_INT_SAMPLER_2D_ARRAY          = 0x8DCF,
-		GL_UNSIGNED_INT_SAMPLER_1D       = 0x8DD1,
-		GL_UNSIGNED_INT_SAMPLER_2D       = 0x8DD2,
-		GL_UNSIGNED_INT_SAMPLER_3D       = 0x8DD3,
-		GL_UNSIGNED_INT_SAMPLER_CUBE     = 0x8DD4,
-		GL_UNSIGNED_INT_SAMPLER_1D_ARRAY = 0x8DD6,
-		GL_UNSIGNED_INT_SAMPLER_2D_ARRAY = 0x8DD7,
-		GL_QUERY_WAIT                    = 0x8E13,
-		GL_QUERY_NO_WAIT                 = 0x8E14,
-		GL_QUERY_BY_REGION_WAIT          = 0x8E15,
-		GL_QUERY_BY_REGION_NO_WAIT       = 0x8E16,
-		GL_BUFFER_ACCESS_FLAGS           = 0x911F,
-		GL_BUFFER_MAP_LENGTH             = 0x9120,
-		GL_BUFFER_MAP_OFFSET             = 0x9121,
+		COMPARE_REF_TO_TEXTURE           = 0x884E,
+		CLIP_DISTANCE0                   = 0x3000,
+		CLIP_DISTANCE1                   = 0x3001,
+		CLIP_DISTANCE2                   = 0x3002,
+		CLIP_DISTANCE3                   = 0x3003,
+		CLIP_DISTANCE4                   = 0x3004,
+		CLIP_DISTANCE5                   = 0x3005,
+		CLIP_DISTANCE6                   = 0x3006,
+		CLIP_DISTANCE7                   = 0x3007,
+		MAX_CLIP_DISTANCES               = 0x0D32,
+		MAJOR_VERSION                    = 0x821B,
+		MINOR_VERSION                    = 0x821C,
+		NUM_EXTENSIONS                   = 0x821D,
+		CONTEXT_FLAGS                    = 0x821E,
+		COMPRESSED_RED                   = 0x8225,
+		COMPRESSED_RG                    = 0x8226,
+		CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT = 0x0001,
+		RGBA32F                          = 0x8814,
+		RGBA16F                          = 0x881A,
+		RGB16F                           = 0x881B,
+		VERTEX_ATTRIB_ARRAY_INTEGER      = 0x88FD,
+		MAX_ARRAY_TEXTURE_LAYERS         = 0x88FF,
+		MIN_PROGRAM_TEXEL_OFFSET         = 0x8904,
+		MAX_PROGRAM_TEXEL_OFFSET         = 0x8905,
+		CLAMP_READ_COLOR                 = 0x891C,
+		FIXED_ONLY                       = 0x891D,
+		PROXY_TEXTURE_1D_ARRAY           = 0x8C19,
+		PROXY_TEXTURE_2D_ARRAY           = 0x8C1B,
+		TEXTURE_BINDING_1D_ARRAY         = 0x8C1C,
+		TEXTURE_BINDING_2D_ARRAY         = 0x8C1D,
+		R11F_G11F_B10F                   = 0x8C3A,
+		UNSIGNED_INT_10F_11F_11F_REV     = 0x8C3B,
+		RGB9_E5                          = 0x8C3D,
+		UNSIGNED_INT_5_9_9_9_REV         = 0x8C3E,
+		TEXTURE_SHARED_SIZE              = 0x8C3F,
+		TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH = 0x8C76,
+		TRANSFORM_FEEDBACK_BUFFER_MODE   = 0x8C7F,
+		MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS = 0x8C80,
+		TRANSFORM_FEEDBACK_VARYINGS      = 0x8C83,
+		TRANSFORM_FEEDBACK_BUFFER_START  = 0x8C84,
+		TRANSFORM_FEEDBACK_BUFFER_SIZE   = 0x8C85,
+		PRIMITIVES_GENERATED             = 0x8C87,
+		TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN = 0x8C88,
+		RASTERIZER_DISCARD               = 0x8C89,
+		MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS = 0x8C8A,
+		MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS = 0x8C8B,
+		INTERLEAVED_ATTRIBS              = 0x8C8C,
+		SEPARATE_ATTRIBS                 = 0x8C8D,
+		TRANSFORM_FEEDBACK_BUFFER        = 0x8C8E,
+		TRANSFORM_FEEDBACK_BUFFER_BINDING = 0x8C8F,
+		RGBA32UI                         = 0x8D70,
+		RGBA16UI                         = 0x8D76,
+		RGB16UI                          = 0x8D77,
+		RGBA8UI                          = 0x8D7C,
+		RGB8UI                           = 0x8D7D,
+		RGBA32I                          = 0x8D82,
+		RGBA16I                          = 0x8D88,
+		RGB16I                           = 0x8D89,
+		RGBA8I                           = 0x8D8E,
+		RGB8I                            = 0x8D8F,
+		RED_INTEGER                      = 0x8D94,
+		GREEN_INTEGER                    = 0x8D95,
+		BLUE_INTEGER                     = 0x8D96,
+		RGB_INTEGER                      = 0x8D98,
+		RGBA_INTEGER                     = 0x8D99,
+		BGR_INTEGER                      = 0x8D9A,
+		BGRA_INTEGER                     = 0x8D9B,
+		SAMPLER_1D_ARRAY                 = 0x8DC0,
+		SAMPLER_2D_ARRAY                 = 0x8DC1,
+		SAMPLER_1D_ARRAY_SHADOW          = 0x8DC3,
+		SAMPLER_2D_ARRAY_SHADOW          = 0x8DC4,
+		SAMPLER_CUBE_SHADOW              = 0x8DC5,
+		UNSIGNED_INT_VEC2                = 0x8DC6,
+		UNSIGNED_INT_VEC3                = 0x8DC7,
+		UNSIGNED_INT_VEC4                = 0x8DC8,
+		INT_SAMPLER_1D                   = 0x8DC9,
+		INT_SAMPLER_2D                   = 0x8DCA,
+		INT_SAMPLER_3D                   = 0x8DCB,
+		INT_SAMPLER_CUBE                 = 0x8DCC,
+		INT_SAMPLER_1D_ARRAY             = 0x8DCE,
+		INT_SAMPLER_2D_ARRAY             = 0x8DCF,
+		UNSIGNED_INT_SAMPLER_1D          = 0x8DD1,
+		UNSIGNED_INT_SAMPLER_2D          = 0x8DD2,
+		UNSIGNED_INT_SAMPLER_3D          = 0x8DD3,
+		UNSIGNED_INT_SAMPLER_CUBE        = 0x8DD4,
+		UNSIGNED_INT_SAMPLER_1D_ARRAY    = 0x8DD6,
+		UNSIGNED_INT_SAMPLER_2D_ARRAY    = 0x8DD7,
+		QUERY_WAIT                       = 0x8E13,
+		QUERY_NO_WAIT                    = 0x8E14,
+		QUERY_BY_REGION_WAIT             = 0x8E15,
+		QUERY_BY_REGION_NO_WAIT          = 0x8E16,
+		BUFFER_ACCESS_FLAGS              = 0x911F,
+		BUFFER_MAP_LENGTH                = 0x9120,
+		BUFFER_MAP_OFFSET                = 0x9121,
 	};
-
-	inline void ColorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a) { ::__gleColorMaski(index, r, g, b, a); }
-	inline void GetBooleani_v(GLenum target, GLuint index, GLboolean *data) { ::__gleGetBooleani_v(target, index, data); }
-	inline void GetIntegeri_v(GLenum target, GLuint index, GLint *data) { ::__gleGetIntegeri_v(target, index, data); }
-	inline void Enablei(GLenum target, GLuint index) { ::__gleEnablei(target, index); }
-	inline void Disablei(GLenum target, GLuint index) { ::__gleDisablei(target, index); }
-	inline GLboolean IsEnabledi(GLenum target, GLuint index) { return ::__gleIsEnabledi(target, index); }
-	inline void BeginTransformFeedback(GLenum primitiveMode) { ::__gleBeginTransformFeedback(primitiveMode); }
-	inline void EndTransformFeedback() { ::__gleEndTransformFeedback(); }
-	inline void BindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size) { ::__gleBindBufferRange(target, index, buffer, offset, size); }
-	inline void BindBufferBase(GLenum target, GLuint index, GLuint buffer) { ::__gleBindBufferBase(target, index, buffer); }
-	inline void TransformFeedbackVaryings(GLuint program, GLsizei count, const GLchar* const *varyings, GLenum bufferMode) { ::__gleTransformFeedbackVaryings(program, count, varyings, bufferMode); }
-	inline void GetTransformFeedbackVarying(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name) { ::__gleGetTransformFeedbackVarying(program, index, bufSize, length, size, type, name); }
-	inline void ClampColor(GLenum target, GLenum clamp) { ::__gleClampColor(target, clamp); }
-	inline void BeginConditionalRender(GLuint id, GLenum mode) { ::__gleBeginConditionalRender(id, mode); }
-	inline void EndConditionalRender() { ::__gleEndConditionalRender(); }
-	inline void VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) { ::__gleVertexAttribIPointer(index, size, type, stride, pointer); }
-	inline void GetVertexAttribIiv(GLuint index, GLenum pname, GLint *params) { ::__gleGetVertexAttribIiv(index, pname, params); }
-	inline void GetVertexAttribIuiv(GLuint index, GLenum pname, GLuint *params) { ::__gleGetVertexAttribIuiv(index, pname, params); }
-	inline void VertexAttribI1i(GLuint index, GLint x) { ::__gleVertexAttribI1i(index, x); }
-	inline void VertexAttribI2i(GLuint index, GLint x, GLint y) { ::__gleVertexAttribI2i(index, x, y); }
-	inline void VertexAttribI3i(GLuint index, GLint x, GLint y, GLint z) { ::__gleVertexAttribI3i(index, x, y, z); }
-	inline void VertexAttribI4i(GLuint index, GLint x, GLint y, GLint z, GLint w) { ::__gleVertexAttribI4i(index, x, y, z, w); }
-	inline void VertexAttribI1ui(GLuint index, GLuint x) { ::__gleVertexAttribI1ui(index, x); }
-	inline void VertexAttribI2ui(GLuint index, GLuint x, GLuint y) { ::__gleVertexAttribI2ui(index, x, y); }
-	inline void VertexAttribI3ui(GLuint index, GLuint x, GLuint y, GLuint z) { ::__gleVertexAttribI3ui(index, x, y, z); }
-	inline void VertexAttribI4ui(GLuint index, GLuint x, GLuint y, GLuint z, GLuint w) { ::__gleVertexAttribI4ui(index, x, y, z, w); }
-	inline void VertexAttribI1iv(GLuint index, const GLint *v) { ::__gleVertexAttribI1iv(index, v); }
-	inline void VertexAttribI2iv(GLuint index, const GLint *v) { ::__gleVertexAttribI2iv(index, v); }
-	inline void VertexAttribI3iv(GLuint index, const GLint *v) { ::__gleVertexAttribI3iv(index, v); }
-	inline void VertexAttribI4iv(GLuint index, const GLint *v) { ::__gleVertexAttribI4iv(index, v); }
-	inline void VertexAttribI1uiv(GLuint index, const GLuint *v) { ::__gleVertexAttribI1uiv(index, v); }
-	inline void VertexAttribI2uiv(GLuint index, const GLuint *v) { ::__gleVertexAttribI2uiv(index, v); }
-	inline void VertexAttribI3uiv(GLuint index, const GLuint *v) { ::__gleVertexAttribI3uiv(index, v); }
-	inline void VertexAttribI4uiv(GLuint index, const GLuint *v) { ::__gleVertexAttribI4uiv(index, v); }
-	inline void VertexAttribI4bv(GLuint index, const GLbyte *v) { ::__gleVertexAttribI4bv(index, v); }
-	inline void VertexAttribI4sv(GLuint index, const GLshort *v) { ::__gleVertexAttribI4sv(index, v); }
-	inline void VertexAttribI4ubv(GLuint index, const GLubyte *v) { ::__gleVertexAttribI4ubv(index, v); }
-	inline void VertexAttribI4usv(GLuint index, const GLushort *v) { ::__gleVertexAttribI4usv(index, v); }
-	inline void GetUniformuiv(GLuint program, GLint location, GLuint *params) { ::__gleGetUniformuiv(program, location, params); }
-	inline void BindFragDataLocation(GLuint program, GLuint color, const GLchar *name) { ::__gleBindFragDataLocation(program, color, name); }
-	inline GLint GetFragDataLocation(GLuint program, const GLchar *name) { return ::__gleGetFragDataLocation(program, name); }
-	inline void Uniform1ui(GLint location, GLuint v0) { ::__gleUniform1ui(location, v0); }
-	inline void Uniform2ui(GLint location, GLuint v0, GLuint v1) { ::__gleUniform2ui(location, v0, v1); }
-	inline void Uniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2) { ::__gleUniform3ui(location, v0, v1, v2); }
-	inline void Uniform4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3) { ::__gleUniform4ui(location, v0, v1, v2, v3); }
-	inline void Uniform1uiv(GLint location, GLsizei count, const GLuint *value) { ::__gleUniform1uiv(location, count, value); }
-	inline void Uniform2uiv(GLint location, GLsizei count, const GLuint *value) { ::__gleUniform2uiv(location, count, value); }
-	inline void Uniform3uiv(GLint location, GLsizei count, const GLuint *value) { ::__gleUniform3uiv(location, count, value); }
-	inline void Uniform4uiv(GLint location, GLsizei count, const GLuint *value) { ::__gleUniform4uiv(location, count, value); }
-	inline void TexParameterIiv(GLenum target, GLenum pname, const GLint *params) { ::__gleTexParameterIiv(target, pname, params); }
-	inline void TexParameterIuiv(GLenum target, GLenum pname, const GLuint *params) { ::__gleTexParameterIuiv(target, pname, params); }
-	inline void GetTexParameterIiv(GLenum target, GLenum pname, GLint *params) { ::__gleGetTexParameterIiv(target, pname, params); }
-	inline void GetTexParameterIuiv(GLenum target, GLenum pname, GLuint *params) { ::__gleGetTexParameterIuiv(target, pname, params); }
-	inline void ClearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *value) { ::__gleClearBufferiv(buffer, drawbuffer, value); }
-	inline void ClearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *value) { ::__gleClearBufferuiv(buffer, drawbuffer, value); }
-	inline void ClearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *value) { ::__gleClearBufferfv(buffer, drawbuffer, value); }
-	inline void ClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil) { ::__gleClearBufferfi(buffer, drawbuffer, depth, stencil); }
-	inline const GLubyte * GetStringi(GLenum name, GLuint index) { return ::__gleGetStringi(name, index); }
-
+	
+	namespace _detail
+	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glColorMaski)(GLuint , GLboolean , GLboolean , GLboolean , GLboolean );
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetBooleani_v)(GLenum , GLuint , GLboolean *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetIntegeri_v)(GLenum , GLuint , GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glEnablei)(GLenum , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glDisablei)(GLenum , GLuint );
+		typedef GLboolean (CODEGEN_FUNCPTR * Proc_glIsEnabledi)(GLenum , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glBeginTransformFeedback)(GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glEndTransformFeedback)();
+		typedef void (CODEGEN_FUNCPTR * Proc_glBindBufferRange)(GLenum , GLuint , GLuint , GLintptr , GLsizeiptr );
+		typedef void (CODEGEN_FUNCPTR * Proc_glBindBufferBase)(GLenum , GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glTransformFeedbackVaryings)(GLuint , GLsizei , const GLchar* const *, GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetTransformFeedbackVarying)(GLuint , GLuint , GLsizei , GLsizei *, GLsizei *, GLenum *, GLchar *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClampColor)(GLenum , GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glBeginConditionalRender)(GLuint , GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glEndConditionalRender)();
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribIPointer)(GLuint , GLint , GLenum , GLsizei , const GLvoid *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetVertexAttribIiv)(GLuint , GLenum , GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetVertexAttribIuiv)(GLuint , GLenum , GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI1i)(GLuint , GLint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI2i)(GLuint , GLint , GLint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI3i)(GLuint , GLint , GLint , GLint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI4i)(GLuint , GLint , GLint , GLint , GLint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI1ui)(GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI2ui)(GLuint , GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI3ui)(GLuint , GLuint , GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI4ui)(GLuint , GLuint , GLuint , GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI1iv)(GLuint , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI2iv)(GLuint , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI3iv)(GLuint , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI4iv)(GLuint , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI1uiv)(GLuint , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI2uiv)(GLuint , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI3uiv)(GLuint , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI4uiv)(GLuint , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI4bv)(GLuint , const GLbyte *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI4sv)(GLuint , const GLshort *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI4ubv)(GLuint , const GLubyte *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribI4usv)(GLuint , const GLushort *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetUniformuiv)(GLuint , GLint , GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glBindFragDataLocation)(GLuint , GLuint , const GLchar *);
+		typedef GLint (CODEGEN_FUNCPTR * Proc_glGetFragDataLocation)(GLuint , const GLchar *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform1ui)(GLint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform2ui)(GLint , GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform3ui)(GLint , GLuint , GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform4ui)(GLint , GLuint , GLuint , GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform1uiv)(GLint , GLsizei , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform2uiv)(GLint , GLsizei , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform3uiv)(GLint , GLsizei , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform4uiv)(GLint , GLsizei , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexParameterIiv)(GLenum , GLenum , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexParameterIuiv)(GLenum , GLenum , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetTexParameterIiv)(GLenum , GLenum , GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetTexParameterIuiv)(GLenum , GLenum , GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClearBufferiv)(GLenum , GLint , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClearBufferuiv)(GLenum , GLint , const GLuint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClearBufferfv)(GLenum , GLint , const GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClearBufferfi)(GLenum , GLint , GLfloat , GLint );
+		typedef const GLubyte * (CODEGEN_FUNCPTR * Proc_glGetStringi)(GLenum , GLuint );
+	}
+	
+	extern _detail::Proc_glColorMaski ColorMaski;
+	extern _detail::Proc_glGetBooleani_v GetBooleani_v;
+	extern _detail::Proc_glGetIntegeri_v GetIntegeri_v;
+	extern _detail::Proc_glEnablei Enablei;
+	extern _detail::Proc_glDisablei Disablei;
+	extern _detail::Proc_glIsEnabledi IsEnabledi;
+	extern _detail::Proc_glBeginTransformFeedback BeginTransformFeedback;
+	extern _detail::Proc_glEndTransformFeedback EndTransformFeedback;
+	extern _detail::Proc_glBindBufferRange BindBufferRange;
+	extern _detail::Proc_glBindBufferBase BindBufferBase;
+	extern _detail::Proc_glTransformFeedbackVaryings TransformFeedbackVaryings;
+	extern _detail::Proc_glGetTransformFeedbackVarying GetTransformFeedbackVarying;
+	extern _detail::Proc_glClampColor ClampColor;
+	extern _detail::Proc_glBeginConditionalRender BeginConditionalRender;
+	extern _detail::Proc_glEndConditionalRender EndConditionalRender;
+	extern _detail::Proc_glVertexAttribIPointer VertexAttribIPointer;
+	extern _detail::Proc_glGetVertexAttribIiv GetVertexAttribIiv;
+	extern _detail::Proc_glGetVertexAttribIuiv GetVertexAttribIuiv;
+	extern _detail::Proc_glVertexAttribI1i VertexAttribI1i;
+	extern _detail::Proc_glVertexAttribI2i VertexAttribI2i;
+	extern _detail::Proc_glVertexAttribI3i VertexAttribI3i;
+	extern _detail::Proc_glVertexAttribI4i VertexAttribI4i;
+	extern _detail::Proc_glVertexAttribI1ui VertexAttribI1ui;
+	extern _detail::Proc_glVertexAttribI2ui VertexAttribI2ui;
+	extern _detail::Proc_glVertexAttribI3ui VertexAttribI3ui;
+	extern _detail::Proc_glVertexAttribI4ui VertexAttribI4ui;
+	extern _detail::Proc_glVertexAttribI1iv VertexAttribI1iv;
+	extern _detail::Proc_glVertexAttribI2iv VertexAttribI2iv;
+	extern _detail::Proc_glVertexAttribI3iv VertexAttribI3iv;
+	extern _detail::Proc_glVertexAttribI4iv VertexAttribI4iv;
+	extern _detail::Proc_glVertexAttribI1uiv VertexAttribI1uiv;
+	extern _detail::Proc_glVertexAttribI2uiv VertexAttribI2uiv;
+	extern _detail::Proc_glVertexAttribI3uiv VertexAttribI3uiv;
+	extern _detail::Proc_glVertexAttribI4uiv VertexAttribI4uiv;
+	extern _detail::Proc_glVertexAttribI4bv VertexAttribI4bv;
+	extern _detail::Proc_glVertexAttribI4sv VertexAttribI4sv;
+	extern _detail::Proc_glVertexAttribI4ubv VertexAttribI4ubv;
+	extern _detail::Proc_glVertexAttribI4usv VertexAttribI4usv;
+	extern _detail::Proc_glGetUniformuiv GetUniformuiv;
+	extern _detail::Proc_glBindFragDataLocation BindFragDataLocation;
+	extern _detail::Proc_glGetFragDataLocation GetFragDataLocation;
+	extern _detail::Proc_glUniform1ui Uniform1ui;
+	extern _detail::Proc_glUniform2ui Uniform2ui;
+	extern _detail::Proc_glUniform3ui Uniform3ui;
+	extern _detail::Proc_glUniform4ui Uniform4ui;
+	extern _detail::Proc_glUniform1uiv Uniform1uiv;
+	extern _detail::Proc_glUniform2uiv Uniform2uiv;
+	extern _detail::Proc_glUniform3uiv Uniform3uiv;
+	extern _detail::Proc_glUniform4uiv Uniform4uiv;
+	extern _detail::Proc_glTexParameterIiv TexParameterIiv;
+	extern _detail::Proc_glTexParameterIuiv TexParameterIuiv;
+	extern _detail::Proc_glGetTexParameterIiv GetTexParameterIiv;
+	extern _detail::Proc_glGetTexParameterIuiv GetTexParameterIuiv;
+	extern _detail::Proc_glClearBufferiv ClearBufferiv;
+	extern _detail::Proc_glClearBufferuiv ClearBufferuiv;
+	extern _detail::Proc_glClearBufferfv ClearBufferfv;
+	extern _detail::Proc_glClearBufferfi ClearBufferfi;
+	extern _detail::Proc_glGetStringi GetStringi;
+	
 }
-
-#endif //_INT_GL_3_0_HPP
-
+#endif /*OPENGL_GEN_CORE_3_0_HPP*/

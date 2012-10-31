@@ -1,13 +1,9 @@
-#ifndef _INT_GL_4_0_H
-#define _INT_GL_4_0_H
-
-
+#ifndef OPENGL_GEN_CORE_4_0_H
+#define OPENGL_GEN_CORE_4_0_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
-
-
+#endif /*__cplusplus*/
 #define GL_SAMPLE_SHADING 0x8C36
 #define GL_MIN_SAMPLE_SHADING_VALUE 0x8C37
 #define GL_MIN_PROGRAM_TEXTURE_GATHER_OFFSET 0x8E5E
@@ -19,28 +15,25 @@ extern "C" {
 #define GL_SAMPLER_CUBE_MAP_ARRAY_SHADOW 0x900D
 #define GL_INT_SAMPLER_CUBE_MAP_ARRAY 0x900E
 #define GL_UNSIGNED_INT_SAMPLER_CUBE_MAP_ARRAY 0x900F
-typedef void (GLE_FUNCPTR * PFNGLMINSAMPLESHADINGPROC)(GLfloat );
-typedef void (GLE_FUNCPTR * PFNGLBLENDEQUATIONIPROC)(GLuint , GLenum );
-typedef void (GLE_FUNCPTR * PFNGLBLENDEQUATIONSEPARATEIPROC)(GLuint , GLenum , GLenum );
-typedef void (GLE_FUNCPTR * PFNGLBLENDFUNCIPROC)(GLuint , GLenum , GLenum );
-typedef void (GLE_FUNCPTR * PFNGLBLENDFUNCSEPARATEIPROC)(GLuint , GLenum , GLenum , GLenum , GLenum );
 
-extern PFNGLMINSAMPLESHADINGPROC __gleMinSampleShading;
-#define glMinSampleShading __gleMinSampleShading
-extern PFNGLBLENDEQUATIONIPROC __gleBlendEquationi;
-#define glBlendEquationi __gleBlendEquationi
-extern PFNGLBLENDEQUATIONSEPARATEIPROC __gleBlendEquationSeparatei;
-#define glBlendEquationSeparatei __gleBlendEquationSeparatei
-extern PFNGLBLENDFUNCIPROC __gleBlendFunci;
-#define glBlendFunci __gleBlendFunci
-extern PFNGLBLENDFUNCSEPARATEIPROC __gleBlendFuncSeparatei;
-#define glBlendFuncSeparatei __gleBlendFuncSeparatei
+typedef void (CODEGEN_FUNCPTR * PFNGLMINSAMPLESHADINGPROC)(GLfloat );
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDEQUATIONIPROC)(GLuint , GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDEQUATIONSEPARATEIPROC)(GLuint , GLenum , GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDFUNCIPROC)(GLuint , GLenum , GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDFUNCSEPARATEIPROC)(GLuint , GLenum , GLenum , GLenum , GLenum );
 
+extern PFNGLMINSAMPLESHADINGPROC _funcptr_glMinSampleShading;
+#define glMinSampleShading _funcptr_glMinSampleShading
+extern PFNGLBLENDEQUATIONIPROC _funcptr_glBlendEquationi;
+#define glBlendEquationi _funcptr_glBlendEquationi
+extern PFNGLBLENDEQUATIONSEPARATEIPROC _funcptr_glBlendEquationSeparatei;
+#define glBlendEquationSeparatei _funcptr_glBlendEquationSeparatei
+extern PFNGLBLENDFUNCIPROC _funcptr_glBlendFunci;
+#define glBlendFunci _funcptr_glBlendFunci
+extern PFNGLBLENDFUNCSEPARATEIPROC _funcptr_glBlendFuncSeparatei;
+#define glBlendFuncSeparatei _funcptr_glBlendFuncSeparatei
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
-
-
-#endif //_INT_GL_4_0_H
-
+#endif /*__cplusplus*/
+#endif /*OPENGL_GEN_CORE_4_0_H*/

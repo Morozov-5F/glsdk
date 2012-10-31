@@ -1,221 +1,211 @@
-#ifndef _INT_GL_2_0_HPP
-#define _INT_GL_2_0_HPP
+#ifndef OPENGL_GEN_CORE_2_0_HPP
+#define OPENGL_GEN_CORE_2_0_HPP
 
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif //__cplusplus
-
-
-extern void (GLE_FUNCPTR *__gleBlendEquationSeparate)(GLenum , GLenum );
-extern void (GLE_FUNCPTR *__gleDrawBuffers)(GLsizei , const GLenum *);
-extern void (GLE_FUNCPTR *__gleStencilOpSeparate)(GLenum , GLenum , GLenum , GLenum );
-extern void (GLE_FUNCPTR *__gleStencilFuncSeparate)(GLenum , GLenum , GLint , GLuint );
-extern void (GLE_FUNCPTR *__gleStencilMaskSeparate)(GLenum , GLuint );
-extern void (GLE_FUNCPTR *__gleAttachShader)(GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleBindAttribLocation)(GLuint , GLuint , const GLchar *);
-extern void (GLE_FUNCPTR *__gleCompileShader)(GLuint );
-extern GLuint (GLE_FUNCPTR *__gleCreateProgram)();
-extern GLuint (GLE_FUNCPTR *__gleCreateShader)(GLenum );
-extern void (GLE_FUNCPTR *__gleDeleteProgram)(GLuint );
-extern void (GLE_FUNCPTR *__gleDeleteShader)(GLuint );
-extern void (GLE_FUNCPTR *__gleDetachShader)(GLuint , GLuint );
-extern void (GLE_FUNCPTR *__gleDisableVertexAttribArray)(GLuint );
-extern void (GLE_FUNCPTR *__gleEnableVertexAttribArray)(GLuint );
-extern void (GLE_FUNCPTR *__gleGetActiveAttrib)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
-extern void (GLE_FUNCPTR *__gleGetActiveUniform)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
-extern void (GLE_FUNCPTR *__gleGetAttachedShaders)(GLuint , GLsizei , GLsizei *, GLuint *);
-extern GLint (GLE_FUNCPTR *__gleGetAttribLocation)(GLuint , const GLchar *);
-extern void (GLE_FUNCPTR *__gleGetProgramiv)(GLuint , GLenum , GLint *);
-extern void (GLE_FUNCPTR *__gleGetProgramInfoLog)(GLuint , GLsizei , GLsizei *, GLchar *);
-extern void (GLE_FUNCPTR *__gleGetShaderiv)(GLuint , GLenum , GLint *);
-extern void (GLE_FUNCPTR *__gleGetShaderInfoLog)(GLuint , GLsizei , GLsizei *, GLchar *);
-extern void (GLE_FUNCPTR *__gleGetShaderSource)(GLuint , GLsizei , GLsizei *, GLchar *);
-extern GLint (GLE_FUNCPTR *__gleGetUniformLocation)(GLuint , const GLchar *);
-extern void (GLE_FUNCPTR *__gleGetUniformfv)(GLuint , GLint , GLfloat *);
-extern void (GLE_FUNCPTR *__gleGetUniformiv)(GLuint , GLint , GLint *);
-extern void (GLE_FUNCPTR *__gleGetVertexAttribdv)(GLuint , GLenum , GLdouble *);
-extern void (GLE_FUNCPTR *__gleGetVertexAttribfv)(GLuint , GLenum , GLfloat *);
-extern void (GLE_FUNCPTR *__gleGetVertexAttribiv)(GLuint , GLenum , GLint *);
-extern void (GLE_FUNCPTR *__gleGetVertexAttribPointerv)(GLuint , GLenum , GLvoid* *);
-extern GLboolean (GLE_FUNCPTR *__gleIsProgram)(GLuint );
-extern GLboolean (GLE_FUNCPTR *__gleIsShader)(GLuint );
-extern void (GLE_FUNCPTR *__gleLinkProgram)(GLuint );
-extern void (GLE_FUNCPTR *__gleShaderSource)(GLuint , GLsizei , const GLchar* const *, const GLint *);
-extern void (GLE_FUNCPTR *__gleUseProgram)(GLuint );
-extern void (GLE_FUNCPTR *__gleUniform1f)(GLint , GLfloat );
-extern void (GLE_FUNCPTR *__gleUniform2f)(GLint , GLfloat , GLfloat );
-extern void (GLE_FUNCPTR *__gleUniform3f)(GLint , GLfloat , GLfloat , GLfloat );
-extern void (GLE_FUNCPTR *__gleUniform4f)(GLint , GLfloat , GLfloat , GLfloat , GLfloat );
-extern void (GLE_FUNCPTR *__gleUniform1i)(GLint , GLint );
-extern void (GLE_FUNCPTR *__gleUniform2i)(GLint , GLint , GLint );
-extern void (GLE_FUNCPTR *__gleUniform3i)(GLint , GLint , GLint , GLint );
-extern void (GLE_FUNCPTR *__gleUniform4i)(GLint , GLint , GLint , GLint , GLint );
-extern void (GLE_FUNCPTR *__gleUniform1fv)(GLint , GLsizei , const GLfloat *);
-extern void (GLE_FUNCPTR *__gleUniform2fv)(GLint , GLsizei , const GLfloat *);
-extern void (GLE_FUNCPTR *__gleUniform3fv)(GLint , GLsizei , const GLfloat *);
-extern void (GLE_FUNCPTR *__gleUniform4fv)(GLint , GLsizei , const GLfloat *);
-extern void (GLE_FUNCPTR *__gleUniform1iv)(GLint , GLsizei , const GLint *);
-extern void (GLE_FUNCPTR *__gleUniform2iv)(GLint , GLsizei , const GLint *);
-extern void (GLE_FUNCPTR *__gleUniform3iv)(GLint , GLsizei , const GLint *);
-extern void (GLE_FUNCPTR *__gleUniform4iv)(GLint , GLsizei , const GLint *);
-extern void (GLE_FUNCPTR *__gleUniformMatrix2fv)(GLint , GLsizei , GLboolean , const GLfloat *);
-extern void (GLE_FUNCPTR *__gleUniformMatrix3fv)(GLint , GLsizei , GLboolean , const GLfloat *);
-extern void (GLE_FUNCPTR *__gleUniformMatrix4fv)(GLint , GLsizei , GLboolean , const GLfloat *);
-extern void (GLE_FUNCPTR *__gleValidateProgram)(GLuint );
-extern void (GLE_FUNCPTR *__gleVertexAttribPointer)(GLuint , GLint , GLenum , GLboolean , GLsizei , const GLvoid *);
-#ifdef __cplusplus
-}
-#endif //__cplusplus
-
-
-
+#include "_int_load_test.hpp"
 namespace gl
 {
-	enum _int_gl_2_0
+	enum
 	{
-		GL_BLEND_EQUATION_RGB            = 0x8009,
-		GL_VERTEX_ATTRIB_ARRAY_ENABLED   = 0x8622,
-		GL_VERTEX_ATTRIB_ARRAY_SIZE      = 0x8623,
-		GL_VERTEX_ATTRIB_ARRAY_STRIDE    = 0x8624,
-		GL_VERTEX_ATTRIB_ARRAY_TYPE      = 0x8625,
-		GL_CURRENT_VERTEX_ATTRIB         = 0x8626,
-		GL_VERTEX_PROGRAM_POINT_SIZE     = 0x8642,
-		GL_VERTEX_ATTRIB_ARRAY_POINTER   = 0x8645,
-		GL_STENCIL_BACK_FUNC             = 0x8800,
-		GL_STENCIL_BACK_FAIL             = 0x8801,
-		GL_STENCIL_BACK_PASS_DEPTH_FAIL  = 0x8802,
-		GL_STENCIL_BACK_PASS_DEPTH_PASS  = 0x8803,
-		GL_MAX_DRAW_BUFFERS              = 0x8824,
-		GL_DRAW_BUFFER0                  = 0x8825,
-		GL_DRAW_BUFFER1                  = 0x8826,
-		GL_DRAW_BUFFER2                  = 0x8827,
-		GL_DRAW_BUFFER3                  = 0x8828,
-		GL_DRAW_BUFFER4                  = 0x8829,
-		GL_DRAW_BUFFER5                  = 0x882A,
-		GL_DRAW_BUFFER6                  = 0x882B,
-		GL_DRAW_BUFFER7                  = 0x882C,
-		GL_DRAW_BUFFER8                  = 0x882D,
-		GL_DRAW_BUFFER9                  = 0x882E,
-		GL_DRAW_BUFFER10                 = 0x882F,
-		GL_DRAW_BUFFER11                 = 0x8830,
-		GL_DRAW_BUFFER12                 = 0x8831,
-		GL_DRAW_BUFFER13                 = 0x8832,
-		GL_DRAW_BUFFER14                 = 0x8833,
-		GL_DRAW_BUFFER15                 = 0x8834,
-		GL_BLEND_EQUATION_ALPHA          = 0x883D,
-		GL_MAX_VERTEX_ATTRIBS            = 0x8869,
-		GL_VERTEX_ATTRIB_ARRAY_NORMALIZED = 0x886A,
-		GL_MAX_TEXTURE_IMAGE_UNITS       = 0x8872,
-		GL_FRAGMENT_SHADER               = 0x8B30,
-		GL_VERTEX_SHADER                 = 0x8B31,
-		GL_MAX_FRAGMENT_UNIFORM_COMPONENTS = 0x8B49,
-		GL_MAX_VERTEX_UNIFORM_COMPONENTS = 0x8B4A,
-		GL_MAX_VARYING_FLOATS            = 0x8B4B,
-		GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS = 0x8B4C,
-		GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS = 0x8B4D,
-		GL_SHADER_TYPE                   = 0x8B4F,
-		GL_FLOAT_VEC2                    = 0x8B50,
-		GL_FLOAT_VEC3                    = 0x8B51,
-		GL_FLOAT_VEC4                    = 0x8B52,
-		GL_INT_VEC2                      = 0x8B53,
-		GL_INT_VEC3                      = 0x8B54,
-		GL_INT_VEC4                      = 0x8B55,
-		GL_BOOL                          = 0x8B56,
-		GL_BOOL_VEC2                     = 0x8B57,
-		GL_BOOL_VEC3                     = 0x8B58,
-		GL_BOOL_VEC4                     = 0x8B59,
-		GL_FLOAT_MAT2                    = 0x8B5A,
-		GL_FLOAT_MAT3                    = 0x8B5B,
-		GL_FLOAT_MAT4                    = 0x8B5C,
-		GL_SAMPLER_1D                    = 0x8B5D,
-		GL_SAMPLER_2D                    = 0x8B5E,
-		GL_SAMPLER_3D                    = 0x8B5F,
-		GL_SAMPLER_CUBE                  = 0x8B60,
-		GL_SAMPLER_1D_SHADOW             = 0x8B61,
-		GL_SAMPLER_2D_SHADOW             = 0x8B62,
-		GL_DELETE_STATUS                 = 0x8B80,
-		GL_COMPILE_STATUS                = 0x8B81,
-		GL_LINK_STATUS                   = 0x8B82,
-		GL_VALIDATE_STATUS               = 0x8B83,
-		GL_INFO_LOG_LENGTH               = 0x8B84,
-		GL_ATTACHED_SHADERS              = 0x8B85,
-		GL_ACTIVE_UNIFORMS               = 0x8B86,
-		GL_ACTIVE_UNIFORM_MAX_LENGTH     = 0x8B87,
-		GL_SHADER_SOURCE_LENGTH          = 0x8B88,
-		GL_ACTIVE_ATTRIBUTES             = 0x8B89,
-		GL_ACTIVE_ATTRIBUTE_MAX_LENGTH   = 0x8B8A,
-		GL_FRAGMENT_SHADER_DERIVATIVE_HINT = 0x8B8B,
-		GL_SHADING_LANGUAGE_VERSION      = 0x8B8C,
-		GL_CURRENT_PROGRAM               = 0x8B8D,
-		GL_POINT_SPRITE_COORD_ORIGIN     = 0x8CA0,
-		GL_LOWER_LEFT                    = 0x8CA1,
-		GL_UPPER_LEFT                    = 0x8CA2,
-		GL_STENCIL_BACK_REF              = 0x8CA3,
-		GL_STENCIL_BACK_VALUE_MASK       = 0x8CA4,
-		GL_STENCIL_BACK_WRITEMASK        = 0x8CA5,
+		BLEND_EQUATION_RGB               = 0x8009,
+		VERTEX_ATTRIB_ARRAY_ENABLED      = 0x8622,
+		VERTEX_ATTRIB_ARRAY_SIZE         = 0x8623,
+		VERTEX_ATTRIB_ARRAY_STRIDE       = 0x8624,
+		VERTEX_ATTRIB_ARRAY_TYPE         = 0x8625,
+		CURRENT_VERTEX_ATTRIB            = 0x8626,
+		VERTEX_PROGRAM_POINT_SIZE        = 0x8642,
+		VERTEX_ATTRIB_ARRAY_POINTER      = 0x8645,
+		STENCIL_BACK_FUNC                = 0x8800,
+		STENCIL_BACK_FAIL                = 0x8801,
+		STENCIL_BACK_PASS_DEPTH_FAIL     = 0x8802,
+		STENCIL_BACK_PASS_DEPTH_PASS     = 0x8803,
+		MAX_DRAW_BUFFERS                 = 0x8824,
+		DRAW_BUFFER0                     = 0x8825,
+		DRAW_BUFFER1                     = 0x8826,
+		DRAW_BUFFER2                     = 0x8827,
+		DRAW_BUFFER3                     = 0x8828,
+		DRAW_BUFFER4                     = 0x8829,
+		DRAW_BUFFER5                     = 0x882A,
+		DRAW_BUFFER6                     = 0x882B,
+		DRAW_BUFFER7                     = 0x882C,
+		DRAW_BUFFER8                     = 0x882D,
+		DRAW_BUFFER9                     = 0x882E,
+		DRAW_BUFFER10                    = 0x882F,
+		DRAW_BUFFER11                    = 0x8830,
+		DRAW_BUFFER12                    = 0x8831,
+		DRAW_BUFFER13                    = 0x8832,
+		DRAW_BUFFER14                    = 0x8833,
+		DRAW_BUFFER15                    = 0x8834,
+		BLEND_EQUATION_ALPHA             = 0x883D,
+		MAX_VERTEX_ATTRIBS               = 0x8869,
+		VERTEX_ATTRIB_ARRAY_NORMALIZED   = 0x886A,
+		MAX_TEXTURE_IMAGE_UNITS          = 0x8872,
+		FRAGMENT_SHADER                  = 0x8B30,
+		VERTEX_SHADER                    = 0x8B31,
+		MAX_FRAGMENT_UNIFORM_COMPONENTS  = 0x8B49,
+		MAX_VERTEX_UNIFORM_COMPONENTS    = 0x8B4A,
+		MAX_VARYING_FLOATS               = 0x8B4B,
+		MAX_VERTEX_TEXTURE_IMAGE_UNITS   = 0x8B4C,
+		MAX_COMBINED_TEXTURE_IMAGE_UNITS = 0x8B4D,
+		SHADER_TYPE                      = 0x8B4F,
+		FLOAT_VEC2                       = 0x8B50,
+		FLOAT_VEC3                       = 0x8B51,
+		FLOAT_VEC4                       = 0x8B52,
+		INT_VEC2                         = 0x8B53,
+		INT_VEC3                         = 0x8B54,
+		INT_VEC4                         = 0x8B55,
+		BOOL                             = 0x8B56,
+		BOOL_VEC2                        = 0x8B57,
+		BOOL_VEC3                        = 0x8B58,
+		BOOL_VEC4                        = 0x8B59,
+		FLOAT_MAT2                       = 0x8B5A,
+		FLOAT_MAT3                       = 0x8B5B,
+		FLOAT_MAT4                       = 0x8B5C,
+		SAMPLER_1D                       = 0x8B5D,
+		SAMPLER_2D                       = 0x8B5E,
+		SAMPLER_3D                       = 0x8B5F,
+		SAMPLER_CUBE                     = 0x8B60,
+		SAMPLER_1D_SHADOW                = 0x8B61,
+		SAMPLER_2D_SHADOW                = 0x8B62,
+		DELETE_STATUS                    = 0x8B80,
+		COMPILE_STATUS                   = 0x8B81,
+		LINK_STATUS                      = 0x8B82,
+		VALIDATE_STATUS                  = 0x8B83,
+		INFO_LOG_LENGTH                  = 0x8B84,
+		ATTACHED_SHADERS                 = 0x8B85,
+		ACTIVE_UNIFORMS                  = 0x8B86,
+		ACTIVE_UNIFORM_MAX_LENGTH        = 0x8B87,
+		SHADER_SOURCE_LENGTH             = 0x8B88,
+		ACTIVE_ATTRIBUTES                = 0x8B89,
+		ACTIVE_ATTRIBUTE_MAX_LENGTH      = 0x8B8A,
+		FRAGMENT_SHADER_DERIVATIVE_HINT  = 0x8B8B,
+		SHADING_LANGUAGE_VERSION         = 0x8B8C,
+		CURRENT_PROGRAM                  = 0x8B8D,
+		POINT_SPRITE_COORD_ORIGIN        = 0x8CA0,
+		LOWER_LEFT                       = 0x8CA1,
+		UPPER_LEFT                       = 0x8CA2,
+		STENCIL_BACK_REF                 = 0x8CA3,
+		STENCIL_BACK_VALUE_MASK          = 0x8CA4,
+		STENCIL_BACK_WRITEMASK           = 0x8CA5,
 	};
-
-	inline void BlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha) { ::__gleBlendEquationSeparate(modeRGB, modeAlpha); }
-	inline void DrawBuffers(GLsizei n, const GLenum *bufs) { ::__gleDrawBuffers(n, bufs); }
-	inline void StencilOpSeparate(GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass) { ::__gleStencilOpSeparate(face, sfail, dpfail, dppass); }
-	inline void StencilFuncSeparate(GLenum face, GLenum func, GLint ref, GLuint mask) { ::__gleStencilFuncSeparate(face, func, ref, mask); }
-	inline void StencilMaskSeparate(GLenum face, GLuint mask) { ::__gleStencilMaskSeparate(face, mask); }
-	inline void AttachShader(GLuint program, GLuint shader) { ::__gleAttachShader(program, shader); }
-	inline void BindAttribLocation(GLuint program, GLuint index, const GLchar *name) { ::__gleBindAttribLocation(program, index, name); }
-	inline void CompileShader(GLuint shader) { ::__gleCompileShader(shader); }
-	inline GLuint CreateProgram() { return ::__gleCreateProgram(); }
-	inline GLuint CreateShader(GLenum type) { return ::__gleCreateShader(type); }
-	inline void DeleteProgram(GLuint program) { ::__gleDeleteProgram(program); }
-	inline void DeleteShader(GLuint shader) { ::__gleDeleteShader(shader); }
-	inline void DetachShader(GLuint program, GLuint shader) { ::__gleDetachShader(program, shader); }
-	inline void DisableVertexAttribArray(GLuint index) { ::__gleDisableVertexAttribArray(index); }
-	inline void EnableVertexAttribArray(GLuint index) { ::__gleEnableVertexAttribArray(index); }
-	inline void GetActiveAttrib(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name) { ::__gleGetActiveAttrib(program, index, bufSize, length, size, type, name); }
-	inline void GetActiveUniform(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name) { ::__gleGetActiveUniform(program, index, bufSize, length, size, type, name); }
-	inline void GetAttachedShaders(GLuint program, GLsizei maxCount, GLsizei *count, GLuint *obj) { ::__gleGetAttachedShaders(program, maxCount, count, obj); }
-	inline GLint GetAttribLocation(GLuint program, const GLchar *name) { return ::__gleGetAttribLocation(program, name); }
-	inline void GetProgramiv(GLuint program, GLenum pname, GLint *params) { ::__gleGetProgramiv(program, pname, params); }
-	inline void GetProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog) { ::__gleGetProgramInfoLog(program, bufSize, length, infoLog); }
-	inline void GetShaderiv(GLuint shader, GLenum pname, GLint *params) { ::__gleGetShaderiv(shader, pname, params); }
-	inline void GetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog) { ::__gleGetShaderInfoLog(shader, bufSize, length, infoLog); }
-	inline void GetShaderSource(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *source) { ::__gleGetShaderSource(shader, bufSize, length, source); }
-	inline GLint GetUniformLocation(GLuint program, const GLchar *name) { return ::__gleGetUniformLocation(program, name); }
-	inline void GetUniformfv(GLuint program, GLint location, GLfloat *params) { ::__gleGetUniformfv(program, location, params); }
-	inline void GetUniformiv(GLuint program, GLint location, GLint *params) { ::__gleGetUniformiv(program, location, params); }
-	inline void GetVertexAttribdv(GLuint index, GLenum pname, GLdouble *params) { ::__gleGetVertexAttribdv(index, pname, params); }
-	inline void GetVertexAttribfv(GLuint index, GLenum pname, GLfloat *params) { ::__gleGetVertexAttribfv(index, pname, params); }
-	inline void GetVertexAttribiv(GLuint index, GLenum pname, GLint *params) { ::__gleGetVertexAttribiv(index, pname, params); }
-	inline void GetVertexAttribPointerv(GLuint index, GLenum pname, GLvoid* *pointer) { ::__gleGetVertexAttribPointerv(index, pname, pointer); }
-	inline GLboolean IsProgram(GLuint program) { return ::__gleIsProgram(program); }
-	inline GLboolean IsShader(GLuint shader) { return ::__gleIsShader(shader); }
-	inline void LinkProgram(GLuint program) { ::__gleLinkProgram(program); }
-	inline void ShaderSource(GLuint shader, GLsizei count, const GLchar* const *string, const GLint *length) { ::__gleShaderSource(shader, count, string, length); }
-	inline void UseProgram(GLuint program) { ::__gleUseProgram(program); }
-	inline void Uniform1f(GLint location, GLfloat v0) { ::__gleUniform1f(location, v0); }
-	inline void Uniform2f(GLint location, GLfloat v0, GLfloat v1) { ::__gleUniform2f(location, v0, v1); }
-	inline void Uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2) { ::__gleUniform3f(location, v0, v1, v2); }
-	inline void Uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) { ::__gleUniform4f(location, v0, v1, v2, v3); }
-	inline void Uniform1i(GLint location, GLint v0) { ::__gleUniform1i(location, v0); }
-	inline void Uniform2i(GLint location, GLint v0, GLint v1) { ::__gleUniform2i(location, v0, v1); }
-	inline void Uniform3i(GLint location, GLint v0, GLint v1, GLint v2) { ::__gleUniform3i(location, v0, v1, v2); }
-	inline void Uniform4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3) { ::__gleUniform4i(location, v0, v1, v2, v3); }
-	inline void Uniform1fv(GLint location, GLsizei count, const GLfloat *value) { ::__gleUniform1fv(location, count, value); }
-	inline void Uniform2fv(GLint location, GLsizei count, const GLfloat *value) { ::__gleUniform2fv(location, count, value); }
-	inline void Uniform3fv(GLint location, GLsizei count, const GLfloat *value) { ::__gleUniform3fv(location, count, value); }
-	inline void Uniform4fv(GLint location, GLsizei count, const GLfloat *value) { ::__gleUniform4fv(location, count, value); }
-	inline void Uniform1iv(GLint location, GLsizei count, const GLint *value) { ::__gleUniform1iv(location, count, value); }
-	inline void Uniform2iv(GLint location, GLsizei count, const GLint *value) { ::__gleUniform2iv(location, count, value); }
-	inline void Uniform3iv(GLint location, GLsizei count, const GLint *value) { ::__gleUniform3iv(location, count, value); }
-	inline void Uniform4iv(GLint location, GLsizei count, const GLint *value) { ::__gleUniform4iv(location, count, value); }
-	inline void UniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) { ::__gleUniformMatrix2fv(location, count, transpose, value); }
-	inline void UniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) { ::__gleUniformMatrix3fv(location, count, transpose, value); }
-	inline void UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) { ::__gleUniformMatrix4fv(location, count, transpose, value); }
-	inline void ValidateProgram(GLuint program) { ::__gleValidateProgram(program); }
-	inline void VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer) { ::__gleVertexAttribPointer(index, size, type, normalized, stride, pointer); }
-
+	
+	namespace _detail
+	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquationSeparate)(GLenum , GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glDrawBuffers)(GLsizei , const GLenum *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glStencilOpSeparate)(GLenum , GLenum , GLenum , GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glStencilFuncSeparate)(GLenum , GLenum , GLint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glStencilMaskSeparate)(GLenum , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glAttachShader)(GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glBindAttribLocation)(GLuint , GLuint , const GLchar *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glCompileShader)(GLuint );
+		typedef GLuint (CODEGEN_FUNCPTR * Proc_glCreateProgram)();
+		typedef GLuint (CODEGEN_FUNCPTR * Proc_glCreateShader)(GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glDeleteProgram)(GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glDeleteShader)(GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glDetachShader)(GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glDisableVertexAttribArray)(GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glEnableVertexAttribArray)(GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetActiveAttrib)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetActiveUniform)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetAttachedShaders)(GLuint , GLsizei , GLsizei *, GLuint *);
+		typedef GLint (CODEGEN_FUNCPTR * Proc_glGetAttribLocation)(GLuint , const GLchar *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetProgramiv)(GLuint , GLenum , GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetProgramInfoLog)(GLuint , GLsizei , GLsizei *, GLchar *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetShaderiv)(GLuint , GLenum , GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetShaderInfoLog)(GLuint , GLsizei , GLsizei *, GLchar *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetShaderSource)(GLuint , GLsizei , GLsizei *, GLchar *);
+		typedef GLint (CODEGEN_FUNCPTR * Proc_glGetUniformLocation)(GLuint , const GLchar *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetUniformfv)(GLuint , GLint , GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetUniformiv)(GLuint , GLint , GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetVertexAttribdv)(GLuint , GLenum , GLdouble *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetVertexAttribfv)(GLuint , GLenum , GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetVertexAttribiv)(GLuint , GLenum , GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetVertexAttribPointerv)(GLuint , GLenum , GLvoid* *);
+		typedef GLboolean (CODEGEN_FUNCPTR * Proc_glIsProgram)(GLuint );
+		typedef GLboolean (CODEGEN_FUNCPTR * Proc_glIsShader)(GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glLinkProgram)(GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glShaderSource)(GLuint , GLsizei , const GLchar* const *, const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUseProgram)(GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform1f)(GLint , GLfloat );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform2f)(GLint , GLfloat , GLfloat );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform3f)(GLint , GLfloat , GLfloat , GLfloat );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform4f)(GLint , GLfloat , GLfloat , GLfloat , GLfloat );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform1i)(GLint , GLint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform2i)(GLint , GLint , GLint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform3i)(GLint , GLint , GLint , GLint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform4i)(GLint , GLint , GLint , GLint , GLint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform1fv)(GLint , GLsizei , const GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform2fv)(GLint , GLsizei , const GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform3fv)(GLint , GLsizei , const GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform4fv)(GLint , GLsizei , const GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform1iv)(GLint , GLsizei , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform2iv)(GLint , GLsizei , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform3iv)(GLint , GLsizei , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniform4iv)(GLint , GLsizei , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix2fv)(GLint , GLsizei , GLboolean , const GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix3fv)(GLint , GLsizei , GLboolean , const GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix4fv)(GLint , GLsizei , GLboolean , const GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glValidateProgram)(GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribPointer)(GLuint , GLint , GLenum , GLboolean , GLsizei , const GLvoid *);
+	}
+	
+	extern _detail::Proc_glBlendEquationSeparate BlendEquationSeparate;
+	extern _detail::Proc_glDrawBuffers DrawBuffers;
+	extern _detail::Proc_glStencilOpSeparate StencilOpSeparate;
+	extern _detail::Proc_glStencilFuncSeparate StencilFuncSeparate;
+	extern _detail::Proc_glStencilMaskSeparate StencilMaskSeparate;
+	extern _detail::Proc_glAttachShader AttachShader;
+	extern _detail::Proc_glBindAttribLocation BindAttribLocation;
+	extern _detail::Proc_glCompileShader CompileShader;
+	extern _detail::Proc_glCreateProgram CreateProgram;
+	extern _detail::Proc_glCreateShader CreateShader;
+	extern _detail::Proc_glDeleteProgram DeleteProgram;
+	extern _detail::Proc_glDeleteShader DeleteShader;
+	extern _detail::Proc_glDetachShader DetachShader;
+	extern _detail::Proc_glDisableVertexAttribArray DisableVertexAttribArray;
+	extern _detail::Proc_glEnableVertexAttribArray EnableVertexAttribArray;
+	extern _detail::Proc_glGetActiveAttrib GetActiveAttrib;
+	extern _detail::Proc_glGetActiveUniform GetActiveUniform;
+	extern _detail::Proc_glGetAttachedShaders GetAttachedShaders;
+	extern _detail::Proc_glGetAttribLocation GetAttribLocation;
+	extern _detail::Proc_glGetProgramiv GetProgramiv;
+	extern _detail::Proc_glGetProgramInfoLog GetProgramInfoLog;
+	extern _detail::Proc_glGetShaderiv GetShaderiv;
+	extern _detail::Proc_glGetShaderInfoLog GetShaderInfoLog;
+	extern _detail::Proc_glGetShaderSource GetShaderSource;
+	extern _detail::Proc_glGetUniformLocation GetUniformLocation;
+	extern _detail::Proc_glGetUniformfv GetUniformfv;
+	extern _detail::Proc_glGetUniformiv GetUniformiv;
+	extern _detail::Proc_glGetVertexAttribdv GetVertexAttribdv;
+	extern _detail::Proc_glGetVertexAttribfv GetVertexAttribfv;
+	extern _detail::Proc_glGetVertexAttribiv GetVertexAttribiv;
+	extern _detail::Proc_glGetVertexAttribPointerv GetVertexAttribPointerv;
+	extern _detail::Proc_glIsProgram IsProgram;
+	extern _detail::Proc_glIsShader IsShader;
+	extern _detail::Proc_glLinkProgram LinkProgram;
+	extern _detail::Proc_glShaderSource ShaderSource;
+	extern _detail::Proc_glUseProgram UseProgram;
+	extern _detail::Proc_glUniform1f Uniform1f;
+	extern _detail::Proc_glUniform2f Uniform2f;
+	extern _detail::Proc_glUniform3f Uniform3f;
+	extern _detail::Proc_glUniform4f Uniform4f;
+	extern _detail::Proc_glUniform1i Uniform1i;
+	extern _detail::Proc_glUniform2i Uniform2i;
+	extern _detail::Proc_glUniform3i Uniform3i;
+	extern _detail::Proc_glUniform4i Uniform4i;
+	extern _detail::Proc_glUniform1fv Uniform1fv;
+	extern _detail::Proc_glUniform2fv Uniform2fv;
+	extern _detail::Proc_glUniform3fv Uniform3fv;
+	extern _detail::Proc_glUniform4fv Uniform4fv;
+	extern _detail::Proc_glUniform1iv Uniform1iv;
+	extern _detail::Proc_glUniform2iv Uniform2iv;
+	extern _detail::Proc_glUniform3iv Uniform3iv;
+	extern _detail::Proc_glUniform4iv Uniform4iv;
+	extern _detail::Proc_glUniformMatrix2fv UniformMatrix2fv;
+	extern _detail::Proc_glUniformMatrix3fv UniformMatrix3fv;
+	extern _detail::Proc_glUniformMatrix4fv UniformMatrix4fv;
+	extern _detail::Proc_glValidateProgram ValidateProgram;
+	extern _detail::Proc_glVertexAttribPointer VertexAttribPointer;
+	
 }
-
-#endif //_INT_GL_2_0_HPP
-
+#endif /*OPENGL_GEN_CORE_2_0_HPP*/

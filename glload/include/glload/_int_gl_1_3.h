@@ -1,13 +1,9 @@
-#ifndef _INT_GL_1_3_H
-#define _INT_GL_1_3_H
-
-
+#ifndef OPENGL_GEN_CORE_1_3_H
+#define OPENGL_GEN_CORE_1_3_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
-
-
+#endif /*__cplusplus*/
 #define GL_TEXTURE0 0x84C0
 #define GL_TEXTURE1 0x84C1
 #define GL_TEXTURE2 0x84C2
@@ -64,40 +60,37 @@ extern "C" {
 #define GL_NUM_COMPRESSED_TEXTURE_FORMATS 0x86A2
 #define GL_COMPRESSED_TEXTURE_FORMATS 0x86A3
 #define GL_CLAMP_TO_BORDER 0x812D
-typedef void (GLE_FUNCPTR * PFNGLACTIVETEXTUREPROC)(GLenum );
-typedef void (GLE_FUNCPTR * PFNGLSAMPLECOVERAGEPROC)(GLfloat , GLboolean );
-typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXIMAGE3DPROC)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
-typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXIMAGE2DPROC)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
-typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXIMAGE1DPROC)(GLenum , GLint , GLenum , GLsizei , GLint , GLsizei , const GLvoid *);
-typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC)(GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei , GLenum , GLsizei , const GLvoid *);
-typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC)(GLenum , GLint , GLint , GLint , GLsizei , GLsizei , GLenum , GLsizei , const GLvoid *);
-typedef void (GLE_FUNCPTR * PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC)(GLenum , GLint , GLint , GLsizei , GLenum , GLsizei , const GLvoid *);
-typedef void (GLE_FUNCPTR * PFNGLGETCOMPRESSEDTEXIMAGEPROC)(GLenum , GLint , GLvoid *);
 
-extern PFNGLACTIVETEXTUREPROC __gleActiveTexture;
-#define glActiveTexture __gleActiveTexture
-extern PFNGLSAMPLECOVERAGEPROC __gleSampleCoverage;
-#define glSampleCoverage __gleSampleCoverage
-extern PFNGLCOMPRESSEDTEXIMAGE3DPROC __gleCompressedTexImage3D;
-#define glCompressedTexImage3D __gleCompressedTexImage3D
-extern PFNGLCOMPRESSEDTEXIMAGE2DPROC __gleCompressedTexImage2D;
-#define glCompressedTexImage2D __gleCompressedTexImage2D
-extern PFNGLCOMPRESSEDTEXIMAGE1DPROC __gleCompressedTexImage1D;
-#define glCompressedTexImage1D __gleCompressedTexImage1D
-extern PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC __gleCompressedTexSubImage3D;
-#define glCompressedTexSubImage3D __gleCompressedTexSubImage3D
-extern PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC __gleCompressedTexSubImage2D;
-#define glCompressedTexSubImage2D __gleCompressedTexSubImage2D
-extern PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC __gleCompressedTexSubImage1D;
-#define glCompressedTexSubImage1D __gleCompressedTexSubImage1D
-extern PFNGLGETCOMPRESSEDTEXIMAGEPROC __gleGetCompressedTexImage;
-#define glGetCompressedTexImage __gleGetCompressedTexImage
+typedef void (CODEGEN_FUNCPTR * PFNGLACTIVETEXTUREPROC)(GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLSAMPLECOVERAGEPROC)(GLfloat , GLboolean );
+typedef void (CODEGEN_FUNCPTR * PFNGLCOMPRESSEDTEXIMAGE3DPROC)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
+typedef void (CODEGEN_FUNCPTR * PFNGLCOMPRESSEDTEXIMAGE2DPROC)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
+typedef void (CODEGEN_FUNCPTR * PFNGLCOMPRESSEDTEXIMAGE1DPROC)(GLenum , GLint , GLenum , GLsizei , GLint , GLsizei , const GLvoid *);
+typedef void (CODEGEN_FUNCPTR * PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC)(GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei , GLenum , GLsizei , const GLvoid *);
+typedef void (CODEGEN_FUNCPTR * PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC)(GLenum , GLint , GLint , GLint , GLsizei , GLsizei , GLenum , GLsizei , const GLvoid *);
+typedef void (CODEGEN_FUNCPTR * PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC)(GLenum , GLint , GLint , GLsizei , GLenum , GLsizei , const GLvoid *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETCOMPRESSEDTEXIMAGEPROC)(GLenum , GLint , GLvoid *);
 
+extern PFNGLACTIVETEXTUREPROC _funcptr_glActiveTexture;
+#define glActiveTexture _funcptr_glActiveTexture
+extern PFNGLSAMPLECOVERAGEPROC _funcptr_glSampleCoverage;
+#define glSampleCoverage _funcptr_glSampleCoverage
+extern PFNGLCOMPRESSEDTEXIMAGE3DPROC _funcptr_glCompressedTexImage3D;
+#define glCompressedTexImage3D _funcptr_glCompressedTexImage3D
+extern PFNGLCOMPRESSEDTEXIMAGE2DPROC _funcptr_glCompressedTexImage2D;
+#define glCompressedTexImage2D _funcptr_glCompressedTexImage2D
+extern PFNGLCOMPRESSEDTEXIMAGE1DPROC _funcptr_glCompressedTexImage1D;
+#define glCompressedTexImage1D _funcptr_glCompressedTexImage1D
+extern PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC _funcptr_glCompressedTexSubImage3D;
+#define glCompressedTexSubImage3D _funcptr_glCompressedTexSubImage3D
+extern PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC _funcptr_glCompressedTexSubImage2D;
+#define glCompressedTexSubImage2D _funcptr_glCompressedTexSubImage2D
+extern PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC _funcptr_glCompressedTexSubImage1D;
+#define glCompressedTexSubImage1D _funcptr_glCompressedTexSubImage1D
+extern PFNGLGETCOMPRESSEDTEXIMAGEPROC _funcptr_glGetCompressedTexImage;
+#define glGetCompressedTexImage _funcptr_glGetCompressedTexImage
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
-
-
-#endif //_INT_GL_1_3_H
-
+#endif /*__cplusplus*/
+#endif /*OPENGL_GEN_CORE_1_3_H*/

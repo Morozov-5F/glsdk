@@ -19,14 +19,14 @@ GLuint BuildShader(GLenum eShaderType, const std::string &shaderText)
 	gl::CompileShader(shader);
 
 	GLint status;
-	gl::GetShaderiv(shader, gl::GL_COMPILE_STATUS, &status);
-	if (status == gl::GL_FALSE)
+	gl::GetShaderiv(shader, gl::COMPILE_STATUS, &status);
+	if (status == gl::FALSE_)
 	{
 		//With ARB_debug_output, we already get the info log on compile failure.
-		if(!glext_ARB_debug_output)
+		if(!gl::exts::glext_ARB_debug_output)
 		{
 			GLint infoLogLength;
-			gl::GetShaderiv(shader, gl::GL_INFO_LOG_LENGTH, &infoLogLength);
+			gl::GetShaderiv(shader, gl::INFO_LOG_LENGTH, &infoLogLength);
 
 			GLchar *strInfoLog = new GLchar[infoLogLength + 1];
 			gl::GetShaderInfoLog(shader, infoLogLength, NULL, strInfoLog);
@@ -34,9 +34,9 @@ GLuint BuildShader(GLenum eShaderType, const std::string &shaderText)
 			const char *strShaderType = NULL;
 			switch(eShaderType)
 			{
-			case gl::GL_VERTEX_SHADER: strShaderType = "vertex"; break;
-			case gl::GL_GEOMETRY_SHADER: strShaderType = "geometry"; break;
-			case gl::GL_FRAGMENT_SHADER: strShaderType = "fragment"; break;
+			case gl::VERTEX_SHADER: strShaderType = "vertex"; break;
+			case gl::GEOMETRY_SHADER: strShaderType = "geometry"; break;
+			case gl::FRAGMENT_SHADER: strShaderType = "fragment"; break;
 			}
 
 			fprintf(stderr, "Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
@@ -62,9 +62,9 @@ void init()
 	};
 
 	gl::GenBuffers(1, &positionBufferObject);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, positionBufferObject);
-	gl::BufferData(gl::GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, gl::GL_STATIC_DRAW);
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, 0);
+	gl::BindBuffer(gl::ARRAY_BUFFER, positionBufferObject);
+	gl::BufferData(gl::ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, gl::STATIC_DRAW);
+	gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
 	const std::string vertexShader(
 		"#version 330\n"
@@ -84,8 +84,8 @@ void init()
 		"}\n"
 		);
 
-	GLuint vertShader = BuildShader(gl::GL_VERTEX_SHADER, vertexShader);
-	GLuint fragShader = BuildShader(gl::GL_FRAGMENT_SHADER, fragmentShader);
+	GLuint vertShader = BuildShader(gl::VERTEX_SHADER, vertexShader);
+	GLuint fragShader = BuildShader(gl::FRAGMENT_SHADER, fragmentShader);
 
 	program = gl::CreateProgram();
 	gl::AttachShader(program, vertShader);
@@ -93,13 +93,13 @@ void init()
 	gl::LinkProgram(program);
 
 	GLint status;
-	gl::GetProgramiv (program, gl::GL_LINK_STATUS, &status);
-	if (status == gl::GL_FALSE)
+	gl::GetProgramiv (program, gl::LINK_STATUS, &status);
+	if (status == gl::FALSE_)
 	{
-		if(!glext_ARB_debug_output)
+		if(!gl::exts::glext_ARB_debug_output)
 		{
 			GLint infoLogLength;
-			gl::GetProgramiv(program, gl::GL_INFO_LOG_LENGTH, &infoLogLength);
+			gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &infoLogLength);
 
 			GLchar *strInfoLog = new GLchar[infoLogLength + 1];
 			gl::GetProgramInfoLog(program, infoLogLength, NULL, strInfoLog);
@@ -117,15 +117,15 @@ void init()
 void display()
 {
 	gl::ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	gl::Clear(gl::GL_COLOR_BUFFER_BIT);
+	gl::Clear(gl::COLOR_BUFFER_BIT);
 
 	gl::UseProgram(program);
 
-	gl::BindBuffer(gl::GL_ARRAY_BUFFER, positionBufferObject);
+	gl::BindBuffer(gl::ARRAY_BUFFER, positionBufferObject);
 	gl::EnableVertexAttribArray(0);
-	gl::VertexAttribPointer(0, 4, gl::GL_FLOAT, gl::GL_FALSE, 0, 0);
+	gl::VertexAttribPointer(0, 4, gl::FLOAT, gl::FALSE_, 0, 0);
 
-	gl::DrawArrays(gl::GL_TRIANGLES, 0, 3);
+	gl::DrawArrays(gl::TRIANGLES, 0, 3);
 
 	gl::DisableVertexAttribArray(0);
 	gl::UseProgram(0);
@@ -160,31 +160,31 @@ void APIENTRY DebugFunc(GLenum source, GLenum type, GLuint id, GLenum severity, 
 	std::string srcName;
 	switch(source)
 	{
-	case gl::GL_DEBUG_SOURCE_API_ARB: srcName = "API"; break;
-	case gl::GL_DEBUG_SOURCE_WINDOW_SYSTEM_ARB: srcName = "Window System"; break;
-	case gl::GL_DEBUG_SOURCE_SHADER_COMPILER_ARB: srcName = "Shader Compiler"; break;
-	case gl::GL_DEBUG_SOURCE_THIRD_PARTY_ARB: srcName = "Third Party"; break;
-	case gl::GL_DEBUG_SOURCE_APPLICATION_ARB: srcName = "Application"; break;
-	case gl::GL_DEBUG_SOURCE_OTHER_ARB: srcName = "Other"; break;
+	case gl::DEBUG_SOURCE_API_ARB: srcName = "API"; break;
+	case gl::DEBUG_SOURCE_WINDOW_SYSTEM_ARB: srcName = "Window System"; break;
+	case gl::DEBUG_SOURCE_SHADER_COMPILER_ARB: srcName = "Shader Compiler"; break;
+	case gl::DEBUG_SOURCE_THIRD_PARTY_ARB: srcName = "Third Party"; break;
+	case gl::DEBUG_SOURCE_APPLICATION_ARB: srcName = "Application"; break;
+	case gl::DEBUG_SOURCE_OTHER_ARB: srcName = "Other"; break;
 	}
 
 	std::string errorType;
 	switch(type)
 	{
-	case gl::GL_DEBUG_TYPE_ERROR_ARB: errorType = "Error"; break;
-	case gl::GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB: errorType = "Deprecated Functionality"; break;
-	case gl::GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB: errorType = "Undefined Behavior"; break;
-	case gl::GL_DEBUG_TYPE_PORTABILITY_ARB: errorType = "Portability"; break;
-	case gl::GL_DEBUG_TYPE_PERFORMANCE_ARB: errorType = "Performance"; break;
-	case gl::GL_DEBUG_TYPE_OTHER_ARB: errorType = "Other"; break;
+	case gl::DEBUG_TYPE_ERROR_ARB: errorType = "Error"; break;
+	case gl::DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB: errorType = "Deprecated Functionality"; break;
+	case gl::DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB: errorType = "Undefined Behavior"; break;
+	case gl::DEBUG_TYPE_PORTABILITY_ARB: errorType = "Portability"; break;
+	case gl::DEBUG_TYPE_PERFORMANCE_ARB: errorType = "Performance"; break;
+	case gl::DEBUG_TYPE_OTHER_ARB: errorType = "Other"; break;
 	}
 
 	std::string typeSeverity;
 	switch(severity)
 	{
-	case gl::GL_DEBUG_SEVERITY_HIGH_ARB: typeSeverity = "High"; break;
-	case gl::GL_DEBUG_SEVERITY_MEDIUM_ARB: typeSeverity = "Medium"; break;
-	case gl::GL_DEBUG_SEVERITY_LOW_ARB: typeSeverity = "Low"; break;
+	case gl::DEBUG_SEVERITY_HIGH_ARB: typeSeverity = "High"; break;
+	case gl::DEBUG_SEVERITY_MEDIUM_ARB: typeSeverity = "Medium"; break;
+	case gl::DEBUG_SEVERITY_LOW_ARB: typeSeverity = "Low"; break;
 	}
 
 	printf("%s from %s,\t%s priority\nMessage: %s\n",
@@ -211,11 +211,11 @@ int main(int argc, char** argv)
 
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 
-	glload::LoadFunctions();
+	glload::LoadTest test = glload::LoadFunctions();
 
-	if(glext_ARB_debug_output)
+	if(gl::exts::glext_ARB_debug_output)
 	{
-		gl::Enable(gl::GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
+		gl::Enable(gl::DEBUG_OUTPUT_SYNCHRONOUS_ARB);
 		gl::DebugMessageCallbackARB(DebugFunc, (void*)15);
 	}
 

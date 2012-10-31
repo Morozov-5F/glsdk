@@ -21,31 +21,25 @@ project("glload")
 		"include/glload/gl_*.hpp",
 		"include/glload/gll.h",
 		"include/glload/gll.hpp",
-		"source/gll*.c",
-		"source/gll*.cpp",
-		"source/gll*.h",
+		"source/gl_*",
+		"source/gll_c.c",
 	};
 	
 	configuration "plainc"
 		excludes {
-			"source/gll*.cpp",
-			"include/glload/gll.hpp",
-			"include/glload/gl_*.hpp"
+			"source/*.cpp",
+			"include/glload/*.hpp",
 		}
 	
 	configuration "windows"
 		defines {"WIN32"}
 		files {"include/glload/wgl_*.h",}
-		files {"source/wgll*.c",
-			"source/wgll*.cpp",
-			"source/wgll*.h",}
+		files {"source/wgl_*"}
 	
 	configuration "linux"
 	    defines {"LOAD_X11"}
 		files {"include/glload/glx_*.h"}
-		files {"source/glxl*.c",
-			"source/glxl*.cpp",
-			"source/glxl*.h",}
+		files {"source/glx_*"}
 
 	configuration "Debug"
 		flags "Unicode";

@@ -1,13 +1,9 @@
-#ifndef _INT_GL_3_2_H
-#define _INT_GL_3_2_H
-
-
+#ifndef OPENGL_GEN_CORE_3_2_H
+#define OPENGL_GEN_CORE_3_2_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
-
-
+#endif /*__cplusplus*/
 #define GL_CONTEXT_CORE_PROFILE_BIT 0x00000001
 #define GL_CONTEXT_COMPATIBILITY_PROFILE_BIT 0x00000002
 #define GL_LINES_ADJACENCY 0x000A
@@ -30,22 +26,19 @@ extern "C" {
 #define GL_MAX_GEOMETRY_OUTPUT_COMPONENTS 0x9124
 #define GL_MAX_FRAGMENT_INPUT_COMPONENTS 0x9125
 #define GL_CONTEXT_PROFILE_MASK 0x9126
-typedef void (GLE_FUNCPTR * PFNGLGETINTEGER64I_VPROC)(GLenum , GLuint , GLint64 *);
-typedef void (GLE_FUNCPTR * PFNGLGETBUFFERPARAMETERI64VPROC)(GLenum , GLenum , GLint64 *);
-typedef void (GLE_FUNCPTR * PFNGLFRAMEBUFFERTEXTUREPROC)(GLenum , GLenum , GLuint , GLint );
 
-extern PFNGLGETINTEGER64I_VPROC __gleGetInteger64i_v;
-#define glGetInteger64i_v __gleGetInteger64i_v
-extern PFNGLGETBUFFERPARAMETERI64VPROC __gleGetBufferParameteri64v;
-#define glGetBufferParameteri64v __gleGetBufferParameteri64v
-extern PFNGLFRAMEBUFFERTEXTUREPROC __gleFramebufferTexture;
-#define glFramebufferTexture __gleFramebufferTexture
+typedef void (CODEGEN_FUNCPTR * PFNGLGETINTEGER64I_VPROC)(GLenum , GLuint , GLint64 *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETBUFFERPARAMETERI64VPROC)(GLenum , GLenum , GLint64 *);
+typedef void (CODEGEN_FUNCPTR * PFNGLFRAMEBUFFERTEXTUREPROC)(GLenum , GLenum , GLuint , GLint );
 
+extern PFNGLGETINTEGER64I_VPROC _funcptr_glGetInteger64i_v;
+#define glGetInteger64i_v _funcptr_glGetInteger64i_v
+extern PFNGLGETBUFFERPARAMETERI64VPROC _funcptr_glGetBufferParameteri64v;
+#define glGetBufferParameteri64v _funcptr_glGetBufferParameteri64v
+extern PFNGLFRAMEBUFFERTEXTUREPROC _funcptr_glFramebufferTexture;
+#define glFramebufferTexture _funcptr_glFramebufferTexture
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
-
-
-#endif //_INT_GL_3_2_H
-
+#endif /*__cplusplus*/
+#endif /*OPENGL_GEN_CORE_3_2_H*/

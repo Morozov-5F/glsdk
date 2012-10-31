@@ -1,13 +1,9 @@
-#ifndef _INT_GL_2_0_H
-#define _INT_GL_2_0_H
-
-
+#ifndef OPENGL_GEN_CORE_2_0_H
+#define OPENGL_GEN_CORE_2_0_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
-
-
+#endif /*__cplusplus*/
 #define GL_BLEND_EQUATION_RGB 0x8009
 #define GL_VERTEX_ATTRIB_ARRAY_ENABLED 0x8622
 #define GL_VERTEX_ATTRIB_ARRAY_SIZE 0x8623
@@ -88,184 +84,181 @@ extern "C" {
 #define GL_STENCIL_BACK_REF 0x8CA3
 #define GL_STENCIL_BACK_VALUE_MASK 0x8CA4
 #define GL_STENCIL_BACK_WRITEMASK 0x8CA5
-typedef void (GLE_FUNCPTR * PFNGLBLENDEQUATIONSEPARATEPROC)(GLenum , GLenum );
-typedef void (GLE_FUNCPTR * PFNGLDRAWBUFFERSPROC)(GLsizei , const GLenum *);
-typedef void (GLE_FUNCPTR * PFNGLSTENCILOPSEPARATEPROC)(GLenum , GLenum , GLenum , GLenum );
-typedef void (GLE_FUNCPTR * PFNGLSTENCILFUNCSEPARATEPROC)(GLenum , GLenum , GLint , GLuint );
-typedef void (GLE_FUNCPTR * PFNGLSTENCILMASKSEPARATEPROC)(GLenum , GLuint );
-typedef void (GLE_FUNCPTR * PFNGLATTACHSHADERPROC)(GLuint , GLuint );
-typedef void (GLE_FUNCPTR * PFNGLBINDATTRIBLOCATIONPROC)(GLuint , GLuint , const GLchar *);
-typedef void (GLE_FUNCPTR * PFNGLCOMPILESHADERPROC)(GLuint );
-typedef GLuint (GLE_FUNCPTR * PFNGLCREATEPROGRAMPROC)();
-typedef GLuint (GLE_FUNCPTR * PFNGLCREATESHADERPROC)(GLenum );
-typedef void (GLE_FUNCPTR * PFNGLDELETEPROGRAMPROC)(GLuint );
-typedef void (GLE_FUNCPTR * PFNGLDELETESHADERPROC)(GLuint );
-typedef void (GLE_FUNCPTR * PFNGLDETACHSHADERPROC)(GLuint , GLuint );
-typedef void (GLE_FUNCPTR * PFNGLDISABLEVERTEXATTRIBARRAYPROC)(GLuint );
-typedef void (GLE_FUNCPTR * PFNGLENABLEVERTEXATTRIBARRAYPROC)(GLuint );
-typedef void (GLE_FUNCPTR * PFNGLGETACTIVEATTRIBPROC)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
-typedef void (GLE_FUNCPTR * PFNGLGETACTIVEUNIFORMPROC)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
-typedef void (GLE_FUNCPTR * PFNGLGETATTACHEDSHADERSPROC)(GLuint , GLsizei , GLsizei *, GLuint *);
-typedef GLint (GLE_FUNCPTR * PFNGLGETATTRIBLOCATIONPROC)(GLuint , const GLchar *);
-typedef void (GLE_FUNCPTR * PFNGLGETPROGRAMIVPROC)(GLuint , GLenum , GLint *);
-typedef void (GLE_FUNCPTR * PFNGLGETPROGRAMINFOLOGPROC)(GLuint , GLsizei , GLsizei *, GLchar *);
-typedef void (GLE_FUNCPTR * PFNGLGETSHADERIVPROC)(GLuint , GLenum , GLint *);
-typedef void (GLE_FUNCPTR * PFNGLGETSHADERINFOLOGPROC)(GLuint , GLsizei , GLsizei *, GLchar *);
-typedef void (GLE_FUNCPTR * PFNGLGETSHADERSOURCEPROC)(GLuint , GLsizei , GLsizei *, GLchar *);
-typedef GLint (GLE_FUNCPTR * PFNGLGETUNIFORMLOCATIONPROC)(GLuint , const GLchar *);
-typedef void (GLE_FUNCPTR * PFNGLGETUNIFORMFVPROC)(GLuint , GLint , GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLGETUNIFORMIVPROC)(GLuint , GLint , GLint *);
-typedef void (GLE_FUNCPTR * PFNGLGETVERTEXATTRIBDVPROC)(GLuint , GLenum , GLdouble *);
-typedef void (GLE_FUNCPTR * PFNGLGETVERTEXATTRIBFVPROC)(GLuint , GLenum , GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLGETVERTEXATTRIBIVPROC)(GLuint , GLenum , GLint *);
-typedef void (GLE_FUNCPTR * PFNGLGETVERTEXATTRIBPOINTERVPROC)(GLuint , GLenum , GLvoid* *);
-typedef GLboolean (GLE_FUNCPTR * PFNGLISPROGRAMPROC)(GLuint );
-typedef GLboolean (GLE_FUNCPTR * PFNGLISSHADERPROC)(GLuint );
-typedef void (GLE_FUNCPTR * PFNGLLINKPROGRAMPROC)(GLuint );
-typedef void (GLE_FUNCPTR * PFNGLSHADERSOURCEPROC)(GLuint , GLsizei , const GLchar* const *, const GLint *);
-typedef void (GLE_FUNCPTR * PFNGLUSEPROGRAMPROC)(GLuint );
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM1FPROC)(GLint , GLfloat );
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM2FPROC)(GLint , GLfloat , GLfloat );
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM3FPROC)(GLint , GLfloat , GLfloat , GLfloat );
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM4FPROC)(GLint , GLfloat , GLfloat , GLfloat , GLfloat );
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM1IPROC)(GLint , GLint );
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM2IPROC)(GLint , GLint , GLint );
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM3IPROC)(GLint , GLint , GLint , GLint );
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM4IPROC)(GLint , GLint , GLint , GLint , GLint );
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM1FVPROC)(GLint , GLsizei , const GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM2FVPROC)(GLint , GLsizei , const GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM3FVPROC)(GLint , GLsizei , const GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM4FVPROC)(GLint , GLsizei , const GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM1IVPROC)(GLint , GLsizei , const GLint *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM2IVPROC)(GLint , GLsizei , const GLint *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM3IVPROC)(GLint , GLsizei , const GLint *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORM4IVPROC)(GLint , GLsizei , const GLint *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORMMATRIX2FVPROC)(GLint , GLsizei , GLboolean , const GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORMMATRIX3FVPROC)(GLint , GLsizei , GLboolean , const GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLUNIFORMMATRIX4FVPROC)(GLint , GLsizei , GLboolean , const GLfloat *);
-typedef void (GLE_FUNCPTR * PFNGLVALIDATEPROGRAMPROC)(GLuint );
-typedef void (GLE_FUNCPTR * PFNGLVERTEXATTRIBPOINTERPROC)(GLuint , GLint , GLenum , GLboolean , GLsizei , const GLvoid *);
 
-extern PFNGLBLENDEQUATIONSEPARATEPROC __gleBlendEquationSeparate;
-#define glBlendEquationSeparate __gleBlendEquationSeparate
-extern PFNGLDRAWBUFFERSPROC __gleDrawBuffers;
-#define glDrawBuffers __gleDrawBuffers
-extern PFNGLSTENCILOPSEPARATEPROC __gleStencilOpSeparate;
-#define glStencilOpSeparate __gleStencilOpSeparate
-extern PFNGLSTENCILFUNCSEPARATEPROC __gleStencilFuncSeparate;
-#define glStencilFuncSeparate __gleStencilFuncSeparate
-extern PFNGLSTENCILMASKSEPARATEPROC __gleStencilMaskSeparate;
-#define glStencilMaskSeparate __gleStencilMaskSeparate
-extern PFNGLATTACHSHADERPROC __gleAttachShader;
-#define glAttachShader __gleAttachShader
-extern PFNGLBINDATTRIBLOCATIONPROC __gleBindAttribLocation;
-#define glBindAttribLocation __gleBindAttribLocation
-extern PFNGLCOMPILESHADERPROC __gleCompileShader;
-#define glCompileShader __gleCompileShader
-extern PFNGLCREATEPROGRAMPROC __gleCreateProgram;
-#define glCreateProgram __gleCreateProgram
-extern PFNGLCREATESHADERPROC __gleCreateShader;
-#define glCreateShader __gleCreateShader
-extern PFNGLDELETEPROGRAMPROC __gleDeleteProgram;
-#define glDeleteProgram __gleDeleteProgram
-extern PFNGLDELETESHADERPROC __gleDeleteShader;
-#define glDeleteShader __gleDeleteShader
-extern PFNGLDETACHSHADERPROC __gleDetachShader;
-#define glDetachShader __gleDetachShader
-extern PFNGLDISABLEVERTEXATTRIBARRAYPROC __gleDisableVertexAttribArray;
-#define glDisableVertexAttribArray __gleDisableVertexAttribArray
-extern PFNGLENABLEVERTEXATTRIBARRAYPROC __gleEnableVertexAttribArray;
-#define glEnableVertexAttribArray __gleEnableVertexAttribArray
-extern PFNGLGETACTIVEATTRIBPROC __gleGetActiveAttrib;
-#define glGetActiveAttrib __gleGetActiveAttrib
-extern PFNGLGETACTIVEUNIFORMPROC __gleGetActiveUniform;
-#define glGetActiveUniform __gleGetActiveUniform
-extern PFNGLGETATTACHEDSHADERSPROC __gleGetAttachedShaders;
-#define glGetAttachedShaders __gleGetAttachedShaders
-extern PFNGLGETATTRIBLOCATIONPROC __gleGetAttribLocation;
-#define glGetAttribLocation __gleGetAttribLocation
-extern PFNGLGETPROGRAMIVPROC __gleGetProgramiv;
-#define glGetProgramiv __gleGetProgramiv
-extern PFNGLGETPROGRAMINFOLOGPROC __gleGetProgramInfoLog;
-#define glGetProgramInfoLog __gleGetProgramInfoLog
-extern PFNGLGETSHADERIVPROC __gleGetShaderiv;
-#define glGetShaderiv __gleGetShaderiv
-extern PFNGLGETSHADERINFOLOGPROC __gleGetShaderInfoLog;
-#define glGetShaderInfoLog __gleGetShaderInfoLog
-extern PFNGLGETSHADERSOURCEPROC __gleGetShaderSource;
-#define glGetShaderSource __gleGetShaderSource
-extern PFNGLGETUNIFORMLOCATIONPROC __gleGetUniformLocation;
-#define glGetUniformLocation __gleGetUniformLocation
-extern PFNGLGETUNIFORMFVPROC __gleGetUniformfv;
-#define glGetUniformfv __gleGetUniformfv
-extern PFNGLGETUNIFORMIVPROC __gleGetUniformiv;
-#define glGetUniformiv __gleGetUniformiv
-extern PFNGLGETVERTEXATTRIBDVPROC __gleGetVertexAttribdv;
-#define glGetVertexAttribdv __gleGetVertexAttribdv
-extern PFNGLGETVERTEXATTRIBFVPROC __gleGetVertexAttribfv;
-#define glGetVertexAttribfv __gleGetVertexAttribfv
-extern PFNGLGETVERTEXATTRIBIVPROC __gleGetVertexAttribiv;
-#define glGetVertexAttribiv __gleGetVertexAttribiv
-extern PFNGLGETVERTEXATTRIBPOINTERVPROC __gleGetVertexAttribPointerv;
-#define glGetVertexAttribPointerv __gleGetVertexAttribPointerv
-extern PFNGLISPROGRAMPROC __gleIsProgram;
-#define glIsProgram __gleIsProgram
-extern PFNGLISSHADERPROC __gleIsShader;
-#define glIsShader __gleIsShader
-extern PFNGLLINKPROGRAMPROC __gleLinkProgram;
-#define glLinkProgram __gleLinkProgram
-extern PFNGLSHADERSOURCEPROC __gleShaderSource;
-#define glShaderSource __gleShaderSource
-extern PFNGLUSEPROGRAMPROC __gleUseProgram;
-#define glUseProgram __gleUseProgram
-extern PFNGLUNIFORM1FPROC __gleUniform1f;
-#define glUniform1f __gleUniform1f
-extern PFNGLUNIFORM2FPROC __gleUniform2f;
-#define glUniform2f __gleUniform2f
-extern PFNGLUNIFORM3FPROC __gleUniform3f;
-#define glUniform3f __gleUniform3f
-extern PFNGLUNIFORM4FPROC __gleUniform4f;
-#define glUniform4f __gleUniform4f
-extern PFNGLUNIFORM1IPROC __gleUniform1i;
-#define glUniform1i __gleUniform1i
-extern PFNGLUNIFORM2IPROC __gleUniform2i;
-#define glUniform2i __gleUniform2i
-extern PFNGLUNIFORM3IPROC __gleUniform3i;
-#define glUniform3i __gleUniform3i
-extern PFNGLUNIFORM4IPROC __gleUniform4i;
-#define glUniform4i __gleUniform4i
-extern PFNGLUNIFORM1FVPROC __gleUniform1fv;
-#define glUniform1fv __gleUniform1fv
-extern PFNGLUNIFORM2FVPROC __gleUniform2fv;
-#define glUniform2fv __gleUniform2fv
-extern PFNGLUNIFORM3FVPROC __gleUniform3fv;
-#define glUniform3fv __gleUniform3fv
-extern PFNGLUNIFORM4FVPROC __gleUniform4fv;
-#define glUniform4fv __gleUniform4fv
-extern PFNGLUNIFORM1IVPROC __gleUniform1iv;
-#define glUniform1iv __gleUniform1iv
-extern PFNGLUNIFORM2IVPROC __gleUniform2iv;
-#define glUniform2iv __gleUniform2iv
-extern PFNGLUNIFORM3IVPROC __gleUniform3iv;
-#define glUniform3iv __gleUniform3iv
-extern PFNGLUNIFORM4IVPROC __gleUniform4iv;
-#define glUniform4iv __gleUniform4iv
-extern PFNGLUNIFORMMATRIX2FVPROC __gleUniformMatrix2fv;
-#define glUniformMatrix2fv __gleUniformMatrix2fv
-extern PFNGLUNIFORMMATRIX3FVPROC __gleUniformMatrix3fv;
-#define glUniformMatrix3fv __gleUniformMatrix3fv
-extern PFNGLUNIFORMMATRIX4FVPROC __gleUniformMatrix4fv;
-#define glUniformMatrix4fv __gleUniformMatrix4fv
-extern PFNGLVALIDATEPROGRAMPROC __gleValidateProgram;
-#define glValidateProgram __gleValidateProgram
-extern PFNGLVERTEXATTRIBPOINTERPROC __gleVertexAttribPointer;
-#define glVertexAttribPointer __gleVertexAttribPointer
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDEQUATIONSEPARATEPROC)(GLenum , GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLDRAWBUFFERSPROC)(GLsizei , const GLenum *);
+typedef void (CODEGEN_FUNCPTR * PFNGLSTENCILOPSEPARATEPROC)(GLenum , GLenum , GLenum , GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLSTENCILFUNCSEPARATEPROC)(GLenum , GLenum , GLint , GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLSTENCILMASKSEPARATEPROC)(GLenum , GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLATTACHSHADERPROC)(GLuint , GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLBINDATTRIBLOCATIONPROC)(GLuint , GLuint , const GLchar *);
+typedef void (CODEGEN_FUNCPTR * PFNGLCOMPILESHADERPROC)(GLuint );
+typedef GLuint (CODEGEN_FUNCPTR * PFNGLCREATEPROGRAMPROC)();
+typedef GLuint (CODEGEN_FUNCPTR * PFNGLCREATESHADERPROC)(GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLDELETEPROGRAMPROC)(GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLDELETESHADERPROC)(GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLDETACHSHADERPROC)(GLuint , GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLDISABLEVERTEXATTRIBARRAYPROC)(GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLENABLEVERTEXATTRIBARRAYPROC)(GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLGETACTIVEATTRIBPROC)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETACTIVEUNIFORMPROC)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETATTACHEDSHADERSPROC)(GLuint , GLsizei , GLsizei *, GLuint *);
+typedef GLint (CODEGEN_FUNCPTR * PFNGLGETATTRIBLOCATIONPROC)(GLuint , const GLchar *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETPROGRAMIVPROC)(GLuint , GLenum , GLint *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETPROGRAMINFOLOGPROC)(GLuint , GLsizei , GLsizei *, GLchar *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETSHADERIVPROC)(GLuint , GLenum , GLint *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETSHADERINFOLOGPROC)(GLuint , GLsizei , GLsizei *, GLchar *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETSHADERSOURCEPROC)(GLuint , GLsizei , GLsizei *, GLchar *);
+typedef GLint (CODEGEN_FUNCPTR * PFNGLGETUNIFORMLOCATIONPROC)(GLuint , const GLchar *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETUNIFORMFVPROC)(GLuint , GLint , GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETUNIFORMIVPROC)(GLuint , GLint , GLint *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETVERTEXATTRIBDVPROC)(GLuint , GLenum , GLdouble *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETVERTEXATTRIBFVPROC)(GLuint , GLenum , GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETVERTEXATTRIBIVPROC)(GLuint , GLenum , GLint *);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETVERTEXATTRIBPOINTERVPROC)(GLuint , GLenum , GLvoid* *);
+typedef GLboolean (CODEGEN_FUNCPTR * PFNGLISPROGRAMPROC)(GLuint );
+typedef GLboolean (CODEGEN_FUNCPTR * PFNGLISSHADERPROC)(GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLLINKPROGRAMPROC)(GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLSHADERSOURCEPROC)(GLuint , GLsizei , const GLchar* const *, const GLint *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUSEPROGRAMPROC)(GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM1FPROC)(GLint , GLfloat );
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM2FPROC)(GLint , GLfloat , GLfloat );
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM3FPROC)(GLint , GLfloat , GLfloat , GLfloat );
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM4FPROC)(GLint , GLfloat , GLfloat , GLfloat , GLfloat );
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM1IPROC)(GLint , GLint );
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM2IPROC)(GLint , GLint , GLint );
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM3IPROC)(GLint , GLint , GLint , GLint );
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM4IPROC)(GLint , GLint , GLint , GLint , GLint );
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM1FVPROC)(GLint , GLsizei , const GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM2FVPROC)(GLint , GLsizei , const GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM3FVPROC)(GLint , GLsizei , const GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM4FVPROC)(GLint , GLsizei , const GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM1IVPROC)(GLint , GLsizei , const GLint *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM2IVPROC)(GLint , GLsizei , const GLint *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM3IVPROC)(GLint , GLsizei , const GLint *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORM4IVPROC)(GLint , GLsizei , const GLint *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORMMATRIX2FVPROC)(GLint , GLsizei , GLboolean , const GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORMMATRIX3FVPROC)(GLint , GLsizei , GLboolean , const GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLUNIFORMMATRIX4FVPROC)(GLint , GLsizei , GLboolean , const GLfloat *);
+typedef void (CODEGEN_FUNCPTR * PFNGLVALIDATEPROGRAMPROC)(GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLVERTEXATTRIBPOINTERPROC)(GLuint , GLint , GLenum , GLboolean , GLsizei , const GLvoid *);
 
+extern PFNGLBLENDEQUATIONSEPARATEPROC _funcptr_glBlendEquationSeparate;
+#define glBlendEquationSeparate _funcptr_glBlendEquationSeparate
+extern PFNGLDRAWBUFFERSPROC _funcptr_glDrawBuffers;
+#define glDrawBuffers _funcptr_glDrawBuffers
+extern PFNGLSTENCILOPSEPARATEPROC _funcptr_glStencilOpSeparate;
+#define glStencilOpSeparate _funcptr_glStencilOpSeparate
+extern PFNGLSTENCILFUNCSEPARATEPROC _funcptr_glStencilFuncSeparate;
+#define glStencilFuncSeparate _funcptr_glStencilFuncSeparate
+extern PFNGLSTENCILMASKSEPARATEPROC _funcptr_glStencilMaskSeparate;
+#define glStencilMaskSeparate _funcptr_glStencilMaskSeparate
+extern PFNGLATTACHSHADERPROC _funcptr_glAttachShader;
+#define glAttachShader _funcptr_glAttachShader
+extern PFNGLBINDATTRIBLOCATIONPROC _funcptr_glBindAttribLocation;
+#define glBindAttribLocation _funcptr_glBindAttribLocation
+extern PFNGLCOMPILESHADERPROC _funcptr_glCompileShader;
+#define glCompileShader _funcptr_glCompileShader
+extern PFNGLCREATEPROGRAMPROC _funcptr_glCreateProgram;
+#define glCreateProgram _funcptr_glCreateProgram
+extern PFNGLCREATESHADERPROC _funcptr_glCreateShader;
+#define glCreateShader _funcptr_glCreateShader
+extern PFNGLDELETEPROGRAMPROC _funcptr_glDeleteProgram;
+#define glDeleteProgram _funcptr_glDeleteProgram
+extern PFNGLDELETESHADERPROC _funcptr_glDeleteShader;
+#define glDeleteShader _funcptr_glDeleteShader
+extern PFNGLDETACHSHADERPROC _funcptr_glDetachShader;
+#define glDetachShader _funcptr_glDetachShader
+extern PFNGLDISABLEVERTEXATTRIBARRAYPROC _funcptr_glDisableVertexAttribArray;
+#define glDisableVertexAttribArray _funcptr_glDisableVertexAttribArray
+extern PFNGLENABLEVERTEXATTRIBARRAYPROC _funcptr_glEnableVertexAttribArray;
+#define glEnableVertexAttribArray _funcptr_glEnableVertexAttribArray
+extern PFNGLGETACTIVEATTRIBPROC _funcptr_glGetActiveAttrib;
+#define glGetActiveAttrib _funcptr_glGetActiveAttrib
+extern PFNGLGETACTIVEUNIFORMPROC _funcptr_glGetActiveUniform;
+#define glGetActiveUniform _funcptr_glGetActiveUniform
+extern PFNGLGETATTACHEDSHADERSPROC _funcptr_glGetAttachedShaders;
+#define glGetAttachedShaders _funcptr_glGetAttachedShaders
+extern PFNGLGETATTRIBLOCATIONPROC _funcptr_glGetAttribLocation;
+#define glGetAttribLocation _funcptr_glGetAttribLocation
+extern PFNGLGETPROGRAMIVPROC _funcptr_glGetProgramiv;
+#define glGetProgramiv _funcptr_glGetProgramiv
+extern PFNGLGETPROGRAMINFOLOGPROC _funcptr_glGetProgramInfoLog;
+#define glGetProgramInfoLog _funcptr_glGetProgramInfoLog
+extern PFNGLGETSHADERIVPROC _funcptr_glGetShaderiv;
+#define glGetShaderiv _funcptr_glGetShaderiv
+extern PFNGLGETSHADERINFOLOGPROC _funcptr_glGetShaderInfoLog;
+#define glGetShaderInfoLog _funcptr_glGetShaderInfoLog
+extern PFNGLGETSHADERSOURCEPROC _funcptr_glGetShaderSource;
+#define glGetShaderSource _funcptr_glGetShaderSource
+extern PFNGLGETUNIFORMLOCATIONPROC _funcptr_glGetUniformLocation;
+#define glGetUniformLocation _funcptr_glGetUniformLocation
+extern PFNGLGETUNIFORMFVPROC _funcptr_glGetUniformfv;
+#define glGetUniformfv _funcptr_glGetUniformfv
+extern PFNGLGETUNIFORMIVPROC _funcptr_glGetUniformiv;
+#define glGetUniformiv _funcptr_glGetUniformiv
+extern PFNGLGETVERTEXATTRIBDVPROC _funcptr_glGetVertexAttribdv;
+#define glGetVertexAttribdv _funcptr_glGetVertexAttribdv
+extern PFNGLGETVERTEXATTRIBFVPROC _funcptr_glGetVertexAttribfv;
+#define glGetVertexAttribfv _funcptr_glGetVertexAttribfv
+extern PFNGLGETVERTEXATTRIBIVPROC _funcptr_glGetVertexAttribiv;
+#define glGetVertexAttribiv _funcptr_glGetVertexAttribiv
+extern PFNGLGETVERTEXATTRIBPOINTERVPROC _funcptr_glGetVertexAttribPointerv;
+#define glGetVertexAttribPointerv _funcptr_glGetVertexAttribPointerv
+extern PFNGLISPROGRAMPROC _funcptr_glIsProgram;
+#define glIsProgram _funcptr_glIsProgram
+extern PFNGLISSHADERPROC _funcptr_glIsShader;
+#define glIsShader _funcptr_glIsShader
+extern PFNGLLINKPROGRAMPROC _funcptr_glLinkProgram;
+#define glLinkProgram _funcptr_glLinkProgram
+extern PFNGLSHADERSOURCEPROC _funcptr_glShaderSource;
+#define glShaderSource _funcptr_glShaderSource
+extern PFNGLUSEPROGRAMPROC _funcptr_glUseProgram;
+#define glUseProgram _funcptr_glUseProgram
+extern PFNGLUNIFORM1FPROC _funcptr_glUniform1f;
+#define glUniform1f _funcptr_glUniform1f
+extern PFNGLUNIFORM2FPROC _funcptr_glUniform2f;
+#define glUniform2f _funcptr_glUniform2f
+extern PFNGLUNIFORM3FPROC _funcptr_glUniform3f;
+#define glUniform3f _funcptr_glUniform3f
+extern PFNGLUNIFORM4FPROC _funcptr_glUniform4f;
+#define glUniform4f _funcptr_glUniform4f
+extern PFNGLUNIFORM1IPROC _funcptr_glUniform1i;
+#define glUniform1i _funcptr_glUniform1i
+extern PFNGLUNIFORM2IPROC _funcptr_glUniform2i;
+#define glUniform2i _funcptr_glUniform2i
+extern PFNGLUNIFORM3IPROC _funcptr_glUniform3i;
+#define glUniform3i _funcptr_glUniform3i
+extern PFNGLUNIFORM4IPROC _funcptr_glUniform4i;
+#define glUniform4i _funcptr_glUniform4i
+extern PFNGLUNIFORM1FVPROC _funcptr_glUniform1fv;
+#define glUniform1fv _funcptr_glUniform1fv
+extern PFNGLUNIFORM2FVPROC _funcptr_glUniform2fv;
+#define glUniform2fv _funcptr_glUniform2fv
+extern PFNGLUNIFORM3FVPROC _funcptr_glUniform3fv;
+#define glUniform3fv _funcptr_glUniform3fv
+extern PFNGLUNIFORM4FVPROC _funcptr_glUniform4fv;
+#define glUniform4fv _funcptr_glUniform4fv
+extern PFNGLUNIFORM1IVPROC _funcptr_glUniform1iv;
+#define glUniform1iv _funcptr_glUniform1iv
+extern PFNGLUNIFORM2IVPROC _funcptr_glUniform2iv;
+#define glUniform2iv _funcptr_glUniform2iv
+extern PFNGLUNIFORM3IVPROC _funcptr_glUniform3iv;
+#define glUniform3iv _funcptr_glUniform3iv
+extern PFNGLUNIFORM4IVPROC _funcptr_glUniform4iv;
+#define glUniform4iv _funcptr_glUniform4iv
+extern PFNGLUNIFORMMATRIX2FVPROC _funcptr_glUniformMatrix2fv;
+#define glUniformMatrix2fv _funcptr_glUniformMatrix2fv
+extern PFNGLUNIFORMMATRIX3FVPROC _funcptr_glUniformMatrix3fv;
+#define glUniformMatrix3fv _funcptr_glUniformMatrix3fv
+extern PFNGLUNIFORMMATRIX4FVPROC _funcptr_glUniformMatrix4fv;
+#define glUniformMatrix4fv _funcptr_glUniformMatrix4fv
+extern PFNGLVALIDATEPROGRAMPROC _funcptr_glValidateProgram;
+#define glValidateProgram _funcptr_glValidateProgram
+extern PFNGLVERTEXATTRIBPOINTERPROC _funcptr_glVertexAttribPointer;
+#define glVertexAttribPointer _funcptr_glVertexAttribPointer
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
-
-
-#endif //_INT_GL_2_0_H
-
+#endif /*__cplusplus*/
+#endif /*OPENGL_GEN_CORE_2_0_H*/

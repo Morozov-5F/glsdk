@@ -1,29 +1,14 @@
-#ifndef _INT_GL_4_3_HPP
-#define _INT_GL_4_3_HPP
+#ifndef OPENGL_GEN_CORE_4_3_HPP
+#define OPENGL_GEN_CORE_4_3_HPP
 
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif //__cplusplus
-
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
-
-
-
+#include "_int_load_test.hpp"
 namespace gl
 {
-	enum _int_gl_4_3
+	enum
 	{
-		GL_NUM_SHADING_LANGUAGE_VERSIONS = 0x82E9,
-		GL_VERTEX_ATTRIB_ARRAY_LONG      = 0x874E,
+		NUM_SHADING_LANGUAGE_VERSIONS    = 0x82E9,
+		VERTEX_ATTRIB_ARRAY_LONG         = 0x874E,
 	};
-
-
+	
 }
-
-#endif //_INT_GL_4_3_HPP
-
+#endif /*OPENGL_GEN_CORE_4_3_HPP*/

@@ -1,8 +1,9 @@
-#ifndef GL_4_3_H
-#define GL_4_3_H
+#ifndef OPENGL_GEN_4_3_H
+#define OPENGL_GEN_4_3_H
 
 #include "_int_gl_type.h"
 #include "_int_gl_exts.h"
+
 #include "_int_gl_1_1.h"
 #include "_int_gl_1_2.h"
 #include "_int_gl_1_3.h"
@@ -16,6 +17,4 @@
 #include "_int_gl_3_3.h"
 #include "_int_gl_4_0.h"
 #include "_int_gl_4_3.h"
-
-#endif //GL_4_3_H
-
+#endif /*OPENGL_GEN_4_3_H*/

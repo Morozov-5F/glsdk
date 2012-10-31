@@ -1,13 +1,9 @@
-#ifndef _INT_GL_1_2_H
-#define _INT_GL_1_2_H
-
-
+#ifndef OPENGL_GEN_CORE_1_2_H
+#define OPENGL_GEN_CORE_1_2_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
-
-
+#endif /*__cplusplus*/
 #define GL_UNSIGNED_BYTE_3_3_2 0x8032
 #define GL_UNSIGNED_SHORT_4_4_4_4 0x8033
 #define GL_UNSIGNED_SHORT_5_5_5_1 0x8034
@@ -41,28 +37,25 @@ extern "C" {
 #define GL_SMOOTH_LINE_WIDTH_RANGE 0x0B22
 #define GL_SMOOTH_LINE_WIDTH_GRANULARITY 0x0B23
 #define GL_ALIASED_LINE_WIDTH_RANGE 0x846E
-typedef void (GLE_FUNCPTR * PFNGLBLENDCOLORPROC)(GLfloat , GLfloat , GLfloat , GLfloat );
-typedef void (GLE_FUNCPTR * PFNGLBLENDEQUATIONPROC)(GLenum );
-typedef void (GLE_FUNCPTR * PFNGLDRAWRANGEELEMENTSPROC)(GLenum , GLuint , GLuint , GLsizei , GLenum , const GLvoid *);
-typedef void (GLE_FUNCPTR * PFNGLTEXSUBIMAGE3DPROC)(GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei , GLenum , GLenum , const GLvoid *);
-typedef void (GLE_FUNCPTR * PFNGLCOPYTEXSUBIMAGE3DPROC)(GLenum , GLint , GLint , GLint , GLint , GLint , GLint , GLsizei , GLsizei );
 
-extern PFNGLBLENDCOLORPROC __gleBlendColor;
-#define glBlendColor __gleBlendColor
-extern PFNGLBLENDEQUATIONPROC __gleBlendEquation;
-#define glBlendEquation __gleBlendEquation
-extern PFNGLDRAWRANGEELEMENTSPROC __gleDrawRangeElements;
-#define glDrawRangeElements __gleDrawRangeElements
-extern PFNGLTEXSUBIMAGE3DPROC __gleTexSubImage3D;
-#define glTexSubImage3D __gleTexSubImage3D
-extern PFNGLCOPYTEXSUBIMAGE3DPROC __gleCopyTexSubImage3D;
-#define glCopyTexSubImage3D __gleCopyTexSubImage3D
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDCOLORPROC)(GLfloat , GLfloat , GLfloat , GLfloat );
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDEQUATIONPROC)(GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLDRAWRANGEELEMENTSPROC)(GLenum , GLuint , GLuint , GLsizei , GLenum , const GLvoid *);
+typedef void (CODEGEN_FUNCPTR * PFNGLTEXSUBIMAGE3DPROC)(GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei , GLenum , GLenum , const GLvoid *);
+typedef void (CODEGEN_FUNCPTR * PFNGLCOPYTEXSUBIMAGE3DPROC)(GLenum , GLint , GLint , GLint , GLint , GLint , GLint , GLsizei , GLsizei );
 
+extern PFNGLBLENDCOLORPROC _funcptr_glBlendColor;
+#define glBlendColor _funcptr_glBlendColor
+extern PFNGLBLENDEQUATIONPROC _funcptr_glBlendEquation;
+#define glBlendEquation _funcptr_glBlendEquation
+extern PFNGLDRAWRANGEELEMENTSPROC _funcptr_glDrawRangeElements;
+#define glDrawRangeElements _funcptr_glDrawRangeElements
+extern PFNGLTEXSUBIMAGE3DPROC _funcptr_glTexSubImage3D;
+#define glTexSubImage3D _funcptr_glTexSubImage3D
+extern PFNGLCOPYTEXSUBIMAGE3DPROC _funcptr_glCopyTexSubImage3D;
+#define glCopyTexSubImage3D _funcptr_glCopyTexSubImage3D
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
-
-
-#endif //_INT_GL_1_2_H
-
+#endif /*__cplusplus*/
+#endif /*OPENGL_GEN_CORE_1_2_H*/

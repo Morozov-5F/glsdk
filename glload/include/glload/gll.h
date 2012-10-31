@@ -1,30 +1,31 @@
 
-#ifndef GLSDL_LOAD_H
-#define GLSDL_LOAD_H
+#ifndef GLSDK_LOAD_H
+#define GLSDK_LOAD_H
 
 /**
 \file
 \brief The C header to include if you want to initialize the OpenGL functions.
 
+\deprecated
 **/
 
-///\addtogroup module_glload_cinter
-///@{
+/**\addtogroup module_glload_cinter**/
+/**@{**/
 
 /**
 \brief The loading status returned by the GL loading functions.
 
+\deprecated
 **/
 enum LoadSucceeded
 {
-	LS_LOAD_FUNCTIONS_ALL,		///<All function pointers defined for each extension have been loaded.
-	LS_LOAD_FUNCTIONS_SOME,		///<Only some of the function pointers defined for each extension have been loaded.
-	LS_LOAD_FAILED,				///<Function loading failed. Things were reset to nothing being loaded.
+	LS_LOAD_FAILED,				/**<Function loading failed. Things were reset to nothing being loaded.**/
+	LS_LOAD_SUCCEEDED,			/**<All functions for the current version were loaded.**/
 };
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif /*__cplusplus*/
 
 /**
 \brief Loads all of the OpenGL function pointers for the current version and extensions.
@@ -35,6 +36,7 @@ is defined for a 3.1 context, it will load the compatibility profile; otherwise,
 For 3.0 and below, it loads everything available.
 
 \return Of the type ::LoadSucceeded.
+\deprecated
 **/
 int LoadFunctions();
 
@@ -43,35 +45,42 @@ int LoadFunctions();
 \brief Loads all of the function pointers associated with WGL.
 
 \return Of the type ::LoadSucceeded.
+\deprecated
 **/
 int LoadWinFunctions(void *hdc);
-#endif //WIN32
+#endif /*WIN32*/
 #ifdef GLX_H
 /**
 \brief Loads all of the function pointers associated with GLX.
 
 \return Of the type ::LoadSucceeded.
+\deprecated
 **/
 int LoadGLXFunctions(void *display, int screen);
 #endif
 
 /**
 This function retrieves the major GL version number of the OpenGL context. Only works after LoadFunctions has been called.
+\deprecated
 **/
 int GetMajorVersion();
 
 /**
 This function retrieves the minor GL version number of the OpenGL context. Only works after LoadFunctions has been called.
+\deprecated
 **/
 int GetMinorVersion();
 
-///Returns non-zero if the current GL version is greater than or equal to the given version.
+/**
+\brief Returns non-zero if the current GL version is greater than or equal to the given version.
+\deprecated
+**/
 int IsVersionGEQ(int iMajorVersion, int iMinorVersion);
-///@}
+/**@}**/
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif /*__cplusplus*/
 
-#endif //GLSDL_LOAD_H
+#endif /*GLSDK_LOAD_H*/
 

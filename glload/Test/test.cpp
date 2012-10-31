@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <stdio.h>
 #include <glload/gl_3_3.h>
-#include <glload/gll.hpp>
+#include <glload/gll.h>
 #include <GL/freeglut.h>
 
 GLuint positionBufferObject;
@@ -211,7 +211,7 @@ int main(int argc, char** argv)
 
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 
-	glload::LoadFunctions();
+	LoadFunctions();
 
 	if(glext_ARB_debug_output)
 	{
