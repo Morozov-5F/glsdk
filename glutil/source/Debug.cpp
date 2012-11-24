@@ -102,5 +102,113 @@ namespace glutil
 
 		return true;
 	}
+
+	std::string ErrorCodeToEnumString( GLenum errorCode )
+	{
+		switch(errorCode)
+		{
+		case gl::INVALID_ENUM:
+			return "GL_INVALID_ENUM";
+		case gl::INVALID_VALUE:
+			return "GL_INVALID_VALUE";
+		case gl::INVALID_OPERATION:
+			return "GL_INVALID_OPERATION";
+		case gl::OUT_OF_MEMORY:
+			return "GL_OUT_OF_MEMORY";
+		case gl::INVALID_FRAMEBUFFER_OPERATION:
+			return "GL_INVALID_FRAMEBUFFER_OPERATION";
+		case gl::STACK_OVERFLOW:
+			return "GL_STACK_OVERFLOW";
+		case gl::STACK_UNDERFLOW:
+			return "GL_STACK_UNDERFLOW";
+		case gl::TABLE_TOO_LARGE:
+			return "GL_TABLE_TOO_LARGE";
+		}
+
+		return std::string();
+	}
+
+	std::string ErrorCodeToDescription( GLenum errorCode )
+	{
+		switch(errorCode)
+		{
+		case gl::INVALID_ENUM:
+			return "An enumerator passed to a function is not an acceptable enumerator.";
+		case gl::INVALID_VALUE:
+			return "One of the integer or float values passed to a function is outside the accepted range.";
+		case gl::INVALID_OPERATION:
+			return "A combination of parameters to a function or the interaction with context state is not acceptable.";
+		case gl::OUT_OF_MEMORY:
+			return "OpenGL cannot allocate that much memory";
+		case gl::INVALID_FRAMEBUFFER_OPERATION:
+			return "The current draw or read framebuffer is not complete.";
+		case gl::STACK_OVERFLOW:
+			return "An operation attempted to push onto a stack that exceeded the stack's size.";
+		case gl::STACK_UNDERFLOW:
+			return "An operation attempted to pop from an empty stack.";
+		case gl::TABLE_TOO_LARGE:
+			return "The color lookup or histogram table is too large.";
+		}
+
+		return std::string();
+	}
+
+	std::string FramebufferToEnumString( GLenum framebufferStatus )
+	{
+		switch(framebufferStatus)
+		{
+		case gl::FRAMEBUFFER_UNDEFINED:
+			return "GL_FRAMEBUFFER_UNDEFINED";
+		case gl::FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+			return "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT";
+		case gl::FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+			return "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT";
+		case gl::FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+			return "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER";
+		case gl::FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+			return "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER";
+		case gl::FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+			return "GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE";
+		case gl::FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+			return "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS";
+		case gl::FRAMEBUFFER_UNSUPPORTED:
+			return "GL_FRAMEBUFFER_UNSUPPORTED";
+		case gl::FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+			return "GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT";
+		case gl::FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+			return "GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT";
+		}
+
+		return std::string();
+	}
+
+	std::string FramebufferToDescription( GLenum framebufferStatus )
+	{
+		switch(framebufferStatus)
+		{
+		case gl::FRAMEBUFFER_UNDEFINED:
+			return "The framebuffer is the default framebuffer, and the default framebuffer does not exist.";
+		case gl::FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+			return "One of the framebuffer's attachments is incomplete.";
+		case gl::FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+			return "No image is attached, and no default width/height parameters are set.";
+		case gl::FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+			return "One of the images specified in the draw buffers array does not have an image attached.";
+		case gl::FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+			return "One of the images specified in the read buffers array does not have an image attached.";
+		case gl::FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+			return "The attached images have an inconsistent number of samples.";
+		case gl::FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+			return "The attached images have an inconsistent layering attachment. Some are layered and some are not.";
+		case gl::FRAMEBUFFER_UNSUPPORTED:
+			return "The combination of image formats is not supported in this implementation.";
+		case gl::FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+			return "The attached images have inconsistent widths/heights.";
+		case gl::FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+			return "The color attachments have inconsistent internal formats.";
+		}
+
+		return std::string();
+	}
 }
 

@@ -2,9 +2,12 @@
 #ifndef DEBUG_UTIL_H
 #define DEBUG_UTIL_H
 
+#include <string>
+#include <vector>
+
 /**
 \file
-\brief Includes a function for attaching to ARB_debug_output and printing error messages automatically.
+\brief Includes a function for attaching to ARB_debug_output and printing error messages automatically. This header must be included after an OpenGL header.
 **/
 
 namespace glutil
@@ -31,6 +34,45 @@ namespace glutil
 	**/
 	bool RegisterDebugOutput(OutputLocation eLoc);
 
+	/**
+	\brief Generates the enumerator string for an OpenGL error code.
+
+	\returns The enumerator string for an error code. If \a errorCode is not an actual,
+	valid OpenGL error code, it will return an empty string.
+	**/
+	std::string ErrorCodeToEnumString(GLenum errorCode);
+
+	/**
+	\brief Generates a string description for an OpenGL error code.
+
+	This is a relatively short (sentence or two) length description of the meaning of an OpenGL error code.
+
+	\returns A short (sentence or two) description of an OpenGL error code. If \a errorCode is not an
+	actual, valid OpenGL error code, it will return an empty string.
+	**/
+	std::string ErrorCodeToDescription(GLenum errorCode);
+
+	/**
+	\brief Generates the enumerator string for an OpenGL framebuffer status code.
+
+	This will generate a string representing the OpenGL enumerator for the status returned
+	by <tt>glCheckFramebufferStatus</tt>.
+
+	\returns The enumerator string for the framebuffer status. If \a framebufferStatus is not
+	an actual, valid framebuffer status code, it will return an empty string.
+	**/
+	std::string FramebufferToEnumString(GLenum framebufferStatus);
+
+	/**
+	\brief Generates a description for an OpenGL framebuffer status code.
+	
+	This is a relatively short (sentence or two) length description of the meaning of an
+	OpenGL framebuffer status code.
+
+	\returns A short (sentence or two) description of a framebuffer status code. 
+	If \a errorCode is not an actual, valid framebuffer status code, it will return an empty string.
+	**/
+	std::string FramebufferToDescription(GLenum framebufferStatus);
 	///@}
 }
 

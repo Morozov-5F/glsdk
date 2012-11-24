@@ -280,6 +280,8 @@ For Linux, you will need to link to some of the following libraries. All of them
 
 Changes from 0.4.4:
 \li Modified how GL Load works, using a code generator from an external project.
+\li @ref module_glutil_debug "GL Util's debug system" now has functions to get string names and descriptions for OpenGL errors and framebuffer status codes.
+\li Added GL Load Gen to the distribution.
 
 Changes from 0.4.3:
 \li GL Load includes OpenGL 4.3 extensions and core functions.

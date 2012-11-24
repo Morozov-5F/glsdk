@@ -13,6 +13,7 @@
 #include "MousePoles.h"
 #include "MatrixStack.h"
 #include "Font.h"
+#include "Error.h"
 
 
 /**
