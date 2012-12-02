@@ -34,6 +34,14 @@ local externals =
 		"",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
 		[[https://downloads.sourceforge.net/project/ogl-math/glm-0.9.4.0/glm-0.9.4.0.7z?r=&ts=1354407389&use_mirror=iweb]]
 	},
+
+	{
+		"glLoadGen 1.0.3",	--The name of the component.
+		"glloadgen",		--The output directory to copy the component's data.
+		"glloadgen.7z",		--The filename that will be created in the download director.
+		"glLoadGen_1_0_3",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
+		[[https://sourceforge.net/projects/glsdk/files/glLoadGen/glLoadGen_1_0_3.7z/download?use_mirror=superb-dca2]]
+	},
 }
 
 local zipFullName = FindFileInPath("7z.exe");

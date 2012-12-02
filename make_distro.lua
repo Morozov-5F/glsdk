@@ -99,6 +99,7 @@ local toDelete =
 	"glimg/Test", "glload/Test",
 	"glutil/Test", "glmesh/Test",
 	"glm/doc/build",
+	"glloadgen/docs", "glloadgen/test",
 	"caps",
 }
 

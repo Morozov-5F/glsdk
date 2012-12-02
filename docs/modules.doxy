@@ -33,6 +33,18 @@ GLFW is distributed under the <a href="http://www.opensource.org/licenses/Zlib">
 **/
 
 /**
+\defgroup module_glloadgen OpenGL Loader Generator
+
+The \ref module_glload "GL Load" module is a very useful tool for loading OpenGL functions. However, it loads all of them. While it does have nice headers that provide only the functions in a specific version, even those headers have clutter because it still provides all of the extensions. Even if you don't use them.
+
+The <a href="https://bitbucket.org/alfonse/glloadgen/wiki/Home">OpenGL Loader Generator</a> is a tool to avoid this. You specify on the command-line (or in files) exactly which extensions you want and what version you want to use. And the files generated will only provide enumerators and functions for those specific extensions and versions.
+
+It is a Lua-based tool, so you will need Lua installed (it is a fast install, as the Lua runtime is very tiny). The <a href="https://bitbucket.org/alfonse/glloadgen/wiki/Command_Line_Options">manual for it</a> is quite complete.
+
+The code generation system is so flexible that it is now used to generate GL Load's headers and source itself.
+**/
+
+/**
 \defgroup module_troubleshooting Troubleshooting
 
 @section trouble_headers Header Inclusion Order
