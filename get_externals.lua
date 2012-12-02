@@ -24,15 +24,15 @@ local externals =
 		"glfw",			--The output directory to copy the component's data.
 		"glfw.zip",		--The filename that will be created in the download director.
 		"glfw-2.7.2",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
-		"https://downloads.sourceforge.net/project/glfw/glfw/2.7.2/glfw-2.7.2.zip?r=&ts=1319754828&use_mirror=surfnet"
+		"https://downloads.sourceforge.net/project/glfw/glfw/2.7.2/glfw-2.7.2.zip?r=&ts=1354407512&use_mirror=iweb"
 	},
 	
 	{
-		"GLM 0.9.2.7",	--The name of the component.
+		"GLM 0.9.4.0",	--The name of the component.
 		"glm",			--The output directory to copy the component's data.
 		"glm.7z",		--The filename that will be created in the download director.
-		"glm-0.9.2.7",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
-		"http://downloads.sourceforge.net/project/ogl-math/glm-0.9.2.7/glm-0.9.2.7.zip?r=http%3A%2F%2Fglm.g-truc.net%2Fdownload.html&ts=1319664316&use_mirror=hivelocity"
+		"",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
+		[[https://downloads.sourceforge.net/project/ogl-math/glm-0.9.4.0/glm-0.9.4.0.7z?r=&ts=1354407389&use_mirror=iweb]]
 	},
 }
 
@@ -101,6 +101,9 @@ for i, ext in ipairs(externals) do
 
 	local pathOut = ufs.path(".\\" .. ext[2]);
 	ufs.create_directory(pathOut);
+	if(not ufs.exists(pathSrc)) then
+		error("Unknown source directory: " .. tostring(pathSrc))
+	end
 	RecursiveCopy(pathSrc, pathOut);
 end
 
