@@ -280,7 +280,9 @@ For Linux, you will need to link to some of the following libraries. All of them
 \page pg_changelist Changelist
 
 Changes from 0.4.4:
-\li Modified how GL Load works, using a code generator from an external project.
+\li Now includes glLoadGen.
+\li Modified how GL Load works, using glLoadGen's code generation system.
+\li C++ GL Load now doesn't need to prefix its enums with GL_.
 \li @ref module_glutil_debug "GL Util's debug system" now has functions to get string names and descriptions for OpenGL errors and framebuffer status codes.
 \li Added GL Load Gen to the distribution.
 
