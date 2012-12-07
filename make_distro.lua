@@ -91,7 +91,7 @@ local toDelete =
 {
 	--files
 	"make_distro.lua", "get_externals.lua", ".hgignore", ".hgtags",
-	"_FindFileInPath.lua", "make_copyright.lua",
+	"_FindFileInPath.lua", "make_copyright.lua", "extract_boost.lua",
 	".hg_archival.txt",
 	"glimg/premake4.lua", "glload/premake4.lua",
 	"glutil/premake4.lua", "glmesh/premake4.lua",

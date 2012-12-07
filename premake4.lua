@@ -1,6 +1,6 @@
 solution "glsdk"
 	configurations {"Debug", "Release"}
-	defines {"_CRT_SECURE_NO_WARNINGS", "_SCL_SECURE_NO_WARNINGS"}
+	defines(dofile("common_defines.lua"))
 
 
 local libPremakes = 

@@ -1,8 +1,7 @@
 
 solution "glutil"
 configurations {"Debug", "Release"}
-defines {"_CRT_SECURE_NO_WARNINGS"}
-defines {"_SCL_SECURE_NO_WARNINGS"}
+defines(dofile("../common_defiles.lua"))
 
 dofile("glutil.lua");
 

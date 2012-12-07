@@ -66,6 +66,11 @@ local LinkFuncs =
 		configuration "Release"
 			links {"glfw"}
 	end,
+	boost = function()
+		includedirs "boost"
+		
+		defiles {"BOOST_ALL_NO_LIB"}
+	end,
 }
 
 local function ProcTable(tbl)

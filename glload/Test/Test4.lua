@@ -33,6 +33,7 @@ project "Test"
 project "TestPP"
 	kind "WindowedApp"
 	language "c++"
+	includedirs { "../../boost" }
 	includedirs { "../include" }
 	links {"glload"}
 
