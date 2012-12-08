@@ -69,7 +69,7 @@ local LinkFuncs =
 	boost = function()
 		includedirs "boost"
 		
-		defiles {"BOOST_ALL_NO_LIB"}
+		defines {"BOOST_ALL_NO_LIB"}
 	end,
 }
 
