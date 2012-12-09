@@ -1,6 +1,6 @@
 
-#ifndef STREAM_BUFFER_MESH_H
-#define STREAM_BUFFER_MESH_H
+#ifndef GLSDK_MESH_STREAM_BUFFER_H
+#define GLSDK_MESH_STREAM_BUFFER_H
 
 /**
 \file
@@ -219,4 +219,4 @@ namespace glmesh
 	///@}
 }
 
-#endif //STREAM_BUFFER_MESH_H
+#endif //GLSDK_MESH_STREAM_BUFFER_H

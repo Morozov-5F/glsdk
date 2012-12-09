@@ -1,6 +1,6 @@
 
-#ifndef VERTEX_FORMAT_MESH_H
-#define VERTEX_FORMAT_MESH_H
+#ifndef GLSDK_MESH_VERTEX_FORMAT_H
+#define GLSDK_MESH_VERTEX_FORMAT_H
 
 /**
 \file
@@ -52,6 +52,7 @@ namespace glmesh
 		}
 	};
 
+	///Thrown if VertexFormat is given two AttribDesc objects that use the same attribute index.
 	class AttributeIndexMultipleRefException : public VertexFormatException
 	{
 	public:
@@ -158,7 +159,8 @@ namespace glmesh
 	other. The attributes always have 4 byte alignment, as there are some hardware that
 	really doesn't like misaligned data. Double-precision attributes have 8-byte alignment.
 
-	The byte offset of each attribute from the beginning of the vertex can be queried.
+	The byte offset of each attribute from the beginning of the vertex can be queried. This is
+	useful if all of the attributes come from the same buffer object's source.
 
 	Note that the order of the attribute sequence is the same as the order of the AttributeList.
 	This means that the order is \em not the order of the attribute indices. This is the order
@@ -184,9 +186,9 @@ namespace glmesh
 		/**
 		\brief Creates a VertexFormat from a sequence of AttribDesc objects.
 
-		The order fo the sequence of attributes will match the order of \a attribs.
+		The order of the sequence of attributes will match the order of \a attribs.
 		
-		\throw ddd If any of the \a attribs refer to the same attribute index as any of the others.
+		\throw AttributeIndexMultipleRefException If any of the \a attribs refer to the same attribute index as any of the others.
 		**/
 		VertexFormat(const AttributeList &attribs);
 
@@ -205,16 +207,71 @@ namespace glmesh
 		size_t GetAttribByteOffset(size_t attribIx) const;
 
 		/**
-		\ingroup module_glmesh_draw
-		\brief RAII-style class for binding a VertexFormat to the OpenGL context. The destructor unbinds it.
+		\brief Binds the VertexFormat to the context.
 
-		This class assumes that a valid VAO is bound (if one is needed). It also assumes that
-		all vertex data comes from a single buffer object which has also been bound to GL_ARRAY_BUFFER.
+		This function assumes that a valid VAO is bound (if one is needed), as well as GL_ARRAY_BUFFER.
+
+		The following OpenGL state is touched by this function:
+
+		\li The enable state of all of the attributes in the format will be set to enabled.
+		\li For each such attribute location, glVertexAttrib*Pointer will be called.
+
+		This function assumes that all vertex attributes come from the buffer object currently bound
+		to GL_ARRAY_BUFFER. Therefore, you can only use it with a single buffer object.
+
+		\param baseOffset The byte offset from the start of the buffer object to where the vertex data is.
+		**/
+		void BindAttributes(size_t baseOffset) const;
+
+		/**
+		\brief Binds the VertexFormat using ARB_vertex_attrib_format.
+
+		This function assumes that a valid VAO is bound (if one is needed).
+
+		The following OpenGL state is touched by this function:
+
+		\li The enable state of all of the attributes in the format will be set to enabled.
+		\li For each such attribute location, glVertexAttrib*Format will be called.
+
+		This function uses the offsets computed by GetAttribByteOffset, so it assumes that all vertex
+		attributes come from the buffer object currently bound to GL_ARRAY_BUFFER. Therefore, you
+		can only use it with a single buffer object.
+		**/
+		void BindAttribFormat() const;
+
+		/**
+		\brief Disables the attributes.
+
+		The following OpenGL state is touched by this function:
+
+		\li The enable state of all of the attributes in the format will be set to disabled.
+		**/
+		void DisableAttributes() const;
+
+		/**
+		\ingroup module_glmesh_draw
+		\brief RAII-style class for binding a VertexFormat to the OpenGL context.
+		
+		The constructors of this class call BindAttributes or BindAttribFormat, as appropriate. The destructor
+		calls DisableAttributes.
+		
+		This class can use the ARB_vertex_attrib_binding functionality instead of glVertexAttribPointer. If it does,
+		it only changes the vertex format state, not the buffer binding state. That is, it will call
+		glEnable/DisableVertexAttrbiArray and glVertexAttribFormat, but not glVertexAttribBinding,
+		glBindVertexBuffer, or glVertexBindingDivisor.
+
+		Note that all of the attributes will still have the same stride, and the offsets will be computed
+		as though it all comes from a single buffer. You can use multiple separate VertexFormat objects,
+		if you want to define multiple different formats.
+		
+		If you are not using ARB_vertex_attrib_binding, then this class assumes that
+		all vertex data comes from the buffer currently bound to GL_ARRAY_BUFFER.
 
 		The following OpenGL state is touched by constructing this object:
 
-		\li For each attribute in the given VertexFormat, that attributes state will be changed. After this
-		object is destroyed, all of the attributes used by this VertexFormat will be disabled.
+		\li The enable/disable state of the attributes in the format.
+		\li If you are using ARB_vertex_attrib_binding, then the state set by glVertexAttrib*Format.
+		\li If not using ARB_vertex_attrib_binding, then the state set by glVertexAttrib*Pointer.
 
 		After creating one of these, you can use \c glDraw* functions to render from the previously
 		bound buffer object, using the VertexFormat given.
@@ -224,13 +281,17 @@ namespace glmesh
 		public:
 			/**
 			\brief Binds the vertex format to the OpenGL context, given a byte offset to the first vertex.
-			
-			\param fmt The format to bind to the context. Taken by reference; do not destroy
-			this before this object is destroyed.
-			\param baseOffset The byte offset from the beginning of the buffer to the first piece of
-			vertex data.
+
+			Calls VertexFormat::BindAttributes on \a fmt.
 			**/
 			Enable(const VertexFormat &fmt, size_t baseOffset);
+
+			/**
+			\brief Binds the vertex format to the OpenGL context, using ARB_vertex_attrib_binding.
+
+			Calls VertexFormat::BindAttribFormat on \a fmt.
+			**/
+			Enable(const VertexFormat &fmt);
 
 			///Unbinds the vertex format from the OpenGL context.
 			~Enable();
@@ -253,4 +314,4 @@ namespace glmesh
 }
 
 
-#endif //VERTEX_FORMAT_MESH_H
+#endif //GLSDK_MESH_VERTEX_FORMAT_H

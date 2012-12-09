@@ -4,6 +4,8 @@
 #include <glload/gl_all.hpp>
 #include <glload/gll.hpp>
 #include "glmesh/VertexFormat.h"
+#include <boost/foreach.hpp>
+#include <boost/static_assert.hpp>
 
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
@@ -24,6 +26,8 @@ namespace glmesh
 			4,
 			4,
 		};
+
+		BOOST_STATIC_ASSERT(NUM_VERTEX_DATA_TYPES == ARRAY_COUNT(g_byteSizesVertexTypes));
 	}
 
 	AttributeDataInvalidException::AttributeDataInvalidException( int numComponentsGiven )
@@ -179,54 +183,97 @@ namespace glmesh
 			gl::INT,
 			gl::UNSIGNED_INT,
 		};
+
+		BOOST_STATIC_ASSERT(NUM_VERTEX_DATA_TYPES == ARRAY_COUNT(t_vertexUploadType));
 	}
 
-	VertexFormat::Enable::Enable( const VertexFormat &fmt, size_t baseOffset )
-		: m_fmt(fmt)
+	void VertexFormat::BindAttributes( size_t baseOffset ) const
 	{
-		const size_t numAttribs = fmt.GetNumAttribs();
+		const size_t numAttribs = GetNumAttribs();
 		for(size_t attribIx = 0; attribIx < numAttribs; ++attribIx)
 		{
-			const AttribDesc &attribute = fmt.GetAttribDesc(attribIx);
-			size_t offset = fmt.GetAttribByteOffset(attribIx);
+			const AttribDesc &attribute = GetAttribDesc(attribIx);
+			size_t offset = GetAttribByteOffset(attribIx);
+			const GLuint attributeIndex = attribute.GetAttribIndex();
 
-			gl::EnableVertexAttribArray(attribute.GetAttribIndex());
+			gl::EnableVertexAttribArray(attributeIndex);
 			GLenum type = t_vertexUploadType[attribute.GetVertexDataType()];
 			GLint numComponents = static_cast<GLint>(attribute.GetNumComponents());
 			switch(attribute.GetAttribDataType())
 			{
 			case ADT_FLOAT:
-				gl::VertexAttribPointer(attribute.GetAttribIndex(),
-					numComponents, type, gl::FALSE_, fmt.GetVertexByteSize(),
-					reinterpret_cast<void*>(baseOffset + offset));
+				gl::VertexAttribPointer(attributeIndex, numComponents, type, gl::FALSE_,
+					GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
 				break;
 			case ADT_NORM_FLOAT:
-				gl::VertexAttribPointer(attribute.GetAttribIndex(),
-					numComponents, type, gl::TRUE_, fmt.GetVertexByteSize(),
-					reinterpret_cast<void*>(baseOffset + offset));
+				gl::VertexAttribPointer(attributeIndex, numComponents, type, gl::TRUE_,
+					GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
 				break;
 			case ADT_INTEGER:
-				gl::VertexAttribIPointer(attribute.GetAttribIndex(),
-					numComponents, type, fmt.GetVertexByteSize(),
-					reinterpret_cast<void*>(baseOffset + offset));
+				gl::VertexAttribIPointer(attributeIndex, numComponents, type,
+					GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
 				break;
 			case ADT_DOUBLE:
-				gl::VertexAttribLPointer(attribute.GetAttribIndex(),
-					numComponents, type, fmt.GetVertexByteSize(),
-					reinterpret_cast<void*>(baseOffset + offset));
+				gl::VertexAttribLPointer(attributeIndex, numComponents, type,
+					GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
 				break;
 			}
 		}
 	}
 
-	VertexFormat::Enable::~Enable()
+	void VertexFormat::BindAttribFormat( ) const
 	{
-		const size_t numAttribs = m_fmt.GetNumAttribs();
+		const size_t numAttribs = GetNumAttribs();
 		for(size_t attribIx = 0; attribIx < numAttribs; ++attribIx)
 		{
-			const AttribDesc &attribute = m_fmt.GetAttribDesc(attribIx);
+			const AttribDesc &attribute = GetAttribDesc(attribIx);
+			size_t offset = GetAttribByteOffset(attribIx);
+			const GLuint attributeIndex = attribute.GetAttribIndex();
 
+			gl::EnableVertexAttribArray(attributeIndex);
+			GLenum type = t_vertexUploadType[attribute.GetVertexDataType()];
+			GLint numComponents = static_cast<GLint>(attribute.GetNumComponents());
+
+			switch(attribute.GetAttribDataType())
+			{
+			case ADT_FLOAT:
+				gl::VertexAttribFormat(attributeIndex, numComponents, type, gl::FALSE_, offset);
+				break;
+			case ADT_NORM_FLOAT:
+				gl::VertexAttribFormat(attributeIndex, numComponents, type, gl::TRUE_, offset);
+				break;
+			case ADT_INTEGER:
+				gl::VertexAttribIFormat(attributeIndex, numComponents, type, offset);
+				break;
+			case ADT_DOUBLE:
+				gl::VertexAttribLFormat(attributeIndex, numComponents, type, offset);
+				break;
+			}
+		}
+	}
+
+	void VertexFormat::DisableAttributes() const
+	{
+		BOOST_FOREACH(const AttribDesc &attribute, m_attribs)
+		{
 			gl::DisableVertexAttribArray(attribute.GetAttribIndex());
 		}
+	}
+
+	VertexFormat::Enable::Enable( const VertexFormat &fmt, size_t baseOffset )
+		: m_fmt(fmt)
+	{
+		m_fmt.BindAttributes(baseOffset);
+	}
+
+	VertexFormat::Enable::Enable( const VertexFormat &fmt )
+		: m_fmt(fmt)
+	{
+		m_fmt.BindAttribFormat();
+	}
+
+	VertexFormat::Enable::~Enable()
+	{
+		m_fmt.DisableAttributes();
 	}
 }

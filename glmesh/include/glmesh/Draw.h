@@ -1,6 +1,6 @@
 
-#ifndef DRAW_MESH_H
-#define DRAW_MESH_H
+#ifndef GLSDK_MESH_DRAW_H
+#define GLSDK_MESH_DRAW_H
 
 /**
 \file
@@ -448,4 +448,4 @@ namespace glmesh
 
 	///@}
 }
-#endif //DRAW_MESH_H
+#endif //GLSDK_MESH_DRAW_H
