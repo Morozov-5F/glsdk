@@ -125,7 +125,7 @@ local function ProcTable(tbl, libTbl)
 				os.chdir(prevDir)
 			end
 		elseif(type(lib) == "table") then
-			ProcTable(lib);
+			ProcTable(lib, libTbl);
 		end
 	end
 end
@@ -137,5 +137,5 @@ end
 
 function InclLibs(...)
 	local libList = {...}
-	ProcInclTable(libList)
+	ProcInclTable(libList, InclFuncs)
 end
