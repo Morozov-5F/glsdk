@@ -32,3 +32,4 @@ OpenGL32.dll
 *.cbp
 *.depend
 *.layout
+glloadgen/*
