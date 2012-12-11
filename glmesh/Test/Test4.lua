@@ -11,7 +11,7 @@ function MakeDrawTest(filename)
 		includedirs { "../include" }
 		links {"glmesh"}
 		
-		UseLibs {"glfw", "glm", "glload", "glutil"}
+		UseLibs {"glfw", "glm", "glload", "glutil", "boost"}
 
 		files {filename, "framework_draw.h", "framework_draw.cpp"}
 

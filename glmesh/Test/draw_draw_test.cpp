@@ -17,35 +17,33 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glutil/glutil.h>
 #include <glmesh/glmesh.h>
+#include <glmesh/BoostDraw.h>
+#include <boost/tuple/tuple.hpp>
+#include <boost/range.hpp>
+#include <boost/foreach.hpp>
 #include "framework_draw.h"
+
+typedef boost::tuple<glm::hvec4, glm::detail::tvec4<GLubyte> > VertexType;
 
 namespace
 {
-	const float g_vertexData[] = {
-		0.75f, 0.75f, 0.0f, 1.0f,
-		0.6f, 0.8f, 0.0f, 1.0f,
-
-		0.75f, -0.75f, 0.0f, 1.0f,
-		0.9f, 0.2f, 0.4f, 1.0f,
-
-		-0.75f, -0.75f, 0.0f, 1.0f,
-		0.1f, 0.2f, 0.7f, 1.0f,
+	VertexType g_vertexData[] =
+	{
+		VertexType(glm::hvec4(0.75f, 0.75f, 0.0f, 1.0f), glm::detail::tvec4<GLubyte>(153, 204, 0, 255)),
+		VertexType(glm::hvec4(0.75f, -0.75f, 0.0f, 1.0f), glm::detail::tvec4<GLubyte>(230, 51, 0, 255)),
+		VertexType(glm::hvec4(-0.75f, -0.75f, 0.0f, 1.0f), glm::detail::tvec4<GLubyte>(26, 51, 179, 255)),
 	};
 
-	const float g_groundData[] = {
-		30.0f, 0.0f, 30.0f, 1.0f,
-		0.2f, 1.0f, 0.2f, 1.0f,
-
-		30.0f, 0.0f, -30.0f, 1.0f,
-		0.2f, 1.0f, 0.2f, 1.0f,
-
-		-30.0f, 0.0f, 30.0f, 1.0f,
-		0.2f, 1.0f, 0.2f, 1.0f,
-
-		-30.0f, 0.0f, -30.0f, 1.0f,
-		0.2f, 1.0f, 0.2f, 1.0f,
+	VertexType g_groundData[] =
+	{
+		VertexType(glm::hvec4(30.0f, 0.0f, 30.0f, 1.0f), glm::detail::tvec4<GLubyte>(51, 255, 51, 255)),
+		VertexType(glm::hvec4(30.0f, 0.0f, -30.0f, 1.0f), glm::detail::tvec4<GLubyte>(51, 255, 51, 255)),
+		VertexType(glm::hvec4(-30.0f, 0.0f, 30.0f, 1.0f), glm::detail::tvec4<GLubyte>(51, 255, 51, 255)),
+		VertexType(glm::hvec4(-30.0f, 0.0f, -30.0f, 1.0f), glm::detail::tvec4<GLubyte>(51, 255, 51, 255)),
 	};
 }
+
+
 
 class BasicDrawable : public Drawable
 {
@@ -129,16 +127,11 @@ public:
 			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::FALSE_,
 				glm::value_ptr(worldToCamera * modelToWorld));
 
-			glmesh::Draw immMode(gl::TRIANGLES, 3, m_vertFmt, m_streamBuf);
-
-			immMode.Attrib<glm::half>(glm::hvec4(0.75f, 0.75f, 0.0f, 1.0f));
-			immMode.Attrib<GLubyte>(153, 204, 0, 255);
-
-			immMode.Attrib<glm::half>(glm::hvec4(0.75f, -0.75f, 0.0f, 1.0f));
-			immMode.Attrib<GLubyte>(230, 51, 0, 255);
-
-			immMode.Attrib<glm::half>(glm::hvec4(-0.75f, -0.75f, 0.0f, 1.0f));
-			immMode.Attrib<GLubyte>(26, 51, 179, 255);
+			glmesh::Draw immMode(gl::TRIANGLES, boost::size(g_vertexData), m_vertFmt, m_streamBuf);
+			BOOST_FOREACH(const VertexType &vertex, g_vertexData)
+			{
+				glmesh::Attrib(immMode, vertex);
+			}
 
 			immMode.Render();
 		}
@@ -147,19 +140,11 @@ public:
 			gl::UniformMatrix4fv(m_unifModelToCameraMatrix, 1, gl::FALSE_,
 				glm::value_ptr(worldToCamera));
 
-			glmesh::Draw immMode(gl::TRIANGLE_STRIP, 4, m_vertFmt, m_streamBuf);
-
-			immMode.Attrib<glm::half>(glm::hvec4(30.0f, 0.0f, 30.0f, 1.0f));
-			immMode.Attrib<GLubyte>(51, 255, 51, 255);
-
-			immMode.Attrib<glm::half>(glm::hvec4(30.0f, 0.0f, -30.0f, 1.0f));
-			immMode.Attrib<GLubyte>(51, 255, 51, 255);
-
-			immMode.Attrib<glm::half>(glm::hvec4(-30.0f, 0.0f, 30.0f, 1.0f));
-			immMode.Attrib<GLubyte>(51, 255, 51, 255);
-
-			immMode.Attrib<glm::half>(glm::hvec4(-30.0f, 0.0f, -30.0f, 1.0f));
-			immMode.Attrib<GLubyte>(51, 255, 51, 255);
+			glmesh::Draw immMode(gl::TRIANGLE_STRIP, boost::size(g_groundData), m_vertFmt, m_streamBuf);
+			BOOST_FOREACH(const VertexType &vertex, g_groundData)
+			{
+				glmesh::Attrib(immMode, vertex);
+			}
 
 			immMode.Render();
 		}
