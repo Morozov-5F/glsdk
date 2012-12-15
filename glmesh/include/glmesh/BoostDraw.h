@@ -58,6 +58,71 @@ namespace glmesh
 		};
 	}
 
+	/**
+	\brief A Boost.Fusion-based function for drawing attribute structs.
+
+	\ingroup module_glmesh_draw
+
+	Boost.Fusion makes it possible to compile-time iterate over boost::tuples,
+	fusion::sequences, and similar types. With the use of certain Boost.Fusion
+	preprocessor commands, it is also possible to iterate over plain structs.
+
+	When using glmesh::Draw, if you have some struct that has vertex data, you normally must
+	either write a function to send its vertex data to a glmesh::Draw object, or you must
+	write it out manually at the location where you send vertex data. But if you
+	store your vertex data in a struct that is a valid Boost.Fusion sequence, you can
+	use this function to iterate over them.
+
+	Here is an example:
+
+	\code
+#include <boost/tuple/tuple.hpp>
+#include <boost/range.hpp>
+#include <boost/foreach.hpp>
+
+typedef boost::tuple<glm::hvec4, glm::detail::tvec4<GLubyte> > VertexType;
+
+VertexType vertexData[] = ... //Fill in array.
+
+//Draw the mesh.
+glmesh::Draw immMode(gl::TRIANGLES, boost::size(g_vertexData), vertexFormat, streamBuffer);
+BOOST_FOREACH(const VertexType &vertex, vertexData)
+{
+  glmesh::Attrib(immMode, vertex);
+}
+	\endcode
+
+	Here is a version that uses Boost.Fusion's struct adaptor utilities:
+
+	\code
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/range.hpp>
+#include <boost/foreach.hpp>
+
+struct VertexType
+{
+  glm::hvec4 position;
+  glm::tvec4<GLubyte> color;
+};
+
+BOOST_FUSION_ADAPT_STRUCT(
+  VertexType,
+  (glm::hvec4, position)
+  (glm::detail::tvec4<GLubyte>, color))
+
+VertexType vertexData[] = ... //Fill in array.
+
+glmesh::Draw immMode(gl::TRIANGLES, boost::size(g_vertexData), vertexFormat, streamBuffer);
+BOOST_FOREACH(const VertexType &vertex, vertexData)
+{
+  glmesh::Attrib(immMode, vertex);
+}
+	\endcode
+
+	You can change the vertex type to match whatever you use. In the future, there may be a function
+	that takes a Boost.Fusion sequence and converts it into a vertex format directly.
+	**/
 	template<typename VertexSequence>
 	void Attrib(Draw &drawable, const VertexSequence &vertexData)
 	{

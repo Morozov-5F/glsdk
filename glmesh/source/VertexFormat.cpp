@@ -106,7 +106,7 @@ namespace glmesh
 				throw AttributeDataInvalidException("Only VDT_DOUBLE_FLOAT can be paired with ADT_DOUBLE.");
 
 			//Check for double-precision support.
-			if(!glload::IsVersionGEQ(4, 0) && !gl::exts::var_ARB_vertex_attrib_64bit)
+			if(!glload::IsVersionGEQ(4, 1) && !gl::exts::var_ARB_vertex_attrib_64bit)
 			{
 				throw AttributeDataUnsupportedException(
 					"Double attributes are not supported on this OpenGL implementation.");
