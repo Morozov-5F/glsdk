@@ -13,6 +13,8 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 
 \brief Helper function for registering a function to handle ARB_debug_output.
 
+\ref module_glload "GL Load" must have been successfully initialized for these functions to work.
+
 \ingroup module_glutil
 **/
 
@@ -23,11 +25,11 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 
 This SDK module provides basic font rendering services. It is important to emphasize that this is \em basic font rendering. This is not intended to be a serious font handling system. Therefore, you will notice that some of the amenities one might find in a more significant font system are not present.
 
-The fonts themselves are hard-coded directly into the executable. Among other things, this means that the executable's size will be noticably bigger by including the font system (~500KB). Note that if you don't call glutil::GenerateFont, your executable size will be unaffected.
+The fonts themselves are hard-coded directly into the library. This means that the executable's size will be noticably bigger by including the font system (~500KB). Note that if you don't call glutil::GenerateFont, your executable size will be completely unaffected.
 
 The font used here is called Inconsolata, a free font available online. It is used here as a raster font, with several pre-defined font sizes. The font is a fixed-width font, which makes text layout much easier.
 
-This system provides \em limited Unicode support. Specifically, these fonts provide the first 256 Unicode codepoints, which is commonly called Latin-1. All other codepoints are ignored. As such, this avoids complex text layout system and other concepts that are well outside of a basic font system.
+This system provides \em limited Unicode support. Specifically, it accepts UTF-8-encoded text, but it \em only recognizes the first 256 Unicode codepoints. While this corresponds to Latin-1, it cannot actually take Latin-1 encoded strings. This limited Unicode support avoids complex text layout system, as well as minimize the image storage size of the fonts.
 
 A glutil::Font object can only be created by calling glutil::GenerateFont. The Font class provides methods for getting size information about the font (since it is fixed-width, all of the characters have the same size characteristics). It also has a function that will layout a single string of text (horizontally), without line-breaks or anything of that nature.
 
@@ -63,7 +65,7 @@ MouseClick must be called when a mouse button is pressed or released; it should 
 
 MouseMove should be called anytime the mouse is moved, though they will usually only do something useful when the action button is down. MouseWheel should be called when the mouse wheel is touched. CharPress should be called when a keyboard character is entered. It should only be called for presses; releases are irrelevant.
 
-When a Pole is created, it is given a specific mouse button to listen for and respond to. This is the button that the pole in question uses for all of its mouse-based controls.
+When a Pole is created, it is given a specific mouse button to listen for and respond to. This is the button that the pole in question uses for all of its mouse-based controls. This feature allows you to, for example, use left-clicks to mean "move the camera" and right-clicks to mean "move the object".
 
 \ingroup module_glutil
 **/
