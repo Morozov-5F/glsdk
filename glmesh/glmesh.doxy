@@ -110,6 +110,10 @@ void RenderScene(glmesh::VertexFormat &vfmt, glmesh::StreamBuffer &streamBuf)
 }
 \endcode
 
+If you are inclined to use Boost directly, a Boost.Fusion-capable function exists which is compatible with any glmesh::VertexWriter-based class (such as glmesh::Draw). It takes a Boost.Tuple or other Fusion-compatible sequence type and writes each attribute in order. This allows you to use arbitrary structs directly, rather than having to write each vertex's attributes in order.
+
+This function, glmesh::Attrib, has example code in its documentation.
+
 **/
 
 /**

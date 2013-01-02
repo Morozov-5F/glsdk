@@ -32,7 +32,7 @@ The SDK also comes with a number of examples, which are in the <tt>examples</tt>
 
 Installation of the SDK is simple. <a href="https://sourceforge.net/projects/glsdk/files/">Download the most recent version of the distribution</a> and unzip the file to a directory of your choice. Then follow the @subpage pg_build "instructions for building the SDK components."
 
-Once the SDK has been successfully built. To use it, follow the @subpage pg_use "instructions for using the SDK."
+Once the SDK has been successfully built, follow the @subpage pg_use "instructions for using the SDK" to use it.
 
 \section mainpage_support Support
 
@@ -46,15 +46,13 @@ You can look on the \ref module_troubleshooting "troubleshooting page" for infor
 
 The Unofficial GL SDK is still in Alpha at present. Currently, the SDK is missing the following libraries:
 
-\li Font rendering: A library for rendering glyphs from fonts and doing the most basic of text layout.
 \li Mesh rendering: A library for loading and rendering meshes.
 
 The main issue is finding good, well-maintained libraries that can do these. Libraries that rely on compatibility profiles are not acceptable for the SDK, yet most of the available libraries that perform these tasks do.
 
-They do not have to be C++, but they should have no additional dependencies outside of the <em>absolutely necessary</em>. For instance, FreeType2 would be essential for any font library, as there's no way anyone should be expected to reinvent that wheel. But outside of that, there should be no extra dependencies.
+They do not have to be C++, but they should have no additional dependencies outside of the <em>absolutely necessary</em>. For instance, FreeType2 would be essential for any beyond the most basic font library, as there's no way anyone should be expected to reinvent that wheel. But outside of something that essential, there should be no extra dependencies.
 
 The MIT License is preferable, but similar BSD-style licenses are also accepted. Since the SDK uses static linking (for ease of use reasons), GPL and LGPL libraries are not acceptable.
-
 **/
 
 /**

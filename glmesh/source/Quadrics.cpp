@@ -5,6 +5,11 @@
 #include <glload/gl_all.hpp>
 #include <glload/gll.hpp>
 
+#include <boost/tuple/tuple.hpp>
+#include "glmesh/BoostDraw.h"
+#include "glmesh/CpuDataWriter.h"
+#include "glmesh/VertexFormat.h"
+
 #include "glmesh/Mesh.h"
 #include "glmesh/Quadrics.h"
 #include "GenHelper.h"
@@ -22,6 +27,8 @@ namespace glmesh
 
 		Mesh * UnitSphere( int numHorizSlices, int numVertSlices )
 		{
+			typedef boost::tuple<glm::vec3, glm::vec3, glm::vec2> VertexType;
+
 			//The term "ring" refers to horizontal slices.
 			//The term "segment" refers to vertical slices.
 
@@ -36,27 +43,28 @@ namespace glmesh
 			size_t numSegVerts = numVertSlices + 1;
 			size_t attribCount = numSegVerts * numRingVerts;
 
-			std::vector<glm::vec3> positions;
-			std::vector<glm::vec3> normals;
-			std::vector<glm::vec2> texCoords;
+			glmesh::AttributeList attribs;
+			attribs.push_back(glmesh::AttribDesc(0, 3, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
+			attribs.push_back(glmesh::AttribDesc(2, 3, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
+			attribs.push_back(glmesh::AttribDesc(5, 2, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
 
-			positions.reserve(attribCount);
-			normals.reserve(attribCount);
-			texCoords.reserve(attribCount);
+			VertexFormat fmt(attribs);
+
+			CpuDataWriter writer(fmt, attribCount);
 
 			float deltaSegTexCoord = 1.0f / numSegVerts;
 			float deltaRingTexCoord = 1.0f / numRingVerts;
 
 			for(int segment = 0; segment < numVertSlices; ++segment)
 			{
-				positions.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-				normals.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-				texCoords.push_back(glm::vec2(deltaSegTexCoord * segment, 1.0f));
+				writer.Attrib(0.0f, 1.0f, 0.0f);
+				writer.Attrib(0.0f, 1.0f, 0.0f);
+				writer.Attrib(deltaSegTexCoord * segment, 1.0f);
 			}
 
-			positions.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-			normals.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-			texCoords.push_back(glm::vec2(1.0f, 0.0f));
+			writer.Attrib(0.0f, 1.0f, 0.0f);
+			writer.Attrib(0.0f, 1.0f, 0.0f);
+			writer.Attrib(1.0f, 0.0f);
 
 			float radThetaDelta = g_pi / (numHorizSlices + 1);
 			float radRhoDelta = g_2pi / numVertSlices;
@@ -76,31 +84,31 @@ namespace glmesh
 					float cosRho = std::cos(-radRho);
 
 					glm::vec3 currPos(sinTheta * cosRho, cosTheta, sinTheta * sinRho);
-					positions.push_back(currPos);
-					normals.push_back(currPos);
-					texCoords.push_back(glm::vec2(deltaSegTexCoord * segment, ringTexCoord));
+					writer.Attrib(currPos);
+					writer.Attrib(currPos);
+					writer.Attrib(deltaSegTexCoord * segment, ringTexCoord);
 				}
 
-				positions.push_back(glm::vec3(sinTheta, cosTheta, 0.0f));
-				normals.push_back(glm::vec3(sinTheta, cosTheta, 0.0f));
-				texCoords.push_back(glm::vec2(1.0f, ringTexCoord));
+				writer.Attrib(sinTheta, cosTheta, 0.0f);
+				writer.Attrib(sinTheta, cosTheta, 0.0f);
+				writer.Attrib(1.0f, ringTexCoord);
 			}
 
 			for(int segment = 0; segment < numVertSlices; ++segment)
 			{
-				positions.push_back(glm::vec3(0.0f, -1.0f, 0.0f));
-				normals.push_back(glm::vec3(0.0f, -1.0f, 0.0f));
-				texCoords.push_back(glm::vec2(deltaSegTexCoord * segment, 0.0f));
+				writer.Attrib(0.0f, -1.0f, 0.0f);
+				writer.Attrib(0.0f, -1.0f, 0.0f);
+				writer.Attrib(deltaSegTexCoord * segment, 0.0f);
 			}
 
-			positions.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-			normals.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-			texCoords.push_back(glm::vec2(1.0f, 0.0f));
+			writer.Attrib(0.0f, 1.0f, 0.0f);
+			writer.Attrib(0.0f, 1.0f, 0.0f);
+			writer.Attrib(1.0f, 0.0f);
 
 			//////////////////////////////////////////////////////////////////////////
 			//Generate the index data.
 			//Restart index.
-			GLuint restartIndex = positions.size();
+			GLuint restartIndex = writer.GetNumVerticesWritten();
 
 			size_t stripSize = ((2 * numVertSlices) + 2);
 			//One strip for each ring vertex list, minus 1.
@@ -130,40 +138,10 @@ namespace glmesh
 
 			//////////////////////////////////////////////////////////////////////////
 			//Build the buffers.
-			size_t vertexBufferSize = 0;
-
-			vertexBufferSize += positions.size() * (sizeof(GLshort) * 4);
-			vertexBufferSize += normals.size() * (sizeof(GLshort) * 4);
-			vertexBufferSize += texCoords.size() * (sizeof(GLshort) * 2);
-
-			std::vector<GLubyte> data(vertexBufferSize);
-
-			GLshort *pCurrPos = (GLshort*)&data[0];
-			for(size_t vert = 0; vert < positions.size(); ++vert)
-			{
-				pCurrPos[0] = GLshort(positions[vert].x * 32767);
-				pCurrPos[1] = GLshort(positions[vert].y * 32767);
-				pCurrPos[2] = GLshort(positions[vert].z * 32767);
-
-				pCurrPos[4] = GLshort(normals[vert].x * 32767);
-				pCurrPos[5] = GLshort(normals[vert].y * 32767);
-				pCurrPos[6] = GLshort(normals[vert].z * 32767);
-
-				GLushort *pTexCorrdLoc = (GLushort*)&pCurrPos[8];
-
-				pTexCorrdLoc[0] = GLushort(texCoords[vert].x * 65535);
-				pTexCorrdLoc[1] = GLushort(texCoords[vert].y * 65535);
-
-				pCurrPos += 10;
-			}
-
-			pCurrPos = (GLshort*)&data[0];
-
 			std::vector<GLuint> buffers(2);
 
 			gl::GenBuffers(2, &buffers[0]);
-			gl::BindBuffer(gl::ARRAY_BUFFER, buffers[0]);
-			gl::BufferData(gl::ARRAY_BUFFER, data.size(), &data[0], gl::STATIC_DRAW);
+			writer.TransferToBuffer(gl::ARRAY_BUFFER, gl::STATIC_DRAW, buffers[0]);
 
 			//vertex data done. Now build the index buffer.
 			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
@@ -181,41 +159,29 @@ namespace glmesh
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
 			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
-			gl::EnableVertexAttribArray(0);
-			gl::VertexAttribPointer(0, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort), (void*)0);
+			fmt.BindAttribute(0, 0);
 			AddVariantToMap(variantMap, currVao, 0);
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
 			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
-			gl::EnableVertexAttribArray(0);
-			gl::VertexAttribPointer(0, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort), (void*)0);
-			gl::EnableVertexAttribArray(2);
-			gl::VertexAttribPointer(2, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort),
-				(void*)(4 * sizeof(GLshort)));
+			fmt.BindAttribute(0, 0);
+			fmt.BindAttribute(0, 1);
 			AddVariantToMap(variantMap, currVao, VAR_NORMAL);
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
 			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
-			gl::EnableVertexAttribArray(0);
-			gl::VertexAttribPointer(0, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort), (void*)0);
-			gl::EnableVertexAttribArray(5);
-			gl::VertexAttribPointer(5, 3, gl::UNSIGNED_SHORT, gl::TRUE_, 10 * sizeof(GLshort),
-				(void*)(8 * sizeof(GLushort)));
+			fmt.BindAttribute(0, 0);
+			fmt.BindAttribute(0, 2);
 			AddVariantToMap(variantMap, currVao, VAR_TEX_COORD);
 
 			gl::GenVertexArrays(1, &currVao);
 			gl::BindVertexArray(currVao);
 			gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buffers[1]);
-			gl::EnableVertexAttribArray(0);
-			gl::VertexAttribPointer(0, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort), (void*)0);
-			gl::EnableVertexAttribArray(2);
-			gl::VertexAttribPointer(2, 3, gl::SHORT, gl::TRUE_, 10 * sizeof(GLshort),
-				(void*)(4 * sizeof(GLshort)));
-			gl::EnableVertexAttribArray(5);
-			gl::VertexAttribPointer(5, 3, gl::UNSIGNED_SHORT, gl::TRUE_, 10 * sizeof(GLshort),
-				(void*)(8 * sizeof(GLushort)));
+			fmt.BindAttribute(0, 0);
+			fmt.BindAttribute(0, 1);
+			fmt.BindAttribute(0, 2);
 			AddVariantToMap(variantMap, currVao, VAR_TEX_COORD | VAR_NORMAL);
 
 			gl::BindVertexArray(0);

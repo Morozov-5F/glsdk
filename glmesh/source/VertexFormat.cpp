@@ -192,63 +192,73 @@ namespace glmesh
 		const size_t numAttribs = GetNumAttribs();
 		for(size_t attribIx = 0; attribIx < numAttribs; ++attribIx)
 		{
-			const AttribDesc &attribute = GetAttribDesc(attribIx);
-			size_t offset = GetAttribByteOffset(attribIx);
-			const GLuint attributeIndex = attribute.GetAttribIndex();
-
-			gl::EnableVertexAttribArray(attributeIndex);
-			GLenum type = t_vertexUploadType[attribute.GetVertexDataType()];
-			GLint numComponents = static_cast<GLint>(attribute.GetNumComponents());
-			switch(attribute.GetAttribDataType())
-			{
-			case ADT_FLOAT:
-				gl::VertexAttribPointer(attributeIndex, numComponents, type, gl::FALSE_,
-					GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
-				break;
-			case ADT_NORM_FLOAT:
-				gl::VertexAttribPointer(attributeIndex, numComponents, type, gl::TRUE_,
-					GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
-				break;
-			case ADT_INTEGER:
-				gl::VertexAttribIPointer(attributeIndex, numComponents, type,
-					GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
-				break;
-			case ADT_DOUBLE:
-				gl::VertexAttribLPointer(attributeIndex, numComponents, type,
-					GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
-				break;
-			}
+			BindAttribute(baseOffset, attribIx);
 		}
 	}
 
-	void VertexFormat::BindAttribFormat( ) const
+	void VertexFormat::BindAttribute( size_t baseOffset, size_t attribIx ) const
+	{
+		const AttribDesc &attribute = GetAttribDesc(attribIx);
+		size_t offset = GetAttribByteOffset(attribIx);
+		const GLuint attributeIndex = attribute.GetAttribIndex();
+
+		gl::EnableVertexAttribArray(attributeIndex);
+		GLenum type = t_vertexUploadType[attribute.GetVertexDataType()];
+		GLint numComponents = static_cast<GLint>(attribute.GetNumComponents());
+		switch(attribute.GetAttribDataType())
+		{
+		case ADT_FLOAT:
+			gl::VertexAttribPointer(attributeIndex, numComponents, type, gl::FALSE_,
+				GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
+			break;
+		case ADT_NORM_FLOAT:
+			gl::VertexAttribPointer(attributeIndex, numComponents, type, gl::TRUE_,
+				GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
+			break;
+		case ADT_INTEGER:
+			gl::VertexAttribIPointer(attributeIndex, numComponents, type,
+				GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
+			break;
+		case ADT_DOUBLE:
+			gl::VertexAttribLPointer(attributeIndex, numComponents, type,
+				GetVertexByteSize(), reinterpret_cast<void*>(baseOffset + offset));
+			break;
+		}
+	}
+
+	void VertexFormat::BindAttribFormats( ) const
 	{
 		const size_t numAttribs = GetNumAttribs();
 		for(size_t attribIx = 0; attribIx < numAttribs; ++attribIx)
 		{
-			const AttribDesc &attribute = GetAttribDesc(attribIx);
-			size_t offset = GetAttribByteOffset(attribIx);
-			const GLuint attributeIndex = attribute.GetAttribIndex();
+			BindAttribFormat(attribIx);
+		}
+	}
 
-			gl::EnableVertexAttribArray(attributeIndex);
-			GLenum type = t_vertexUploadType[attribute.GetVertexDataType()];
-			GLint numComponents = static_cast<GLint>(attribute.GetNumComponents());
+	void VertexFormat::BindAttribFormat( size_t attribIx ) const
+	{
+		const AttribDesc &attribute = GetAttribDesc(attribIx);
+		size_t offset = GetAttribByteOffset(attribIx);
+		const GLuint attributeIndex = attribute.GetAttribIndex();
 
-			switch(attribute.GetAttribDataType())
-			{
-			case ADT_FLOAT:
-				gl::VertexAttribFormat(attributeIndex, numComponents, type, gl::FALSE_, offset);
-				break;
-			case ADT_NORM_FLOAT:
-				gl::VertexAttribFormat(attributeIndex, numComponents, type, gl::TRUE_, offset);
-				break;
-			case ADT_INTEGER:
-				gl::VertexAttribIFormat(attributeIndex, numComponents, type, offset);
-				break;
-			case ADT_DOUBLE:
-				gl::VertexAttribLFormat(attributeIndex, numComponents, type, offset);
-				break;
-			}
+		gl::EnableVertexAttribArray(attributeIndex);
+		GLenum type = t_vertexUploadType[attribute.GetVertexDataType()];
+		GLint numComponents = static_cast<GLint>(attribute.GetNumComponents());
+
+		switch(attribute.GetAttribDataType())
+		{
+		case ADT_FLOAT:
+			gl::VertexAttribFormat(attributeIndex, numComponents, type, gl::FALSE_, offset);
+			break;
+		case ADT_NORM_FLOAT:
+			gl::VertexAttribFormat(attributeIndex, numComponents, type, gl::TRUE_, offset);
+			break;
+		case ADT_INTEGER:
+			gl::VertexAttribIFormat(attributeIndex, numComponents, type, offset);
+			break;
+		case ADT_DOUBLE:
+			gl::VertexAttribLFormat(attributeIndex, numComponents, type, offset);
+			break;
 		}
 	}
 
@@ -269,7 +279,7 @@ namespace glmesh
 	VertexFormat::Enable::Enable( const VertexFormat &fmt )
 		: m_fmt(fmt)
 	{
-		m_fmt.BindAttribFormat();
+		m_fmt.BindAttribFormats();
 	}
 
 	VertexFormat::Enable::~Enable()

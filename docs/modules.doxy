@@ -14,7 +14,7 @@ The <b>Free</b> Open<b>GL</b> <b>U</b>tility <b>T</b>oolkit is a cross-platform 
 
 FreeGLUT is intended for simple graphical demos, and at this purpose, it works quite well. As your needs become more complex, you will run into more and more of FreeGLUT's limitations. Consider @ref module_glfw "GLFW" as an alternative if this happens.
 
-FreeGLUT is distributed under an X-Consortium style license. FreeGLUT maintains <a href="../../freeglut/doc/index.html">separate documentation</a>. The SDK uses version 2.6.0
+FreeGLUT is distributed under an X-Consortium style license. FreeGLUT maintains <a href="http://freeglut.sourceforge.net/docs/api.php">separate documentation</a>. The SDK uses version 2.6.0
 **/
 
 /**

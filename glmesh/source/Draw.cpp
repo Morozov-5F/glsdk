@@ -10,15 +10,6 @@
 
 namespace glmesh
 {
-	MismatchDrawTypeException::MismatchDrawTypeException( int eRequiredType,
-		const std::string &realType )
-	{
-		std::ostringstream temp;
-		temp << "You provided the type \"" << realType << "\", for an attribute of type \"" << eRequiredType
-			<< "\"" << std::endl;
-		message = temp.str();
-	}
-
 	TooFewVerticesSentException::TooFewVerticesSentException( int numProvided, size_t numStated )
 	{
 		std::ostringstream temp;
@@ -131,7 +122,6 @@ namespace glmesh
 		, m_map(buffer, vertexCount * fmt.GetVertexByteSize(), true)
 		, m_buffer(buffer)
 		, m_bufferOffset(buffer.GetBufferPosition())
-		, m_currAttrib(0)
 		, m_verticesRemaining((int)vertexCount)
 		, m_tempBuffer(fmt.GetVertexByteSize())
 	{
@@ -167,27 +157,25 @@ namespace glmesh
 		return false;
 	}
 
-	void Draw::ProcessAttrib( const void *pData, size_t bytesPerComponent )
+	void Draw::WriteAttribute( const void *pData, size_t bytesPerComponent, size_t currAttrib )
 	{
 		if(m_verticesRemaining == 0)
 			throw TooManyVerticesSentException();
 
-		size_t numComponents = m_fmt.GetAttribDesc(m_currAttrib).GetNumComponents();
+		size_t numComponents = m_fmt.GetAttribDesc(currAttrib).GetNumComponents();
 
-		memcpy(GetPtrForAttrib(), pData, bytesPerComponent * numComponents);
+		memcpy(GetPtrForAttrib(currAttrib), pData, bytesPerComponent * numComponents);
 
-		m_currAttrib++;
-		if(m_currAttrib >= m_fmt.GetNumAttribs())
+		if(currAttrib + 1 == m_fmt.GetNumAttribs())
 		{
 			memcpy(GetOutputPtrForVertex(), &m_tempBuffer[0], m_fmt.GetVertexByteSize());
-			m_currAttrib = 0;
 			m_verticesRemaining--;
 		}
 	}
 
-	void * Draw::GetPtrForAttrib()
+	void * Draw::GetPtrForAttrib(size_t currAttrib)
 	{
-		size_t offset = m_fmt.GetAttribByteOffset(m_currAttrib);
+		size_t offset = m_fmt.GetAttribByteOffset(currAttrib);
 		GLubyte *pData = (&m_tempBuffer[0]);
 		return (pData + offset);
 	}

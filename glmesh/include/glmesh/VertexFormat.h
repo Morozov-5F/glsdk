@@ -224,6 +224,24 @@ namespace glmesh
 		void BindAttributes(size_t baseOffset) const;
 
 		/**
+		\brief Binds the attribute given by the attribute index to the context.
+		
+		This function assumes that a valid VAO is bound (if one is needed), as well as GL_ARRAY_BUFFER.
+
+		The following OpenGL state is touched by this function:
+
+		\li The enable state of the attribute referred to by \a attribIx will be set to enable.
+		\li The attribute location for \a attribIx will have glVertexAttrib*Pointer called on it.
+
+		This function assumes that all vertex attributes come from the buffer object currently bound
+		to GL_ARRAY_BUFFER. Therefore, you can only use it with a single buffer object.
+
+		\param baseOffset The byte offset from the start of the buffer object to where the vertex data is.
+		\param attribIX The index of the attribute to bind.
+		**/
+		void BindAttribute(size_t baseOffset, size_t attribIx) const;
+
+		/**
 		\brief Binds the VertexFormat using ARB_vertex_attrib_format.
 
 		This function assumes that a valid VAO is bound (if one is needed).
@@ -234,10 +252,26 @@ namespace glmesh
 		\li For each such attribute location, glVertexAttrib*Format will be called.
 
 		This function uses the offsets computed by GetAttribByteOffset, so it assumes that all vertex
-		attributes come from the buffer object currently bound to GL_ARRAY_BUFFER. Therefore, you
-		can only use it with a single buffer object.
+		attributes come from a single buffer object. You can bind the buffer later with glBindVertexBuffer,
+		and you will need to set up the mapping state for glVertexAttribBinding yourself.
 		**/
-		void BindAttribFormat() const;
+		void BindAttribFormats() const;
+
+		/**
+		\brief Binds the attribute given by the attribute index using ARB_vertex_attrib_format.
+
+		This function assumes that a valid VAO is bound (if one is needed).
+
+		The following OpenGL state is touched by this function:
+
+		\li The enable state of the attribute referred to by \a attribIx will be set to enable.
+		\li The attribute location for \a attribIx will have glVertexAttrib*Format will be called.
+
+		This function uses the offsets computed by GetAttribByteOffset, so it assumes that all vertex
+		attributes come from a single buffer object. You can bind the buffer later with glBindVertexBuffer,
+		and you will need to set up the mapping state for glVertexAttribBinding yourself.
+		**/
+		void BindAttribFormat( size_t attribIx ) const;
 
 		/**
 		\brief Disables the attributes.

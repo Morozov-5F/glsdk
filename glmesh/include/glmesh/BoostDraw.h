@@ -43,9 +43,10 @@ namespace glmesh
 		};
 
 
+		template<typename Sink>
 		struct WriteAttrib
 		{
-			WriteAttrib(Draw &drawable) : m_drawable(drawable) {}
+			WriteAttrib(VertexWriter<Sink> &drawable) : m_drawable(drawable) {}
 
 			template<typename AttribType>
 			void operator()(const AttribType &attribute) const
@@ -54,7 +55,7 @@ namespace glmesh
 			}
 
 		private:
-			mutable Draw &m_drawable;
+			mutable VertexWriter<Sink> &m_drawable;
 		};
 	}
 
@@ -123,10 +124,10 @@ BOOST_FOREACH(const VertexType &vertex, vertexData)
 	You can change the vertex type to match whatever you use. In the future, there may be a function
 	that takes a Boost.Fusion sequence and converts it into a vertex format directly.
 	**/
-	template<typename VertexSequence>
-	void Attrib(Draw &drawable, const VertexSequence &vertexData)
+	template<typename Sink, typename VertexSequence>
+	void Attrib(VertexWriter<Sink> &drawable, const VertexSequence &vertexData)
 	{
-		boost::fusion::for_each(vertexData, _detail::WriteAttrib(drawable));
+		boost::fusion::for_each(vertexData, _detail::WriteAttrib<Sink>(drawable));
 	}
 }
 
