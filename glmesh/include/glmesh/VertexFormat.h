@@ -237,7 +237,7 @@ namespace glmesh
 		to GL_ARRAY_BUFFER. Therefore, you can only use it with a single buffer object.
 
 		\param baseOffset The byte offset from the start of the buffer object to where the vertex data is.
-		\param attribIX The index of the attribute to bind.
+		\param attribIx The index of the attribute to bind.
 		**/
 		void BindAttribute(size_t baseOffset, size_t attribIx) const;
 
@@ -323,7 +323,8 @@ namespace glmesh
 			/**
 			\brief Binds the vertex format to the OpenGL context, using ARB_vertex_attrib_binding.
 
-			Calls VertexFormat::BindAttribFormat on \a fmt.
+			Calls VertexFormat::BindAttribFormat on \a fmt. You are expected to provide the
+			buffer object yourself, as well as make the glVertexAttribBinding calls.
 			**/
 			Enable(const VertexFormat &fmt);
 

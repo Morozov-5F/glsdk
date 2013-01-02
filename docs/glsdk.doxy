@@ -285,12 +285,27 @@ For Linux, you will need to link to some of the following libraries. All of them
 \page pg_changelist Changelist
 
 Changes from 0.4.4:
-\li @ref module_glmesh "GL Mesh"'s VertexFormat::Enable class now can use ARB_vertex_attrib_binding.
-\li Now includes glLoadGen.
-\li Modified how GL Load works, using glLoadGen's code generation system.
-\li C++ GL Load now doesn't need to prefix its enums with GL_.
-\li @ref module_glutil_debug "GL Util's debug system" now has functions to get string names and descriptions for OpenGL errors and framebuffer status codes.
-\li Added GL Load Gen to the distribution.
+<ul>
+<li>Added GL Load Gen to the distribution.</li>
+<li> From @ref module_glmesh "GL Mesh"
+<ul>
+<li>splits the glmesh::Draw::Attrib functions into their own utility class, so that they can be used in glmesh::CpuVertexWriter. Also that is a new class which can be used for creating vertex arrays on the CPU.</li>
+<li>glmesh::VertexFormat::Enable class now can use ARB_vertex_attrib_binding.</li>
+<li>glmesh::VertexFormat has functions to bind attributes, either all of them or individually. This makes it easy to use it with a VAO; you bind the VAO, call glmesh::VertexFormat::BindAttributes, and you're done. There is also glmesh::VertexFormat::BindAttribFormats for ARB_vertex_attrib_binding usage</li>
+</ul>
+</li>
+<li> From @ref module_glload "GL Load"
+<ul>
+<li>GL Load is now generated using glLoadGen's generation system.</li>
+<li>BREAKING CHANGE: GL Load's C++ API now doesn't need to prefix its enums with GL_.</li>
+</ul>
+</li>
+<li> From @ref module_glutil "GL Util"
+<ul>
+<li>@ref module_glutil_debug "The Debug system" now has functions to get string names and descriptions for OpenGL errors and framebuffer status codes.</li>
+</ul>
+</li>
+</ul>
 
 Changes from 0.4.3:
 \li GL Load includes OpenGL 4.3 extensions and core functions.
