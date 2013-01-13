@@ -1,5 +1,6 @@
 
 #include <assert.h>
+#include <algorithm>
 #include "ImageSetImpl.h"
 #include "Util.h"
 
@@ -45,9 +46,9 @@ namespace glimg
 	{
 		for(int iLoop = 0; iLoop < mipmapLevel; iLoop++)
 		{
-			origDim.width /= 2;
-			origDim.height /= 2;
-			origDim.depth /= 2;
+			origDim.width = std::min(origDim.width /= 2, 1);
+			origDim.height = std::min(origDim.height /= 2, 1);
+			origDim.depth = std::min(origDim.depth /= 2, 1);
 		}
 
 		return origDim;
