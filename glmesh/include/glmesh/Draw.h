@@ -100,8 +100,6 @@ namespace glmesh
 	The VertexWriter::Attrib functions, used to write attributes, will also throw
 	TooManyVerticesSentException if more vertices have been sent than were originally specified.
 
-	\todo The 1.0 for the fourth value doesn't work right with normalized values.
-
 	\note This class cannot be copied.
 	**/
 	class Draw : public VertexWriter<Draw>
