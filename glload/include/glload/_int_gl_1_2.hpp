@@ -43,11 +43,11 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glBlendColor)(GLfloat , GLfloat , GLfloat , GLfloat );
-		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquation)(GLenum );
-		typedef void (CODEGEN_FUNCPTR * Proc_glDrawRangeElements)(GLenum , GLuint , GLuint , GLsizei , GLenum , const GLvoid *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glTexSubImage3D)(GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei , GLenum , GLenum , const GLvoid *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glCopyTexSubImage3D)(GLenum , GLint , GLint , GLint , GLint , GLint , GLint , GLsizei , GLsizei );
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendColor)(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquation)(GLenum mode);
+		typedef void (CODEGEN_FUNCPTR * Proc_glDrawRangeElements)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexSubImage3D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid *pixels);
+		typedef void (CODEGEN_FUNCPTR * Proc_glCopyTexSubImage3D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
 	}
 	
 	extern _detail::Proc_glBlendColor BlendColor;

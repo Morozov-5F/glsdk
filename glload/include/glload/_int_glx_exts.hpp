@@ -229,14 +229,14 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef GLXContext (CODEGEN_FUNCPTR * Proc_glXCreateContextAttribsARB)(Display *, GLXFBConfig , GLXContext , Bool , const int *);
+		typedef GLXContext (CODEGEN_FUNCPTR * Proc_glXCreateContextAttribsARB)(Display *dpy, GLXFBConfig config, GLXContext share_context, Bool direct, const int *attrib_list);
 	}
 	
 	extern _detail::Proc_glXCreateContextAttribsARB CreateContextAttribsARB;
 	
 	namespace _detail
 	{
-		typedef __GLXextFuncPtr (CODEGEN_FUNCPTR * Proc_glXGetProcAddressARB)(const GLubyte *);
+		typedef __GLXextFuncPtr (CODEGEN_FUNCPTR * Proc_glXGetProcAddressARB)(const GLubyte *procName);
 	}
 	
 	extern _detail::Proc_glXGetProcAddressARB GetProcAddressARB;
@@ -244,10 +244,10 @@ namespace glX
 	namespace _detail
 	{
 		typedef Display * (CODEGEN_FUNCPTR * Proc_glXGetCurrentDisplayEXT)();
-		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryContextInfoEXT)(Display *, GLXContext , int , int *);
-		typedef GLXContextID (CODEGEN_FUNCPTR * Proc_glXGetContextIDEXT)(const GLXContext );
-		typedef GLXContext (CODEGEN_FUNCPTR * Proc_glXImportContextEXT)(Display *, GLXContextID );
-		typedef void (CODEGEN_FUNCPTR * Proc_glXFreeContextEXT)(Display *, GLXContext );
+		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryContextInfoEXT)(Display *dpy, GLXContext context, int attribute, int *value);
+		typedef GLXContextID (CODEGEN_FUNCPTR * Proc_glXGetContextIDEXT)(const GLXContext context);
+		typedef GLXContext (CODEGEN_FUNCPTR * Proc_glXImportContextEXT)(Display *dpy, GLXContextID contextID);
+		typedef void (CODEGEN_FUNCPTR * Proc_glXFreeContextEXT)(Display *dpy, GLXContext context);
 	}
 	
 	extern _detail::Proc_glXGetCurrentDisplayEXT GetCurrentDisplayEXT;
@@ -258,15 +258,15 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glXSwapIntervalEXT)(Display *, GLXDrawable , int );
+		typedef void (CODEGEN_FUNCPTR * Proc_glXSwapIntervalEXT)(Display *dpy, GLXDrawable drawable, int interval);
 	}
 	
 	extern _detail::Proc_glXSwapIntervalEXT SwapIntervalEXT;
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glXBindTexImageEXT)(Display *, GLXDrawable , int , const int *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glXReleaseTexImageEXT)(Display *, GLXDrawable , int );
+		typedef void (CODEGEN_FUNCPTR * Proc_glXBindTexImageEXT)(Display *dpy, GLXDrawable drawable, int buffer, const int *attrib_list);
+		typedef void (CODEGEN_FUNCPTR * Proc_glXReleaseTexImageEXT)(Display *dpy, GLXDrawable drawable, int buffer);
 	}
 	
 	extern _detail::Proc_glXBindTexImageEXT BindTexImageEXT;
@@ -274,50 +274,50 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef unsigned int (CODEGEN_FUNCPTR * Proc_glXGetAGPOffsetMESA)(const void *);
+		typedef unsigned int (CODEGEN_FUNCPTR * Proc_glXGetAGPOffsetMESA)(const void *pointer);
 	}
 	
 	extern _detail::Proc_glXGetAGPOffsetMESA GetAGPOffsetMESA;
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glXCopySubBufferMESA)(Display *, GLXDrawable , int , int , int , int );
+		typedef void (CODEGEN_FUNCPTR * Proc_glXCopySubBufferMESA)(Display *dpy, GLXDrawable drawable, int x, int y, int width, int height);
 	}
 	
 	extern _detail::Proc_glXCopySubBufferMESA CopySubBufferMESA;
 	
 	namespace _detail
 	{
-		typedef GLXPixmap (CODEGEN_FUNCPTR * Proc_glXCreateGLXPixmapMESA)(Display *, XVisualInfo *, Pixmap , Colormap );
+		typedef GLXPixmap (CODEGEN_FUNCPTR * Proc_glXCreateGLXPixmapMESA)(Display *dpy, XVisualInfo *visual, Pixmap pixmap, Colormap cmap);
 	}
 	
 	extern _detail::Proc_glXCreateGLXPixmapMESA CreateGLXPixmapMESA;
 	
 	namespace _detail
 	{
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXReleaseBuffersMESA)(Display *, GLXDrawable );
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXReleaseBuffersMESA)(Display *dpy, GLXDrawable drawable);
 	}
 	
 	extern _detail::Proc_glXReleaseBuffersMESA ReleaseBuffersMESA;
 	
 	namespace _detail
 	{
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXSet3DfxModeMESA)(int );
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXSet3DfxModeMESA)(int mode);
 	}
 	
 	extern _detail::Proc_glXSet3DfxModeMESA Set3DfxModeMESA;
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glXCopyImageSubDataNV)(Display *, GLXContext , GLuint , GLenum , GLint , GLint , GLint , GLint , GLXContext , GLuint , GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei );
+		typedef void (CODEGEN_FUNCPTR * Proc_glXCopyImageSubDataNV)(Display *dpy, GLXContext srcCtx, GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLXContext dstCtx, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth);
 	}
 	
 	extern _detail::Proc_glXCopyImageSubDataNV CopyImageSubDataNV;
 	
 	namespace _detail
 	{
-		typedef unsigned int * (CODEGEN_FUNCPTR * Proc_glXEnumerateVideoDevicesNV)(Display *, int , int *);
-		typedef int (CODEGEN_FUNCPTR * Proc_glXBindVideoDeviceNV)(Display *, unsigned int , unsigned int , const int *);
+		typedef unsigned int * (CODEGEN_FUNCPTR * Proc_glXEnumerateVideoDevicesNV)(Display *dpy, int screen, int *nelements);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXBindVideoDeviceNV)(Display *dpy, unsigned int video_slot, unsigned int video_device, const int *attrib_list);
 	}
 	
 	extern _detail::Proc_glXEnumerateVideoDevicesNV EnumerateVideoDevicesNV;
@@ -325,12 +325,12 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXJoinSwapGroupNV)(Display *, GLXDrawable , GLuint );
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXBindSwapBarrierNV)(Display *, GLuint , GLuint );
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXQuerySwapGroupNV)(Display *, GLXDrawable , GLuint *, GLuint *);
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXQueryMaxSwapGroupsNV)(Display *, int , GLuint *, GLuint *);
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXQueryFrameCountNV)(Display *, int , GLuint *);
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXResetFrameCountNV)(Display *, int );
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXJoinSwapGroupNV)(Display *dpy, GLXDrawable drawable, GLuint group);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXBindSwapBarrierNV)(Display *dpy, GLuint group, GLuint barrier);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXQuerySwapGroupNV)(Display *dpy, GLXDrawable drawable, GLuint *group, GLuint *barrier);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXQueryMaxSwapGroupsNV)(Display *dpy, int screen, GLuint *maxGroups, GLuint *maxBarriers);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXQueryFrameCountNV)(Display *dpy, int screen, GLuint *count);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXResetFrameCountNV)(Display *dpy, int screen);
 	}
 	
 	extern _detail::Proc_glXJoinSwapGroupNV JoinSwapGroupNV;
@@ -342,11 +342,11 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef int (CODEGEN_FUNCPTR * Proc_glXBindVideoCaptureDeviceNV)(Display *, unsigned int , GLXVideoCaptureDeviceNV );
-		typedef GLXVideoCaptureDeviceNV * (CODEGEN_FUNCPTR * Proc_glXEnumerateVideoCaptureDevicesNV)(Display *, int , int *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glXLockVideoCaptureDeviceNV)(Display *, GLXVideoCaptureDeviceNV );
-		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryVideoCaptureDeviceNV)(Display *, GLXVideoCaptureDeviceNV , int , int *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glXReleaseVideoCaptureDeviceNV)(Display *, GLXVideoCaptureDeviceNV );
+		typedef int (CODEGEN_FUNCPTR * Proc_glXBindVideoCaptureDeviceNV)(Display *dpy, unsigned int video_capture_slot, GLXVideoCaptureDeviceNV device);
+		typedef GLXVideoCaptureDeviceNV * (CODEGEN_FUNCPTR * Proc_glXEnumerateVideoCaptureDevicesNV)(Display *dpy, int screen, int *nelements);
+		typedef void (CODEGEN_FUNCPTR * Proc_glXLockVideoCaptureDeviceNV)(Display *dpy, GLXVideoCaptureDeviceNV device);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryVideoCaptureDeviceNV)(Display *dpy, GLXVideoCaptureDeviceNV device, int attribute, int *value);
+		typedef void (CODEGEN_FUNCPTR * Proc_glXReleaseVideoCaptureDeviceNV)(Display *dpy, GLXVideoCaptureDeviceNV device);
 	}
 	
 	extern _detail::Proc_glXBindVideoCaptureDeviceNV BindVideoCaptureDeviceNV;
@@ -357,11 +357,11 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXGetSyncValuesOML)(Display *, GLXDrawable , int64_t *, int64_t *, int64_t *);
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXGetMscRateOML)(Display *, GLXDrawable , int32_t *, int32_t *);
-		typedef int64_t (CODEGEN_FUNCPTR * Proc_glXSwapBuffersMscOML)(Display *, GLXDrawable , int64_t , int64_t , int64_t );
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXWaitForMscOML)(Display *, GLXDrawable , int64_t , int64_t , int64_t , int64_t *, int64_t *, int64_t *);
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXWaitForSbcOML)(Display *, GLXDrawable , int64_t , int64_t *, int64_t *, int64_t *);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXGetSyncValuesOML)(Display *dpy, GLXDrawable drawable, int64_t *ust, int64_t *msc, int64_t *sbc);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXGetMscRateOML)(Display *dpy, GLXDrawable drawable, int32_t *numerator, int32_t *denominator);
+		typedef int64_t (CODEGEN_FUNCPTR * Proc_glXSwapBuffersMscOML)(Display *dpy, GLXDrawable drawable, int64_t target_msc, int64_t divisor, int64_t remainder);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXWaitForMscOML)(Display *dpy, GLXDrawable drawable, int64_t target_msc, int64_t divisor, int64_t remainder, int64_t *ust, int64_t *msc, int64_t *sbc);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXWaitForSbcOML)(Display *dpy, GLXDrawable drawable, int64_t target_sbc, int64_t *ust, int64_t *msc, int64_t *sbc);
 	}
 	
 	extern _detail::Proc_glXGetSyncValuesOML GetSyncValuesOML;
@@ -372,12 +372,12 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef int (CODEGEN_FUNCPTR * Proc_glXGetFBConfigAttribSGIX)(Display *, GLXFBConfigSGIX , int , int *);
-		typedef GLXFBConfigSGIX * (CODEGEN_FUNCPTR * Proc_glXChooseFBConfigSGIX)(Display *, int , int *, int *);
-		typedef GLXPixmap (CODEGEN_FUNCPTR * Proc_glXCreateGLXPixmapWithConfigSGIX)(Display *, GLXFBConfigSGIX , Pixmap );
-		typedef GLXContext (CODEGEN_FUNCPTR * Proc_glXCreateContextWithConfigSGIX)(Display *, GLXFBConfigSGIX , int , GLXContext , Bool );
-		typedef XVisualInfo * (CODEGEN_FUNCPTR * Proc_glXGetVisualFromFBConfigSGIX)(Display *, GLXFBConfigSGIX );
-		typedef GLXFBConfigSGIX (CODEGEN_FUNCPTR * Proc_glXGetFBConfigFromVisualSGIX)(Display *, XVisualInfo *);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXGetFBConfigAttribSGIX)(Display *dpy, GLXFBConfigSGIX config, int attribute, int *value);
+		typedef GLXFBConfigSGIX * (CODEGEN_FUNCPTR * Proc_glXChooseFBConfigSGIX)(Display *dpy, int screen, int *attrib_list, int *nelements);
+		typedef GLXPixmap (CODEGEN_FUNCPTR * Proc_glXCreateGLXPixmapWithConfigSGIX)(Display *dpy, GLXFBConfigSGIX config, Pixmap pixmap);
+		typedef GLXContext (CODEGEN_FUNCPTR * Proc_glXCreateContextWithConfigSGIX)(Display *dpy, GLXFBConfigSGIX config, int render_type, GLXContext share_list, Bool direct);
+		typedef XVisualInfo * (CODEGEN_FUNCPTR * Proc_glXGetVisualFromFBConfigSGIX)(Display *dpy, GLXFBConfigSGIX config);
+		typedef GLXFBConfigSGIX (CODEGEN_FUNCPTR * Proc_glXGetFBConfigFromVisualSGIX)(Display *dpy, XVisualInfo *vis);
 	}
 	
 	extern _detail::Proc_glXGetFBConfigAttribSGIX GetFBConfigAttribSGIX;
@@ -389,11 +389,11 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef GLXPbufferSGIX (CODEGEN_FUNCPTR * Proc_glXCreateGLXPbufferSGIX)(Display *, GLXFBConfigSGIX , unsigned int , unsigned int , int *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glXDestroyGLXPbufferSGIX)(Display *, GLXPbufferSGIX );
-		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryGLXPbufferSGIX)(Display *, GLXPbufferSGIX , int , unsigned int *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glXSelectEventSGIX)(Display *, GLXDrawable , unsigned long );
-		typedef void (CODEGEN_FUNCPTR * Proc_glXGetSelectedEventSGIX)(Display *, GLXDrawable , unsigned long *);
+		typedef GLXPbufferSGIX (CODEGEN_FUNCPTR * Proc_glXCreateGLXPbufferSGIX)(Display *dpy, GLXFBConfigSGIX config, unsigned int width, unsigned int height, int *attrib_list);
+		typedef void (CODEGEN_FUNCPTR * Proc_glXDestroyGLXPbufferSGIX)(Display *dpy, GLXPbufferSGIX pbuf);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryGLXPbufferSGIX)(Display *dpy, GLXPbufferSGIX pbuf, int attribute, unsigned int *value);
+		typedef void (CODEGEN_FUNCPTR * Proc_glXSelectEventSGIX)(Display *dpy, GLXDrawable drawable, unsigned long mask);
+		typedef void (CODEGEN_FUNCPTR * Proc_glXGetSelectedEventSGIX)(Display *dpy, GLXDrawable drawable, unsigned long *mask);
 	}
 	
 	extern _detail::Proc_glXCreateGLXPbufferSGIX CreateGLXPbufferSGIX;
@@ -404,8 +404,8 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glXBindSwapBarrierSGIX)(Display *, GLXDrawable , int );
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXQueryMaxSwapBarriersSGIX)(Display *, int , int *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glXBindSwapBarrierSGIX)(Display *dpy, GLXDrawable drawable, int barrier);
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXQueryMaxSwapBarriersSGIX)(Display *dpy, int screen, int *max);
 	}
 	
 	extern _detail::Proc_glXBindSwapBarrierSGIX BindSwapBarrierSGIX;
@@ -413,18 +413,18 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glXJoinSwapGroupSGIX)(Display *, GLXDrawable , GLXDrawable );
+		typedef void (CODEGEN_FUNCPTR * Proc_glXJoinSwapGroupSGIX)(Display *dpy, GLXDrawable drawable, GLXDrawable member);
 	}
 	
 	extern _detail::Proc_glXJoinSwapGroupSGIX JoinSwapGroupSGIX;
 	
 	namespace _detail
 	{
-		typedef int (CODEGEN_FUNCPTR * Proc_glXBindChannelToWindowSGIX)(Display *, int , int , Window );
-		typedef int (CODEGEN_FUNCPTR * Proc_glXChannelRectSGIX)(Display *, int , int , int , int , int , int );
-		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryChannelRectSGIX)(Display *, int , int , int *, int *, int *, int *);
-		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryChannelDeltasSGIX)(Display *, int , int , int *, int *, int *, int *);
-		typedef int (CODEGEN_FUNCPTR * Proc_glXChannelRectSyncSGIX)(Display *, int , int , GLenum );
+		typedef int (CODEGEN_FUNCPTR * Proc_glXBindChannelToWindowSGIX)(Display *display, int screen, int channel, Window window);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXChannelRectSGIX)(Display *display, int screen, int channel, int x, int y, int w, int h);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryChannelRectSGIX)(Display *display, int screen, int channel, int *dx, int *dy, int *dw, int *dh);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryChannelDeltasSGIX)(Display *display, int screen, int channel, int *x, int *y, int *w, int *h);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXChannelRectSyncSGIX)(Display *display, int screen, int channel, GLenum synctype);
 	}
 	
 	extern _detail::Proc_glXBindChannelToWindowSGIX BindChannelToWindowSGIX;
@@ -435,14 +435,14 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glXCushionSGI)(Display *, Window , float );
+		typedef void (CODEGEN_FUNCPTR * Proc_glXCushionSGI)(Display *dpy, Window window, float cushion);
 	}
 	
 	extern _detail::Proc_glXCushionSGI CushionSGI;
 	
 	namespace _detail
 	{
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXMakeCurrentReadSGI)(Display *, GLXDrawable , GLXDrawable , GLXContext );
+		typedef Bool (CODEGEN_FUNCPTR * Proc_glXMakeCurrentReadSGI)(Display *dpy, GLXDrawable draw, GLXDrawable read, GLXContext ctx);
 		typedef GLXDrawable (CODEGEN_FUNCPTR * Proc_glXGetCurrentReadDrawableSGI)();
 	}
 	
@@ -451,15 +451,15 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef int (CODEGEN_FUNCPTR * Proc_glXSwapIntervalSGI)(int );
+		typedef int (CODEGEN_FUNCPTR * Proc_glXSwapIntervalSGI)(int interval);
 	}
 	
 	extern _detail::Proc_glXSwapIntervalSGI SwapIntervalSGI;
 	
 	namespace _detail
 	{
-		typedef int (CODEGEN_FUNCPTR * Proc_glXGetVideoSyncSGI)(unsigned int *);
-		typedef int (CODEGEN_FUNCPTR * Proc_glXWaitVideoSyncSGI)(int , int , unsigned int *);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXGetVideoSyncSGI)(unsigned int *count);
+		typedef int (CODEGEN_FUNCPTR * Proc_glXWaitVideoSyncSGI)(int divisor, int remainder, unsigned int *count);
 	}
 	
 	extern _detail::Proc_glXGetVideoSyncSGI GetVideoSyncSGI;
@@ -467,7 +467,7 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef Status (CODEGEN_FUNCPTR * Proc_glXGetTransparentIndexSUN)(Display *, Window , Window , long *);
+		typedef Status (CODEGEN_FUNCPTR * Proc_glXGetTransparentIndexSUN)(Display *dpy, Window overlay, Window underlay, long *pTransparentIndex);
 	}
 	
 	extern _detail::Proc_glXGetTransparentIndexSUN GetTransparentIndexSUN;

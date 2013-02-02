@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include <glload/gl_3_3.h>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #include <GL/glfw.h>
 
 GLuint positionBufferObject;

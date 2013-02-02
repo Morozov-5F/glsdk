@@ -20,10 +20,10 @@ extern "C" {
 #define GL_PRIMITIVE_RESTART 0x8F9D
 #define GL_PRIMITIVE_RESTART_INDEX 0x8F9E
 
-typedef void (CODEGEN_FUNCPTR * PFNGLDRAWARRAYSINSTANCEDPROC)(GLenum , GLint , GLsizei , GLsizei );
-typedef void (CODEGEN_FUNCPTR * PFNGLDRAWELEMENTSINSTANCEDPROC)(GLenum , GLsizei , GLenum , const GLvoid *, GLsizei );
-typedef void (CODEGEN_FUNCPTR * PFNGLTEXBUFFERPROC)(GLenum , GLenum , GLuint );
-typedef void (CODEGEN_FUNCPTR * PFNGLPRIMITIVERESTARTINDEXPROC)(GLuint );
+typedef void (CODEGEN_FUNCPTR * PFNGLDRAWARRAYSINSTANCEDPROC)(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
+typedef void (CODEGEN_FUNCPTR * PFNGLDRAWELEMENTSINSTANCEDPROC)(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei instancecount);
+typedef void (CODEGEN_FUNCPTR * PFNGLTEXBUFFERPROC)(GLenum target, GLenum internalformat, GLuint buffer);
+typedef void (CODEGEN_FUNCPTR * PFNGLPRIMITIVERESTARTINDEXPROC)(GLuint index);
 
 extern PFNGLDRAWARRAYSINSTANCEDPROC _funcptr_glDrawArraysInstanced;
 #define glDrawArraysInstanced _funcptr_glDrawArraysInstanced

@@ -510,7 +510,7 @@ typedef struct glx_StrToExtMap_s
 	PFN_LOADFUNCPOINTERS LoadExtension;
 } glx_StrToExtMap;
 
-static glx_StrToExtMap ExtensionTable[] = {
+static glx_StrToExtMap ExtensionTable[49] = {
 	{"GLX_3DFX_multisample", &glXext_3DFX_multisample, NULL},
 	{"GLX_AMD_gpu_association", &glXext_AMD_gpu_association, NULL},
 	{"GLX_ARB_create_context", &glXext_ARB_create_context, LoadExt_ARB_create_context},

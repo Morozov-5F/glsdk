@@ -313,22 +313,22 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetStereoEmitterState3DL)(HDC , UINT );
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetStereoEmitterState3DL)(HDC hDC, UINT uState);
 	}
 	
 	extern _detail::Proc_wglSetStereoEmitterState3DL SetStereoEmitterState3DL;
 	
 	namespace _detail
 	{
-		typedef UINT (CODEGEN_FUNCPTR * Proc_wglGetGPUIDsAMD)(UINT , UINT *);
-		typedef INT (CODEGEN_FUNCPTR * Proc_wglGetGPUInfoAMD)(UINT , int , GLenum , UINT , void *);
-		typedef UINT (CODEGEN_FUNCPTR * Proc_wglGetContextGPUIDAMD)(HGLRC );
-		typedef HGLRC (CODEGEN_FUNCPTR * Proc_wglCreateAssociatedContextAMD)(UINT );
-		typedef HGLRC (CODEGEN_FUNCPTR * Proc_wglCreateAssociatedContextAttribsAMD)(UINT , HGLRC , const int *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDeleteAssociatedContextAMD)(HGLRC );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglMakeAssociatedContextCurrentAMD)(HGLRC );
+		typedef UINT (CODEGEN_FUNCPTR * Proc_wglGetGPUIDsAMD)(UINT maxCount, UINT *ids);
+		typedef INT (CODEGEN_FUNCPTR * Proc_wglGetGPUInfoAMD)(UINT id, int property, GLenum dataType, UINT size, void *data);
+		typedef UINT (CODEGEN_FUNCPTR * Proc_wglGetContextGPUIDAMD)(HGLRC hglrc);
+		typedef HGLRC (CODEGEN_FUNCPTR * Proc_wglCreateAssociatedContextAMD)(UINT id);
+		typedef HGLRC (CODEGEN_FUNCPTR * Proc_wglCreateAssociatedContextAttribsAMD)(UINT id, HGLRC hShareContext, const int *attribList);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDeleteAssociatedContextAMD)(HGLRC hglrc);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglMakeAssociatedContextCurrentAMD)(HGLRC hglrc);
 		typedef HGLRC (CODEGEN_FUNCPTR * Proc_wglGetCurrentAssociatedContextAMD)();
-		typedef VOID (CODEGEN_FUNCPTR * Proc_wglBlitContextFramebufferAMD)(HGLRC , GLint , GLint , GLint , GLint , GLint , GLint , GLint , GLint , GLbitfield , GLenum );
+		typedef VOID (CODEGEN_FUNCPTR * Proc_wglBlitContextFramebufferAMD)(HGLRC dstCtx, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
 	}
 	
 	extern _detail::Proc_wglGetGPUIDsAMD GetGPUIDsAMD;
@@ -343,10 +343,10 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef HANDLE (CODEGEN_FUNCPTR * Proc_wglCreateBufferRegionARB)(HDC , int , UINT );
-		typedef VOID (CODEGEN_FUNCPTR * Proc_wglDeleteBufferRegionARB)(HANDLE );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSaveBufferRegionARB)(HANDLE , int , int , int , int );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglRestoreBufferRegionARB)(HANDLE , int , int , int , int , int , int );
+		typedef HANDLE (CODEGEN_FUNCPTR * Proc_wglCreateBufferRegionARB)(HDC hDC, int iLayerPlane, UINT uType);
+		typedef VOID (CODEGEN_FUNCPTR * Proc_wglDeleteBufferRegionARB)(HANDLE hRegion);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSaveBufferRegionARB)(HANDLE hRegion, int x, int y, int width, int height);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglRestoreBufferRegionARB)(HANDLE hRegion, int x, int y, int width, int height, int xSrc, int ySrc);
 	}
 	
 	extern _detail::Proc_wglCreateBufferRegionARB CreateBufferRegionARB;
@@ -356,21 +356,21 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef HGLRC (CODEGEN_FUNCPTR * Proc_wglCreateContextAttribsARB)(HDC , HGLRC , const int *);
+		typedef HGLRC (CODEGEN_FUNCPTR * Proc_wglCreateContextAttribsARB)(HDC hDC, HGLRC hShareContext, const int *attribList);
 	}
 	
 	extern _detail::Proc_wglCreateContextAttribsARB CreateContextAttribsARB;
 	
 	namespace _detail
 	{
-		typedef const char * (CODEGEN_FUNCPTR * Proc_wglGetExtensionsStringARB)(HDC );
+		typedef const char * (CODEGEN_FUNCPTR * Proc_wglGetExtensionsStringARB)(HDC hdc);
 	}
 	
 	extern _detail::Proc_wglGetExtensionsStringARB GetExtensionsStringARB;
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglMakeContextCurrentARB)(HDC , HDC , HGLRC );
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglMakeContextCurrentARB)(HDC hDrawDC, HDC hReadDC, HGLRC hglrc);
 		typedef HDC (CODEGEN_FUNCPTR * Proc_wglGetCurrentReadDCARB)();
 	}
 	
@@ -379,11 +379,11 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef HPBUFFERARB (CODEGEN_FUNCPTR * Proc_wglCreatePbufferARB)(HDC , int , int , int , const int *);
-		typedef HDC (CODEGEN_FUNCPTR * Proc_wglGetPbufferDCARB)(HPBUFFERARB );
-		typedef int (CODEGEN_FUNCPTR * Proc_wglReleasePbufferDCARB)(HPBUFFERARB , HDC );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDestroyPbufferARB)(HPBUFFERARB );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryPbufferARB)(HPBUFFERARB , int , int *);
+		typedef HPBUFFERARB (CODEGEN_FUNCPTR * Proc_wglCreatePbufferARB)(HDC hDC, int iPixelFormat, int iWidth, int iHeight, const int *piAttribList);
+		typedef HDC (CODEGEN_FUNCPTR * Proc_wglGetPbufferDCARB)(HPBUFFERARB hPbuffer);
+		typedef int (CODEGEN_FUNCPTR * Proc_wglReleasePbufferDCARB)(HPBUFFERARB hPbuffer, HDC hDC);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDestroyPbufferARB)(HPBUFFERARB hPbuffer);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryPbufferARB)(HPBUFFERARB hPbuffer, int iAttribute, int *piValue);
 	}
 	
 	extern _detail::Proc_wglCreatePbufferARB CreatePbufferARB;
@@ -394,9 +394,9 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetPixelFormatAttribivARB)(HDC , int , int , UINT , const int *, int *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetPixelFormatAttribfvARB)(HDC , int , int , UINT , const int *, FLOAT *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglChoosePixelFormatARB)(HDC , const int *, const FLOAT *, UINT , int *, UINT *);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetPixelFormatAttribivARB)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, int *piValues);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetPixelFormatAttribfvARB)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, const int *piAttributes, FLOAT *pfValues);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglChoosePixelFormatARB)(HDC hdc, const int *piAttribIList, const FLOAT *pfAttribFList, UINT nMaxFormats, int *piFormats, UINT *nNumFormats);
 	}
 	
 	extern _detail::Proc_wglGetPixelFormatAttribivARB GetPixelFormatAttribivARB;
@@ -405,9 +405,9 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindTexImageARB)(HPBUFFERARB , int );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseTexImageARB)(HPBUFFERARB , int );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetPbufferAttribARB)(HPBUFFERARB , const int *);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindTexImageARB)(HPBUFFERARB hPbuffer, int iBuffer);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseTexImageARB)(HPBUFFERARB hPbuffer, int iBuffer);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetPbufferAttribARB)(HPBUFFERARB hPbuffer, const int *piAttribList);
 	}
 	
 	extern _detail::Proc_wglBindTexImageARB BindTexImageARB;
@@ -416,7 +416,7 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglMakeContextCurrentEXT)(HDC , HDC , HGLRC );
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglMakeContextCurrentEXT)(HDC hDrawDC, HDC hReadDC, HGLRC hglrc);
 		typedef HDC (CODEGEN_FUNCPTR * Proc_wglGetCurrentReadDCEXT)();
 	}
 	
@@ -425,11 +425,11 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef HPBUFFEREXT (CODEGEN_FUNCPTR * Proc_wglCreatePbufferEXT)(HDC , int , int , int , const int *);
-		typedef HDC (CODEGEN_FUNCPTR * Proc_wglGetPbufferDCEXT)(HPBUFFEREXT );
-		typedef int (CODEGEN_FUNCPTR * Proc_wglReleasePbufferDCEXT)(HPBUFFEREXT , HDC );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDestroyPbufferEXT)(HPBUFFEREXT );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryPbufferEXT)(HPBUFFEREXT , int , int *);
+		typedef HPBUFFEREXT (CODEGEN_FUNCPTR * Proc_wglCreatePbufferEXT)(HDC hDC, int iPixelFormat, int iWidth, int iHeight, const int *piAttribList);
+		typedef HDC (CODEGEN_FUNCPTR * Proc_wglGetPbufferDCEXT)(HPBUFFEREXT hPbuffer);
+		typedef int (CODEGEN_FUNCPTR * Proc_wglReleasePbufferDCEXT)(HPBUFFEREXT hPbuffer, HDC hDC);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDestroyPbufferEXT)(HPBUFFEREXT hPbuffer);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryPbufferEXT)(HPBUFFEREXT hPbuffer, int iAttribute, int *piValue);
 	}
 	
 	extern _detail::Proc_wglCreatePbufferEXT CreatePbufferEXT;
@@ -440,9 +440,9 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetPixelFormatAttribivEXT)(HDC , int , int , UINT , int *, int *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetPixelFormatAttribfvEXT)(HDC , int , int , UINT , int *, FLOAT *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglChoosePixelFormatEXT)(HDC , const int *, const FLOAT *, UINT , int *, UINT *);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetPixelFormatAttribivEXT)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, int *piAttributes, int *piValues);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetPixelFormatAttribfvEXT)(HDC hdc, int iPixelFormat, int iLayerPlane, UINT nAttributes, int *piAttributes, FLOAT *pfValues);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglChoosePixelFormatEXT)(HDC hdc, const int *piAttribIList, const FLOAT *pfAttribFList, UINT nMaxFormats, int *piFormats, UINT *nNumFormats);
 	}
 	
 	extern _detail::Proc_wglGetPixelFormatAttribivEXT GetPixelFormatAttribivEXT;
@@ -451,7 +451,7 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSwapIntervalEXT)(int );
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSwapIntervalEXT)(int interval);
 		typedef int (CODEGEN_FUNCPTR * Proc_wglGetSwapIntervalEXT)();
 	}
 	
@@ -460,8 +460,8 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetDigitalVideoParametersI3D)(HDC , int , int *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetDigitalVideoParametersI3D)(HDC , int , const int *);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetDigitalVideoParametersI3D)(HDC hDC, int iAttribute, int *piValue);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetDigitalVideoParametersI3D)(HDC hDC, int iAttribute, const int *piValue);
 	}
 	
 	extern _detail::Proc_wglGetDigitalVideoParametersI3D GetDigitalVideoParametersI3D;
@@ -469,10 +469,10 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGammaTableParametersI3D)(HDC , int , int *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetGammaTableParametersI3D)(HDC , int , const int *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGammaTableI3D)(HDC , int , USHORT *, USHORT *, USHORT *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetGammaTableI3D)(HDC , int , const USHORT *, const USHORT *, const USHORT *);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGammaTableParametersI3D)(HDC hDC, int iAttribute, int *piValue);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetGammaTableParametersI3D)(HDC hDC, int iAttribute, const int *piValue);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGammaTableI3D)(HDC hDC, int iEntries, USHORT *puRed, USHORT *puGreen, USHORT *puBlue);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSetGammaTableI3D)(HDC hDC, int iEntries, const USHORT *puRed, const USHORT *puGreen, const USHORT *puBlue);
 	}
 	
 	extern _detail::Proc_wglGetGammaTableParametersI3D GetGammaTableParametersI3D;
@@ -482,18 +482,18 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglEnableGenlockI3D)(HDC );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDisableGenlockI3D)(HDC );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglIsEnabledGenlockI3D)(HDC , BOOL *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGenlockSourceI3D)(HDC , UINT );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGenlockSourceI3D)(HDC , UINT *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGenlockSourceEdgeI3D)(HDC , UINT );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGenlockSourceEdgeI3D)(HDC , UINT *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGenlockSampleRateI3D)(HDC , UINT );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGenlockSampleRateI3D)(HDC , UINT *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGenlockSourceDelayI3D)(HDC , UINT );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGenlockSourceDelayI3D)(HDC , UINT *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryGenlockMaxSourceDelayI3D)(HDC , UINT *, UINT *);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglEnableGenlockI3D)(HDC hDC);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDisableGenlockI3D)(HDC hDC);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglIsEnabledGenlockI3D)(HDC hDC, BOOL *pFlag);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGenlockSourceI3D)(HDC hDC, UINT uSource);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGenlockSourceI3D)(HDC hDC, UINT *uSource);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGenlockSourceEdgeI3D)(HDC hDC, UINT uEdge);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGenlockSourceEdgeI3D)(HDC hDC, UINT *uEdge);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGenlockSampleRateI3D)(HDC hDC, UINT uRate);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGenlockSampleRateI3D)(HDC hDC, UINT *uRate);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGenlockSourceDelayI3D)(HDC hDC, UINT uDelay);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetGenlockSourceDelayI3D)(HDC hDC, UINT *uDelay);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryGenlockMaxSourceDelayI3D)(HDC hDC, UINT *uMaxLineDelay, UINT *uMaxPixelDelay);
 	}
 	
 	extern _detail::Proc_wglEnableGenlockI3D EnableGenlockI3D;
@@ -511,10 +511,10 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef LPVOID (CODEGEN_FUNCPTR * Proc_wglCreateImageBufferI3D)(HDC , DWORD , UINT );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDestroyImageBufferI3D)(HDC , LPVOID );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglAssociateImageBufferEventsI3D)(HDC , const HANDLE *, const LPVOID *, const DWORD *, UINT );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseImageBufferEventsI3D)(HDC , const LPVOID *, UINT );
+		typedef LPVOID (CODEGEN_FUNCPTR * Proc_wglCreateImageBufferI3D)(HDC hDC, DWORD dwSize, UINT uFlags);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDestroyImageBufferI3D)(HDC hDC, LPVOID pAddress);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglAssociateImageBufferEventsI3D)(HDC hDC, const HANDLE *pEvent, const LPVOID *pAddress, const DWORD *pSize, UINT count);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseImageBufferEventsI3D)(HDC hDC, const LPVOID *pAddress, UINT count);
 	}
 	
 	extern _detail::Proc_wglCreateImageBufferI3D CreateImageBufferI3D;
@@ -526,8 +526,8 @@ namespace wgl
 	{
 		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglEnableFrameLockI3D)();
 		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDisableFrameLockI3D)();
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglIsEnabledFrameLockI3D)(BOOL *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryFrameLockMasterI3D)(BOOL *);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglIsEnabledFrameLockI3D)(BOOL *pFlag);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryFrameLockMasterI3D)(BOOL *pFlag);
 	}
 	
 	extern _detail::Proc_wglEnableFrameLockI3D EnableFrameLockI3D;
@@ -537,14 +537,14 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXSetResourceShareHandleNV)(void *, HANDLE );
-		typedef HANDLE (CODEGEN_FUNCPTR * Proc_wglDXOpenDeviceNV)(void *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXCloseDeviceNV)(HANDLE );
-		typedef HANDLE (CODEGEN_FUNCPTR * Proc_wglDXRegisterObjectNV)(HANDLE , void *, GLuint , GLenum , GLenum );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXUnregisterObjectNV)(HANDLE , HANDLE );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXObjectAccessNV)(HANDLE , GLenum );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXLockObjectsNV)(HANDLE , GLint , HANDLE *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXUnlockObjectsNV)(HANDLE , GLint , HANDLE *);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXSetResourceShareHandleNV)(void *dxObject, HANDLE shareHandle);
+		typedef HANDLE (CODEGEN_FUNCPTR * Proc_wglDXOpenDeviceNV)(void *dxDevice);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXCloseDeviceNV)(HANDLE hDevice);
+		typedef HANDLE (CODEGEN_FUNCPTR * Proc_wglDXRegisterObjectNV)(HANDLE hDevice, void *dxObject, GLuint name, GLenum type, GLenum access);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXUnregisterObjectNV)(HANDLE hDevice, HANDLE hObject);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXObjectAccessNV)(HANDLE hObject, GLenum access);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXLockObjectsNV)(HANDLE hDevice, GLint count, HANDLE *hObjects);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDXUnlockObjectsNV)(HANDLE hDevice, GLint count, HANDLE *hObjects);
 	}
 	
 	extern _detail::Proc_wglDXSetResourceShareHandleNV DXSetResourceShareHandleNV;
@@ -558,18 +558,18 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglCopyImageSubDataNV)(HGLRC , GLuint , GLenum , GLint , GLint , GLint , GLint , HGLRC , GLuint , GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei );
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglCopyImageSubDataNV)(HGLRC hSrcRC, GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, HGLRC hDstRC, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth);
 	}
 	
 	extern _detail::Proc_wglCopyImageSubDataNV CopyImageSubDataNV;
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglEnumGpusNV)(UINT , HGPUNV *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglEnumGpuDevicesNV)(HGPUNV , UINT , PGPU_DEVICE );
-		typedef HDC (CODEGEN_FUNCPTR * Proc_wglCreateAffinityDCNV)(const HGPUNV *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglEnumGpusFromAffinityDCNV)(HDC , UINT , HGPUNV *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDeleteDCNV)(HDC );
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglEnumGpusNV)(UINT iGpuIndex, HGPUNV *phGpu);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglEnumGpuDevicesNV)(HGPUNV hGpu, UINT iDeviceIndex, PGPU_DEVICE lpGpuDevice);
+		typedef HDC (CODEGEN_FUNCPTR * Proc_wglCreateAffinityDCNV)(const HGPUNV *phGpuList);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglEnumGpusFromAffinityDCNV)(HDC hAffinityDC, UINT iGpuIndex, HGPUNV *hGpu);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglDeleteDCNV)(HDC hdc);
 	}
 	
 	extern _detail::Proc_wglEnumGpusNV EnumGpusNV;
@@ -580,9 +580,9 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef int (CODEGEN_FUNCPTR * Proc_wglEnumerateVideoDevicesNV)(HDC , HVIDEOOUTPUTDEVICENV *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindVideoDeviceNV)(HDC , unsigned int , HVIDEOOUTPUTDEVICENV , const int *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryCurrentContextNV)(int , int *);
+		typedef int (CODEGEN_FUNCPTR * Proc_wglEnumerateVideoDevicesNV)(HDC hDC, HVIDEOOUTPUTDEVICENV *phDeviceList);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindVideoDeviceNV)(HDC hDC, unsigned int uVideoSlot, HVIDEOOUTPUTDEVICENV hVideoDevice, const int *piAttribList);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryCurrentContextNV)(int iAttribute, int *piValue);
 	}
 	
 	extern _detail::Proc_wglEnumerateVideoDevicesNV EnumerateVideoDevicesNV;
@@ -591,12 +591,12 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglJoinSwapGroupNV)(HDC , GLuint );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindSwapBarrierNV)(GLuint , GLuint );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQuerySwapGroupNV)(HDC , GLuint *, GLuint *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryMaxSwapGroupsNV)(HDC , GLuint *, GLuint *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryFrameCountNV)(HDC , GLuint *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglResetFrameCountNV)(HDC );
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglJoinSwapGroupNV)(HDC hDC, GLuint group);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindSwapBarrierNV)(GLuint group, GLuint barrier);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQuerySwapGroupNV)(HDC hDC, GLuint *group, GLuint *barrier);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryMaxSwapGroupsNV)(HDC hDC, GLuint *maxGroups, GLuint *maxBarriers);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryFrameCountNV)(HDC hDC, GLuint *count);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglResetFrameCountNV)(HDC hDC);
 	}
 	
 	extern _detail::Proc_wglJoinSwapGroupNV JoinSwapGroupNV;
@@ -608,11 +608,11 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindVideoCaptureDeviceNV)(UINT , HVIDEOINPUTDEVICENV );
-		typedef UINT (CODEGEN_FUNCPTR * Proc_wglEnumerateVideoCaptureDevicesNV)(HDC , HVIDEOINPUTDEVICENV *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglLockVideoCaptureDeviceNV)(HDC , HVIDEOINPUTDEVICENV );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryVideoCaptureDeviceNV)(HDC , HVIDEOINPUTDEVICENV , int , int *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseVideoCaptureDeviceNV)(HDC , HVIDEOINPUTDEVICENV );
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindVideoCaptureDeviceNV)(UINT uVideoSlot, HVIDEOINPUTDEVICENV hDevice);
+		typedef UINT (CODEGEN_FUNCPTR * Proc_wglEnumerateVideoCaptureDevicesNV)(HDC hDc, HVIDEOINPUTDEVICENV *phDeviceList);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglLockVideoCaptureDeviceNV)(HDC hDc, HVIDEOINPUTDEVICENV hDevice);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglQueryVideoCaptureDeviceNV)(HDC hDc, HVIDEOINPUTDEVICENV hDevice, int iAttribute, int *piValue);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseVideoCaptureDeviceNV)(HDC hDc, HVIDEOINPUTDEVICENV hDevice);
 	}
 	
 	extern _detail::Proc_wglBindVideoCaptureDeviceNV BindVideoCaptureDeviceNV;
@@ -623,12 +623,12 @@ namespace wgl
 	
 	namespace _detail
 	{
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetVideoDeviceNV)(HDC , int , HPVIDEODEV *);
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseVideoDeviceNV)(HPVIDEODEV );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindVideoImageNV)(HPVIDEODEV , HPBUFFERARB , int );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseVideoImageNV)(HPBUFFERARB , int );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSendPbufferToVideoNV)(HPBUFFERARB , int , unsigned long *, BOOL );
-		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetVideoInfoNV)(HPVIDEODEV , unsigned long *, unsigned long *);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetVideoDeviceNV)(HDC hDC, int numDevices, HPVIDEODEV *hVideoDevice);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseVideoDeviceNV)(HPVIDEODEV hVideoDevice);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglBindVideoImageNV)(HPVIDEODEV hVideoDevice, HPBUFFERARB hPbuffer, int iVideoBuffer);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglReleaseVideoImageNV)(HPBUFFERARB hPbuffer, int iVideoBuffer);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglSendPbufferToVideoNV)(HPBUFFERARB hPbuffer, int iBufferType, unsigned long *pulCounterPbuffer, BOOL bBlock);
+		typedef BOOL (CODEGEN_FUNCPTR * Proc_wglGetVideoInfoNV)(HPVIDEODEV hpVideoDevice, unsigned long *pulCounterOutputPbuffer, unsigned long *pulCounterOutputVideo);
 	}
 	
 	extern _detail::Proc_wglGetVideoDeviceNV GetVideoDeviceNV;

@@ -14,7 +14,8 @@ SDK's build process, and link to them as is normal for your build system.
 
 There are two interfaces for GL Load: the C interface and the C++ interface. Files that end in <tt>.hpp</tt> are for C++, and files that end in <tt>.h</tt> are for C. C++ programs can freely include and use the C interface files.
 
-All header files except <tt>glload/gll.h</tt> and <tt>glload/gll.hpp</tt> expose OpenGL functions or functions in WGL/GLX. For regular OpenGL functions, you need to include one of the headers of the form <tt>glload/gl_*.h</tt> or <tt>.hpp</tt>, where * is the version of OpenGL that you are coding against. For example, <tt>glload/gl_3_3.h</tt> represents the header for OpenGL version 3.3. There are also <tt>_comp</tt> verisons. For example: <tt>glload/gl_3_3_comp.hpp</tt> includes the C++ headers for the OpenGL 3.3 compatibility profile.
+The 
+All header files except the <tt>glload/*_load.h</tt> and <tt>glload/*_load.hpp</tt> files expose OpenGL functions or functions in WGL/GLX. For regular OpenGL functions, you need to include one of the headers of the form <tt>glload/gl_*.h</tt> or <tt>.hpp</tt>, where * is the version of OpenGL that you are coding against. For example, <tt>glload/gl_3_3.h</tt> represents the header for OpenGL version 3.3. There are also <tt>_comp</tt> verisons. For example: <tt>glload/gl_3_3_comp.hpp</tt> includes the C++ headers for the OpenGL 3.3 compatibility profile.
 
 Regardless of version number or core/compatibility issues, all OpenGL headers contain function for every extension.
 
@@ -108,10 +109,13 @@ int main(int argc, char *argv[])
 {
   //Initialize OpenGL and bind the context
   
-  if(LoadFunctions() == 0)
-    //exit in some way
+  int loadTest = ogl_LoadFunctions();
+  if(loadTest == ogl_LOAD_FAILED)
+    //Loading failed.
 	
-  //Loading succeeded. Now use OpenGL functions.
+  //Loading succeeded.
+  //loadTest - ogl_LOAD_SUCCESS is the number of functions that failed to load.
+  //Now use OpenGL functions.
   
   //Render stuff
   GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
@@ -131,11 +135,13 @@ Here is the same code, but written for the C++ interface.
 int main(int argc, char *argv[])
 {
   //Initialize OpenGL and bind the context
-  
-  if(!glload::LoadFunctions())
+  glload::LoadTest tst = glload::LoadFunctions();
+  if(!tst)
     //exit in some way
 	
-  //Loading succeeded. Now use OpenGL functions.
+  //Loading succeeded.
+  //tst.GetNumMissing() is the number of core functions that couldn't be loaded.
+  //Now use OpenGL functions.
   
   //Render stuff
   GLuint vertShader = gl::CreateShader(gl::GL_VERTEX_SHADER);
@@ -157,7 +163,7 @@ For example, you could have this scenario:
 \code
 //main.cpp
 #include <glload/gl_3_3.hpp>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #include <GL/glfw.h>
 
 int main(int argc, char *argv[])
@@ -181,7 +187,7 @@ If the warning bothers you, you can undefine the enum just before including the 
 
 \code
 #include <glload/gl_3_3.hpp>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #undef APIENTRY
 #include <GL/glfw.h>
 

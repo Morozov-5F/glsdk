@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <set>
 #include <glload/gl_all.hpp>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #include "glmesh/Mesh.h"
 
 

@@ -11,7 +11,7 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribDivisor)(GLuint , GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertexAttribDivisor)(GLuint index, GLuint divisor);
 	}
 	
 	extern _detail::Proc_glVertexAttribDivisor VertexAttribDivisor;

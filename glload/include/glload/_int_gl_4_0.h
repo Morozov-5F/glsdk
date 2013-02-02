@@ -16,11 +16,11 @@ extern "C" {
 #define GL_INT_SAMPLER_CUBE_MAP_ARRAY 0x900E
 #define GL_UNSIGNED_INT_SAMPLER_CUBE_MAP_ARRAY 0x900F
 
-typedef void (CODEGEN_FUNCPTR * PFNGLMINSAMPLESHADINGPROC)(GLfloat );
-typedef void (CODEGEN_FUNCPTR * PFNGLBLENDEQUATIONIPROC)(GLuint , GLenum );
-typedef void (CODEGEN_FUNCPTR * PFNGLBLENDEQUATIONSEPARATEIPROC)(GLuint , GLenum , GLenum );
-typedef void (CODEGEN_FUNCPTR * PFNGLBLENDFUNCIPROC)(GLuint , GLenum , GLenum );
-typedef void (CODEGEN_FUNCPTR * PFNGLBLENDFUNCSEPARATEIPROC)(GLuint , GLenum , GLenum , GLenum , GLenum );
+typedef void (CODEGEN_FUNCPTR * PFNGLMINSAMPLESHADINGPROC)(GLfloat value);
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDEQUATIONIPROC)(GLuint buf, GLenum mode);
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDEQUATIONSEPARATEIPROC)(GLuint buf, GLenum modeRGB, GLenum modeAlpha);
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDFUNCIPROC)(GLuint buf, GLenum src, GLenum dst);
+typedef void (CODEGEN_FUNCPTR * PFNGLBLENDFUNCSEPARATEIPROC)(GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha);
 
 extern PFNGLMINSAMPLESHADINGPROC _funcptr_glMinSampleShading;
 #define glMinSampleShading _funcptr_glMinSampleShading

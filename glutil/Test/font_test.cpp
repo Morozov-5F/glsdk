@@ -7,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <glload/gl_3_3.hpp>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #include <GL/glfw.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -224,7 +224,7 @@ int main(int argc, char** argv)
 
 	glm::ivec2 desktopSize(desktopMode.Width, desktopMode.Height);
 	glm::ivec2 wndPos = glutil::CalcWindowPosition(g_windowSize, desktopSize,
-		glutil::WH_LEFT, glutil::WV_CENTER);
+		glutil::WH_CENTER, glutil::WV_CENTER);
 
 	glfwSetWindowPos(wndPos.x, wndPos.y);
 

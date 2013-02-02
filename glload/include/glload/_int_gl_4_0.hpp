@@ -21,11 +21,11 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glMinSampleShading)(GLfloat );
-		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquationi)(GLuint , GLenum );
-		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquationSeparatei)(GLuint , GLenum , GLenum );
-		typedef void (CODEGEN_FUNCPTR * Proc_glBlendFunci)(GLuint , GLenum , GLenum );
-		typedef void (CODEGEN_FUNCPTR * Proc_glBlendFuncSeparatei)(GLuint , GLenum , GLenum , GLenum , GLenum );
+		typedef void (CODEGEN_FUNCPTR * Proc_glMinSampleShading)(GLfloat value);
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquationi)(GLuint buf, GLenum mode);
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquationSeparatei)(GLuint buf, GLenum modeRGB, GLenum modeAlpha);
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendFunci)(GLuint buf, GLenum src, GLenum dst);
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendFuncSeparatei)(GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha);
 	}
 	
 	extern _detail::Proc_glMinSampleShading MinSampleShading;

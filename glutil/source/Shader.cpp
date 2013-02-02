@@ -1,6 +1,6 @@
 
 #include <glload/gl_all.hpp>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #include "glutil/Shader.h"
 
 namespace glutil

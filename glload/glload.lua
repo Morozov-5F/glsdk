@@ -22,7 +22,6 @@ project("glload")
 		"include/glload/gll.h",
 		"include/glload/gll.hpp",
 		"source/gl_*",
-		"source/gll_c.c",
 	};
 	
 	configuration "plainc"

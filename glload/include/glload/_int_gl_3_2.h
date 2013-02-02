@@ -27,9 +27,9 @@ extern "C" {
 #define GL_MAX_FRAGMENT_INPUT_COMPONENTS 0x9125
 #define GL_CONTEXT_PROFILE_MASK 0x9126
 
-typedef void (CODEGEN_FUNCPTR * PFNGLGETINTEGER64I_VPROC)(GLenum , GLuint , GLint64 *);
-typedef void (CODEGEN_FUNCPTR * PFNGLGETBUFFERPARAMETERI64VPROC)(GLenum , GLenum , GLint64 *);
-typedef void (CODEGEN_FUNCPTR * PFNGLFRAMEBUFFERTEXTUREPROC)(GLenum , GLenum , GLuint , GLint );
+typedef void (CODEGEN_FUNCPTR * PFNGLGETINTEGER64I_VPROC)(GLenum target, GLuint index, GLint64 *data);
+typedef void (CODEGEN_FUNCPTR * PFNGLGETBUFFERPARAMETERI64VPROC)(GLenum target, GLenum pname, GLint64 *params);
+typedef void (CODEGEN_FUNCPTR * PFNGLFRAMEBUFFERTEXTUREPROC)(GLenum target, GLenum attachment, GLuint texture, GLint level);
 
 extern PFNGLGETINTEGER64I_VPROC _funcptr_glGetInteger64i_v;
 #define glGetInteger64i_v _funcptr_glGetInteger64i_v

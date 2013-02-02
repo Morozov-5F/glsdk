@@ -25,10 +25,10 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glDrawArraysInstanced)(GLenum , GLint , GLsizei , GLsizei );
-		typedef void (CODEGEN_FUNCPTR * Proc_glDrawElementsInstanced)(GLenum , GLsizei , GLenum , const GLvoid *, GLsizei );
-		typedef void (CODEGEN_FUNCPTR * Proc_glTexBuffer)(GLenum , GLenum , GLuint );
-		typedef void (CODEGEN_FUNCPTR * Proc_glPrimitiveRestartIndex)(GLuint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glDrawArraysInstanced)(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
+		typedef void (CODEGEN_FUNCPTR * Proc_glDrawElementsInstanced)(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei instancecount);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexBuffer)(GLenum target, GLenum internalformat, GLuint buffer);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPrimitiveRestartIndex)(GLuint index);
 	}
 	
 	extern _detail::Proc_glDrawArraysInstanced DrawArraysInstanced;

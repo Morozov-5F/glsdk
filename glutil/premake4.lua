@@ -1,7 +1,7 @@
 
 solution "glutil"
 configurations {"Debug", "Release"}
-defines(dofile("../common_defiles.lua"))
+defines(dofile("../common_defines.lua"))
 
 dofile("glutil.lua");
 

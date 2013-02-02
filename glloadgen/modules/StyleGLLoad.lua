@@ -95,7 +95,7 @@ function ext_hdr.WriteFuncTypedef(hFile, func, typemap, spec, options)
 	hFile:fmt(glload.GetTypedefFormat(spec),
 		common.GetFuncReturnType(func, typemap),
 		glload.GetFuncTypedefName(func, spec, options),
-		common.GetFuncParamList(func, typemap))
+		common.GetFuncParamList(func, typemap, true))
 end
 
 function ext_hdr.WriteFuncDecl(hFile, func, typemap, spec, options)
@@ -160,7 +160,7 @@ function core_hdr.WriteFuncTypedef(hFile, func, typemap, spec, options)
 	hFile:fmt(glload.GetTypedefFormat(spec),
 		common.GetFuncReturnType(func, typemap),
 		glload.GetFuncTypedefName(func, spec, options),
-		common.GetFuncParamList(func, typemap))
+		common.GetFuncParamList(func, typemap, true))
 end
 
 function core_hdr.WriteFuncDecl(hFile, func, typemap, spec, options)

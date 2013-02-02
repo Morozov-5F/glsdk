@@ -2,7 +2,7 @@
 #include <set>
 #include <sstream>
 #include <glload/gl_all.hpp>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #include "glmesh/VertexFormat.h"
 #include <boost/foreach.hpp>
 #include <boost/static_assert.hpp>

@@ -22,7 +22,7 @@ OpenGL 1.1. */
 #include <string.h>
 #include <math.h>
 #include <glload/gl_all.h>
-#include <glload/gll.h>
+#include <glload/gl_load.h>
 #include <GL/freeglut.h>
 
 #include "texload.h"
@@ -505,7 +505,7 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);
 	glutCreateWindow("underwater");
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
-	LoadFunctions();
+	ogl_LoadFunctions();
 
 	/* Check that renderer has the GL_EXT_texture_object
 	extension or supports OpenGL 1.1 */

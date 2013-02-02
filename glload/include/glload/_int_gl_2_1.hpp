@@ -26,12 +26,12 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix2x3fv)(GLint , GLsizei , GLboolean , const GLfloat *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix3x2fv)(GLint , GLsizei , GLboolean , const GLfloat *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix2x4fv)(GLint , GLsizei , GLboolean , const GLfloat *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix4x2fv)(GLint , GLsizei , GLboolean , const GLfloat *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix3x4fv)(GLint , GLsizei , GLboolean , const GLfloat *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix4x3fv)(GLint , GLsizei , GLboolean , const GLfloat *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix2x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix3x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix2x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix4x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix3x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUniformMatrix4x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
 	}
 	
 	extern _detail::Proc_glUniformMatrix2x3fv UniformMatrix2x3fv;

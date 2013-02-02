@@ -627,7 +627,7 @@ typedef struct wgl_StrToExtMap_s
 	PFN_LOADFUNCPOINTERS LoadExtension;
 } wgl_StrToExtMap;
 
-static wgl_StrToExtMap ExtensionTable[] = {
+static wgl_StrToExtMap ExtensionTable[43] = {
 	{"WGL_3DFX_multisample", &wglext_3DFX_multisample, NULL},
 	{"WGL_3DL_stereo_control", &wglext_3DL_stereo_control, LoadExt_3DL_stereo_control},
 	{"WGL_AMD_gpu_association", &wglext_AMD_gpu_association, LoadExt_AMD_gpu_association},

@@ -7,6 +7,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
+extern int glext_ARB_imaging;
 extern int glext_ARB_vertex_array_object;
 extern int glext_ARB_texture_rg;
 extern int glext_ARB_texture_compression_rgtc;
@@ -129,7 +130,6 @@ extern int glext_ARB_fragment_program_shadow;
 extern int glext_ARB_fragment_shader;
 extern int glext_ARB_geometry_shader4;
 extern int glext_ARB_half_float_pixel;
-extern int glext_ARB_imaging;
 extern int glext_ARB_instanced_arrays;
 extern int glext_ARB_matrix_palette;
 extern int glext_ARB_multisample;
@@ -2900,6 +2900,7 @@ namespace gl
 {
 	namespace exts
 	{
+		glload::LoadTest var_ARB_imaging;
 		glload::LoadTest var_ARB_vertex_array_object;
 		glload::LoadTest var_ARB_texture_rg;
 		glload::LoadTest var_ARB_texture_compression_rgtc;
@@ -3022,7 +3023,6 @@ namespace gl
 		glload::LoadTest var_ARB_fragment_shader;
 		glload::LoadTest var_ARB_geometry_shader4;
 		glload::LoadTest var_ARB_half_float_pixel;
-		glload::LoadTest var_ARB_imaging;
 		glload::LoadTest var_ARB_instanced_arrays;
 		glload::LoadTest var_ARB_matrix_palette;
 		glload::LoadTest var_ARB_multisample;
@@ -6012,6 +6012,7 @@ namespace gl
 	
 	static void CopyExtensionVariables()
 	{
+		exts::var_ARB_imaging = glload::LoadTest((::glext_ARB_imaging != 0), ::glext_ARB_imaging - 1);
 		exts::var_ARB_vertex_array_object = glload::LoadTest((::glext_ARB_vertex_array_object != 0), ::glext_ARB_vertex_array_object - 1);
 		exts::var_ARB_texture_rg = glload::LoadTest((::glext_ARB_texture_rg != 0), ::glext_ARB_texture_rg - 1);
 		exts::var_ARB_texture_compression_rgtc = glload::LoadTest((::glext_ARB_texture_compression_rgtc != 0), ::glext_ARB_texture_compression_rgtc - 1);
@@ -6134,7 +6135,6 @@ namespace gl
 		exts::var_ARB_fragment_shader = glload::LoadTest((::glext_ARB_fragment_shader != 0), ::glext_ARB_fragment_shader - 1);
 		exts::var_ARB_geometry_shader4 = glload::LoadTest((::glext_ARB_geometry_shader4 != 0), ::glext_ARB_geometry_shader4 - 1);
 		exts::var_ARB_half_float_pixel = glload::LoadTest((::glext_ARB_half_float_pixel != 0), ::glext_ARB_half_float_pixel - 1);
-		exts::var_ARB_imaging = glload::LoadTest((::glext_ARB_imaging != 0), ::glext_ARB_imaging - 1);
 		exts::var_ARB_instanced_arrays = glload::LoadTest((::glext_ARB_instanced_arrays != 0), ::glext_ARB_instanced_arrays - 1);
 		exts::var_ARB_matrix_palette = glload::LoadTest((::glext_ARB_matrix_palette != 0), ::glext_ARB_matrix_palette - 1);
 		exts::var_ARB_multisample = glload::LoadTest((::glext_ARB_multisample != 0), ::glext_ARB_multisample - 1);

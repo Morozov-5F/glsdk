@@ -96,6 +96,7 @@ static PROC WinGetProcAddress(const char *name)
 	#endif
 #endif
 
+int glext_ARB_imaging = 0;
 int glext_ARB_vertex_array_object = 0;
 int glext_ARB_texture_rg = 0;
 int glext_ARB_texture_compression_rgtc = 0;
@@ -218,7 +219,6 @@ int glext_ARB_fragment_program_shadow = 0;
 int glext_ARB_fragment_shader = 0;
 int glext_ARB_geometry_shader4 = 0;
 int glext_ARB_half_float_pixel = 0;
-int glext_ARB_imaging = 0;
 int glext_ARB_instanced_arrays = 0;
 int glext_ARB_matrix_palette = 0;
 int glext_ARB_multisample = 0;
@@ -10525,7 +10525,8 @@ typedef struct ogl_StrToExtMap_s
 	PFN_LOADFUNCPOINTERS LoadExtension;
 } ogl_StrToExtMap;
 
-static ogl_StrToExtMap ExtensionTable[] = {
+static ogl_StrToExtMap ExtensionTable[438] = {
+	{"GL_ARB_imaging", &glext_ARB_imaging, NULL},
 	{"GL_ARB_vertex_array_object", &glext_ARB_vertex_array_object, LoadExt_ARB_vertex_array_object},
 	{"GL_ARB_texture_rg", &glext_ARB_texture_rg, NULL},
 	{"GL_ARB_texture_compression_rgtc", &glext_ARB_texture_compression_rgtc, NULL},
@@ -10648,7 +10649,6 @@ static ogl_StrToExtMap ExtensionTable[] = {
 	{"GL_ARB_fragment_shader", &glext_ARB_fragment_shader, NULL},
 	{"GL_ARB_geometry_shader4", &glext_ARB_geometry_shader4, LoadExt_ARB_geometry_shader4},
 	{"GL_ARB_half_float_pixel", &glext_ARB_half_float_pixel, NULL},
-	{"GL_ARB_imaging", &glext_ARB_imaging, NULL},
 	{"GL_ARB_instanced_arrays", &glext_ARB_instanced_arrays, LoadExt_ARB_instanced_arrays},
 	{"GL_ARB_matrix_palette", &glext_ARB_matrix_palette, LoadExt_ARB_matrix_palette},
 	{"GL_ARB_multisample", &glext_ARB_multisample, LoadExt_ARB_multisample},
@@ -10983,6 +10983,7 @@ static ogl_StrToExtMap *FindExtEntry(const char *extensionName)
 
 static void ClearExtensionVars()
 {
+	glext_ARB_imaging = 0;
 	glext_ARB_vertex_array_object = 0;
 	glext_ARB_texture_rg = 0;
 	glext_ARB_texture_compression_rgtc = 0;
@@ -11105,7 +11106,6 @@ static void ClearExtensionVars()
 	glext_ARB_fragment_shader = 0;
 	glext_ARB_geometry_shader4 = 0;
 	glext_ARB_half_float_pixel = 0;
-	glext_ARB_imaging = 0;
 	glext_ARB_instanced_arrays = 0;
 	glext_ARB_matrix_palette = 0;
 	glext_ARB_multisample = 0;

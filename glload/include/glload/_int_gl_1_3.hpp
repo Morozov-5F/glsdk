@@ -66,15 +66,15 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glActiveTexture)(GLenum );
-		typedef void (CODEGEN_FUNCPTR * Proc_glSampleCoverage)(GLfloat , GLboolean );
-		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexImage3D)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexImage2D)(GLenum , GLint , GLenum , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexImage1D)(GLenum , GLint , GLenum , GLsizei , GLint , GLsizei , const GLvoid *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexSubImage3D)(GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei , GLenum , GLsizei , const GLvoid *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexSubImage2D)(GLenum , GLint , GLint , GLint , GLsizei , GLsizei , GLenum , GLsizei , const GLvoid *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexSubImage1D)(GLenum , GLint , GLint , GLsizei , GLenum , GLsizei , const GLvoid *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glGetCompressedTexImage)(GLenum , GLint , GLvoid *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glActiveTexture)(GLenum texture);
+		typedef void (CODEGEN_FUNCPTR * Proc_glSampleCoverage)(GLfloat value, GLboolean invert);
+		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexImage3D)(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const GLvoid *data);
+		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexImage2D)(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
+		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexImage1D)(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid *data);
+		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexSubImage3D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid *data);
+		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexSubImage2D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid *data);
+		typedef void (CODEGEN_FUNCPTR * Proc_glCompressedTexSubImage1D)(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid *data);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetCompressedTexImage)(GLenum target, GLint level, GLvoid *img);
 	}
 	
 	extern _detail::Proc_glActiveTexture ActiveTexture;

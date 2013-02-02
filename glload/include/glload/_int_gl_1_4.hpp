@@ -26,13 +26,13 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glBlendFuncSeparate)(GLenum , GLenum , GLenum , GLenum );
-		typedef void (CODEGEN_FUNCPTR * Proc_glMultiDrawArrays)(GLenum , const GLint *, const GLsizei *, GLsizei );
-		typedef void (CODEGEN_FUNCPTR * Proc_glMultiDrawElements)(GLenum , const GLsizei *, GLenum , const GLvoid* const *, GLsizei );
-		typedef void (CODEGEN_FUNCPTR * Proc_glPointParameterf)(GLenum , GLfloat );
-		typedef void (CODEGEN_FUNCPTR * Proc_glPointParameterfv)(GLenum , const GLfloat *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glPointParameteri)(GLenum , GLint );
-		typedef void (CODEGEN_FUNCPTR * Proc_glPointParameteriv)(GLenum , const GLint *);
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendFuncSeparate)(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiDrawArrays)(GLenum mode, const GLint *first, const GLsizei *count, GLsizei drawcount);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiDrawElements)(GLenum mode, const GLsizei *count, GLenum type, const GLvoid* const *indices, GLsizei drawcount);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPointParameterf)(GLenum pname, GLfloat param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPointParameterfv)(GLenum pname, const GLfloat *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPointParameteri)(GLenum pname, GLint param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPointParameteriv)(GLenum pname, const GLint *params);
 	}
 	
 	extern _detail::Proc_glBlendFuncSeparate BlendFuncSeparate;

@@ -32,9 +32,9 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glGetInteger64i_v)(GLenum , GLuint , GLint64 *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glGetBufferParameteri64v)(GLenum , GLenum , GLint64 *);
-		typedef void (CODEGEN_FUNCPTR * Proc_glFramebufferTexture)(GLenum , GLenum , GLuint , GLint );
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetInteger64i_v)(GLenum target, GLuint index, GLint64 *data);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetBufferParameteri64v)(GLenum target, GLenum pname, GLint64 *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glFramebufferTexture)(GLenum target, GLenum attachment, GLuint texture, GLint level);
 	}
 	
 	extern _detail::Proc_glGetInteger64i_v GetInteger64i_v;
