@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 #include <glload/gl_3_3.h>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #include <GL/freeglut.h>
 #include <glutil/glutil.h>
 #include <glimg/glimg.h>

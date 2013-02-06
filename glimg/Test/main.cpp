@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 #include <glload/gl_3_3_comp.h>
-#include <glload/gll.hpp>
+#include <glload/gl_load.hpp>
 #include <GL/freeglut.h>
 #include <glimg/glimg.h>
 #include <glimg/TextureGenerator.h>
