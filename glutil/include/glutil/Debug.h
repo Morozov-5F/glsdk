@@ -7,7 +7,7 @@
 
 /**
 \file
-\brief Includes a function for attaching to ARB_debug_output and printing error messages automatically. This header must be included after an OpenGL header.
+\brief Includes a function for attaching to ARB/KHR_debug_output and printing error messages automatically. This header must be included after an OpenGL header.
 **/
 
 namespace glutil
@@ -25,8 +25,10 @@ namespace glutil
 	/**
 	\brief Registers a function for automatically outputting debug messages.
 
-	This function only works with ARB_debug_output. If this extension is not available, the function
-	will return false. If you have registered a function before calling this one, then the registered
+	\ref module_glload "GL Load" must have been successfully initialized for this function to work.
+
+	This function works with ARB_debug_output, KHR_debug_output, or GL 4.3. If the are not available, the
+	function will return false. If you have registered a function before calling this one, then the registered
 	function will pass the function through, including your void* argument.
 	
 	\param eLoc The destination where errors or other debug messages will be printed.
