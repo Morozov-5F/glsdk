@@ -134,7 +134,7 @@ The attribute indices used by the mesh generator functions are standardized. The
 \li 1: Color, diffuse (four-dimensional, float)
 \li 2: Normal (three-dimensional, float)
 \li 3: Tangent, for establishing an NBT basis (three-dimensional, float)
-\li 4: Binormal, for establishing an NBT basis (three-dimensional, float)
+\li 4: Bitangent, for establishing an NBT basis (three-dimensional, float)
 \li 5: Texture coordinate (two-dimensional, float)
 
 The main VAO of each mesh includes all attributes. There will be variants generated containing fewer attributes. The naming convention for generated mesh variants is as follows:
@@ -144,8 +144,7 @@ The main VAO of each mesh includes all attributes. There will be variants genera
 \li <tt>tex</tt>: Position+TexCoord
 \li <tt>color</tt>: Position+Color
 
-These can be combined with <tt>-</tt> characters (except for <tt>unlit</tt>). So <tt>lit-tex</tt> means positions, normals, and texture coordinates. The order doesn't matter.
-
+These can be combined with <tt>-</tt> characters (except for <tt>unlit</tt>). So <tt>lit-tex</tt> means positions, normals, and texture coordinates. The order doesn't matter, so <tt>lit-tex</tt> is the same as <tt>tex-lit</tt>.
 **/
 
 /**

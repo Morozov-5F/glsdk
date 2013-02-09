@@ -4,6 +4,8 @@
 
 #include <string>
 #include "glmesh/Mesh.h"
+#include "glmesh/VertexFormat.h"
+
 //Requires having included GL defines.
 
 namespace glmesh
@@ -22,6 +24,11 @@ namespace glmesh
 		std::string GenerateNameForVariant(const int components);
 
 		void AddVariantToMap(MeshVariantMap &variantMap, GLuint vao, const int components);
+
+		//components must be in the order of the attributes in the fmt. 0 is assumed to be the position
+		//and is always there, so the first component must be 1, 2, etc. The array buffer should be bound.
+		void BuildVariations(MeshVariantMap &variantMap, const std::vector<int> &components,
+			const VertexFormat &fmt, GLuint indexBuffer = 0);
 	}
 }
 

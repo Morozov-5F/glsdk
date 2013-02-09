@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <sstream>
+#include <cmath>
 #include <glload/gl_all.hpp>
 #include "GenHelper.h"
 
@@ -82,6 +83,33 @@ namespace glmesh
 				variantMap[theName.str()] = vao;
 			}
 			while(std::next_permutation(currNames.begin(), currNames.end()));
+		}
+
+		void BuildVariations( MeshVariantMap &variantMap, const std::vector<int> &components,
+			const VertexFormat &fmt, GLuint indexBuffer )
+		{
+			const int numVariations = std::pow(2.0f, (int)components.size());
+			std::vector<GLuint> vaos(numVariations);
+			gl::GenVertexArrays(numVariations, &vaos[0]);
+			for(int variant = 0; variant < numVariations; ++variant)
+			{
+				gl::GenVertexArrays(1, &vaos[variant]);
+				gl::BindVertexArray(vaos[variant]);
+				gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, indexBuffer);
+				fmt.BindAttribute(0, 0);
+
+				int variation = 0;
+				for(size_t comp = 0; comp < components.size(); ++comp)
+				{
+					if(variant & (0x1 << comp))
+						variation |= components[comp];
+					fmt.BindAttribute(0, comp + 1);
+				}
+
+				AddVariantToMap(variantMap, vaos[variant], variation);
+			}
+
+			gl::BindVertexArray(0);
 		}
 	}
 }

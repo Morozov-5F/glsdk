@@ -27,8 +27,6 @@ namespace glmesh
 
 		Mesh * UnitSphere( int numHorizSlices, int numVertSlices )
 		{
-			typedef boost::tuple<glm::vec3, glm::vec3, glm::vec2> VertexType;
-
 			//The term "ring" refers to horizontal slices.
 			//The term "segment" refers to vertical slices.
 
@@ -44,9 +42,9 @@ namespace glmesh
 			size_t attribCount = numSegVerts * numRingVerts;
 
 			glmesh::AttributeList attribs;
-			attribs.push_back(glmesh::AttribDesc(0, 3, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
-			attribs.push_back(glmesh::AttribDesc(2, 3, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
-			attribs.push_back(glmesh::AttribDesc(5, 2, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
+			attribs.push_back(glmesh::AttribDesc(ATTR_POS, 3, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
+			attribs.push_back(glmesh::AttribDesc(ATTR_NORMAL, 3, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
+			attribs.push_back(glmesh::AttribDesc(ATTR_TEXCOORD, 2, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
 
 			VertexFormat fmt(attribs);
 

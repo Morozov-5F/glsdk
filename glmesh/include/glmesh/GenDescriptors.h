@@ -10,6 +10,18 @@
 
 namespace glmesh
 {
+	namespace gen
+	{
+		enum StandardAttributeIndices
+		{
+			ATTR_POS = 0,
+			ATTR_COLOR = 1,
+			ATTR_NORMAL = 2,
+			ATTR_TANGENT = 3,
+			ATTR_BITANGENT = 4,
+			ATTR_TEXCOORD = 5,
+		};
+	}
 }
 
 

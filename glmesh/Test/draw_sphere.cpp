@@ -81,9 +81,7 @@ public:
 			"#version 330\n"
 			"\n"
 			"layout(location = 0) in vec4 position;\n"
-			"layout(location = 1) in vec4 color;\n"
 			"\n"
-			"smooth out vec4 theColor;\n"
 			"\n"
 			"uniform mat4 cameraToClipMatrix;\n"
 			"uniform mat4 modelToCameraMatrix;\n"
@@ -92,19 +90,17 @@ public:
 			"{\n"
 			"	vec4 cameraPos = modelToCameraMatrix * position;\n"
 			"	gl_Position = cameraToClipMatrix * cameraPos;\n"
-			"	theColor = color;\n"
 			"}\n"
 			);
 
 		const std::string groundFragmentShader(
 			"#version 330\n"
 			"\n"
-			"smooth in vec4 theColor;\n"
-			"out vec4 outputColor;\n"
+			"layout(location = 0) out vec4 outputColor;\n"
 			"\n"
 			"void main()\n"
 			"{\n"
-			"	outputColor = theColor;\n"
+			"	outputColor = vec4(0, 0.7, 0.7, 1.0);\n"
 			"}\n"
 			);
 
@@ -195,8 +191,7 @@ public:
 
 		variants.insert(testVar);
 
-		m_pGroundPlane.reset(new glmesh::Mesh(buffers, mainVao, cmdList, variants));
-
+		m_pGroundPlane.reset(glmesh::gen::GroundPlane(7, 3));
 		m_pSphere.reset(glmesh::gen::UnitSphere(6, 8));
 	}
 
@@ -216,8 +211,10 @@ public:
 			glm::value_ptr(cameraToClip));
 
 		{
+			glm::mat4 groundMat = glm::rotate(worldToCamera, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+			groundMat = glm::scale(groundMat, glm::vec3(20, 20, 20));
 			gl::UniformMatrix4fv(m_ground.unifModelToCameraMatrix, 1, gl::FALSE_,
-				glm::value_ptr(worldToCamera));
+				glm::value_ptr(groundMat));
 
 			m_pGroundPlane->Render();
 		}

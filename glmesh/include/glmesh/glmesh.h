@@ -13,6 +13,7 @@
 #include "Mesh.h"
 #include "GenDescriptors.h"
 #include "Quadrics.h"
+#include "MeshMisc.h"
 
 
 /**
