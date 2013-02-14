@@ -217,42 +217,42 @@ namespace glmesh
 		struct InfoTraits<GLubyte>
 		{
 			static const GLubyte zero = 0;
-			static const GLubyte one = 255;
+			static const GLubyte one = 0xFFU;
 		};
 
 		template<>
 		struct InfoTraits<GLbyte>
 		{
 			static const GLbyte zero = 0;
-			static const GLbyte one = 127;
+			static const GLbyte one = 0x7F;
 		};
 
 		template<>
 		struct InfoTraits<GLushort>
 		{
 			static const GLushort zero = 0;
-			static const GLushort one = 65535;
+			static const GLushort one = 0xFFFFU;
 		};
 
 		template<>
 		struct InfoTraits<GLshort>
 		{
 			static const GLshort zero = 0;
-			static const GLshort one = 32767;
+			static const GLshort one = 0x7FFF;
 		};
 
 		template<>
 		struct InfoTraits<GLuint>
 		{
 			static const GLuint zero = 0;
-			static const GLuint one = 4294967295;
+			static const GLuint one = 0xFFFFFFFFU;
 		};
 
 		template<>
 		struct InfoTraits<GLint>
 		{
 			static const GLint zero = 0;
-			static const GLint one = 2147483647;
+			static const GLint one = 0x7FFFFFFF;
 		};
 
 		template<>
@@ -306,7 +306,7 @@ namespace glmesh
 	GetVertexFormat just gets a VertexFormat instance, which represents the format of the data used for this
 	writer. It should not change from call to call.
 
-	WriteAttribute will be called to write an attribute's data. The \a pData argument is a pointer to a buffer 
+	WriteAttribute will be called to write an attribute's data. The \a pData argument is a pointer to a buffer
 	that is \a bytesPerComponent * 4 in size. You should copy a number of components worth of data, based
 	on the VertexFormat and the \a currAttrib index. \a currAttrib is the current vertex attribute
 	for the data being written.
@@ -323,12 +323,12 @@ namespace glmesh
 
 		/**
 		\name Attribute Setting Functions
-		
+
 		The Attrib functions set the value of the current attribute.
 
 		The Attrib series of functions are all templates based on certain types that the Draw class
 		accepts.
-		
+
 		If you attempt to use the wrong type for the current attribute, an exception will be thrown. The
 		types must match \em exactly; there is no narrowing or expansion of shorts into bytes or ints.
 		Nor is there conversion from signed to unsigned types.

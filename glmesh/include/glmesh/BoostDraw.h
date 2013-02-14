@@ -4,6 +4,7 @@
 
 #include "Draw.h"
 #include "VertexFormat.h"
+#include "VertexWriter.h"
 #include <boost/fusion/algorithm.hpp>
 #include <boost/fusion/adapted/boost_tuple.hpp>
 #include <boost/fusion/include/boost_tuple.hpp>
@@ -51,11 +52,12 @@ namespace glmesh
 			template<typename AttribType>
 			void operator()(const AttribType &attribute) const
 			{
-				m_drawable.Attrib<typename AttribTypeTraits<AttribType>::value_type>(attribute);
+			    typedef typename glmesh::_detail::AttribTypeTraits<AttribType>::value_type GccSucks;
+				m_drawable.template Attrib<GccSucks>(attribute);
 			}
 
 		private:
-			mutable VertexWriter<Sink> &m_drawable;
+			VertexWriter<Sink> &m_drawable;
 		};
 	}
 
