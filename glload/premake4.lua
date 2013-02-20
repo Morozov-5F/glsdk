@@ -1,3 +1,4 @@
+dofile("../boost_include.lua")
 
 solution "glload"
 configurations {"Debug", "Release"}

@@ -1,3 +1,4 @@
+dofile("../boost_include.lua")
 
 solution "glmesh"
 configurations {"Debug", "Release"}

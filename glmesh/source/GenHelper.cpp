@@ -88,7 +88,7 @@ namespace glmesh
 		void BuildVariations( MeshVariantMap &variantMap, const std::vector<int> &components,
 			const VertexFormat &fmt, GLuint indexBuffer )
 		{
-			const int numVariations = std::pow(2.0f, (int)components.size());
+			const int numVariations = (int)std::pow(2.0f, (float)components.size());
 			std::vector<GLuint> vaos(numVariations);
 			gl::GenVertexArrays(numVariations, &vaos[0]);
 			for(int variant = 0; variant < numVariations; ++variant)

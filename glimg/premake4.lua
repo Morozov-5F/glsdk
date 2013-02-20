@@ -1,3 +1,4 @@
+dofile("../boost_include.lua")
 
 solution "glimg"
 configurations {"Debug", "Release"}

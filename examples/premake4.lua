@@ -1,3 +1,4 @@
+dofile ("../boost_include.lua")
 dofile ("../links.lua")
 
 solution "examples"
@@ -31,7 +32,7 @@ for i, currDir in ipairs(dirs) do
 			files {"*.h"}
 
 			UseLibs {"glload", "glimage", "glutil", "glmesh",
-				"glm", "freeglut", "glfw"}
+				"glm", "freeglut", "glfw", "boost"}
 			
 			configuration "windows"
 				defines "WIN32"

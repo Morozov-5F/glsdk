@@ -1,3 +1,4 @@
+dofile("../boost_include.lua")
 
 solution "glutil"
 configurations {"Debug", "Release"}
