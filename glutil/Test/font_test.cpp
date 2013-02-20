@@ -112,7 +112,7 @@ void InitializeVertexData()
 
 	std::string theText = GetString();
 
-	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine(theText.c_str(), theText.size(),
+	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine(theText,
 		glm::vec2(50.0f, 250.0f), glutil::REF_BASELINE);
 
 	vecVertex.reserve(24 * glyphs.size());

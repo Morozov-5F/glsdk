@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+#include "string_ref.h"
 #include <glm/glm.hpp>
 
 namespace glutil
@@ -204,7 +205,6 @@ namespace glutil
 		etc) will be ignored. Spaces will use work (though obviously they won't draw anything).
 		
 		\param text The string of text to get the glyphs for, encoded as UTF-8.
-		\param length The length of \a text in bytes. If this is zero, then strlen will be employed to compute the length.
 		\param ptReference The starting point for the string. Each glyph will be offset to the right.
 		\param eRef Defines what the Y-component of \a ptReference means.
 
@@ -212,7 +212,7 @@ namespace glutil
 
 		\throw InvalidEncodingException Thrown if \a text is not valid UTF-8.
 		**/
-		std::vector<GlyphQuad> LayoutLine(const char *text, size_t length, const glm::vec2 &ptReference,
+		std::vector<GlyphQuad> LayoutLine(refs::string_ref text, const glm::vec2 &ptReference,
 			PointReference eRef = REF_BASELINE) const;
 
 		///Returns the baseline-to-baseline height of the font, in pixels.

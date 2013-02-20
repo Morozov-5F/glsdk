@@ -156,13 +156,13 @@ namespace glutil
 				return std::make_pair(GetQuad(baseline, m_glyphs[glyphIx]), true);
 			}
 
-			std::vector<GlyphQuad> LayoutLine(const char *text, size_t length, const glm::vec2 &ptReference,
+			std::vector<GlyphQuad> LayoutLine(refs::string_ref theRef, const glm::vec2 &ptReference,
 				PointReference eRef = REF_BASELINE) const
 			{
 				std::vector<GlyphQuad> ret;
 
-				if(!length)
-					length = std::char_traits<char>::length(text);
+				const char *text = theRef.data();
+				const size_t length = theRef.size();
 
 				glm::vec2 baseline = CalcBaseline(ptReference, eRef);
 
@@ -335,10 +335,10 @@ namespace glutil
 		return m_pImpl->GetSingleGlyph(codepoint, ptReference, eRef);
 	}
 
-	std::vector<GlyphQuad> Font::LayoutLine( const char *text, size_t length,
+	std::vector<GlyphQuad> Font::LayoutLine( refs::string_ref text,
 		const glm::vec2 &ptReference, PointReference eRef ) const
 	{
-		return m_pImpl->LayoutLine(text, length, ptReference, eRef);
+		return m_pImpl->LayoutLine(text, ptReference, eRef);
 	}
 
 	int Font::GetLinePixelHeight() const
