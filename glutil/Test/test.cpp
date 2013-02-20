@@ -30,7 +30,7 @@ void init()
 	gl::BufferData(gl::ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, gl::STATIC_DRAW);
 	gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 
-	const std::string vertexShader(
+	const char *vertexShader(
 		"#version 330\n"
 		"layout(location = 0) in vec4 position;\n"
 		"void main()\n"
@@ -48,7 +48,8 @@ void init()
 		"}\n"
 		);
 
-	GLuint vertShader = glutil::CompileShader(gl::VERTEX_SHADER, vertexShader);
+	GLuint vertShader = glutil::CompileShader(gl::VERTEX_SHADER,
+		refs::array_ref<const char*>(&vertexShader, 1));
 	GLuint fragShader = glutil::CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
 
 	program = glutil::LinkProgram(vertShader, fragShader);

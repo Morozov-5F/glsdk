@@ -23,7 +23,7 @@ The headers <tt>glload/gl_all.h</tt> and <tt>glload/gl_all.hpp</tt> contain ever
 
 You should not use <tt>GL/gl.h</tt> in conjunction with these headers. Nor should it be used in conjunction with @em any other OpenGL headers (<tt>gl3.h</tt>, <tt>gl_ext.h</tt>, etc). Many OpenGL libraries, such as FreeGLUT, will include <tt>GL/gl.h</tt> for you. In those cases, make sure to include those headers \em after the GL Load headers.
 
-Also, for each source file, you should pick @em one GL Load header and include only that. A single source file should not include both <tt>glload/gl_3_3_comp.hpp</tt> and <tt>glload/gl_4_2.hpp</tt>, for example.
+Also, for each source file, you should pick \emone GL Load header and include only that. A single source file should not include both <tt>glload/gl_3_3_comp.hpp</tt> and <tt>glload/gl_4_2.hpp</tt>, for example.
 
 It \em is allowable to include different headers in different source files. The GL Load initialization process will load whatever functions are advertized by OpenGL, so which functions are actually loaded is independent of the header included. So, if your implementation supports 3.3, you can freely use a 2.1 header in one source file, and a 3.2 header in another. Attempting to use a 4.2 header if the implementation only supports 3.3 is asking for trouble.
 

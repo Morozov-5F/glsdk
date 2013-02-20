@@ -10,6 +10,8 @@
 #include <exception>
 #include <string>
 #include <vector>
+#include "array_ref.h"
+#include "string_ref.h"
 
 namespace glutil
 {
@@ -73,15 +75,12 @@ namespace glutil
 	\throw CompileLinkException Thrown if the shader compilation fails. The shader object will
 	be destroyed, and the error log will be stored in the exception.
 	**/
-	GLuint CompileShader(GLenum shaderType, const char *shaderText);
-
-	/** \copydoc CompileShader(GLenum, const char *) **/
-	GLuint CompileShader(GLenum shaderType, const std::string &shaderText);
+	GLuint CompileShader(GLenum shaderType, refs::string_ref shaderText);
 
 	/**
 	\brief As CompileShader(GLenum, const char *), but with a list of strings.	
 	**/
-	GLuint CompileShader(GLenum shaderType, const char **shaderList, size_t numStrings);
+	GLuint CompileShader(GLenum shaderType, refs::array_ref<const char *> shaderList);
 
 	/**
 	\brief As CompileShader(GLenum, const char *), but with a list of strings.	
@@ -132,16 +131,10 @@ namespace glutil
 	\throw CompileLinkException Thrown if the shader compilation or program linking fails.
 	In all cases, any previously created shader/program objects will be destroyed.
 	**/
-	GLuint LinkProgram(const char *vertexShader, const char *fragmentShader);
+	GLuint LinkProgram(refs::string_ref vertexShader, refs::string_ref fragmentShader);
 
-	/** \copydoc LinkProgram(const char *, const char *) **/
-	GLuint LinkProgram(const std::string &vertexShader, const std::string &fragmentShader);
-
-	///As LinkProgram(const char *, const char *), except that it is given a program to do the linking within.
-	GLuint LinkProgram(GLuint program, const char *vertexShader, const char *fragmentShader);
-
-	///As LinkProgram(const std::string &, const std::string &), except that it is given a program to do the linking within.
-	GLuint LinkProgram(GLuint program, const std::string &vertexShader, const std::string &fragmentShader);
+	///As LinkProgram(refs::string_ref, refs::string_ref), except that it is given a program to do the linking within.
+	GLuint LinkProgram(GLuint program, refs::string_ref vertexShader, refs::string_ref fragmentShader);
 
 
 	/**
@@ -163,7 +156,7 @@ namespace glutil
 	/**
 	\brief As LinkProgram(GLuint, bool), only with a list of shaders.
 	**/
-	GLuint LinkProgram(const std::vector<GLuint> &shaders, bool isSeparable = false);
+	GLuint LinkProgram(refs::array_ref<GLuint> shaders, bool isSeparable = false);
 
 	/**
 	\brief Takes a program and links a number of shaders to it.
@@ -173,7 +166,7 @@ namespace glutil
 	\throw CompileLinkException Thrown if the linking fails. The program will be
 	destroyed, and the error log will be stored in the exception.
 	**/
-	GLuint LinkProgram(GLuint program, const std::vector<GLuint> &shaders);
+	GLuint LinkProgram(GLuint program, refs::array_ref<GLuint> shaders);
 	///@}
 
 	/**
@@ -205,7 +198,7 @@ namespace glutil
 	/**
 	\brief As MakeSeparableProgram(GLenum, const char *), except with a list of strings.
 	**/
-	GLuint MakeSeparableProgram(GLenum shaderType, const char **shaderList, size_t numStrings);
+	GLuint MakeSeparableProgram(GLenum shaderType, refs::array_ref<const char *> shaderList);
 
 	/**
 	\brief As MakeSeparableProgram(GLenum, const char *), except with a list of strings.

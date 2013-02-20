@@ -8,7 +8,7 @@ function MakeProject(name, ...)
 		includedirs { "../include" }
 		links {"glutil"}
 		
-		UseLibs {"glfw", "glm", "glload"}
+		UseLibs {"glfw", "glm", "glload", "boost"}
 
 		files {...}
 

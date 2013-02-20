@@ -69,22 +69,11 @@ namespace glutil
 		: ShaderException("Implementation does not support shader object separation.")
 	{}
 
-	GLuint CompileShader( GLenum shaderType, const char *shaderText )
-	{
-		GLuint shader = gl::CreateShader(shaderType);
-		gl::ShaderSource(shader, 1, static_cast<const GLchar **>(&shaderText), NULL);
-		gl::CompileShader(shader);
-
-		ThrowIfShaderCompileFailed(shader);
-
-		return shader;
-	}
-
-	GLuint CompileShader( GLenum shaderType, const std::string &shaderText )
+	GLuint CompileShader( GLenum shaderType, refs::string_ref shaderText )
 	{
 		GLuint shader = gl::CreateShader(shaderType);
 		GLint textLength = (GLint)shaderText.size();
-		const GLchar *pText = static_cast<const GLchar *>(shaderText.c_str());
+		const GLchar *pText = static_cast<const GLchar *>(shaderText.data());
 		gl::ShaderSource(shader, 1, &pText, &textLength);
 		gl::CompileShader(shader);
 
@@ -93,10 +82,11 @@ namespace glutil
 		return shader;
 	}
 
-	GLuint CompileShader( GLenum shaderType, const char **shaderList, size_t numStrings )
+	GLuint CompileShader( GLenum shaderType, refs::array_ref<const char *> shaderList )
 	{
 		GLuint shader = gl::CreateShader(shaderType);
-		gl::ShaderSource(shader, numStrings, static_cast<const GLchar **>(shaderList), NULL);
+		gl::ShaderSource(shader, shaderList.size(),
+			static_cast<const GLchar * const*>(shaderList.data()), NULL);
 		gl::CompileShader(shader);
 
 		ThrowIfShaderCompileFailed(shader);
@@ -145,7 +135,7 @@ namespace glutil
 		return program;
 	}
 
-	GLuint LinkProgram( const char *vertexShader, const char *fragmentShader )
+	GLuint LinkProgram( refs::string_ref vertexShader, refs::string_ref fragmentShader )
 	{
 		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
 		GLuint fragShader = 0;
@@ -174,65 +164,7 @@ namespace glutil
 		}
 	}
 
-	GLuint LinkProgram( const std::string &vertexShader, const std::string &fragmentShader )
-	{
-		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
-		GLuint fragShader = 0;
-		try
-		{
-			fragShader = CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
-		}
-		catch(...)
-		{
-			gl::DeleteShader(vertShader);
-			throw;
-		}
-
-		try
-		{
-			GLuint program = LinkProgram(vertShader, fragShader);
-			gl::DeleteShader(vertShader);
-			gl::DeleteShader(fragShader);
-			return program;
-		}
-		catch(...)
-		{
-			gl::DeleteShader(vertShader);
-			gl::DeleteShader(fragShader);
-			throw;
-		}
-	}
-
-	GLuint LinkProgram( GLuint program, const char *vertexShader, const char *fragmentShader )
-	{
-		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
-		GLuint fragShader = 0;
-		try
-		{
-			fragShader = CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
-		}
-		catch(...)
-		{
-			gl::DeleteShader(vertShader);
-			throw;
-		}
-
-		try
-		{
-			LinkProgram(program, vertShader, fragShader);
-			gl::DeleteShader(vertShader);
-			gl::DeleteShader(fragShader);
-			return program;
-		}
-		catch(...)
-		{
-			gl::DeleteShader(vertShader);
-			gl::DeleteShader(fragShader);
-			throw;
-		}
-	}
-
-	GLuint LinkProgram( GLuint program, const std::string &vertexShader, const std::string &fragmentShader )
+	GLuint LinkProgram( GLuint program, refs::string_ref vertexShader, refs::string_ref fragmentShader )
 	{
 		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
 		GLuint fragShader = 0;
@@ -278,7 +210,7 @@ namespace glutil
 		return program;
 	}
 
-	GLuint LinkProgram( const std::vector<GLuint> &shaders, bool isSeparable )
+	GLuint LinkProgram( refs::array_ref<GLuint> shaders, bool isSeparable )
 	{
 		if(isSeparable)
 			ThrowIfNotSeparable();
@@ -290,7 +222,7 @@ namespace glutil
 		return LinkProgram(program, shaders);
 	}
 
-	GLuint LinkProgram( GLuint program, const std::vector<GLuint> &shaders )
+	GLuint LinkProgram( GLuint program, refs::array_ref<GLuint> shaders )
 	{
 		for(size_t loop = 0; loop < shaders.size(); ++loop)
 			gl::AttachShader(program, shaders[loop]);
@@ -318,12 +250,12 @@ namespace glutil
 		return MakeSeparableProgram(shaderType, shaderText.c_str());
 	}
 
-	GLuint MakeSeparableProgram( GLenum shaderType, const char **shaderList, size_t numStrings )
+	GLuint MakeSeparableProgram( GLenum shaderType, refs::array_ref<const char *> shaderList )
 	{
 		ThrowIfNotSeparable();
 
-		GLuint program = gl::CreateShaderProgramv(shaderType, numStrings,
-			static_cast<const GLchar **>(shaderList));
+		GLuint program = gl::CreateShaderProgramv(shaderType, shaderList.size(),
+			static_cast<const GLchar * const*>(shaderList.data()));
 		ThrowIfProgramLinkFailed(program);
 		return program;
 	}
@@ -336,6 +268,6 @@ namespace glutil
 		for(size_t loop = 0; loop < shaderList.size(); ++loop)
 			stringList.push_back(shaderList[loop].c_str());
 
-		return MakeSeparableProgram(shaderType, &stringList[0], shaderList.size());
+		return MakeSeparableProgram(shaderType, refs::array_ref<const char *>(stringList));
 	}
 }
