@@ -1,5 +1,12 @@
 local thisDirectory = os.getcwd();
 
+local LibDeps = 
+{
+	glimage = {"boost"},
+	glmesh = {"boost", "glload", "glm"},
+	glutil = {"boost", "glm"},
+}
+
 local LinkFuncs =
 {
 	glload = function()
@@ -130,12 +137,60 @@ local function ProcTable(tbl, libTbl)
 	end
 end
 
+local function FlattenTable(tbl, ret)
+	ret = ret or {}
+	for _, entry in ipairs(tbl) do
+		if(type(entry) == "table") then
+			FlattenTable(entry, ret)
+		else
+			ret[#ret + 1] = entry
+		end
+	end
+	return ret
+end
+
+local function FixupDependencies(libTbl)
+	local libList = FlattenTable(libTbl)
+
+	local current = {}
+	for _, lib in ipairs(libList) do
+		current[lib] = "find"
+	end
+	
+	repeat
+		local toAdd = {}
+		for lib, deps in pairs(current) do
+			if(deps == "find") then
+				if(LibDeps[lib]) then
+					for _, newLib in ipairs(LibDeps[lib]) do
+						if(not current[newLib]) then
+							toAdd[#toAdd + 1] = newLib
+						end
+					end
+				end
+				current[lib] = true
+			end
+		end
+		
+		for _, lib in ipairs(toAdd) do
+			current[lib] = "find"
+		end
+	until (#toAdd == 0)
+	
+	local ret = {}
+	for lib, _ in pairs(current) do
+		ret[#ret + 1] = lib
+	end
+	
+	return ret
+end
+
 function UseLibs(...)
-	local libList = {...}
+	local libList = FixupDependencies {...}
 	ProcTable(libList, LinkFuncs)
 end
 
 function InclLibs(...)
-	local libList = {...}
+	local libList = FixupDependencies {...}
 	ProcInclTable(libList, InclFuncs)
 end

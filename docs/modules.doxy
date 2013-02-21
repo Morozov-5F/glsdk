@@ -8,6 +8,31 @@ The OpenGL Mathematics library is distributed under the <a href="http://www.open
 **/
 
 /**
+\defgroup module_boost Boost C++ Libraries
+
+The Boost C++ libraries are a collection of peer-reviewed libraries that provide useful functionality when developing in C++. Only \em part of Boost is distributed with the SDK. This distribution is header-only, so none of the compiled parts of Boost are distributed (so no Regex, Thread, etc). Of the header-only libraries, only a specific selection are included.
+
+Part of Boost is distributed with the SDK, but you can replace it with your own version (as long as it is at least 1.51) if you wish. To do this, you must give @ref page_build_premake "Premake" the special command-line <tt>--boost-dir</tt>, which points to the directory where Boost can be found.
+
+<a href="http://www.boost.org/">The Boost libraries</a> are distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License, Version 1.0</a>, which is effectively equivalent to the MIT License.
+
+Generally speaking, direct use of Boost is not necessary to use the SDK. You can benefit from it, and using certain APIs require it, but there will generally be non-Boost alternatives. It is mostly there for writing the SDK itself, and lubricating the experience of using it.
+
+Among the interesting included libraries are (but are not limited to):
+
+\li Boost.Any and Boost.Variant
+\li scoped, smart, and weak pointers
+\li Boost.Format
+\li Boost.Range
+\li Boost.Container
+\li Boost.Bind and Boost.Function
+\li Boost.Foreach
+\li Boost.Optional
+\li Boost.StaticAssert
+
+**/
+
+/**
 \defgroup module_freeglut FreeGLUT
 
 The <b>Free</b> Open<b>GL</b> <b>U</b>tility <b>T</b>oolkit is a cross-platform library for creating and managing an OpenGL window. It abstracts platform-specific code, so code written to use FreeGLUT can work on any platform FreeGLUT supports.

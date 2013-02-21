@@ -32,6 +32,7 @@ local pull =
 	"unordered_map.hpp",
 	"utility.hpp",
 	"variant.hpp",
+	"typeof/typeof.hpp",
 	"boost/variant",
 	"boost/algorithm/cxx11",
 

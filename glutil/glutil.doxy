@@ -13,7 +13,9 @@ Most of these functions interact with OpenGL directly. Therefore, they require a
 
 \brief Helper functions for handling ARB/KHR_debug_output and displaying OpenGL/FBO errors.
 
-These functions are useful helpers for debugging OpenGL. Debug output can be piped directly to stdout or stderr. There are also functions for testing OpenGL errors or FBO status codes and retrieving a displayable error string for them.
+These functions are useful helpers for debugging OpenGL. Debug output can be piped directly to stdout or stderr. There are also functions for testing OpenGL errors or FBO status codes and retrieving displayable error strings for them.
+
+\ref module_glload "GL Load" must have been successfully initialized for these functions to work.
 
 \ingroup module_glutil
 **/

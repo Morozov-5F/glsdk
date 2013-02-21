@@ -23,7 +23,8 @@ The library components are:
 <li>@ref module_glm "OpenGL Mathematics": Provides useful math classes and functions for OpenGL, using a GLSL-like syntax.</li>
 <li>@ref module_glfw "GLFW": A tool for creating and managing an OpenGL window. It can be used to handle input.</li>
 <li>@ref module_freeglut "FreeGLUT": A tool for creating and managing an OpenGL window. It can be used to handle input, as well as render a few basic shapes.</li>
-<li>@ref module_glloadgen "OpenGL Loader Generator": A tool for generating OpenGL loader code.</li>
+<li>@ref module_boost "Boost": A C++ utility library distributed with and used by the SDK.</li>
+<li>@ref module_glloadgen "OpenGL Loader Generator": A command-line script tool for generating OpenGL loader code.</li>
 </ul>
 
 The SDK also comes with a number of examples, which are in the <tt>examples</tt> directory.
@@ -209,6 +210,11 @@ The names of the libraries used with <tt>UseLibs</tt> are as follows:
 \li \a glfw: GLFW
 \li \a freeglut: FreeGLUT
 \li \a glm: GLM
+\li \a boost: Boost
+
+Some of the SDK libraries have dependencies on other libraries. For example, GL Mesh can't work without GL Load. And so forth. In all cases, dependent libraries will be included. So if you call <tt>UseLibs</tt> with "glmesh", you will also get GL Load and boost (because it needs that too).
+
+Only \em hard dependencies will be included. For example, GL Image needs GL Load, but only to upload image data to OpenGL textures. Because this is a soft dependency (and because you need to explicitly initialize GL Load before GL Image can use it), you must explicitly include "glload" if you want to use that part of GL Image.
 
 Note that all of the libraries are built linking non-statically to the C++ runtime libraries (where available on the platform). Therefore, you should not use the <tt>StaticRuntime</tt> flag in Premake4.
 
@@ -260,6 +266,22 @@ You will also need to add some \#defines to your command line. These are:
 \li _LIB
 \li FREEGLUT_LIB_PRAGMAS=0
 
+\subsection page_use_native_boost Boost Linking
+
+The only sections of Boost that are included are the header-only parts. So there are no libraries. But you do need to have your include path use <tt>"boost"</tt>.
+
+You will also need to add some \#defines to your command line. These are:
+
+\li BOOST_ALL_NO_LIB
+
+\subsection page_use_native_deps SDK Dependencies
+
+One more thing. Some of the SDK libraries are dependent on other SDK libraries. You could just include them all and be done with it. But if you only want to include the bare minimum you need, here is the lsit of dependencies. Any library not mentioned has no dependencies:
+
+\li GL Util: Boost, GL Load (for some functions)
+\li GL Mesh: Boost, GL Util, GL Load, GLM
+\li GL Image: Boost, GL Load (for the texture upload functions)
+
 \section page_use_other Other Includes
 
 While the Unofficial OpenGL SDK is intended to be self-contained, there is one external dependency that is unavoidable, by the very nature of its purpose: OpenGL itself.
@@ -286,6 +308,7 @@ For Linux, you will need to link to some of the following libraries. All of them
 
 Changes from 0.4.4:
 <ul>
+<li>Added Boost to the distribution, as well as support for user-provided Boost.</li>
 <li>Added GL Load Gen to the distribution.</li>
 <li> From @ref module_glmesh "GL Mesh"
 <ul>
