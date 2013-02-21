@@ -964,7 +964,7 @@ namespace glimg
 		}
 
 		//Texture must be bound to the target.
-		void FinalizeTexture(GLenum texTarget, const detail::ImageSetImpl *pImage)
+		void FinalizeTexture(GLenum texTarget, detail::ImageSetImplPtr pImage)
 		{
 			int numMipmaps = pImage->GetMipmapCount();
 			gl::TexParameteri(texTarget, gl::TEXTURE_BASE_LEVEL, 0);
@@ -984,7 +984,7 @@ namespace glimg
 			}
 		}
 
-		void FinalizeTexture(GLuint texture, GLenum texTarget, const detail::ImageSetImpl *pImage)
+		void FinalizeTexture(GLuint texture, GLenum texTarget, detail::ImageSetImplPtr pImage)
 		{
 			//Zero means bound, so no DSA.
 			if(texture == 0)
@@ -1416,14 +1416,14 @@ namespace glimg
 			GLenum texTarget;
 		};
 
-		void Build1DArrayTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
+		void Build1DArrayTexture(unsigned int textureName, detail::ImageSetImplPtr pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			ThrowIfArrayTextureNotSupported();
 			throw TextureUnexpectedException();
 		}
 
-		void Build1DTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
+		void Build1DTexture(unsigned int textureName, detail::ImageSetImplPtr pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			SetupUploadState(pImage->GetFormat(), forceConvertBits);
@@ -1450,7 +1450,7 @@ namespace glimg
 			FinalizeTexture(textureName, gl::TEXTURE_1D, pImage);
 		}
 
-		void Build2DCubeArrayTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
+		void Build2DCubeArrayTexture(unsigned int textureName, detail::ImageSetImplPtr pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			ThrowIfArrayTextureNotSupported();
@@ -1458,14 +1458,14 @@ namespace glimg
 			throw TextureUnexpectedException();
 		}
 
-		void Build2DArrayTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
+		void Build2DArrayTexture(unsigned int textureName, detail::ImageSetImplPtr pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			ThrowIfArrayTextureNotSupported();
 			throw TextureUnexpectedException();
 		}
 
-		void Build2DCubeTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
+		void Build2DCubeTexture(unsigned int textureName, detail::ImageSetImplPtr pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			ThrowIfCubeTextureNotSupported();
@@ -1499,7 +1499,7 @@ namespace glimg
 			FinalizeTexture(textureName, gl::TEXTURE_CUBE_MAP, pImage);
 		}
 
-		void Build2DTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
+		void Build2DTexture(unsigned int textureName, detail::ImageSetImplPtr pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			SetupUploadState(pImage->GetFormat(), forceConvertBits);
@@ -1526,7 +1526,7 @@ namespace glimg
 			FinalizeTexture(textureName, gl::TEXTURE_2D, pImage);
 		}
 
-		void Build3DTexture(unsigned int textureName, const detail::ImageSetImpl *pImage,
+		void Build3DTexture(unsigned int textureName, detail::ImageSetImplPtr pImage,
 			unsigned int forceConvertBits, GLuint internalFormat, const OpenGLPixelTransferParams &upload)
 		{
 			SetupUploadState(pImage->GetFormat(), forceConvertBits);

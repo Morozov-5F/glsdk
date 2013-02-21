@@ -6,7 +6,7 @@ project "Test"
 	includedirs { "../include", "../../glload/include" }
 	links {"glload", "glimg"}
 	
-	UseLibs {"freeglut"}
+	UseLibs {"freeglut", "boost"}
 
 	files {"test.cpp", "test.h", "main.cpp"}
 
@@ -35,7 +35,7 @@ project "CubemapTest"
 	includedirs { "../include", "../../glload/include" }
 	links {"glload", "glimg"}
 	
-	UseLibs {"freeglut", "glutil", "glmesh", "glm"}
+	UseLibs {"freeglut", "glutil", "glmesh", "glm", "boost"}
 
 	files {"cubemap.cpp"}
 

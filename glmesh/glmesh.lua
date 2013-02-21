@@ -3,7 +3,7 @@ project("glmesh")
 	kind "StaticLib"
 	language "c++"
 	includedirs {"include", "source",
-		"../glload/include", "../glutil/include", "../glm", "../boost"}
+		"../glload/include", "../glutil/include", "../glm", BoostDir()}
 	targetdir "lib"
 
 	files {

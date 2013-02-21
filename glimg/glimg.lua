@@ -2,7 +2,7 @@
 project("glimg")
 	kind "StaticLib"
 	language "c++"
-	includedirs {"include", "source", "../glload/include"}
+	includedirs {"include", "source", "../glload/include", BoostDir()}
 	targetdir "lib"
 
 	files {

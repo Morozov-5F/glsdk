@@ -46,9 +46,9 @@ namespace glimg
 	{
 		for(int iLoop = 0; iLoop < mipmapLevel; iLoop++)
 		{
-			origDim.width = std::min(origDim.width /= 2, 1);
-			origDim.height = std::min(origDim.height /= 2, 1);
-			origDim.depth = std::min(origDim.depth /= 2, 1);
+			origDim.width = std::max(origDim.width /= 2, 1);
+			origDim.height = std::max(origDim.height /= 2, 1);
+			origDim.depth = std::max(origDim.depth /= 2, 1);
 		}
 
 		return origDim;

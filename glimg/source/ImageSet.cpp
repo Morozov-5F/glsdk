@@ -5,7 +5,7 @@
 
 namespace glimg
 {
-	SingleImage::SingleImage( const detail::ImageSetImpl *pImpl, int mipmapLevel, int arrayIx, int faceIx )
+	SingleImage::SingleImage( detail::ImageSetImplPtr pImpl, int mipmapLevel, int arrayIx, int faceIx )
 		: m_pImpl(pImpl)
 		, m_arrayIx(arrayIx)
 		, m_faceIx(faceIx)
@@ -33,14 +33,9 @@ namespace glimg
 	}
 
 ///////////////////////////////////////////////////////////
-	ImageSet::ImageSet( detail::ImageSetImpl *pImpl )
+	ImageSet::ImageSet( detail::ImageSetImplPtr pImpl )
 		: m_pImpl(pImpl)
 	{}
-
-	ImageSet::~ImageSet()
-	{
-		delete m_pImpl;
-	}
 
 	glimg::Dimensions ImageSet::GetDimensions() const
 	{

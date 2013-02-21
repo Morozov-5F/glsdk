@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/ref.hpp>
 #include "glimg/ImageSet.h"
 #include "glimg/ImageCreator.h"
 #include "ImageSetImpl.h"
@@ -269,8 +272,9 @@ namespace glimg
 		if(m_imageData.empty())
 			throw ImageSetAlreadyCreatedException();
 
-		detail::ImageSetImpl *pImageData = new detail::ImageSetImpl(m_format, m_dims,
-			m_mipmapCount, m_arrayCount, m_faceCount, m_imageData, m_imageSizes);
+		boost::shared_ptr<detail::ImageSetImpl> pImageData =
+			boost::make_shared<detail::ImageSetImpl>(m_format, m_dims,
+			m_mipmapCount, m_arrayCount, m_faceCount, boost::ref(m_imageData), boost::ref(m_imageSizes));
 
 		ImageSet *pImageSet = new ImageSet(pImageData);
 

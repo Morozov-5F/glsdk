@@ -3,7 +3,7 @@ project("glutil")
 	kind "StaticLib"
 	language "c++"
 	includedirs {"include", "source",
-		"../glload/include", "../glm", "../boost"}
+		"../glload/include", "../glm", BoostDir()}
 	targetdir "lib"
 
 	files {

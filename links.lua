@@ -67,7 +67,7 @@ local LinkFuncs =
 			links {"glfw"}
 	end,
 	boost = function()
-		includedirs("boost")
+		includedirs(BoostDir())
 		
 		defines {"BOOST_ALL_NO_LIB"}
 	end,
@@ -104,7 +104,7 @@ local InclFuncs =
 		libdirs "glfw/library"
 	end,
 	boost = function()
-		includedirs "boost"
+		includedirs(BoostDir())
 		defines {"BOOST_ALL_NO_LIB"}
 	end,
 }

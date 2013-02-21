@@ -9,6 +9,8 @@
 **/
 
 #include "ImageFormat.h"
+#include "boost/shared_ptr.hpp"
+#include "boost/noncopyable.hpp"
 
 namespace glimg
 {
@@ -47,6 +49,7 @@ namespace glimg
 	namespace detail
 	{
 		class ImageSetImpl;
+		typedef boost::shared_ptr<const ImageSetImpl> ImageSetImplPtr;
 	}
 
 	class ImageSet;
@@ -54,8 +57,11 @@ namespace glimg
 	/**
 	\brief Represents a single image of a certain dimensionality.
 
-	The internal data of the image can be retrieved. Objects of this type can be retrieved from an ImageSet,
-	via ImageSet::GetImage.
+	The internal data of the image can be retrieved. Objects of this type can be retrieved from
+	an ImageSet, via ImageSet::GetImage.
+
+	This object uses reference semantics. Every copy of it will refer to the same image from the same
+	ImageSet.
 	**/
 	class SingleImage
 	{
@@ -79,7 +85,7 @@ namespace glimg
 		size_t GetImageByteSize() const;
 
 	private:
-		const detail::ImageSetImpl *m_pImpl;
+		detail::ImageSetImplPtr m_pImpl;
 		int m_arrayIx;
 		int m_faceIx;
 		int m_mipmapLevel;
@@ -87,7 +93,7 @@ namespace glimg
 		friend class detail::ImageSetImpl;
 		friend class ImageSet;
 
-		SingleImage(const detail::ImageSetImpl *pImpl, int mipmapLevel, int arrayIx, int faceIx);
+		SingleImage(detail::ImageSetImplPtr pImpl, int mipmapLevel, int arrayIx, int faceIx);
 	};
 
 	/**
@@ -107,14 +113,11 @@ namespace glimg
 	Array indices represent images that go into an array texture. Array-cubemap textures are arranged in memory
 	as specified in the ARB_texture_cube_map_array extension.
 
-	This object should always be used by reference. You cannot copy it; attempting to do so will yield a compler
-	or linker error.
+	This object uses reference semantics. Every copy of it will refer to the same image data.
 	**/
 	class ImageSet
 	{
 	public:
-		~ImageSet();
-
 		/**
 		\brief Returns the dimensionality of the base mipmap image.
 		**/
@@ -154,7 +157,8 @@ namespace glimg
 		/**
 		\brief Retrieves the image at the given mipmap level, array index, and face index.
 		
-		\return A reference to the image. Do not use it after the ImageSet object that created it is destroyed.
+		\return A reference to the image. As long as this object or a SingleImage that
+		references this object exists, the image data will continue to exist.
 		**/
 		SingleImage GetImage(int mipmapLevel, int arrayIx = 0, int faceIx = 0) const;
 
@@ -169,16 +173,12 @@ namespace glimg
 		const void *GetImageArray(int mipmapLevel) const;
 
 	private:
-		detail::ImageSetImpl *m_pImpl;
+		detail::ImageSetImplPtr m_pImpl;
 
-		explicit ImageSet(detail::ImageSetImpl *pImpl);
+		explicit ImageSet(detail::ImageSetImplPtr pImpl);
 
 		friend class ImageCreator;
 		friend void CreateTexture(unsigned int textureName, const ImageSet *pImage, unsigned int forceConvertBits);
-
-		//Prevent copying.
-		ImageSet(const ImageSet &);
-		ImageSet &operator=(const ImageSet &);
 	};
 
 	///@}
