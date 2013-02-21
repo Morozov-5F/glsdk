@@ -43,8 +43,8 @@ os.execute(clone);
 --------------------------------------------------------------
 -- Step 2: Build the Doxygen documentation.
 local pathDoxygen = pathDest / "docs";
-local doxygenFilename = "doxygen174.exe"
-local doxygenCfgName = "glsdk.cfg"
+local doxygenFilename = "doxygen183.exe"
+local doxygenCfgName = "glsdk_web.cfg"
 
 ufs.current_path(pathDoxygen);
 
@@ -52,6 +52,12 @@ local pathDoxygen = ufs.path(FindFileInPath(doxygenFilename));
 if(pathDoxygen:empty()) then
 	print("Could not find Doxygen.");
 	return;
+end
+
+do
+	local hDoxyVersion = io.open("glsdk_version.cfg")
+	hDoxyVersion:write("PROJECT_NUMBER = ", versionNum, "\n")
+	hDoxyVersion:close()
 end
 
 local doxProc = ex.spawn(tostring(pathDoxygen),

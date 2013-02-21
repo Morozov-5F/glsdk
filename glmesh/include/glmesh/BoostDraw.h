@@ -2,6 +2,12 @@
 #ifndef GLSDK_MESH_DRAW_WITH_BOOST_H
 #define GLSDK_MESH_DRAW_WITH_BOOST_H
 
+/**
+\file
+
+\brief Boost header for special Boost-based drawing functions.
+**/
+
 #include "Draw.h"
 #include "VertexFormat.h"
 #include "VertexWriter.h"

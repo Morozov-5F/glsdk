@@ -61,6 +61,8 @@ namespace glmesh
 		but all prior attributes will have been removed.
 
 		\throw Blah If a vertex has only been partially specified.
+		
+		\todo Exception for CpuDataWriter::Extract.
 		**/
 		void Extract(std::vector<char> &output);
 
@@ -68,6 +70,8 @@ namespace glmesh
 		\brief Copies the buffer to the return value. Does not modify the internal data.
 
 		\throw Blah If a vertex has only been partially specified.
+
+		\todo Exception for CpuDataWriter::Copy.
 		**/
 		std::vector<char> Copy() const;
 
@@ -88,6 +92,8 @@ namespace glmesh
 		\return The buffer object uploaded into.
 
 		\throw Blah If a vertex has only been partially specified.
+
+		\todo Exception for CpuDataWriter::TransferToBuffer.
 		**/
 		GLuint TransferToBuffer(GLenum target, GLenum usage, GLuint bufferObject = 0) const;
 		///@}
