@@ -9,6 +9,7 @@
 
 #include <string>
 #include <exception>
+#include <boost/noncopyable.hpp>
 
 
 namespace glmesh
@@ -74,7 +75,7 @@ namespace glmesh
 
 	StreamBuffer cannot be copied, as performing a deep-copy would not be a reasonably fast operation.
 	**/
-	class StreamBuffer
+	class StreamBuffer : public boost::noncopyable
 	{
 	public:
 		/**
@@ -133,7 +134,7 @@ namespace glmesh
 
 		When this function completes, the binding state of GL_ARRAY_BUFFER will be 0.
 		**/
-		class Map
+		class Map : public boost::noncopyable
 		{
 		public:
 			/**
@@ -197,10 +198,6 @@ namespace glmesh
 			StreamBuffer *m_pData;
 			void *m_pCurrPtr;
 			size_t m_bytesMapped;
-
-			//No copying.
-			Map(const Map&);
-			Map& operator=(const Map&);
 		};
 
 	private:
@@ -211,10 +208,6 @@ namespace glmesh
 		bool m_isMapped;
 
 		GLuint m_vao;
-
-		//No copying.
-		StreamBuffer(const StreamBuffer &);
-		StreamBuffer &operator=(const StreamBuffer &);
 	};
 	///@}
 }

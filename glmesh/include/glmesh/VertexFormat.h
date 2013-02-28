@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <exception>
+#include <boost/noncopyable.hpp>
 
 namespace glmesh
 {
@@ -310,7 +311,7 @@ namespace glmesh
 		After creating one of these, you can use \c glDraw* functions to render from the previously
 		bound buffer object, using the VertexFormat given.
 		**/
-		class Enable
+		class Enable : public boost::noncopyable
 		{
 		public:
 			/**
@@ -333,10 +334,6 @@ namespace glmesh
 
 		private:
 			const VertexFormat &m_fmt;
-
-			//No copying.
-			Enable(const Enable &);
-			Enable &operator=(const Enable &);
 		};
 
 	private:

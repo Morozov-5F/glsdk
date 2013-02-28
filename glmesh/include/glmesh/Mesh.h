@@ -11,6 +11,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <boost/noncopyable.hpp>
 
 namespace glmesh
 {
@@ -108,18 +109,18 @@ namespace glmesh
 	ownership of one or more buffer objects, which it will also delete when it is deleted. It does not
 	use these buffer objects for any purpose other than to delete them.
 	
-	This class cannot be copied.
-
 	Rendering with this class (via any call to Render) will affect the following OpenGL state:
 
 	\li The current VAO binding. After the call, it will be reset to 0.
 	\li The current GL_PRIMITIVE_RESTART enable. After the call, it will be disabled.
 
+	\note This class cannot be copied.
+
 	\note: This class requires the presence of ARB_vertex_array_object or OpenGL 3.0 or above.
 
-	\note: You must ensure that the OpenGL context exists when this Mesh's is called.
+	\note: You must ensure that the OpenGL context exists when this Mesh's constructor is called.
 	**/
-	class Mesh
+	class Mesh : public boost::noncopyable
 	{
 	public:
 		/**
