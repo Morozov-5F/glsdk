@@ -12,6 +12,7 @@
 #include <vector>
 #include "array_ref.h"
 #include "string_ref.h"
+#include <boost/noncopyable.hpp>
 
 namespace glutil
 {
@@ -205,6 +206,135 @@ namespace glutil
 	**/
 	GLuint MakeSeparableProgram(GLenum shaderType, const std::vector<std::string> &shaderList);
 	///@}
+
+	/**
+	\brief RAII object for managing a shader object.
+
+	This object manages the lifetime of a shader object. It represents a uniquely-owned shader object.
+	It is implicitly convertible to GLuint, so you can use it more or less wherever you used a
+	GLuint before.
+
+	It is explicitly non-copyable. C++11 would eventually allow move-semantics, but that's not widely
+	available enough to directly support. If you need to transfer ownership, it is swappable, so
+	you'll have to make due with using `swap`.
+
+	This RAII-style class makes it easy to be exception-safe with shader objects.
+
+	\todo: Implement C++11 move semantics.
+	**/
+	class UniqueShader : public boost::noncopyable
+	{
+	public:
+		///An empty UniqueShader, with shader name 0.
+		UniqueShader() : m_shader(0) {}
+		///Create a UniqueShader from an existing shader object.
+		explicit UniqueShader(GLuint shader) : m_shader(shader) {}
+		///Destroys the owned shader object, if any.
+		~UniqueShader() {Disengage();}
+
+		///Exchanges shader ownership between the two objects.
+		void swap(UniqueShader &other)
+		{
+			using std::swap;
+			swap(m_shader, other.m_shader);
+		}
+
+		///Implicit conversion to shader object.
+		operator GLuint() const {return m_shader;}
+
+		///Resets the currently owned shader, deleting the present one.
+		void reset(GLuint newShader = 0)
+		{
+			Disengage();
+			m_shader = newShader;
+		}
+
+		/**
+		\brief Abandons ownership of the currently-owned shader object.
+
+		After calling this function, the shader object will be unowned. It will \em not have
+		been destroyed.
+
+		\return The shader object that used to be owned.
+		**/
+		GLuint release()
+		{
+			GLuint shaderName = m_shader;
+			m_shader = 0;
+			return shaderName;
+		}
+
+	private:
+		GLuint m_shader;
+
+		void Disengage();
+	};
+
+	/**
+	\brief RAII object for managing a program object.
+
+	This object manages the lifetime of a program object. It represents a uniquely-owned program object.
+	It is implicitly convertible to GLuint, so you can use it more or less wherever you used a
+	GLuint before.
+
+	It is explicitly non-copyable. C++11 would eventually allow move-semantics, but that's not widely
+	available enough to directly support. If you need to transfer ownership, it is swappable, so
+	you'll have to make due with using `swap`.
+
+	This RAII-style class makes it easy to be exception-safe with program objects.
+
+	\todo: Implement C++11 move semantics.
+	**/
+	class UniqueProgram : public boost::noncopyable
+	{
+	public:
+		///An empty UniqueProgram, with program name 0.
+		UniqueProgram() : m_program(0) {}
+		///Create a UniqueProgram from an existing program object.
+		explicit UniqueProgram(GLuint program) : m_program(0) {}
+		///Destroys the owned program object, if any.
+		~UniqueProgram() {Disengage();}
+
+		///Exchanges program ownership between the two objects.
+		void swap(UniqueProgram &other)
+		{
+			using std::swap;
+			swap(m_program, other.m_program);
+		}
+
+		///Implicit conversion to program object.
+		operator GLuint () const {return m_program;}
+
+		///Resets the currently owned program, deleting the present one.
+		void reset(GLuint newProgram = 0)
+		{
+			Disengage();
+			m_program = newProgram;
+		}
+
+		/**
+		\brief Abandons ownership of the currently-owned program object.
+
+		After calling this function, the program object will be unowned. It will \em not have
+		been destroyed.
+
+		\return The program object that used to be owned.
+		**/
+		GLuint release()
+		{
+			GLuint programName = m_program;
+			m_program = 0;
+			return programName;
+		}
+
+	private:
+		GLuint m_program;
+
+		void Disengage();
+	};
+
+	inline void swap(UniqueShader &lhs, UniqueShader &rhs) {lhs.swap(rhs);}
+	inline void swap(UniqueProgram &lhs, UniqueProgram &rhs) {lhs.swap(rhs);}
 
 	///@}
 }

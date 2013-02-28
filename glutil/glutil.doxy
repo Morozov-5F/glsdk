@@ -75,7 +75,7 @@ When a Pole is created, it is given a specific mouse button to listen for and re
 /**
 \defgroup module_glutil_program Program Compilation/Linking
 
-\brief Helper functions for shader and program compiling and linking.
+\brief Helper functions and objects for shader and program compiling and linking.
 
 \ref module_glload "GL Load" must have been successfully initialized for these functions to work.
 

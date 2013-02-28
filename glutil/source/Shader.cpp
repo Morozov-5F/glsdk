@@ -137,60 +137,18 @@ namespace glutil
 
 	GLuint LinkProgram( refs::string_ref vertexShader, refs::string_ref fragmentShader )
 	{
-		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
-		GLuint fragShader = 0;
-		try
-		{
-			fragShader = CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
-		}
-		catch(...)
-		{
-			gl::DeleteShader(vertShader);
-			throw;
-		}
+		UniqueShader vertShader(CompileShader(gl::VERTEX_SHADER, vertexShader));
+		UniqueShader fragShader(CompileShader(gl::FRAGMENT_SHADER, fragmentShader));
 
-		try
-		{
-			GLuint program = LinkProgram(vertShader, fragShader);
-			gl::DeleteShader(vertShader);
-			gl::DeleteShader(fragShader);
-			return program;
-		}
-		catch(...)
-		{
-			gl::DeleteShader(vertShader);
-			gl::DeleteShader(fragShader);
-			throw;
-		}
+		return LinkProgram(vertShader, fragShader);
 	}
 
 	GLuint LinkProgram( GLuint program, refs::string_ref vertexShader, refs::string_ref fragmentShader )
 	{
-		GLuint vertShader = CompileShader(gl::VERTEX_SHADER, vertexShader);
-		GLuint fragShader = 0;
-		try
-		{
-			fragShader = CompileShader(gl::FRAGMENT_SHADER, fragmentShader);
-		}
-		catch(...)
-		{
-			gl::DeleteShader(vertShader);
-			throw;
-		}
+		UniqueShader vertShader(CompileShader(gl::VERTEX_SHADER, vertexShader));
+		UniqueShader fragShader(CompileShader(gl::FRAGMENT_SHADER, fragmentShader));
 
-		try
-		{
-			LinkProgram(program, vertShader, fragShader);
-			gl::DeleteShader(vertShader);
-			gl::DeleteShader(fragShader);
-			return program;
-		}
-		catch(...)
-		{
-			gl::DeleteShader(vertShader);
-			gl::DeleteShader(fragShader);
-			throw;
-		}
+		return LinkProgram(program, vertShader, fragShader);;
 	}
 
 	GLuint LinkProgram( GLuint shader, bool isSeparable )
@@ -269,5 +227,17 @@ namespace glutil
 			stringList.push_back(shaderList[loop].c_str());
 
 		return MakeSeparableProgram(shaderType, refs::array_ref<const char *>(stringList));
+	}
+
+	void UniqueShader::Disengage()
+	{
+		gl::DeleteShader(m_shader);
+		m_shader = 0;
+	}
+
+	void UniqueProgram::Disengage()
+	{
+		gl::DeleteProgram(m_program);
+		m_program = 0;
 	}
 }
