@@ -101,6 +101,7 @@ local toDelete =
 	".hg_archival.txt",
 	"glimg/premake4.lua", "glload/premake4.lua",
 	"glutil/premake4.lua", "glmesh/premake4.lua",
+	"freeglut/premake4.lua", "glfw/premake4.lua",
 	--directories
 	"glimg/Test", "glload/Test",
 	"glutil/Test", "glmesh/Test",
