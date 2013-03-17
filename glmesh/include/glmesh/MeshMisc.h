@@ -34,7 +34,7 @@ namespace glmesh
 		This creates a square, on the range [-1, 1] in the XY plane (faces in the +Z direction).
 		The quad can be tessellated arbitrarily, via parameters.
 
-		Avaliable attributes:
+		Available attributes:
 		\li normals
 		\li texture coordinates: The lower-left corner of the texture is in the -X/-Y part of the square.
 
@@ -43,6 +43,34 @@ namespace glmesh
 		\param bDoubleSided Whether the ground is double-sided or not. If not, then CCW will point in the positive-Y.
 		**/
 		Mesh *GroundPlane(int numXVerts, int numYVerts, bool bDoubleSided = true);
+
+		/**
+		\brief Creates a cube-shaped block of cubes, in an alternating pattern.
+
+		Each cube is a cube of size 2. The entire array will be centered around it's centerpoint.
+		The array's length on one side will be `2 * (2n - 1)`, where `n` is the number of cubes on an edge.
+
+		Available attributes:
+		\li normals
+		
+		\param numCubesOnEdge The number of cubes that will appear on each edge. Will be clamped to the range [1, 16384].
+		**/
+		Mesh *CubeBlock(int numCubesOnEdge);
+
+		/**
+		\brief Creates a pyramid made of cubes, in an alternating pattern.
+
+		Each cube is a cube of size 2. The pyramid will be pointing in the positive y axis.
+		The entire array will be centered around its X/Z centerpoint, with the zero y at the base of the pyramid.
+		The height will be `2*n`, where `n` is the number of cubes in height. The width/depth will be
+		`2 * (2n - 1)`.
+
+		Available attributes:
+		\li normals
+		
+		\param numCubesTall How many cubes in height the pyramid will be. Will be clamped to the range [1, 16383].
+		**/
+		Mesh *CubePyramid(int numCubesTall);
 		///@}
 	}
 }

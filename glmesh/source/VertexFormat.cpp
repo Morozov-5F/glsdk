@@ -147,7 +147,7 @@ namespace glmesh
 			currOffset += currAttrib.ByteSize();
 
 			//Round currOffset up to the nearest 4 bytes.
-			currOffset = ((currOffset + 7) / 8) * 8;
+			currOffset = ((currOffset + 3) / 4) * 4;
 
 			if(foundIndices.find(currAttrib.GetAttribIndex()) != foundIndices.end())
 				throw AttributeIndexMultipleRefException(currAttrib.GetAttribIndex());
