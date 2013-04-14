@@ -8,6 +8,7 @@
 **/
 
 #include "GenDescriptors.h"
+#include "GenCommon.h"
 
 namespace glmesh
 {
@@ -52,10 +53,14 @@ namespace glmesh
 
 		Available attributes:
 		\li normals
+		\li color, if you pass a non-empty \a colorSequence argument.
 		
 		\param numCubesOnEdge The number of cubes that will appear on each edge. Will be clamped to the range [1, 16384].
+		\param colorSequence A series of colors used to color the faces of the objects. The order of faces is:
+		+y, +x, -y, -x, +z, -z. The color used will wrap around, so if you provide 6 colors, then each cube will get
+		the same six colors.
 		**/
-		Mesh *CubeBlock(int numCubesOnEdge);
+		Mesh *CubeBlock(int numCubesOnEdge, const ColorArray &colorSequence = ColorArray());
 
 		/**
 		\brief Creates a pyramid made of cubes, in an alternating pattern.
@@ -67,10 +72,14 @@ namespace glmesh
 
 		Available attributes:
 		\li normals
+		\li color, if you pass a non-empty \a colorSequence argument.
 		
 		\param numCubesTall How many cubes in height the pyramid will be. Will be clamped to the range [1, 16383].
+		\param colorSequence A series of colors used to color the faces of the objects. The order of faces is:
+		+y, +x, -y, -x, +z, -z. The color used will wrap around, so if you provide 6 colors, then each cube will get
+		the same six colors.
 		**/
-		Mesh *CubePyramid(int numCubesTall);
+		Mesh *CubePyramid(int numCubesTall, const ColorArray &colorSequence = ColorArray());
 		///@}
 	}
 }

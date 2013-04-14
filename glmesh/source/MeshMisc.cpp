@@ -12,7 +12,7 @@
 #include "glmesh/VertexFormat.h"
 
 #include "glmesh/Mesh.h"
-#include "glmesh/Quadrics.h"
+#include "glmesh/MeshMisc.h"
 #include "GenHelper.h"
 #include <glm/glm.hpp>
 
@@ -208,7 +208,8 @@ namespace gen
 		| |
 		1-3
 		*/
-		void WriteCubeLayer(CpuDataWriter &writer, const int numCubesOnEdge, const GLshort heightOfCenter)
+		void WriteCubeLayer(CpuDataWriter &writer, const int numCubesOnEdge, const GLshort heightOfCenter,
+			const ColorArray &colorSequence)
 		{
 			const svec3 cubeSides[] =
 			{
@@ -267,6 +268,8 @@ namespace gen
 			//The center of the current cube.
 			svec3 currCube(-2 * (numCubesOnEdge - 1), heightOfCenter, -2 * (numCubesOnEdge - 1));
 
+			size_t currColor = 0;
+
 			for(int x = 0; x < numCubesOnEdge; ++x, currCube.x += 4)
 			{
 				currCube.z = -2 * (numCubesOnEdge - 1);
@@ -276,19 +279,33 @@ namespace gen
 					{
 						writer.Attrib(currCube + cubeSides[face * 4 + 0]);
 						writer.Attrib(normals[face]);
+						if(!colorSequence.empty())
+							writer.Attrib(colorSequence[currColor]);
 						writer.Attrib(currCube + cubeSides[face * 4 + 1]);
 						writer.Attrib(normals[face]);
+						if(!colorSequence.empty())
+							writer.Attrib(colorSequence[currColor]);
 						writer.Attrib(currCube + cubeSides[face * 4 + 2]);
 						writer.Attrib(normals[face]);
+						if(!colorSequence.empty())
+							writer.Attrib(colorSequence[currColor]);
 						writer.Attrib(currCube + cubeSides[face * 4 + 3]);
 						writer.Attrib(normals[face]);
+						if(!colorSequence.empty())
+							writer.Attrib(colorSequence[currColor]);
+
+						if(!colorSequence.empty())
+						{
+							++currColor;
+							currColor = currColor % colorSequence.size();
+						}
 					}
 				}
 			}
 		}
 	}
 
-	Mesh * CubeBlock( int numCubesOnEdge )
+	Mesh * CubeBlock( int numCubesOnEdge, const ColorArray &colorSequence )
 	{
 		numCubesOnEdge = std::max(numCubesOnEdge, 1);
 		numCubesOnEdge = std::min(numCubesOnEdge, 16384); //Because we're using shorts.
@@ -306,6 +323,8 @@ namespace gen
 		glmesh::AttributeList attribs;
 		attribs.push_back(glmesh::AttribDesc(ATTR_POS, 3, glmesh::VDT_SIGN_SHORT, glmesh::ADT_FLOAT));
 		attribs.push_back(glmesh::AttribDesc(ATTR_NORMAL, 4, glmesh::VDT_SIGN_BYTE, glmesh::ADT_NORM_FLOAT));
+		if(!colorSequence.empty())
+			attribs.push_back(glmesh::AttribDesc(ATTR_COLOR, 4, glmesh::VDT_UNSIGN_BYTE, glmesh::ADT_NORM_FLOAT));
 		VertexFormat fmt(attribs);
 
 		CpuDataWriter writer(fmt,  numCubesTotal * 24);
@@ -313,7 +332,7 @@ namespace gen
 
 		for(int layer = 0; layer < numLayers; ++layer, height -= 2)
 		{
-			WriteCubeLayer(writer, layer % 2 ? numCubesOnEdge - 1 : numCubesOnEdge, height);
+			WriteCubeLayer(writer, layer % 2 ? numCubesOnEdge - 1 : numCubesOnEdge, height, colorSequence);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -349,6 +368,8 @@ namespace gen
 
 		std::vector<int> components;
 		components.push_back(VAR_NORMAL);
+		if(!colorSequence.empty())
+			components.push_back(VAR_COLOR);
 
 		BuildVariations(variantMap, components, fmt, buffers[1]);
 
@@ -366,7 +387,7 @@ namespace gen
 		return pRet;
 	}
 
-	Mesh * CubePyramid( int numCubesTall )
+	Mesh * CubePyramid( int numCubesTall, const ColorArray &colorSequence )
 	{
 		numCubesTall = std::max(numCubesTall, 1);
 		numCubesTall = std::min(numCubesTall, 16383); //Because we're using shorts.
@@ -376,6 +397,8 @@ namespace gen
 		glmesh::AttributeList attribs;
 		attribs.push_back(glmesh::AttribDesc(ATTR_POS, 3, glmesh::VDT_SIGN_SHORT, glmesh::ADT_FLOAT));
 		attribs.push_back(glmesh::AttribDesc(ATTR_NORMAL, 4, glmesh::VDT_SIGN_BYTE, glmesh::ADT_NORM_FLOAT));
+		if(!colorSequence.empty())
+			attribs.push_back(glmesh::AttribDesc(ATTR_COLOR, 4, glmesh::VDT_UNSIGN_BYTE, glmesh::ADT_NORM_FLOAT));
 		VertexFormat fmt(attribs);
 
 		CpuDataWriter writer(fmt);
@@ -383,7 +406,7 @@ namespace gen
 
 		for(int layer = 0; layer < numCubesTall; ++layer, height -= 2)
 		{
-			WriteCubeLayer(writer, layer + 1, height);
+			WriteCubeLayer(writer, layer + 1, height, colorSequence);
 		}
 
 		const size_t numCubesTotal = writer.GetNumVerticesWritten() / 24;
@@ -421,6 +444,8 @@ namespace gen
 
 		std::vector<int> components;
 		components.push_back(VAR_NORMAL);
+		if(!colorSequence.empty())
+			components.push_back(VAR_COLOR);
 
 		BuildVariations(variantMap, components, fmt, buffers[1]);
 
