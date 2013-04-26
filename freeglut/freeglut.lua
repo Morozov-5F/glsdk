@@ -1,6 +1,7 @@
-
 if(_ACTION == "gmake") then
-    os.execute("sh ./configure");
+	if(os.get() == "linux" or os.get() == "bsd") then
+		os.execute("sh ./configure");
+	end
 end
 
 project "freeglut"
@@ -15,7 +16,7 @@ project "freeglut"
 	configuration "windows"
 		defines "WIN32"
 		
-	configuration "gmake"
+	configuration {"gmake", "linux or bsd"}
         defines {"HAVE_CONFIG_H", }
         includedirs {"."}
 		
