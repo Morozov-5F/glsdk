@@ -87,7 +87,7 @@ namespace refs
 
 		size_type size() const {return m_size;}
 		size_type max_size() const {return std::numeric_limits<size_type>::max();}
-		bool empty() const {return m_size != 0;}
+		bool empty() const {return m_size == 0;}
 
 		const T & operator[](size_t i) const {return m_data[i];}
 		const T & at(size_t i) const
