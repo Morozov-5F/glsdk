@@ -9,6 +9,7 @@
 
 
 #include "ImageSet.h"
+#include "TextureGeneratorExceptions.h"
 
 
 namespace glimg
