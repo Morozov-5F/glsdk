@@ -107,7 +107,7 @@ local toDelete =
 	"glutil/Test", "glmesh/Test",
 	"glm/doc/build",
 	"glloadgen/docs", "glloadgen/test",
-	"caps",
+	"caps", "mesh_data"
 }
 
 
