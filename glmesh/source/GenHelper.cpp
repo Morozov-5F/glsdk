@@ -102,8 +102,10 @@ namespace glmesh
 				for(size_t comp = 0; comp < components.size(); ++comp)
 				{
 					if(variant & (0x1 << comp))
+					{
 						variation |= components[comp];
-					fmt.BindAttribute(0, comp + 1);
+						fmt.BindAttribute(0, comp + 1);
+					}
 				}
 
 				AddVariantToMap(variantMap, vaos[variant], variation);

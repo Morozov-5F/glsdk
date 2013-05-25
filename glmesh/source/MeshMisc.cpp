@@ -381,7 +381,7 @@ namespace gen
 
 		renderCmds.DrawElements(gl::TRIANGLES, indices.size(), gl::UNSIGNED_INT, 0);
 
-		GLuint mainVao = variantMap["lit"];
+		GLuint mainVao = colorSequence.empty() ? variantMap["lit"] : variantMap["lit-color"];
 
 		Mesh *pRet = new Mesh(buffers, mainVao, renderCmds, variantMap);
 		return pRet;
@@ -457,7 +457,7 @@ namespace gen
 
 		renderCmds.DrawElements(gl::TRIANGLES, indices.size(), gl::UNSIGNED_INT, 0);
 
-		GLuint mainVao = variantMap["lit"];
+		GLuint mainVao = colorSequence.empty() ? variantMap["lit"] : variantMap["lit-color"];
 
 		Mesh *pRet = new Mesh(buffers, mainVao, renderCmds, variantMap);
 		return pRet;

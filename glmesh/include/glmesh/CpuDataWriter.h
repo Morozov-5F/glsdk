@@ -12,6 +12,32 @@
 
 namespace glmesh
 {
+	///\addtogroup module_glmesh_exceptions
+	///@{
+
+	///Base class for all CpuDataWriter specific exceptions.
+	class CpuDataException : public std::exception
+	{
+	public:
+		virtual ~CpuDataException() throw() {}
+
+		virtual const char *what() const throw() {return message.c_str();}
+
+	protected:
+		std::string message;
+	};
+
+	///Thrown when attempting to get vertices from a CpuDataWriter when a vertex is incomplete.
+	class IncompleteVertexException : public CpuDataException
+	{
+	public:
+		IncompleteVertexException()
+		{
+			message = "All vertices must be complete before attempting to extract them from CpuDataWriter.";
+		}
+	};
+
+	///@}
 
 	///\addtogroup module_glmesh_draw
 	///@{
@@ -32,7 +58,7 @@ namespace glmesh
 	It will still throw if you attempt to extract the vertex data when a vertex is only partially specified,
 	but otherwise, there are no limitations.
 
-	You can extract the data by copying it into a vector<char>, by "moving" it into one, or by
+	You can extract the data by copying it into a `vector<char>`, by "moving" it into one, or by
 	directly uploading it to a buffer object.
 	**/
 	class CpuDataWriter : public VertexWriter<CpuDataWriter>
@@ -60,18 +86,14 @@ namespace glmesh
 		copying of the data. Once you call this, you could continue writing more attributes,
 		but all prior attributes will have been removed.
 
-		\throw Blah If a vertex has only been partially specified.
-		
-		\todo Exception for CpuDataWriter::Extract.
+		\throw IncompleteVertexException If a vertex has only been partially specified.
 		**/
 		void Extract(std::vector<char> &output);
 
 		/**
 		\brief Copies the buffer to the return value. Does not modify the internal data.
 
-		\throw Blah If a vertex has only been partially specified.
-
-		\todo Exception for CpuDataWriter::Copy.
+		\throw IncompleteVertexException If a vertex has only been partially specified.
 		**/
 		std::vector<char> Copy() const;
 
@@ -91,9 +113,7 @@ namespace glmesh
 		\param bufferObject The buffer object name you want to upload into. If not specified, this will create a new one.
 		\return The buffer object uploaded into.
 
-		\throw Blah If a vertex has only been partially specified.
-
-		\todo Exception for CpuDataWriter::TransferToBuffer.
+		\throw IncompleteVertexException If a vertex has only been partially specified.
 		**/
 		GLuint TransferToBuffer(GLenum target, GLenum usage, GLuint bufferObject = 0) const;
 		///@}

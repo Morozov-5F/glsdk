@@ -4,7 +4,7 @@
 
 /**
 \file
-\brief Defines miscellaneous mesh generators.
+\brief Various miscellaneous mesh generators.
 **/
 
 #include "GenDescriptors.h"
@@ -46,7 +46,15 @@ namespace glmesh
 		Mesh *GroundPlane(int numXVerts, int numYVerts, bool bDoubleSided = true);
 
 		/**
-		\brief Creates a cube-shaped block of cubes, in an alternating pattern.
+		\name Structures
+		These generators build larger, complex structures out of smaller functional units. These
+		shapes are useful for showing off lighting and other effects. These functions are
+		parameterized, allowing them to produce structures of arbitrary (within reason) sizes.
+		**/
+		///@{
+
+		/**
+		\brief Creates a cubical block of cubes in an alternating pattern.
 
 		Each cube is a cube of size 2. The entire array will be centered around it's centerpoint.
 		The array's length on one side will be `2 * (2n - 1)`, where `n` is the number of cubes on an edge.
@@ -80,6 +88,9 @@ namespace glmesh
 		the same six colors.
 		**/
 		Mesh *CubePyramid(int numCubesTall, const ColorArray &colorSequence = ColorArray());
+
+		///@}
+
 		///@}
 	}
 }

@@ -312,9 +312,10 @@ Changes from 0.4.4:
 <li>Added GL Load Gen to the distribution.</li>
 <li> From @ref module_glmesh "GL Mesh"
 <ul>
-<li>splits the glmesh::Draw::Attrib functions into their own utility class, so that they can be used in glmesh::CpuVertexWriter. Also that is a new class which can be used for creating vertex arrays on the CPU.</li>
+<li>splits the glmesh::Draw::Attrib functions into their own utility class, so that the interface can be used in the new glmesh::CpuVertexWriter. This class is used for creating vertex arrays on the CPU, to be used in later uploads to the GPU.</li>
 <li>glmesh::VertexFormat::Enable class now can use ARB_vertex_attrib_binding.</li>
 <li>glmesh::VertexFormat has functions to bind attributes, either all of them or individually. This makes it easy to use it with a VAO; you bind the VAO, call glmesh::VertexFormat::BindAttributes, and you're done. There is also glmesh::VertexFormat::BindAttribFormats for ARB_vertex_attrib_binding usage</li>
+<li>A number of \ref module_glmesh_mesh_generator "mesh generators"</li>
 </ul>
 </li>
 <li> From @ref module_glload "GL Load"

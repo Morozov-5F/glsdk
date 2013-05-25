@@ -4,7 +4,7 @@
 
 /**
 \file
-\brief Defines mesh generators for various quadrics and curved surfaces.
+\brief Defines mesh generators for various quadric and curved surfaces.
 **/
 
 #include "GenDescriptors.h"
@@ -16,6 +16,14 @@ namespace glmesh
 	namespace gen
 	{
 		///\addtogroup module_glmesh_mesh_generator
+		///@{
+
+		/**
+		\name Quadric Surfaces
+		[Quadric Surfaces](http://en.wikipedia.org/wiki/Quadric) are curved surfaces defined by
+		multi-dimensional quadratic equations. It is a special class of surface that includes
+		cones, cylinders, and spheres. These functions generate unit meshes for these shapes.
+		**/
 		///@{
 
 		/**
@@ -32,6 +40,8 @@ namespace glmesh
 		\param numVertSlices The number of vertical slices of the sphere. More slices make it smoother.
 		**/
 		Mesh *UnitSphere(int numHorizSlices, int numVertSlices);
+
+		///@}
 
 		///@}
 	}

@@ -152,7 +152,7 @@ int main(int argc, char** argv)
 
 	glm::ivec2 desktopSize(desktopMode.Width, desktopMode.Height);
 	glm::ivec2 wndPos = glutil::CalcWindowPosition(wndSize, desktopSize,
-		glutil::WH_LEFT, glutil::WV_CENTER);
+		glutil::WH_RIGHT, glutil::WV_CENTER);
 
 	glfwSetWindowPos(wndPos.x, wndPos.y);
 

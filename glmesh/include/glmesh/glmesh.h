@@ -14,6 +14,7 @@
 #include "GenDescriptors.h"
 #include "Quadrics.h"
 #include "MeshMisc.h"
+#include "GenPlatonic.h"
 
 
 /**

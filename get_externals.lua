@@ -12,6 +12,7 @@ require "_FindFileInPath"
 
 local externals =
 {
+--[[
 	{
 		"FreeGLUT 2.6.0",	--The name of the component.
 		"freeglut",	--The output directory to copy the component's data.
@@ -19,6 +20,7 @@ local externals =
 		"freeglut-2.6.0",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
 		"https://downloads.sourceforge.net/project/freeglut/freeglut/freeglut-2.6.0.tar.gz?r=&ts=1315279369&use_mirror=cdnetworks-us-2" --URL to download.
 	},
+	]]
 	{
 		"GLFW 2.7.2",	--The name of the component.
 		"glfw",			--The output directory to copy the component's data.
@@ -36,11 +38,11 @@ local externals =
 	},
 
 	{
-		"glLoadGen 1.0.3",	--The name of the component.
+		"glLoadGen 1.1.1",	--The name of the component.
 		"glloadgen",		--The output directory to copy the component's data.
 		"glloadgen.7z",		--The filename that will be created in the download director.
-		"glLoadGen_1_0_3",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
-		[[https://sourceforge.net/projects/glsdk/files/glLoadGen/glLoadGen_1_0_3.7z/download?use_mirror=superb-dca2]]
+		"glLoadGen_1_1_1",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
+		[[https://downloads.sourceforge.net/project/glsdk/glLoadGen/glLoadGen_1_1_1.7z?r=&ts=1369510233&use_mirror=dfn]]
 	},
 }
 

@@ -116,9 +116,10 @@ namespace glmesh
 
 	\note This class cannot be copied.
 
-	\note: This class requires the presence of ARB_vertex_array_object or OpenGL 3.0 or above.
+	\note This class requires OpenGL 3.2 or above. It can be used with OpenGL 3.0 so long as you don't
+	use any rendering command that has a non-zero base vertex.
 
-	\note: You must ensure that the OpenGL context exists when this Mesh's constructor is called.
+	\note You must ensure that the OpenGL context exists when Mesh's constructor is called.
 	**/
 	class Mesh : public boost::noncopyable
 	{

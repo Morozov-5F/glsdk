@@ -16,7 +16,7 @@ namespace glmesh
 	void CpuDataWriter::Extract( std::vector<char> &output )
 	{
 		if(GetCurrAttrib() != 0)
-			throw;
+			throw IncompleteVertexException();
 
 		output.swap(m_data);
 		m_data.clear();
@@ -26,7 +26,7 @@ namespace glmesh
 	std::vector<char> CpuDataWriter::Copy() const
 	{
 		if(GetCurrAttrib() != 0)
-			throw;
+			throw IncompleteVertexException();
 
 		return m_data;
 	}
@@ -34,7 +34,7 @@ namespace glmesh
 	GLuint CpuDataWriter::TransferToBuffer( GLenum target, GLenum usage, GLuint bufferObject /*= 0*/ ) const
 	{
 		if(GetCurrAttrib() != 0)
-			throw;
+			throw IncompleteVertexException();
 
 		if(!bufferObject)
 			gl::GenBuffers(1, &bufferObject);
