@@ -22,7 +22,7 @@ namespace gl
 		CONTEXT_FLAGS                    = 0x821E,
 		COMPRESSED_RED                   = 0x8225,
 		COMPRESSED_RG                    = 0x8226,
-		CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT = 0x0001,
+		CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT = 0x00000001,
 		RGBA32F                          = 0x8814,
 		RGBA16F                          = 0x881A,
 		RGB16F                           = 0x881B,

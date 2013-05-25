@@ -108,6 +108,7 @@ int glXext_ARB_multisample = 0;
 int glXext_ARB_vertex_buffer_object = 0;
 int glXext_EXT_buffer_age = 0;
 int glXext_EXT_create_context_es2_profile = 0;
+int glXext_EXT_create_context_es_profile = 0;
 int glXext_EXT_fbconfig_packed_float = 0;
 int glXext_EXT_framebuffer_sRGB = 0;
 int glXext_EXT_import_context = 0;
@@ -510,7 +511,7 @@ typedef struct glx_StrToExtMap_s
 	PFN_LOADFUNCPOINTERS LoadExtension;
 } glx_StrToExtMap;
 
-static glx_StrToExtMap ExtensionTable[49] = {
+static glx_StrToExtMap ExtensionTable[50] = {
 	{"GLX_3DFX_multisample", &glXext_3DFX_multisample, NULL},
 	{"GLX_AMD_gpu_association", &glXext_AMD_gpu_association, NULL},
 	{"GLX_ARB_create_context", &glXext_ARB_create_context, LoadExt_ARB_create_context},
@@ -523,6 +524,7 @@ static glx_StrToExtMap ExtensionTable[49] = {
 	{"GLX_ARB_vertex_buffer_object", &glXext_ARB_vertex_buffer_object, NULL},
 	{"GLX_EXT_buffer_age", &glXext_EXT_buffer_age, NULL},
 	{"GLX_EXT_create_context_es2_profile", &glXext_EXT_create_context_es2_profile, NULL},
+	{"GLX_EXT_create_context_es_profile", &glXext_EXT_create_context_es_profile, NULL},
 	{"GLX_EXT_fbconfig_packed_float", &glXext_EXT_fbconfig_packed_float, NULL},
 	{"GLX_EXT_framebuffer_sRGB", &glXext_EXT_framebuffer_sRGB, NULL},
 	{"GLX_EXT_import_context", &glXext_EXT_import_context, LoadExt_EXT_import_context},
@@ -562,7 +564,7 @@ static glx_StrToExtMap ExtensionTable[49] = {
 	{"GLX_SUN_get_transparent_index", &glXext_SUN_get_transparent_index, LoadExt_SUN_get_transparent_index},
 };
 
-static int g_extensionMapSize = 49;
+static int g_extensionMapSize = 50;
 
 static glx_StrToExtMap *FindExtEntry(const char *extensionName)
 {
@@ -591,6 +593,7 @@ static void ClearExtensionVars()
 	glXext_ARB_vertex_buffer_object = 0;
 	glXext_EXT_buffer_age = 0;
 	glXext_EXT_create_context_es2_profile = 0;
+	glXext_EXT_create_context_es_profile = 0;
 	glXext_EXT_fbconfig_packed_float = 0;
 	glXext_EXT_framebuffer_sRGB = 0;
 	glXext_EXT_import_context = 0;

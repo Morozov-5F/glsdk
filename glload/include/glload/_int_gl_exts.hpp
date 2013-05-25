@@ -93,6 +93,7 @@ namespace gl
 		extern glload::LoadTest var_AMD_sample_positions;
 		extern glload::LoadTest var_AMD_seamless_cubemap_per_texture;
 		extern glload::LoadTest var_AMD_shader_stencil_export;
+		extern glload::LoadTest var_AMD_shader_trinary_minmax;
 		extern glload::LoadTest var_AMD_sparse_texture;
 		extern glload::LoadTest var_AMD_stencil_operation_extended;
 		extern glload::LoadTest var_AMD_texture_texture4;
@@ -282,7 +283,6 @@ namespace gl
 		extern glload::LoadTest var_EXT_vertex_shader;
 		extern glload::LoadTest var_EXT_vertex_weighting;
 		extern glload::LoadTest var_EXT_x11_sync_object;
-		extern glload::LoadTest var_FfdMaskSGIX;
 		extern glload::LoadTest var_GREMEDY_frame_terminator;
 		extern glload::LoadTest var_GREMEDY_string_marker;
 		extern glload::LoadTest var_HP_convolution_border_modes;
@@ -292,11 +292,13 @@ namespace gl
 		extern glload::LoadTest var_IBM_cull_vertex;
 		extern glload::LoadTest var_IBM_multimode_draw_arrays;
 		extern glload::LoadTest var_IBM_rasterpos_clip;
+		extern glload::LoadTest var_IBM_static_data;
 		extern glload::LoadTest var_IBM_texture_mirrored_repeat;
 		extern glload::LoadTest var_IBM_vertex_array_lists;
 		extern glload::LoadTest var_INGR_color_clamp;
 		extern glload::LoadTest var_INGR_interlace_read;
 		extern glload::LoadTest var_INGR_palette_buffer;
+		extern glload::LoadTest var_INTEL_map_texture;
 		extern glload::LoadTest var_INTEL_parallel_arrays;
 		extern glload::LoadTest var_INTEL_texture_scissor;
 		extern glload::LoadTest var_KHR_texture_compression_astc_ldr;
@@ -305,13 +307,17 @@ namespace gl
 		extern glload::LoadTest var_MESA_resize_buffers;
 		extern glload::LoadTest var_MESA_window_pos;
 		extern glload::LoadTest var_MESA_ycbcr_texture;
+		extern glload::LoadTest var_NVX_conditional_render;
 		extern glload::LoadTest var_NV_bindless_texture;
 		extern glload::LoadTest var_NV_blend_square;
+		extern glload::LoadTest var_NV_compute_program5;
 		extern glload::LoadTest var_NV_conditional_render;
 		extern glload::LoadTest var_NV_copy_depth_to_color;
 		extern glload::LoadTest var_NV_copy_image;
+		extern glload::LoadTest var_NV_deep_texture3D;
 		extern glload::LoadTest var_NV_depth_buffer_float;
 		extern glload::LoadTest var_NV_depth_clamp;
+		extern glload::LoadTest var_NV_draw_texture;
 		extern glload::LoadTest var_NV_evaluators;
 		extern glload::LoadTest var_NV_explicit_multisample;
 		extern glload::LoadTest var_NV_fence;
@@ -342,9 +348,11 @@ namespace gl
 		extern glload::LoadTest var_NV_primitive_restart;
 		extern glload::LoadTest var_NV_register_combiners;
 		extern glload::LoadTest var_NV_register_combiners2;
+		extern glload::LoadTest var_NV_shader_atomic_counters;
 		extern glload::LoadTest var_NV_shader_atomic_float;
 		extern glload::LoadTest var_NV_shader_buffer_load;
 		extern glload::LoadTest var_NV_shader_buffer_store;
+		extern glload::LoadTest var_NV_shader_storage_buffer_object;
 		extern glload::LoadTest var_NV_tessellation_program5;
 		extern glload::LoadTest var_NV_texgen_emboss;
 		extern glload::LoadTest var_NV_texgen_reflection;
@@ -371,7 +379,12 @@ namespace gl
 		extern glload::LoadTest var_NV_vertex_program3;
 		extern glload::LoadTest var_NV_vertex_program4;
 		extern glload::LoadTest var_NV_video_capture;
+		extern glload::LoadTest var_OES_byte_coordinates;
+		extern glload::LoadTest var_OES_compressed_paletted_texture;
+		extern glload::LoadTest var_OES_fixed_point;
+		extern glload::LoadTest var_OES_query_matrix;
 		extern glload::LoadTest var_OES_read_format;
+		extern glload::LoadTest var_OES_single_precision;
 		extern glload::LoadTest var_OML_interlace;
 		extern glload::LoadTest var_OML_resample;
 		extern glload::LoadTest var_OML_subsample;
@@ -404,10 +417,8 @@ namespace gl
 		extern glload::LoadTest var_SGIX_depth_texture;
 		extern glload::LoadTest var_SGIX_flush_raster;
 		extern glload::LoadTest var_SGIX_fog_offset;
-		extern glload::LoadTest var_SGIX_fog_scale;
 		extern glload::LoadTest var_SGIX_fragment_lighting;
 		extern glload::LoadTest var_SGIX_framezoom;
-		extern glload::LoadTest var_SGIX_impact_pixel_texture;
 		extern glload::LoadTest var_SGIX_instruments;
 		extern glload::LoadTest var_SGIX_interlace;
 		extern glload::LoadTest var_SGIX_ir_instrument1;
@@ -434,7 +445,6 @@ namespace gl
 		extern glload::LoadTest var_SGIX_ycrcba;
 		extern glload::LoadTest var_SGI_color_matrix;
 		extern glload::LoadTest var_SGI_color_table;
-		extern glload::LoadTest var_SGI_depth_pass_instrument;
 		extern glload::LoadTest var_SGI_texture_color_table;
 		extern glload::LoadTest var_SUNX_constant_data;
 		extern glload::LoadTest var_SUN_convolution_border_modes;
@@ -1236,7 +1246,7 @@ namespace gl
 		MAX_SHADER_STORAGE_BUFFER_BINDINGS = 0x90DD,
 		MAX_SHADER_STORAGE_BLOCK_SIZE    = 0x90DE,
 		SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT = 0x90DF,
-		SHADER_STORAGE_BARRIER_BIT       = 0x2000,
+		SHADER_STORAGE_BARRIER_BIT       = 0x00002000,
 		MAX_COMBINED_SHADER_OUTPUT_RESOURCES = 0x8F39,
 		DEPTH_STENCIL_TEXTURE_MODE       = 0x90EA,
 		TEXTURE_BUFFER_OFFSET            = 0x919D,
@@ -2818,8 +2828,6 @@ namespace gl
 		VERTEX_WEIGHT_ARRAY_STRIDE_EXT   = 0x850F,
 		VERTEX_WEIGHT_ARRAY_POINTER_EXT  = 0x8510,
 		SYNC_X11_FENCE_EXT               = 0x90E1,
-		TEXTURE_DEFORMATION_BIT_SGIX     = 0x00000001,
-		GEOMETRY_DEFORMATION_BIT_SGIX    = 0x00000002,
 		IGNORE_BORDER_HP                 = 0x8150,
 		CONSTANT_BORDER_HP               = 0x8151,
 		REPLICATE_BORDER_HP              = 0x8153,
@@ -2846,6 +2854,8 @@ namespace gl
 		TEXTURE_PRE_SPECULAR_HP          = 0x8169,
 		CULL_VERTEX_IBM                  = 103050,
 		RASTER_POSITION_UNCLIPPED_IBM    = 0x19262,
+		ALL_STATIC_DATA_IBM              = 103060,
+		STATIC_VERTEX_ARRAY_IBM          = 103061,
 		MIRRORED_REPEAT_IBM              = 0x8370,
 		VERTEX_ARRAY_LIST_IBM            = 103070,
 		NORMAL_ARRAY_LIST_IBM            = 103071,
@@ -2872,6 +2882,10 @@ namespace gl
 		BLUE_MAX_CLAMP_INGR              = 0x8566,
 		ALPHA_MAX_CLAMP_INGR             = 0x8567,
 		INTERLACE_READ_INGR              = 0x8568,
+		TEXTURE_MEMORY_LAYOUT_INTEL      = 0x83FF,
+		LAYOUT_DEFAULT_INTEL             = 0,
+		LAYOUT_LINEAR_INTEL              = 1,
+		LAYOUT_LINEAR_CPU_CACHED_INTEL   = 2,
 		PARALLEL_ARRAYS_INTEL            = 0x83F4,
 		VERTEX_ARRAY_PARALLEL_POINTERS_INTEL = 0x83F5,
 		NORMAL_ARRAY_PARALLEL_POINTERS_INTEL = 0x83F6,
@@ -2915,12 +2929,16 @@ namespace gl
 		UNSIGNED_SHORT_8_8_MESA          = 0x85BA,
 		UNSIGNED_SHORT_8_8_REV_MESA      = 0x85BB,
 		YCBCR_MESA                       = 0x8757,
+		COMPUTE_PROGRAM_NV               = 0x90FB,
+		COMPUTE_PROGRAM_PARAMETER_BUFFER_NV = 0x90FC,
 		QUERY_WAIT_NV                    = 0x8E13,
 		QUERY_NO_WAIT_NV                 = 0x8E14,
 		QUERY_BY_REGION_WAIT_NV          = 0x8E15,
 		QUERY_BY_REGION_NO_WAIT_NV       = 0x8E16,
 		DEPTH_STENCIL_TO_RGBA_NV         = 0x886E,
 		DEPTH_STENCIL_TO_BGRA_NV         = 0x886F,
+		MAX_DEEP_3D_TEXTURE_WIDTH_HEIGHT_NV = 0x90D0,
+		MAX_DEEP_3D_TEXTURE_DEPTH_NV     = 0x90D1,
 		DEPTH_COMPONENT32F_NV            = 0x8DAB,
 		DEPTH32F_STENCIL8_NV             = 0x8DAC,
 		FLOAT_32_UNSIGNED_INT_24_8_REV_NV = 0x8DAD,
@@ -3061,7 +3079,7 @@ namespace gl
 		HALF_FLOAT_NV                    = 0x140B,
 		MAX_SHININESS_NV                 = 0x8504,
 		MAX_SPOT_EXPONENT_NV             = 0x8505,
-		COVERAGE_SAMPLES_NV              = 0x80A9,
+		//SAMPLES_ARB taken from ARB_multisample
 		COLOR_SAMPLES_NV                 = 0x8E20,
 		MULTISAMPLE_FILTER_HINT_NV       = 0x8534,
 		PIXEL_COUNTER_BITS_NV            = 0x8864,
@@ -3075,6 +3093,9 @@ namespace gl
 		VERTEX_PROGRAM_PARAMETER_BUFFER_NV = 0x8DA2,
 		GEOMETRY_PROGRAM_PARAMETER_BUFFER_NV = 0x8DA3,
 		FRAGMENT_PROGRAM_PARAMETER_BUFFER_NV = 0x8DA4,
+		PRIMARY_COLOR                    = 0x8577,
+		PRIMARY_COLOR_NV                 = 0x852C,
+		SECONDARY_COLOR_NV               = 0x852D,
 		PATH_FORMAT_SVG_NV               = 0x9070,
 		PATH_FORMAT_PS_NV                = 0x9071,
 		STANDARD_FONT_NAME_NV            = 0x9072,
@@ -3096,27 +3117,19 @@ namespace gl
 		PATH_FILL_COVER_MODE_NV          = 0x9082,
 		PATH_STROKE_COVER_MODE_NV        = 0x9083,
 		PATH_STROKE_MASK_NV              = 0x9084,
-		PATH_SAMPLE_QUALITY_NV           = 0x9085,
-		PATH_STROKE_BOUND_NV             = 0x9086,
-		PATH_STROKE_OVERSAMPLE_COUNT_NV  = 0x9087,
 		COUNT_UP_NV                      = 0x9088,
 		COUNT_DOWN_NV                    = 0x9089,
 		PATH_OBJECT_BOUNDING_BOX_NV      = 0x908A,
 		CONVEX_HULL_NV                   = 0x908B,
-		MULTI_HULLS_NV                   = 0x908C,
 		BOUNDING_BOX_NV                  = 0x908D,
 		TRANSLATE_X_NV                   = 0x908E,
 		TRANSLATE_Y_NV                   = 0x908F,
 		TRANSLATE_2D_NV                  = 0x9090,
 		TRANSLATE_3D_NV                  = 0x9091,
 		AFFINE_2D_NV                     = 0x9092,
-		PROJECTIVE_2D_NV                 = 0x9093,
 		AFFINE_3D_NV                     = 0x9094,
-		PROJECTIVE_3D_NV                 = 0x9095,
 		TRANSPOSE_AFFINE_2D_NV           = 0x9096,
-		TRANSPOSE_PROJECTIVE_2D_NV       = 0x9097,
 		TRANSPOSE_AFFINE_3D_NV           = 0x9098,
-		TRANSPOSE_PROJECTIVE_3D_NV       = 0x9099,
 		UTF8_NV                          = 0x909A,
 		UTF16_NV                         = 0x909B,
 		BOUNDING_BOX_OF_BOUNDING_BOXES_NV = 0x909C,
@@ -3196,20 +3209,20 @@ namespace gl
 		GLYPH_VERTICAL_BEARING_X_BIT_NV  = 0x20,
 		GLYPH_VERTICAL_BEARING_Y_BIT_NV  = 0x40,
 		GLYPH_VERTICAL_BEARING_ADVANCE_BIT_NV = 0x80,
-		GLYPH_HAS_KERNING_NV             = 0x100,
-		FONT_X_MIN_BOUNDS_NV             = 0x00010000,
-		FONT_Y_MIN_BOUNDS_NV             = 0x00020000,
-		FONT_X_MAX_BOUNDS_NV             = 0x00040000,
-		FONT_Y_MAX_BOUNDS_NV             = 0x00080000,
-		FONT_UNITS_PER_EM_NV             = 0x00100000,
-		FONT_ASCENDER_NV                 = 0x00200000,
-		FONT_DESCENDER_NV                = 0x00400000,
-		FONT_HEIGHT_NV                   = 0x00800000,
-		FONT_MAX_ADVANCE_WIDTH_NV        = 0x01000000,
-		FONT_MAX_ADVANCE_HEIGHT_NV       = 0x02000000,
-		FONT_UNDERLINE_POSITION_NV       = 0x04000000,
-		FONT_UNDERLINE_THICKNESS_NV      = 0x08000000,
-		FONT_HAS_KERNING_NV              = 0x10000000,
+		GLYPH_HAS_KERNING_BIT_NV         = 0x100,
+		FONT_X_MIN_BOUNDS_BIT_NV         = 0x00010000,
+		FONT_Y_MIN_BOUNDS_BIT_NV         = 0x00020000,
+		FONT_X_MAX_BOUNDS_BIT_NV         = 0x00040000,
+		FONT_Y_MAX_BOUNDS_BIT_NV         = 0x00080000,
+		FONT_UNITS_PER_EM_BIT_NV         = 0x00100000,
+		FONT_ASCENDER_BIT_NV             = 0x00200000,
+		FONT_DESCENDER_BIT_NV            = 0x00400000,
+		FONT_HEIGHT_BIT_NV               = 0x00800000,
+		FONT_MAX_ADVANCE_WIDTH_BIT_NV    = 0x01000000,
+		FONT_MAX_ADVANCE_HEIGHT_BIT_NV   = 0x02000000,
+		FONT_UNDERLINE_POSITION_BIT_NV   = 0x04000000,
+		FONT_UNDERLINE_THICKNESS_BIT_NV  = 0x08000000,
+		FONT_HAS_KERNING_BIT_NV          = 0x10000000,
 		WRITE_PIXEL_DATA_RANGE_NV        = 0x8878,
 		READ_PIXEL_DATA_RANGE_NV         = 0x8879,
 		WRITE_PIXEL_DATA_RANGE_LENGTH_NV = 0x887A,
@@ -3242,8 +3255,8 @@ namespace gl
 		VARIABLE_G_NV                    = 0x8529,
 		CONSTANT_COLOR0_NV               = 0x852A,
 		CONSTANT_COLOR1_NV               = 0x852B,
-		PRIMARY_COLOR_NV                 = 0x852C,
-		SECONDARY_COLOR_NV               = 0x852D,
+		//PRIMARY_COLOR_NV taken from NV_path_rendering
+		//SECONDARY_COLOR_NV taken from NV_path_rendering
 		SPARE0_NV                        = 0x852E,
 		SPARE1_NV                        = 0x852F,
 		DISCARD_NV                       = 0x8530,
@@ -3324,10 +3337,10 @@ namespace gl
 		SHADER_OPERATION_NV              = 0x86DF,
 		CULL_MODES_NV                    = 0x86E0,
 		OFFSET_TEXTURE_MATRIX_NV         = 0x86E1,
-		OFFSET_TEXTURE_SCALE_NV          = 0x86E2,
-		OFFSET_TEXTURE_BIAS_NV           = 0x86E3,
 		OFFSET_TEXTURE_2D_MATRIX_NV      = 0x86E1,
+		OFFSET_TEXTURE_SCALE_NV          = 0x86E2,
 		OFFSET_TEXTURE_2D_SCALE_NV       = 0x86E2,
+		OFFSET_TEXTURE_BIAS_NV           = 0x86E3,
 		OFFSET_TEXTURE_2D_BIAS_NV        = 0x86E3,
 		PREVIOUS_TEXTURE_INPUT_NV        = 0x86E4,
 		CONST_EYE_NV                     = 0x86E5,
@@ -3586,6 +3599,17 @@ namespace gl
 		VIDEO_CAPTURE_FIELD_UPPER_HEIGHT_NV = 0x903A,
 		VIDEO_CAPTURE_FIELD_LOWER_HEIGHT_NV = 0x903B,
 		VIDEO_CAPTURE_SURFACE_ORIGIN_NV  = 0x903C,
+		PALETTE4_RGB8_OES                = 0x8B90,
+		PALETTE4_RGBA8_OES               = 0x8B91,
+		PALETTE4_R5_G6_B5_OES            = 0x8B92,
+		PALETTE4_RGBA4_OES               = 0x8B93,
+		PALETTE4_RGB5_A1_OES             = 0x8B94,
+		PALETTE8_RGB8_OES                = 0x8B95,
+		PALETTE8_RGBA8_OES               = 0x8B96,
+		PALETTE8_R5_G6_B5_OES            = 0x8B97,
+		PALETTE8_RGBA4_OES               = 0x8B98,
+		PALETTE8_RGB5_A1_OES             = 0x8B99,
+		FIXED_OES                        = 0x140C,
 		IMPLEMENTATION_COLOR_READ_TYPE_OES = 0x8B9A,
 		IMPLEMENTATION_COLOR_READ_FORMAT_OES = 0x8B9B,
 		INTERLACE_OML                    = 0x8980,
@@ -3622,6 +3646,8 @@ namespace gl
 		VERTEX_CONSISTENT_HINT_PGI       = 0x1A22B,
 		MATERIAL_SIDE_HINT_PGI           = 0x1A22C,
 		MAX_VERTEX_HINT_PGI              = 0x1A22D,
+		VERTEX23_BIT_PGI                 = 0x00000004,
+		VERTEX4_BIT_PGI                  = 0x00000008,
 		COLOR3_BIT_PGI                   = 0x00010000,
 		COLOR4_BIT_PGI                   = 0x00020000,
 		EDGEFLAG_BIT_PGI                 = 0x00040000,
@@ -3638,8 +3664,6 @@ namespace gl
 		TEXCOORD2_BIT_PGI                = 0x20000000,
 		TEXCOORD3_BIT_PGI                = 0x40000000,
 		TEXCOORD4_BIT_PGI                = 0x80000000,
-		VERTEX23_BIT_PGI                 = 0x00000004,
-		VERTEX4_BIT_PGI                  = 0x00000008,
 		SCREEN_COORDINATES_REND          = 0x8490,
 		INVERTED_SCREEN_W_REND           = 0x8491,
 		RGB_S3TC                         = 0x83A0,
@@ -3768,8 +3792,6 @@ namespace gl
 		DEPTH_COMPONENT32_SGIX           = 0x81A7,
 		FOG_OFFSET_SGIX                  = 0x8198,
 		FOG_OFFSET_VALUE_SGIX            = 0x8199,
-		FOG_SCALE_SGIX                   = 0x81FC,
-		FOG_SCALE_VALUE_SGIX             = 0x81FD,
 		FRAGMENT_LIGHTING_SGIX           = 0x8400,
 		FRAGMENT_COLOR_MATERIAL_SGIX     = 0x8401,
 		FRAGMENT_COLOR_MATERIAL_FACE_SGIX = 0x8402,
@@ -3793,13 +3815,6 @@ namespace gl
 		FRAMEZOOM_SGIX                   = 0x818B,
 		FRAMEZOOM_FACTOR_SGIX            = 0x818C,
 		MAX_FRAMEZOOM_FACTOR_SGIX        = 0x818D,
-		PIXEL_TEX_GEN_Q_CEILING_SGIX     = 0x8184,
-		PIXEL_TEX_GEN_Q_ROUND_SGIX       = 0x8185,
-		PIXEL_TEX_GEN_Q_FLOOR_SGIX       = 0x8186,
-		PIXEL_TEX_GEN_ALPHA_REPLACE_SGIX = 0x8187,
-		PIXEL_TEX_GEN_ALPHA_NO_REPLACE_SGIX = 0x8188,
-		PIXEL_TEX_GEN_ALPHA_LS_SGIX      = 0x8189,
-		PIXEL_TEX_GEN_ALPHA_MS_SGIX      = 0x818A,
 		INSTRUMENT_BUFFER_POINTER_SGIX   = 0x8180,
 		INSTRUMENT_MEASUREMENTS_SGIX     = 0x8181,
 		INTERLACE_SGIX                   = 0x8094,
@@ -3815,6 +3830,8 @@ namespace gl
 		PIXEL_TILE_GRID_HEIGHT_SGIX      = 0x8143,
 		PIXEL_TILE_GRID_DEPTH_SGIX       = 0x8144,
 		PIXEL_TILE_CACHE_SIZE_SGIX       = 0x8145,
+		TEXTURE_DEFORMATION_BIT_SGIX     = 0x00000001,
+		GEOMETRY_DEFORMATION_BIT_SGIX    = 0x00000002,
 		GEOMETRY_DEFORMATION_SGIX        = 0x8194,
 		TEXTURE_DEFORMATION_SGIX         = 0x8195,
 		DEFORMATIONS_MASK_SGIX           = 0x8196,
@@ -3894,9 +3911,6 @@ namespace gl
 		COLOR_TABLE_ALPHA_SIZE_SGI       = 0x80DD,
 		COLOR_TABLE_LUMINANCE_SIZE_SGI   = 0x80DE,
 		COLOR_TABLE_INTENSITY_SIZE_SGI   = 0x80DF,
-		DEPTH_PASS_INSTRUMENT_SGIX       = 0x8310,
-		DEPTH_PASS_INSTRUMENT_COUNTERS_SGIX = 0x8311,
-		DEPTH_PASS_INSTRUMENT_MAX_SGIX   = 0x8312,
 		TEXTURE_COLOR_TABLE_SGI          = 0x80BC,
 		PROXY_TEXTURE_COLOR_TABLE_SGI    = 0x80BD,
 		UNPACK_CONSTANT_DATA_SUNX        = 0x81D5,
@@ -7094,6 +7108,13 @@ namespace gl
 	
 	namespace _detail
 	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glFlushStaticDataIBM)(GLenum target);
+	}
+	
+	extern _detail::Proc_glFlushStaticDataIBM FlushStaticDataIBM;
+	
+	namespace _detail
+	{
 		typedef void (CODEGEN_FUNCPTR * Proc_glColorPointerListIBM)(GLint size, GLenum type, GLint stride, const GLvoid* *pointer, GLint ptrstride);
 		typedef void (CODEGEN_FUNCPTR * Proc_glSecondaryColorPointerListIBM)(GLint size, GLenum type, GLint stride, const GLvoid* *pointer, GLint ptrstride);
 		typedef void (CODEGEN_FUNCPTR * Proc_glEdgeFlagPointerListIBM)(GLint stride, const GLboolean* *pointer, GLint ptrstride);
@@ -7112,6 +7133,17 @@ namespace gl
 	extern _detail::Proc_glNormalPointerListIBM NormalPointerListIBM;
 	extern _detail::Proc_glTexCoordPointerListIBM TexCoordPointerListIBM;
 	extern _detail::Proc_glVertexPointerListIBM VertexPointerListIBM;
+	
+	namespace _detail
+	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glSyncTextureINTEL)(GLuint texture);
+		typedef void (CODEGEN_FUNCPTR * Proc_glUnmapTexture2DINTEL)(GLuint texture, GLint level);
+		typedef GLvoid* (CODEGEN_FUNCPTR * Proc_glMapTexture2DINTEL)(GLuint texture, GLint level, GLbitfield access, const GLint *stride, const GLenum *layout);
+	}
+	
+	extern _detail::Proc_glSyncTextureINTEL SyncTextureINTEL;
+	extern _detail::Proc_glUnmapTexture2DINTEL UnmapTexture2DINTEL;
+	extern _detail::Proc_glMapTexture2DINTEL MapTexture2DINTEL;
 	
 	namespace _detail
 	{
@@ -7188,6 +7220,15 @@ namespace gl
 	
 	namespace _detail
 	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glBeginConditionalRenderNVX)(GLuint id);
+		typedef void (CODEGEN_FUNCPTR * Proc_glEndConditionalRenderNVX)();
+	}
+	
+	extern _detail::Proc_glBeginConditionalRenderNVX BeginConditionalRenderNVX;
+	extern _detail::Proc_glEndConditionalRenderNVX EndConditionalRenderNVX;
+	
+	namespace _detail
+	{
 		typedef GLuint64 (CODEGEN_FUNCPTR * Proc_glGetTextureHandleNV)(GLuint texture);
 		typedef GLuint64 (CODEGEN_FUNCPTR * Proc_glGetTextureSamplerHandleNV)(GLuint texture, GLuint sampler);
 		typedef void (CODEGEN_FUNCPTR * Proc_glMakeTextureHandleResidentNV)(GLuint64 handle);
@@ -7246,6 +7287,13 @@ namespace gl
 	
 	namespace _detail
 	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glDrawTextureNV)(GLuint texture, GLuint sampler, GLfloat x0, GLfloat y0, GLfloat x1, GLfloat y1, GLfloat z, GLfloat s0, GLfloat t0, GLfloat s1, GLfloat t1);
+	}
+	
+	extern _detail::Proc_glDrawTextureNV DrawTextureNV;
+	
+	namespace _detail
+	{
 		typedef void (CODEGEN_FUNCPTR * Proc_glMapControlPointsNV)(GLenum target, GLuint index, GLenum type, GLsizei ustride, GLsizei vstride, GLint uorder, GLint vorder, GLboolean packed, const GLvoid *points);
 		typedef void (CODEGEN_FUNCPTR * Proc_glMapParameterivNV)(GLenum target, GLenum pname, const GLint *params);
 		typedef void (CODEGEN_FUNCPTR * Proc_glMapParameterfvNV)(GLenum target, GLenum pname, const GLfloat *params);
@@ -7300,16 +7348,16 @@ namespace gl
 	namespace _detail
 	{
 		typedef void (CODEGEN_FUNCPTR * Proc_glProgramNamedParameter4fNV)(GLuint id, GLsizei len, const GLubyte *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
-		typedef void (CODEGEN_FUNCPTR * Proc_glProgramNamedParameter4dNV)(GLuint id, GLsizei len, const GLubyte *name, GLdouble x, GLdouble y, GLdouble z, GLdouble w);
 		typedef void (CODEGEN_FUNCPTR * Proc_glProgramNamedParameter4fvNV)(GLuint id, GLsizei len, const GLubyte *name, const GLfloat *v);
+		typedef void (CODEGEN_FUNCPTR * Proc_glProgramNamedParameter4dNV)(GLuint id, GLsizei len, const GLubyte *name, GLdouble x, GLdouble y, GLdouble z, GLdouble w);
 		typedef void (CODEGEN_FUNCPTR * Proc_glProgramNamedParameter4dvNV)(GLuint id, GLsizei len, const GLubyte *name, const GLdouble *v);
 		typedef void (CODEGEN_FUNCPTR * Proc_glGetProgramNamedParameterfvNV)(GLuint id, GLsizei len, const GLubyte *name, GLfloat *params);
 		typedef void (CODEGEN_FUNCPTR * Proc_glGetProgramNamedParameterdvNV)(GLuint id, GLsizei len, const GLubyte *name, GLdouble *params);
 	}
 	
 	extern _detail::Proc_glProgramNamedParameter4fNV ProgramNamedParameter4fNV;
-	extern _detail::Proc_glProgramNamedParameter4dNV ProgramNamedParameter4dNV;
 	extern _detail::Proc_glProgramNamedParameter4fvNV ProgramNamedParameter4fvNV;
+	extern _detail::Proc_glProgramNamedParameter4dNV ProgramNamedParameter4dNV;
 	extern _detail::Proc_glProgramNamedParameter4dvNV ProgramNamedParameter4dvNV;
 	extern _detail::Proc_glGetProgramNamedParameterfvNV GetProgramNamedParameterfvNV;
 	extern _detail::Proc_glGetProgramNamedParameterdvNV GetProgramNamedParameterdvNV;
@@ -7569,9 +7617,9 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glProgramBufferParametersfvNV)(GLenum target, GLuint buffer, GLuint index, GLsizei count, const GLfloat *params);
-		typedef void (CODEGEN_FUNCPTR * Proc_glProgramBufferParametersIivNV)(GLenum target, GLuint buffer, GLuint index, GLsizei count, const GLint *params);
-		typedef void (CODEGEN_FUNCPTR * Proc_glProgramBufferParametersIuivNV)(GLenum target, GLuint buffer, GLuint index, GLsizei count, const GLuint *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glProgramBufferParametersfvNV)(GLenum target, GLuint bindingIndex, GLuint wordIndex, GLsizei count, const GLfloat *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glProgramBufferParametersIivNV)(GLenum target, GLuint bindingIndex, GLuint wordIndex, GLsizei count, const GLint *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glProgramBufferParametersIuivNV)(GLenum target, GLuint bindingIndex, GLuint wordIndex, GLsizei count, const GLuint *params);
 	}
 	
 	extern _detail::Proc_glProgramBufferParametersfvNV ProgramBufferParametersfvNV;
@@ -8188,6 +8236,292 @@ namespace gl
 	extern _detail::Proc_glVideoCaptureStreamParameterivNV VideoCaptureStreamParameterivNV;
 	extern _detail::Proc_glVideoCaptureStreamParameterfvNV VideoCaptureStreamParameterfvNV;
 	extern _detail::Proc_glVideoCaptureStreamParameterdvNV VideoCaptureStreamParameterdvNV;
+	
+	namespace _detail
+	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord1bOES)(GLenum texture, GLbyte s);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord1bvOES)(GLenum texture, const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord2bOES)(GLenum texture, GLbyte s, GLbyte t);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord2bvOES)(GLenum texture, const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord3bOES)(GLenum texture, GLbyte s, GLbyte t, GLbyte r);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord3bvOES)(GLenum texture, const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord4bOES)(GLenum texture, GLbyte s, GLbyte t, GLbyte r, GLbyte q);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord4bvOES)(GLenum texture, const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord1bOES)(GLbyte s);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord1bvOES)(const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord2bOES)(GLbyte s, GLbyte t);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord2bvOES)(const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord3bOES)(GLbyte s, GLbyte t, GLbyte r);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord3bvOES)(const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord4bOES)(GLbyte s, GLbyte t, GLbyte r, GLbyte q);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord4bvOES)(const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex2bOES)(GLbyte x);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex2bvOES)(const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex3bOES)(GLbyte x, GLbyte y);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex3bvOES)(const GLbyte *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex4bOES)(GLbyte x, GLbyte y, GLbyte z);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex4bvOES)(const GLbyte *coords);
+	}
+	
+	extern _detail::Proc_glMultiTexCoord1bOES MultiTexCoord1bOES;
+	extern _detail::Proc_glMultiTexCoord1bvOES MultiTexCoord1bvOES;
+	extern _detail::Proc_glMultiTexCoord2bOES MultiTexCoord2bOES;
+	extern _detail::Proc_glMultiTexCoord2bvOES MultiTexCoord2bvOES;
+	extern _detail::Proc_glMultiTexCoord3bOES MultiTexCoord3bOES;
+	extern _detail::Proc_glMultiTexCoord3bvOES MultiTexCoord3bvOES;
+	extern _detail::Proc_glMultiTexCoord4bOES MultiTexCoord4bOES;
+	extern _detail::Proc_glMultiTexCoord4bvOES MultiTexCoord4bvOES;
+	extern _detail::Proc_glTexCoord1bOES TexCoord1bOES;
+	extern _detail::Proc_glTexCoord1bvOES TexCoord1bvOES;
+	extern _detail::Proc_glTexCoord2bOES TexCoord2bOES;
+	extern _detail::Proc_glTexCoord2bvOES TexCoord2bvOES;
+	extern _detail::Proc_glTexCoord3bOES TexCoord3bOES;
+	extern _detail::Proc_glTexCoord3bvOES TexCoord3bvOES;
+	extern _detail::Proc_glTexCoord4bOES TexCoord4bOES;
+	extern _detail::Proc_glTexCoord4bvOES TexCoord4bvOES;
+	extern _detail::Proc_glVertex2bOES Vertex2bOES;
+	extern _detail::Proc_glVertex2bvOES Vertex2bvOES;
+	extern _detail::Proc_glVertex3bOES Vertex3bOES;
+	extern _detail::Proc_glVertex3bvOES Vertex3bvOES;
+	extern _detail::Proc_glVertex4bOES Vertex4bOES;
+	extern _detail::Proc_glVertex4bvOES Vertex4bvOES;
+	
+	namespace _detail
+	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glAccumxOES)(GLenum op, GLfixed value);
+		typedef void (CODEGEN_FUNCPTR * Proc_glAlphaFuncxOES)(GLenum func, GLfixed ref);
+		typedef void (CODEGEN_FUNCPTR * Proc_glBitmapxOES)(GLsizei width, GLsizei height, GLfixed xorig, GLfixed yorig, GLfixed xmove, GLfixed ymove, const GLubyte *bitmap);
+		typedef void (CODEGEN_FUNCPTR * Proc_glBlendColorxOES)(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClearAccumxOES)(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClearColorxOES)(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClearDepthxOES)(GLfixed depth);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClipPlanexOES)(GLenum plane, const GLfixed *equation);
+		typedef void (CODEGEN_FUNCPTR * Proc_glColor3xOES)(GLfixed red, GLfixed green, GLfixed blue);
+		typedef void (CODEGEN_FUNCPTR * Proc_glColor4xOES)(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha);
+		typedef void (CODEGEN_FUNCPTR * Proc_glColor3xvOES)(const GLfixed *components);
+		typedef void (CODEGEN_FUNCPTR * Proc_glColor4xvOES)(const GLfixed *components);
+		typedef void (CODEGEN_FUNCPTR * Proc_glConvolutionParameterxOES)(GLenum target, GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glConvolutionParameterxvOES)(GLenum target, GLenum pname, const GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glDepthRangexOES)(GLfixed n, GLfixed f);
+		typedef void (CODEGEN_FUNCPTR * Proc_glEvalCoord1xOES)(GLfixed u);
+		typedef void (CODEGEN_FUNCPTR * Proc_glEvalCoord2xOES)(GLfixed u, GLfixed v);
+		typedef void (CODEGEN_FUNCPTR * Proc_glEvalCoord1xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glEvalCoord2xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glFeedbackBufferxOES)(GLsizei n, GLenum type, const GLfixed *buffer);
+		typedef void (CODEGEN_FUNCPTR * Proc_glFogxOES)(GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glFogxvOES)(GLenum pname, const GLfixed *param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glFrustumxOES)(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetClipPlanexOES)(GLenum plane, GLfixed *equation);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetConvolutionParameterxvOES)(GLenum target, GLenum pname, GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetFixedvOES)(GLenum pname, GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetHistogramParameterxvOES)(GLenum target, GLenum pname, GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetLightxOES)(GLenum light, GLenum pname, GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetMapxvOES)(GLenum target, GLenum query, GLfixed *v);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetMaterialxOES)(GLenum face, GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetPixelMapxv)(GLenum map, GLint size, GLfixed *values);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetTexEnvxvOES)(GLenum target, GLenum pname, GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetTexGenxvOES)(GLenum coord, GLenum pname, GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetTexLevelParameterxvOES)(GLenum target, GLint level, GLenum pname, GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetTexParameterxvOES)(GLenum target, GLenum pname, GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glIndexxOES)(GLfixed component);
+		typedef void (CODEGEN_FUNCPTR * Proc_glIndexxvOES)(const GLfixed *component);
+		typedef void (CODEGEN_FUNCPTR * Proc_glLightModelxOES)(GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glLightModelxvOES)(GLenum pname, const GLfixed *param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glLightxOES)(GLenum light, GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glLightxvOES)(GLenum light, GLenum pname, const GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glLineWidthxOES)(GLfixed width);
+		typedef void (CODEGEN_FUNCPTR * Proc_glLoadMatrixxOES)(const GLfixed *m);
+		typedef void (CODEGEN_FUNCPTR * Proc_glLoadTransposeMatrixxOES)(const GLfixed *m);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMap1xOES)(GLenum target, GLfixed u1, GLfixed u2, GLint stride, GLint order, GLfixed points);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMap2xOES)(GLenum target, GLfixed u1, GLfixed u2, GLint ustride, GLint uorder, GLfixed v1, GLfixed v2, GLint vstride, GLint vorder, GLfixed points);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMapGrid1xOES)(GLint n, GLfixed u1, GLfixed u2);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMapGrid2xOES)(GLint n, GLfixed u1, GLfixed u2, GLfixed v1, GLfixed v2);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMaterialxOES)(GLenum face, GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMaterialxvOES)(GLenum face, GLenum pname, const GLfixed *param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultMatrixxOES)(const GLfixed *m);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultTransposeMatrixxOES)(const GLfixed *m);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord1xOES)(GLenum texture, GLfixed s);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord2xOES)(GLenum texture, GLfixed s, GLfixed t);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord3xOES)(GLenum texture, GLfixed s, GLfixed t, GLfixed r);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord4xOES)(GLenum texture, GLfixed s, GLfixed t, GLfixed r, GLfixed q);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord1xvOES)(GLenum texture, const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord2xvOES)(GLenum texture, const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord3xvOES)(GLenum texture, const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glMultiTexCoord4xvOES)(GLenum texture, const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glNormal3xOES)(GLfixed nx, GLfixed ny, GLfixed nz);
+		typedef void (CODEGEN_FUNCPTR * Proc_glNormal3xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glOrthoxOES)(GLfixed l, GLfixed r, GLfixed b, GLfixed t, GLfixed n, GLfixed f);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPassThroughxOES)(GLfixed token);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPixelMapx)(GLenum map, GLint size, const GLfixed *values);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPixelStorex)(GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPixelTransferxOES)(GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPixelZoomxOES)(GLfixed xfactor, GLfixed yfactor);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPointParameterxvOES)(GLenum pname, const GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPointSizexOES)(GLfixed size);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPolygonOffsetxOES)(GLfixed factor, GLfixed units);
+		typedef void (CODEGEN_FUNCPTR * Proc_glPrioritizeTexturesxOES)(GLsizei n, const GLuint *textures, const GLfixed *priorities);
+		typedef void (CODEGEN_FUNCPTR * Proc_glRasterPos2xOES)(GLfixed x, GLfixed y);
+		typedef void (CODEGEN_FUNCPTR * Proc_glRasterPos3xOES)(GLfixed x, GLfixed y, GLfixed z);
+		typedef void (CODEGEN_FUNCPTR * Proc_glRasterPos4xOES)(GLfixed x, GLfixed y, GLfixed z, GLfixed w);
+		typedef void (CODEGEN_FUNCPTR * Proc_glRasterPos2xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glRasterPos3xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glRasterPos4xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glRectxOES)(GLfixed x1, GLfixed y1, GLfixed x2, GLfixed y2);
+		typedef void (CODEGEN_FUNCPTR * Proc_glRectxvOES)(const GLfixed *v1, const GLfixed *v2);
+		typedef void (CODEGEN_FUNCPTR * Proc_glRotatexOES)(GLfixed angle, GLfixed x, GLfixed y, GLfixed z);
+		typedef void (CODEGEN_FUNCPTR * Proc_glSampleCoverageOES)(GLfixed value, GLboolean invert);
+		typedef void (CODEGEN_FUNCPTR * Proc_glScalexOES)(GLfixed x, GLfixed y, GLfixed z);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord1xOES)(GLfixed s);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord2xOES)(GLfixed s, GLfixed t);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord3xOES)(GLfixed s, GLfixed t, GLfixed r);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord4xOES)(GLfixed s, GLfixed t, GLfixed r, GLfixed q);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord1xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord2xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord3xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexCoord4xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexEnvxOES)(GLenum target, GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexEnvxvOES)(GLenum target, GLenum pname, const GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexGenxOES)(GLenum coord, GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexGenxvOES)(GLenum coord, GLenum pname, const GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexParameterxOES)(GLenum target, GLenum pname, GLfixed param);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexParameterxvOES)(GLenum target, GLenum pname, const GLfixed *params);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTranslatexOES)(GLfixed x, GLfixed y, GLfixed z);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex2xOES)(GLfixed x);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex3xOES)(GLfixed x, GLfixed y);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex4xOES)(GLfixed x, GLfixed y, GLfixed z);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex2xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex3xvOES)(const GLfixed *coords);
+		typedef void (CODEGEN_FUNCPTR * Proc_glVertex4xvOES)(const GLfixed *coords);
+	}
+	
+	extern _detail::Proc_glAccumxOES AccumxOES;
+	extern _detail::Proc_glAlphaFuncxOES AlphaFuncxOES;
+	extern _detail::Proc_glBitmapxOES BitmapxOES;
+	extern _detail::Proc_glBlendColorxOES BlendColorxOES;
+	extern _detail::Proc_glClearAccumxOES ClearAccumxOES;
+	extern _detail::Proc_glClearColorxOES ClearColorxOES;
+	extern _detail::Proc_glClearDepthxOES ClearDepthxOES;
+	extern _detail::Proc_glClipPlanexOES ClipPlanexOES;
+	extern _detail::Proc_glColor3xOES Color3xOES;
+	extern _detail::Proc_glColor4xOES Color4xOES;
+	extern _detail::Proc_glColor3xvOES Color3xvOES;
+	extern _detail::Proc_glColor4xvOES Color4xvOES;
+	extern _detail::Proc_glConvolutionParameterxOES ConvolutionParameterxOES;
+	extern _detail::Proc_glConvolutionParameterxvOES ConvolutionParameterxvOES;
+	extern _detail::Proc_glDepthRangexOES DepthRangexOES;
+	extern _detail::Proc_glEvalCoord1xOES EvalCoord1xOES;
+	extern _detail::Proc_glEvalCoord2xOES EvalCoord2xOES;
+	extern _detail::Proc_glEvalCoord1xvOES EvalCoord1xvOES;
+	extern _detail::Proc_glEvalCoord2xvOES EvalCoord2xvOES;
+	extern _detail::Proc_glFeedbackBufferxOES FeedbackBufferxOES;
+	extern _detail::Proc_glFogxOES FogxOES;
+	extern _detail::Proc_glFogxvOES FogxvOES;
+	extern _detail::Proc_glFrustumxOES FrustumxOES;
+	extern _detail::Proc_glGetClipPlanexOES GetClipPlanexOES;
+	extern _detail::Proc_glGetConvolutionParameterxvOES GetConvolutionParameterxvOES;
+	extern _detail::Proc_glGetFixedvOES GetFixedvOES;
+	extern _detail::Proc_glGetHistogramParameterxvOES GetHistogramParameterxvOES;
+	extern _detail::Proc_glGetLightxOES GetLightxOES;
+	extern _detail::Proc_glGetMapxvOES GetMapxvOES;
+	extern _detail::Proc_glGetMaterialxOES GetMaterialxOES;
+	extern _detail::Proc_glGetPixelMapxv GetPixelMapxv;
+	extern _detail::Proc_glGetTexEnvxvOES GetTexEnvxvOES;
+	extern _detail::Proc_glGetTexGenxvOES GetTexGenxvOES;
+	extern _detail::Proc_glGetTexLevelParameterxvOES GetTexLevelParameterxvOES;
+	extern _detail::Proc_glGetTexParameterxvOES GetTexParameterxvOES;
+	extern _detail::Proc_glIndexxOES IndexxOES;
+	extern _detail::Proc_glIndexxvOES IndexxvOES;
+	extern _detail::Proc_glLightModelxOES LightModelxOES;
+	extern _detail::Proc_glLightModelxvOES LightModelxvOES;
+	extern _detail::Proc_glLightxOES LightxOES;
+	extern _detail::Proc_glLightxvOES LightxvOES;
+	extern _detail::Proc_glLineWidthxOES LineWidthxOES;
+	extern _detail::Proc_glLoadMatrixxOES LoadMatrixxOES;
+	extern _detail::Proc_glLoadTransposeMatrixxOES LoadTransposeMatrixxOES;
+	extern _detail::Proc_glMap1xOES Map1xOES;
+	extern _detail::Proc_glMap2xOES Map2xOES;
+	extern _detail::Proc_glMapGrid1xOES MapGrid1xOES;
+	extern _detail::Proc_glMapGrid2xOES MapGrid2xOES;
+	extern _detail::Proc_glMaterialxOES MaterialxOES;
+	extern _detail::Proc_glMaterialxvOES MaterialxvOES;
+	extern _detail::Proc_glMultMatrixxOES MultMatrixxOES;
+	extern _detail::Proc_glMultTransposeMatrixxOES MultTransposeMatrixxOES;
+	extern _detail::Proc_glMultiTexCoord1xOES MultiTexCoord1xOES;
+	extern _detail::Proc_glMultiTexCoord2xOES MultiTexCoord2xOES;
+	extern _detail::Proc_glMultiTexCoord3xOES MultiTexCoord3xOES;
+	extern _detail::Proc_glMultiTexCoord4xOES MultiTexCoord4xOES;
+	extern _detail::Proc_glMultiTexCoord1xvOES MultiTexCoord1xvOES;
+	extern _detail::Proc_glMultiTexCoord2xvOES MultiTexCoord2xvOES;
+	extern _detail::Proc_glMultiTexCoord3xvOES MultiTexCoord3xvOES;
+	extern _detail::Proc_glMultiTexCoord4xvOES MultiTexCoord4xvOES;
+	extern _detail::Proc_glNormal3xOES Normal3xOES;
+	extern _detail::Proc_glNormal3xvOES Normal3xvOES;
+	extern _detail::Proc_glOrthoxOES OrthoxOES;
+	extern _detail::Proc_glPassThroughxOES PassThroughxOES;
+	extern _detail::Proc_glPixelMapx PixelMapx;
+	extern _detail::Proc_glPixelStorex PixelStorex;
+	extern _detail::Proc_glPixelTransferxOES PixelTransferxOES;
+	extern _detail::Proc_glPixelZoomxOES PixelZoomxOES;
+	extern _detail::Proc_glPointParameterxvOES PointParameterxvOES;
+	extern _detail::Proc_glPointSizexOES PointSizexOES;
+	extern _detail::Proc_glPolygonOffsetxOES PolygonOffsetxOES;
+	extern _detail::Proc_glPrioritizeTexturesxOES PrioritizeTexturesxOES;
+	extern _detail::Proc_glRasterPos2xOES RasterPos2xOES;
+	extern _detail::Proc_glRasterPos3xOES RasterPos3xOES;
+	extern _detail::Proc_glRasterPos4xOES RasterPos4xOES;
+	extern _detail::Proc_glRasterPos2xvOES RasterPos2xvOES;
+	extern _detail::Proc_glRasterPos3xvOES RasterPos3xvOES;
+	extern _detail::Proc_glRasterPos4xvOES RasterPos4xvOES;
+	extern _detail::Proc_glRectxOES RectxOES;
+	extern _detail::Proc_glRectxvOES RectxvOES;
+	extern _detail::Proc_glRotatexOES RotatexOES;
+	extern _detail::Proc_glSampleCoverageOES SampleCoverageOES;
+	extern _detail::Proc_glScalexOES ScalexOES;
+	extern _detail::Proc_glTexCoord1xOES TexCoord1xOES;
+	extern _detail::Proc_glTexCoord2xOES TexCoord2xOES;
+	extern _detail::Proc_glTexCoord3xOES TexCoord3xOES;
+	extern _detail::Proc_glTexCoord4xOES TexCoord4xOES;
+	extern _detail::Proc_glTexCoord1xvOES TexCoord1xvOES;
+	extern _detail::Proc_glTexCoord2xvOES TexCoord2xvOES;
+	extern _detail::Proc_glTexCoord3xvOES TexCoord3xvOES;
+	extern _detail::Proc_glTexCoord4xvOES TexCoord4xvOES;
+	extern _detail::Proc_glTexEnvxOES TexEnvxOES;
+	extern _detail::Proc_glTexEnvxvOES TexEnvxvOES;
+	extern _detail::Proc_glTexGenxOES TexGenxOES;
+	extern _detail::Proc_glTexGenxvOES TexGenxvOES;
+	extern _detail::Proc_glTexParameterxOES TexParameterxOES;
+	extern _detail::Proc_glTexParameterxvOES TexParameterxvOES;
+	extern _detail::Proc_glTranslatexOES TranslatexOES;
+	extern _detail::Proc_glVertex2xOES Vertex2xOES;
+	extern _detail::Proc_glVertex3xOES Vertex3xOES;
+	extern _detail::Proc_glVertex4xOES Vertex4xOES;
+	extern _detail::Proc_glVertex2xvOES Vertex2xvOES;
+	extern _detail::Proc_glVertex3xvOES Vertex3xvOES;
+	extern _detail::Proc_glVertex4xvOES Vertex4xvOES;
+	
+	namespace _detail
+	{
+		typedef GLbitfield (CODEGEN_FUNCPTR * Proc_glQueryMatrixxOES)(GLfixed *mantissa, GLint *exponent);
+	}
+	
+	extern _detail::Proc_glQueryMatrixxOES QueryMatrixxOES;
+	
+	namespace _detail
+	{
+		typedef void (CODEGEN_FUNCPTR * Proc_glDepthRangefOES)(GLclampf n, GLclampf f);
+		typedef void (CODEGEN_FUNCPTR * Proc_glFrustumfOES)(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
+		typedef void (CODEGEN_FUNCPTR * Proc_glOrthofOES)(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClipPlanefOES)(GLenum plane, const GLfloat *equation);
+		typedef void (CODEGEN_FUNCPTR * Proc_glClearDepthfOES)(GLclampf depth);
+		typedef void (CODEGEN_FUNCPTR * Proc_glGetClipPlanefOES)(GLenum plane, GLfloat *equation);
+	}
+	
+	extern _detail::Proc_glDepthRangefOES DepthRangefOES;
+	extern _detail::Proc_glFrustumfOES FrustumfOES;
+	extern _detail::Proc_glOrthofOES OrthofOES;
+	extern _detail::Proc_glClipPlanefOES ClipPlanefOES;
+	extern _detail::Proc_glClearDepthfOES ClearDepthfOES;
+	extern _detail::Proc_glGetClipPlanefOES GetClipPlanefOES;
 	
 	namespace _detail
 	{

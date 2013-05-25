@@ -12,15 +12,13 @@ require "_FindFileInPath"
 
 local externals =
 {
---[[
 	{
 		"FreeGLUT 2.6.0",	--The name of the component.
 		"freeglut",	--The output directory to copy the component's data.
 		"freeglut.tar.gz",	--The filename that will be created in the download director.
 		"freeglut-2.6.0",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
-		"https://downloads.sourceforge.net/project/freeglut/freeglut/freeglut-2.6.0.tar.gz?r=&ts=1315279369&use_mirror=cdnetworks-us-2" --URL to download.
+		"https://downloads.sourceforge.net/project/freeglut/freeglut/2.6.0/freeglut-2.6.0.tar.gz?r=&ts=1369510584&use_mirror=superb-dca2" --URL to download.
 	},
-	]]
 	{
 		"GLFW 2.7.2",	--The name of the component.
 		"glfw",			--The output directory to copy the component's data.

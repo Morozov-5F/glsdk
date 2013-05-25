@@ -41,6 +41,7 @@ extern "C" {
 typedef void (CODEGEN_FUNCPTR * PFNGLBLENDCOLORPROC)(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 typedef void (CODEGEN_FUNCPTR * PFNGLBLENDEQUATIONPROC)(GLenum mode);
 typedef void (CODEGEN_FUNCPTR * PFNGLDRAWRANGEELEMENTSPROC)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices);
+typedef void (CODEGEN_FUNCPTR * PFNGLTEXIMAGE3DPROC)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels);
 typedef void (CODEGEN_FUNCPTR * PFNGLTEXSUBIMAGE3DPROC)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid *pixels);
 typedef void (CODEGEN_FUNCPTR * PFNGLCOPYTEXSUBIMAGE3DPROC)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
 
@@ -50,6 +51,8 @@ extern PFNGLBLENDEQUATIONPROC _funcptr_glBlendEquation;
 #define glBlendEquation _funcptr_glBlendEquation
 extern PFNGLDRAWRANGEELEMENTSPROC _funcptr_glDrawRangeElements;
 #define glDrawRangeElements _funcptr_glDrawRangeElements
+extern PFNGLTEXIMAGE3DPROC _funcptr_glTexImage3D;
+#define glTexImage3D _funcptr_glTexImage3D
 extern PFNGLTEXSUBIMAGE3DPROC _funcptr_glTexSubImage3D;
 #define glTexSubImage3D _funcptr_glTexSubImage3D
 extern PFNGLCOPYTEXSUBIMAGE3DPROC _funcptr_glCopyTexSubImage3D;

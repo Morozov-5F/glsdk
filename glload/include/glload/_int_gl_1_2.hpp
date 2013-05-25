@@ -46,6 +46,7 @@ namespace gl
 		typedef void (CODEGEN_FUNCPTR * Proc_glBlendColor)(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 		typedef void (CODEGEN_FUNCPTR * Proc_glBlendEquation)(GLenum mode);
 		typedef void (CODEGEN_FUNCPTR * Proc_glDrawRangeElements)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices);
+		typedef void (CODEGEN_FUNCPTR * Proc_glTexImage3D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels);
 		typedef void (CODEGEN_FUNCPTR * Proc_glTexSubImage3D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid *pixels);
 		typedef void (CODEGEN_FUNCPTR * Proc_glCopyTexSubImage3D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
 	}
@@ -53,6 +54,7 @@ namespace gl
 	extern _detail::Proc_glBlendColor BlendColor;
 	extern _detail::Proc_glBlendEquation BlendEquation;
 	extern _detail::Proc_glDrawRangeElements DrawRangeElements;
+	extern _detail::Proc_glTexImage3D TexImage3D;
 	extern _detail::Proc_glTexSubImage3D TexSubImage3D;
 	extern _detail::Proc_glCopyTexSubImage3D CopyTexSubImage3D;
 	

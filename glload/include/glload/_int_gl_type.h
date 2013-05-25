@@ -1,19 +1,28 @@
 #ifndef OPENGL_GEN_TYPE_H
 #define OPENGL_GEN_TYPE_H
+#if defined(__glew_h__) || defined(__GLEW_H__)
+#error Attempt to include auto-generated header after including glew.h
+#endif
 #if defined(__gl_h_) || defined(__GL_H__)
 #error Attempt to include auto-generated header after including gl.h
 #endif
 #if defined(__glext_h_) || defined(__GLEXT_H_)
 #error Attempt to include auto-generated header after including glext.h
 #endif
+#if defined(__gltypes_h_)
+#error Attempt to include auto-generated header after gltypes.h
+#endif
 #if defined(__gl_ATI_h_)
 #error Attempt to include auto-generated header after including glATI.h
 #endif
 
+#define __glew_h__
+#define __GLEW_H__
 #define __gl_h_
 #define __GL_H__
 #define __glext_h_
 #define __GLEXT_H_
+#define __gltypes_h_
 #define __gl_ATI_h_
 
 #ifndef APIENTRY
@@ -161,5 +170,9 @@
 #endif
 #ifndef GL_NV_vdpau_interop
 	typedef GLintptr GLvdpauSurfaceNV;
+#endif
+#ifndef GL_OES_fixed_point
+	/* GLint must be 32 bits, a relatively safe assumption on modern CPUs */
+	typedef GLint GLfixed;
 #endif
 #endif /*OPENGL_GEN_TYPE_H*/

@@ -142,7 +142,7 @@ void InitializeVertexData()
 
 	std::string theText = GetString();
 
-	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine(theText.c_str(), theText.size(),
+	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine(theText,
 		glm::vec2(50.0f, 250.0f), glutil::REF_BASELINE);
 
 	vecVertex.reserve(24 * glyphs.size());
@@ -172,15 +172,6 @@ void InitializeVertexData()
 	gl::BindBuffer(gl::ARRAY_BUFFER, 0);
 }
 
-//Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
-void init()
-{
-	g_pFont = glutil::GenerateFont(glutil::FONT_SIZE_LARGE);
-
-	InitializeProgram();
-	InitializeVertexData();
-}
-
 glm::ivec2 g_windowSize(500, 500);
 
 typedef std::deque<std::string> StringQueue;
@@ -188,9 +179,20 @@ typedef std::deque<std::string> StringQueue;
 std::string g_currString;
 StringQueue g_strings;
 
+//Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
+void init()
+{
+	g_strings.push_front("Type some stuff:");
+
+	g_pFont = glutil::GenerateFont(glutil::FONT_SIZE_LARGE);
+
+	InitializeProgram();
+	InitializeVertexData();
+}
+
 void DrawTextString(const std::string &text, const glm::vec2 &location)
 {
-	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine(text.c_str(), text.size(),
+	std::vector<glutil::GlyphQuad> glyphs = g_pFont->LayoutLine(text,
 		location, glutil::REF_BOTTOM);
 
 	glmesh::Draw imm(gl::TRIANGLES, glyphs.size() * 6, *g_pVertFmt, *g_pStreamBuf);

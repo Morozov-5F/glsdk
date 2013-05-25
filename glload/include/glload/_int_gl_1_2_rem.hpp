@@ -15,7 +15,6 @@ namespace gl
 	
 	namespace _detail
 	{
-		typedef void (CODEGEN_FUNCPTR * Proc_glTexImage3D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels);
 		typedef void (CODEGEN_FUNCPTR * Proc_glColorTable)(GLenum target, GLenum internalformat, GLsizei width, GLenum format, GLenum type, const GLvoid *table);
 		typedef void (CODEGEN_FUNCPTR * Proc_glColorTableParameterfv)(GLenum target, GLenum pname, const GLfloat *params);
 		typedef void (CODEGEN_FUNCPTR * Proc_glColorTableParameteriv)(GLenum target, GLenum pname, const GLint *params);
@@ -50,7 +49,6 @@ namespace gl
 		typedef void (CODEGEN_FUNCPTR * Proc_glResetMinmax)(GLenum target);
 	}
 	
-	extern _detail::Proc_glTexImage3D TexImage3D;
 	extern _detail::Proc_glColorTable ColorTable;
 	extern _detail::Proc_glColorTableParameterfv ColorTableParameterfv;
 	extern _detail::Proc_glColorTableParameteriv ColorTableParameteriv;

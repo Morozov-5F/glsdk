@@ -182,6 +182,7 @@ int glext_AMD_query_buffer_object = 0;
 int glext_AMD_sample_positions = 0;
 int glext_AMD_seamless_cubemap_per_texture = 0;
 int glext_AMD_shader_stencil_export = 0;
+int glext_AMD_shader_trinary_minmax = 0;
 int glext_AMD_sparse_texture = 0;
 int glext_AMD_stencil_operation_extended = 0;
 int glext_AMD_texture_texture4 = 0;
@@ -371,7 +372,6 @@ int glext_EXT_vertex_attrib_64bit = 0;
 int glext_EXT_vertex_shader = 0;
 int glext_EXT_vertex_weighting = 0;
 int glext_EXT_x11_sync_object = 0;
-int glext_FfdMaskSGIX = 0;
 int glext_GREMEDY_frame_terminator = 0;
 int glext_GREMEDY_string_marker = 0;
 int glext_HP_convolution_border_modes = 0;
@@ -381,11 +381,13 @@ int glext_HP_texture_lighting = 0;
 int glext_IBM_cull_vertex = 0;
 int glext_IBM_multimode_draw_arrays = 0;
 int glext_IBM_rasterpos_clip = 0;
+int glext_IBM_static_data = 0;
 int glext_IBM_texture_mirrored_repeat = 0;
 int glext_IBM_vertex_array_lists = 0;
 int glext_INGR_color_clamp = 0;
 int glext_INGR_interlace_read = 0;
 int glext_INGR_palette_buffer = 0;
+int glext_INTEL_map_texture = 0;
 int glext_INTEL_parallel_arrays = 0;
 int glext_INTEL_texture_scissor = 0;
 int glext_KHR_texture_compression_astc_ldr = 0;
@@ -394,13 +396,17 @@ int glext_MESA_pack_invert = 0;
 int glext_MESA_resize_buffers = 0;
 int glext_MESA_window_pos = 0;
 int glext_MESA_ycbcr_texture = 0;
+int glext_NVX_conditional_render = 0;
 int glext_NV_bindless_texture = 0;
 int glext_NV_blend_square = 0;
+int glext_NV_compute_program5 = 0;
 int glext_NV_conditional_render = 0;
 int glext_NV_copy_depth_to_color = 0;
 int glext_NV_copy_image = 0;
+int glext_NV_deep_texture3D = 0;
 int glext_NV_depth_buffer_float = 0;
 int glext_NV_depth_clamp = 0;
+int glext_NV_draw_texture = 0;
 int glext_NV_evaluators = 0;
 int glext_NV_explicit_multisample = 0;
 int glext_NV_fence = 0;
@@ -431,9 +437,11 @@ int glext_NV_present_video = 0;
 int glext_NV_primitive_restart = 0;
 int glext_NV_register_combiners = 0;
 int glext_NV_register_combiners2 = 0;
+int glext_NV_shader_atomic_counters = 0;
 int glext_NV_shader_atomic_float = 0;
 int glext_NV_shader_buffer_load = 0;
 int glext_NV_shader_buffer_store = 0;
+int glext_NV_shader_storage_buffer_object = 0;
 int glext_NV_tessellation_program5 = 0;
 int glext_NV_texgen_emboss = 0;
 int glext_NV_texgen_reflection = 0;
@@ -460,7 +468,12 @@ int glext_NV_vertex_program2_option = 0;
 int glext_NV_vertex_program3 = 0;
 int glext_NV_vertex_program4 = 0;
 int glext_NV_video_capture = 0;
+int glext_OES_byte_coordinates = 0;
+int glext_OES_compressed_paletted_texture = 0;
+int glext_OES_fixed_point = 0;
+int glext_OES_query_matrix = 0;
 int glext_OES_read_format = 0;
+int glext_OES_single_precision = 0;
 int glext_OML_interlace = 0;
 int glext_OML_resample = 0;
 int glext_OML_subsample = 0;
@@ -493,10 +506,8 @@ int glext_SGIX_convolution_accuracy = 0;
 int glext_SGIX_depth_texture = 0;
 int glext_SGIX_flush_raster = 0;
 int glext_SGIX_fog_offset = 0;
-int glext_SGIX_fog_scale = 0;
 int glext_SGIX_fragment_lighting = 0;
 int glext_SGIX_framezoom = 0;
-int glext_SGIX_impact_pixel_texture = 0;
 int glext_SGIX_instruments = 0;
 int glext_SGIX_interlace = 0;
 int glext_SGIX_ir_instrument1 = 0;
@@ -523,7 +534,6 @@ int glext_SGIX_ycrcb_subsample = 0;
 int glext_SGIX_ycrcba = 0;
 int glext_SGI_color_matrix = 0;
 int glext_SGI_color_table = 0;
-int glext_SGI_depth_pass_instrument = 0;
 int glext_SGI_texture_color_table = 0;
 int glext_SUNX_constant_data = 0;
 int glext_SUN_convolution_border_modes = 0;
@@ -5203,6 +5213,16 @@ static int LoadExt_IBM_multimode_draw_arrays()
 	return numFailed;
 }
 
+PFNGLFLUSHSTATICDATAIBMPROC _funcptr_glFlushStaticDataIBM = NULL;
+
+static int LoadExt_IBM_static_data()
+{
+	int numFailed = 0;
+	_funcptr_glFlushStaticDataIBM = (PFNGLFLUSHSTATICDATAIBMPROC)IntGetProcAddress("glFlushStaticDataIBM");
+	if(!_funcptr_glFlushStaticDataIBM) ++numFailed;
+	return numFailed;
+}
+
 PFNGLCOLORPOINTERLISTIBMPROC _funcptr_glColorPointerListIBM = NULL;
 PFNGLSECONDARYCOLORPOINTERLISTIBMPROC _funcptr_glSecondaryColorPointerListIBM = NULL;
 PFNGLEDGEFLAGPOINTERLISTIBMPROC _funcptr_glEdgeFlagPointerListIBM = NULL;
@@ -5231,6 +5251,22 @@ static int LoadExt_IBM_vertex_array_lists()
 	if(!_funcptr_glTexCoordPointerListIBM) ++numFailed;
 	_funcptr_glVertexPointerListIBM = (PFNGLVERTEXPOINTERLISTIBMPROC)IntGetProcAddress("glVertexPointerListIBM");
 	if(!_funcptr_glVertexPointerListIBM) ++numFailed;
+	return numFailed;
+}
+
+PFNGLSYNCTEXTUREINTELPROC _funcptr_glSyncTextureINTEL = NULL;
+PFNGLUNMAPTEXTURE2DINTELPROC _funcptr_glUnmapTexture2DINTEL = NULL;
+PFNGLMAPTEXTURE2DINTELPROC _funcptr_glMapTexture2DINTEL = NULL;
+
+static int LoadExt_INTEL_map_texture()
+{
+	int numFailed = 0;
+	_funcptr_glSyncTextureINTEL = (PFNGLSYNCTEXTUREINTELPROC)IntGetProcAddress("glSyncTextureINTEL");
+	if(!_funcptr_glSyncTextureINTEL) ++numFailed;
+	_funcptr_glUnmapTexture2DINTEL = (PFNGLUNMAPTEXTURE2DINTELPROC)IntGetProcAddress("glUnmapTexture2DINTEL");
+	if(!_funcptr_glUnmapTexture2DINTEL) ++numFailed;
+	_funcptr_glMapTexture2DINTEL = (PFNGLMAPTEXTURE2DINTELPROC)IntGetProcAddress("glMapTexture2DINTEL");
+	if(!_funcptr_glMapTexture2DINTEL) ++numFailed;
 	return numFailed;
 }
 
@@ -5342,6 +5378,19 @@ static int LoadExt_MESA_window_pos()
 	return numFailed;
 }
 
+PFNGLBEGINCONDITIONALRENDERNVXPROC _funcptr_glBeginConditionalRenderNVX = NULL;
+PFNGLENDCONDITIONALRENDERNVXPROC _funcptr_glEndConditionalRenderNVX = NULL;
+
+static int LoadExt_NVX_conditional_render()
+{
+	int numFailed = 0;
+	_funcptr_glBeginConditionalRenderNVX = (PFNGLBEGINCONDITIONALRENDERNVXPROC)IntGetProcAddress("glBeginConditionalRenderNVX");
+	if(!_funcptr_glBeginConditionalRenderNVX) ++numFailed;
+	_funcptr_glEndConditionalRenderNVX = (PFNGLENDCONDITIONALRENDERNVXPROC)IntGetProcAddress("glEndConditionalRenderNVX");
+	if(!_funcptr_glEndConditionalRenderNVX) ++numFailed;
+	return numFailed;
+}
+
 PFNGLGETTEXTUREHANDLENVPROC _funcptr_glGetTextureHandleNV = NULL;
 PFNGLGETTEXTURESAMPLERHANDLENVPROC _funcptr_glGetTextureSamplerHandleNV = NULL;
 PFNGLMAKETEXTUREHANDLERESIDENTNVPROC _funcptr_glMakeTextureHandleResidentNV = NULL;
@@ -5427,6 +5476,16 @@ static int LoadExt_NV_depth_buffer_float()
 	return numFailed;
 }
 
+PFNGLDRAWTEXTURENVPROC _funcptr_glDrawTextureNV = NULL;
+
+static int LoadExt_NV_draw_texture()
+{
+	int numFailed = 0;
+	_funcptr_glDrawTextureNV = (PFNGLDRAWTEXTURENVPROC)IntGetProcAddress("glDrawTextureNV");
+	if(!_funcptr_glDrawTextureNV) ++numFailed;
+	return numFailed;
+}
+
 PFNGLMAPCONTROLPOINTSNVPROC _funcptr_glMapControlPointsNV = NULL;
 PFNGLMAPPARAMETERIVNVPROC _funcptr_glMapParameterivNV = NULL;
 PFNGLMAPPARAMETERFVNVPROC _funcptr_glMapParameterfvNV = NULL;
@@ -5506,8 +5565,8 @@ static int LoadExt_NV_fence()
 }
 
 PFNGLPROGRAMNAMEDPARAMETER4FNVPROC _funcptr_glProgramNamedParameter4fNV = NULL;
-PFNGLPROGRAMNAMEDPARAMETER4DNVPROC _funcptr_glProgramNamedParameter4dNV = NULL;
 PFNGLPROGRAMNAMEDPARAMETER4FVNVPROC _funcptr_glProgramNamedParameter4fvNV = NULL;
+PFNGLPROGRAMNAMEDPARAMETER4DNVPROC _funcptr_glProgramNamedParameter4dNV = NULL;
 PFNGLPROGRAMNAMEDPARAMETER4DVNVPROC _funcptr_glProgramNamedParameter4dvNV = NULL;
 PFNGLGETPROGRAMNAMEDPARAMETERFVNVPROC _funcptr_glGetProgramNamedParameterfvNV = NULL;
 PFNGLGETPROGRAMNAMEDPARAMETERDVNVPROC _funcptr_glGetProgramNamedParameterdvNV = NULL;
@@ -5517,10 +5576,10 @@ static int LoadExt_NV_fragment_program()
 	int numFailed = 0;
 	_funcptr_glProgramNamedParameter4fNV = (PFNGLPROGRAMNAMEDPARAMETER4FNVPROC)IntGetProcAddress("glProgramNamedParameter4fNV");
 	if(!_funcptr_glProgramNamedParameter4fNV) ++numFailed;
-	_funcptr_glProgramNamedParameter4dNV = (PFNGLPROGRAMNAMEDPARAMETER4DNVPROC)IntGetProcAddress("glProgramNamedParameter4dNV");
-	if(!_funcptr_glProgramNamedParameter4dNV) ++numFailed;
 	_funcptr_glProgramNamedParameter4fvNV = (PFNGLPROGRAMNAMEDPARAMETER4FVNVPROC)IntGetProcAddress("glProgramNamedParameter4fvNV");
 	if(!_funcptr_glProgramNamedParameter4fvNV) ++numFailed;
+	_funcptr_glProgramNamedParameter4dNV = (PFNGLPROGRAMNAMEDPARAMETER4DNVPROC)IntGetProcAddress("glProgramNamedParameter4dNV");
+	if(!_funcptr_glProgramNamedParameter4dNV) ++numFailed;
 	_funcptr_glProgramNamedParameter4dvNV = (PFNGLPROGRAMNAMEDPARAMETER4DVNVPROC)IntGetProcAddress("glProgramNamedParameter4dvNV");
 	if(!_funcptr_glProgramNamedParameter4dvNV) ++numFailed;
 	_funcptr_glGetProgramNamedParameterfvNV = (PFNGLGETPROGRAMNAMEDPARAMETERFVNVPROC)IntGetProcAddress("glGetProgramNamedParameterfvNV");
@@ -6826,6 +6885,433 @@ static int LoadExt_NV_video_capture()
 	if(!_funcptr_glVideoCaptureStreamParameterfvNV) ++numFailed;
 	_funcptr_glVideoCaptureStreamParameterdvNV = (PFNGLVIDEOCAPTURESTREAMPARAMETERDVNVPROC)IntGetProcAddress("glVideoCaptureStreamParameterdvNV");
 	if(!_funcptr_glVideoCaptureStreamParameterdvNV) ++numFailed;
+	return numFailed;
+}
+
+PFNGLMULTITEXCOORD1BOESPROC _funcptr_glMultiTexCoord1bOES = NULL;
+PFNGLMULTITEXCOORD1BVOESPROC _funcptr_glMultiTexCoord1bvOES = NULL;
+PFNGLMULTITEXCOORD2BOESPROC _funcptr_glMultiTexCoord2bOES = NULL;
+PFNGLMULTITEXCOORD2BVOESPROC _funcptr_glMultiTexCoord2bvOES = NULL;
+PFNGLMULTITEXCOORD3BOESPROC _funcptr_glMultiTexCoord3bOES = NULL;
+PFNGLMULTITEXCOORD3BVOESPROC _funcptr_glMultiTexCoord3bvOES = NULL;
+PFNGLMULTITEXCOORD4BOESPROC _funcptr_glMultiTexCoord4bOES = NULL;
+PFNGLMULTITEXCOORD4BVOESPROC _funcptr_glMultiTexCoord4bvOES = NULL;
+PFNGLTEXCOORD1BOESPROC _funcptr_glTexCoord1bOES = NULL;
+PFNGLTEXCOORD1BVOESPROC _funcptr_glTexCoord1bvOES = NULL;
+PFNGLTEXCOORD2BOESPROC _funcptr_glTexCoord2bOES = NULL;
+PFNGLTEXCOORD2BVOESPROC _funcptr_glTexCoord2bvOES = NULL;
+PFNGLTEXCOORD3BOESPROC _funcptr_glTexCoord3bOES = NULL;
+PFNGLTEXCOORD3BVOESPROC _funcptr_glTexCoord3bvOES = NULL;
+PFNGLTEXCOORD4BOESPROC _funcptr_glTexCoord4bOES = NULL;
+PFNGLTEXCOORD4BVOESPROC _funcptr_glTexCoord4bvOES = NULL;
+PFNGLVERTEX2BOESPROC _funcptr_glVertex2bOES = NULL;
+PFNGLVERTEX2BVOESPROC _funcptr_glVertex2bvOES = NULL;
+PFNGLVERTEX3BOESPROC _funcptr_glVertex3bOES = NULL;
+PFNGLVERTEX3BVOESPROC _funcptr_glVertex3bvOES = NULL;
+PFNGLVERTEX4BOESPROC _funcptr_glVertex4bOES = NULL;
+PFNGLVERTEX4BVOESPROC _funcptr_glVertex4bvOES = NULL;
+
+static int LoadExt_OES_byte_coordinates()
+{
+	int numFailed = 0;
+	_funcptr_glMultiTexCoord1bOES = (PFNGLMULTITEXCOORD1BOESPROC)IntGetProcAddress("glMultiTexCoord1bOES");
+	if(!_funcptr_glMultiTexCoord1bOES) ++numFailed;
+	_funcptr_glMultiTexCoord1bvOES = (PFNGLMULTITEXCOORD1BVOESPROC)IntGetProcAddress("glMultiTexCoord1bvOES");
+	if(!_funcptr_glMultiTexCoord1bvOES) ++numFailed;
+	_funcptr_glMultiTexCoord2bOES = (PFNGLMULTITEXCOORD2BOESPROC)IntGetProcAddress("glMultiTexCoord2bOES");
+	if(!_funcptr_glMultiTexCoord2bOES) ++numFailed;
+	_funcptr_glMultiTexCoord2bvOES = (PFNGLMULTITEXCOORD2BVOESPROC)IntGetProcAddress("glMultiTexCoord2bvOES");
+	if(!_funcptr_glMultiTexCoord2bvOES) ++numFailed;
+	_funcptr_glMultiTexCoord3bOES = (PFNGLMULTITEXCOORD3BOESPROC)IntGetProcAddress("glMultiTexCoord3bOES");
+	if(!_funcptr_glMultiTexCoord3bOES) ++numFailed;
+	_funcptr_glMultiTexCoord3bvOES = (PFNGLMULTITEXCOORD3BVOESPROC)IntGetProcAddress("glMultiTexCoord3bvOES");
+	if(!_funcptr_glMultiTexCoord3bvOES) ++numFailed;
+	_funcptr_glMultiTexCoord4bOES = (PFNGLMULTITEXCOORD4BOESPROC)IntGetProcAddress("glMultiTexCoord4bOES");
+	if(!_funcptr_glMultiTexCoord4bOES) ++numFailed;
+	_funcptr_glMultiTexCoord4bvOES = (PFNGLMULTITEXCOORD4BVOESPROC)IntGetProcAddress("glMultiTexCoord4bvOES");
+	if(!_funcptr_glMultiTexCoord4bvOES) ++numFailed;
+	_funcptr_glTexCoord1bOES = (PFNGLTEXCOORD1BOESPROC)IntGetProcAddress("glTexCoord1bOES");
+	if(!_funcptr_glTexCoord1bOES) ++numFailed;
+	_funcptr_glTexCoord1bvOES = (PFNGLTEXCOORD1BVOESPROC)IntGetProcAddress("glTexCoord1bvOES");
+	if(!_funcptr_glTexCoord1bvOES) ++numFailed;
+	_funcptr_glTexCoord2bOES = (PFNGLTEXCOORD2BOESPROC)IntGetProcAddress("glTexCoord2bOES");
+	if(!_funcptr_glTexCoord2bOES) ++numFailed;
+	_funcptr_glTexCoord2bvOES = (PFNGLTEXCOORD2BVOESPROC)IntGetProcAddress("glTexCoord2bvOES");
+	if(!_funcptr_glTexCoord2bvOES) ++numFailed;
+	_funcptr_glTexCoord3bOES = (PFNGLTEXCOORD3BOESPROC)IntGetProcAddress("glTexCoord3bOES");
+	if(!_funcptr_glTexCoord3bOES) ++numFailed;
+	_funcptr_glTexCoord3bvOES = (PFNGLTEXCOORD3BVOESPROC)IntGetProcAddress("glTexCoord3bvOES");
+	if(!_funcptr_glTexCoord3bvOES) ++numFailed;
+	_funcptr_glTexCoord4bOES = (PFNGLTEXCOORD4BOESPROC)IntGetProcAddress("glTexCoord4bOES");
+	if(!_funcptr_glTexCoord4bOES) ++numFailed;
+	_funcptr_glTexCoord4bvOES = (PFNGLTEXCOORD4BVOESPROC)IntGetProcAddress("glTexCoord4bvOES");
+	if(!_funcptr_glTexCoord4bvOES) ++numFailed;
+	_funcptr_glVertex2bOES = (PFNGLVERTEX2BOESPROC)IntGetProcAddress("glVertex2bOES");
+	if(!_funcptr_glVertex2bOES) ++numFailed;
+	_funcptr_glVertex2bvOES = (PFNGLVERTEX2BVOESPROC)IntGetProcAddress("glVertex2bvOES");
+	if(!_funcptr_glVertex2bvOES) ++numFailed;
+	_funcptr_glVertex3bOES = (PFNGLVERTEX3BOESPROC)IntGetProcAddress("glVertex3bOES");
+	if(!_funcptr_glVertex3bOES) ++numFailed;
+	_funcptr_glVertex3bvOES = (PFNGLVERTEX3BVOESPROC)IntGetProcAddress("glVertex3bvOES");
+	if(!_funcptr_glVertex3bvOES) ++numFailed;
+	_funcptr_glVertex4bOES = (PFNGLVERTEX4BOESPROC)IntGetProcAddress("glVertex4bOES");
+	if(!_funcptr_glVertex4bOES) ++numFailed;
+	_funcptr_glVertex4bvOES = (PFNGLVERTEX4BVOESPROC)IntGetProcAddress("glVertex4bvOES");
+	if(!_funcptr_glVertex4bvOES) ++numFailed;
+	return numFailed;
+}
+
+PFNGLACCUMXOESPROC _funcptr_glAccumxOES = NULL;
+PFNGLALPHAFUNCXOESPROC _funcptr_glAlphaFuncxOES = NULL;
+PFNGLBITMAPXOESPROC _funcptr_glBitmapxOES = NULL;
+PFNGLBLENDCOLORXOESPROC _funcptr_glBlendColorxOES = NULL;
+PFNGLCLEARACCUMXOESPROC _funcptr_glClearAccumxOES = NULL;
+PFNGLCLEARCOLORXOESPROC _funcptr_glClearColorxOES = NULL;
+PFNGLCLEARDEPTHXOESPROC _funcptr_glClearDepthxOES = NULL;
+PFNGLCLIPPLANEXOESPROC _funcptr_glClipPlanexOES = NULL;
+PFNGLCOLOR3XOESPROC _funcptr_glColor3xOES = NULL;
+PFNGLCOLOR4XOESPROC _funcptr_glColor4xOES = NULL;
+PFNGLCOLOR3XVOESPROC _funcptr_glColor3xvOES = NULL;
+PFNGLCOLOR4XVOESPROC _funcptr_glColor4xvOES = NULL;
+PFNGLCONVOLUTIONPARAMETERXOESPROC _funcptr_glConvolutionParameterxOES = NULL;
+PFNGLCONVOLUTIONPARAMETERXVOESPROC _funcptr_glConvolutionParameterxvOES = NULL;
+PFNGLDEPTHRANGEXOESPROC _funcptr_glDepthRangexOES = NULL;
+PFNGLEVALCOORD1XOESPROC _funcptr_glEvalCoord1xOES = NULL;
+PFNGLEVALCOORD2XOESPROC _funcptr_glEvalCoord2xOES = NULL;
+PFNGLEVALCOORD1XVOESPROC _funcptr_glEvalCoord1xvOES = NULL;
+PFNGLEVALCOORD2XVOESPROC _funcptr_glEvalCoord2xvOES = NULL;
+PFNGLFEEDBACKBUFFERXOESPROC _funcptr_glFeedbackBufferxOES = NULL;
+PFNGLFOGXOESPROC _funcptr_glFogxOES = NULL;
+PFNGLFOGXVOESPROC _funcptr_glFogxvOES = NULL;
+PFNGLFRUSTUMXOESPROC _funcptr_glFrustumxOES = NULL;
+PFNGLGETCLIPPLANEXOESPROC _funcptr_glGetClipPlanexOES = NULL;
+PFNGLGETCONVOLUTIONPARAMETERXVOESPROC _funcptr_glGetConvolutionParameterxvOES = NULL;
+PFNGLGETFIXEDVOESPROC _funcptr_glGetFixedvOES = NULL;
+PFNGLGETHISTOGRAMPARAMETERXVOESPROC _funcptr_glGetHistogramParameterxvOES = NULL;
+PFNGLGETLIGHTXOESPROC _funcptr_glGetLightxOES = NULL;
+PFNGLGETMAPXVOESPROC _funcptr_glGetMapxvOES = NULL;
+PFNGLGETMATERIALXOESPROC _funcptr_glGetMaterialxOES = NULL;
+PFNGLGETPIXELMAPXVPROC _funcptr_glGetPixelMapxv = NULL;
+PFNGLGETTEXENVXVOESPROC _funcptr_glGetTexEnvxvOES = NULL;
+PFNGLGETTEXGENXVOESPROC _funcptr_glGetTexGenxvOES = NULL;
+PFNGLGETTEXLEVELPARAMETERXVOESPROC _funcptr_glGetTexLevelParameterxvOES = NULL;
+PFNGLGETTEXPARAMETERXVOESPROC _funcptr_glGetTexParameterxvOES = NULL;
+PFNGLINDEXXOESPROC _funcptr_glIndexxOES = NULL;
+PFNGLINDEXXVOESPROC _funcptr_glIndexxvOES = NULL;
+PFNGLLIGHTMODELXOESPROC _funcptr_glLightModelxOES = NULL;
+PFNGLLIGHTMODELXVOESPROC _funcptr_glLightModelxvOES = NULL;
+PFNGLLIGHTXOESPROC _funcptr_glLightxOES = NULL;
+PFNGLLIGHTXVOESPROC _funcptr_glLightxvOES = NULL;
+PFNGLLINEWIDTHXOESPROC _funcptr_glLineWidthxOES = NULL;
+PFNGLLOADMATRIXXOESPROC _funcptr_glLoadMatrixxOES = NULL;
+PFNGLLOADTRANSPOSEMATRIXXOESPROC _funcptr_glLoadTransposeMatrixxOES = NULL;
+PFNGLMAP1XOESPROC _funcptr_glMap1xOES = NULL;
+PFNGLMAP2XOESPROC _funcptr_glMap2xOES = NULL;
+PFNGLMAPGRID1XOESPROC _funcptr_glMapGrid1xOES = NULL;
+PFNGLMAPGRID2XOESPROC _funcptr_glMapGrid2xOES = NULL;
+PFNGLMATERIALXOESPROC _funcptr_glMaterialxOES = NULL;
+PFNGLMATERIALXVOESPROC _funcptr_glMaterialxvOES = NULL;
+PFNGLMULTMATRIXXOESPROC _funcptr_glMultMatrixxOES = NULL;
+PFNGLMULTTRANSPOSEMATRIXXOESPROC _funcptr_glMultTransposeMatrixxOES = NULL;
+PFNGLMULTITEXCOORD1XOESPROC _funcptr_glMultiTexCoord1xOES = NULL;
+PFNGLMULTITEXCOORD2XOESPROC _funcptr_glMultiTexCoord2xOES = NULL;
+PFNGLMULTITEXCOORD3XOESPROC _funcptr_glMultiTexCoord3xOES = NULL;
+PFNGLMULTITEXCOORD4XOESPROC _funcptr_glMultiTexCoord4xOES = NULL;
+PFNGLMULTITEXCOORD1XVOESPROC _funcptr_glMultiTexCoord1xvOES = NULL;
+PFNGLMULTITEXCOORD2XVOESPROC _funcptr_glMultiTexCoord2xvOES = NULL;
+PFNGLMULTITEXCOORD3XVOESPROC _funcptr_glMultiTexCoord3xvOES = NULL;
+PFNGLMULTITEXCOORD4XVOESPROC _funcptr_glMultiTexCoord4xvOES = NULL;
+PFNGLNORMAL3XOESPROC _funcptr_glNormal3xOES = NULL;
+PFNGLNORMAL3XVOESPROC _funcptr_glNormal3xvOES = NULL;
+PFNGLORTHOXOESPROC _funcptr_glOrthoxOES = NULL;
+PFNGLPASSTHROUGHXOESPROC _funcptr_glPassThroughxOES = NULL;
+PFNGLPIXELMAPXPROC _funcptr_glPixelMapx = NULL;
+PFNGLPIXELSTOREXPROC _funcptr_glPixelStorex = NULL;
+PFNGLPIXELTRANSFERXOESPROC _funcptr_glPixelTransferxOES = NULL;
+PFNGLPIXELZOOMXOESPROC _funcptr_glPixelZoomxOES = NULL;
+PFNGLPOINTPARAMETERXVOESPROC _funcptr_glPointParameterxvOES = NULL;
+PFNGLPOINTSIZEXOESPROC _funcptr_glPointSizexOES = NULL;
+PFNGLPOLYGONOFFSETXOESPROC _funcptr_glPolygonOffsetxOES = NULL;
+PFNGLPRIORITIZETEXTURESXOESPROC _funcptr_glPrioritizeTexturesxOES = NULL;
+PFNGLRASTERPOS2XOESPROC _funcptr_glRasterPos2xOES = NULL;
+PFNGLRASTERPOS3XOESPROC _funcptr_glRasterPos3xOES = NULL;
+PFNGLRASTERPOS4XOESPROC _funcptr_glRasterPos4xOES = NULL;
+PFNGLRASTERPOS2XVOESPROC _funcptr_glRasterPos2xvOES = NULL;
+PFNGLRASTERPOS3XVOESPROC _funcptr_glRasterPos3xvOES = NULL;
+PFNGLRASTERPOS4XVOESPROC _funcptr_glRasterPos4xvOES = NULL;
+PFNGLRECTXOESPROC _funcptr_glRectxOES = NULL;
+PFNGLRECTXVOESPROC _funcptr_glRectxvOES = NULL;
+PFNGLROTATEXOESPROC _funcptr_glRotatexOES = NULL;
+PFNGLSAMPLECOVERAGEOESPROC _funcptr_glSampleCoverageOES = NULL;
+PFNGLSCALEXOESPROC _funcptr_glScalexOES = NULL;
+PFNGLTEXCOORD1XOESPROC _funcptr_glTexCoord1xOES = NULL;
+PFNGLTEXCOORD2XOESPROC _funcptr_glTexCoord2xOES = NULL;
+PFNGLTEXCOORD3XOESPROC _funcptr_glTexCoord3xOES = NULL;
+PFNGLTEXCOORD4XOESPROC _funcptr_glTexCoord4xOES = NULL;
+PFNGLTEXCOORD1XVOESPROC _funcptr_glTexCoord1xvOES = NULL;
+PFNGLTEXCOORD2XVOESPROC _funcptr_glTexCoord2xvOES = NULL;
+PFNGLTEXCOORD3XVOESPROC _funcptr_glTexCoord3xvOES = NULL;
+PFNGLTEXCOORD4XVOESPROC _funcptr_glTexCoord4xvOES = NULL;
+PFNGLTEXENVXOESPROC _funcptr_glTexEnvxOES = NULL;
+PFNGLTEXENVXVOESPROC _funcptr_glTexEnvxvOES = NULL;
+PFNGLTEXGENXOESPROC _funcptr_glTexGenxOES = NULL;
+PFNGLTEXGENXVOESPROC _funcptr_glTexGenxvOES = NULL;
+PFNGLTEXPARAMETERXOESPROC _funcptr_glTexParameterxOES = NULL;
+PFNGLTEXPARAMETERXVOESPROC _funcptr_glTexParameterxvOES = NULL;
+PFNGLTRANSLATEXOESPROC _funcptr_glTranslatexOES = NULL;
+PFNGLVERTEX2XOESPROC _funcptr_glVertex2xOES = NULL;
+PFNGLVERTEX3XOESPROC _funcptr_glVertex3xOES = NULL;
+PFNGLVERTEX4XOESPROC _funcptr_glVertex4xOES = NULL;
+PFNGLVERTEX2XVOESPROC _funcptr_glVertex2xvOES = NULL;
+PFNGLVERTEX3XVOESPROC _funcptr_glVertex3xvOES = NULL;
+PFNGLVERTEX4XVOESPROC _funcptr_glVertex4xvOES = NULL;
+
+static int LoadExt_OES_fixed_point()
+{
+	int numFailed = 0;
+	_funcptr_glAccumxOES = (PFNGLACCUMXOESPROC)IntGetProcAddress("glAccumxOES");
+	if(!_funcptr_glAccumxOES) ++numFailed;
+	_funcptr_glAlphaFuncxOES = (PFNGLALPHAFUNCXOESPROC)IntGetProcAddress("glAlphaFuncxOES");
+	if(!_funcptr_glAlphaFuncxOES) ++numFailed;
+	_funcptr_glBitmapxOES = (PFNGLBITMAPXOESPROC)IntGetProcAddress("glBitmapxOES");
+	if(!_funcptr_glBitmapxOES) ++numFailed;
+	_funcptr_glBlendColorxOES = (PFNGLBLENDCOLORXOESPROC)IntGetProcAddress("glBlendColorxOES");
+	if(!_funcptr_glBlendColorxOES) ++numFailed;
+	_funcptr_glClearAccumxOES = (PFNGLCLEARACCUMXOESPROC)IntGetProcAddress("glClearAccumxOES");
+	if(!_funcptr_glClearAccumxOES) ++numFailed;
+	_funcptr_glClearColorxOES = (PFNGLCLEARCOLORXOESPROC)IntGetProcAddress("glClearColorxOES");
+	if(!_funcptr_glClearColorxOES) ++numFailed;
+	_funcptr_glClearDepthxOES = (PFNGLCLEARDEPTHXOESPROC)IntGetProcAddress("glClearDepthxOES");
+	if(!_funcptr_glClearDepthxOES) ++numFailed;
+	_funcptr_glClipPlanexOES = (PFNGLCLIPPLANEXOESPROC)IntGetProcAddress("glClipPlanexOES");
+	if(!_funcptr_glClipPlanexOES) ++numFailed;
+	_funcptr_glColor3xOES = (PFNGLCOLOR3XOESPROC)IntGetProcAddress("glColor3xOES");
+	if(!_funcptr_glColor3xOES) ++numFailed;
+	_funcptr_glColor4xOES = (PFNGLCOLOR4XOESPROC)IntGetProcAddress("glColor4xOES");
+	if(!_funcptr_glColor4xOES) ++numFailed;
+	_funcptr_glColor3xvOES = (PFNGLCOLOR3XVOESPROC)IntGetProcAddress("glColor3xvOES");
+	if(!_funcptr_glColor3xvOES) ++numFailed;
+	_funcptr_glColor4xvOES = (PFNGLCOLOR4XVOESPROC)IntGetProcAddress("glColor4xvOES");
+	if(!_funcptr_glColor4xvOES) ++numFailed;
+	_funcptr_glConvolutionParameterxOES = (PFNGLCONVOLUTIONPARAMETERXOESPROC)IntGetProcAddress("glConvolutionParameterxOES");
+	if(!_funcptr_glConvolutionParameterxOES) ++numFailed;
+	_funcptr_glConvolutionParameterxvOES = (PFNGLCONVOLUTIONPARAMETERXVOESPROC)IntGetProcAddress("glConvolutionParameterxvOES");
+	if(!_funcptr_glConvolutionParameterxvOES) ++numFailed;
+	_funcptr_glDepthRangexOES = (PFNGLDEPTHRANGEXOESPROC)IntGetProcAddress("glDepthRangexOES");
+	if(!_funcptr_glDepthRangexOES) ++numFailed;
+	_funcptr_glEvalCoord1xOES = (PFNGLEVALCOORD1XOESPROC)IntGetProcAddress("glEvalCoord1xOES");
+	if(!_funcptr_glEvalCoord1xOES) ++numFailed;
+	_funcptr_glEvalCoord2xOES = (PFNGLEVALCOORD2XOESPROC)IntGetProcAddress("glEvalCoord2xOES");
+	if(!_funcptr_glEvalCoord2xOES) ++numFailed;
+	_funcptr_glEvalCoord1xvOES = (PFNGLEVALCOORD1XVOESPROC)IntGetProcAddress("glEvalCoord1xvOES");
+	if(!_funcptr_glEvalCoord1xvOES) ++numFailed;
+	_funcptr_glEvalCoord2xvOES = (PFNGLEVALCOORD2XVOESPROC)IntGetProcAddress("glEvalCoord2xvOES");
+	if(!_funcptr_glEvalCoord2xvOES) ++numFailed;
+	_funcptr_glFeedbackBufferxOES = (PFNGLFEEDBACKBUFFERXOESPROC)IntGetProcAddress("glFeedbackBufferxOES");
+	if(!_funcptr_glFeedbackBufferxOES) ++numFailed;
+	_funcptr_glFogxOES = (PFNGLFOGXOESPROC)IntGetProcAddress("glFogxOES");
+	if(!_funcptr_glFogxOES) ++numFailed;
+	_funcptr_glFogxvOES = (PFNGLFOGXVOESPROC)IntGetProcAddress("glFogxvOES");
+	if(!_funcptr_glFogxvOES) ++numFailed;
+	_funcptr_glFrustumxOES = (PFNGLFRUSTUMXOESPROC)IntGetProcAddress("glFrustumxOES");
+	if(!_funcptr_glFrustumxOES) ++numFailed;
+	_funcptr_glGetClipPlanexOES = (PFNGLGETCLIPPLANEXOESPROC)IntGetProcAddress("glGetClipPlanexOES");
+	if(!_funcptr_glGetClipPlanexOES) ++numFailed;
+	_funcptr_glGetConvolutionParameterxvOES = (PFNGLGETCONVOLUTIONPARAMETERXVOESPROC)IntGetProcAddress("glGetConvolutionParameterxvOES");
+	if(!_funcptr_glGetConvolutionParameterxvOES) ++numFailed;
+	_funcptr_glGetFixedvOES = (PFNGLGETFIXEDVOESPROC)IntGetProcAddress("glGetFixedvOES");
+	if(!_funcptr_glGetFixedvOES) ++numFailed;
+	_funcptr_glGetHistogramParameterxvOES = (PFNGLGETHISTOGRAMPARAMETERXVOESPROC)IntGetProcAddress("glGetHistogramParameterxvOES");
+	if(!_funcptr_glGetHistogramParameterxvOES) ++numFailed;
+	_funcptr_glGetLightxOES = (PFNGLGETLIGHTXOESPROC)IntGetProcAddress("glGetLightxOES");
+	if(!_funcptr_glGetLightxOES) ++numFailed;
+	_funcptr_glGetMapxvOES = (PFNGLGETMAPXVOESPROC)IntGetProcAddress("glGetMapxvOES");
+	if(!_funcptr_glGetMapxvOES) ++numFailed;
+	_funcptr_glGetMaterialxOES = (PFNGLGETMATERIALXOESPROC)IntGetProcAddress("glGetMaterialxOES");
+	if(!_funcptr_glGetMaterialxOES) ++numFailed;
+	_funcptr_glGetPixelMapxv = (PFNGLGETPIXELMAPXVPROC)IntGetProcAddress("glGetPixelMapxv");
+	if(!_funcptr_glGetPixelMapxv) ++numFailed;
+	_funcptr_glGetTexEnvxvOES = (PFNGLGETTEXENVXVOESPROC)IntGetProcAddress("glGetTexEnvxvOES");
+	if(!_funcptr_glGetTexEnvxvOES) ++numFailed;
+	_funcptr_glGetTexGenxvOES = (PFNGLGETTEXGENXVOESPROC)IntGetProcAddress("glGetTexGenxvOES");
+	if(!_funcptr_glGetTexGenxvOES) ++numFailed;
+	_funcptr_glGetTexLevelParameterxvOES = (PFNGLGETTEXLEVELPARAMETERXVOESPROC)IntGetProcAddress("glGetTexLevelParameterxvOES");
+	if(!_funcptr_glGetTexLevelParameterxvOES) ++numFailed;
+	_funcptr_glGetTexParameterxvOES = (PFNGLGETTEXPARAMETERXVOESPROC)IntGetProcAddress("glGetTexParameterxvOES");
+	if(!_funcptr_glGetTexParameterxvOES) ++numFailed;
+	_funcptr_glIndexxOES = (PFNGLINDEXXOESPROC)IntGetProcAddress("glIndexxOES");
+	if(!_funcptr_glIndexxOES) ++numFailed;
+	_funcptr_glIndexxvOES = (PFNGLINDEXXVOESPROC)IntGetProcAddress("glIndexxvOES");
+	if(!_funcptr_glIndexxvOES) ++numFailed;
+	_funcptr_glLightModelxOES = (PFNGLLIGHTMODELXOESPROC)IntGetProcAddress("glLightModelxOES");
+	if(!_funcptr_glLightModelxOES) ++numFailed;
+	_funcptr_glLightModelxvOES = (PFNGLLIGHTMODELXVOESPROC)IntGetProcAddress("glLightModelxvOES");
+	if(!_funcptr_glLightModelxvOES) ++numFailed;
+	_funcptr_glLightxOES = (PFNGLLIGHTXOESPROC)IntGetProcAddress("glLightxOES");
+	if(!_funcptr_glLightxOES) ++numFailed;
+	_funcptr_glLightxvOES = (PFNGLLIGHTXVOESPROC)IntGetProcAddress("glLightxvOES");
+	if(!_funcptr_glLightxvOES) ++numFailed;
+	_funcptr_glLineWidthxOES = (PFNGLLINEWIDTHXOESPROC)IntGetProcAddress("glLineWidthxOES");
+	if(!_funcptr_glLineWidthxOES) ++numFailed;
+	_funcptr_glLoadMatrixxOES = (PFNGLLOADMATRIXXOESPROC)IntGetProcAddress("glLoadMatrixxOES");
+	if(!_funcptr_glLoadMatrixxOES) ++numFailed;
+	_funcptr_glLoadTransposeMatrixxOES = (PFNGLLOADTRANSPOSEMATRIXXOESPROC)IntGetProcAddress("glLoadTransposeMatrixxOES");
+	if(!_funcptr_glLoadTransposeMatrixxOES) ++numFailed;
+	_funcptr_glMap1xOES = (PFNGLMAP1XOESPROC)IntGetProcAddress("glMap1xOES");
+	if(!_funcptr_glMap1xOES) ++numFailed;
+	_funcptr_glMap2xOES = (PFNGLMAP2XOESPROC)IntGetProcAddress("glMap2xOES");
+	if(!_funcptr_glMap2xOES) ++numFailed;
+	_funcptr_glMapGrid1xOES = (PFNGLMAPGRID1XOESPROC)IntGetProcAddress("glMapGrid1xOES");
+	if(!_funcptr_glMapGrid1xOES) ++numFailed;
+	_funcptr_glMapGrid2xOES = (PFNGLMAPGRID2XOESPROC)IntGetProcAddress("glMapGrid2xOES");
+	if(!_funcptr_glMapGrid2xOES) ++numFailed;
+	_funcptr_glMaterialxOES = (PFNGLMATERIALXOESPROC)IntGetProcAddress("glMaterialxOES");
+	if(!_funcptr_glMaterialxOES) ++numFailed;
+	_funcptr_glMaterialxvOES = (PFNGLMATERIALXVOESPROC)IntGetProcAddress("glMaterialxvOES");
+	if(!_funcptr_glMaterialxvOES) ++numFailed;
+	_funcptr_glMultMatrixxOES = (PFNGLMULTMATRIXXOESPROC)IntGetProcAddress("glMultMatrixxOES");
+	if(!_funcptr_glMultMatrixxOES) ++numFailed;
+	_funcptr_glMultTransposeMatrixxOES = (PFNGLMULTTRANSPOSEMATRIXXOESPROC)IntGetProcAddress("glMultTransposeMatrixxOES");
+	if(!_funcptr_glMultTransposeMatrixxOES) ++numFailed;
+	_funcptr_glMultiTexCoord1xOES = (PFNGLMULTITEXCOORD1XOESPROC)IntGetProcAddress("glMultiTexCoord1xOES");
+	if(!_funcptr_glMultiTexCoord1xOES) ++numFailed;
+	_funcptr_glMultiTexCoord2xOES = (PFNGLMULTITEXCOORD2XOESPROC)IntGetProcAddress("glMultiTexCoord2xOES");
+	if(!_funcptr_glMultiTexCoord2xOES) ++numFailed;
+	_funcptr_glMultiTexCoord3xOES = (PFNGLMULTITEXCOORD3XOESPROC)IntGetProcAddress("glMultiTexCoord3xOES");
+	if(!_funcptr_glMultiTexCoord3xOES) ++numFailed;
+	_funcptr_glMultiTexCoord4xOES = (PFNGLMULTITEXCOORD4XOESPROC)IntGetProcAddress("glMultiTexCoord4xOES");
+	if(!_funcptr_glMultiTexCoord4xOES) ++numFailed;
+	_funcptr_glMultiTexCoord1xvOES = (PFNGLMULTITEXCOORD1XVOESPROC)IntGetProcAddress("glMultiTexCoord1xvOES");
+	if(!_funcptr_glMultiTexCoord1xvOES) ++numFailed;
+	_funcptr_glMultiTexCoord2xvOES = (PFNGLMULTITEXCOORD2XVOESPROC)IntGetProcAddress("glMultiTexCoord2xvOES");
+	if(!_funcptr_glMultiTexCoord2xvOES) ++numFailed;
+	_funcptr_glMultiTexCoord3xvOES = (PFNGLMULTITEXCOORD3XVOESPROC)IntGetProcAddress("glMultiTexCoord3xvOES");
+	if(!_funcptr_glMultiTexCoord3xvOES) ++numFailed;
+	_funcptr_glMultiTexCoord4xvOES = (PFNGLMULTITEXCOORD4XVOESPROC)IntGetProcAddress("glMultiTexCoord4xvOES");
+	if(!_funcptr_glMultiTexCoord4xvOES) ++numFailed;
+	_funcptr_glNormal3xOES = (PFNGLNORMAL3XOESPROC)IntGetProcAddress("glNormal3xOES");
+	if(!_funcptr_glNormal3xOES) ++numFailed;
+	_funcptr_glNormal3xvOES = (PFNGLNORMAL3XVOESPROC)IntGetProcAddress("glNormal3xvOES");
+	if(!_funcptr_glNormal3xvOES) ++numFailed;
+	_funcptr_glOrthoxOES = (PFNGLORTHOXOESPROC)IntGetProcAddress("glOrthoxOES");
+	if(!_funcptr_glOrthoxOES) ++numFailed;
+	_funcptr_glPassThroughxOES = (PFNGLPASSTHROUGHXOESPROC)IntGetProcAddress("glPassThroughxOES");
+	if(!_funcptr_glPassThroughxOES) ++numFailed;
+	_funcptr_glPixelMapx = (PFNGLPIXELMAPXPROC)IntGetProcAddress("glPixelMapx");
+	if(!_funcptr_glPixelMapx) ++numFailed;
+	_funcptr_glPixelStorex = (PFNGLPIXELSTOREXPROC)IntGetProcAddress("glPixelStorex");
+	if(!_funcptr_glPixelStorex) ++numFailed;
+	_funcptr_glPixelTransferxOES = (PFNGLPIXELTRANSFERXOESPROC)IntGetProcAddress("glPixelTransferxOES");
+	if(!_funcptr_glPixelTransferxOES) ++numFailed;
+	_funcptr_glPixelZoomxOES = (PFNGLPIXELZOOMXOESPROC)IntGetProcAddress("glPixelZoomxOES");
+	if(!_funcptr_glPixelZoomxOES) ++numFailed;
+	_funcptr_glPointParameterxvOES = (PFNGLPOINTPARAMETERXVOESPROC)IntGetProcAddress("glPointParameterxvOES");
+	if(!_funcptr_glPointParameterxvOES) ++numFailed;
+	_funcptr_glPointSizexOES = (PFNGLPOINTSIZEXOESPROC)IntGetProcAddress("glPointSizexOES");
+	if(!_funcptr_glPointSizexOES) ++numFailed;
+	_funcptr_glPolygonOffsetxOES = (PFNGLPOLYGONOFFSETXOESPROC)IntGetProcAddress("glPolygonOffsetxOES");
+	if(!_funcptr_glPolygonOffsetxOES) ++numFailed;
+	_funcptr_glPrioritizeTexturesxOES = (PFNGLPRIORITIZETEXTURESXOESPROC)IntGetProcAddress("glPrioritizeTexturesxOES");
+	if(!_funcptr_glPrioritizeTexturesxOES) ++numFailed;
+	_funcptr_glRasterPos2xOES = (PFNGLRASTERPOS2XOESPROC)IntGetProcAddress("glRasterPos2xOES");
+	if(!_funcptr_glRasterPos2xOES) ++numFailed;
+	_funcptr_glRasterPos3xOES = (PFNGLRASTERPOS3XOESPROC)IntGetProcAddress("glRasterPos3xOES");
+	if(!_funcptr_glRasterPos3xOES) ++numFailed;
+	_funcptr_glRasterPos4xOES = (PFNGLRASTERPOS4XOESPROC)IntGetProcAddress("glRasterPos4xOES");
+	if(!_funcptr_glRasterPos4xOES) ++numFailed;
+	_funcptr_glRasterPos2xvOES = (PFNGLRASTERPOS2XVOESPROC)IntGetProcAddress("glRasterPos2xvOES");
+	if(!_funcptr_glRasterPos2xvOES) ++numFailed;
+	_funcptr_glRasterPos3xvOES = (PFNGLRASTERPOS3XVOESPROC)IntGetProcAddress("glRasterPos3xvOES");
+	if(!_funcptr_glRasterPos3xvOES) ++numFailed;
+	_funcptr_glRasterPos4xvOES = (PFNGLRASTERPOS4XVOESPROC)IntGetProcAddress("glRasterPos4xvOES");
+	if(!_funcptr_glRasterPos4xvOES) ++numFailed;
+	_funcptr_glRectxOES = (PFNGLRECTXOESPROC)IntGetProcAddress("glRectxOES");
+	if(!_funcptr_glRectxOES) ++numFailed;
+	_funcptr_glRectxvOES = (PFNGLRECTXVOESPROC)IntGetProcAddress("glRectxvOES");
+	if(!_funcptr_glRectxvOES) ++numFailed;
+	_funcptr_glRotatexOES = (PFNGLROTATEXOESPROC)IntGetProcAddress("glRotatexOES");
+	if(!_funcptr_glRotatexOES) ++numFailed;
+	_funcptr_glSampleCoverageOES = (PFNGLSAMPLECOVERAGEOESPROC)IntGetProcAddress("glSampleCoverageOES");
+	if(!_funcptr_glSampleCoverageOES) ++numFailed;
+	_funcptr_glScalexOES = (PFNGLSCALEXOESPROC)IntGetProcAddress("glScalexOES");
+	if(!_funcptr_glScalexOES) ++numFailed;
+	_funcptr_glTexCoord1xOES = (PFNGLTEXCOORD1XOESPROC)IntGetProcAddress("glTexCoord1xOES");
+	if(!_funcptr_glTexCoord1xOES) ++numFailed;
+	_funcptr_glTexCoord2xOES = (PFNGLTEXCOORD2XOESPROC)IntGetProcAddress("glTexCoord2xOES");
+	if(!_funcptr_glTexCoord2xOES) ++numFailed;
+	_funcptr_glTexCoord3xOES = (PFNGLTEXCOORD3XOESPROC)IntGetProcAddress("glTexCoord3xOES");
+	if(!_funcptr_glTexCoord3xOES) ++numFailed;
+	_funcptr_glTexCoord4xOES = (PFNGLTEXCOORD4XOESPROC)IntGetProcAddress("glTexCoord4xOES");
+	if(!_funcptr_glTexCoord4xOES) ++numFailed;
+	_funcptr_glTexCoord1xvOES = (PFNGLTEXCOORD1XVOESPROC)IntGetProcAddress("glTexCoord1xvOES");
+	if(!_funcptr_glTexCoord1xvOES) ++numFailed;
+	_funcptr_glTexCoord2xvOES = (PFNGLTEXCOORD2XVOESPROC)IntGetProcAddress("glTexCoord2xvOES");
+	if(!_funcptr_glTexCoord2xvOES) ++numFailed;
+	_funcptr_glTexCoord3xvOES = (PFNGLTEXCOORD3XVOESPROC)IntGetProcAddress("glTexCoord3xvOES");
+	if(!_funcptr_glTexCoord3xvOES) ++numFailed;
+	_funcptr_glTexCoord4xvOES = (PFNGLTEXCOORD4XVOESPROC)IntGetProcAddress("glTexCoord4xvOES");
+	if(!_funcptr_glTexCoord4xvOES) ++numFailed;
+	_funcptr_glTexEnvxOES = (PFNGLTEXENVXOESPROC)IntGetProcAddress("glTexEnvxOES");
+	if(!_funcptr_glTexEnvxOES) ++numFailed;
+	_funcptr_glTexEnvxvOES = (PFNGLTEXENVXVOESPROC)IntGetProcAddress("glTexEnvxvOES");
+	if(!_funcptr_glTexEnvxvOES) ++numFailed;
+	_funcptr_glTexGenxOES = (PFNGLTEXGENXOESPROC)IntGetProcAddress("glTexGenxOES");
+	if(!_funcptr_glTexGenxOES) ++numFailed;
+	_funcptr_glTexGenxvOES = (PFNGLTEXGENXVOESPROC)IntGetProcAddress("glTexGenxvOES");
+	if(!_funcptr_glTexGenxvOES) ++numFailed;
+	_funcptr_glTexParameterxOES = (PFNGLTEXPARAMETERXOESPROC)IntGetProcAddress("glTexParameterxOES");
+	if(!_funcptr_glTexParameterxOES) ++numFailed;
+	_funcptr_glTexParameterxvOES = (PFNGLTEXPARAMETERXVOESPROC)IntGetProcAddress("glTexParameterxvOES");
+	if(!_funcptr_glTexParameterxvOES) ++numFailed;
+	_funcptr_glTranslatexOES = (PFNGLTRANSLATEXOESPROC)IntGetProcAddress("glTranslatexOES");
+	if(!_funcptr_glTranslatexOES) ++numFailed;
+	_funcptr_glVertex2xOES = (PFNGLVERTEX2XOESPROC)IntGetProcAddress("glVertex2xOES");
+	if(!_funcptr_glVertex2xOES) ++numFailed;
+	_funcptr_glVertex3xOES = (PFNGLVERTEX3XOESPROC)IntGetProcAddress("glVertex3xOES");
+	if(!_funcptr_glVertex3xOES) ++numFailed;
+	_funcptr_glVertex4xOES = (PFNGLVERTEX4XOESPROC)IntGetProcAddress("glVertex4xOES");
+	if(!_funcptr_glVertex4xOES) ++numFailed;
+	_funcptr_glVertex2xvOES = (PFNGLVERTEX2XVOESPROC)IntGetProcAddress("glVertex2xvOES");
+	if(!_funcptr_glVertex2xvOES) ++numFailed;
+	_funcptr_glVertex3xvOES = (PFNGLVERTEX3XVOESPROC)IntGetProcAddress("glVertex3xvOES");
+	if(!_funcptr_glVertex3xvOES) ++numFailed;
+	_funcptr_glVertex4xvOES = (PFNGLVERTEX4XVOESPROC)IntGetProcAddress("glVertex4xvOES");
+	if(!_funcptr_glVertex4xvOES) ++numFailed;
+	return numFailed;
+}
+
+PFNGLQUERYMATRIXXOESPROC _funcptr_glQueryMatrixxOES = NULL;
+
+static int LoadExt_OES_query_matrix()
+{
+	int numFailed = 0;
+	_funcptr_glQueryMatrixxOES = (PFNGLQUERYMATRIXXOESPROC)IntGetProcAddress("glQueryMatrixxOES");
+	if(!_funcptr_glQueryMatrixxOES) ++numFailed;
+	return numFailed;
+}
+
+PFNGLDEPTHRANGEFOESPROC _funcptr_glDepthRangefOES = NULL;
+PFNGLFRUSTUMFOESPROC _funcptr_glFrustumfOES = NULL;
+PFNGLORTHOFOESPROC _funcptr_glOrthofOES = NULL;
+PFNGLCLIPPLANEFOESPROC _funcptr_glClipPlanefOES = NULL;
+PFNGLCLEARDEPTHFOESPROC _funcptr_glClearDepthfOES = NULL;
+PFNGLGETCLIPPLANEFOESPROC _funcptr_glGetClipPlanefOES = NULL;
+
+static int LoadExt_OES_single_precision()
+{
+	int numFailed = 0;
+	_funcptr_glDepthRangefOES = (PFNGLDEPTHRANGEFOESPROC)IntGetProcAddress("glDepthRangefOES");
+	if(!_funcptr_glDepthRangefOES) ++numFailed;
+	_funcptr_glFrustumfOES = (PFNGLFRUSTUMFOESPROC)IntGetProcAddress("glFrustumfOES");
+	if(!_funcptr_glFrustumfOES) ++numFailed;
+	_funcptr_glOrthofOES = (PFNGLORTHOFOESPROC)IntGetProcAddress("glOrthofOES");
+	if(!_funcptr_glOrthofOES) ++numFailed;
+	_funcptr_glClipPlanefOES = (PFNGLCLIPPLANEFOESPROC)IntGetProcAddress("glClipPlanefOES");
+	if(!_funcptr_glClipPlanefOES) ++numFailed;
+	_funcptr_glClearDepthfOES = (PFNGLCLEARDEPTHFOESPROC)IntGetProcAddress("glClearDepthfOES");
+	if(!_funcptr_glClearDepthfOES) ++numFailed;
+	_funcptr_glGetClipPlanefOES = (PFNGLGETCLIPPLANEFOESPROC)IntGetProcAddress("glGetClipPlanefOES");
+	if(!_funcptr_glGetClipPlanefOES) ++numFailed;
 	return numFailed;
 }
 
@@ -8771,6 +9257,8 @@ static int LoadCore_Version_1_2()
 	if(!_funcptr_glBlendEquation) ++numFailed;
 	_funcptr_glDrawRangeElements = (PFNGLDRAWRANGEELEMENTSPROC)IntGetProcAddress("glDrawRangeElements");
 	if(!_funcptr_glDrawRangeElements) ++numFailed;
+	_funcptr_glTexImage3D = (PFNGLTEXIMAGE3DPROC)IntGetProcAddress("glTexImage3D");
+	if(!_funcptr_glTexImage3D) ++numFailed;
 	_funcptr_glTexSubImage3D = (PFNGLTEXSUBIMAGE3DPROC)IntGetProcAddress("glTexSubImage3D");
 	if(!_funcptr_glTexSubImage3D) ++numFailed;
 	_funcptr_glCopyTexSubImage3D = (PFNGLCOPYTEXSUBIMAGE3DPROC)IntGetProcAddress("glCopyTexSubImage3D");
@@ -8781,8 +9269,6 @@ static int LoadCore_Version_1_2()
 static int LoadCore_Version_1_2_Comp()
 {
 	int numFailed = 0;
-	_funcptr_glTexImage3D = (PFNGLTEXIMAGE3DPROC)IntGetProcAddress("glTexImage3D");
-	if(!_funcptr_glTexImage3D) ++numFailed;
 	_funcptr_glColorTable = (PFNGLCOLORTABLEPROC)IntGetProcAddress("glColorTable");
 	if(!_funcptr_glColorTable) ++numFailed;
 	_funcptr_glColorTableParameterfv = (PFNGLCOLORTABLEPARAMETERFVPROC)IntGetProcAddress("glColorTableParameterfv");
@@ -10525,7 +11011,7 @@ typedef struct ogl_StrToExtMap_s
 	PFN_LOADFUNCPOINTERS LoadExtension;
 } ogl_StrToExtMap;
 
-static ogl_StrToExtMap ExtensionTable[438] = {
+static ogl_StrToExtMap ExtensionTable[448] = {
 	{"GL_ARB_imaging", &glext_ARB_imaging, NULL},
 	{"GL_ARB_vertex_array_object", &glext_ARB_vertex_array_object, LoadExt_ARB_vertex_array_object},
 	{"GL_ARB_texture_rg", &glext_ARB_texture_rg, NULL},
@@ -10612,6 +11098,7 @@ static ogl_StrToExtMap ExtensionTable[438] = {
 	{"GL_AMD_sample_positions", &glext_AMD_sample_positions, LoadExt_AMD_sample_positions},
 	{"GL_AMD_seamless_cubemap_per_texture", &glext_AMD_seamless_cubemap_per_texture, NULL},
 	{"GL_AMD_shader_stencil_export", &glext_AMD_shader_stencil_export, NULL},
+	{"GL_AMD_shader_trinary_minmax", &glext_AMD_shader_trinary_minmax, NULL},
 	{"GL_AMD_sparse_texture", &glext_AMD_sparse_texture, LoadExt_AMD_sparse_texture},
 	{"GL_AMD_stencil_operation_extended", &glext_AMD_stencil_operation_extended, LoadExt_AMD_stencil_operation_extended},
 	{"GL_AMD_texture_texture4", &glext_AMD_texture_texture4, NULL},
@@ -10801,7 +11288,6 @@ static ogl_StrToExtMap ExtensionTable[438] = {
 	{"GL_EXT_vertex_shader", &glext_EXT_vertex_shader, LoadExt_EXT_vertex_shader},
 	{"GL_EXT_vertex_weighting", &glext_EXT_vertex_weighting, LoadExt_EXT_vertex_weighting},
 	{"GL_EXT_x11_sync_object", &glext_EXT_x11_sync_object, LoadExt_EXT_x11_sync_object},
-	{"GL_FfdMaskSGIX", &glext_FfdMaskSGIX, NULL},
 	{"GL_GREMEDY_frame_terminator", &glext_GREMEDY_frame_terminator, LoadExt_GREMEDY_frame_terminator},
 	{"GL_GREMEDY_string_marker", &glext_GREMEDY_string_marker, LoadExt_GREMEDY_string_marker},
 	{"GL_HP_convolution_border_modes", &glext_HP_convolution_border_modes, NULL},
@@ -10811,11 +11297,13 @@ static ogl_StrToExtMap ExtensionTable[438] = {
 	{"GL_IBM_cull_vertex", &glext_IBM_cull_vertex, NULL},
 	{"GL_IBM_multimode_draw_arrays", &glext_IBM_multimode_draw_arrays, LoadExt_IBM_multimode_draw_arrays},
 	{"GL_IBM_rasterpos_clip", &glext_IBM_rasterpos_clip, NULL},
+	{"GL_IBM_static_data", &glext_IBM_static_data, LoadExt_IBM_static_data},
 	{"GL_IBM_texture_mirrored_repeat", &glext_IBM_texture_mirrored_repeat, NULL},
 	{"GL_IBM_vertex_array_lists", &glext_IBM_vertex_array_lists, LoadExt_IBM_vertex_array_lists},
 	{"GL_INGR_color_clamp", &glext_INGR_color_clamp, NULL},
 	{"GL_INGR_interlace_read", &glext_INGR_interlace_read, NULL},
 	{"GL_INGR_palette_buffer", &glext_INGR_palette_buffer, NULL},
+	{"GL_INTEL_map_texture", &glext_INTEL_map_texture, LoadExt_INTEL_map_texture},
 	{"GL_INTEL_parallel_arrays", &glext_INTEL_parallel_arrays, LoadExt_INTEL_parallel_arrays},
 	{"GL_INTEL_texture_scissor", &glext_INTEL_texture_scissor, NULL},
 	{"GL_KHR_texture_compression_astc_ldr", &glext_KHR_texture_compression_astc_ldr, NULL},
@@ -10824,13 +11312,17 @@ static ogl_StrToExtMap ExtensionTable[438] = {
 	{"GL_MESA_resize_buffers", &glext_MESA_resize_buffers, LoadExt_MESA_resize_buffers},
 	{"GL_MESA_window_pos", &glext_MESA_window_pos, LoadExt_MESA_window_pos},
 	{"GL_MESA_ycbcr_texture", &glext_MESA_ycbcr_texture, NULL},
+	{"GL_NVX_conditional_render", &glext_NVX_conditional_render, LoadExt_NVX_conditional_render},
 	{"GL_NV_bindless_texture", &glext_NV_bindless_texture, LoadExt_NV_bindless_texture},
 	{"GL_NV_blend_square", &glext_NV_blend_square, NULL},
+	{"GL_NV_compute_program5", &glext_NV_compute_program5, NULL},
 	{"GL_NV_conditional_render", &glext_NV_conditional_render, LoadExt_NV_conditional_render},
 	{"GL_NV_copy_depth_to_color", &glext_NV_copy_depth_to_color, NULL},
 	{"GL_NV_copy_image", &glext_NV_copy_image, LoadExt_NV_copy_image},
+	{"GL_NV_deep_texture3D", &glext_NV_deep_texture3D, NULL},
 	{"GL_NV_depth_buffer_float", &glext_NV_depth_buffer_float, LoadExt_NV_depth_buffer_float},
 	{"GL_NV_depth_clamp", &glext_NV_depth_clamp, NULL},
+	{"GL_NV_draw_texture", &glext_NV_draw_texture, LoadExt_NV_draw_texture},
 	{"GL_NV_evaluators", &glext_NV_evaluators, LoadExt_NV_evaluators},
 	{"GL_NV_explicit_multisample", &glext_NV_explicit_multisample, LoadExt_NV_explicit_multisample},
 	{"GL_NV_fence", &glext_NV_fence, LoadExt_NV_fence},
@@ -10861,9 +11353,11 @@ static ogl_StrToExtMap ExtensionTable[438] = {
 	{"GL_NV_primitive_restart", &glext_NV_primitive_restart, LoadExt_NV_primitive_restart},
 	{"GL_NV_register_combiners", &glext_NV_register_combiners, LoadExt_NV_register_combiners},
 	{"GL_NV_register_combiners2", &glext_NV_register_combiners2, LoadExt_NV_register_combiners2},
+	{"GL_NV_shader_atomic_counters", &glext_NV_shader_atomic_counters, NULL},
 	{"GL_NV_shader_atomic_float", &glext_NV_shader_atomic_float, NULL},
 	{"GL_NV_shader_buffer_load", &glext_NV_shader_buffer_load, LoadExt_NV_shader_buffer_load},
 	{"GL_NV_shader_buffer_store", &glext_NV_shader_buffer_store, NULL},
+	{"GL_NV_shader_storage_buffer_object", &glext_NV_shader_storage_buffer_object, NULL},
 	{"GL_NV_tessellation_program5", &glext_NV_tessellation_program5, NULL},
 	{"GL_NV_texgen_emboss", &glext_NV_texgen_emboss, NULL},
 	{"GL_NV_texgen_reflection", &glext_NV_texgen_reflection, NULL},
@@ -10890,7 +11384,12 @@ static ogl_StrToExtMap ExtensionTable[438] = {
 	{"GL_NV_vertex_program3", &glext_NV_vertex_program3, NULL},
 	{"GL_NV_vertex_program4", &glext_NV_vertex_program4, LoadExt_NV_vertex_program4},
 	{"GL_NV_video_capture", &glext_NV_video_capture, LoadExt_NV_video_capture},
+	{"GL_OES_byte_coordinates", &glext_OES_byte_coordinates, LoadExt_OES_byte_coordinates},
+	{"GL_OES_compressed_paletted_texture", &glext_OES_compressed_paletted_texture, NULL},
+	{"GL_OES_fixed_point", &glext_OES_fixed_point, LoadExt_OES_fixed_point},
+	{"GL_OES_query_matrix", &glext_OES_query_matrix, LoadExt_OES_query_matrix},
 	{"GL_OES_read_format", &glext_OES_read_format, NULL},
+	{"GL_OES_single_precision", &glext_OES_single_precision, LoadExt_OES_single_precision},
 	{"GL_OML_interlace", &glext_OML_interlace, NULL},
 	{"GL_OML_resample", &glext_OML_resample, NULL},
 	{"GL_OML_subsample", &glext_OML_subsample, NULL},
@@ -10923,10 +11422,8 @@ static ogl_StrToExtMap ExtensionTable[438] = {
 	{"GL_SGIX_depth_texture", &glext_SGIX_depth_texture, NULL},
 	{"GL_SGIX_flush_raster", &glext_SGIX_flush_raster, LoadExt_SGIX_flush_raster},
 	{"GL_SGIX_fog_offset", &glext_SGIX_fog_offset, NULL},
-	{"GL_SGIX_fog_scale", &glext_SGIX_fog_scale, NULL},
 	{"GL_SGIX_fragment_lighting", &glext_SGIX_fragment_lighting, LoadExt_SGIX_fragment_lighting},
 	{"GL_SGIX_framezoom", &glext_SGIX_framezoom, LoadExt_SGIX_framezoom},
-	{"GL_SGIX_impact_pixel_texture", &glext_SGIX_impact_pixel_texture, NULL},
 	{"GL_SGIX_instruments", &glext_SGIX_instruments, LoadExt_SGIX_instruments},
 	{"GL_SGIX_interlace", &glext_SGIX_interlace, NULL},
 	{"GL_SGIX_ir_instrument1", &glext_SGIX_ir_instrument1, NULL},
@@ -10953,7 +11450,6 @@ static ogl_StrToExtMap ExtensionTable[438] = {
 	{"GL_SGIX_ycrcba", &glext_SGIX_ycrcba, NULL},
 	{"GL_SGI_color_matrix", &glext_SGI_color_matrix, NULL},
 	{"GL_SGI_color_table", &glext_SGI_color_table, LoadExt_SGI_color_table},
-	{"GL_SGI_depth_pass_instrument", &glext_SGI_depth_pass_instrument, NULL},
 	{"GL_SGI_texture_color_table", &glext_SGI_texture_color_table, NULL},
 	{"GL_SUNX_constant_data", &glext_SUNX_constant_data, LoadExt_SUNX_constant_data},
 	{"GL_SUN_convolution_border_modes", &glext_SUN_convolution_border_modes, NULL},
@@ -10966,7 +11462,7 @@ static ogl_StrToExtMap ExtensionTable[438] = {
 	{"GL_WIN_specular_fog", &glext_WIN_specular_fog, NULL},
 };
 
-static int g_extensionMapSize = 438;
+static int g_extensionMapSize = 448;
 
 static ogl_StrToExtMap *FindExtEntry(const char *extensionName)
 {
@@ -11069,6 +11565,7 @@ static void ClearExtensionVars()
 	glext_AMD_sample_positions = 0;
 	glext_AMD_seamless_cubemap_per_texture = 0;
 	glext_AMD_shader_stencil_export = 0;
+	glext_AMD_shader_trinary_minmax = 0;
 	glext_AMD_sparse_texture = 0;
 	glext_AMD_stencil_operation_extended = 0;
 	glext_AMD_texture_texture4 = 0;
@@ -11258,7 +11755,6 @@ static void ClearExtensionVars()
 	glext_EXT_vertex_shader = 0;
 	glext_EXT_vertex_weighting = 0;
 	glext_EXT_x11_sync_object = 0;
-	glext_FfdMaskSGIX = 0;
 	glext_GREMEDY_frame_terminator = 0;
 	glext_GREMEDY_string_marker = 0;
 	glext_HP_convolution_border_modes = 0;
@@ -11268,11 +11764,13 @@ static void ClearExtensionVars()
 	glext_IBM_cull_vertex = 0;
 	glext_IBM_multimode_draw_arrays = 0;
 	glext_IBM_rasterpos_clip = 0;
+	glext_IBM_static_data = 0;
 	glext_IBM_texture_mirrored_repeat = 0;
 	glext_IBM_vertex_array_lists = 0;
 	glext_INGR_color_clamp = 0;
 	glext_INGR_interlace_read = 0;
 	glext_INGR_palette_buffer = 0;
+	glext_INTEL_map_texture = 0;
 	glext_INTEL_parallel_arrays = 0;
 	glext_INTEL_texture_scissor = 0;
 	glext_KHR_texture_compression_astc_ldr = 0;
@@ -11281,13 +11779,17 @@ static void ClearExtensionVars()
 	glext_MESA_resize_buffers = 0;
 	glext_MESA_window_pos = 0;
 	glext_MESA_ycbcr_texture = 0;
+	glext_NVX_conditional_render = 0;
 	glext_NV_bindless_texture = 0;
 	glext_NV_blend_square = 0;
+	glext_NV_compute_program5 = 0;
 	glext_NV_conditional_render = 0;
 	glext_NV_copy_depth_to_color = 0;
 	glext_NV_copy_image = 0;
+	glext_NV_deep_texture3D = 0;
 	glext_NV_depth_buffer_float = 0;
 	glext_NV_depth_clamp = 0;
+	glext_NV_draw_texture = 0;
 	glext_NV_evaluators = 0;
 	glext_NV_explicit_multisample = 0;
 	glext_NV_fence = 0;
@@ -11318,9 +11820,11 @@ static void ClearExtensionVars()
 	glext_NV_primitive_restart = 0;
 	glext_NV_register_combiners = 0;
 	glext_NV_register_combiners2 = 0;
+	glext_NV_shader_atomic_counters = 0;
 	glext_NV_shader_atomic_float = 0;
 	glext_NV_shader_buffer_load = 0;
 	glext_NV_shader_buffer_store = 0;
+	glext_NV_shader_storage_buffer_object = 0;
 	glext_NV_tessellation_program5 = 0;
 	glext_NV_texgen_emboss = 0;
 	glext_NV_texgen_reflection = 0;
@@ -11347,7 +11851,12 @@ static void ClearExtensionVars()
 	glext_NV_vertex_program3 = 0;
 	glext_NV_vertex_program4 = 0;
 	glext_NV_video_capture = 0;
+	glext_OES_byte_coordinates = 0;
+	glext_OES_compressed_paletted_texture = 0;
+	glext_OES_fixed_point = 0;
+	glext_OES_query_matrix = 0;
 	glext_OES_read_format = 0;
+	glext_OES_single_precision = 0;
 	glext_OML_interlace = 0;
 	glext_OML_resample = 0;
 	glext_OML_subsample = 0;
@@ -11380,10 +11889,8 @@ static void ClearExtensionVars()
 	glext_SGIX_depth_texture = 0;
 	glext_SGIX_flush_raster = 0;
 	glext_SGIX_fog_offset = 0;
-	glext_SGIX_fog_scale = 0;
 	glext_SGIX_fragment_lighting = 0;
 	glext_SGIX_framezoom = 0;
-	glext_SGIX_impact_pixel_texture = 0;
 	glext_SGIX_instruments = 0;
 	glext_SGIX_interlace = 0;
 	glext_SGIX_ir_instrument1 = 0;
@@ -11410,7 +11917,6 @@ static void ClearExtensionVars()
 	glext_SGIX_ycrcba = 0;
 	glext_SGI_color_matrix = 0;
 	glext_SGI_color_table = 0;
-	glext_SGI_depth_pass_instrument = 0;
 	glext_SGI_texture_color_table = 0;
 	glext_SUNX_constant_data = 0;
 	glext_SUN_convolution_border_modes = 0;

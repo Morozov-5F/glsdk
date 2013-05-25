@@ -39,7 +39,6 @@ namespace gl
 		INTERPOLATE                      = 0x8575,
 		SUBTRACT                         = 0x84E7,
 		CONSTANT                         = 0x8576,
-		PRIMARY_COLOR                    = 0x8577,
 		PREVIOUS                         = 0x8578,
 		DOT3_RGB                         = 0x86AE,
 		DOT3_RGBA                        = 0x86AF,

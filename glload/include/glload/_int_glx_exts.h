@@ -17,6 +17,7 @@ extern int glXext_ARB_multisample;
 extern int glXext_ARB_vertex_buffer_object;
 extern int glXext_EXT_buffer_age;
 extern int glXext_EXT_create_context_es2_profile;
+extern int glXext_EXT_create_context_es_profile;
 extern int glXext_EXT_fbconfig_packed_float;
 extern int glXext_EXT_framebuffer_sRGB;
 extern int glXext_EXT_import_context;
@@ -107,6 +108,8 @@ extern PFNGLXGETPROCADDRESSARBPROC _funcptr_glXGetProcAddressARB;
 #define GLX_BACK_BUFFER_AGE_EXT 0x20F4
 
 #define GLX_CONTEXT_ES2_PROFILE_BIT_EXT 0x00000004
+
+#define GLX_CONTEXT_ES_PROFILE_BIT_EXT 0x00000004
 
 #define GLX_RGBA_UNSIGNED_FLOAT_TYPE_EXT 0x20B1
 #define GLX_RGBA_UNSIGNED_FLOAT_BIT_EXT 0x00000008

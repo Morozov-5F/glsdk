@@ -37,7 +37,6 @@ extern "C" {
 #define GL_INTERPOLATE 0x8575
 #define GL_SUBTRACT 0x84E7
 #define GL_CONSTANT 0x8576
-#define GL_PRIMARY_COLOR 0x8577
 #define GL_PREVIOUS 0x8578
 #define GL_DOT3_RGB 0x86AE
 #define GL_DOT3_RGBA 0x86AF

@@ -19,6 +19,7 @@ namespace glX
 		extern glload::LoadTest var_ARB_vertex_buffer_object;
 		extern glload::LoadTest var_EXT_buffer_age;
 		extern glload::LoadTest var_EXT_create_context_es2_profile;
+		extern glload::LoadTest var_EXT_create_context_es_profile;
 		extern glload::LoadTest var_EXT_fbconfig_packed_float;
 		extern glload::LoadTest var_EXT_framebuffer_sRGB;
 		extern glload::LoadTest var_EXT_import_context;
@@ -92,6 +93,7 @@ namespace glX
 		CONTEXT_ALLOW_BUFFER_BYTE_ORDER_MISMATCH_ARB = 0x2095,
 		BACK_BUFFER_AGE_EXT              = 0x20F4,
 		CONTEXT_ES2_PROFILE_BIT_EXT      = 0x00000004,
+		CONTEXT_ES_PROFILE_BIT_EXT       = 0x00000004,
 		RGBA_UNSIGNED_FLOAT_TYPE_EXT     = 0x20B1,
 		RGBA_UNSIGNED_FLOAT_BIT_EXT      = 0x00000008,
 		FRAMEBUFFER_SRGB_CAPABLE_EXT     = 0x20B2,

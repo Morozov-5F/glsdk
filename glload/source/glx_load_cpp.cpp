@@ -19,6 +19,7 @@ extern int glXext_ARB_multisample;
 extern int glXext_ARB_vertex_buffer_object;
 extern int glXext_EXT_buffer_age;
 extern int glXext_EXT_create_context_es2_profile;
+extern int glXext_EXT_create_context_es_profile;
 extern int glXext_EXT_fbconfig_packed_float;
 extern int glXext_EXT_framebuffer_sRGB;
 extern int glXext_EXT_import_context;
@@ -140,6 +141,7 @@ namespace glX
 		glload::LoadTest var_ARB_vertex_buffer_object;
 		glload::LoadTest var_EXT_buffer_age;
 		glload::LoadTest var_EXT_create_context_es2_profile;
+		glload::LoadTest var_EXT_create_context_es_profile;
 		glload::LoadTest var_EXT_fbconfig_packed_float;
 		glload::LoadTest var_EXT_framebuffer_sRGB;
 		glload::LoadTest var_EXT_import_context;
@@ -278,6 +280,7 @@ namespace glX
 		exts::var_ARB_vertex_buffer_object = glload::LoadTest((::glXext_ARB_vertex_buffer_object != 0), ::glXext_ARB_vertex_buffer_object - 1);
 		exts::var_EXT_buffer_age = glload::LoadTest((::glXext_EXT_buffer_age != 0), ::glXext_EXT_buffer_age - 1);
 		exts::var_EXT_create_context_es2_profile = glload::LoadTest((::glXext_EXT_create_context_es2_profile != 0), ::glXext_EXT_create_context_es2_profile - 1);
+		exts::var_EXT_create_context_es_profile = glload::LoadTest((::glXext_EXT_create_context_es_profile != 0), ::glXext_EXT_create_context_es_profile - 1);
 		exts::var_EXT_fbconfig_packed_float = glload::LoadTest((::glXext_EXT_fbconfig_packed_float != 0), ::glXext_EXT_fbconfig_packed_float - 1);
 		exts::var_EXT_framebuffer_sRGB = glload::LoadTest((::glXext_EXT_framebuffer_sRGB != 0), ::glXext_EXT_framebuffer_sRGB - 1);
 		exts::var_EXT_import_context = glload::LoadTest((::glXext_EXT_import_context != 0), ::glXext_EXT_import_context - 1);
