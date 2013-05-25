@@ -155,7 +155,7 @@ The main VAO of each mesh includes all attributes. There will be variants genera
 
 These can be combined with <tt>-</tt> characters (except for <tt>unlit</tt>). So <tt>lit-tex</tt> means positions, normals, and texture coordinates. The order doesn't matter, so <tt>lit-tex</tt> is the same as <tt>tex-lit</tt>.
 
-Some generator functions allow the user to provide a glmesh::
+Some generator functions allow the user to provide a glmesh::gen::ColorArray, defining a sequence of colors. These colors will be applied to the vertices or faces of the object, depending on the generator.
 **/
 
 /**
