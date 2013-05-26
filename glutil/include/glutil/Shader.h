@@ -216,7 +216,7 @@ namespace glutil
 
 	It is explicitly non-copyable. C++11 would eventually allow move-semantics, but that's not widely
 	available enough to directly support. If you need to transfer ownership, it is swappable, so
-	you'll have to make due with using `swap`.
+	you'll have to make due with [using `swap`](http://en.cppreference.com/w/cpp/concept/Swappable).
 
 	This RAII-style class makes it easy to be exception-safe with shader objects.
 
@@ -242,7 +242,7 @@ namespace glutil
 		///Implicit conversion to shader object.
 		operator GLuint() const {return m_shader;}
 
-		///Resets the currently owned shader, deleting the present one.
+		///The given shader becomes the current shader; the old one is deleted.
 		void reset(GLuint newShader = 0)
 		{
 			Disengage();
@@ -279,7 +279,7 @@ namespace glutil
 
 	It is explicitly non-copyable. C++11 would eventually allow move-semantics, but that's not widely
 	available enough to directly support. If you need to transfer ownership, it is swappable, so
-	you'll have to make due with using `swap`.
+	you'll have to make due with [using `swap`](http://en.cppreference.com/w/cpp/concept/Swappable).
 
 	This RAII-style class makes it easy to be exception-safe with program objects.
 
@@ -305,7 +305,7 @@ namespace glutil
 		///Implicit conversion to program object.
 		operator GLuint () const {return m_program;}
 
-		///Resets the currently owned program, deleting the present one.
+		///The given program becomes the current program; the old one is deleted.
 		void reset(GLuint newProgram = 0)
 		{
 			Disengage();

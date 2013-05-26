@@ -15,8 +15,8 @@
 **/
 enum
 {
-	ogl_LOAD_FAILED = 0,
-	ogl_LOAD_SUCCEEDED,
+	ogl_LOAD_FAILED = 0, ///<Failed to load entirely.
+	ogl_LOAD_SUCCEEDED, ///<At least partially succeded.
 };
 
 #ifdef __cplusplus

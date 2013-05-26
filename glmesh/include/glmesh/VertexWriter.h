@@ -285,18 +285,19 @@ namespace glmesh
 	\brief Base class, using CRTP, that provides a framework for writing vertex attributes to arbitrary locations.
 
 	Vertex attribute writing, such as done in glmesh::Draw, has a lot of boilerplate code that can be shared
-	among many different destinations. glmesh::Draw writes to a StreamBuffer. Other writers could write
-	to some form of std::vector. And so forth.
+	among many different destinations. glmesh::Draw writes to a StreamBuffer. CpuDataWriter writes to an
+	internal `std::vector` buffer. And so forth.
 
-	This provides a standard interface for all of them, as well as a solid codebase. To use this, derive from
-	VertexWriter using the CRTP:
+	This provides a standard interface for all of them, as well as a solid codebase for implementing them.
+	To use this, derive from VertexWriter using the CRTP:
 
 	\code
 	class Derived : public VertexWriter<Derived> ...
 	\endcode
 
-	Your Derived class needs to provide two methods accessible to VertexWriter. You may make this VertexWriter
-	instantiation a friend of your Derived class, to keep these hidden. It must provide:
+	Your `Derived` class needs to provide two methods accessible to VertexWriter. You may make
+	this VertexWriter instantiation a friend of your Derived class, to keep these hidden.
+	`Derived` must provide:
 
 	\code
 	const VertexFormat &GetVertexFormat() const;
@@ -311,8 +312,8 @@ namespace glmesh
 	on the VertexFormat and the \a currAttrib index. \a currAttrib is the current vertex attribute
 	for the data being written.
 
-	This class provides GetCurrAttrib as a protected member function. This returns the current attribute
-	index.
+	This class provides VertexWriter::GetCurrAttrib as a protected member function. This returns the
+	current attribute index.
 	**/
 	template<typename Sink>
 	class VertexWriter
@@ -341,19 +342,19 @@ namespace glmesh
 		If you get an unresolved external error for some form of VertexWriter::Attrib, it is because you are
 		not using the correct type. The valid types are, in the order defined in VertexDataType:
 
-		\li \c glm::thalf
-		\li \c GLfloat
-		\li \c GLdouble
-		\li \c GLbyte
-		\li \c GLubyte
-		\li \c GLshort
-		\li \c GLushort
-		\li \c GLint
-		\li \c GLuint
+		- `glm::thalf`
+		- `GLfloat`
+		- `GLdouble`
+		- `GLbyte`
+		- `GLubyte`
+		- `GLshort`
+		- `GLushort`
+		- `GLint`
+		- `GLuint`
 
 		There are vector versions of these functions. They will work with glm's vector types, but
-		only for certain ones. The 3 floating-point types (glm::hvec, glm::vec, glm::dvec) will work.
-		And if you specifically use glm::detail::vec#<type>, then you can use vector types directly.
+		only for certain ones. The 3 floating-point types (`glm::hvec`, `glm::vec`, `glm::dvec`) will work.
+		And if you specifically use `glm::detail::vec#<type>`, then you can use vector types directly.
 		Otherwise, you should probably stick to the overloads that take a number of scalar values.
 
 		\throw MismatchWriterTypeException If the type you are using does not exactly match the type

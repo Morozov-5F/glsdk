@@ -226,22 +226,23 @@ namespace glmesh
 		}
 	}
 
-	void VertexFormat::BindAttribFormats( ) const
+	void VertexFormat::BindAttribFormats(GLuint bindingIndex) const
 	{
 		const size_t numAttribs = GetNumAttribs();
 		for(size_t attribIx = 0; attribIx < numAttribs; ++attribIx)
 		{
-			BindAttribFormat(attribIx);
+			BindAttribFormat(attribIx, bindingIndex);
 		}
 	}
 
-	void VertexFormat::BindAttribFormat( size_t attribIx ) const
+	void VertexFormat::BindAttribFormat( size_t attribIx, GLuint bindingIndex) const
 	{
 		const AttribDesc &attribute = GetAttribDesc(attribIx);
 		size_t offset = GetAttribByteOffset(attribIx);
 		const GLuint attributeIndex = attribute.GetAttribIndex();
 
 		gl::EnableVertexAttribArray(attributeIndex);
+		gl::VertexAttribBinding(attributeIndex, bindingIndex);
 		GLenum type = t_vertexUploadType[attribute.GetVertexDataType()];
 		GLint numComponents = static_cast<GLint>(attribute.GetNumComponents());
 
@@ -276,10 +277,10 @@ namespace glmesh
 		m_fmt.BindAttributes(baseOffset);
 	}
 
-	VertexFormat::Enable::Enable( const VertexFormat &fmt )
+	VertexFormat::Enable::Enable( const VertexFormat &fmt, GLuint bindingIndex, SeparateAttribFormat )
 		: m_fmt(fmt)
 	{
-		m_fmt.BindAttribFormats();
+		m_fmt.BindAttribFormats(bindingIndex);
 	}
 
 	VertexFormat::Enable::~Enable()

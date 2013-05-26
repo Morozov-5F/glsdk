@@ -71,6 +71,11 @@ namespace glmesh
 	the assumption being that you have written to all of the data requested. The user can ask
 	how much space is left in the StreamBuffer.
 
+	This [method of streaming is one of the documented ones from the OpenGL
+	wiki](http://www.opengl.org/wiki/Buffer_Object_Streaming). This class can be used just as well
+	for [uniform buffers](http://www.opengl.org/wiki/Uniform_Buffer_Object) or
+	other cases when streaming from the CPU to buffer objects.
+
 	Invalidating the buffer resets the current position.
 
 	StreamBuffer cannot be copied, as performing a deep-copy would not be a reasonably fast operation.
@@ -81,7 +86,7 @@ namespace glmesh
 		/**
 		\brief Creates a StreamBuffer with the given size. The size cannot be changed later.
 
-		When this function completes, the buffer bound to GL_ARRAY_BUFFER will be reset 0.
+		When this function completes, the buffer bound to `GL_ARRAY_BUFFER` will be reset 0.
 		**/
 		StreamBuffer(size_t bufferSize);
 
@@ -131,8 +136,6 @@ namespace glmesh
 		This object is the proper way to update the buffer's storage. It maps the buffer, containing a
 		pointer to the buffer's contents that can only be written to. The user must ensure not to write
 		outside of the byte range that was mapped.
-
-		When this function completes, the binding state of GL_ARRAY_BUFFER will be 0.
 		**/
 		class Map : public boost::noncopyable
 		{
@@ -148,7 +151,7 @@ namespace glmesh
 			if this parameter is true, then the buffer will be invalidated before mapping. If it is false,
 			then an exception is thrown.
 
-			When this function completes, the binding state of GL_ARRAY_BUFFER will be 0.
+			When this function completes, the binding state of `GL_ARRAY_BUFFER` will be 0.
 
 			\note If \a invalidateIfNotAvailable is \c true, the buffer can be invalidated. This means
 			that the current position can \em change due to creating a Map. If you pass \c true
@@ -182,7 +185,7 @@ namespace glmesh
 			The current position within the buffer will be advanced by the number of bytes mapped.
 
 			When this function completes, if the Map was not previously Release()'d,
-			the binding state of GL_ARRAY_BUFFER will be 0.
+			the binding state of `GL_ARRAY_BUFFER` will be 0.
 
 			\return true if the buffer's contents are fine. False if they are lost, or
 			if Release() was called once before

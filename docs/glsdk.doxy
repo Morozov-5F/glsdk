@@ -47,7 +47,7 @@ You can look on the \ref module_troubleshooting "troubleshooting page" for infor
 
 The Unofficial GL SDK is still in Alpha at present. Currently, the SDK is missing the following libraries:
 
-\li Mesh rendering: A library for loading and rendering meshes.
+\li Mesh loading: A library for loading files into GL Mesh meshes.
 
 The main issue is finding good, well-maintained libraries that can do these. Libraries that rely on compatibility profiles are not acceptable for the SDK, yet most of the available libraries that perform these tasks do.
 

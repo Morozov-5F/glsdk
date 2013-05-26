@@ -49,7 +49,7 @@ namespace glmesh
 	old-style client-side array rendering, or just compiling lots of data to eventually be
 	uploaded to actual buffer objects.
 
-	This class does this. It stores the attribute data into a std::vector<char>, in accord with the
+	This class does this. It stores the attribute data into a `std::vector<char>`, in accord with the
 	given VertexFormat.
 
 	Unlike glmesh::Draw, this class does not require you to provide a maximum upper limit on the number

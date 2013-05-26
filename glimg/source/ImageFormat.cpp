@@ -103,7 +103,7 @@ namespace glimg
 			if(bSharedExp != bSharedOrder ||
 				bSharedOrder != bSharedDepth)
 				return std::string("Shared floats must use DT_SHARED_EXP_FLOAT type, "
-					"ORDER_RGBE ordre, and BD_PACKED_32_BIT_5999_REV bitdepth.");
+					"ORDER_RGBE order, and BD_PACKED_32_BIT_5999_REV bitdepth.");
 
 			if(bSharedExp && (eFormat != FMT_COLOR_RGB))
 				return std::string("Shared floats must use RGB format.");
@@ -136,7 +136,7 @@ namespace glimg
 			else if(eType == DT_FLOAT)
 			{
 				//Must be 32-bit float.
-				if(eBitdepth != BD_PER_COMP_32)
+				if(eBitdepth != BD_PER_COMP_32 || eFormat != FMT_DEPTH)
 					return std::string("DT_FLOAT types with depth formats must use BD_PER_COMP_32 bitdepth");
 			}
 			else

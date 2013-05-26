@@ -15,8 +15,8 @@
 **/
 enum
 {
-	wgl_LOAD_FAILED = 0,
-	wgl_LOAD_SUCCEEDED,
+	wgl_LOAD_FAILED = 0, ///<Failed to load entirely.
+	wgl_LOAD_SUCCEEDED, ///<At least partially succeded.
 };
 
 #ifdef __cplusplus

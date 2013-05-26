@@ -51,30 +51,32 @@ namespace glimg
 
 	This function should be used when you want to do the uploading of the texture data
 	yourself.
+	It returns the [internal format](http://www.opengl.org/wiki/Image_Format) to use for a particular image format and
+	conversion bits.
 	
 	\note This function requires an active OpenGL context, and it requires
-	that \ref module_glload "GLLoad" has been initialized. It will only return internal formats
+	that the [GL Load](@ref module_glload) has been initialized. It will only return internal formats
 	supported by the current OpenGL context. It will use version numbers, core vs. compatibility,
 	and so forth to detect this.
 	
-	Format mapping is done as follows. One and two channel PixelComponents
-	(RED and RG) will be mapped to luminance and luminance alpha \em only if
-	the OpenGL context doesn't support GL_RED and GL_RG textures. Both the
+	Format mapping is done as follows. One and two channel glimg::PixelComponents
+	(`RED` and `RG`) will be mapped to luminance and luminance alpha \em only if
+	the OpenGL context doesn't support `GL_RED` and `GL_RG` textures. Both the
 	EXT extension and the version number will be checked to verify the
 	availability of the feature.
 	
-	Similarly, if you use FORCE_LUMINANCE_FMT on a core context, this function will
+	Similarly, if you use `FORCE_LUMINANCE_FMT` on a core context, this function will
 	throw.
 
 	\param format The image format of the image data to have a texture created for it.
 	\param forceConvertBits A bitfield containing values from ForcedConvertFlags.
 	These affect how the format is generated.
 
-	\return A GLenum representing the internal OpenGL format.
+	\return A `GLenum` representing the internal OpenGL format.
 
 	\throws TextureUnsupportedException The type of texture that was asked to be created cannot be created
 	because the OpenGL implementation doesn't support that kind of texture.
-	\throws CannotForceRenderTargetException Only given if FORCE_COLOR_RENDERABLE_FMT is set and
+	\throws CannotForceRenderTargetException Only given if `FORCE_COLOR_RENDERABLE_FMT` is set and
 	a color renderable format cannot be found that is appropriate.
 	**/
 	unsigned int GetInternalFormat(const ImageFormat &format, unsigned int forceConvertBits);
@@ -112,14 +114,14 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	\endcode
 
 	\param format The image format of the image data to have a texture created for it.
-	\param forceConvertBits A bitfield containing values from ForcedConvertFlags. These
+	\param forceConvertBits A bitfield containing values from glimg::ForcedConvertFlags. These
 	affect how the format is generated.
 
 	\return The OpenGL pixel transfer parameters, and a compressed block size field.
 
 	\throws TextureUnsupportedException The type of texture that was asked to be created cannot be created
 	because the OpenGL implementation doesn't support that kind of texture.
-	\throws CannotForceRenderTargetException Only given if FORCE_COLOR_RENDERABLE_FMT is set and
+	\throws CannotForceRenderTargetException Only given if `FORCE_COLOR_RENDERABLE_FMT` is set and
 	a color renderable format cannot be found that is appropriate.
 	**/
 	OpenGLPixelTransferParams GetUploadFormatType(const ImageFormat &format, unsigned int forceConvertBits);
@@ -127,18 +129,18 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	/**
 	\brief Retrieves the texture type for the given ImageSet.
 
-	When the CreateTexture functions are called, they will create a texture with a specific
+	When the glimg::CreateTexture functions are called, they will create a texture with a specific
 	texture type. This is the target that the texture is bound to the context with, and this
 	information is baked into the texture object. It is vital to know what this type will actually
 	be, so that the texture object can be properly bound to the context.
 
-	This function will return the texture target that CreateTexture will create, given
-	\em exactly the same parameters as CreateTexture.
+	This function will return the texture target that glimg::CreateTexture will create, given
+	\em exactly the same parameters as glimg::CreateTexture.
 
-	\param pImage The image that would be uploaded in a CreateTexture call.
-	\param forceConvertBits A bitfield containing values from ForcedConvertFlags.
+	\param pImage The image that would be uploaded in a glimg::CreateTexture call.
+	\param forceConvertBits A bitfield containing values from glimg::ForcedConvertFlags.
 
-	\return A GLenum for the texture type for a texture that would be created by CreateTexture.
+	\return A GLenum for the texture type for a texture that would be created by glimg::CreateTexture.
 	**/
 	unsigned int GetTextureType(const ImageSet *pImage, unsigned int forceConvertBits);
 
@@ -150,15 +152,15 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	after. So this function should be completely exception safe.
 
 	\note This function requires an active OpenGL context, and it requires
-	that \ref module_glload "GLLoad" has been initialized.
+	that [GLLoad(@ref module_glload) has been initialized.
 
 	If an exception is not thrown, then the following OpenGL context state will be changed:
 
-	\li All GL_UNPACK_* state.
-	\li The texture target of the returned texture will have texture object 0 bound to it.
+	\li [All `GL_UNPACK_*` state](http://www.opengl.org/wiki/Pixel_Transfer#Pixel_transfer_parameters).
+	\li The current texture unit for the texture target of the returned texture (as determined by glimg::GetTextureType) will have texture object 0 bound to it.
 
-	If you pass the USE_DSA or FORCE_DSA flags, and your implementation supports
-	GL_EXT_direct_state_access, then the only state that will be changed is the GL_UNPACK_*
+	If you pass the `USE_DSA` or `FORCE_DSA` flags, and your implementation supports
+	GL_EXT_direct_state_access, then the only state that will be changed are the `GL_UNPACK_*`
 	state.
 
 	\param pImage The image to upload to OpenGL.
@@ -174,11 +176,11 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	because the OpenGL implementation doesn't support that kind of texture.
 	\throws TextureUnexpectedException The type of texture has not been implemented in GL Image.
 	Appologies for that.
-	\throws CannotForceRenderTargetException Only given if FORCE_COLOR_RENDERABLE_FMT is set and
+	\throws CannotForceRenderTargetException Only given if `FORCE_COLOR_RENDERABLE_FMT` is set and
 	a color renderable format cannot be found that is appropriate.
-	\throws CannotForceTextureStorage Only given if FORCE_TEXTURE_STORAGE is set and the OpenGL
+	\throws CannotForceTextureStorage Only given if `FORCE_TEXTURE_STORAGE` is set and the OpenGL
 	implementation does not implement GL 4.2 or the GL_ARB_texture_storage extension.
-	\throws CannotForceDSAUsage Only given if FORCE_DSA is set, and the OpenGL implementation
+	\throws CannotForceDSAUsage Only given if `FORCE_DSA` is set, and the OpenGL implementation
 	does not implement GL_EXT_direct_state_access.
 	**/
 	unsigned int CreateTexture(const ImageSet *pImage, unsigned int forceConvertBits);
@@ -187,7 +189,7 @@ glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims.width, dims.height,
 	\brief As CreateTexture(const ImageSet *, unsigned int), but with a texture object provided by the user.
 	
 	The given texture object \em must not have been used at all. You cannot even have
-	bound it to the OpenGL context once. It should be fresh from glGenTextures.
+	bound it to the OpenGL context once. It should be fresh from `glGenTextures`.
 
 	\throws ... Everything that CreateTexture(const ImageSet *, unsigned int) throws.
 	**/

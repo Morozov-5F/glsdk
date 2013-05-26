@@ -23,6 +23,12 @@ namespace glutil
 	};
 
 	/**
+	\name Debug Output Piping
+	**/
+
+	///@{
+
+	/**
 	\brief Registers a function for automatically outputting debug messages.
 
 	\ref module_glload "GL Load" must have been successfully initialized for this function to work.
@@ -35,6 +41,15 @@ namespace glutil
 	\return true if the function was registered.
 	**/
 	bool RegisterDebugOutput(OutputLocation eLoc);
+
+	///@}
+
+	/**
+	\name Error Codes
+	These functions are used to convert OpenGL error codes into human-readable strings.
+	**/
+
+	///@{
 
 	/**
 	\brief Generates the enumerator string for an OpenGL error code.
@@ -75,6 +90,8 @@ namespace glutil
 	If \a errorCode is not an actual, valid framebuffer status code, it will return an empty string.
 	**/
 	std::string FramebufferToDescription(GLenum framebufferStatus);
+	///@}
+
 	///@}
 }
 

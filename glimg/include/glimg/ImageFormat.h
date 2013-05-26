@@ -23,8 +23,8 @@ namespace glimg
 
 	The pixel data type of an image represents the basic type of data stored in the image.
 	This can be floating-point, normalized unsigned integer, and the like. They also describe
-	if they are compressed. You can test a PixelDataType to see if it is a compressed format
-	by seeing if the value is less than DT_NUM_UNCOMPRESSED_TYPES.
+	if they are compressed. You can test a `PixelDataType` to see if it is a compressed format
+	by seeing if the value is less than `DT_NUM_UNCOMPRESSED_TYPES`.
 	**/
 	enum PixelDataType
 	{
@@ -51,7 +51,7 @@ namespace glimg
 	};
 
 	/**
-	\brief Describes the values stored in a pixel of the image.
+	\brief Describes the components stored in a pixel of the image.
 
 	Pixels can store between 1 and 4 values. This enumerator defines how many values are stored
 	and what these values mean. It defines the colorspace of the values (sRGB vs. linear),
@@ -77,8 +77,8 @@ namespace glimg
 	/**
 	\brief Specifies the ordering of the component data in the image.
 
-	This enumeration specifies the ordering of the components in the image's values. Values that are
-	missing from the BaseDataFormat are ignored.
+	This enumeration specifies the ordering of the components in the image's values. Components that are
+	missing from the `BaseDataFormat` are ignored.
 
 	Some combinations of order and bitdepth are not allowed.
 	**/
@@ -86,7 +86,7 @@ namespace glimg
 	{
 		ORDER_RGBA,				///<Standard RGBA ordering.
 		ORDER_BGRA,				///<Often used in conjunction with _REV Bitdepths.
-		ORDER_RGBE,				///<For DT_SHARED_EXP_FLOAT types. The E is the exponent, and it comes first.
+		ORDER_RGBE,				///<For `DT_SHARED_EXP_FLOAT` types. The `E` is the exponent, and it comes last. Can only be used with `BD_PACKED_32_BIT_5999_REF`.
 
 		ORDER_DEPTH_STENCIL,	///<Ordering for depth and depth-stencil image formats.
 
@@ -102,17 +102,17 @@ namespace glimg
 	are either per-component or specify the size of an entire pixel. The PER_COMP
 	enumerators specify the size of each component.
 
-	So if PER_COMP_16 is used with a RGB format, then each pixel takes up 48 bits.
+	So if `PER_COMP_16` is used with a RGB format, then each pixel takes up 48 bits.
 	This could be using integers (shorts) or floats (half-floats). Whether it is
-	16-bit integers or 16-bit floats is determined by the PixelDataType.
+	16-bit integers or 16-bit floats is determined by the `PixelDataType`.
 
-	The PACKED enumerators are for formats where each component does not have
-	the same bitdepth. The number after PACKED specifies the overall bitdepth
-	of the pixel. PACKED_16_BIT means that the pixel takes up 16 bits.
+	The `PACKED` enumerators are for formats where each component does not have
+	the same bitdepth. The number after `PACKED` specifies the overall bitdepth
+	of the pixel. `PACKED_16_BIT` means that the pixel takes up 16 bits.
 	The numbers after represent the bitdepth of the individual components, in the order
 	specified by the ComponentOrder enumerator.
 
-	PACKED formats that end in "_REV" reverse the order of the components. So 1555_REV
+	`PACKED` formats that end in `_REV` reverse the order of the components. So `1555_REV`
 	means that the lowest 5 bits are the first component, the next 5 are the second, 
 	the 5 after that are the third, and the highest bit is the fourth component.
 	**/
@@ -139,8 +139,8 @@ namespace glimg
 
 		BD_PACKED_32_BIT_8888_REV,		///<Reverse order. Each component takes up 8 bits.
 		BD_PACKED_32_BIT_2101010_REV,	///<Reverse order. The first three components take up 10 bits, and the last takes up 2.
-		BD_PACKED_32_BIT_101111_REV,	///<Reverse order. The first two components take 11 bits, and the third takes 10. Used for DT_FLOAT types.
-		BD_PACKED_32_BIT_5999_REV,		///<Reverse order. The first 3 components take 9 bits, and the last takes 5. Used for DT_SHARED_EXP_FLOAT types. 
+		BD_PACKED_32_BIT_101111_REV,	///<Reverse order. The first two components take 11 bits, and the third takes 10. Used only for `DT_FLOAT` types.
+		BD_PACKED_32_BIT_5999_REV,		///<Reverse order. The first 3 components take 9 bits, and the last takes 5. Used only for `DT_SHARED_EXP_FLOAT` types. 
 
 		BD_NUM_BITDEPTH,
 	};

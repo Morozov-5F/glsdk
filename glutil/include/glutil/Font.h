@@ -50,17 +50,23 @@ namespace glutil
 
 	Since the Font creates an OpenGL texture, calling this function will modify the following OpenGL state:
 
-	\li All GL_UNPACK_* state.
-	\li The GL_TEXTURE_2D target will have texture object 0 bound to it.
+	\li [All `GL_UNPACK_*` state](http://www.opengl.org/wiki/Pixel_Transfer#Pixel_transfer_parameters).
+	\li The current texture unit's `GL_TEXTURE_2D` target will have texture object 0 bound to it.
 
-	If ARB_texture_storage, or GL 4.2+, is available, then that will be used to create the texture. Therefore,
-	the texture's storage will be immutable.
+	If ARB_texture_storage, or GL 4.2+, is available, then the [texture's storage will be
+	immutable](http://www.opengl.org/wiki/Texture_Storage#Immutable_storage). So don't
+	count on being able to modify the storage (the contents can be modified, just not the
+	storage structure itself).
 
-	Calling this function multiple times with the same parameters will effectively create multiple copies
-	of the same data. That is not necessary; just keep the Font object around and use it.
+	Calling this function multiple times with the same parameters will create multiple copies
+	of the same data. That is not necessary; just keep the Font object around and use it from
+	different places.
 
-	\param eSize Particular font size.
+	\param eSize The requested font size.
 	\return The created Font.
+
+	\note Despite this function creating a texture, this function has no dependencies on
+	[GL Image](@ref module_glimg).
 	**/
 	Font *GenerateFont(FontSizes eSize);
 
@@ -90,14 +96,14 @@ namespace glutil
 
 		The vector will have 4 elements, representing the four corners of the quad. In order, the points are:
 
-		<ol>
-		<li>Top-left</li>
-		<li>Bottom-left</li>
-		<li>Top-right</li>
-		<li>Bottom-right</li>
-		</ol>
+		1. Top-left
+		2. Bottom-left
+		3. Top-right
+		4. Bottom-right
 
 		This represents a counter-clockwise winding order (the OpenGL default), and is suitable for a triangle strip.
+
+		\todo Make this return a boost::array or something.
 		**/
 		std::vector<glm::vec2> GetPositions() const;
 
@@ -106,6 +112,8 @@ namespace glutil
 
 		The vector will have 4 elements, representing the four corners of the quad. They are in the same order
 		as for GetPositions.
+
+		\todo Make this return a boost::array or something.
 		**/
 		std::vector<glm::vec2> GetTexCoords() const;
 
@@ -154,7 +162,7 @@ namespace glutil
 
 	This font is a "bitmap" font; the glyphs are stores as images in a texture.
 
-	This class's constructor's are private; you must use glutil::GenerateFont to create an instance of this class. The
+	This class's constructors are private; you must use glutil::GenerateFont to create an instance of this class. The
 	destructor is not private; you can (and \em should) call delete on this pointer.
 
 	This class contains and manages an OpenGL texture. This means that deleting this class will destroy that texture.

@@ -51,30 +51,35 @@ namespace glutil
 	/**
 	\brief Mouse-based control over the orientation and position of an object.
 
-	This Pole speaks of three spaces: local, world, and view. Local refers to the coordinate system
+	This Pole deals with three spaces: local, world, and view. Local refers to the coordinate system
 	of vertices given to the matrix that this Pole generates. World represents the \em output coordinate
 	system. So vertices enter in local and are transformed to world. Note that this does not have
-	to actually be the real world-space. It could be the space of some parent hierarchy, but
-	the ObjectPole is not really designed for that.
+	to actually be the real world-space. It could be the space of the parent node in some object
+	hierarchy, though there is a caveat below.
 	
-	View represents the space provided by the ViewProvider given to the constructor. The assumption
+	View represents the space that vertices are transformed into by the ViewProvider's matrix.
+	The ViewProvider is given to this class's constructor. The assumption
 	that this Pole makes when using the view space matrix is that the matrix the ObjectPole
-	generates will be multiplied by the view matrix given by the ViewProvider. So it is assumed
-	that there is no intermediate space.
+	generates will be right-multiplied by the view matrix given by the ViewProvider. So it is assumed
+	that there is no intermediate space between world and view.
+
+	By defining these three spaces, it is possible to dictate orientation relative to these spaces.
+	The ViewProvider exists to allow transformations relative to the current camera.
 
 	This Pole is given an action button, which it will listen for click events from. When
-	the action button is held down and the mouse moved, the object's orientation will change,
-	relative to the orientation of the view. But only if a ViewProvider (such as ViewPole) was
-	provided; otherwise, the rotation will be relative to the world.
+	the action button is held down and the mouse moved, the object's orientation will change. The
+	orientation will be relative to the view's orientation if a ViewProvider was provided. If not, it
+	will be relative to the world.
 	
 	If no modifier keys (shift, ctrl, alt) were held when the click was given, then the object will be
-	oriented in both the view-space X and Y axes. If the CTRL key is held when the click was given, then
-	the object will only rotate around either the X or Y axis. The selection is based on whether
+	oriented in both the X and Y axes of the transformation space. If the CTRL key is held
+	when the click was given, then the object will only rotate around either the X or Y axis.
+	The selection is based on whether
 	the X or the Y mouse coordinate is farthest from the initial position when dragging started.
 	If the ALT key is held, then the object will rotate about the Z axis, and only the X position
 	of the mouse affects the object.
 
-	More information on \ref module_glutil_poles "mouse poles is available."
+	More information on [mouse poles is available](@ref module_glutil_poles).
 	**/
 	class ObjectPole
 	{
@@ -217,7 +222,9 @@ namespace glutil
 	orientation around that target point that represents the camera. The Pole allows the user
 	to rotate around this point, move closer to/farther from it, and to move the point itself.
 
-	This Pole is given a ViewDef that defines a number of size parameters and limitations.
+	This Pole is given a ViewData object that contains the initial viewing orientation, as well
+	as a ViewScale that represents how fast the various movements change the view, as well as its
+	limitations.
 
 	This Pole is given an action button, which it will listen for click events from. If the
 	mouse button is clicked and no modifiers are pressed, the the view will rotate
@@ -226,14 +233,14 @@ namespace glutil
 	X or Y directions. If the ALT key is held, then the camera will spin in the view-local Z direction.
 
 	Scrolling the mouse wheel up or down moves the camera closer or farther from the object, respectively.
-	The distance is taken from ViewDef::largeRadiusDelta. If the SHIFT key is held while scrolling, then the
-	movement will be the ViewDef::smallRadiusDelta value instead.
+	The distance is taken from ViewScale::largeRadiusDelta. If the SHIFT key is held while scrolling, then the
+	movement will be the ViewScale::smallRadiusDelta value instead.
 
 	The target point can be moved, relative to the current view, with the WASD keys. W/S move forward and
 	backwards, while A/D move left and right, respectively. Q and E move down and up, respectively. If
 	the \a bRightKeyboardCtrls parameter of the constructor is set, then it uses the IJKLUO keys instead
-	of WASDQE. The offset applied to the position is ViewDef::largePosOffset; if SHIFT is held,
-	then ViewDef::smallPosOffset is used instead.
+	of WASDQE. The offset applied to the position is ViewScale::largePosOffset; if SHIFT is held,
+	then ViewScale::smallPosOffset is used instead.
 	**/
 	class ViewPole : public ViewProvider
 	{

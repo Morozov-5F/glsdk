@@ -232,8 +232,8 @@ local hdr_pattern =
 **/
 enum
 {
-	$<prefix>LOAD_FAILED = 0,
-	$<prefix>LOAD_SUCCEEDED,
+	$<prefix>LOAD_FAILED = 0, ///<Failed to load entirely.
+	$<prefix>LOAD_SUCCEEDED, ///<At least partially succeded.
 };
 
 #ifdef __cplusplus

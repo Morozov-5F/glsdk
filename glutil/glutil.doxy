@@ -5,17 +5,21 @@ The OpenGL Utility Library (GL Util) is a collection of miscellaneous tools for 
 
 The GL Utility library is distributed under the <a href="http://www.opensource.org/licenses/MIT">MIT License</a>.
 
-Most of these functions interact with OpenGL directly. Therefore, they require an active OpenGL context. They also use GL Load to get to OpenGL, so they need it to have been initialized as well.
+Most of these functions interact with OpenGL directly. Therefore, they require an active OpenGL context. They also use [GL Load](@ref module_glload) to use OpenGL, so that library must be properly initialized before calling most of these functions. Each of the groups of functions/classes below will state whether they need to have GL Load initialized.
 **/
 
 /**
 \defgroup module_glutil_debug Debug Output
 
-\brief Helper functions for handling ARB/KHR_debug_output and displaying OpenGL/FBO errors.
+\brief Helper functions for tracking down and understanding OpenGL errors.
 
-These functions are useful helpers for debugging OpenGL. Debug output can be piped directly to stdout or stderr. There are also functions for testing OpenGL errors or FBO status codes and retrieving displayable error strings for them.
+These functions help deal with errors in two ways. The glutil::RegisterDebugOutput function will automatically output all errors through the ARB/KHR_debug_output extension. They can be filed to standard out or standard error, as you see fit. This function requires that GL Load has been successfully initialized.
 
-\ref module_glload "GL Load" must have been successfully initialized for these functions to work.
+OpenGL errors come as error codes; simple numbers. If you need to understand the meaning of an OpenGL error message, these functions can convert them either into the standard OpenGL error enumerator or a text description of what that enumerator means.
+
+This also includes functions for translating [framebuffer completeness failures](http://www.opengl.org/wiki/Framebuffer_Object#Framebuffer_Completeness) error codes into text.
+
+None of the error translation functions need GL Load to have been initialized.
 
 \ingroup module_glutil
 **/
@@ -25,15 +29,15 @@ These functions are useful helpers for debugging OpenGL. Debug output can be pip
 
 \brief Classes for basic font rendering.
 
-This SDK module provides basic font rendering services. It is important to emphasize that this is \em basic font rendering. This is not intended to be a serious font handling system. Therefore, you will notice that some of the amenities one might find in a more significant font system are not present.
+This SDK module provides basic font rendering services. It is important to note that this is *basic* font rendering. This is not intended to be a serious font handling system. Therefore, you will notice that some of the amenities one might find in a more significant font system are not present.
 
-The fonts themselves are hard-coded directly into the library. This means that the executable's size will be noticably bigger by including the font system (~500KB). Note that if you don't call glutil::GenerateFont, your executable size will be completely unaffected.
+The fonts themselves are hard-coded directly into the library. This means that the executable's size can be noticably bigger by including the font system (~500KB). However, if you never use the font system (ie: you never call glutil::GenerateFont), your executable size will be completely unaffected.
 
-The font used here is called Inconsolata, a free font available online. It is used here as a raster font, with several pre-defined font sizes. The font is a fixed-width font, which makes text layout much easier.
+The font used here is called [Inconsolata](http://www.levien.com/type/myfonts/inconsolata.html), a free font available online. The font is a fixed-width font, which makes text layout much easier. It is used here as a raster font, with several pre-defined font sizes.
 
-This system provides \em limited Unicode support. Specifically, it accepts UTF-8-encoded text, but it \em only recognizes the first 256 Unicode codepoints. While this corresponds to Latin-1, it cannot actually take Latin-1 encoded strings. This limited Unicode support avoids complex text layout system, as well as minimize the image storage size of the fonts.
+This system provides *limited* [Unicode](http://en.wikipedia.org/wiki/Unicode) support. Specifically, it accepts UTF-8-encoded text, but it *only* recognizes the first 256 Unicode codepoints. While this corresponds to [Latin-1](http://en.wikipedia.org/wiki/ISO/IEC_8859-1), it cannot actually take Latin-1 *encoded* strings; it only accepts the UTF-8 encoding. This limited Unicode support avoids complex text layout system, as well as minimizes the image storage size of the fonts.
 
-A glutil::Font object can only be created by calling glutil::GenerateFont. The Font class provides methods for getting size information about the font (since it is fixed-width, all of the characters have the same size characteristics). It also has a function that will layout a single string of text (horizontally), without line-breaks or anything of that nature.
+A glutil::Font object can only be created by calling glutil::GenerateFont (which requires that [GL Load](@ref module_glload) has been successfully initialized). The Font class provides methods for getting size information about the font (since it is fixed-width, all of the characters have the same size characteristics). It also has a function that will layout a single string of text (horizontally), without line-breaks or anything of that nature.
 
 More complex text layout, like paragraphs and line breaks, is beyond this system.
 
@@ -57,11 +61,11 @@ Since it is a very useful feature, the GL Util library provides the MatrixStack 
 
 \brief Objects that allow mouse-based control over the position and orientation of objects and the camera.
 
-A "Pole" is a class that allows mouse-based control over an object's orientation, via clicking and dragging.
+A "Pole" is a class that allows mouse-based control over an object's orientation by clicking and dragging.
 
-In order to be platform-agnostic, the Pole classes are not dependent on input from any one windowing system. Instead, they rely on external code to provide input. When the user clicks the mouse, external code must detect this in whatever way it sees fit and translate it for the Pole class.
+In order to be platform-agnostic, the Pole classes are not dependent on input from any one windowing system. Instead, they rely on external code to provide input. When the user clicks the mouse, external code must detect this for the current platform and translate it for the Pole class.
 
-All Pole classes have 4 input functions: MouseClick, MouseMove, MouseWheel, and CharPress. The user should call these to provide input to the Poles.
+All Pole classes have 4 input functions: `MouseClick`, `MouseMove`, `MouseWheel`, and `CharPress`. The user should call these to provide input to the Poles.
 
 MouseClick must be called when a mouse button is pressed or released; it should not be called when the button is merely held. It should also be given the modifier keys that are currenlty being held down at the time of the pressing/releasing.
 
@@ -78,6 +82,8 @@ When a Pole is created, it is given a specific mouse button to listen for and re
 \brief Helper functions and objects for shader and program compiling and linking.
 
 \ref module_glload "GL Load" must have been successfully initialized for these functions to work.
+
+\todo Add a function for program binary uploading.
 
 \ingroup module_glutil
 **/

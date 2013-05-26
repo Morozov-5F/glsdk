@@ -23,8 +23,9 @@ namespace glutil
 	A matrix stack is a sequence of transforms which you can preserve and restore as needed. The
 	stack has the concept of a "current matrix", which can be retrieved with the Top() function.
 	The top matrix can even be obtained as a float array. The pointer returned will remain valid until
-	this object is destroyed (though its values will change). This is useful for uploading matrices
-	to OpenGL via glUniformMatrix4fv.
+	this object is destroyed (though its values will change when you modify the current matrix).
+	This is useful for uploading matrices to OpenGL via
+	[`glUniformMatrix4fv`](http://www.opengl.org/wiki/GLAPI/glUniform).
 
 	The other functions will right-multiply a transformation matrix with the current matrix, thus
 	changing the current matrix.
@@ -222,7 +223,10 @@ namespace glutil
 		becomes the new current matrix.
 		**/
 		///@{
+
+		///Right-multiplies the current matrix with the given one, making the result new current matrix.
 		void ApplyMatrix(const glm::mat4 &theMatrix);
+		///Right-multiplies the current matrix with the given one, making the result new current matrix.
 		MatrixStack &operator*=(const glm::mat4 &theMatrix) {ApplyMatrix(theMatrix); return *this;}
 		///@}
 

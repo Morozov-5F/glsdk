@@ -88,18 +88,18 @@ namespace glmesh
 	/**
 	\brief The expected interpretation of the attribute data by GLSL.
 
-	This type must match its corresponding VertexDataType or an error will result.
+	This type must match its corresponding glmesh::VertexDataType or an error will result.
 
-	\li ADT_FLOAT can be used with anything.
-	\li ADT_NORM_FLOAT can only be used with the integer types, signed or unsigned.
-	\li ADT_INTEGER can only be used with the integer types, signed or unsigned.
-	\li ADT_DOUBLE can only be used with VDT_DOUBLE_FLOAT.
+	\li `ADT_FLOAT` can be used with anything.
+	\li `ADT_NORM_FLOAT` can only be used with the integer types, signed or unsigned.
+	\li `ADT_INTEGER` can only be used with the integer types, signed or unsigned.
+	\li `ADT_DOUBLE` can only be used with `VDT_DOUBLE_FLOAT`.
 	**/
 	enum AttribDataType
 	{
 		ADT_FLOAT,			///<Values are used directly as floats. Integer types like 24 are converted to 24.0f floats.
 		ADT_NORM_FLOAT,		///<Integer values are normalized. So 128 as an unsigned byte becomes 0.502.
-		ADT_INTEGER,		///<Integer values are taken as integers. The shader must use an integral attribute to store it.
+		ADT_INTEGER,		///<Integer values are taken as integers.
 		ADT_DOUBLE,			///<Values are used as double-precision. The shader must use \c double or \c dvec attributes.
 
 		NUM_ATTRIB_DATA_TYPES,
@@ -108,6 +108,10 @@ namespace glmesh
 
 	/**
 	\brief Describes the storage for a single vertex attribute.
+
+	This object is used as part of the construction for a VertexFormat. It allows for "atomic"
+	construction of VertexFormat objects, such that all attributes are added at once during
+	construction.
 	
 	\note A valid OpenGL context must be active to create one of these objects.
 	Do not make global variables of these.
@@ -118,12 +122,12 @@ namespace glmesh
 		/**
 		\brief Creates a valid AttribDesc
 
-		\throw AttributeDataUnsupportedException If \a attribIndex is outside the allowed range of OpenGL.
-		\throw AttributeDataInvalidException If \a vertType and \a attribType do not match.
+		\throw AttributeDataUnsupportedException If \a attribIndex is outside the [implementation-defined allowed range of OpenGL attributes](http://www.opengl.org/wiki/Vertex_Attribute).
+		\throw AttributeDataInvalidException If \a vertType and \a attribType do not match, as defined in glmesh::AttribDataType.
 		\throw AttributeDataInvalidException If \a numComponents is not on the range [1, 4].
-		\throw AttributeDataUnsupportedException If \a attribType is ADT_DOUBLE and the implementation doesn't support them.
-		\throw AttributeDataUnsupportedException If \a attribType is ADT_INTEGER and the implementation doesn't support them.
-		\throw AttributeDataUnsupportedException If \a vertType is VDT_HALF_FLOAT and the implementation doesn't support them.
+		\throw AttributeDataUnsupportedException If \a attribType is `ADT_DOUBLE` and the implementation doesn't support double-precision attributes.
+		\throw AttributeDataUnsupportedException If \a attribType is `ADT_INTEGER` and the implementation doesn't support integral attributes.
+		\throw AttributeDataUnsupportedException If \a vertType is `VDT_HALF_FLOAT` and the implementation doesn't support half-floating point attributes.
 		**/
 		AttribDesc(unsigned int attribIndex, unsigned int numComponents,
 			VertexDataType vertType, AttribDataType attribType);
@@ -153,6 +157,12 @@ namespace glmesh
 	///Convenience typedef for std::vector's of attributes.
 	typedef std::vector<AttribDesc> AttributeList;
 
+	///Used in VertexFormat::Enable to differentiate constructors.
+	struct SeparateAttribFormat {};
+
+	///Use this in VertexFormat::Enable to use the separate attribute format constructor.
+	const SeparateAttribFormat sepFormat;
+
 	/**
 	\brief Describes the layout for a sequence of vertex attributes, to be used for rendering.
 
@@ -164,23 +174,27 @@ namespace glmesh
 	useful if all of the attributes come from the same buffer object's source.
 
 	Note that the order of the attribute sequence is the same as the order of the AttributeList.
-	This means that the order is \em not the order of the attribute indices. This is the order
-	of the attributes to be used in the buffer object.
+	This means that the order is \em not the order of the OpenGL attribute location. The attribute
+	sequence order, as defined by the AttributeList, is the order the attributes will be stored in
+	within the buffer object.
+
+	Any function that takes an \a attribIx parameter is taking an index into the attribute sequence
+	order, *not* an OpenGL attribute location.
 
 	You may use VertexFormat::Enable to perform all of the \c glEnableVertexAttribArray
 	and \c glVertexAttrib*Pointer calls to associate a buffer object with this format.
 	It is a RAII class, so the destructor will call \c glDisableVertexAttribArray to
 	disable the arrays.
+
+	This class uses value semantics and is copyable.
 	**/
 	class VertexFormat
 	{
 	public:
 		/**
-		\brief Creates an empty vertex format. You should fill it with data via a copy.
+		\brief Creates an empty vertex format. You should fill it with data via copy assignment.
 		
-		This exists mainly to make it easy to store these. Since AttributeList objects have to be
-		compile-time constructs, it is often useful to create an empty one in a class, then fill it
-		with actual data via copy at runtime.
+		This exists mainly to make it easy to store these.
 		**/
 		VertexFormat();
 
@@ -189,7 +203,7 @@ namespace glmesh
 
 		The order of the sequence of attributes will match the order of \a attribs.
 		
-		\throw AttributeIndexMultipleRefException If any of the \a attribs refer to the same attribute index as any of the others.
+		\throw AttributeIndexMultipleRefException If any of the \a attribs refer to the same attribute location as any of the others.
 		**/
 		VertexFormat(const AttributeList &attribs);
 
@@ -243,36 +257,44 @@ namespace glmesh
 		void BindAttribute(size_t baseOffset, size_t attribIx) const;
 
 		/**
-		\brief Binds the VertexFormat using ARB_vertex_attrib_format.
+		\brief Binds the VertexFormat using
+		[ARB_vertex_attrib_format](http://www.opengl.org/wiki/Vertex_Specification#Separate_attribute_format).
 
 		This function assumes that a valid VAO is bound (if one is needed).
 
 		The following OpenGL state is touched by this function:
 
-		\li The enable state of all of the attributes in the format will be set to enabled.
-		\li For each such attribute location, glVertexAttrib*Format will be called.
+		- The enable state of all of the attributes in the format will be set to enabled.
+		- For each such attribute location, `glVertexAttrib*Format` will be called.
+		- For each such attribute location, `glVertexAttribBinding` will be called with \a bindingIndex.
 
 		This function uses the offsets computed by GetAttribByteOffset, so it assumes that all vertex
-		attributes come from a single buffer object. You can bind the buffer later with glBindVertexBuffer,
-		and you will need to set up the mapping state for glVertexAttribBinding yourself.
+		attributes come from a single buffer object. You can bind the buffer later with glBindVertexBuffer.
+
+		\param bindingIndex The buffer binding index to use for all vertex attributes.
+
+		\note No exception will be thrown if ARB_vertex_attrib_format or GL 4.3 are not available.
 		**/
-		void BindAttribFormats() const;
+		void BindAttribFormats(GLuint bindingIndex) const;
 
 		/**
-		\brief Binds the attribute given by the attribute index using ARB_vertex_attrib_format.
+		\brief Binds the attribute given by the attribute index using
+		[ARB_vertex_attrib_format](http://www.opengl.org/wiki/Vertex_Specification#Separate_attribute_format).
 
 		This function assumes that a valid VAO is bound (if one is needed).
 
 		The following OpenGL state is touched by this function:
 
-		\li The enable state of the attribute referred to by \a attribIx will be set to enable.
-		\li The attribute location for \a attribIx will have glVertexAttrib*Format will be called.
+		- The enable state of the attribute referred to by \a attribIx will be set to enable.
+		- The attribute location for \a attribIx will have `glVertexAttrib*Format` will be called.
+		- The attribute location for \a attribIx will have `glVertexAttribBinding` called with \a bindingIndex.
 
 		This function uses the offsets computed by GetAttribByteOffset, so it assumes that all vertex
-		attributes come from a single buffer object. You can bind the buffer later with glBindVertexBuffer,
-		and you will need to set up the mapping state for glVertexAttribBinding yourself.
+		attributes come from a single buffer object. You can bind the buffer later with glBindVertexBuffer.
+
+		\note No exception will be thrown if ARB_vertex_attrib_format or GL 4.3 are not available.
 		**/
-		void BindAttribFormat( size_t attribIx ) const;
+		void BindAttribFormat( size_t attribIx, GLuint bindingIndex ) const;
 
 		/**
 		\brief Disables the attributes.
@@ -287,29 +309,34 @@ namespace glmesh
 		\ingroup module_glmesh_draw
 		\brief RAII-style class for binding a VertexFormat to the OpenGL context.
 		
-		The constructors of this class call BindAttributes or BindAttribFormat, as appropriate. The destructor
-		calls DisableAttributes.
+		The constructors of this class call VertexFormat::BindAttributes or
+		VertexFormat::BindAttribFormat, as appropriate. The destructor
+		calls VertexFormat::DisableAttributes.
 		
-		This class can use the ARB_vertex_attrib_binding functionality instead of glVertexAttribPointer. If it does,
-		it only changes the vertex format state, not the buffer binding state. That is, it will call
-		glEnable/DisableVertexAttrbiArray and glVertexAttribFormat, but not glVertexAttribBinding,
-		glBindVertexBuffer, or glVertexBindingDivisor.
+		This class can
+		[use the ARB_vertex_attrib_binding functionality](http://www.opengl.org/wiki/Vertex_Specification#Separate_attribute_format)
+		instead of `glVertexAttribPointer`. If you do, then this class
+		only changes the vertex format state, not the buffer binding state. That is, it will call
+		`glEnable/DisableVertexAttrbiArray` and [`glVertexAttribFormat`](http://www.opengl.org/wiki/GLAPI/glVertexAttribFormat),
+		but not `glVertexAttribBinding`,
+		`glBindVertexBuffer`, or `glVertexBindingDivisor`.
 
 		Note that all of the attributes will still have the same stride, and the offsets will be computed
-		as though it all comes from a single buffer. You can use multiple separate VertexFormat objects,
-		if you want to define multiple different formats.
+		as though it all comes from a single buffer. You can use multiple separate VertexFormat objects
+		if you want to have different buffers with different attributes for the same mesh.
 		
 		If you are not using ARB_vertex_attrib_binding, then this class assumes that
-		all vertex data comes from the buffer currently bound to GL_ARRAY_BUFFER.
+		all vertex data comes from the buffer currently bound to `GL_ARRAY_BUFFER`.
 
-		The following OpenGL state is touched by constructing this object:
+		The constructors have the effect of calling VertexFormat::BindAttributes or
+		VertexFormat::BindAttributeFormats, as appropriate. Those functions define the
+		OpenGL state that will be changed. The destructor will call VertexFormat::DisableAttributes.
 
-		\li The enable/disable state of the attributes in the format.
-		\li If you are using ARB_vertex_attrib_binding, then the state set by glVertexAttrib*Format.
-		\li If not using ARB_vertex_attrib_binding, then the state set by glVertexAttrib*Pointer.
-
-		After creating one of these, you can use \c glDraw* functions to render from the previously
-		bound buffer object, using the VertexFormat given.
+		Assuming all of your buffer setup is in order (ie: if you're using separate attribute formats,
+		you [have bound a buffer](http://www.opengl.org/wiki/GLAPI/glBindVertexBuffer)
+		and [set the attribute binding](http://www.opengl.org/wiki/GLAPI/glVertexAttribBinding)),
+		you can [use any OpenGL rendering functions](http://www.opengl.org/wiki/Vertex_Rendering)
+		to render using the VertexFormat given.
 		**/
 		class Enable : public boost::noncopyable
 		{
@@ -322,14 +349,20 @@ namespace glmesh
 			Enable(const VertexFormat &fmt, size_t baseOffset);
 
 			/**
-			\brief Binds the vertex format to the OpenGL context, using ARB_vertex_attrib_binding.
+			\brief Binds the vertex format to the OpenGL context, using
+			[ARB_vertex_attrib_binding](http://www.opengl.org/wiki/Vertex_Specification#Separate_attribute_format).
 
-			Calls VertexFormat::BindAttribFormat on \a fmt. You are expected to provide the
-			buffer object yourself, as well as make the glVertexAttribBinding calls.
+			Calls VertexFormat::BindAttribFormat on \a fmt. You are expected to make the appropriate
+			`glBindVertexBuffer` calls for the buffer yourself.
+
+			To call this function, pass glmesh::sepFormat as the third parameter (or a default-constructed
+			object).
+
+			\note No exception will be thrown if ARB_vertex_attrib_format or GL 4.3 are not available.
 			**/
-			Enable(const VertexFormat &fmt);
+			Enable(const VertexFormat &fmt, GLuint bindingIndex, SeparateAttribFormat);
 
-			///Unbinds the vertex format from the OpenGL context.
+			///Unbinds the vertex format by calling VertexFormat::DisableAttributes.
 			~Enable();
 
 		private:

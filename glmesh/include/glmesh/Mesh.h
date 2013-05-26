@@ -30,8 +30,9 @@ namespace glmesh
 	rendering commands which will be used when rendering a particular Mesh. The series of commands
 	will be used in the order given.
 
-	Indexed rendering commands (DrawElements and its ilk) will use the element buffer that is
-	stored in the VAO used by the Mesh to render.
+	Indexed rendering commands (`glDrawElements` and its ilk) will use the element buffer that is
+	stored in the VAO used by the Mesh to render. You do not provide the element buffer to these
+	functions.
 
 	The rendering command functions mimic their OpenGL counterparts where possible.
 	**/
@@ -47,7 +48,7 @@ namespace glmesh
 		RenderCmdList& operator=(class RenderCmdList &anOther);
 
 		/**
-		\brief Adds a glDrawArrays command to the list of rendering commands.
+		\brief Adds a `glDrawArrays` command to the list of rendering commands.
 		
 		\param primitive The OpenGL primitive type to render.
 		\param startIndex The first index in the vertex arrays to render.
@@ -56,17 +57,21 @@ namespace glmesh
 		void DrawArrays(GLenum primitive, GLint startIndex, GLsizei vertexCount);
 
 		/**
-		\brief Adds a glDrawElements-style command to the list of rendering commands.
+		\brief Adds a `glDrawElements`-style command to the list of rendering commands.
 
 		If there is a currently set restart index (with PrimitiveRestartIndex(GLuint) ), then
 		it will be rendered with that as the restart index.
 		
 		\param primitive The OpenGL primitive type to render.
 		\param vertexCount The number of vertices to render.
-		\param dataType The OpenGL data type of the indices (GL_UNSIGNED_SHORT, etc).
+		\param dataType The OpenGL data type of the indices (`GL_UNSIGNED_SHORT`, etc).
 		\param byteOffset The offset from the beginning of the index buffer to where OpenGL will begin to pull data.
 		\param baseVertex An integer offset to be added to each index before fetching from the buffer. The restart
 		index check happens before adding \a baseVertex to the index.
+
+		\note If you specify a non-zero \a baseVertex, then rendering with this command list will
+		require OpenGL 3.2 or ARB_draw_elements_base_vertex. No exception will be thrown for lacking
+		these features; the attempt to execute the rendering command will simply crash.
 		**/
 		void DrawElements(GLenum primitive, GLsizei vertexCount, GLenum dataType, GLintptr byteOffset,
 			GLint baseVertex = 0);
@@ -77,9 +82,13 @@ namespace glmesh
 		/**
 		\brief Subsequent indexed rendering functions will use the given index as the primitive restart index.
 
-		The primitive restart index will affect all indexed rendering functions (like DrawElements) until
-		it is changed with a later call to this function. To stop using the restart index,
+		The primitive restart index will affect all indexed rendering functions (like `glDrawElements`)
+		until it is changed with a later call to this function. To stop using the restart index,
 		use PrimitiveRestartIndex().
+
+		\note If you specify a primitive restart index, then rendering with this command list will
+		require OpenGL 3.0. No exception will be thrown for lacking this version; the attempt
+		to execute the rendering command will simply crash.
 		**/
 		void PrimitiveRestartIndex(GLuint index);
 
@@ -95,15 +104,13 @@ namespace glmesh
 	/**
 	\brief An object that represents a static collection of mesh data.
 
-	Mesh objects are created to represent static data, where Draw and its ilk are used for more dynamic
-	or simple objects.
-
-	Mesh objects are composed of a VAO (which sets up all of the vertex attribute commands),
+	Mesh objects are represent static mesh data.
+	Mesh objects are composed of a VAO (which sets up all of the vertex attribute commands)
 	coupled with a series of rendering commands, provided by a RenderCmdList.
 	
 	A Mesh can have multiple VAOs, each of which has a unique name. These named VAOs
-	are called variants. The main VAO, which is unnamed, . All of the variants are rendered
-	with the same sequence of rendering commands.
+	are called variants. The main VAO, which is unnamed, will be used when no name is given to render.
+	All of the variants are rendered with the same sequence of rendering commands.
 
 	This object owns the VAOs it is provided with, and it will delete them. It can also be given
 	ownership of one or more buffer objects, which it will also delete when it is deleted. It does not
@@ -112,7 +119,7 @@ namespace glmesh
 	Rendering with this class (via any call to Render) will affect the following OpenGL state:
 
 	\li The current VAO binding. After the call, it will be reset to 0.
-	\li The current GL_PRIMITIVE_RESTART enable. After the call, it will be disabled.
+	\li The current `GL_PRIMITIVE_RESTART` enable. After the call, it will be disabled.
 
 	\note This class cannot be copied.
 
@@ -120,6 +127,8 @@ namespace glmesh
 	use any rendering command that has a non-zero base vertex.
 
 	\note You must ensure that the OpenGL context exists when Mesh's constructor is called.
+
+	\todo Change the interface for Render() to use boost::optional strings and string_refs.
 	**/
 	class Mesh : public boost::noncopyable
 	{
@@ -130,10 +139,10 @@ namespace glmesh
 		This class claims ownership of \em all OpenGL objects passed to it. Its destructor will delete
 		every VAO and buffer object it is given. If you want to manage the lifetime of a buffer object
 		elsewhere, do not pass it as a parameter. Your VAOs can still reference those buffers,
-		but this class will not dig through VAOs to delete buffers.
+		but this class will not dig through VAOs to delete buffers stored in them.
 
 		\param bufferObjects A series of buffer objects to be freed when this Mesh is destroyed.
-		The same buffer object \em cannot be in this array multiple times.
+		The same buffer object *must not* be in this array multiple times.
 		\param mainVao The primary vertex array object, used when calling Render with no parameters.
 		If it is 0, then the only way to render the mesh is with a named variant.
 		\param renderCmds The series of rendering commands to be used to render this object. This sequence
