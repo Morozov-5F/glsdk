@@ -158,10 +158,10 @@ namespace glmesh
 	typedef std::vector<AttribDesc> AttributeList;
 
 	///Used in VertexFormat::Enable to differentiate constructors.
-	struct SeparateAttribFormat {};
+	struct SeparateAttribFormatTag {};
 
 	///Use this in VertexFormat::Enable to use the separate attribute format constructor.
-	const SeparateAttribFormat sepFormat;
+	const SeparateAttribFormatTag sepFormat;
 
 	/**
 	\brief Describes the layout for a sequence of vertex attributes, to be used for rendering.
@@ -224,15 +224,15 @@ namespace glmesh
 		/**
 		\brief Binds the VertexFormat to the context.
 
-		This function assumes that a valid VAO is bound (if one is needed), as well as GL_ARRAY_BUFFER.
+		This function assumes that a valid VAO is bound (if one is needed), as well as `GL_ARRAY_BUFFER`.
 
 		The following OpenGL state is touched by this function:
 
 		\li The enable state of all of the attributes in the format will be set to enabled.
-		\li For each such attribute location, glVertexAttrib*Pointer will be called.
+		\li For each such attribute location, `glVertexAttrib*Pointer` will be called.
 
 		This function assumes that all vertex attributes come from the buffer object currently bound
-		to GL_ARRAY_BUFFER. Therefore, you can only use it with a single buffer object.
+		to `GL_ARRAY_BUFFER`. Therefore, you can only use it with a single buffer object.
 
 		\param baseOffset The byte offset from the start of the buffer object to where the vertex data is.
 		**/
@@ -241,7 +241,7 @@ namespace glmesh
 		/**
 		\brief Binds the attribute given by the attribute index to the context.
 		
-		This function assumes that a valid VAO is bound (if one is needed), as well as GL_ARRAY_BUFFER.
+		This function assumes that a valid VAO is bound (if one is needed), as well as `GL_ARRAY_BUFFER`.
 
 		The following OpenGL state is touched by this function:
 
@@ -249,7 +249,7 @@ namespace glmesh
 		\li The attribute location for \a attribIx will have glVertexAttrib*Pointer called on it.
 
 		This function assumes that all vertex attributes come from the buffer object currently bound
-		to GL_ARRAY_BUFFER. Therefore, you can only use it with a single buffer object.
+		to `GL_ARRAY_BUFFER`. Therefore, you can only use it with a single buffer object.
 
 		\param baseOffset The byte offset from the start of the buffer object to where the vertex data is.
 		\param attribIx The index of the attribute to bind.
@@ -268,8 +268,8 @@ namespace glmesh
 		- For each such attribute location, `glVertexAttrib*Format` will be called.
 		- For each such attribute location, `glVertexAttribBinding` will be called with \a bindingIndex.
 
-		This function uses the offsets computed by GetAttribByteOffset, so it assumes that all vertex
-		attributes come from a single buffer object. You can bind the buffer later with glBindVertexBuffer.
+		This function uses the offsets computed by GetAttribByteOffset(), so it assumes that all vertex
+		attributes come from a single buffer object. You can bind the buffer later with `glBindVertexBuffer`.
 
 		\param bindingIndex The buffer binding index to use for all vertex attributes.
 
@@ -289,8 +289,8 @@ namespace glmesh
 		- The attribute location for \a attribIx will have `glVertexAttrib*Format` will be called.
 		- The attribute location for \a attribIx will have `glVertexAttribBinding` called with \a bindingIndex.
 
-		This function uses the offsets computed by GetAttribByteOffset, so it assumes that all vertex
-		attributes come from a single buffer object. You can bind the buffer later with glBindVertexBuffer.
+		This function uses the offsets computed by GetAttribByteOffset(), so it assumes that all vertex
+		attributes come from a single buffer object. You can bind the buffer later with `glBindVertexBuffer`.
 
 		\note No exception will be thrown if ARB_vertex_attrib_format or GL 4.3 are not available.
 		**/
@@ -360,7 +360,7 @@ namespace glmesh
 
 			\note No exception will be thrown if ARB_vertex_attrib_format or GL 4.3 are not available.
 			**/
-			Enable(const VertexFormat &fmt, GLuint bindingIndex, SeparateAttribFormat);
+			Enable(const VertexFormat &fmt, GLuint bindingIndex, SeparateAttribFormatTag);
 
 			///Unbinds the vertex format by calling VertexFormat::DisableAttributes.
 			~Enable();

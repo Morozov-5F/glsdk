@@ -10,6 +10,7 @@
 #include "StreamBuffer.h"
 #include "VertexFormat.h"
 #include "Draw.h"
+#include "CpuDataWriter.h""
 #include "Mesh.h"
 #include "GenDescriptors.h"
 #include "Quadrics.h"

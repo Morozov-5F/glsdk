@@ -309,24 +309,26 @@ For Linux, you will need to link to some of the following libraries. All of them
 Changes from 0.4.4:
 <ul>
 <li>Added Boost to the distribution, as well as support for user-provided Boost.</li>
-<li>Added GL Load Gen to the distribution.</li>
+<li>Added [GL Load Gen](@ref module_glloadgen) to the distribution.</li>
+<li> From @ref module_glload "GL Load"
+<ul>
+<li>GL Load is now generated using glLoadGen's generation system. This should not impact your use of the system.</li>
+<li>BREAKING CHANGE: GL Load's C++ API now doesn't need to prefix its enums with GL_.</li>
+<li>BREAKING CHANGE: Several of GL Load's headers have changed.</li>
+</ul>
+</li>
 <li> From @ref module_glmesh "GL Mesh"
 <ul>
-<li>splits the glmesh::Draw::Attrib functions into their own utility class, so that the interface can be used in the new glmesh::CpuVertexWriter. This class is used for creating vertex arrays on the CPU, to be used in later uploads to the GPU.</li>
+<li>splits the `glmesh::Draw::Attrib` functions into their own utility class, so that the interface can be used in the new glmesh::CpuDataWriter. This class is used for creating vertex arrays on the CPU, to be used in later uploads to the GPU.</li>
 <li>glmesh::VertexFormat::Enable class now can use ARB_vertex_attrib_binding.</li>
 <li>glmesh::VertexFormat has functions to bind attributes, either all of them or individually. This makes it easy to use it with a VAO; you bind the VAO, call glmesh::VertexFormat::BindAttributes, and you're done. There is also glmesh::VertexFormat::BindAttribFormats for ARB_vertex_attrib_binding usage</li>
 <li>A number of \ref module_glmesh_mesh_generator "mesh generators"</li>
 </ul>
 </li>
-<li> From @ref module_glload "GL Load"
-<ul>
-<li>GL Load is now generated using glLoadGen's generation system.</li>
-<li>BREAKING CHANGE: GL Load's C++ API now doesn't need to prefix its enums with GL_.</li>
-</ul>
-</li>
 <li> From @ref module_glutil "GL Util"
 <ul>
 <li>@ref module_glutil_debug "The Debug system" now has functions to get string names and descriptions for OpenGL errors and framebuffer status codes.</li>
+<li>[The program compiling/linking helpers](@ref module_glutil_program) now include RAII-style objects for holding shaders and programs.
 </ul>
 </li>
 </ul>

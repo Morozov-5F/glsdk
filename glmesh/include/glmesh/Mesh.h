@@ -149,6 +149,8 @@ namespace glmesh
 		will be used for every variant.
 		\param variants A std::map of named variants for the Mesh. It is legal to use the same VAOs for
 		the \a mainVao and one of the variants, or between different variants.
+
+		\todo bufferObjects should take an array_ref, not a vector.
 		**/
 		Mesh(const std::vector<GLuint> &bufferObjects, GLuint mainVao, const RenderCmdList &renderCmds,
 			const MeshVariantMap &variants = MeshVariantMap());
@@ -160,12 +162,14 @@ namespace glmesh
 		void Render() const;
 
 		///Renders a named variant. Does nothing if the named VAO does not exist.
+		/// \todo Take a string_ref.
 		void Render(const std::string &variantName) const;
 
 		///Returns true if there is a main VAO.
 		bool DoesMainExist() const;
 
 		///Returns true if the named variant exists.
+		/// \todo Take a string_ref.
 		bool DoesVariantExist(const std::string &variantName) const;
 
 	private:

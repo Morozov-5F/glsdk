@@ -135,7 +135,113 @@ This function, glmesh::Attrib, has example code in its documentation.
 
 The glmesh::Mesh class is used to build a static mesh object which can be bound and rendered with OpenGL. There are a [number of functions to generate meshes](@ref module_glmesh_mesh_generator), but you can build your own mesh object from your own data if you so desire.
 
-Some of the immediate mode APIs can be very useful for creating static meshes. For example, CpuDataWriter can be used to create vertex data for a mesh. You can upload it to a buffer object, and then store it in a glmesh::Mesh object.
+Some of the [classes listed under the immediate mode API](@ref module_glmesh_draw) can be very useful for creating static meshes. VertexFormat is very handy for creating VAOs. Also, CpuDataWriter can be used to create vertex data for a mesh. You can upload it to a buffer object, and then store it in a glmesh::Mesh object.
+
+Here is an example of how to manually build meshes:
+
+\code
+#include <memory>
+#include <glload/gl_all.h>
+#include <glload/gll.hpp>
+#include <glmesh/glmesh.h>
+
+void RenderScene(glmesh::Mesh *);
+
+glmesh::Mesh *BuildMesh()
+{
+	//Loading succeeded. Create the vertex format.
+	glmesh::AttributeList attribs;
+	//First attribute is attribute index 0, a vec4 of floats.
+	attribs.push_back(glmesh::AttribDesc(0, 4, glmesh::VDT_SINGLE_FLOAT, glmesh::ADT_FLOAT));
+	//Second attribute is attribute index 1, a vec4 of normalized, unsigned bytes.
+	attribs.push_back(glmesh::AttribDesc(1, 4, glmesh::VDT_UNSIGN_BYTE, glmesh::ADT_NORM_FLOAT));
+	glmesh::VertexFormat vfmt(attribs);
+	//attribs is no longer necessary; all of the info is stored in vfmt.
+	
+	//Now, use a CpuDataWriter to create our buffer object.
+	glmesh::CpuDataWriter writer(vfmt, 4); //4 is just a hint; it's non-binding.
+	
+	{
+		writer.Attrib(30.0f, 0.0f, 30.0f, 1.0f);
+		writer.Attrib<GLubyte>(255, 0, 255, 255);
+		writer.Attrib(30.0f, 0.0f, -30.0f, 1.0f);
+		writer.Attrib<GLubyte>(255, 128, 255, 255);
+		writer.Attrib(-30.0f, 0.0f, 30.0f, 1.0f);
+		writer.Attrib<GLubyte>(128, 0, 0, 255);
+		writer.Attrib(-30.0f, 0.0f, -30.0f, 1.0f);
+		writer.Attrib<GLubyte>(192, 128, 255, 255);
+	}
+	
+	GLuint bufferObject = writer.TransferToBuffer(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+	//We're done with writer now.
+	
+	//Create a set of mesh variant VAOs. We will have two:
+	//one for position+color, and one for just position.
+	
+	GLuint vaos[2];
+	glGenVertexArrays(2, vaos);
+	
+	//Must bind the buffer, so that the VAOs can store the buffer.
+	glBindBuffer(GL_ARRAY_BUFFER, bufferObject);
+	
+	//Has both attributes.
+	glBindVertexArray(vaos[0]);
+	vfmt.BindAttributes(0);
+	
+	//Has only attribute index 0.
+	glBindVertexArray(vaos[1]);
+	vfmt.BindAttribute(0, 0); //Just one attribute.
+	
+	//Done with the buffer
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+	glmesh::MeshVariantMap variants;
+	variants["all"] = vaos[0];
+	variants["pos-only"] = vaos[1];
+	
+	//Create the rendering command, as a 4-element triangle strip.
+	glmesh::RenderCmdList cmdList;
+	cmdList.DrawArrays(gl::TRIANGLE_STRIP, 0, 4);
+	
+	//Build the mesh and return it.
+	std::vector<GLuint> buffers(1, bufferObject);
+	return new glmesh::Mesh(buffers, vaos[0], cmdList, variants);
+}
+
+int main(int argc, char *argv[])
+{
+	//Initialize OpenGL and bind the context
+
+	//glload must be initialized for glmesh to work.
+	if(glload::LoadFunctions() == glload::LS_LOAD_FAILED)
+	//exit in some way
+
+	std::auto_ptr<glmesh::Mesh *> pMesh = BuildMesh();
+
+	//...
+	
+	while(true)
+	{
+		//check for exit; otherwise, draw frame.
+		RenderScene(pMesh.get());
+	}
+	
+	pMesh.release(); //Delete the mesh.
+	
+}
+
+void RenderScene(glmesh::Mesh *pMesh)
+{
+	//Clear the screen and set up shaders, textures, etc.
+	
+	pMesh->Render("all");		//Uses both attributes
+	pMesh->Render("pos-only");	//Uses just the position
+	pMesh->Render();			//Same as "all", because that's what we used for the main VAO.
+	
+}
+\endcode
+
+
 **/
 
 /**

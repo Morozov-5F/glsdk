@@ -277,7 +277,7 @@ namespace glmesh
 		m_fmt.BindAttributes(baseOffset);
 	}
 
-	VertexFormat::Enable::Enable( const VertexFormat &fmt, GLuint bindingIndex, SeparateAttribFormat )
+	VertexFormat::Enable::Enable( const VertexFormat &fmt, GLuint bindingIndex, SeparateAttribFormatTag )
 		: m_fmt(fmt)
 	{
 		m_fmt.BindAttribFormats(bindingIndex);
