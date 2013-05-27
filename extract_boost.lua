@@ -15,6 +15,7 @@ local pull =
 	"lexical_cast.hpp",
 	"optional.hpp",
 	"random.hpp",
+--	"ref.hpp",
 
 	"range.hpp",
 	"boost/range/adaptors.hpp",
@@ -31,12 +32,18 @@ local pull =
 	"unordered_set.hpp",
 	"unordered_map.hpp",
 	"utility.hpp",
+	"boost/utility",
 	"variant.hpp",
 	"typeof/typeof.hpp",
 	"boost/variant",
 	"boost/algorithm/cxx11",
+	"boost/property_tree",
 
 	"boost/fusion",
+	"phoenix.hpp",
+	"boost/phoenix",
+	"spirit.hpp",
+	"boost/spirit",
 }
 
 local srcDir, dstDir, version = ...
