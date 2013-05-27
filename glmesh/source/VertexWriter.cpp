@@ -6,6 +6,20 @@
 
 namespace glmesh
 {
+	const GLubyte _detail::InfoTraits<GLubyte>::zero = 0;
+	const GLubyte _detail::InfoTraits<GLubyte>::one = 0xFFU;
+	const GLbyte _detail::InfoTraits<GLbyte>::zero = 0;
+	const GLbyte _detail::InfoTraits<GLbyte>::one = 0x7F;
+	const GLushort _detail::InfoTraits<GLushort>::zero = 0;
+	const GLushort _detail::InfoTraits<GLushort>::one = 0xFFFFU;
+	const GLshort _detail::InfoTraits<GLshort>::zero = 0;
+	const GLshort _detail::InfoTraits<GLshort>::one = 0x7FFF;
+	const GLuint _detail::InfoTraits<GLuint>::zero = 0;
+	const GLuint _detail::InfoTraits<GLuint>::one = 0xFFFFFFFFU;
+	const GLint _detail::InfoTraits<GLint>::zero = 0;
+	const GLint _detail::InfoTraits<GLint>::one = 0x7FFFFFFF;
+
+
 	const glm::half _detail::InfoTraits<glm::half>::zero = glm::half(0.0f);
 	const glm::half _detail::InfoTraits<glm::half>::one = glm::half(1.0f);
 	const GLfloat _detail::InfoTraits<GLfloat>::zero = 0.0f;

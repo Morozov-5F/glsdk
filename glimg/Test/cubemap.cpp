@@ -138,7 +138,7 @@ void reshape (int w, int h)
 
 //Called whenever a key on the keyboard was pressed.
 //The key is given by the ''key'' parameter, which is in ASCII.
-//It's often a good idea to have the escape key (ASCII value 27) call glutLeaveMainLoop() to 
+//It's often a good idea to have the escape key (ASCII value 27) call glutLeaveMainLoop() to
 //exit the program.
 void keyboard(unsigned char key, int x, int y)
 {
@@ -180,7 +180,9 @@ void MouseButton(int button, int state, int x, int y)
 {
 	int modifiers = calc_glut_modifiers();
 
+#ifdef LOAD_X11
 	glm::ivec2 mouseLoc = glm::ivec2(x, y);
+#endif //LOAD_X11
 
 	glutil::MouseButtons eButton;
 
@@ -238,7 +240,7 @@ int main(int argc, char** argv)
 #ifdef DEBUG
 	glutInitContextFlags(GLUT_DEBUG);
 #endif
-	glutInitWindowSize (width, height); 
+	glutInitWindowSize (width, height);
 	glutInitWindowPosition (300, 200);
 	glutCreateWindow (argv[0]);
 
@@ -252,7 +254,7 @@ int main(int argc, char** argv)
 	glutMouseFunc(MouseButton);
 	glutMotionFunc(MouseMotion);
 	glutMouseWheelFunc(MouseWheel);
-	glutDisplayFunc(display); 
+	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();

@@ -14,7 +14,7 @@ namespace glutil
 		float fCos = cosf(angRadCCW);
 		float fInvCos = 1.0f - fCos;
 		float fSin = sinf(angRadCCW);
-		float fInvSin = 1.0f - fSin;
+		//float fInvSin = 1.0f - fSin;
 
 		glm::vec3 axis = glm::normalize(axisOfRotation);
 

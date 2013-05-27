@@ -216,43 +216,43 @@ namespace glmesh
 		template<>
 		struct InfoTraits<GLubyte>
 		{
-			static const GLubyte zero = 0;
-			static const GLubyte one = 0xFFU;
+			static const GLubyte zero;
+			static const GLubyte one;
 		};
 
 		template<>
 		struct InfoTraits<GLbyte>
 		{
-			static const GLbyte zero = 0;
-			static const GLbyte one = 0x7F;
+			static const GLbyte zero;
+			static const GLbyte one;
 		};
 
 		template<>
 		struct InfoTraits<GLushort>
 		{
-			static const GLushort zero = 0;
-			static const GLushort one = 0xFFFFU;
+			static const GLushort zero;
+			static const GLushort one;
 		};
 
 		template<>
 		struct InfoTraits<GLshort>
 		{
-			static const GLshort zero = 0;
-			static const GLshort one = 0x7FFF;
+			static const GLshort zero;
+			static const GLshort one;
 		};
 
 		template<>
 		struct InfoTraits<GLuint>
 		{
-			static const GLuint zero = 0;
-			static const GLuint one = 0xFFFFFFFFU;
+			static const GLuint zero;
+			static const GLuint one;
 		};
 
 		template<>
 		struct InfoTraits<GLint>
 		{
-			static const GLint zero = 0;
-			static const GLint one = 0x7FFFFFFF;
+			static const GLint zero;
+			static const GLint one;
 		};
 
 		template<>

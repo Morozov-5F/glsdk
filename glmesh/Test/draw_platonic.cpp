@@ -139,19 +139,6 @@ public:
 
 		m_object.Load(objVertexShader, objFragmentShader);
 
-		GLfloat groundPlaneData[] =
-		{
-			30.0f, 0.0f, 30.0f, 1.0f,
-			30.0f, 0.0f, -30.0f, 1.0f,
-			-30.0f, 0.0f, 30.0f, 1.0f,
-			-30.0f, 0.0f, -30.0f, 1.0f,
-
-			0.2f, 1.0f, 0.2f, 1.0f,
-			0.9f, 0.5f, 0.3f, 1.0f,
-			0.2f, 1.0f, 0.2f, 1.0f,
-			0.9f, 0.5f, 0.3f, 1.0f,
-		};
-
 		m_pGroundPlane.reset(glmesh::gen::GroundPlane(7, 3));
 
 		glmesh::gen::Color arr[] = {

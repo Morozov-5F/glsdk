@@ -23,7 +23,7 @@ namespace refs
 	So that the user has the freedom to use string literals, std::string, or any one of the
 	dozens of string classes that exist to manage their memory. A function that takes string_ref
 	quite simply does not care how the user is managing the memory; it just wants a string.
-	
+
 	This serves as a happy medium between giving the user the freedom to use any possible container
 	by using a range+template, and forcing the user to use exactly and only one container type.
 
@@ -43,7 +43,7 @@ namespace refs
 
 	\ingroup module_glutil
 	**/
-	template<typename charT, typename traits = std::char_traits<charT>>
+	template<typename charT, typename traits = std::char_traits<charT> >
 	class basic_string_ref
 	{
 	public:
