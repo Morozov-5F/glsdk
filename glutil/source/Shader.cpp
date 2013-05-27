@@ -69,7 +69,7 @@ namespace glutil
 		: ShaderException("Implementation does not support shader object separation.")
 	{}
 
-	GLuint CompileShader( GLenum shaderType, refs::string_ref shaderText )
+	GLuint CompileShader( GLenum shaderType, boost::string_ref shaderText )
 	{
 		GLuint shader = gl::CreateShader(shaderType);
 		GLint textLength = (GLint)shaderText.size();
@@ -135,7 +135,7 @@ namespace glutil
 		return program;
 	}
 
-	GLuint LinkProgram( refs::string_ref vertexShader, refs::string_ref fragmentShader )
+	GLuint LinkProgram( boost::string_ref vertexShader, boost::string_ref fragmentShader )
 	{
 		UniqueShader vertShader(CompileShader(gl::VERTEX_SHADER, vertexShader));
 		UniqueShader fragShader(CompileShader(gl::FRAGMENT_SHADER, fragmentShader));
@@ -143,7 +143,7 @@ namespace glutil
 		return LinkProgram(vertShader, fragShader);
 	}
 
-	GLuint LinkProgram( GLuint program, refs::string_ref vertexShader, refs::string_ref fragmentShader )
+	GLuint LinkProgram( GLuint program, boost::string_ref vertexShader, boost::string_ref fragmentShader )
 	{
 		UniqueShader vertShader(CompileShader(gl::VERTEX_SHADER, vertexShader));
 		UniqueShader fragShader(CompileShader(gl::FRAGMENT_SHADER, fragmentShader));

@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
-#include "string_ref.h"
+#include <boost/utility/string_ref.hpp>
 #include <glm/glm.hpp>
 
 namespace glutil
@@ -220,7 +220,7 @@ namespace glutil
 
 		\throw InvalidEncodingException Thrown if \a text is not valid UTF-8.
 		**/
-		std::vector<GlyphQuad> LayoutLine(refs::string_ref text, const glm::vec2 &ptReference,
+		std::vector<GlyphQuad> LayoutLine(boost::string_ref text, const glm::vec2 &ptReference,
 			PointReference eRef = REF_BASELINE) const;
 
 		///Returns the baseline-to-baseline height of the font, in pixels.

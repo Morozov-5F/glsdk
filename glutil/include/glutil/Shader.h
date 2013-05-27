@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 #include "array_ref.h"
-#include "string_ref.h"
+#include <boost/utility/string_ref.hpp>
 #include <boost/noncopyable.hpp>
 
 namespace glutil
@@ -76,7 +76,7 @@ namespace glutil
 	\throw CompileLinkException Thrown if the shader compilation fails. The shader object will
 	be destroyed, and the error log will be stored in the exception.
 	**/
-	GLuint CompileShader(GLenum shaderType, refs::string_ref shaderText);
+	GLuint CompileShader(GLenum shaderType, boost::string_ref shaderText);
 
 	/**
 	\brief As CompileShader(GLenum, const char *), but with a list of strings.	
@@ -132,10 +132,10 @@ namespace glutil
 	\throw CompileLinkException Thrown if the shader compilation or program linking fails.
 	In all cases, any previously created shader/program objects will be destroyed.
 	**/
-	GLuint LinkProgram(refs::string_ref vertexShader, refs::string_ref fragmentShader);
+	GLuint LinkProgram(boost::string_ref vertexShader, boost::string_ref fragmentShader);
 
-	///As LinkProgram(refs::string_ref, refs::string_ref), except that it is given a program to do the linking within.
-	GLuint LinkProgram(GLuint program, refs::string_ref vertexShader, refs::string_ref fragmentShader);
+	///As LinkProgram(boost::string_ref, boost::string_ref), except that it is given a program to do the linking within.
+	GLuint LinkProgram(GLuint program, boost::string_ref vertexShader, boost::string_ref fragmentShader);
 
 
 	/**
@@ -291,7 +291,7 @@ namespace glutil
 		///An empty UniqueProgram, with program name 0.
 		UniqueProgram() : m_program(0) {}
 		///Create a UniqueProgram from an existing program object.
-		explicit UniqueProgram(GLuint program) : m_program(0) {}
+		explicit UniqueProgram(GLuint program) : m_program(program) {}
 		///Destroys the owned program object, if any.
 		~UniqueProgram() {Disengage();}
 
