@@ -11,7 +11,7 @@
 #include "glmesh/VertexFormat.h"
 
 #include "glmesh/Mesh.h"
-#include "glmesh/Quadrics.h"
+#include "glmesh/GenQuadrics.h"
 #include "GenHelper.h"
 #include <glm/glm.hpp>
 

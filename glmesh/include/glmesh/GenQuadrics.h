@@ -1,6 +1,6 @@
 
-#ifndef GLSDK_MESH_QUADRICS_H
-#define GLSDK_MESH_QUADRICS_H
+#ifndef GLSDK_MESH_GENERATE_QUADRICS_H
+#define GLSDK_MESH_GENERATE_QUADRICS_H
 
 /**
 \file
@@ -49,4 +49,4 @@ namespace glmesh
 
 
 
-#endif //GLSDK_MESH_QUADRICS_H
+#endif //GLSDK_MESH_GENERATE_QUADRICS_H

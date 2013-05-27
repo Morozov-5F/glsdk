@@ -12,7 +12,7 @@
 #include "glmesh/VertexFormat.h"
 
 #include "glmesh/Mesh.h"
-#include "glmesh/MeshMisc.h"
+#include "glmesh/GenMeshMisc.h"
 #include "GenHelper.h"
 #include <glm/glm.hpp>
 

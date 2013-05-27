@@ -10,11 +10,11 @@
 #include "StreamBuffer.h"
 #include "VertexFormat.h"
 #include "Draw.h"
-#include "CpuDataWriter.h""
+#include "CpuDataWriter.h"
 #include "Mesh.h"
 #include "GenDescriptors.h"
-#include "Quadrics.h"
-#include "MeshMisc.h"
+#include "GenQuadrics.h"
+#include "GenMeshMisc.h"
 #include "GenPlatonic.h"
 
 
