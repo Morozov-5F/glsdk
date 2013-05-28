@@ -1,18 +1,20 @@
 
-project("glgraph")
+project("glscene")
 	kind "StaticLib"
 	language "c++"
 	includedirs {
 		"include",
 		"source",
 		"../glload/include",
+		"../glutil/include",
 		"../glmesh/include",
+		"../glm",
 		BoostDir()}
 
 	targetdir "lib"
 
 	files {
-		"include/glgraph/*.h",
+		"include/glscene/*.h",
 		"source/*.h",
 		"source/*.cpp",
 	}
@@ -28,11 +30,11 @@ project("glgraph")
 		defines {"DEBUG", "_DEBUG", "MEMORY_DEBUGGING"}
 		objdir "Debug"
 		flags "Symbols"
-		targetname "glgraphD"
+		targetname "glsceneD"
 
 	configuration "Release"
 		defines {"NDEBUG", "RELEASE"}
 		flags "Unicode"
 		flags {"OptimizeSpeed", "NoFramePointer", "ExtraWarnings", "NoEditAndContinue"}
 		objdir "Release"
-		targetname "glgraph"
+		targetname "glscene"

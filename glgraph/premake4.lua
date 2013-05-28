@@ -1,9 +1,9 @@
 dofile("../boost_include.lua")
 
-solution "glgraph"
+solution "glscene"
 configurations {"Debug", "Release"}
 defines(dofile("../common_defines.lua"))
 
-dofile("glgraph.lua");
+dofile("glscene.lua");
 
 dofile("Test/Test4.lua");

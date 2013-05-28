@@ -1,6 +1,11 @@
 /**
-\defgroup module_glgraph GL Graph
+\defgroup module_glscene GL Scene Graph
 
+This is a relatively simple scene graph system, designed around the needs of a shader-based rendering system.
+
+The GL Scene Graph library is distributed under the [MIT License](http://www.opensource.org/licenses/MIT).
 
 
 **/
+
+

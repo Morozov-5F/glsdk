@@ -10,22 +10,19 @@ Each component of the SDK specifies the terms under which they are distributed. 
 
 The library components are:
 
-<ul>
-<li>@ref module_glload "GL Load": Used to gain access to OpenGL's functions.</li>
-<li>@ref module_glimg "GL Image": Used for loading image files into memory and into OpenGL textures.</li>
-<li>@ref module_glutil "GL Utility": Provides a variety of generally useful functionality. It a wide variety of features including:
-<ul>
-<li>@ref module_glutil_font "Very simple text drawing services"</li>
-<li>@ref module_glutil_matrixstack "A matrix stack"</li>
-<li>@ref module_glutil_poles "Mouse-based camera and object manipulation"</li>
-</ul></li>
-<li>@ref module_glmesh "GL Mesh": A mechanism for rendering mesh data. It provides an @ref module_glmesh_draw "immediate mode interface" that can replace glBegin/glEnd, as well as a @ref module_glmesh_mesh "mesh class". It also provides a number of @ref module_glmesh_mesh_generator "sample mesh objects", for doing simple tasks.</li>
-<li>@ref module_glm "OpenGL Mathematics": Provides useful math classes and functions for OpenGL, using a GLSL-like syntax.</li>
-<li>@ref module_glfw "GLFW": A tool for creating and managing an OpenGL window. It can be used to handle input.</li>
-<li>@ref module_freeglut "FreeGLUT": A tool for creating and managing an OpenGL window. It can be used to handle input, as well as render a few basic shapes.</li>
-<li>@ref module_boost "Boost": A C++ utility library distributed with and used by the SDK.</li>
-<li>@ref module_glloadgen "OpenGL Loader Generator": A command-line script tool for generating OpenGL loader code.</li>
-</ul>
+- [GL Load](@ref module_glload): Used to gain access to OpenGL's functions.</li>
+- [GL Image](@ref module_glimg): Used for loading image files into memory and into OpenGL textures.</li>
+- [GL Utility](@ref module_glutil): Provides a variety of generally useful functionality. It a wide variety of features including:
+	- @ref module_glutil_font "Very simple text drawing services"</li>
+	- @ref module_glutil_matrixstack "A matrix stack"</li>
+	- @ref module_glutil_poles "Mouse-based camera and object manipulation"</li>
+- [GL Mesh](@ref module_glmesh): A mechanism for rendering mesh data. It provides an @ref module_glmesh_draw "immediate mode interface" that can replace glBegin/glEnd, as well as a @ref module_glmesh_mesh "mesh class". It also provides a number of @ref module_glmesh_mesh_generator "sample mesh objects", for doing simple tasks.</li>
+- [GL Scene Graph](@ref module_glgraph): A relatively simple scene graph, designed for shader-based rendering systems.
+- [OpenGL Mathematics](@ref module_glm): Provides useful math classes and functions for OpenGL, using a GLSL-like syntax.</li>
+- [GLFW](@ref module_glfw): A tool for creating and managing an OpenGL window. It can be used to handle input.</li>
+- [FreeGLUT](@ref module_freeglut): A tool for creating and managing an OpenGL window. It can be used to handle input, as well as render a few basic shapes.</li>
+- [Boost](@ref module_boost): A C++ utility library distributed with and used by the SDK.</li>
+- [OpenGL Loader Generator](@ref module_glloadgen): A command-line script tool for generating OpenGL loader code.</li>
 
 The SDK also comes with a number of examples, which are in the <tt>examples</tt> directory.
 

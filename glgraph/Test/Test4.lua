@@ -4,9 +4,9 @@ project "Test"
 	kind "WindowedApp"
 	language "c++"
 	includedirs { "../include", "../../glload/include" }
-	links {"glgraph"}
+	links {"glscene"}
 	
-	UseLibs {"freeglut", "boost", "glutil", "glload", "glimg", "glmesh"}
+	UseLibs {"freeglut", "boost", "glm", "glutil", "glload", "glimg", "glmesh"}
 
 	files {"main.cpp"}
 
