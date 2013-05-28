@@ -55,7 +55,7 @@ if(pathDoxygen:empty()) then
 end
 
 do
-	local hDoxyVersion = io.open("glsdk_version.cfg")
+	local hDoxyVersion = io.open("glsdk_version.cfg", "wt")
 	hDoxyVersion:write("PROJECT_NUMBER = ", versionNum, "\n")
 	hDoxyVersion:close()
 end
