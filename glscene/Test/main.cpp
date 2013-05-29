@@ -8,7 +8,7 @@
 #include <glload/gl_3_3_comp.h>
 #include <glload/gl_load.hpp>
 #include <GL/freeglut.h>
-#include <glgraph/glgraph.h>
+#include <glscene/glscene.h>
 #include <glutil/Debug.h>
 
 
