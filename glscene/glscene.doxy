@@ -8,4 +8,16 @@ The GL Scene Graph library is distributed under the [MIT License](http://www.ope
 
 **/
 
+/**
+\defgroup module_glscene_resources GL Scene Graph Resources
+\ingroup module_glscene
 
+**/
+
+
+/**
+\defgroup module_glscene_exceptions GL Scene Graph Exceptions
+\ingroup module_glscene
+
+\brief Exceptions thrown by the GL Scene Graph classes and functions.
+**/

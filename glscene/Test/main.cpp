@@ -125,6 +125,21 @@ int main(int argc, char** argv)
 	glload::LoadFunctions();
 	glutil::RegisterDebugOutput(glutil::STD_OUT);
 
+	{
+		glscene::SceneGraph graph;
+
+		try
+		{
+			graph.GetResources().DefineUniform("special", "special_glsl", 5.0f);
+			graph.GetResources().SetUniform("special", 5.0f);
+		}
+		catch(glscene::UniformResourceTypeMismatchException &e)
+		{
+			printf("%s\n", e.what());
+			throw;
+		}
+	}
+
 	init();
 
 	glutDisplayFunc(display);

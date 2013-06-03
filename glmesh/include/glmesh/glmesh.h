@@ -19,7 +19,7 @@
 
 
 /**
-\brief The main namespace for the \ref module_glmesh "GL Mesh library". All GL Mesh functions are in this namespace.
+\brief The main namespace for the \ref module_glmesh "GL Mesh library". All GL Mesh functions and classes are in this namespace.
 **/
 namespace glmesh
 {

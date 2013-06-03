@@ -1,7 +1,7 @@
 dofile "../../links.lua"
 
 project "Test"
-	kind "WindowedApp"
+	kind "ConsoleApp"
 	language "c++"
 	includedirs { "../include", "../../glload/include" }
 	links {"glscene"}
@@ -15,7 +15,7 @@ project "Test"
 		links {"glu32", "opengl32", "gdi32", "winmm", "user32"}
 
 	configuration "linux"
-		links { "GL" }
+		links {"GL", "GLU", "Xrandr"}
 	
 	configuration "Debug"
 		flags "Unicode";
