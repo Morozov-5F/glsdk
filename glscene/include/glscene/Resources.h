@@ -41,6 +41,7 @@ namespace glscene
 		explicit ResourceMultiplyDefinedException(const std::string &resource, const std::string &resourceType)
 			: ResourceException(GetErrorName(resource, resourceType)) {}
 
+	private:
 		static std::string GetErrorName(const std::string &resource, const std::string &resourceType);
 	};
 
@@ -51,6 +52,7 @@ namespace glscene
 		explicit ResourceNotFoundException(const std::string &resource, const std::string &resourceType)
 			: ResourceException(GetErrorName(resource, resourceType)) {}
 
+	private:
 		static std::string GetErrorName(const std::string &resource, const std::string &resourceType);
 	};
 
@@ -151,11 +153,26 @@ namespace glscene
 		\brief Creates a named texture resource, which may claim ownership of the texture.
 		
 		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
-		been defined.
+		been defined with texture data. If it was defined with void DefineTexture(const std::string &), then it
+		can be redefined with an actual texture.
 
+		\param resource The resource name for the texture.
+		\param textureObj The texture object to be stored.
+		\param target The target the texture is associated with.
+		\param claimOwnership Set to `true` if you want the scene graph to delete the texture.
 		**/
 		void DefineTexture(const std::string &resource, GLuint textureObj,
 			GLenum target, bool claimOwnership = true);
+
+		/**
+		\brief Creates a named texture, which will be filled in with actual data later.
+		
+		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
+		been defined.
+
+		\param resource The resource name for the texture.
+		**/
+		void DefineTexture(const std::string &resource);
 
 	private:
 		ResourceData *m_pData;

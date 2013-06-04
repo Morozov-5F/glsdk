@@ -179,4 +179,9 @@ namespace glscene
 	{
 		m_pData->DefineTexture(resource, textureObj, target, claimOwnership);
 	}
+
+	void Resources::DefineTexture( const std::string &resource )
+	{
+		m_pData->DefineTexture(resource);
+	}
 }

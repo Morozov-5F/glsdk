@@ -95,6 +95,13 @@ namespace glscene
 
 		void DefineTexture(const std::string &resource, GLuint textureObj,
 			GLenum target, bool claimOwnership);
+		void DefineTexture(const std::string &resource);
+
+		void BindTexture(const std::string &resource, GLuint textureUnit) const;
+		void BindImage(const std::string &resource, GLuint imageUnit, int mipmapLevel, int imageLayer,
+			GLenum access, GLenum format, bool layered) const;
+
+		~ResourceData();
 
 	private:
 		UniformMap m_uniformData;

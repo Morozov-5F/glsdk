@@ -8,6 +8,13 @@
 
 namespace glscene
 {
+	std::string NodeRequestedUnknownResourceException::GetErrorName(
+		const std::string &resource, const std::string &resourceType )
+	{
+		return std::string("The resource '") + resource + "' of type '" + resourceType +
+			"' was defined but not provided.";
+	}
+
 	struct SceneGraphData
 	{
 		ResourceData resources;

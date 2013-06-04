@@ -1,12 +1,22 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <boost/foreach.hpp>
 #include <glload/gl_all.h>
 #include "ResourceData.h"
 #include "glscene/Resources.h"
 
 namespace glscene
 {
+	ResourceData::~ResourceData()
+	{
+		BOOST_FOREACH(TextureMap::value_type &texData, m_textureData)
+		{
+			if(texData.second && texData.second->owned)
+				glDeleteTextures(1, &texData.second->textureObj);
+		}
+	}
+
 	namespace
 	{
 		struct UniformsAreSameTypeBinaryVisit : public boost::static_visitor<bool>
@@ -195,7 +205,7 @@ namespace glscene
 
 	GLint ResourceData::GetUniformLocation( GLuint program, const IdString &resource ) const
 	{
-		UniformMap::iterator theVal = m_uniformData.find(resource);
+		UniformMap::const_iterator theVal = m_uniformData.find(resource);
 
 		if(theVal == m_uniformData.end())
 			throw ResourceNotFoundException(resource, "uniform");
@@ -227,13 +237,56 @@ namespace glscene
 	void ResourceData::DefineTexture( const std::string &resource, GLuint textureObj,
 		GLenum target, bool claimOwnership )
 	{
-		if(m_textureData.find(resource) != m_textureData.end())
-			throw ResourceMultiplyDefinedException(resource, "texture");
+		TextureMap::iterator test_it = m_textureData.find(resource);
+		if(test_it != m_textureData.end())
+		{
+			if(test_it->second)
+				throw ResourceMultiplyDefinedException(resource, "texture");
+		}
 
-		TextureData &value = m_textureData[resource];
+		TextureData value;
 		value.owned = claimOwnership;
 		value.target = target;
 		value.textureObj = textureObj;
+
+		m_textureData[resource] = value;
+	}
+
+	void ResourceData::DefineTexture( const std::string &resource )
+	{
+		if(m_textureData.find(resource) != m_textureData.end())
+			throw ResourceMultiplyDefinedException(resource, "texture");
+
+		m_textureData[resource] = boost::none;
+	}
+
+	void ResourceData::BindTexture( const std::string &resource, GLuint textureUnit ) const
+	{
+		UniformMap::const_iterator theVal = m_textureData.find(resource);
+
+		if(theVal == m_textureData.end())
+			throw ResourceNotFoundException(resource, "texture");
+
+		if(!theVal->second)
+			throw NodeRequestedUnknownResourceException(resource, "texture");
+
+		glActiveTexture(GL_TEXTURE0 + textureUnit);
+		glBindTexture(theVal->second->target, theVal->second->textureObj);
+	}
+
+	void ResourceData::BindImage( const std::string &resource, GLuint imageUnit,
+		int mipmapLevel, int imageLayer, GLenum access, GLenum format, bool layered ) const
+	{
+		UniformMap::const_iterator theVal = m_textureData.find(resource);
+
+		if(theVal == m_textureData.end())
+			throw ResourceNotFoundException(resource, "texture");
+
+		if(!theVal->second)
+			throw NodeRequestedUnknownResourceException(resource, "texture");
+
+		glBindImageTexture(imageUnit, theVal->second->textureObj, mipmapLevel,
+			layered ? GL_TRUE : GL_FALSE, imageLayer, access, format);
 	}
 }
 
