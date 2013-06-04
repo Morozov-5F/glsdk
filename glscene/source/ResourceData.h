@@ -7,6 +7,7 @@
 #include <boost/variant.hpp>
 #include <boost/variant/static_visitor.hpp>
 #include <boost/optional.hpp>
+#include <glmesh/Mesh.h>
 
 namespace glscene
 {
@@ -30,11 +31,18 @@ namespace glscene
 		bool owned;
 	};
 
+	struct MeshData
+	{
+		glmesh::Mesh *pMesh;
+		bool owned;
+	};
+
 	struct SamplerInfo;
 
 	typedef boost::container::flat_map<IdString, UniformValue> UniformMap;
 	typedef boost::container::flat_map<IdString, boost::optional<TextureData> > TextureMap;
 	typedef boost::container::flat_map<IdString, GLuint> SamplerMap;
+	typedef boost::container::flat_map<IdString, MeshData> MeshMap;
 
 	template<typename Derived, typename ResultType>
 	struct static_uniform_visitor : public boost::static_visitor<ResultType>
@@ -114,6 +122,11 @@ namespace glscene
 
 		void BindSampler(const std::string &resource, GLuint textureUnit) const;
 
+		void DefineMesh(const std::string &resource, glmesh::Mesh *pMesh, bool claimOwnership);
+		void DefineMesh(const std::string &resource);
+
+		void RenderMesh(const std::string &resource) const;
+		void RenderMesh(const std::string &resource, const std::string &variant) const;
 
 		~ResourceData();
 
@@ -121,6 +134,7 @@ namespace glscene
 		UniformMap m_uniformData;
 		TextureMap m_textureData;
 		SamplerMap m_samplerData;
+		MeshMap m_meshData;
 	};
 }
 

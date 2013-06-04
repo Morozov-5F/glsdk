@@ -21,6 +21,12 @@ namespace glscene
 		{
 			glDeleteSamplers(1, &samplerData.second);
 		}
+
+		BOOST_FOREACH(MeshMap::value_type &meshData, m_meshData)
+		{
+			if(meshData.second.owned)
+				delete meshData.second.pMesh;
+		}
 	}
 
 	namespace
@@ -369,6 +375,56 @@ namespace glscene
 			throw ResourceNotFoundException(resource, "sampler");
 
 		glBindSampler(textureUnit, theVal->second);
+	}
+
+	void ResourceData::DefineMesh( const std::string &resource, glmesh::Mesh *pMesh, bool claimOwnership )
+	{
+		MeshMap::iterator test_it = m_meshData.find(resource);
+		if(test_it != m_meshData.end())
+		{
+			if(!test_it->second.pMesh)
+				throw ResourceMultiplyDefinedException(resource, "mesh");
+		}
+
+		MeshData &value = m_meshData[resource];
+		value.owned = claimOwnership;
+		value.pMesh = pMesh;
+	}
+
+	void ResourceData::DefineMesh( const std::string &resource )
+	{
+		if(m_meshData.find(resource) != m_meshData.end())
+			throw ResourceMultiplyDefinedException(resource, "mesh");
+
+		MeshData &value = m_meshData[resource];
+		value.owned = false;
+		value.pMesh = NULL;
+	}
+
+	void ResourceData::RenderMesh( const std::string &resource ) const
+	{
+		MeshMap::const_iterator theVal = m_meshData.find(resource);
+
+		if(theVal == m_meshData.end())
+			throw ResourceNotFoundException(resource, "mesh");
+
+		if(!theVal->second.pMesh)
+			throw NodeRequestedUnknownResourceException(resource, "mesh");
+
+		theVal->second.pMesh->Render();
+	}
+
+	void ResourceData::RenderMesh( const std::string &resource, const std::string &variant ) const
+	{
+		MeshMap::const_iterator theVal = m_meshData.find(resource);
+
+		if(theVal == m_meshData.end())
+			throw ResourceNotFoundException(resource, "mesh");
+
+		if(!theVal->second.pMesh)
+			throw NodeRequestedUnknownResourceException(resource, "mesh");
+
+		theVal->second.pMesh->Render(variant);
 	}
 }
 

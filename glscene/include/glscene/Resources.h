@@ -235,6 +235,30 @@ namespace glscene
 		**/
 		void SetSamplerLODBias(const std::string &resource, float bias);
 
+		/**
+		\brief Creates a named mesh, which may claim ownership of the mesh.
+		
+		\throws ResourceMultiplyDefinedException If \a resource refers to a mesh resource that has already
+		been defined with mesh data. If it was defined with void DefineMesh(const std::string &), then it
+		can be redefined with an actual mesh.
+
+		\param resource The resource name for the mesh.
+		\param pMesh The mesh object to be stored.
+		\param claimOwnership Set to `true` if you want the scene graph to delete the mesh.
+		**/
+		void DefineMesh(const std::string &resource, glmesh::Mesh *pMesh, bool claimOwnership = true);
+
+		/**
+		\brief Creates a named mesh, which will be filled in with actual data later.
+		
+		\throws ResourceMultiplyDefinedException If \a resource refers to a mesh resource that has already
+		been defined.
+
+		\param resource The resource name for the mesh.
+		**/
+		void DefineMesh(const std::string &resource);
+
+
 	private:
 		ResourceData *m_pData;
 

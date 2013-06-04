@@ -10,6 +10,7 @@
 #include <GL/freeglut.h>
 #include <glscene/glscene.h>
 #include <glutil/Debug.h>
+#include <glmesh/glmesh.h>
 
 
 GLuint g_texture;
@@ -132,6 +133,7 @@ int main(int argc, char** argv)
 		{
 			graph.GetResources().DefineUniform("special", "special_glsl", 5.0f);
 			graph.GetResources().SetUniform("special", 5.0f);
+			graph.GetResources().DefineMesh("special", glmesh::gen::Icosahedron());
 		}
 		catch(glscene::UniformResourceTypeMismatchException &e)
 		{

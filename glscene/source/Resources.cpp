@@ -204,4 +204,14 @@ namespace glscene
 	{
 		m_pData->SetSamplerLODBias(resource, bias);
 	}
+
+	void Resources::DefineMesh( const std::string &resource, glmesh::Mesh *pMesh, bool claimOwnership )
+	{
+		m_pData->DefineMesh(resource, pMesh, claimOwnership);
+	}
+
+	void Resources::DefineMesh( const std::string &resource )
+	{
+		m_pData->DefineMesh(resource);
+	}
 }
