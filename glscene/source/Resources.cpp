@@ -24,6 +24,16 @@ namespace glscene
 			"', which is of type '" + uniformType + "', with a type of " + givenType + ".";
 	}
 
+	SamplerInfo::SamplerInfo()
+		: magFilter(GL_NEAREST)
+		, minFilter(GL_NEAREST)
+		, maxAniso(1.0f)
+		, compareFunc(boost::none)
+		, edgeFilterS(GL_CLAMP_TO_EDGE)
+		, edgeFilterT(GL_CLAMP_TO_EDGE)
+		, edgeFilterR(GL_CLAMP_TO_EDGE)
+	{}
+
 	void Resources::DefineUniform( const std::string &resource, const std::string &uniformName, float data )
 	{
 		m_pData->DefineUniform(resource, uniformName, VectorTypes(data));
@@ -183,5 +193,15 @@ namespace glscene
 	void Resources::DefineTexture( const std::string &resource )
 	{
 		m_pData->DefineTexture(resource);
+	}
+
+	void Resources::DefineSampler( const std::string &resource, const SamplerInfo &data )
+	{
+		m_pData->DefineSampler(resource, data);
+	}
+
+	void Resources::SetSamplerLODBias( const std::string &resource, float bias )
+	{
+		m_pData->SetSamplerLODBias(resource, bias);
 	}
 }

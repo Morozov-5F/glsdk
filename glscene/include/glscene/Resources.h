@@ -12,6 +12,7 @@ before including this file.
 #include <stdexcept>
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility/string_ref.hpp>
+#include <boost/optional.hpp>
 #include <glm/glm.hpp>
 
 namespace glmesh
@@ -73,15 +74,24 @@ namespace glscene
 	///\addtogroup module_glscene_resources
 	///@{
 
+
 	/**
-	\brief Used to modify a sampler resource.
+	\brief Used to define a sampler resource.
 	
 	**/
-	class SamplerResource
+	struct SamplerInfo
 	{
 	public:
+		GLenum magFilter;
+		GLenum minFilter;
+		float maxAniso;
+		boost::optional<GLenum> compareFunc;
 
-	private:
+		GLenum edgeFilterS;
+		GLenum edgeFilterT;
+		GLenum edgeFilterR;
+
+		SamplerInfo();
 	};
 
 	/**
@@ -173,6 +183,57 @@ namespace glscene
 		\param resource The resource name for the texture.
 		**/
 		void DefineTexture(const std::string &resource);
+
+		/**
+		\brief Creates a named sampler resource.
+		
+		\throws ResourceMultiplyDefinedException If \a resource refers to a sampler resource that has already
+		been defined.
+
+		\param resource The resource name for the sampler.
+		\param data The information about the sampler parameters. These parameters are immutable.
+		**/
+		void DefineSampler(const std::string &resource, const SamplerInfo &data);
+
+		/**
+		\brief Sets a floating-point border color for a sampler.
+
+		\throws ResourceNotFoundException If \a resource is not a sampler resource.
+
+		\param resource The resource name for the sampler.
+		\param color The color to set the border color to.
+		**/
+		void SetSamplerBorderColor(const std::string &resource, const glm::vec4 &color);
+
+		/**
+		\brief Sets an integer border color for a sampler.
+
+		\throws ResourceNotFoundException If \a resource is not a sampler resource.
+
+		\param resource The resource name for the sampler.
+		\param color The color to set the border color to.
+		**/
+		void SetSamplerBorderColorI(const std::string &resource, const glm::ivec4 &color);
+
+		/**
+		\brief Sets an integer border color for a sampler.
+
+		\throws ResourceNotFoundException If \a resource is not a sampler resource.
+
+		\param resource The resource name for the sampler.
+		\param color The color to set the border color to.
+		**/
+		void SetSamplerBorderColorI(const std::string &resource, const glm::uvec4 &color);
+
+		/**
+		\brief Sets the LOD bias for a sampler
+		
+		\throws ResourceNotFoundException If \a resource is not a sampler resource.
+
+		\param resource The resource name for the sampler.
+		\param bias The LOD bias for the sampler.
+		**/
+		void SetSamplerLODBias(const std::string &resource, float bias);
 
 	private:
 		ResourceData *m_pData;

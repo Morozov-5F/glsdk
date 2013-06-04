@@ -5,6 +5,7 @@
 #include <glload/gl_all.h>
 #include "ResourceData.h"
 #include "glscene/Resources.h"
+#include "glscene/SceneGraph.h"
 
 namespace glscene
 {
@@ -14,6 +15,11 @@ namespace glscene
 		{
 			if(texData.second && texData.second->owned)
 				glDeleteTextures(1, &texData.second->textureObj);
+		}
+
+		BOOST_FOREACH(SamplerMap::value_type &samplerData, m_samplerData)
+		{
+			glDeleteSamplers(1, &samplerData.second);
 		}
 	}
 
@@ -174,6 +180,24 @@ namespace glscene
 			void operator()(const glm::mat4 &data) const {glProgramUniformMatrix4fv(prog, uniformLoc, 1, GL_FALSE, glm::value_ptr(data));}
 		};
 
+
+		GLuint CreateSampler(const SamplerInfo &info)
+		{
+			GLuint sampler;
+			glGenSamplers(1, &sampler);
+			glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, info.magFilter);
+			glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, info.minFilter);
+			glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, info.maxAniso);
+			glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, info.edgeFilterS);
+			glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, info.edgeFilterT);
+			glSamplerParameteri(sampler, GL_TEXTURE_WRAP_R, info.edgeFilterR);
+			if(info.compareFunc)
+			{
+				glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+				glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, info.compareFunc.get());
+			}
+			return sampler;
+		}
 	}
 
 	void ResourceData::DefineUniform( const IdString &resource, const std::string &uniformName, UniformData data )
@@ -262,7 +286,7 @@ namespace glscene
 
 	void ResourceData::BindTexture( const std::string &resource, GLuint textureUnit ) const
 	{
-		UniformMap::const_iterator theVal = m_textureData.find(resource);
+		TextureMap::const_iterator theVal = m_textureData.find(resource);
 
 		if(theVal == m_textureData.end())
 			throw ResourceNotFoundException(resource, "texture");
@@ -277,7 +301,7 @@ namespace glscene
 	void ResourceData::BindImage( const std::string &resource, GLuint imageUnit,
 		int mipmapLevel, int imageLayer, GLenum access, GLenum format, bool layered ) const
 	{
-		UniformMap::const_iterator theVal = m_textureData.find(resource);
+		TextureMap::const_iterator theVal = m_textureData.find(resource);
 
 		if(theVal == m_textureData.end())
 			throw ResourceNotFoundException(resource, "texture");
@@ -287,6 +311,64 @@ namespace glscene
 
 		glBindImageTexture(imageUnit, theVal->second->textureObj, mipmapLevel,
 			layered ? GL_TRUE : GL_FALSE, imageLayer, access, format);
+	}
+
+	void ResourceData::DefineSampler( const std::string &resource, const SamplerInfo &data )
+	{
+		if(m_samplerData.find(resource) != m_samplerData.end())
+			throw ResourceMultiplyDefinedException(resource, "sampler");
+
+		m_samplerData[resource] = CreateSampler(data);
+	}
+
+	void ResourceData::SetSamplerBorderColor( const std::string &resource, const glm::vec4 &color )
+	{
+		SamplerMap::iterator theVal = m_samplerData.find(resource);
+
+		if(theVal == m_samplerData.end())
+			throw ResourceNotFoundException(resource, "sampler");
+
+		glSamplerParameterfv(theVal->second, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(color));
+	}
+
+	void ResourceData::SetSamplerBorderColorI( const std::string &resource, const glm::ivec4 &color )
+	{
+		SamplerMap::iterator theVal = m_samplerData.find(resource);
+
+		if(theVal == m_samplerData.end())
+			throw ResourceNotFoundException(resource, "sampler");
+
+		glSamplerParameterIiv(theVal->second, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(color));
+	}
+
+	void ResourceData::SetSamplerBorderColorI( const std::string &resource, const glm::uvec4 &color )
+	{
+		SamplerMap::iterator theVal = m_samplerData.find(resource);
+
+		if(theVal == m_samplerData.end())
+			throw ResourceNotFoundException(resource, "sampler");
+
+		glSamplerParameterIuiv(theVal->second, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(color));
+	}
+
+	void ResourceData::SetSamplerLODBias( const std::string &resource, float bias )
+	{
+		SamplerMap::iterator theVal = m_samplerData.find(resource);
+
+		if(theVal == m_samplerData.end())
+			throw ResourceNotFoundException(resource, "sampler");
+
+		glSamplerParameterf(theVal->second, GL_TEXTURE_LOD_BIAS, bias);
+	}
+
+	void ResourceData::BindSampler( const std::string &resource, GLuint textureUnit ) const
+	{
+		SamplerMap::const_iterator theVal = m_samplerData.find(resource);
+
+		if(theVal == m_samplerData.end())
+			throw ResourceNotFoundException(resource, "sampler");
+
+		glBindSampler(textureUnit, theVal->second);
 	}
 }
 

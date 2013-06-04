@@ -30,8 +30,11 @@ namespace glscene
 		bool owned;
 	};
 
+	struct SamplerInfo;
+
 	typedef boost::container::flat_map<IdString, UniformValue> UniformMap;
 	typedef boost::container::flat_map<IdString, boost::optional<TextureData> > TextureMap;
+	typedef boost::container::flat_map<IdString, GLuint> SamplerMap;
 
 	template<typename Derived, typename ResultType>
 	struct static_uniform_visitor : public boost::static_visitor<ResultType>
@@ -101,11 +104,23 @@ namespace glscene
 		void BindImage(const std::string &resource, GLuint imageUnit, int mipmapLevel, int imageLayer,
 			GLenum access, GLenum format, bool layered) const;
 
+		void DefineSampler(const std::string &resource, const SamplerInfo &sampler);
+
+		void SetSamplerBorderColor(const std::string &resource, const glm::vec4 &color);
+		void SetSamplerBorderColorI(const std::string &resource, const glm::ivec4 &color);
+		void SetSamplerBorderColorI(const std::string &resource, const glm::uvec4 &color);
+
+		void SetSamplerLODBias(const std::string &resource, float bias);
+
+		void BindSampler(const std::string &resource, GLuint textureUnit) const;
+
+
 		~ResourceData();
 
 	private:
 		UniformMap m_uniformData;
 		TextureMap m_textureData;
+		SamplerMap m_samplerData;
 	};
 }
 
