@@ -37,12 +37,23 @@ namespace glscene
 		bool owned;
 	};
 
+	struct ProgramData
+	{
+		GLuint program;
+		bool owned;
+		GLuint unifModelToCameraMatrix;
+		boost::optional<GLuint> unifNormalModelToCameraMatrix;
+		boost::optional<GLuint> unifNormalCameraToModelMatrix;
+	};
+
 	struct SamplerInfo;
+	struct ProgramInfo;
 
 	typedef boost::container::flat_map<IdString, UniformValue> UniformMap;
 	typedef boost::container::flat_map<IdString, boost::optional<TextureData> > TextureMap;
 	typedef boost::container::flat_map<IdString, GLuint> SamplerMap;
 	typedef boost::container::flat_map<IdString, MeshData> MeshMap;
+	typedef boost::container::flat_map<IdString, ProgramData> ProgramMap;
 
 	template<typename Derived, typename ResultType>
 	struct static_uniform_visitor : public boost::static_visitor<ResultType>
@@ -128,13 +139,20 @@ namespace glscene
 		void RenderMesh(const std::string &resource) const;
 		void RenderMesh(const std::string &resource, const std::string &variant) const;
 
+		void DefineProgram(const std::string &resource, GLuint program,
+			const ProgramInfo &programInfo, bool claimOwnership);
+
+		GLuint GetProgram(const std::string &resource);
+
+
 		~ResourceData();
 
 	private:
-		UniformMap m_uniformData;
-		TextureMap m_textureData;
-		SamplerMap m_samplerData;
-		MeshMap m_meshData;
+		UniformMap m_uniformMap;
+		TextureMap m_textureMap;
+		SamplerMap m_samplerMap;
+		MeshMap m_meshMap;
+		ProgramMap m_programMap;
 	};
 }
 

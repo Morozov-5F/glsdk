@@ -5,6 +5,10 @@ This is a relatively simple scene graph system, designed around the needs of a s
 
 The GL Scene Graph library is distributed under the [MIT License](http://www.opensource.org/licenses/MIT).
 
+The GL Scene Graph library depends on the OpenGL 3.x API as a bare minimum. The API also has interfaces for advanced OpenGL 4.x features like tessellation shaders, shader storage buffers, and so forth. You may attempt to use these features; however, the library will *not* verify through GL Load that these features are available on your hardware. It will simply attempt to call these functions. If you don't use these features, then the scene graph will not make any calls that attempt to use them either.
+
+So it is incumbent upon *you* to verify that these features are available before trying to use them. The Scene Graph will only do what it is told.
+
 
 **/
 

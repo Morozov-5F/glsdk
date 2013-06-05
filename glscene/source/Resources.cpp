@@ -214,4 +214,10 @@ namespace glscene
 	{
 		m_pData->DefineMesh(resource);
 	}
+
+	void Resources::DefineProgram( const std::string &resource, GLuint program, const ProgramInfo &programInfo,
+		bool claimOwnership )
+	{
+		m_pData->DefineProgram(resource, program, programInfo, claimOwnership);
+	}
 }

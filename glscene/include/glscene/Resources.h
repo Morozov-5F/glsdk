@@ -13,6 +13,7 @@ before including this file.
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <boost/optional.hpp>
+#include <boost/container/flat_map.hpp>
 #include <glm/glm.hpp>
 
 namespace glmesh
@@ -92,6 +93,26 @@ namespace glscene
 		GLenum edgeFilterR;
 
 		SamplerInfo();
+	};
+
+	///Mapping between GLSL variable names and binding indices.
+	typedef boost::container::flat_map<std::string, GLint> BindingLocationMap;
+
+	/**
+	\brief Used to define data for a program.
+	
+	**/
+	struct ProgramInfo
+	{
+	public:
+		BindingLocationMap samplerBindings;			///<Binding locations for [sampler types](http://www.opengl.org/wiki/Sampler_%28GLSL%29).
+		BindingLocationMap imageBindings;			///<Binding locations for [image types](http://www.opengl.org/wiki/Image_Load_Store).
+		BindingLocationMap uniformBlockBindings;	///<Binding locations for [uniform blocks](http://www.opengl.org/wiki/Uniform_Buffer_Object).
+		BindingLocationMap bufferVariableBindings;	///<Binding locations for [buffer variables](http://www.opengl.org/wiki/Shader_Storage_Buffer_Object).
+
+		std::string modelToCameraMatrixUniformName;
+		boost::optional<std::string> normalModelToCameraMatrixUniformName;
+		boost::optional<std::string> normalCameraToModelMatrixUniformName;
 	};
 
 	/**
@@ -257,6 +278,17 @@ namespace glscene
 		\param resource The resource name for the mesh.
 		**/
 		void DefineMesh(const std::string &resource);
+
+		/**
+		\brief 
+		
+
+		This function will modify the following OpenGL state:
+
+		* sets the current program (as defined by glUseProgram) to 0. It will not modify the current program.
+		**/
+		void DefineProgram(const std::string &resource, GLuint program, const ProgramInfo &programInfo,
+			bool claimOwnership = true);
 
 
 	private:
