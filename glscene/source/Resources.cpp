@@ -190,9 +190,9 @@ namespace glscene
 		m_pData->DefineTexture(resource, textureObj, target, claimOwnership);
 	}
 
-	void Resources::DefineTexture( const std::string &resource )
+	void Resources::DefineTextureIncomplete( const std::string &resource )
 	{
-		m_pData->DefineTexture(resource);
+		m_pData->DefineTextureIncomplete(resource);
 	}
 
 	void Resources::DefineSampler( const std::string &resource, const SamplerInfo &data )
@@ -210,14 +210,56 @@ namespace glscene
 		m_pData->DefineMesh(resource, pMesh, claimOwnership);
 	}
 
-	void Resources::DefineMesh( const std::string &resource )
+	void Resources::DefineMeshIncomplete( const std::string &resource )
 	{
-		m_pData->DefineMesh(resource);
+		m_pData->DefineMeshIncomplete(resource);
 	}
 
 	void Resources::DefineProgram( const std::string &resource, GLuint program, const ProgramInfo &programInfo,
 		bool claimOwnership )
 	{
 		m_pData->DefineProgram(resource, program, programInfo, claimOwnership);
+	}
+
+	void Resources::DefineUniformBufferBinding( const std::string &resource, GLuint bufferObject,
+		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
+	{
+		m_pData->DefineUniformBufferBinding(resource, bufferObject, bindPoint, offset, size, claimOwnership);
+	}
+
+	void Resources::DefineUniformBufferBinding( const std::string &resource, GLuint bufferObject,
+		GLintptr offset, bool claimOwnership )
+	{
+		m_pData->DefineUniformBufferBinding(resource, bufferObject, offset, claimOwnership);
+	}
+
+	void Resources::DefineUniformBufferBindingIncomplete( const std::string &resource, GLuint bindPoint,
+		GLsizeiptr size )
+	{
+		m_pData->DefineUniformBufferBindingIncomplete(resource, bindPoint, size);
+	}
+
+	void Resources::DefineStorageBufferBinding( const std::string &resource, GLuint bufferObject,
+		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
+	{
+		m_pData->DefineStorageBufferBinding(resource, bufferObject, bindPoint, offset, size, claimOwnership);
+	}
+
+	void Resources::DefineStorageBufferBinding( const std::string &resource, GLuint bufferObject,
+		GLintptr offset, bool claimOwnership )
+	{
+		m_pData->DefineStorageBufferBinding(resource, bufferObject, offset, claimOwnership);
+	}
+
+	void Resources::DefineStorageBufferBindingIncomplete( const std::string &resource, GLuint bindPoint,
+		GLsizeiptr size )
+	{
+		m_pData->DefineStorageBufferBindingIncomplete(resource, bindPoint, size);
+	}
+
+	void Resources::DefineCamera( const std::string &resource, const glutil::ViewData &initialView,
+		const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls )
+	{
+		m_pData->DefineCamera(resource, initialView, viewScale, actionButton, bRightKeyboardCtrls);
 	}
 }

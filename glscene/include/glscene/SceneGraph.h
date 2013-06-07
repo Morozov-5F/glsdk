@@ -29,12 +29,12 @@ namespace glscene
 	private:
 	};
 
-	class NodeRequestedUnknownResourceException : public SceneGraphException
+	///Thrown whenever a resource that was incomplete is used by a node during rendering.
+	class UsingIncompleteResourceException : public SceneGraphException
 	{
 	public:
-		explicit NodeRequestedUnknownResourceException(const std::string &resource, const std::string &resourceType)
+		explicit UsingIncompleteResourceException(const std::string &resource, const std::string &resourceType)
 			: SceneGraphException(GetErrorName(resource, resourceType)) {}
-
 
 	private:
 		static std::string GetErrorName(const std::string &resource, const std::string &resourceType);

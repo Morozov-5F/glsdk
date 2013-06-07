@@ -3,14 +3,14 @@
 
 /**
 \file
-\brief Includes everything in the [GL Scene Graph library](@ref module_glgraph).
+\brief Includes everything in the [GL Scene Graph library](@ref module_glscene).
 **/
 
 #include "Resources.h"
 #include "SceneGraph.h"
 
 /**
-\brief The main namespace for the [GL Scene Graph library](@ref module_glgraph). All GL Scene
+\brief The main namespace for the [GL Scene Graph library](@ref module_glscene). All GL Scene
 Graph functions and classes are in this namespace.
 **/
 namespace glscene

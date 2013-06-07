@@ -8,6 +8,7 @@
 #include <boost/variant/static_visitor.hpp>
 #include <boost/optional.hpp>
 #include <glmesh/Mesh.h>
+#include <glutil/MousePoles.h>
 
 namespace glscene
 {
@@ -41,9 +42,18 @@ namespace glscene
 	{
 		GLuint program;
 		bool owned;
-		GLuint unifModelToCameraMatrix;
+		boost::optional<GLuint> unifModelToCameraMatrix;
 		boost::optional<GLuint> unifNormalModelToCameraMatrix;
 		boost::optional<GLuint> unifNormalCameraToModelMatrix;
+	};
+
+	struct InterfaceBuffer
+	{
+		boost::optional<GLuint> bufferObject;
+		bool owned;
+		GLuint bindPoint;
+		GLintptr offset;
+		GLsizeiptr size;
 	};
 
 	struct SamplerInfo;
@@ -54,6 +64,8 @@ namespace glscene
 	typedef boost::container::flat_map<IdString, GLuint> SamplerMap;
 	typedef boost::container::flat_map<IdString, MeshData> MeshMap;
 	typedef boost::container::flat_map<IdString, ProgramData> ProgramMap;
+	typedef boost::container::flat_map<IdString, InterfaceBuffer> InterfaceBufferMap;
+	typedef boost::container::flat_map<IdString, glutil::ViewPole> CameraMap;
 
 	template<typename Derived, typename ResultType>
 	struct static_uniform_visitor : public boost::static_visitor<ResultType>
@@ -117,7 +129,7 @@ namespace glscene
 
 		void DefineTexture(const std::string &resource, GLuint textureObj,
 			GLenum target, bool claimOwnership);
-		void DefineTexture(const std::string &resource);
+		void DefineTextureIncomplete(const std::string &resource);
 
 		void BindTexture(const std::string &resource, GLuint textureUnit) const;
 		void BindImage(const std::string &resource, GLuint imageUnit, int mipmapLevel, int imageLayer,
@@ -134,7 +146,7 @@ namespace glscene
 		void BindSampler(const std::string &resource, GLuint textureUnit) const;
 
 		void DefineMesh(const std::string &resource, glmesh::Mesh *pMesh, bool claimOwnership);
-		void DefineMesh(const std::string &resource);
+		void DefineMeshIncomplete(const std::string &resource);
 
 		void RenderMesh(const std::string &resource) const;
 		void RenderMesh(const std::string &resource, const std::string &variant) const;
@@ -144,6 +156,28 @@ namespace glscene
 
 		GLuint GetProgram(const std::string &resource);
 
+		void DefineUniformBufferBinding(const std::string &resource, GLuint bufferObject, GLuint bindPoint,
+			GLintptr offset, GLsizeiptr size, bool claimOwnership);
+		void DefineUniformBufferBinding(const std::string &resource, GLuint bufferObject,
+			GLintptr offset, bool claimOwnership);
+		void DefineUniformBufferBindingIncomplete(const std::string &resource, GLuint bindPoint,
+			GLsizeiptr size);
+
+		void DefineStorageBufferBinding(const std::string &resource, GLuint bufferObject, GLuint bindPoint,
+			GLintptr offset, GLsizeiptr size, bool claimOwnership);
+		void DefineStorageBufferBinding(const std::string &resource, GLuint bufferObject,
+			GLintptr offset, bool claimOwnership);
+		void DefineStorageBufferBindingIncomplete(const std::string &resource, GLuint bindPoint,
+			GLsizeiptr size);
+
+		void BindUniformBuffer(const std::string &resource) const;
+		void BindStorageBuffer(const std::string &resource) const;
+
+		void DefineCamera(const std::string &resource, const glutil::ViewData &initialView,
+			const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls);
+
+		glutil::ViewPole &GetCamera(const std::string &resource);
+		const glutil::ViewPole &GetCamera(const std::string &resource) const;
 
 		~ResourceData();
 
@@ -153,6 +187,9 @@ namespace glscene
 		SamplerMap m_samplerMap;
 		MeshMap m_meshMap;
 		ProgramMap m_programMap;
+		InterfaceBufferMap m_uniformBufferMap;
+		InterfaceBufferMap m_storageBufferMap;
+		CameraMap m_cameraMap;
 	};
 }
 

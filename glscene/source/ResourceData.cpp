@@ -3,6 +3,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <boost/foreach.hpp>
 #include <glload/gl_all.hpp>
+#include <boost/range.hpp>
+#include <boost/range/algorithm.hpp>
 #include "ResourceData.h"
 #include "glscene/Resources.h"
 #include "glscene/SceneGraph.h"
@@ -11,27 +13,62 @@ namespace glscene
 {
 	ResourceData::~ResourceData()
 	{
+		std::vector<GLuint> objectsToDelete;
 		BOOST_FOREACH(TextureMap::value_type &texData, m_textureMap)
 		{
 			if(texData.second && texData.second->owned)
-				gl::DeleteTextures(1, &texData.second->textureObj);
+			{
+				if(boost::range::find(objectsToDelete, texData.second->textureObj) == objectsToDelete.end())
+					objectsToDelete.push_back(texData.second->textureObj);
+			}
 		}
+
+		if(!objectsToDelete.empty())
+			gl::DeleteTextures(objectsToDelete.size(), &objectsToDelete[0]);
+		objectsToDelete.clear();
 
 		BOOST_FOREACH(SamplerMap::value_type &samplerData, m_samplerMap)
 		{
-			gl::DeleteSamplers(1, &samplerData.second);
+			if(boost::range::find(objectsToDelete, samplerData.second) == objectsToDelete.end())
+				objectsToDelete.push_back(samplerData.second);
 		}
+
+		if(!objectsToDelete.empty())
+			gl::DeleteSamplers(objectsToDelete.size(), &objectsToDelete[0]);
+		objectsToDelete.clear();
+
+		BOOST_FOREACH(ProgramMap::value_type &programData, m_programMap)
+		{
+			if(boost::range::find(objectsToDelete, programData.second.program) == objectsToDelete.end())
+				objectsToDelete.push_back(programData.second.program);
+		}
+
+		if(!objectsToDelete.empty())
+			boost::range::for_each(objectsToDelete, gl::DeleteProgram);
+		objectsToDelete.clear();
+
+		BOOST_FOREACH(InterfaceBufferMap::value_type &interfaceData, m_uniformBufferMap)
+		{
+			if(interfaceData.second.bufferObject &&
+				boost::range::find(objectsToDelete, interfaceData.second.bufferObject.get()) == objectsToDelete.end())
+				objectsToDelete.push_back(interfaceData.second.bufferObject.get());
+		}
+
+		BOOST_FOREACH(InterfaceBufferMap::value_type &interfaceData, m_storageBufferMap)
+		{
+			if(interfaceData.second.bufferObject &&
+				boost::range::find(objectsToDelete, interfaceData.second.bufferObject.get()) == objectsToDelete.end())
+				objectsToDelete.push_back(interfaceData.second.bufferObject.get());
+		}
+
+		if(!objectsToDelete.empty())
+			gl::DeleteBuffers(objectsToDelete.size(), &objectsToDelete[0]);
+		objectsToDelete.clear();
 
 		BOOST_FOREACH(MeshMap::value_type &meshData, m_meshMap)
 		{
 			if(meshData.second.owned)
 				delete meshData.second.pMesh;
-		}
-
-		BOOST_FOREACH(ProgramMap::value_type &programData, m_programMap)
-		{
-			if(programData.second.owned)
-				gl::DeleteProgram(programData.second.program);
 		}
 	}
 
@@ -288,7 +325,7 @@ namespace glscene
 		m_textureMap[resource] = value;
 	}
 
-	void ResourceData::DefineTexture( const std::string &resource )
+	void ResourceData::DefineTextureIncomplete( const std::string &resource )
 	{
 		if(m_textureMap.find(resource) != m_textureMap.end())
 			throw ResourceMultiplyDefinedException(resource, "texture");
@@ -304,7 +341,7 @@ namespace glscene
 			throw ResourceNotFoundException(resource, "texture");
 
 		if(!theVal->second)
-			throw NodeRequestedUnknownResourceException(resource, "texture");
+			throw UsingIncompleteResourceException(resource, "texture");
 
 		gl::ActiveTexture(gl::TEXTURE0 + textureUnit);
 		gl::BindTexture(theVal->second->target, theVal->second->textureObj);
@@ -319,7 +356,7 @@ namespace glscene
 			throw ResourceNotFoundException(resource, "texture");
 
 		if(!theVal->second)
-			throw NodeRequestedUnknownResourceException(resource, "texture");
+			throw UsingIncompleteResourceException(resource, "texture");
 
 		gl::BindImageTexture(imageUnit, theVal->second->textureObj, mipmapLevel,
 			layered ? gl::TRUE_ : gl::FALSE_, imageLayer, access, format);
@@ -388,7 +425,7 @@ namespace glscene
 		MeshMap::iterator test_it = m_meshMap.find(resource);
 		if(test_it != m_meshMap.end())
 		{
-			if(!test_it->second.pMesh)
+			if(test_it->second.pMesh)
 				throw ResourceMultiplyDefinedException(resource, "mesh");
 		}
 
@@ -397,7 +434,7 @@ namespace glscene
 		value.pMesh = pMesh;
 	}
 
-	void ResourceData::DefineMesh( const std::string &resource )
+	void ResourceData::DefineMeshIncomplete( const std::string &resource )
 	{
 		if(m_meshMap.find(resource) != m_meshMap.end())
 			throw ResourceMultiplyDefinedException(resource, "mesh");
@@ -415,7 +452,7 @@ namespace glscene
 			throw ResourceNotFoundException(resource, "mesh");
 
 		if(!theVal->second.pMesh)
-			throw NodeRequestedUnknownResourceException(resource, "mesh");
+			throw UsingIncompleteResourceException(resource, "mesh");
 
 		theVal->second.pMesh->Render();
 	}
@@ -428,7 +465,7 @@ namespace glscene
 			throw ResourceNotFoundException(resource, "mesh");
 
 		if(!theVal->second.pMesh)
-			throw NodeRequestedUnknownResourceException(resource, "mesh");
+			throw UsingIncompleteResourceException(resource, "mesh");
 
 		theVal->second.pMesh->Render(variant);
 	}
@@ -471,8 +508,11 @@ namespace glscene
 		}
 		gl::UseProgram(0);
 
-		progData.unifModelToCameraMatrix = gl::GetUniformLocation(program,
-			programInfo.modelToCameraMatrixUniformName.c_str());
+		if(programInfo.modelToCameraMatrixUniformName)
+		{
+			progData.unifModelToCameraMatrix = gl::GetUniformLocation(program,
+				programInfo.modelToCameraMatrixUniformName->c_str());
+		}
 		if(programInfo.normalModelToCameraMatrixUniformName)
 		{
 			progData.unifNormalModelToCameraMatrix = gl::GetUniformLocation(program,
@@ -493,6 +533,156 @@ namespace glscene
 			throw ResourceNotFoundException(resource, "program");
 
 		return theVal->second.program;
+	}
+
+	void ResourceData::DefineUniformBufferBinding( const std::string &resource, GLuint bufferObject,
+		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
+	{
+		InterfaceBufferMap::iterator test_it = m_uniformBufferMap.find(resource);
+		if(test_it != m_uniformBufferMap.end())
+			throw ResourceMultiplyDefinedException(resource, "uniform buffer");
+
+		InterfaceBuffer &binding = m_uniformBufferMap[resource];
+		binding.bufferObject = bufferObject;
+		binding.owned = claimOwnership;
+		binding.bindPoint = bindPoint;
+		binding.offset = offset;
+		binding.size = size;
+	}
+
+	void ResourceData::DefineUniformBufferBinding( const std::string &resource, GLuint bufferObject,
+		GLintptr offset, bool claimOwnership )
+	{
+		InterfaceBufferMap::iterator test_it = m_uniformBufferMap.find(resource);
+		if(test_it == m_uniformBufferMap.end())
+			throw ResourceNotFoundException(resource, "uniform buffer");
+
+		InterfaceBuffer &binding = test_it->second;
+		if(binding.bufferObject)
+			throw ResourceMultiplyDefinedException(resource, "uniform buffer");
+
+		binding.bufferObject = bufferObject;
+		binding.owned = claimOwnership;
+		binding.offset = offset;
+	}
+
+	void ResourceData::DefineUniformBufferBindingIncomplete( const std::string &resource, GLuint bindPoint,
+		GLsizeiptr size )
+	{
+		if(m_uniformBufferMap.find(resource) != m_uniformBufferMap.end())
+			throw ResourceMultiplyDefinedException(resource, "uniform buffer");
+
+		InterfaceBuffer &binding = m_uniformBufferMap[resource];
+		binding.bufferObject = boost::none;
+		binding.owned = false;
+		binding.bindPoint = bindPoint;
+		binding.offset = 0;
+		binding.size = size;
+	}
+
+	void ResourceData::DefineStorageBufferBinding( const std::string &resource, GLuint bufferObject,
+		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
+	{
+		InterfaceBufferMap::iterator test_it = m_storageBufferMap.find(resource);
+		if(test_it != m_storageBufferMap.end())
+			throw ResourceMultiplyDefinedException(resource, "storage buffer");
+
+		InterfaceBuffer &binding = m_storageBufferMap[resource];
+		binding.bufferObject = bufferObject;
+		binding.owned = claimOwnership;
+		binding.bindPoint = bindPoint;
+		binding.offset = offset;
+		binding.size = size;
+	}
+
+	void ResourceData::DefineStorageBufferBinding( const std::string &resource, GLuint bufferObject,
+		GLintptr offset, bool claimOwnership )
+	{
+		InterfaceBufferMap::iterator test_it = m_storageBufferMap.find(resource);
+		if(test_it == m_storageBufferMap.end())
+			throw ResourceNotFoundException(resource, "storage buffer");
+
+		InterfaceBuffer &binding = test_it->second;
+		if(binding.bufferObject)
+			throw ResourceMultiplyDefinedException(resource, "storage buffer");
+
+		binding.bufferObject = bufferObject;
+		binding.owned = claimOwnership;
+		binding.offset = offset;
+	}
+
+	void ResourceData::DefineStorageBufferBindingIncomplete( const std::string &resource, GLuint bindPoint,
+		GLsizeiptr size )
+	{
+		if(m_storageBufferMap.find(resource) != m_storageBufferMap.end())
+			throw ResourceMultiplyDefinedException(resource, "storage buffer");
+
+		InterfaceBuffer &binding = m_storageBufferMap[resource];
+		binding.bufferObject = boost::none;
+		binding.owned = false;
+		binding.bindPoint = bindPoint;
+		binding.offset = 0;
+		binding.size = size;
+	}
+
+	void ResourceData::BindUniformBuffer( const std::string &resource ) const
+	{
+		InterfaceBufferMap::const_iterator theVal = m_uniformBufferMap.find(resource);
+
+		if(theVal == m_uniformBufferMap.end())
+			throw ResourceNotFoundException(resource, "uniform buffer");
+
+		const InterfaceBuffer &buf = theVal->second;
+
+		if(!buf.bufferObject)
+			throw UsingIncompleteResourceException(resource, "uniform buffer");
+
+		gl::BindBufferRange(gl::UNIFORM_BUFFER, buf.bindPoint, buf.bufferObject.get(), buf.offset, buf.size);
+	}
+
+	void ResourceData::BindStorageBuffer( const std::string &resource ) const
+	{
+		InterfaceBufferMap::const_iterator theVal = m_storageBufferMap.find(resource);
+
+		if(theVal == m_storageBufferMap.end())
+			throw ResourceNotFoundException(resource, "storage buffer");
+
+		const InterfaceBuffer &buf = theVal->second;
+
+		if(!buf.bufferObject)
+			throw UsingIncompleteResourceException(resource, "storage buffer");
+
+		gl::BindBufferRange(gl::SHADER_STORAGE_BUFFER, buf.bindPoint, buf.bufferObject.get(), buf.offset, buf.size);
+	}
+
+	void ResourceData::DefineCamera( const std::string &resource, const glutil::ViewData &initialView,
+		const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls )
+	{
+		if(m_cameraMap.find(resource) != m_cameraMap.end())
+			throw ResourceMultiplyDefinedException(resource, "camera");
+
+		m_cameraMap.emplace(std::make_pair(resource,
+			glutil::ViewPole(initialView, viewScale, actionButton, bRightKeyboardCtrls)));
+	}
+
+	glutil::ViewPole & ResourceData::GetCamera( const std::string &resource )
+	{
+		CameraMap::iterator theVal = m_cameraMap.find(resource);
+
+		if(theVal == m_cameraMap.end())
+			throw ResourceNotFoundException(resource, "camera");
+
+		return theVal->second;
+	}
+
+	const glutil::ViewPole & ResourceData::GetCamera( const std::string &resource ) const
+	{
+		CameraMap::const_iterator theVal = m_cameraMap.find(resource);
+
+		if(theVal == m_cameraMap.end())
+			throw ResourceNotFoundException(resource, "camera");
+
+		return theVal->second;
 	}
 }
 

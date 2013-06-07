@@ -15,6 +15,7 @@ before including this file.
 #include <boost/optional.hpp>
 #include <boost/container/flat_map.hpp>
 #include <glm/glm.hpp>
+#include <glutil/MousePoles.h>
 
 namespace glmesh
 {
@@ -83,23 +84,23 @@ namespace glscene
 	struct SamplerInfo
 	{
 	public:
-		GLenum magFilter;
-		GLenum minFilter;
-		float maxAniso;
-		boost::optional<GLenum> compareFunc;
+		GLenum magFilter;		///<The `GL_TEXTURE_MAG_FILTER` parameter. Defaults to `GL_NEAREST`.
+		GLenum minFilter;		///<The `GL_TEXTURE_MIN_FILTER` parameter. Defaults to `GL_NEAREST`.
+		float maxAniso;			///<The maximum anisotropy. Defaults to 1.0f.
+		boost::optional<GLenum> compareFunc;	///<The `GL_TEXTURE_COMPARE_FUNC` parameter. If not present, then there is no depth comparison.
 
-		GLenum edgeFilterS;
-		GLenum edgeFilterT;
-		GLenum edgeFilterR;
+		GLenum edgeFilterS;		///<The `GL_TEXTURE_WRAP_S` parameter. Defaults to `GL_CLAMP_TO_EDGE`.
+		GLenum edgeFilterT;		///<The `GL_TEXTURE_WRAP_T` parameter. Defaults to `GL_CLAMP_TO_EDGE`.
+		GLenum edgeFilterR;		///<The `GL_TEXTURE_WRAP_R` parameter. Defaults to `GL_CLAMP_TO_EDGE`.
 
-		SamplerInfo();
+		SamplerInfo();			///<Creates a default sampler-info.
 	};
 
 	///Mapping between GLSL variable names and binding indices.
 	typedef boost::container::flat_map<std::string, GLint> BindingLocationMap;
 
 	/**
-	\brief Used to define data for a program.
+	\brief Used to define bindings and uniform data for a program.
 	
 	**/
 	struct ProgramInfo
@@ -110,9 +111,9 @@ namespace glscene
 		BindingLocationMap uniformBlockBindings;	///<Binding locations for [uniform blocks](http://www.opengl.org/wiki/Uniform_Buffer_Object).
 		BindingLocationMap bufferVariableBindings;	///<Binding locations for [buffer variables](http://www.opengl.org/wiki/Shader_Storage_Buffer_Object).
 
-		std::string modelToCameraMatrixUniformName;
-		boost::optional<std::string> normalModelToCameraMatrixUniformName;
-		boost::optional<std::string> normalCameraToModelMatrixUniformName;
+		boost::optional<std::string> modelToCameraMatrixUniformName;		///<The name of the shader's `mat4` model-to-camera transformation matrix uniform.
+		boost::optional<std::string> normalModelToCameraMatrixUniformName;		///<The name of the shader's `mat3` model-to-camera transformation matrix uniform.
+		boost::optional<std::string> normalCameraToModelMatrixUniformName;		///<The name of the shader's `mat3` camera-to-model transformation matrix uniform.
 	};
 
 	/**
@@ -121,19 +122,42 @@ namespace glscene
 	This object uses reference semantics. Every copy of it will refer to the resources from the same
 	SceneGraph.
 
+	Some resources have "ownership" semantics: the scene graph takes ownership of some OpenGL object. This mean
+	that the SceneGraph will destroy the OpenGL object. Resource types that claim ownership of objects only do
+	so conditionally; they will provide a \a claimOwnership parameter. If you don't want them to own the object,
+	then pass `false` to this parameter and the scene graph will not destroy the object.
+
+	Certain resources can be provided without giving the OpenGL object immediately. This allows for multi-stage
+	loading of resources. For example, a texture resource can be named without providing an actual texture yet.
+	This allows a file format to specify a resource, which SceneGraph nodes can reference. The reason to do this
+	is to be able to create a texture manually, instead of from a file. SceneGraph nodes in the file can 
+	reference the incomplete resource, then after loading, the user can fill in the missing information.
+
+	All incomplete resources being used must be fulled specified before rendering. All of the incomplete resource
+	definition functions are of the form `Define*Incomplete`. To fully specify the missing data, use the
+	`Define*` version with the name previously used with `Define*Incomplete`.
+
+	With the exception of a single call to complete incomplete resources, named resources can only be defined
+	once. If you attempt to define a resource with the same name again, the call will throw a
+	ResourceMultiplyDefinedException exception.
+
+	Most resources have data that is fixed at definition time. Some resources however allow the user to modify their
+	contents later. Specifically, the modifyable resources are sampler resources and uniform resources. Camera
+	resources are technically modifiable, but only by accessing the camera object directly through the
+	SceneGraph's API.
 	**/
 	class Resources
 	{
 	public:
 		/**
 		\name Creates a named uniform with the given type.
-
-		\throws ResourceMultiplyDefinedException If \a resource refers to a uniform resource that has already
-		been defined.
 		
 		\param resource The resource name for the uniform.
 		\param uniformName The name of the uniform in GLSL.
 		\param data The value to set the uniform to.
+
+		\throws ResourceMultiplyDefinedException If \a resource refers to a uniform resource that has already
+		been defined.
 		**/
 		///@{
 		void DefineUniform(const std::string &resource, const std::string &uniformName, float data);
@@ -156,11 +180,11 @@ namespace glscene
 		/**
 		\name Sets the value of an existing uniform.
 
-		\throws ResourceNotFoundException If \a resource is not a uniform resource.
-		\throws UniformResourceTypeMismatchException If \a data is not the same type as the original uniform definition.
-
 		\param resource The resource name for the uniform.
 		\param data The value to set into the uniform.
+
+		\throws ResourceNotFoundException If \a resource is not a uniform resource.
+		\throws UniformResourceTypeMismatchException If \a data is not the same type as the original uniform definition.
 		**/
 		///@{
 		void SetUniform(const std::string &resource, float data);
@@ -182,28 +206,28 @@ namespace glscene
 
 		/**
 		\brief Creates a named texture resource, which may claim ownership of the texture.
-		
-		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
-		been defined with texture data. If it was defined with void DefineTexture(const std::string &), then it
-		can be redefined with an actual texture.
 
 		\param resource The resource name for the texture.
 		\param textureObj The texture object to be stored.
 		\param target The target the texture is associated with.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the texture.
+
+		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
+		been defined with texture data. If it was defined with DefineTextureIncomplete, then this exception
+		will not be thrown.
 		**/
 		void DefineTexture(const std::string &resource, GLuint textureObj,
 			GLenum target, bool claimOwnership = true);
 
 		/**
-		\brief Creates a named texture, which will be filled in with actual data later.
-		
-		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
-		been defined.
+		\brief Creates an incomplete named texture resource.
 
 		\param resource The resource name for the texture.
+
+		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
+		been defined.
 		**/
-		void DefineTexture(const std::string &resource);
+		void DefineTextureIncomplete(const std::string &resource);
 
 		/**
 		\brief Creates a named sampler resource.
@@ -219,53 +243,53 @@ namespace glscene
 		/**
 		\brief Sets a floating-point border color for a sampler.
 
-		\throws ResourceNotFoundException If \a resource is not a sampler resource.
-
 		\param resource The resource name for the sampler.
 		\param color The color to set the border color to.
+
+		\throws ResourceNotFoundException If \a resource is not a sampler resource.
 		**/
 		void SetSamplerBorderColor(const std::string &resource, const glm::vec4 &color);
 
 		/**
 		\brief Sets an integer border color for a sampler.
 
-		\throws ResourceNotFoundException If \a resource is not a sampler resource.
-
 		\param resource The resource name for the sampler.
 		\param color The color to set the border color to.
+
+		\throws ResourceNotFoundException If \a resource is not a sampler resource.
 		**/
 		void SetSamplerBorderColorI(const std::string &resource, const glm::ivec4 &color);
 
 		/**
 		\brief Sets an integer border color for a sampler.
 
-		\throws ResourceNotFoundException If \a resource is not a sampler resource.
-
 		\param resource The resource name for the sampler.
 		\param color The color to set the border color to.
+
+		\throws ResourceNotFoundException If \a resource is not a sampler resource.
 		**/
 		void SetSamplerBorderColorI(const std::string &resource, const glm::uvec4 &color);
 
 		/**
 		\brief Sets the LOD bias for a sampler
-		
-		\throws ResourceNotFoundException If \a resource is not a sampler resource.
 
 		\param resource The resource name for the sampler.
 		\param bias The LOD bias for the sampler.
+
+		\throws ResourceNotFoundException If \a resource is not a sampler resource.
 		**/
 		void SetSamplerLODBias(const std::string &resource, float bias);
 
 		/**
 		\brief Creates a named mesh, which may claim ownership of the mesh.
 		
-		\throws ResourceMultiplyDefinedException If \a resource refers to a mesh resource that has already
-		been defined with mesh data. If it was defined with void DefineMesh(const std::string &), then it
-		can be redefined with an actual mesh.
-
 		\param resource The resource name for the mesh.
 		\param pMesh The mesh object to be stored.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the mesh.
+
+		\throws ResourceMultiplyDefinedException If \a resource refers to a mesh resource that has already
+		been defined with mesh data. If it was previously defined with DefineMeshIncomplete, then this exception
+		will not be thrown.
 		**/
 		void DefineMesh(const std::string &resource, glmesh::Mesh *pMesh, bool claimOwnership = true);
 
@@ -277,20 +301,181 @@ namespace glscene
 
 		\param resource The resource name for the mesh.
 		**/
-		void DefineMesh(const std::string &resource);
+		void DefineMeshIncomplete(const std::string &resource);
 
 		/**
-		\brief 
+		\brief Creates a named program object resource.
+
+		Program resources are OpenGL program objects, but they are more than that. They can also set various
+		important state on a program, such as sampler/image unit locations, buffer binding points, and the like.
 		
+		Because the scene graph computes the full transform for a node, the scene graph needs a way to communicate
+		this transform to the node. As such, programs can specify a number of uniform matrices that the
+		scene graph will fill in when rendering a mesh with this program.
+
+		The program object can be separable.
 
 		This function will modify the following OpenGL state:
 
-		* sets the current program (as defined by glUseProgram) to 0. It will not modify the current program.
+		* sets the current program (as defined by glUseProgram) to 0. It will not modify the current program, but
+		it may modify the given program's state.
+
+		\param resource The resource name for the program.
+		\param program The fully linked (possibly separable) program to store in the resource.
+		\param programInfo Information about \a program.
+		\param claimOwnership Set to `true` if you want the scene graph to delete the program.
 		**/
 		void DefineProgram(const std::string &resource, GLuint program, const ProgramInfo &programInfo,
 			bool claimOwnership = true);
 
+		/**
+		\brief Creates a named uniform buffer binding resource.
 
+		A [uniform buffer binding][1] is a region of a buffer object that needs to be bound to a location in the
+		context. It effectively encapsulates a [glBindBufferRange(`GL_UNIFORM_BUFFER`)][2]
+		call.
+
+		\param resource The resource name of the uniform buffer binding.
+		\param bufferObject The OpenGL buffer object.
+		\param bindPoint The index to bind to. Must be less than `GL_MAX_UNIFORM_BUFFER_BINDINGS`.
+		\param offset The offset from the start of the buffer for the bind call. The offset must be
+		a multiple of `GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT`
+		\param size The size of the range to bind.
+		\param claimOwnership Set to `true` if you want the scene graph to delete the buffer.
+
+		\throws ResourceMultiplyDefinedException If \a resource refers to a uniform buffer resource that has
+		already been defined. This will still be thrown if you used DefineUniformBufferBindingIncomplete
+		to partially define the resource. In that case, you must use the other overload of this function.
+
+		[1] http://www.opengl.org/wiki/Uniform_Buffer_Object
+		[2] http://www.opengl.org/wiki/GLAPI/glBindBufferRange
+		**/
+		void DefineUniformBufferBinding( const std::string &resource, GLuint bufferObject,
+			GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership );
+
+		/**
+		\brief Completes the creation of a named uniform buffer that was started with DefineUniformBufferBindingIncomplete.
+
+		This call defines the buffer object and offset for a uniform buffer resource that was 
+		incompletely defined with DefineUniformBufferBindingIncomplete. The bind point and range size
+		will remain the same; only the buffer object and the starting offset can be modified with this function.
+
+		\param resource The resource name of the uniform buffer binding.
+		\param bufferObject The OpenGL buffer object.
+		\param offset The offset from the start of the buffer for the bind call. The offset must be
+		a multiple of `GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT`
+		\param claimOwnership Set to `true` if you want the scene graph to delete the buffer.
+
+		\throws ResourceNotFoundException If \a resource does not refer to an existing uniform buffer
+		resource.
+		\throws ResourceMultiplyDefinedException If \a resource refers to an existing uniform buffer
+		resource that was not incompletely defined by a call to DefineUniformBufferBindingIncomplete, or
+		if the resource was previously defined by a call to this function.
+		**/
+		void DefineUniformBufferBinding(const std::string &resource, GLuint bufferObject,
+			GLintptr offset, bool claimOwnership);
+
+		/**
+		\brief Incompletely creates a named uniform buffer binding resource.
+
+		This call defines the bind-point and byte size for a uniform buffer binding resource. The rest of the
+		data can be filled in with a call to DefineUniformBufferBinding(const std::string &, GLuint,
+		GLintptr, bool).
+
+		\param resource The resource name of the uniform buffer binding.
+		\param bindPoint The index to bind to. Must be less than `GL_MAX_UNIFORM_BUFFER_BINDINGS`.
+		\param size The size of the range to bind.
+		
+		\throws ResourceMultiplyDefinedException If \a resource refers to a uniform buffer resource that has
+		already been defined.
+		**/
+		void DefineUniformBufferBindingIncomplete(const std::string &resource, GLuint bindPoint,
+			GLsizeiptr size);
+
+
+		/**
+		\brief Creates a named storage buffer binding resource.
+
+		A [storage buffer binding][1] is a region of a buffer object that needs to be bound to a location in the
+		context. It effectively encapsulates a [glBindBufferRange(`GL_SHADER_STORAGE_BUFFER`)][2]
+		call.
+
+		\param resource The resource name of the storage buffer binding.
+		\param bufferObject The OpenGL buffer object.
+		\param bindPoint The index to bind to. Must be less than `GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS`.
+		\param offset The offset from the start of the buffer for the bind call. The offset must be
+		a multiple of `GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT`
+		\param size The size of the range to bind.
+		\param claimOwnership Set to `true` if you want the scene graph to delete the buffer.
+
+		\throws ResourceMultiplyDefinedException If \a resource refers to a storage buffer resource that has
+		already been defined. This will still be thrown if you used DefineUniformBufferBindingIncomplete
+		to partially define the resource. In that case, you must use the other overload of this function.
+
+		[1] http://www.opengl.org/wiki/Shader_Storage_Uniform_Buffer_Object
+		[2] http://www.opengl.org/wiki/GLAPI/glBindBufferRange
+		**/
+		void DefineStorageBufferBinding( const std::string &resource, GLuint bufferObject,
+			GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership );
+
+		/**
+		\brief Completes the creation of a named storage buffer that was started with DefineStorageBufferBindingIncomplete.
+
+		This call defines the buffer object and offset for a storage buffer resource that was 
+		incompletely defined with DefineUniformBufferBindingIncomplete. The bind point and range size
+		will remain the same; only the buffer object and the starting offset can be modified with this function.
+
+		\param resource The resource name of the storage buffer binding.
+		\param bufferObject The OpenGL buffer object.
+		\param offset The offset from the start of the buffer for the bind call. The offset must be
+		a multiple of `GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT`
+		\param claimOwnership Set to `true` if you want the scene graph to delete the buffer.
+
+		\throws ResourceNotFoundException If \a resource does not refer to an existing storage buffer
+		resource.
+		\throws ResourceMultiplyDefinedException If \a resource refers to an existing storage buffer
+		resource that was not incompletely defined by a call to DefineStorageBufferBindingIncomplete, or
+		if the resource was previously defined by a call to this function.
+		**/
+		void DefineStorageBufferBinding(const std::string &resource, GLuint bufferObject,
+			GLintptr offset, bool claimOwnership);
+
+		/**
+		\brief Incompletely creates a named storage buffer binding resource.
+
+		This call defines the bind-point and byte size for a storage buffer binding resource. The rest of the
+		data can be filled in with a call to DefineStorageBufferBinding(const std::string &, GLuint,
+		GLintptr, bool).
+
+		\param resource The resource name of the storage buffer binding.
+		\param bindPoint The index to bind to. Must be less than `GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS`.
+		\param size The size of the range to bind.
+		
+		\throws ResourceMultiplyDefinedException If \a resource refers to a storage buffer resource that has
+		already been defined.
+		**/
+		void DefineStorageBufferBindingIncomplete(const std::string &resource, GLuint bindPoint,
+			GLsizeiptr size);
+
+
+		/**
+		\brief Creates a named camera resource.
+
+		This call creates a glutil::ViewPole camera resource, given the various information needed by the
+		glutil::ViewPole class. Named cameras can be directly accessed by the user through the SceneGraph
+		class.
+
+		\param resource The resource name of the camera.
+		\param initialView The starting state of the view.
+		\param viewScale The viewport definition to use.
+		\param actionButton The mouse button to listen for. All other mouse buttons are ignored.
+		\param bRightKeyboardCtrls If true, then it uses IJKLUO instead of WASDQE keys.
+
+		\throws ResourceMultiplyDefinedException If \a resource refers to a camera resource that has
+		already been defined.
+		**/
+		void DefineCamera(const std::string &resource, const glutil::ViewData &initialView,
+			const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls);
 	private:
 		ResourceData *m_pData;
 

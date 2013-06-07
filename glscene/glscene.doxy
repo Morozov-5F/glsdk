@@ -16,6 +16,7 @@ So it is incumbent upon *you* to verify that these features are available before
 \defgroup module_glscene_resources GL Scene Graph Resources
 \ingroup module_glscene
 
+Stuff
 **/
 
 
@@ -24,4 +25,6 @@ So it is incumbent upon *you* to verify that these features are available before
 \ingroup module_glscene
 
 \brief Exceptions thrown by the GL Scene Graph classes and functions.
+
+stuff
 **/

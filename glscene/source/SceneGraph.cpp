@@ -8,7 +8,7 @@
 
 namespace glscene
 {
-	std::string NodeRequestedUnknownResourceException::GetErrorName(
+	std::string UsingIncompleteResourceException::GetErrorName(
 		const std::string &resource, const std::string &resourceType )
 	{
 		return std::string("The resource '") + resource + "' of type '" + resourceType +
