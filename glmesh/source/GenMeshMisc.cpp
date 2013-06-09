@@ -197,6 +197,67 @@ namespace gen
 		return pRet;
 	}
 
+	Mesh * Axes( ColorArray colorSequence )
+	{
+		Color defaults[3] = {Color(255, 0, 0, 255), Color(0, 255, 0, 255), Color(0, 0, 255, 255)};
+
+		if(colorSequence.size() < 3)
+		{
+			colorSequence = ColorArray(defaults);
+		}
+
+		glmesh::AttributeList attribs;
+		attribs.push_back(glmesh::AttribDesc(ATTR_POS, 3, glmesh::VDT_SIGN_SHORT, glmesh::ADT_NORM_FLOAT));
+		attribs.push_back(glmesh::AttribDesc(ATTR_COLOR, 4, glmesh::VDT_UNSIGN_BYTE, glmesh::ADT_NORM_FLOAT));
+
+		VertexFormat fmt(attribs);
+
+		CpuDataWriter writer(fmt, 6);
+
+		writer.Attrib<GLshort>(32767, 0, 0);
+		writer.Attrib(colorSequence[0]);
+		writer.Attrib<GLshort>(0, 0, 0);
+		writer.Attrib(colorSequence[0]);
+		writer.Attrib<GLshort>(0, 32767, 0);
+		writer.Attrib(colorSequence[1]);
+		writer.Attrib<GLshort>(0, 0, 0);
+		writer.Attrib(colorSequence[1]);
+		writer.Attrib<GLshort>(0, 0, 32767);
+		writer.Attrib(colorSequence[2]);
+		writer.Attrib<GLshort>(0, 0, 0);
+		writer.Attrib(colorSequence[2]);
+
+		//////////////////////////////////////////////////////////////////////////
+		//Build the buffers.
+		std::vector<GLuint> buffers(1);
+		gl::GenBuffers(1, &buffers[0]);
+		writer.TransferToBuffer(gl::ARRAY_BUFFER, gl::STATIC_DRAW, buffers[0]);
+
+		//Create VAOs.
+		MeshVariantMap variantMap;
+
+		gl::BindBuffer(gl::ARRAY_BUFFER, buffers[0]);
+
+		std::vector<int> components;
+		components.push_back(VAR_COLOR);
+
+		BuildVariations(variantMap, components, fmt, 0);
+
+		gl::BindBuffer(gl::ARRAY_BUFFER, 0);
+
+		//////////////////////////////////////////////////////////////////////////
+		//Create rendering commands.
+		RenderCmdList renderCmds;
+
+		renderCmds.DrawArrays(gl::LINES, 0, 6);
+
+		GLuint mainVao = variantMap["color"];
+
+		Mesh *pRet = new Mesh(buffers, mainVao, renderCmds, variantMap);
+		return pRet;
+	}
+
+
 	namespace
 	{
 		typedef glm::detail::tvec3<GLshort> svec3;

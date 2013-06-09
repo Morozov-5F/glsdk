@@ -46,6 +46,21 @@ namespace glmesh
 		Mesh *GroundPlane(int numXVerts, int numYVerts, bool bDoubleSided = true);
 
 		/**
+		\brief Creates a 3-axis directional indicator.
+
+		This is useful for wanting to know what the orientation of an object is. It creates a 3-line
+		axis, pointing in the +X, +Y, and +Z directions. The length of each line is 1 unit, so
+		scaling could be important.
+
+		Available attributes:
+		\li color.
+
+		\param colorSequence A series of 3 colors, for the X, Y, and Z axes respectively. If you pass
+		no colors, or pass less than 3, then it will use the default colors of red, green, and blue.
+		**/
+		Mesh *Axes(ColorArray colorSequence = ColorArray());
+
+		/**
 		\name Structures
 		These generators build larger, complex structures out of smaller functional units. These
 		shapes are useful for showing off lighting and other effects. These functions are
