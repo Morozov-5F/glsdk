@@ -1,14 +1,39 @@
 /**
 \defgroup module_glscene GL Scene Graph
 
-This is a relatively simple scene graph system, designed around the needs of a shader-based rendering system.
+This is a relatively simple scene graph system, designed around the needs of a shader-based rendering system. The system is simple in that it doesn't handle concepts like light management and the like. But it is powerful in several ways.
 
-The GL Scene Graph library is distributed under the [MIT License](http://www.opensource.org/licenses/MIT).
+First, it has a system for managing most of the resources that the scene uses. Meshes, textures, and so forth are all stored in the scene graph's resource list. Therefore, when you delete the scene graph object, all of the owned resources will be deleted as well.
 
-The GL Scene Graph library depends on the OpenGL 3.x API as a bare minimum. The API also has interfaces for advanced OpenGL 4.x features like tessellation shaders, shader storage buffers, and so forth. You may attempt to use these features; however, the library will *not* verify through GL Load that these features are available on your hardware. It will simply attempt to call these functions. If you don't use these features, then the scene graph will not make any calls that attempt to use them either.
+The resource system also allows you to have uniform values (not in buffers) which are shared among multiple programs. When the values of these uniforms are changed, the changes will be propogated across all nodes that use those uniforms for programs.
 
-So it is incumbent upon *you* to verify that these features are available before trying to use them. The Scene Graph will only do what it is told.
+Second, it provides direct support for a variety of newer OpenGL features. These include:
 
+- [Tessellation Shaders]()
+- [Separate programs and program pipelines](http://www.opengl.org/wiki/Shader_Compilation#Separate_programs)
+- [Uniform buffers](http://www.opengl.org/wiki/Uniform_Buffer_Object)
+- [Shader storage buffers](http://www.opengl.org/wiki/Shader_Storage_Buffer_Object)
+- [Image Load/Store](http://www.opengl.org/wiki/Image_Load_Store)
+
+Most scene graphs do not handle these advanced features.
+
+\note While the API provides access to these features, *you- must verify that these features are available before using them. The API will *not- check to see if, for example, image load/store is available before it tries to use them. If a node uses an image, then the graph assumes you're *serious- about that and that image load/store will be available. If it is not, then badness will occur.
+
+Third, the scene graph system allows the creation of multiple distinct scenes. Within each scene, each node that is rendered can have multiple distinct named *variant*. A variant represents a different form of the same rendered object. It could be using a different mesh, a different shader, a different texture, etc.
+
+A particular rendering operation renders a given variant within a given scene. Each rendering operation can be rendered in an arbitrary order or sorted (coarsely) back-to-front. The latter mechanism allows for blending. So a non-blended variant can be rendered in the default ordering, then a blended variant can be used for more precise ordering. The meshes and shaders used to render the second variant can be different from the first.
+
+The scene graph does not cover framebuffer state, blending state, viewport state, or the like. The scene graph only handles the program, texture, image, uniform and storage buffer bindings.
+**/
+
+/**
+\defgroup module_glscene_core GL Scene Graph Core Facilities
+\ingroup module_glscene
+
+
+## Transforms Node vs Object ##
+
+Nodes in the graph have two separate transformation matrices: the node transform and the object transform.
 
 **/
 
@@ -16,7 +41,51 @@ So it is incumbent upon *you* to verify that these features are available before
 \defgroup module_glscene_resources GL Scene Graph Resources
 \ingroup module_glscene
 
-Stuff
+The SceneGraph class maintains a list of resources. When a node is rendered, it references these resources to get its textures, samplers, and so forth.
+
+The SceneGraph provides access to its internal resources via the Resources class, obtained with the SceneGraph::GetResources function. The Resources class uses reference semantics, so copies will all refer back to the same resources in the SceneGraph instance.
+
+All resources are named. The various different types of resources all have different namespaces, so it's perfectly valid to use the same name for a texture resource as a program resource. Though that might be confusing.
+
+The Resources class maintains the following resources:
+
+- [Textures](http://www.opengl.org/wiki/Texture) (which can be used for samplers or [images](http://www.opengl.org/wiki/Image_Load_Store).)
+- [Sampler Objects](http://www.opengl.org/wiki/Sampler_Object). Most of their state is defined via the SamplerInfo object.
+- Programs, which have already been properly linked.
+- Drawable Meshes, via the glmesh::Mesh class.
+- [Uniform](http://www.opengl.org/wiki/Uniform_Buffer_Object) and [Shader Storage buffer objects](http://www.opengl.org/wiki/Shader_Storage_Buffer_Object). These not only store the buffer but also the place it is bound to and the range. It effectively stores the data for a [glBindBufferRange](http://www.opengl.org/wiki/GLAPI/glBindBufferRange) call.
+- [Uniforms](http://www.opengl.org/wiki/Uniform_%28GLSL%29), which can be referenced by any program. The uniform stored in the Resources object therefore can be shared among a number of different programs. Changing it in one place changes it in all places.
+- Cameras, via the glutil::ViewPole class.
+
+The Resources class can be told to take ownership over any of the OpenGL objects it is given (as well as meshes). By claiming ownership, the Resources class (and therefore the SceneGraph that owns them) will destroy these objects when it is destroyed.
+
+Certain data stored by sampler objects can be modified in-situ, as can the value of particular uniforms.
+
+Program objects are complex resources. This is in part because of the nature of the SceneGraph system. The graph will compute the transform for the object from model space to camera space; that is part of the graph's job during rendering. However, getting that data to a shader is less simple, due to the fact that users can name variables however they wish.
+
+To avoid forcing users to name their matrices a certain way, programs that contain vertex shaders can specify certain uniforms that represent matrices. There are three matrices that can be specified:
+
+- Model to Camera matrix: This is must be of the GLSL type `mat4`.
+- Model to Camera matrix for normals: This must be of the GLSL type `mat3`.
+- Camera to Model matrix for normals: This must be of the GLSL type `mat3`. This can be useful for transforming the light direction into model-space, so that it can be transformed into tangent-space.
+
+Also, it is often convenient to establish a convention for the meaning of various context resources. For example, you could say that texture unit 0 is always the diffuse texture. So, rather than having to change the program's uniform state every time you want use a texture, you just set the program to use a known unit. At render-time, you bind the texture to that texture unit. 
+
+All of this information is provided through the ProgramInfo object.
+
+### Resource naming ###
+
+Resource names, for the sake of efficiency, are not stored as `std::string` objects. Instead, they are stored as a fixed-length hashed-string for faster lookup and less memory allocation overhead. Strings longer than the fixed-length are truncated from the middle.
+
+It is therefore possible to get a collision of string names in this system, where two different strings that you give the system actually map to the same name. This require all of the following to be true of both strings:
+
+- They are longer than the fixed-string length (27 characters currently)
+- The full length versions happen to generate the same hashes
+- The truncated version of both strings resolves to the same 27-character sequence.
+
+This is highly unlikely to happen in practice. I have personally used the [djb2 hashing algorithm](http://www.cse.yorku.ca/~oz/hash.html) in a purely hash-driven system. Even using a database of *tens* of thousands of strings (where we routinely scanned for hash collisions as an off-line process) we only got a collision *once*. And that was with a system were we *only* stored the hashes, not 27 other characters along with them.
+
+However, if this does concern you (and it shouldn't), you can ensure that there will be no problems by using resource names that are 27 characters or less. And 27 characters is quite a lot for an identifier.
 **/
 
 

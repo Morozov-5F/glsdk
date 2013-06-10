@@ -38,4 +38,9 @@ namespace glscene
 	{
 		return Resources(&m_pData->resources);
 	}
+
+	void swap( SceneGraph &lhs, SceneGraph &rhs )
+	{
+		swap(lhs.m_pData, rhs.m_pData);
+	}
 }

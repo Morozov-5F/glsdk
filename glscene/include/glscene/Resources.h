@@ -142,7 +142,7 @@ namespace glscene
 	ResourceMultiplyDefinedException exception.
 
 	Most resources have data that is fixed at definition time. Some resources however allow the user to modify their
-	contents later. Specifically, the modifyable resources are sampler resources and uniform resources. Camera
+	contents later. Specifically, the modifiable resources are sampler resources and uniform resources. Camera
 	resources are technically modifiable, but only by accessing the camera object directly through the
 	SceneGraph's API.
 	**/
@@ -317,7 +317,7 @@ namespace glscene
 
 		This function will modify the following OpenGL state:
 
-		* sets the current program (as defined by glUseProgram) to 0. It will not modify the current program, but
+		- sets the current program (as defined by glUseProgram) to 0. It will not modify the current program, but
 		it may modify the given program's state.
 
 		\param resource The resource name for the program.
@@ -332,7 +332,7 @@ namespace glscene
 		\brief Creates a named uniform buffer binding resource.
 
 		A [uniform buffer binding][1] is a region of a buffer object that needs to be bound to a location in the
-		context. It effectively encapsulates a [glBindBufferRange(`GL_UNIFORM_BUFFER`)][2]
+		context. It effectively encapsulates a [glBindBufferRange(GL_UNIFORM_BUFFER)][2]
 		call.
 
 		\param resource The resource name of the uniform buffer binding.
@@ -347,8 +347,8 @@ namespace glscene
 		already been defined. This will still be thrown if you used DefineUniformBufferBindingIncomplete
 		to partially define the resource. In that case, you must use the other overload of this function.
 
-		[1] http://www.opengl.org/wiki/Uniform_Buffer_Object
-		[2] http://www.opengl.org/wiki/GLAPI/glBindBufferRange
+		[1]: http://www.opengl.org/wiki/Uniform_Buffer_Object
+		[2]: http://www.opengl.org/wiki/GLAPI/glBindBufferRange
 		**/
 		void DefineUniformBufferBinding( const boost::string_ref &resource, GLuint bufferObject,
 			GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership );
@@ -412,8 +412,8 @@ namespace glscene
 		already been defined. This will still be thrown if you used DefineUniformBufferBindingIncomplete
 		to partially define the resource. In that case, you must use the other overload of this function.
 
-		[1] http://www.opengl.org/wiki/Shader_Storage_Uniform_Buffer_Object
-		[2] http://www.opengl.org/wiki/GLAPI/glBindBufferRange
+		[1]: http://www.opengl.org/wiki/Shader_Storage_Uniform_Buffer_Object
+		[2]: http://www.opengl.org/wiki/GLAPI/glBindBufferRange
 		**/
 		void DefineStorageBufferBinding( const boost::string_ref &resource, GLuint bufferObject,
 			GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership );

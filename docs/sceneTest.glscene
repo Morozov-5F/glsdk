@@ -1,0 +1,101 @@
+//Delimiters:
+//<>: Resource and node names.
+//"": Filenames.
+//'': Mesh variant names.
+//[]: GLSL identifier.
+//{}: "Enumerators". Things that a specific parameter takes, which are selected from a specific list.
+//(): lists of numbers, for things like vectors.
+
+resources
+	texture <ship_diffuse_tex> "diffuse_ship.dds"
+	texture <ship_reflect_tex> placeholder
+	sampler <trilinear-clamp>
+		mag{linear}
+		min{linear-mip-linear}
+	end
+	sampler <aniso-repeat>
+		mag{linear}
+		min{linear-mip-linear}
+		aniso 8
+		wrap_s{repeat}
+		wrap_t{repeat}
+		wrap_r{repeat}
+	end
+	mesh <ship_mesh> gen{octahedron}
+	program <shader>
+		vert "transform.vert"
+		frag "diffuse_reflect.frag"
+		mtc [modelToCamera]
+		nmtc [normalModelToCamera]
+		sampler [diffuse_tex] 0
+		uniform_buffer [projection_matrix] 0
+		uniform_buffer [lights] 2
+	end
+	program <shader>
+		vert "transform.vert"
+		frag "diffuse_reflect.frag"
+		mtc [modelToCamera]
+		nmtc [normalModelToCamera]
+		sampler [diffuse_tex] 0
+		sampler [reflect_tex] 4
+		uniform_buffer [projection_matrix] 0
+		uniform_buffer [lights] 2
+	end
+	uniform_buffer <projection_matrix>
+		binding 0
+		size 64
+		offset 0
+		usage{stream-draw}
+	end
+	uniform_buffer <lights>
+		binding 2
+		size 128
+		placeholder
+	end
+	uniform <num_lights> type{float} 5
+	uniform <test_value> type{vec3} (2.43 3.4 9.8)
+	camera <main>
+	end
+end
+
+scene <>
+	node <globals>
+
+		local <matrices>
+			uniform_buffer <projection_matrix>
+			uniform_buffer <lights>
+		end
+		
+		node <ship>
+			node-tm
+				quaternion (0 0.707 0 0.707)
+				translation (0 5 0)
+			end
+			obj-tm
+				scale 2
+			end
+			
+			local <common>
+				mesh <ship_mesh> 'variantName'
+				texture 0 <ship_diffuse_tex> <aniso-repeat>
+			end
+			
+			variant <>
+				using <matrices>
+				using <common>
+				
+				program <shader>
+			end
+			
+			variant <test>
+				using <matrices>
+				using <common>
+
+				program <reflect_shader>
+				texture 4 <ship_reflect_tex> <trilinear-clamp>
+				uniform <num_lights>
+			end
+
+		end
+	end
+end

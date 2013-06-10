@@ -42,9 +42,13 @@ namespace glscene
 
 	///@}
 
+	///\addtogroup module_glscene_core
+	///@{
+
 	/**
 	\brief The class which represents a scene graph and all of its data.
-	
+
+
 	**/
 	class SceneGraph : public boost::noncopyable
 	{
@@ -57,7 +61,15 @@ namespace glscene
 
 	private:
 		boost::scoped_ptr<SceneGraphData> m_pData;
+
+		friend void swap(SceneGraph &lhs, SceneGraph &rhs);
 	};
+
+	///Makes SceneGraph swappable via an ADL-style `swap` call.
+	void swap(SceneGraph &lhs, SceneGraph &rhs);
+
+	///@}
+
 }
 
 #endif //GLSDK_GLSCENE_SCENE_GRAPH_H

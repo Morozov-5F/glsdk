@@ -1,0 +1,156 @@
+EBNF grammar (mostly)
+
+Tokens:
+	String: A sequence of characters, including spaces, but not including control characters.
+	StringExceptQuote: A `String` that also doesn't include the `"` character.
+	StringExceptGreater: A `String` that also doesn't include the `>` character.
+	ShaderIdentifier: A valid OpenGL Shading Language Identifier.
+	Float
+	SignedInt
+	UnsignedInt
+	OpenBrace:		`{`
+	CloseBrace:		`}`
+	OpenBracket:	`[`
+	CloseBracket:	`]`
+	OpenParen:		`(`
+	CloseParen:		`)`
+	OpenAngle:		`<`
+	CloseAngle:		`>`
+	Quote:			`"`
+	SingleQuote:	`'`
+
+Grammar:
+	res_name_decl = OpenAngle, StringExceptGreater, CloseAngle;
+	res_name_ref = OpenAngle, StringExceptGreater, CloseAngle;
+	node_name_decl = OpenAngle, [StringExceptGreater], CloseAngle;
+	scene_name_decl = OpenAngle, [StringExceptGreater], CloseAngle;
+	pass_name_decl = OpenAngle, StringExceptGreater, CloseAngle;
+	local_name_decl = OpenAngle, StringExceptGreater, CloseAngle;
+	local_name_ref = OpenAngle, StringExceptGreater, CloseAngle;
+	filename = Quote, StringExceptQuote, Quote;
+	
+	mesh_generators = //List of mesh generators.
+	mag_filters = //
+	min_filters = //
+	edge_wraps = //
+	compare_funcs = //
+	buffer_usages = //
+	uniform_types = //
+
+	resources = ("res" | "resources"), resource_def+, "end";
+	resource_def =
+		texture_res |
+		sampler_res |
+		mesh_res |
+		program_res |
+		uniform_buffer_res |
+		storage_buffer_res |
+		uniform_res |
+		camera_res |
+		;
+	
+	texture_res = ("tex" | "texture"), res_name_decl, (filename | "placeholder");
+	mesh_res = "mesh", res_name_decl, (mesh_accessor | "placeholder");
+	mesh_accessor = "gen", OpenBrace, mesh_generators, CloseBrace;
+	
+	sampler_res = "sampler", res_name_decl, sampler_stmt*, "end";
+	sampler_stmt = 
+		sampler_mag_filter |
+		sampler_min_filter |
+		sampler_aniso |
+		sampler_wrap_s |
+		sampler_wrap_t |
+		sampler_wrap_r |
+		sampler_compare_func |
+		;
+		
+	sampler_mag_filter = "mag", OpenBrace, mag_filters, CloseBrace;
+	sampler_min_filter = "min", OpenBrace, min_filters, CloseBrace;
+	sampler_aniso = "aniso", UnsignedInt;
+	sampler_wrap_s = "wrap_s", OpenBrace, edge_wraps, CloseBrace;
+	sampler_wrap_t = "wrap_t", OpenBrace, edge_wraps, CloseBrace;
+	sampler_wrap_r = "wrap_r", OpenBrace, edge_wraps, CloseBrace;
+	sampler_compare_func = "compare", OpenBrace, compare_funcs, CloseBrace;
+	
+	uniform_buffer_res = "uniform_buffer", res_name_decl,
+		bb_binding,
+		bb_size,
+		(bb_offset, bb_usage) | "placeholder",
+		"end";
+		
+	bb_binding = "binding", UnsignedInt;
+	bb_size = "size", UnsignedInt;
+	bb_offset = "offset", UnsignedInt;
+	bb_usage = "usage", OpenBrace, buffer_usages, CloseBrace;
+	
+	storage_buffer_res = "storage_buffer", res_name_decl,
+		bb_binding,
+		bb_size,
+		(bb_offset, bb_usage) | "placeholder",
+		"end";
+		
+	uniform_res = "uniform", res_name_decl,
+		"type", OpenBrace, uniform_types, CloseBrace,
+		[uniform_value];
+	uniform_value = Float | SignedInt | UnsignedInt |
+		(OpenParen, Float+, CloseParen) |
+		(OpenParen, SignedInt+, CloseParen) |
+		(OpenParen, UnsignedInt+, CloseParen)
+		;
+		
+	camera_res = "camera", res_name_decl, camera_scale, camera_state, "end";
+	camera_scale =
+		"radius_range", Float, Float,
+		"radius_delta", Float, Float,
+		"pos_offset", Float, Float,
+		"orient_scale", Float;
+	camera_state = 
+		"target_pos", OpenParen, Float, Float, Float, CloseParen,
+		"orient", OpenParen, Float, Float, Float, Float, CloseParen,
+		"radius", Float,
+		"up_spin", Float;
+
+	
+	scene = "scene", scene_name_decl, local_def*, node_def+, "end";
+	
+	local_def = "local", local_name_decl, local_cmds, "end";
+	node_def = "node", node_name_decl,
+		node_transform,
+		node_obj_transform,
+		local_def*,
+		pass_def*,
+		node_def*,
+		"end";
+	
+	node_transform = "node_tm", transforms, "end";
+	node_obj_transform = "obj_tm", transforms, "end";
+	transforms =
+		[translate_transform],
+		[quat_transform],
+		[scale_transform];
+
+	pass_def = "pass", pass_name_decl,
+		pass_using*,
+		local_cmds,
+		"end";
+		
+	pass_using = "using", local_name_ref;
+	
+	local_cmds = local_command+;
+	local_command =
+		local_texture |
+		local_uniform_buffer |
+		local_storage_buffer |
+		local_uniform |
+		local_program |
+		local_mesh;
+	
+	local_mesh = "mesh", res_name_ref;
+	local_uniform = "uniform", res_name_ref;
+	local_uniform_buffer = "uniform_buffer", res_name_ref;
+	local_storage_buffer = "storage_buffer", res_name_ref;
+	local_texture = "texture", UnsignedInt, res_name_ref, res_name_ref;
+	local_program = "program", res_name_ref;
+	
+	
+	grammar = resources+, scene+;
