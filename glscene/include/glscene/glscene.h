@@ -1,5 +1,5 @@
-#ifndef GLSDK_GLGRAPH_H
-#define GLSDK_GLGRAPH_H
+#ifndef GLSDK_GLSCENE_H
+#define GLSDK_GLSCENE_H
 
 /**
 \file
@@ -20,4 +20,4 @@ namespace glscene
 
 
 
-#endif //GLSDK_GLGRAPH_H
+#endif //GLSDK_GLSCENE_H

@@ -307,7 +307,7 @@ namespace glscene
 		boost::apply_visitor(UniformApplyDSAVisit(program, uniformLocation), theVal->second.data);
 	}
 
-	void ResourceData::DefineTexture( const std::string &resource, GLuint textureObj,
+	void ResourceData::DefineTexture( const IdString &resource, GLuint textureObj,
 		GLenum target, bool claimOwnership )
 	{
 		TextureMap::iterator test_it = m_textureMap.find(resource);
@@ -325,7 +325,7 @@ namespace glscene
 		m_textureMap[resource] = value;
 	}
 
-	void ResourceData::DefineTextureIncomplete( const std::string &resource )
+	void ResourceData::DefineTextureIncomplete( const IdString &resource )
 	{
 		if(m_textureMap.find(resource) != m_textureMap.end())
 			throw ResourceMultiplyDefinedException(resource, "texture");
@@ -333,7 +333,7 @@ namespace glscene
 		m_textureMap[resource] = boost::none;
 	}
 
-	void ResourceData::BindTexture( const std::string &resource, GLuint textureUnit ) const
+	void ResourceData::BindTexture( const IdString &resource, GLuint textureUnit ) const
 	{
 		TextureMap::const_iterator theVal = m_textureMap.find(resource);
 
@@ -347,7 +347,7 @@ namespace glscene
 		gl::BindTexture(theVal->second->target, theVal->second->textureObj);
 	}
 
-	void ResourceData::BindImage( const std::string &resource, GLuint imageUnit,
+	void ResourceData::BindImage( const IdString &resource, GLuint imageUnit,
 		int mipmapLevel, int imageLayer, GLenum access, GLenum format, bool layered ) const
 	{
 		TextureMap::const_iterator theVal = m_textureMap.find(resource);
@@ -362,7 +362,7 @@ namespace glscene
 			layered ? gl::TRUE_ : gl::FALSE_, imageLayer, access, format);
 	}
 
-	void ResourceData::DefineSampler( const std::string &resource, const SamplerInfo &data )
+	void ResourceData::DefineSampler( const IdString &resource, const SamplerInfo &data )
 	{
 		if(m_samplerMap.find(resource) != m_samplerMap.end())
 			throw ResourceMultiplyDefinedException(resource, "sampler");
@@ -370,7 +370,7 @@ namespace glscene
 		m_samplerMap[resource] = CreateSampler(data);
 	}
 
-	void ResourceData::SetSamplerBorderColor( const std::string &resource, const glm::vec4 &color )
+	void ResourceData::SetSamplerBorderColor( const IdString &resource, const glm::vec4 &color )
 	{
 		SamplerMap::iterator theVal = m_samplerMap.find(resource);
 
@@ -380,7 +380,7 @@ namespace glscene
 		gl::SamplerParameterfv(theVal->second, gl::TEXTURE_BORDER_COLOR, glm::value_ptr(color));
 	}
 
-	void ResourceData::SetSamplerBorderColorI( const std::string &resource, const glm::ivec4 &color )
+	void ResourceData::SetSamplerBorderColorI( const IdString &resource, const glm::ivec4 &color )
 	{
 		SamplerMap::iterator theVal = m_samplerMap.find(resource);
 
@@ -390,7 +390,7 @@ namespace glscene
 		gl::SamplerParameterIiv(theVal->second, gl::TEXTURE_BORDER_COLOR, glm::value_ptr(color));
 	}
 
-	void ResourceData::SetSamplerBorderColorI( const std::string &resource, const glm::uvec4 &color )
+	void ResourceData::SetSamplerBorderColorI( const IdString &resource, const glm::uvec4 &color )
 	{
 		SamplerMap::iterator theVal = m_samplerMap.find(resource);
 
@@ -400,7 +400,7 @@ namespace glscene
 		gl::SamplerParameterIuiv(theVal->second, gl::TEXTURE_BORDER_COLOR, glm::value_ptr(color));
 	}
 
-	void ResourceData::SetSamplerLODBias( const std::string &resource, float bias )
+	void ResourceData::SetSamplerLODBias( const IdString &resource, float bias )
 	{
 		SamplerMap::iterator theVal = m_samplerMap.find(resource);
 
@@ -410,7 +410,7 @@ namespace glscene
 		gl::SamplerParameterf(theVal->second, gl::TEXTURE_LOD_BIAS, bias);
 	}
 
-	void ResourceData::BindSampler( const std::string &resource, GLuint textureUnit ) const
+	void ResourceData::BindSampler( const IdString &resource, GLuint textureUnit ) const
 	{
 		SamplerMap::const_iterator theVal = m_samplerMap.find(resource);
 
@@ -420,7 +420,7 @@ namespace glscene
 		gl::BindSampler(textureUnit, theVal->second);
 	}
 
-	void ResourceData::DefineMesh( const std::string &resource, glmesh::Mesh *pMesh, bool claimOwnership )
+	void ResourceData::DefineMesh( const IdString &resource, glmesh::Mesh *pMesh, bool claimOwnership )
 	{
 		MeshMap::iterator test_it = m_meshMap.find(resource);
 		if(test_it != m_meshMap.end())
@@ -434,7 +434,7 @@ namespace glscene
 		value.pMesh = pMesh;
 	}
 
-	void ResourceData::DefineMeshIncomplete( const std::string &resource )
+	void ResourceData::DefineMeshIncomplete( const IdString &resource )
 	{
 		if(m_meshMap.find(resource) != m_meshMap.end())
 			throw ResourceMultiplyDefinedException(resource, "mesh");
@@ -444,7 +444,7 @@ namespace glscene
 		value.pMesh = NULL;
 	}
 
-	void ResourceData::RenderMesh( const std::string &resource ) const
+	void ResourceData::RenderMesh( const IdString &resource ) const
 	{
 		MeshMap::const_iterator theVal = m_meshMap.find(resource);
 
@@ -457,7 +457,7 @@ namespace glscene
 		theVal->second.pMesh->Render();
 	}
 
-	void ResourceData::RenderMesh( const std::string &resource, const std::string &variant ) const
+	void ResourceData::RenderMesh( const IdString &resource, const std::string &variant ) const
 	{
 		MeshMap::const_iterator theVal = m_meshMap.find(resource);
 
@@ -470,7 +470,7 @@ namespace glscene
 		theVal->second.pMesh->Render(variant);
 	}
 
-	void ResourceData::DefineProgram( const std::string &resource, GLuint program,
+	void ResourceData::DefineProgram( const IdString &resource, GLuint program,
 		const ProgramInfo &programInfo, bool claimOwnership )
 	{
 		if(m_programMap.find(resource) != m_programMap.end())
@@ -525,7 +525,7 @@ namespace glscene
 		}
 	}
 
-	GLuint ResourceData::GetProgram( const std::string &resource )
+	GLuint ResourceData::GetProgram( const IdString &resource )
 	{
 		ProgramMap::const_iterator theVal = m_programMap.find(resource);
 
@@ -535,7 +535,7 @@ namespace glscene
 		return theVal->second.program;
 	}
 
-	void ResourceData::DefineUniformBufferBinding( const std::string &resource, GLuint bufferObject,
+	void ResourceData::DefineUniformBufferBinding( const IdString &resource, GLuint bufferObject,
 		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
 		InterfaceBufferMap::iterator test_it = m_uniformBufferMap.find(resource);
@@ -550,7 +550,7 @@ namespace glscene
 		binding.size = size;
 	}
 
-	void ResourceData::DefineUniformBufferBinding( const std::string &resource, GLuint bufferObject,
+	void ResourceData::DefineUniformBufferBinding( const IdString &resource, GLuint bufferObject,
 		GLintptr offset, bool claimOwnership )
 	{
 		InterfaceBufferMap::iterator test_it = m_uniformBufferMap.find(resource);
@@ -566,7 +566,7 @@ namespace glscene
 		binding.offset = offset;
 	}
 
-	void ResourceData::DefineUniformBufferBindingIncomplete( const std::string &resource, GLuint bindPoint,
+	void ResourceData::DefineUniformBufferBindingIncomplete( const IdString &resource, GLuint bindPoint,
 		GLsizeiptr size )
 	{
 		if(m_uniformBufferMap.find(resource) != m_uniformBufferMap.end())
@@ -580,7 +580,7 @@ namespace glscene
 		binding.size = size;
 	}
 
-	void ResourceData::DefineStorageBufferBinding( const std::string &resource, GLuint bufferObject,
+	void ResourceData::DefineStorageBufferBinding( const IdString &resource, GLuint bufferObject,
 		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
 		InterfaceBufferMap::iterator test_it = m_storageBufferMap.find(resource);
@@ -595,7 +595,7 @@ namespace glscene
 		binding.size = size;
 	}
 
-	void ResourceData::DefineStorageBufferBinding( const std::string &resource, GLuint bufferObject,
+	void ResourceData::DefineStorageBufferBinding( const IdString &resource, GLuint bufferObject,
 		GLintptr offset, bool claimOwnership )
 	{
 		InterfaceBufferMap::iterator test_it = m_storageBufferMap.find(resource);
@@ -611,7 +611,7 @@ namespace glscene
 		binding.offset = offset;
 	}
 
-	void ResourceData::DefineStorageBufferBindingIncomplete( const std::string &resource, GLuint bindPoint,
+	void ResourceData::DefineStorageBufferBindingIncomplete( const IdString &resource, GLuint bindPoint,
 		GLsizeiptr size )
 	{
 		if(m_storageBufferMap.find(resource) != m_storageBufferMap.end())
@@ -625,7 +625,7 @@ namespace glscene
 		binding.size = size;
 	}
 
-	void ResourceData::BindUniformBuffer( const std::string &resource ) const
+	void ResourceData::BindUniformBuffer( const IdString &resource ) const
 	{
 		InterfaceBufferMap::const_iterator theVal = m_uniformBufferMap.find(resource);
 
@@ -640,7 +640,7 @@ namespace glscene
 		gl::BindBufferRange(gl::UNIFORM_BUFFER, buf.bindPoint, buf.bufferObject.get(), buf.offset, buf.size);
 	}
 
-	void ResourceData::BindStorageBuffer( const std::string &resource ) const
+	void ResourceData::BindStorageBuffer( const IdString &resource ) const
 	{
 		InterfaceBufferMap::const_iterator theVal = m_storageBufferMap.find(resource);
 
@@ -655,7 +655,7 @@ namespace glscene
 		gl::BindBufferRange(gl::SHADER_STORAGE_BUFFER, buf.bindPoint, buf.bufferObject.get(), buf.offset, buf.size);
 	}
 
-	void ResourceData::DefineCamera( const std::string &resource, const glutil::ViewData &initialView,
+	void ResourceData::DefineCamera( const IdString &resource, const glutil::ViewData &initialView,
 		const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls )
 	{
 		if(m_cameraMap.find(resource) != m_cameraMap.end())
@@ -665,7 +665,7 @@ namespace glscene
 			glutil::ViewPole(initialView, viewScale, actionButton, bRightKeyboardCtrls)));
 	}
 
-	glutil::ViewPole & ResourceData::GetCamera( const std::string &resource )
+	glutil::ViewPole & ResourceData::GetCamera( const IdString &resource )
 	{
 		CameraMap::iterator theVal = m_cameraMap.find(resource);
 
@@ -675,7 +675,7 @@ namespace glscene
 		return theVal->second;
 	}
 
-	const glutil::ViewPole & ResourceData::GetCamera( const std::string &resource ) const
+	const glutil::ViewPole & ResourceData::GetCamera( const IdString &resource ) const
 	{
 		CameraMap::const_iterator theVal = m_cameraMap.find(resource);
 

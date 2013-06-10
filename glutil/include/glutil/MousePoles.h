@@ -198,7 +198,7 @@ namespace glutil
 	struct ViewData
 	{
 		glm::vec3 targetPos;	///<The starting target position position.
-		glm::fquat orient;		///<The initial orientation aroudn the target position.
+		glm::fquat orient;		///<The initial orientation around the target position.
 		float radius;			///<The initial radius of the camera from the target point.
 		float degSpinRotation;	///<The initial spin rotation of the "up" axis, relative to \a orient
 	};

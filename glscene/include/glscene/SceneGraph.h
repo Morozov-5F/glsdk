@@ -1,5 +1,5 @@
-#ifndef GLSDK_GLGRAPH_SCENE_GRAPH_H
-#define GLSDK_GLGRAPH_SCENE_GRAPH_H
+#ifndef GLSDK_GLSCENE_SCENE_GRAPH_H
+#define GLSDK_GLSCENE_SCENE_GRAPH_H
 
 /**
 \file
@@ -60,4 +60,4 @@ namespace glscene
 	};
 }
 
-#endif //GLSDK_GLGRAPH_SCENE_GRAPH_H
+#endif //GLSDK_GLSCENE_SCENE_GRAPH_H

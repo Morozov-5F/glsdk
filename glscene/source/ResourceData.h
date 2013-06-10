@@ -1,5 +1,5 @@
-#ifndef GLSDK_INTERNAL_GLGRAPH_RESOURCE_DATA_H
-#define GLSDK_INTERNAL_GLGRAPH_RESOURCE_DATA_H
+#ifndef GLSDK_INTERNAL_GLSCENE_RESOURCE_DATA_H
+#define GLSDK_INTERNAL_GLSCENE_RESOURCE_DATA_H
 
 #include <string>
 #include <glm/glm.hpp>
@@ -9,10 +9,10 @@
 #include <boost/optional.hpp>
 #include <glmesh/Mesh.h>
 #include <glutil/MousePoles.h>
+#include "IdString.h"
 
 namespace glscene
 {
-	typedef std::string IdString;
 	typedef boost::variant<float, glm::vec2, glm::vec3, glm::vec4> VectorTypes;
 	typedef boost::variant<int, glm::ivec2, glm::ivec3, glm::ivec4> IntVectorTypes;
 	typedef boost::variant<unsigned int, glm::uvec2, glm::uvec3, glm::uvec4> UIntVectorTypes;
@@ -127,57 +127,57 @@ namespace glscene
 		void ApplyUniform(GLuint program, const IdString &resource, GLint uniformLocation) const;
 
 
-		void DefineTexture(const std::string &resource, GLuint textureObj,
+		void DefineTexture(const IdString &resource, GLuint textureObj,
 			GLenum target, bool claimOwnership);
-		void DefineTextureIncomplete(const std::string &resource);
+		void DefineTextureIncomplete(const IdString &resource);
 
-		void BindTexture(const std::string &resource, GLuint textureUnit) const;
-		void BindImage(const std::string &resource, GLuint imageUnit, int mipmapLevel, int imageLayer,
+		void BindTexture(const IdString &resource, GLuint textureUnit) const;
+		void BindImage(const IdString &resource, GLuint imageUnit, int mipmapLevel, int imageLayer,
 			GLenum access, GLenum format, bool layered) const;
 
-		void DefineSampler(const std::string &resource, const SamplerInfo &sampler);
+		void DefineSampler(const IdString &resource, const SamplerInfo &sampler);
 
-		void SetSamplerBorderColor(const std::string &resource, const glm::vec4 &color);
-		void SetSamplerBorderColorI(const std::string &resource, const glm::ivec4 &color);
-		void SetSamplerBorderColorI(const std::string &resource, const glm::uvec4 &color);
+		void SetSamplerBorderColor(const IdString &resource, const glm::vec4 &color);
+		void SetSamplerBorderColorI(const IdString &resource, const glm::ivec4 &color);
+		void SetSamplerBorderColorI(const IdString &resource, const glm::uvec4 &color);
 
-		void SetSamplerLODBias(const std::string &resource, float bias);
+		void SetSamplerLODBias(const IdString &resource, float bias);
 
-		void BindSampler(const std::string &resource, GLuint textureUnit) const;
+		void BindSampler(const IdString &resource, GLuint textureUnit) const;
 
-		void DefineMesh(const std::string &resource, glmesh::Mesh *pMesh, bool claimOwnership);
-		void DefineMeshIncomplete(const std::string &resource);
+		void DefineMesh(const IdString &resource, glmesh::Mesh *pMesh, bool claimOwnership);
+		void DefineMeshIncomplete(const IdString &resource);
 
-		void RenderMesh(const std::string &resource) const;
-		void RenderMesh(const std::string &resource, const std::string &variant) const;
+		void RenderMesh(const IdString &resource) const;
+		void RenderMesh(const IdString &resource, const std::string &variant) const;
 
-		void DefineProgram(const std::string &resource, GLuint program,
+		void DefineProgram(const IdString &resource, GLuint program,
 			const ProgramInfo &programInfo, bool claimOwnership);
 
-		GLuint GetProgram(const std::string &resource);
+		GLuint GetProgram(const IdString &resource);
 
-		void DefineUniformBufferBinding(const std::string &resource, GLuint bufferObject, GLuint bindPoint,
+		void DefineUniformBufferBinding(const IdString &resource, GLuint bufferObject, GLuint bindPoint,
 			GLintptr offset, GLsizeiptr size, bool claimOwnership);
-		void DefineUniformBufferBinding(const std::string &resource, GLuint bufferObject,
+		void DefineUniformBufferBinding(const IdString &resource, GLuint bufferObject,
 			GLintptr offset, bool claimOwnership);
-		void DefineUniformBufferBindingIncomplete(const std::string &resource, GLuint bindPoint,
+		void DefineUniformBufferBindingIncomplete(const IdString &resource, GLuint bindPoint,
 			GLsizeiptr size);
 
-		void DefineStorageBufferBinding(const std::string &resource, GLuint bufferObject, GLuint bindPoint,
+		void DefineStorageBufferBinding(const IdString &resource, GLuint bufferObject, GLuint bindPoint,
 			GLintptr offset, GLsizeiptr size, bool claimOwnership);
-		void DefineStorageBufferBinding(const std::string &resource, GLuint bufferObject,
+		void DefineStorageBufferBinding(const IdString &resource, GLuint bufferObject,
 			GLintptr offset, bool claimOwnership);
-		void DefineStorageBufferBindingIncomplete(const std::string &resource, GLuint bindPoint,
+		void DefineStorageBufferBindingIncomplete(const IdString &resource, GLuint bindPoint,
 			GLsizeiptr size);
 
-		void BindUniformBuffer(const std::string &resource) const;
-		void BindStorageBuffer(const std::string &resource) const;
+		void BindUniformBuffer(const IdString &resource) const;
+		void BindStorageBuffer(const IdString &resource) const;
 
-		void DefineCamera(const std::string &resource, const glutil::ViewData &initialView,
+		void DefineCamera(const IdString &resource, const glutil::ViewData &initialView,
 			const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls);
 
-		glutil::ViewPole &GetCamera(const std::string &resource);
-		const glutil::ViewPole &GetCamera(const std::string &resource) const;
+		glutil::ViewPole &GetCamera(const IdString &resource);
+		const glutil::ViewPole &GetCamera(const IdString &resource) const;
 
 		~ResourceData();
 
@@ -194,4 +194,4 @@ namespace glscene
 }
 
 
-#endif //GLSDK_INTERNAL_GLGRAPH_RESOURCE_DATA_H
+#endif //GLSDK_INTERNAL_GLSCENE_RESOURCE_DATA_H
