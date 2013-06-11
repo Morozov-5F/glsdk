@@ -477,9 +477,9 @@ namespace glscene
 		void DefineCamera(const boost::string_ref &resource, const glutil::ViewData &initialView,
 			const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls);
 	private:
-		ResourceData *m_pData;
+		ResourceData &m_data;
 
-		Resources(ResourceData *pData) : m_pData(pData) {}
+		Resources(ResourceData &data) : m_data(data) {}
 
 		friend class SceneGraph;
 	};

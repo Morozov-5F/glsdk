@@ -4,6 +4,7 @@
 #include "glscene/SceneGraph.h"
 #include "glscene/Resources.h"
 #include "ResourceData.h"
+#include "TransformData.h"
 
 
 namespace glscene

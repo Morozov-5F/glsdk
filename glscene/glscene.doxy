@@ -9,7 +9,7 @@ The resource system also allows you to have uniform values (not in buffers) whic
 
 Second, it provides direct support for a variety of newer OpenGL features. These include:
 
-- [Tessellation Shaders]()
+- [Tessellation Shaders](http://www.opengl.org/wiki/Tessellation)
 - [Separate programs and program pipelines](http://www.opengl.org/wiki/Shader_Compilation#Separate_programs)
 - [Uniform buffers](http://www.opengl.org/wiki/Uniform_Buffer_Object)
 - [Shader storage buffers](http://www.opengl.org/wiki/Shader_Storage_Buffer_Object)
@@ -26,16 +26,34 @@ A particular rendering operation renders a given variant within a given scene. E
 The scene graph does not cover framebuffer state, blending state, viewport state, or the like. The scene graph only handles the program, texture, image, uniform and storage buffer bindings.
 **/
 
+
 /**
 \defgroup module_glscene_core GL Scene Graph Core Facilities
 \ingroup module_glscene
 
 
-## Transforms Node vs Object ##
+
+### Transforms Node vs Object ###
 
 Nodes in the graph have two separate transformation matrices: the node transform and the object transform.
 
+The node transforms for various nodes are propogated up the hierarchy of nodes within a scene. The object transforms *are not*; the only transform only applies to the mesh(es) being rendered on this node, in variants provided *by* this node. The object transform is applied before any parent node transforms. So it is right-multiplied onto the list of transforms.
+
+So, for a node with 2 parent nodes, the full model-to-camera matrix for rendering variants on a node looks like this:
+
+    model_to_camera = camera * root_node_tm * direct_parent_node_tm * current_node_tm * current_node_object_tm
+	
+The purpose of this distinction is to allow transformations, such as scaling, that don't apply to child nodes. This allows one to re-position or re-scale a mesh without accidentally modifying child nodes. It's easier to do it this way than to create a separate child node for the mesh. 
 **/
+
+
+/**
+\defgroup module_glscene_node GL Scene Graph Node
+\ingroup module_glscene
+
+
+**/
+
 
 /**
 \defgroup module_glscene_resources GL Scene Graph Resources
@@ -75,17 +93,19 @@ All of this information is provided through the ProgramInfo object.
 
 ### Resource naming ###
 
-Resource names, for the sake of efficiency, are not stored as `std::string` objects. Instead, they are stored as a fixed-length hashed-string for faster lookup and less memory allocation overhead. Strings longer than the fixed-length are truncated from the middle.
+For the sake of efficiency, resource names are not internally stored as `std::string` objects. Instead, they are stored as a fixed-length hashed-string for faster lookup and less memory allocation overhead. Strings longer than the fixed-length are truncated from the middle.
 
-It is therefore possible to get a collision of string names in this system, where two different strings that you give the system actually map to the same name. This require all of the following to be true of both strings:
+It is therefore possible to get a collision of string names in this system, where two different strings that you give the system actually map to the same name. This requires that the following to be true of *both* strings:
 
-- They are longer than the fixed-string length (27 characters currently)
-- The full length versions happen to generate the same hashes
-- The truncated version of both strings resolves to the same 27-character sequence.
+- They are longer than the fixed-length (27 characters currently)
+- The truncated version of the strings resolves to the same 27-character sequence. Note that the truncation happens in the *middle*.
+- The full length strings happen to generate the same hashes
 
-This is highly unlikely to happen in practice. I have personally used the [djb2 hashing algorithm](http://www.cse.yorku.ca/~oz/hash.html) in a purely hash-driven system. Even using a database of *tens* of thousands of strings (where we routinely scanned for hash collisions as an off-line process) we only got a collision *once*. And that was with a system were we *only* stored the hashes, not 27 other characters along with them.
+*All of these* must happen to have a name collision.
 
-However, if this does concern you (and it shouldn't), you can ensure that there will be no problems by using resource names that are 27 characters or less. And 27 characters is quite a lot for an identifier.
+In practice, all of these are highly unlikely to happen. I have professionally seen the [djb2 hashing algorithm](http://www.cse.yorku.ca/~oz/hash.html) used in a purely hash-driven system. Even using a database of *tens* of thousands of strings (where we routinely scanned for hash collisions as an off-line process) we only got a collision *once*. And that was with a system were we stored *just* the hashes, not 27 other characters from the string.
+
+However, if this does concern you (and it shouldn't), you can ensure that there will be no problems by using resource names that are 27 characters or less. And 27 characters is plenty of room for an identifier string.
 **/
 
 
