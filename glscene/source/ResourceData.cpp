@@ -5,8 +5,8 @@
 #include <glload/gl_all.hpp>
 #include <boost/range.hpp>
 #include <boost/range/algorithm.hpp>
-#include "ResourceData.h"
 #include "glscene/Resources.h"
+#include "ResourceData.h"
 #include "glscene/SceneGraph.h"
 
 namespace glscene
@@ -68,7 +68,7 @@ namespace glscene
 		BOOST_FOREACH(MeshMap::value_type &meshData, m_meshMap)
 		{
 			if(meshData.second.owned)
-				delete meshData.second.pMesh;
+				meshData.second.pMesh->Dispose();
 		}
 	}
 
@@ -420,7 +420,7 @@ namespace glscene
 		gl::BindSampler(textureUnit, theVal->second);
 	}
 
-	void ResourceData::DefineMesh( const IdString &resource, glmesh::Mesh *pMesh, bool claimOwnership )
+	void ResourceData::DefineMesh( const IdString &resource, glscene::Drawable *pMesh, bool claimOwnership )
 	{
 		MeshMap::iterator test_it = m_meshMap.find(resource);
 		if(test_it != m_meshMap.end())
@@ -444,7 +444,7 @@ namespace glscene
 		value.pMesh = NULL;
 	}
 
-	void ResourceData::RenderMesh( const IdString &resource ) const
+	void ResourceData::RenderMesh( const IdString &resource, const boost::optional<std::string> &variant ) const
 	{
 		MeshMap::const_iterator theVal = m_meshMap.find(resource);
 
@@ -454,20 +454,7 @@ namespace glscene
 		if(!theVal->second.pMesh)
 			throw UsingIncompleteResourceException(resource, "mesh");
 
-		theVal->second.pMesh->Render();
-	}
-
-	void ResourceData::RenderMesh( const IdString &resource, const std::string &variant ) const
-	{
-		MeshMap::const_iterator theVal = m_meshMap.find(resource);
-
-		if(theVal == m_meshMap.end())
-			throw ResourceNotFoundException(resource, "mesh");
-
-		if(!theVal->second.pMesh)
-			throw UsingIncompleteResourceException(resource, "mesh");
-
-		theVal->second.pMesh->Render(variant);
+		theVal->second.pMesh->Draw(variant);
 	}
 
 	void ResourceData::DefineProgram( const IdString &resource, GLuint program,

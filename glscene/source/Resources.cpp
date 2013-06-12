@@ -207,6 +207,12 @@ namespace glscene
 
 	void Resources::DefineMesh( const boost::string_ref &resource, glmesh::Mesh *pMesh, bool claimOwnership )
 	{
+		//Manager will delete, but MeshDrawable will decide to delete the mesh itself.
+		m_data.DefineMesh(resource, new MeshDrawable(pMesh, claimOwnership), true);
+	}
+
+	void Resources::DefineMesh( const boost::string_ref &resource, glscene::Drawable *pMesh, bool claimOwnership /*= true*/ )
+	{
 		m_data.DefineMesh(resource, pMesh, claimOwnership);
 	}
 

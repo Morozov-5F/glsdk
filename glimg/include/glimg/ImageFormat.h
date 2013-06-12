@@ -207,7 +207,7 @@ namespace glimg
 	\brief An immutable combination of image format parameters.
 
 	The image format object will throw if the given format parameters are impossible or inconsistent.
-	The \ref page_glimg_format_validation "rules for format validation are available."
+	The [rules for format validation are available.](@ref page_glimg_format_validation)
 	
 	These objects are immutable once created.
 	**/

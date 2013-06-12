@@ -26,13 +26,13 @@ namespace glmesh
 	/**
 	\brief A list of rendering commands to be used by a Mesh.
 	
-	This class is part of the setup process for creating a Mesh. It stores a series of OpenGL
-	rendering commands which will be used when rendering a particular Mesh. The series of commands
-	will be used in the order given.
+	This class is part of the setup process for creating a Mesh. It stores a series of [OpenGL
+	rendering commands](http://www.opengl.org/wiki/Vertex_Rendering) which will be used when
+	rendering a particular Mesh. The series of commands will be used in the order given.
 
 	Indexed rendering commands (`glDrawElements` and its ilk) will use the element buffer that is
 	stored in the VAO used by the Mesh to render. You do not provide the element buffer to these
-	functions.
+	functions, just the byte offsets.
 
 	The rendering command functions mimic their OpenGL counterparts where possible.
 	**/
@@ -158,18 +158,30 @@ namespace glmesh
 		///Deletes all VAOs and buffer objects owned by this Mesh. The OpenGL context must still exist.
 		~Mesh();
 
-		///Renders the main VAO. Does nothing if there is no main VAO.
+		/**
+		\brief Renders the main VAO. Does nothing if there is no main VAO.
+
+		If the VAO exists, then the following OpenGL state will be changed:
+
+		- Primitive restarting (`GL_PRIMITIVE_RESTART`) will be disabled.
+		- The current VAO binding will be set to 0.
+		**/
 		void Render() const;
 
-		///Renders a named variant. Does nothing if the named VAO does not exist.
-		/// \todo Take a string_ref.
+		/**
+		\brief Renders a named variant. Does nothing if the named VAO does not exist.
+		
+		If the VAO exists, then the following OpenGL state will be changed:
+
+		- Primitive restarting (`GL_PRIMITIVE_RESTART`) will be disabled.
+		- The current VAO binding will be set to 0.
+		**/
 		void Render(const std::string &variantName) const;
 
 		///Returns true if there is a main VAO.
 		bool DoesMainExist() const;
 
 		///Returns true if the named variant exists.
-		/// \todo Take a string_ref.
 		bool DoesVariantExist(const std::string &variantName) const;
 
 	private:

@@ -136,7 +136,7 @@ Each function that throws describes the exceptions (or base classes thereof) tha
 
 Not every combination of ImageFormat parameters is considered valid. Some are functionally meaningless or inconsistent, while others are simply not allowed.
 
-- The ImageFormat::LineAlign field must be 1, 2, 4, or 8. This value is ignored if the glimg::PixelDataType is a compressed format; they do not use the line alignment.
+- The glimg::ImageFormat::LineAlign field must be 1, 2, 4, or 8. This value is ignored if the glimg::PixelDataType is a compressed format; they do not use the line alignment.
 
 - If the glimg::PixelDataType is not a compressed format, then:
  

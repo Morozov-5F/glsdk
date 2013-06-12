@@ -19,6 +19,30 @@ namespace glscene
 	typedef boost::variant<glm::mat2, glm::mat3, glm::mat4> MatrixTypes;
 	typedef boost::variant<VectorTypes, IntVectorTypes, UIntVectorTypes, MatrixTypes> UniformData;
 
+	class MeshDrawable : public Drawable
+	{
+	public:
+		MeshDrawable(glmesh::Mesh *_pMesh, bool _owned) : pMesh(_pMesh), owned(_owned) {}
+
+		virtual void Draw(const boost::optional<std::string> &param) const
+		{
+			if(param)
+				pMesh->Render();
+			else
+				pMesh->Render(param.get());
+		}
+
+		virtual ~MeshDrawable()
+		{
+			if(owned)
+				delete pMesh;
+		}
+
+	private:
+		glmesh::Mesh *pMesh;
+		bool owned;
+	};
+
 	struct UniformValue
 	{
 		std::string uniformName;
@@ -34,7 +58,7 @@ namespace glscene
 
 	struct MeshData
 	{
-		glmesh::Mesh *pMesh;
+		glscene::Drawable *pMesh;
 		bool owned;
 	};
 
@@ -145,11 +169,10 @@ namespace glscene
 
 		void BindSampler(const IdString &resource, GLuint textureUnit) const;
 
-		void DefineMesh(const IdString &resource, glmesh::Mesh *pMesh, bool claimOwnership);
+		void DefineMesh(const IdString &resource, glscene::Drawable *pMesh, bool claimOwnership);
 		void DefineMeshIncomplete(const IdString &resource);
 
-		void RenderMesh(const IdString &resource) const;
-		void RenderMesh(const IdString &resource, const std::string &variant) const;
+		void RenderMesh(const IdString &resource, const boost::optional<std::string> &variant) const;
 
 		void DefineProgram(const IdString &resource, GLuint program,
 			const ProgramInfo &programInfo, bool claimOwnership);

@@ -96,6 +96,57 @@ namespace glscene
 		SamplerInfo();			///<Creates a default sampler-info.
 	};
 
+	/**
+	\brief Base class for user-provided drawable objects.
+
+	This class provides a hook for the user to define their own meshes and provide them as resources. A
+	Drawable only needs to be able to render the mesh.
+
+	The Drawable you provide will be destroyed only if you told the Resources object to claim ownership of it.
+	This destruction will be managed by calling the Dispose function; `delete` will not be called directly.
+	This allows you to manage the memory for Drawable objects in your own way, such as by pool allocators
+	and the like.
+	**/
+	class Drawable
+	{
+	public:
+		/**
+		\brief Performs rendering.
+
+		This function will be called after all state setup has been done. All textures have been bound,
+		all buffers and the like that are part of the scene graph have been bound to the
+		context. This class simply needs to set
+		[vertex specification](http://www.opengl.org/wiki/Vertex_Specification) state (perhaps with a VAO bind)
+		and issue some number of rendering commands.
+		
+		While this cannot be enforced, this class is expected to:
+
+		- Restrict its OpenGL state modifications to *only*
+		[vertex specification](http://www.opengl.org/wiki/Vertex_Specification) and
+		[vertex rendering](http://www.opengl.org/wiki/Vertex_Rendering) state. No uniform setting and such.
+		- Make no assumptions about the current contents of vertex specification or rendering state. For example,
+		if you need attribute X, you enable that attribute.
+		- Reset this state upon being finished. If you used primitive restarting in your rendering, turn it off.
+
+		\param param An arbitrary string passed by the system. For glmesh::Mesh objects, it's the mesh variant
+		name.
+		**/
+		virtual void Draw(const boost::optional<std::string> &param) const = 0;
+
+		virtual ~Drawable() {}
+
+	private:
+		/**
+		\brief Destroys this object. 
+		
+		Override this function only if your Drawable-derived class has special memory management needs
+		that prevent `delete` from being called on them.
+		**/
+		virtual void Dispose() {delete this;}
+
+		friend class ResourceData;
+	};
+
 	///Mapping between GLSL variable names and binding indices.
 	typedef boost::container::flat_map<std::string, GLint> BindingLocationMap;
 
@@ -292,6 +343,19 @@ namespace glscene
 		will not be thrown.
 		**/
 		void DefineMesh(const boost::string_ref &resource, glmesh::Mesh *pMesh, bool claimOwnership = true);
+
+		/**
+		\brief Creates a named, user-defined mesh, which may claim ownership of the mesh.
+		
+		\param resource The resource name for the mesh.
+		\param pMesh The mesh object to be stored.
+		\param claimOwnership Set to `true` if you want the scene graph to delete the mesh.
+
+		\throws ResourceMultiplyDefinedException If \a resource refers to a mesh resource that has already
+		been defined with mesh data. If it was previously defined with DefineMeshIncomplete, then this exception
+		will not be thrown.
+		**/
+		void DefineMesh(const boost::string_ref &resource, glscene::Drawable *pMesh, bool claimOwnership = true);
 
 		/**
 		\brief Creates a named mesh, which will be filled in with actual data later.

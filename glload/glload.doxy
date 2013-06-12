@@ -7,14 +7,10 @@ The GL Load library is distributed under the <a href="http://www.opensource.org/
 
 @section glload_headers GL Load Headers
 
-The GL Load library provides a number of header files. To include them, simply put the
-glload/include directory in your build system's include path. It also comes with
-a static library which needs to be built. Build the static library as part of the
-SDK's build process, and link to them as is normal for your build system.
+The GL Load library provides a number of header files. To include them, simply put the glload/include directory in your build system's include path. It also comes with a static library which needs to be built. Build the static library as part of the SDK's build process, and link to them as is normal for your build system.
 
 There are two interfaces for GL Load: the C interface and the C++ interface. Files that end in <tt>.hpp</tt> are for C++, and files that end in <tt>.h</tt> are for C. C++ programs can freely include and use the C interface files.
 
-The 
 All header files except the <tt>glload/*_load.h</tt> and <tt>glload/*_load.hpp</tt> files expose OpenGL functions or functions in WGL/GLX. For regular OpenGL functions, you need to include one of the headers of the form <tt>glload/gl_*.h</tt> or <tt>.hpp</tt>, where * is the version of OpenGL that you are coding against. For example, <tt>glload/gl_3_3.h</tt> represents the header for OpenGL version 3.3. There are also <tt>_comp</tt> verisons. For example: <tt>glload/gl_3_3_comp.hpp</tt> includes the C++ headers for the OpenGL 3.3 compatibility profile.
 
 Regardless of version number or core/compatibility issues, all OpenGL headers contain function for every extension.
@@ -49,19 +45,11 @@ The function ::ogl_IsVersionGEQ can be used to test if the current OpenGL versio
 
 GL Load has support for OpenGL extensions. The initialization routines will initialize OpenGL extensions just as it includes the core functions. The OpenGL (and WGL/GLX) headers have some additional, extension-specific functionality.
 
-Variables are provided to query whether an extension is available. These variables are of the form:
+Variables are provided to query whether an extension is available. These variables are of the form: `glext_extension_name`, where `extension_name` is the name of the extension without the `GL_` part. So just `glext_ARB_vertex_attrib_binding` and such.
 
-<code>
-glext_<em>extension_name</em>
-</code>
+For WGL/GLX, this becomes `wglext_/glXext_` respectively.
 
-For WGL/GLX, this becomes <tt>wglext_/glXext_</tt> respectively.
-
-In C++, the variables are named:
-
-<code>
-gl::exts::var_<em>extension_name</em>
-</code>
+In C++, the variables are named: `gl::exts::var_extension_name`.
 
 Again, with the namespace changes for WGL/GLX.
 

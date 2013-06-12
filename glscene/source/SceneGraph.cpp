@@ -32,12 +32,12 @@ namespace glscene
 
 	Resources SceneGraph::GetResources()
 	{
-		return Resources(&m_pData->resources);
+		return Resources(m_pData->resources);
 	}
 
 	const Resources SceneGraph::GetResources() const
 	{
-		return Resources(&m_pData->resources);
+		return Resources(m_pData->resources);
 	}
 
 	void swap( SceneGraph &lhs, SceneGraph &rhs )

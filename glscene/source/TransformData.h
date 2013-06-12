@@ -34,7 +34,7 @@ namespace glscene
 
 		bool IsDecomposed() const
 		{
-			boost::get<const DecomposedMatrix*>(m_matrix) != NULL;
+			return boost::get<const DecomposedMatrix*>(m_matrix) != NULL;
 		}
 
 		void SetTranslationDecomp(const glm::vec3 &translation)
