@@ -1,9 +1,13 @@
 /**
 \defgroup module_glscene GL Scene Graph
 
-This is a relatively simple scene graph system, designed around the needs of a shader-based rendering system. The system is simple in that it doesn't handle concepts like light management and the like. But it is powerful in several ways.
+This is a relatively simple scene graph system, designed around the needs of a shader-based rendering system.
 
-First, it has a system for managing most of the resources that the scene uses. Meshes, textures, and so forth are all stored in the scene graph's resource list. Therefore, when you delete the scene graph object, all of the owned resources will be deleted as well.
+If you do not know what a "scene graph" is, [here is your answer](@ref page_glscene_scene_graph). That describes the basic concepts of a scene graph, which the following discussion expects you to understand.
+
+This scene graph system is simple in that it doesn't handle concepts like light management and the like. But it is powerful in several ways.
+
+First, it has a system for managing most of the resources that the scene uses. Meshes (either glmesh::Mesh or user-specified rendering code), textures, and so forth are all stored in the scene graph's resource list. Therefore, when you delete the scene graph object, all of the owned resources will be deleted as well.
 
 The resource system also allows you to have uniform values (not in buffers) which are shared among multiple programs. When the values of these uniforms are changed, the changes will be propogated across all nodes that use those uniforms for programs.
 
@@ -17,11 +21,19 @@ Second, it provides direct support for a variety of newer OpenGL features. These
 
 Most scene graphs do not handle these advanced features.
 
-\note While the API provides access to these features, *you- must verify that these features are available before using them. The API will *not- check to see if, for example, image load/store is available before it tries to use them. If a node uses an image, then the graph assumes you're *serious- about that and that image load/store will be available. If it is not, then badness will occur.
+\note While the scene graph API provides access to these features, *you* must verify that these features are available before actually using them. The API will *not* check to see if, for example, image load/store is available if you tell it to bind an image. If a node uses an image, then the graph assumes you're *serious* about that and that image load/store will be available. If it is not available, then badness will occur.
 
-Third, the scene graph system allows the creation of multiple distinct scenes. Within each scene, each node that is rendered can have multiple distinct named *variant*. A variant represents a different form of the same rendered object. It could be using a different mesh, a different shader, a different texture, etc. This is for rendering the scene to a shadow map. 
+Third, the scene graph system has multiple levels of rendering customization. Nodes in this graph contain the data to be rendered. However, the data that a node gets rendered with depends on two things: the layer and the variant.
 
-A particular rendering operation renders a given variant within a given scene. Each rendering operation can be rendered in an arbitrary order or sorted (coarsely) back-to-front. The latter mechanism allows for blending. So a non-blended variant can be rendered in the default ordering, then a blended variant can be used for more precise ordering. The meshes and shaders used to render the second variant can be different from the first.
+Nodes can be part of a layer. A node can be part of multiple layers. When you render the scene, you render a specific layer. If the node is not part of the layer being rendered, then it will not be rendered.
+
+Nodes have one or more variants, and the variants contain the meshes, shaders, and other parameters needed to render. When you render the scene, you render a specific variant. If the node does not have a variant that matches the one you requested, then it will not be rendered.
+
+Conceptually, "layer" specifies *what* you want to render; "variant" specifies *how* you want to render it.
+
+Note that the above applies only to *rendering*. The transfomrations up and down the node hierarchy remain the same no matter what layer or variant is being used. So a node that doesn't get rendered will still affect its child nodes.
+
+When the scene is rendered, the nodes can be rendered either in an arbitrarr order or sorted back-to-front (coarsely by position, relative to the camera).  The latter mechanism allows for blending. Using variants, a non-blended variant can be rendered in the default order, then a blended variant can be used in the back-to-front order. Between these rendering calls, blending would be turned on. The meshes and shaders used in the blended variant could be different from those in the non-blended one.
 
 The scene graph does not cover framebuffer state, blending state, viewport state, or the like. The scene graph only handles the program, texture, image, uniform and storage buffer bindings.
 **/
@@ -100,6 +112,7 @@ It is therefore possible to get a collision of string names in this system, wher
 - They are longer than the fixed-length (27 characters currently)
 - The truncated version of the strings resolves to the same 27-character sequence. Note that the truncation happens in the *middle*.
 - The full length strings happen to generate the same hashes
+- The names are used for the same type of resource (two textures, two uniforms, etc).
 
 *All of these* must happen to have a name collision.
 
@@ -116,4 +129,30 @@ However, if this does concern you (and it shouldn't), you can ensure that there 
 \brief Exceptions thrown by the [GL Scene Graph](@ref module_glscene) classes and functions.
 
 stuff
+**/
+
+/**
+\page page_glscene_scene_graph What is a Scene Graph?
+
+This explains the general concept of a scene graph. The [GL Scene Graph][4] system implements a particular form of scene graph.
+
+A [scene graph][1] is a data structrue that stores and maintains the relative position and orientation of numerous objects in a scene. There are many variations in terms of the implementation of this concept, but the basic concept is as follows.
+
+A scene graph is first and foremost a *[graph][2]*; a series of nodes that are connected to one another in some way. For scenes, the graph is typically ordered into a [tree][3]. A tree is a special restricted form of graph. Specifically, nodes in a tree are hierarchially arranged: all nodes but one are connected to a single parent node and zero or more child nodes. The node without a parent is the root node, and all other nodes in the tree directly or indirectly are the child of the root.
+
+In a scene graph, a node represents a transform, as well as one or more things that 
+could be rendered with that transform. Because nodes in the graph are inherited, the 
+transforms are *also* inherited. Each node's transform is relative to its parent node in the hierarchy.
+
+This is a very powerful concept in rendering. This allows objects to move relative to one another. You can have a world that is fixed with objects that move around within the world. You can then have a objects within a train move relative to a train that is moving relative to the world. The objects in the train are children of the train node, and the train node is a child of the root world node.
+
+Depending on how the scene graph is structured, visible objects can either be specific (childless) nodes in the scene or they can be contents of nodes. The [GL Scene Graph][4] system makes the objects part of the contents of a node. The "contents" generally consist of some form of mesh coupled with information about how to render it (shaders, parameters for those shaders, textures, etc). Each node in scene graphs usually represents only a single mesh.
+
+Some scene graph systems add an additional grouping classification to nodes: layers. Nodes can belong to layers. When rendering the scene graph, the user renders a particular layer. And the contents of a node are rendered only if it is part of the layer being rendered.
+
+
+[1]: http://en.wikipedia.org/wiki/Scene_graph
+[2]: http://en.wikipedia.org/wiki/Graph_%28data_structure%29
+[3]: http://en.wikipedia.org/wiki/Tree_%28data_structure%29
+[4]: @ref module_glscene
 **/

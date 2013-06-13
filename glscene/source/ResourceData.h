@@ -169,6 +169,7 @@ namespace glscene
 
 		void BindSampler(const IdString &resource, GLuint textureUnit) const;
 
+		void DefineMesh(const IdString &resource, glmesh::Mesh *pMesh, bool claimOwnership);
 		void DefineMesh(const IdString &resource, glscene::Drawable *pMesh, bool claimOwnership);
 		void DefineMeshIncomplete(const IdString &resource);
 

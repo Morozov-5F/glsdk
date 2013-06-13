@@ -3,6 +3,7 @@ EBNF grammar (mostly)
 Tokens:
 	String: A sequence of characters, including spaces, but not including control characters.
 	StringExceptQuote: A `String` that also doesn't include the `"` character.
+	StringExceptSingleQuote: A `String` that also doesn't include the `'` character.
 	StringExceptGreater: A `String` that also doesn't include the `>` character.
 	ShaderIdentifier: A valid OpenGL Shading Language Identifier.
 	Float
@@ -24,7 +25,7 @@ Grammar:
 	res_name_ref = OpenAngle, StringExceptGreater, CloseAngle;
 	node_name_decl = OpenAngle, [StringExceptGreater], CloseAngle;
 	scene_name_decl = OpenAngle, [StringExceptGreater], CloseAngle;
-	pass_name_decl = OpenAngle, StringExceptGreater, CloseAngle;
+	variant_name_decl = OpenAngle, StringExceptGreater, CloseAngle;
 	local_name_decl = OpenAngle, StringExceptGreater, CloseAngle;
 	local_name_ref = OpenAngle, StringExceptGreater, CloseAngle;
 	filename = Quote, StringExceptQuote, Quote;
@@ -111,17 +112,23 @@ Grammar:
 		"up_spin", Float;
 
 	
-	scene = "scene", scene_name_decl, local_def*, node_def+, "end";
+	scene = "scene", layer_def, local_def*, node_def+, "end";
+	
+	layer_def = "layers", (SingleQuote, StringExceptSingleQuote, SingleQuote)+, "end";
 	
 	local_def = "local", local_name_decl, local_cmds, "end";
 	node_def = "node", node_name_decl,
+		layer_ref+,
 		node_transform,
 		node_obj_transform,
 		local_def*,
-		pass_def*,
+		variant_def*,
 		node_def*,
 		"end";
-	
+		
+	layer_ref = "layer",
+		("-"?, (SingleQuote, StringExceptSingleQuote, SingleQuote) | "inherit")
+
 	node_transform = "node_tm", transforms, "end";
 	node_obj_transform = "obj_tm", transforms, "end";
 	transforms =
@@ -129,12 +136,12 @@ Grammar:
 		[quat_transform],
 		[scale_transform];
 
-	pass_def = "pass", pass_name_decl,
-		pass_using*,
+	variant_def = "variant", variant_name_decl,
+		variant_using*,
 		local_cmds,
 		"end";
 		
-	pass_using = "using", local_name_ref;
+	variant_using = "using", local_name_ref;
 	
 	local_cmds = local_command+;
 	local_command =
@@ -153,4 +160,4 @@ Grammar:
 	local_program = "program", res_name_ref;
 	
 	
-	grammar = resources+, scene+;
+	grammar = resources+, scene;

@@ -1,7 +1,7 @@
 //Delimiters:
-//<>: Resource and node names.
-//"": Filenames.
-//'': Mesh variant names.
+//<>: Resource and node names. These will be converted to IdStrings.
+//"": Filenames, or string names that are construed as filenames.
+//'': Strings that will be stored and used in the graph.
 //[]: GLSL identifier.
 //{}: "Enumerators". Things that a specific parameter takes, which are selected from a specific list.
 //(): lists of numbers, for things like vectors.
@@ -58,8 +58,15 @@ resources
 	end
 end
 
-scene <>
+scene
+	layers		//Defines all layers
+		'main'
+		'shadow1'
+		'shadow2'
+	end
+
 	node <globals>
+		layer 'main'	//Layer for the current node.
 
 		local <matrices>
 			uniform_buffer <projection_matrix>
@@ -67,6 +74,10 @@ scene <>
 		end
 		
 		node <ship>
+			layer inherit	//Take the layers from parent
+			layer 'shadow1'	//Adds 'shadow1' layer
+			layer -'main'	//Removes from 'main' layer if it is part of it.
+			
 			node-tm
 				quaternion (0 0.707 0 0.707)
 				translation (0 5 0)

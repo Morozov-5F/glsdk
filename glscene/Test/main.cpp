@@ -127,7 +127,12 @@ int main(int argc, char** argv)
 	glutil::RegisterDebugOutput(glutil::STD_OUT);
 
 	{
-		glscene::SceneGraph graph;
+		const char *layerNames[] =
+		{
+			"main",
+		};
+
+		glscene::SceneGraph graph(layerNames);
 
 		try
 		{

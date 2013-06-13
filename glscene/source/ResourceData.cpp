@@ -420,6 +420,20 @@ namespace glscene
 		gl::BindSampler(textureUnit, theVal->second);
 	}
 
+	void ResourceData::DefineMesh( const IdString &resource, glmesh::Mesh *pMesh, bool claimOwnership )
+	{
+		MeshMap::iterator test_it = m_meshMap.find(resource);
+		if(test_it != m_meshMap.end())
+		{
+			if(test_it->second.pMesh)
+				throw ResourceMultiplyDefinedException(resource, "mesh");
+		}
+
+		MeshData &value = m_meshMap[resource];
+		value.owned = true;
+		value.pMesh = new MeshDrawable(pMesh, claimOwnership);
+	}
+
 	void ResourceData::DefineMesh( const IdString &resource, glscene::Drawable *pMesh, bool claimOwnership )
 	{
 		MeshMap::iterator test_it = m_meshMap.find(resource);

@@ -49,19 +49,21 @@ namespace glscene
 
 		void SetOrientDecomp(const glm::quat &orientation)
 		{
-			GetDecomposed().orientation = orientation;
+			GetDecomposed().orientation = glm::normalize(orientation);
 		}
 
 		void RightMultiplyOrientDecomp(const glm::quat &orientation)
 		{
 			DecomposedMatrix &mat = GetDecomposed();
 			mat.orientation = mat.orientation * orientation;
+			mat.orientation = glm::normalize(mat.orientation);
 		}
 
 		void LeftMultiplyOrientDecomp(const glm::quat &orientation)
 		{
 			DecomposedMatrix &mat = GetDecomposed();
 			mat.orientation = orientation * mat.orientation;
+			mat.orientation = glm::normalize(mat.orientation);
 		}
 
 		void SetScaleDecomp(const glm::vec3 &scale)

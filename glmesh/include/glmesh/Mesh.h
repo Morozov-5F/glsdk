@@ -35,6 +35,9 @@ namespace glmesh
 	functions, just the byte offsets.
 
 	The rendering command functions mimic their OpenGL counterparts where possible.
+
+	\todo Allow the user to actually execute these rendering commands, so that they
+	can create their own mesh types with them.
 	**/
 	class RenderCmdList
 	{
