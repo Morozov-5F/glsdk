@@ -1,13 +1,21 @@
-#ifndef GLSDK_INTERNAL_GLSCENE_TRANSFORM_H
-#define GLSDK_INTERNAL_GLSCENE_TRANSFORM_H
 
+#ifndef GLSDK_GLSCENE_NODE_H
+#define GLSDK_GLSCENE_NODE_H
+
+/**
+\file
+\brief Includes the glscene::Node class for the system.
+**/
+
+#include <string>
+#include <stdexcept>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <stdexcept>
-
+#include <boost/ref.hpp>
 
 namespace glscene
 {
+	class NodeData;
 	class TransformData;
 
 	///\addtogroup module_glscene_exceptions
@@ -32,7 +40,6 @@ namespace glscene
 	private:
 	};
 	///@}
-
 
 	///\addtogroup module_glscene_node
 	///@{
@@ -113,13 +120,39 @@ namespace glscene
 		void SetMatrixCompose(const glm::mat4 &matrix);
 
 	private:
-		TransformData &m_data;
+		boost::reference_wrapper<TransformData> m_data;
 
 		Transform(TransformData &data) : m_data(data) {}
+
+		friend class Node;
 	};
 
 	///@}
+
+	/**
+	\brief Blah
+	
+	**/
+	class Node
+	{
+	public:
+		Transform GetNodeTM();
+		Transform GetObjectTM();
+
+
+		///If you add to a layer that doesn't exist, this will not throw. It will ignore the call.
+		void AddToLayer(int layerIx);
+		void RemoveFromLayer(int layerIx);
+		bool IsInLayer(int layerIx) const;
+
+	private:
+		boost::reference_wrapper<NodeData> m_data;
+
+		Node(NodeData &data) : m_data(data) {}
+
+		friend class SceneGraph;
+	};
 }
 
 
-#endif //GLSDK_INTERNAL_GLSCENE_TRANSFORM_H
+#endif //GLSDK_GLSCENE_NODE_H

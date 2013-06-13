@@ -14,6 +14,7 @@ before including this file.
 #include <boost/utility/string_ref.hpp>
 #include <boost/optional.hpp>
 #include <boost/container/flat_map.hpp>
+#include <boost/ref.hpp>
 #include <glm/glm.hpp>
 #include <glutil/MousePoles.h>
 
@@ -545,7 +546,7 @@ namespace glscene
 		void DefineCamera(const boost::string_ref &resource, const glutil::ViewData &initialView,
 			const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls);
 	private:
-		ResourceData &m_data;
+		boost::reference_wrapper<ResourceData> m_data;
 
 		Resources(ResourceData &data) : m_data(data) {}
 

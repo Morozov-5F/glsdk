@@ -1,52 +1,53 @@
 
-#include "glscene/Transform.h"
-#include "TransformData.h"
+
+#include "glscene/Node.h"
+#include "NodeData.h"
 
 namespace glscene
 {
 	void Transform::SetTranslationDecomp( const glm::vec3 &translation )
 	{
-		m_data.SetTranslationDecomp(translation);
+		m_data.get().SetTranslationDecomp(translation);
 	}
 
 	void Transform::OffsetTranslationDecomp( const glm::vec3 &translation )
 	{
-		m_data.OffsetTranslationDecomp(translation);
+		m_data.get().OffsetTranslationDecomp(translation);
 	}
 
 	void Transform::SetOrientDecomp( const glm::quat &orientation )
 	{
-		m_data.SetOrientDecomp(orientation);
+		m_data.get().SetOrientDecomp(orientation);
 	}
 
 	void Transform::RightMultiplyOrientDecomp( const glm::quat &orientation )
 	{
-		m_data.RightMultiplyOrientDecomp(orientation);
+		m_data.get().RightMultiplyOrientDecomp(orientation);
 	}
 
 	void Transform::LeftMultiplyOrientDecomp( const glm::quat &orientation )
 	{
-		m_data.LeftMultiplyOrientDecomp(orientation);
+		m_data.get().LeftMultiplyOrientDecomp(orientation);
 	}
 
 	void Transform::SetScaleDecomp( const glm::vec3 &scale )
 	{
-		m_data.SetScaleDecomp(scale);
+		m_data.get().SetScaleDecomp(scale);
 	}
 
 	glm::vec3 Transform::GetTranslationDecomp() const
 	{
-		return m_data.GetTranslationDecomp();
+		return m_data.get().GetTranslationDecomp();
 	}
 
 	glm::quat Transform::GetOrientDecomp() const
 	{
-		return m_data.GetOrientDecomp();
+		return m_data.get().GetOrientDecomp();
 	}
 
 	glm::vec3 Transform::GetScaleDecomp() const
 	{
-		return m_data.GetScaleDecomp();
+		return m_data.get().GetScaleDecomp();
 	}
 
 	void Transform::SetDecomposed( const glm::vec3 &translation,
@@ -56,37 +57,41 @@ namespace glscene
 		mat.translation = translation;
 		mat.orientation = orientation;
 		mat.scale = scale;
-		m_data.SetDecomposed(mat);
+		m_data.get().SetDecomposed(mat);
 	}
 
 	glm::mat4 Transform::GetMatrix() const
 	{
-		return m_data.GetMatrix();
+		return m_data.get().GetMatrix();
 	}
 
 	void Transform::Compose()
 	{
-		m_data.Compose();
+		m_data.get().Compose();
 	}
 
 	void Transform::RightMultiplyCompose( const glm::mat4 &rhs )
 	{
-		m_data.RightMultiplyCompose(rhs);
+		m_data.get().RightMultiplyCompose(rhs);
 	}
 
 	void Transform::LeftMultiplyCompose( const glm::mat4 &lhs )
 	{
-		m_data.LeftMultiplyCompose(lhs);
+		m_data.get().LeftMultiplyCompose(lhs);
 	}
 
 	void Transform::SetMatrixCompose( const glm::mat4 &matrix )
 	{
-		m_data.SetMatrixCompose(matrix);
+		m_data.get().SetMatrixCompose(matrix);
 	}
 
 	bool Transform::IsDecomposed() const
 	{
-		return m_data.IsDecomposed();
+		return m_data.get().IsDecomposed();
+	}
+
+	Transform Node::GetNodeTM()
+	{
+		return m_data.get().GetNodeTM();
 	}
 }
-

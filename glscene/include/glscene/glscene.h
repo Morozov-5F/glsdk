@@ -8,6 +8,7 @@
 
 #include "Resources.h"
 #include "SceneGraph.h"
+#include "Node.h"
 
 /**
 \brief The main namespace for the [GL Scene Graph library](@ref module_glscene). All GL Scene

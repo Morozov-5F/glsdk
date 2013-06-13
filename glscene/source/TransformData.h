@@ -23,6 +23,18 @@ namespace glscene
 			glm::scale(ret, scale);
 			return ret;
 		}
+
+		static DecomposedMatrix CreateDefault()
+		{
+			DecomposedMatrix ret =
+			{
+				glm::vec3(0.0f, 0.0f, 0.0f),
+				glm::quat(1.0f, 0.0f, 0.0f, 0.0f),
+				glm::vec3(1.0f, 1.0f, 1.0f),
+			};
+
+			return ret;
+		}
 	};
 
 	typedef boost::variant<glm::mat4, DecomposedMatrix> ComposableMatrix;
@@ -31,6 +43,7 @@ namespace glscene
 	{
 	public:
 		TransformData(const ComposableMatrix &mat) : m_matrix(mat) {}
+		TransformData() : m_matrix(DecomposedMatrix::CreateDefault()) {}
 
 		bool IsDecomposed() const
 		{
@@ -110,7 +123,7 @@ namespace glscene
 
 		DecomposedMatrix &GetDecomposed()
 		{
-			const DecomposedMatrix &ret = (const_cast<TransformData&>(*this)).GetDecomposed();
+			const DecomposedMatrix &ret = (const_cast<const TransformData&>(*this)).GetDecomposed();
 			return const_cast<DecomposedMatrix &>(ret);
 		}
 
