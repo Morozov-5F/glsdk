@@ -16,6 +16,8 @@ local pull =
 	"optional.hpp",
 	"random.hpp",
 --	"ref.hpp",
+	"dynamic_bitset.hpp",
+	"bimap.hpp",
 
 	"range.hpp",
 	"boost/range/adaptors.hpp",
@@ -33,11 +35,13 @@ local pull =
 	"unordered_map.hpp",
 	"utility.hpp",
 	"boost/utility",
+	"boost/logic/tribool.hpp",
 	"variant.hpp",
 	"typeof/typeof.hpp",
 	"boost/variant",
 	"boost/algorithm/cxx11",
 	"boost/property_tree",
+	"boost/pool",
 
 	"boost/fusion",
 	"phoenix.hpp",
