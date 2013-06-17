@@ -33,3 +33,5 @@ OpenGL32.dll
 *.depend
 *.layout
 glloadgen/*
+docs/docbook/*
+docs/glsdk_version.cfg
