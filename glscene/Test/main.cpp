@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <iostream>
 #include <glload/gl_3_3_comp.h>
 #include <glload/gl_load.hpp>
 #include <GL/freeglut.h>
@@ -102,6 +103,17 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
+void PrintParent(glscene::Node theNode)
+{
+	boost::optional<glscene::Node> par = theNode.GetParent();
+	if(par)
+	{
+		std::cout << "'" << par->GetName() << "'" << std::endl;
+	}
+	else
+		std::cout << "No parent\n";
+}
+
 
 int main(int argc, char** argv)
 {
@@ -139,6 +151,17 @@ int main(int argc, char** argv)
 			graph.GetResources().DefineUniform("special", "special_glsl", 5.0f);
 			graph.GetResources().SetUniform("special", 5.0f);
 			graph.GetResources().DefineMesh("special", glmesh::gen::Icosahedron());
+
+			glscene::Node testNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("test"));
+			glscene::Node baseNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("base"));
+			glscene::Node alphaNode = graph.CreateChildNode(baseNode, boost::string_ref("alpha"));
+
+			PrintParent(alphaNode);
+			PrintParent(testNode);
+			testNode.MakeChildOfNode(baseNode);
+			PrintParent(testNode);
+
+			boost::optional<glscene::Node> optNode = graph.FindNode("test");
 		}
 		catch(glscene::UniformResourceTypeMismatchException &e)
 		{

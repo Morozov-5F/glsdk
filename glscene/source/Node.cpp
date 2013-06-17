@@ -94,4 +94,23 @@ namespace glscene
 	{
 		return m_data.get().GetNodeTM();
 	}
+
+	boost::string_ref Node::GetName() const
+	{
+		return m_data.get().GetName();
+	}
+
+	boost::optional<Node> Node::GetParent()
+	{
+		NodeData *pNode = m_data.get().GetParent();
+		return pNode ? boost::optional<Node>(Node(*pNode)) : boost::none;
+	}
+
+	void Node::MakeChildOfNode( Node newParent )
+	{
+		if(m_data.get_pointer() == newParent.m_data.get_pointer())
+			throw CannotMakeParentOfSelfException();
+
+		m_data.get().MakeChildOfNode(newParent.m_data.get_pointer());
+	}
 }

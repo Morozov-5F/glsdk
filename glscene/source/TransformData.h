@@ -39,6 +39,12 @@ namespace glscene
 
 	typedef boost::variant<glm::mat4, DecomposedMatrix> ComposableMatrix;
 
+	struct MatrixVisitor : public boost::static_visitor<glm::mat4>
+	{
+		template<typename T>
+			glm::mat4 operator()(const T &mat) const {return mat;}
+	};
+
 	class TransformData
 	{
 	public:
@@ -94,7 +100,10 @@ namespace glscene
 		}
 
 
-		glm::mat4 GetMatrix() const;
+		glm::mat4 GetMatrix() const
+		{
+			return boost::apply_visitor(MatrixVisitor(), m_matrix);
+		}
 
 		void Compose()
 		{

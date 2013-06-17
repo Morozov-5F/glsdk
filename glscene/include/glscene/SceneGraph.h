@@ -12,6 +12,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <glutil/array_ref.h>
 #include <boost/utility/string_ref.hpp>
+#include <boost/optional.hpp>
+#include "glscene/Node.h"
 
 
 namespace glscene
@@ -87,6 +89,15 @@ namespace glscene
 		SceneGraph(refs::array_ref<std::string> layerNames);
 		~SceneGraph();
 
+		///Retrieves the current root node.
+		Node GetRootNode();
+
+		///Finds the given node by its name.
+		boost::optional<Node> FindNode(const boost::string_ref &name);
+
+		///Creates a new node that is the child of the given one.
+		Node CreateChildNode(Node parent, boost::optional<boost::string_ref> name = boost::none);
+
 		/**
 		\brief Retrieves the index for the given layer name.
 
@@ -94,8 +105,8 @@ namespace glscene
 		**/
 		int GetLayerIndex(const std::string &layer) const;
 
+		///Retrieves the Resources stored in the scene graph.
 		Resources GetResources();
-		const Resources GetResources() const;
 
 	private:
 		boost::scoped_ptr<SceneGraphData> m_pData;

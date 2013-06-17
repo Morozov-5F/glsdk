@@ -4,13 +4,15 @@
 
 /**
 \file
-\brief Includes the glscene::Node class for the system.
+\brief Includes the glscene::Node and glscene::Transform classes for the system.
 **/
 
 #include <string>
 #include <stdexcept>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <boost/utility/string_ref.hpp>
+#include <boost/optional.hpp>
 #include <boost/ref.hpp>
 
 namespace glscene
@@ -36,6 +38,26 @@ namespace glscene
 	public:
 		explicit TransformNotDecomposedException()
 			: NodeException("The transform is not decomposed.") {}
+
+	private:
+	};
+
+	///Thrown by Node::MakeChildOfNode if the current node and the parent are the same node.
+	class CannotMakeParentOfSelfException : public NodeException
+	{
+	public:
+		explicit CannotMakeParentOfSelfException()
+			: NodeException("A Node cannot be made the parent of itself.") {}
+
+	private:
+	};
+
+	///Thrown by Node::MakeChildOfNode if trying to reparent the root node.
+	class CannotChangeTheRootParentException : public NodeException
+	{
+	public:
+		explicit CannotChangeTheRootParentException()
+			: NodeException("The root Node's parent cannot be changed.") {}
 
 	private:
 	};
@@ -130,20 +152,60 @@ namespace glscene
 	///@}
 
 	/**
-	\brief Blah
+	\brief Represents a reference to a node in the scene graph.
 	
 	**/
 	class Node
 	{
 	public:
+		///Gets the Node's [node transform](@ref module_glscene_core_transforms).
 		Transform GetNodeTM();
+		///Gets the Node's [object transform](@ref module_glscene_core_transforms).
 		Transform GetObjectTM();
 
 
-		///If you add to a layer that doesn't exist, this will not throw. It will ignore the call.
+		/**
+		\brief Puts the node into the given layer by index.
+
+		If \a layerIx is out of bounds, this will not throw. It will just ignore the call.
+		**/
 		void AddToLayer(int layerIx);
+
+		/**
+		\brief Removes the node from the given layer by index.
+		
+		If you remove the node from a layer it is not in, or if \a layerIx is out of bounds,
+		this will not throw. It will simply ignore the call.
+		**/
 		void RemoveFromLayer(int layerIx);
+
+		/**
+		\brief Tests whether the node is in the given layer by index.
+
+		If \a layerIx is out of bounds, this will not throw. It will return `false`.
+		**/
 		bool IsInLayer(int layerIx) const;
+
+		/**
+		\brief Retrieves the identifier string given for the node's name at construction time.
+		
+		If the Node has no name, this will return an empty string.
+		**/
+		boost::string_ref GetName() const;
+
+		/**
+		\brief Retrieves the parent node, if the node is not the root.
+		**/
+		boost::optional<Node> GetParent();
+
+		/**
+		\brief Makes the given node the parent of this one.
+
+		\throws CannotMakeParentOfSelfException If `*this` is the root node. The root node's parentage cannot be changed.
+		\throws CannotMakeParentOfSelfException If `*this` and \a newParent are the same node.
+		
+		**/
+		void MakeChildOfNode(Node newParent);
 
 	private:
 		boost::reference_wrapper<NodeData> m_data;

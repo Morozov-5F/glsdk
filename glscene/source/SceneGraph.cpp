@@ -8,6 +8,8 @@
 #include "glscene/Resources.h"
 #include "ResourceData.h"
 #include "TransformData.h"
+#include "NodeData.h"
+#include "IdString.h"
 
 
 namespace glscene
@@ -30,6 +32,7 @@ namespace glscene
 	{
 		ResourceData resources;
 		LayerMap layerMap;
+		NodeData rootNode;
 
 		template<typename T>
 		void AssignLayerMap(refs::array_ref<T> layerNames)
@@ -39,11 +42,15 @@ namespace glscene
 				layerMap.emplace(layerNames[index], index);
 			}
 		}
+
+		SceneGraphData(size_t numLayers)
+			: rootNode((int) numLayers)
+		{}
 	};
 
 
 	SceneGraph::SceneGraph( refs::array_ref<const char*> layerNames )
-		: m_pData(new SceneGraphData)
+		: m_pData(new SceneGraphData(layerNames.size()))
 	{
 		if(layerNames.empty())
 			throw EmptyLayerListException();
@@ -52,7 +59,7 @@ namespace glscene
 	}
 
 	SceneGraph::SceneGraph( refs::array_ref<std::string> layerNames )
-		: m_pData(new SceneGraphData)
+		: m_pData(new SceneGraphData(layerNames.size()))
 	{
 		if(layerNames.empty())
 			throw EmptyLayerListException();
@@ -63,12 +70,21 @@ namespace glscene
 	SceneGraph::~SceneGraph()
 	{}
 
-	Resources SceneGraph::GetResources()
+	Node SceneGraph::GetRootNode()
 	{
-		return Resources(m_pData->resources);
+		return Node(m_pData->rootNode);
 	}
 
-	const Resources SceneGraph::GetResources() const
+	glscene::Node SceneGraph::CreateChildNode( Node parent, boost::optional<boost::string_ref> name )
+	{
+		boost::optional<IdString> nameId;
+		if(name)
+			nameId = IdString(name.get());
+
+		return parent.m_data.get().CreateChildNode(nameId);
+	}
+
+	Resources SceneGraph::GetResources()
 	{
 		return Resources(m_pData->resources);
 	}
@@ -80,6 +96,15 @@ namespace glscene
 			throw UndefinedLayerException(layer);
 
 		return (int)found->second;
+	}
+
+	boost::optional<Node> SceneGraph::FindNode( const boost::string_ref &name )
+	{
+		NodeData *pData = m_pData->rootNode.FindByName(name);
+		if(!pData)
+			return boost::none;
+
+		return Node(*pData);
 	}
 
 	void swap( SceneGraph &lhs, SceneGraph &rhs )
