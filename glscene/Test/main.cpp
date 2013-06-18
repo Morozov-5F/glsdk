@@ -108,10 +108,21 @@ void PrintParent(glscene::Node theNode)
 	boost::optional<glscene::Node> par = theNode.GetParent();
 	if(par)
 	{
-		std::cout << "'" << par->GetName() << "'" << std::endl;
+		std::cout << "'" << par->GetName() << "'";
 	}
 	else
-		std::cout << "No parent\n";
+		std::cout << "Root";
+}
+
+void PrintNode(boost::optional<glscene::Node> theNode)
+{
+	if(theNode)
+	{
+		PrintParent(theNode.get());
+		std::cout << " -> '" << theNode->GetName() << "'";
+	}
+	else
+		std::cout << "No node";
 }
 
 
@@ -156,12 +167,9 @@ int main(int argc, char** argv)
 			glscene::Node baseNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("base"));
 			glscene::Node alphaNode = graph.CreateChildNode(baseNode, boost::string_ref("alpha"));
 
-			PrintParent(alphaNode);
-			PrintParent(testNode);
-			testNode.MakeChildOfNode(baseNode);
-			PrintParent(testNode);
+			//graph.DeleteNodeRecursive(baseNode);
 
-			boost::optional<glscene::Node> optNode = graph.FindNode("test");
+			PrintNode(graph.FindNode(boost::string_ref("alpha")));
 		}
 		catch(glscene::UniformResourceTypeMismatchException &e)
 		{

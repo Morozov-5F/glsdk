@@ -64,6 +64,26 @@ namespace glscene
 		static std::string GetErrorName(const std::string &resource, const std::string &resourceType);
 	};
 
+	///Thrown when adding a node with a name that already matches an existing node.
+	class NodeNameAlreadyExistsException : public SceneGraphException
+	{
+	public:
+		explicit NodeNameAlreadyExistsException(const std::string &nodeName)
+			: SceneGraphException(GetErrorName(nodeName)) {}
+
+	private:
+		static std::string GetErrorName(const std::string &nodeName);
+	};
+
+	///Thrown when attempting to delete the root node.
+	class CannotDeleteRootNodeException : public SceneGraphException
+	{
+	public:
+		explicit CannotDeleteRootNodeException()
+			: SceneGraphException("You cannot delete the root Node.") {}
+	};
+
+
 	///@}
 
 	///\addtogroup module_glscene_core
@@ -97,6 +117,20 @@ namespace glscene
 
 		///Creates a new node that is the child of the given one.
 		Node CreateChildNode(Node parent, boost::optional<boost::string_ref> name = boost::none);
+
+		/**
+		\brief Deletes the node and all of its child nodes.
+
+		\throws CannotDeleteRootNodeException If \a nodeToDelete is the root node.
+		**/
+		void DeleteNodeRecursive(Node nodeToDelete);
+
+		/**
+		\brief Deletes only the given node, making all of it's child nodes children of its direct parent.
+		
+		\throws CannotDeleteRootNodeException If \a nodeToDelete is the root node.
+		**/
+		void DeleteNodeOnly(Node nodeToDelete);
 
 		/**
 		\brief Retrieves the index for the given layer name.

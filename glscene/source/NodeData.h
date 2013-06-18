@@ -29,14 +29,19 @@ namespace glscene
 		bool IsInLayer(int layerIx) const;
 
 		NodeData *FindByName(const IdString &name);
-		void MakeChildOfNode(NodeData *pNewParent);
+		void MakeChildOfNode(NodeData &newParent);
 
 		boost::string_ref GetName()
 		{
 			return m_name ? boost::string_ref(m_name.get()) : boost::string_ref();
 		}
 
+		const boost::optional<IdString> &GetNameId() const {return m_name;}
+
 		NodeData &CreateChildNode(const boost::optional<IdString> &name);
+
+		//Beware: will crash if parent is NULL.
+		void ReparentChildrenToParent();
 
 		NodeData *GetParent() {return m_pParent;}
 

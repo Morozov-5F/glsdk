@@ -88,10 +88,14 @@ namespace glscene
 		return NULL;
 	}
 
-	void NodeData::MakeChildOfNode( NodeData *pNewParent )
+	void NodeData::MakeChildOfNode( NodeData &newParent )
 	{
 		if(!m_pParent)
 			throw CannotChangeTheRootParentException();
+
+		//Already the parent. No-op.
+		if(m_pParent == &newParent)
+			return;
 
 		//First, remove ourself from the nodes in our parent list.
 		NodeData &currParent = *m_pParent;
@@ -99,10 +103,10 @@ namespace glscene
 			boost::range::remove(currParent.m_children, this), currParent.m_children.end());
 
 		//Now, add ourselves to the new parent's list.
-		pNewParent->m_children.push_back(this);
+		newParent.m_children.push_back(this);
 
 		//Change our parent.
-		m_pParent = pNewParent;
+		m_pParent = &newParent;
 	}
 
 	NodeData & NodeData::CreateChildNode( const boost::optional<IdString> &name )
@@ -110,5 +114,11 @@ namespace glscene
 		//Child will automatically add itself.
 		NodeData *pRet = new NodeData(name, this, (int)m_layers.size());
 		return *pRet;
+	}
+
+	void NodeData::ReparentChildrenToParent()
+	{
+		while(!m_children.empty())
+			m_children.front()->MakeChildOfNode(*m_pParent);
 	}
 }

@@ -111,6 +111,6 @@ namespace glscene
 		if(m_data.get_pointer() == newParent.m_data.get_pointer())
 			throw CannotMakeParentOfSelfException();
 
-		m_data.get().MakeChildOfNode(newParent.m_data.get_pointer());
+		m_data.get().MakeChildOfNode(newParent.m_data.get());
 	}
 }
