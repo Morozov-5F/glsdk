@@ -5,7 +5,7 @@
 #include <glload/gl_all.hpp>
 #include <boost/range.hpp>
 #include <boost/range/algorithm.hpp>
-#include "glscene/Resources.h"
+#include "glscene/ResourceRef.h"
 #include "ResourceData.h"
 #include "glscene/SceneGraph.h"
 

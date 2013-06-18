@@ -3,7 +3,7 @@
 
 This is a relatively simple scene graph system, designed around the needs of a shader-based rendering system.
 
-If you do not know what a "scene graph" is, [here is your answer](@ref page_glscene_scene_graph). That describes the basic concepts of a scene graph, which the following discussion expects you to understand.
+If you do not know what a "scene graph" is, [here is your answer](@ref page_glscene_scene_graph). That describes the basic concepts of a scene graph; this system implements a specific form of scene graph, as described below.
 
 This scene graph system is simple in that it doesn't handle concepts like light management and the like. But it is powerful in several ways.
 
@@ -36,6 +36,16 @@ Note that the above applies only to *rendering*. The transfomrations up and down
 When the scene is rendered, the nodes can be rendered either in an arbitrarr order or sorted back-to-front (coarsely by position, relative to the camera).  The latter mechanism allows for blending. Using variants, a non-blended variant can be rendered in the default order, then a blended variant can be used in the back-to-front order. Between these rendering calls, blending would be turned on. The meshes and shaders used in the blended variant could be different from those in the non-blended one.
 
 The scene graph does not cover framebuffer state, blending state, viewport state, or the like. The scene graph only handles the program, texture, image, uniform and storage buffer bindings.
+
+### Object naming and semantics ###
+
+Objects in the SceneGraph system come in three general varieties, and each has different semantics.
+
+The SceneGraph object itself has value semantics, but is non-copyable. It is [swappable](http://en.cppreference.com/w/cpp/concept/Swappable) however.
+
+All objects that end in `Ref` have reference semantics. This means that they refer to information stored in another object (the SceneGraph or one of its constituents). Copying them does not copy the data being referenced. Treat them like a pointer. And, like a pointer, if you cause the destruction of an object being referenced, you must stop using *any* `Ref` instance that refers to it.
+
+All objects that end in `Info` have full value semantics. They are copyable and so forth. These are mostly used to provide information to create some object within the SceneGraph (hence the `Info` name).
 **/
 
 
@@ -43,6 +53,14 @@ The scene graph does not cover framebuffer state, blending state, viewport state
 \defgroup module_glscene_core Core Scene Facilities
 \ingroup module_glscene
 
+
+
+**/
+
+
+/**
+\defgroup module_glscene_node Scene Graph Node
+\ingroup module_glscene
 
 
 ### Transforms Node vs Object ###  {module_glscene_core_transforms}
@@ -56,14 +74,6 @@ So, for a node with 2 parent nodes, the full model-to-camera matrix for renderin
     model_to_camera = camera * root_node_tm * direct_parent_node_tm * current_node_tm * current_node_object_tm
 	
 The purpose of this distinction is to allow transformations, such as scaling, that don't apply to child nodes. This allows one to re-position or re-scale a mesh without accidentally modifying child nodes. It's easier to do it this way than to create a separate child node for the mesh. 
-**/
-
-
-/**
-\defgroup module_glscene_node Scene Graph Node
-\ingroup module_glscene
-
-
 **/
 
 

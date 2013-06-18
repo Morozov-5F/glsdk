@@ -3,7 +3,7 @@
 #define GLSDK_GLSCENE_NODE_DATA_H
 
 #include "TransformData.h"
-#include "glscene/Node.h"
+#include "glscene/NodeRef.h"
 #include "IdString.h"
 #include <vector>
 #include <boost/dynamic_bitset.hpp>

@@ -13,12 +13,12 @@
 #include <glutil/array_ref.h>
 #include <boost/utility/string_ref.hpp>
 #include <boost/optional.hpp>
-#include "glscene/Node.h"
+#include "glscene/NodeRef.h"
 
 
 namespace glscene
 {
-	class Resources;
+	class ResourceRef;
 	struct SceneGraphData;
 
 	///\addtogroup module_glscene_exceptions
@@ -80,7 +80,7 @@ namespace glscene
 	{
 	public:
 		explicit CannotDeleteRootNodeException()
-			: SceneGraphException("You cannot delete the root Node.") {}
+			: SceneGraphException("You cannot delete the root NodeRef.") {}
 	};
 
 
@@ -110,27 +110,27 @@ namespace glscene
 		~SceneGraph();
 
 		///Retrieves the current root node.
-		Node GetRootNode();
+		NodeRef GetRootNode();
 
 		///Finds the given node by its name.
-		boost::optional<Node> FindNode(const boost::string_ref &name);
+		boost::optional<NodeRef> FindNode(const boost::string_ref &name);
 
 		///Creates a new node that is the child of the given one.
-		Node CreateChildNode(Node parent, boost::optional<boost::string_ref> name = boost::none);
+		NodeRef CreateChildNode(NodeRef parent, boost::optional<boost::string_ref> name = boost::none);
 
 		/**
 		\brief Deletes the node and all of its child nodes.
 
 		\throws CannotDeleteRootNodeException If \a nodeToDelete is the root node.
 		**/
-		void DeleteNodeRecursive(Node nodeToDelete);
+		void DeleteNodeRecursive(NodeRef nodeToDelete);
 
 		/**
 		\brief Deletes only the given node, making all of it's child nodes children of its direct parent.
 		
 		\throws CannotDeleteRootNodeException If \a nodeToDelete is the root node.
 		**/
-		void DeleteNodeOnly(Node nodeToDelete);
+		void DeleteNodeOnly(NodeRef nodeToDelete);
 
 		/**
 		\brief Retrieves the index for the given layer name.
@@ -140,7 +140,7 @@ namespace glscene
 		int GetLayerIndex(const std::string &layer) const;
 
 		///Retrieves the Resources stored in the scene graph.
-		Resources GetResources();
+		ResourceRef GetResources();
 
 	private:
 		boost::scoped_ptr<SceneGraphData> m_pData;

@@ -103,9 +103,9 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
-void PrintParent(glscene::Node theNode)
+void PrintParent(glscene::NodeRef theNode)
 {
-	boost::optional<glscene::Node> par = theNode.GetParent();
+	boost::optional<glscene::NodeRef> par = theNode.GetParent();
 	if(par)
 	{
 		std::cout << "'" << par->GetName() << "'";
@@ -114,7 +114,7 @@ void PrintParent(glscene::Node theNode)
 		std::cout << "Root";
 }
 
-void PrintNode(boost::optional<glscene::Node> theNode)
+void PrintNode(boost::optional<glscene::NodeRef> theNode)
 {
 	if(theNode)
 	{
@@ -163,9 +163,9 @@ int main(int argc, char** argv)
 			graph.GetResources().SetUniform("special", 5.0f);
 			graph.GetResources().DefineMesh("special", glmesh::gen::Icosahedron());
 
-			glscene::Node testNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("test"));
-			glscene::Node baseNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("base"));
-			glscene::Node alphaNode = graph.CreateChildNode(baseNode, boost::string_ref("alpha"));
+			glscene::NodeRef testNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("test"));
+			glscene::NodeRef baseNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("base"));
+			glscene::NodeRef alphaNode = graph.CreateChildNode(baseNode, boost::string_ref("alpha"));
 
 			//graph.DeleteNodeRecursive(baseNode);
 

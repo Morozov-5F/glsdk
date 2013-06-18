@@ -130,7 +130,7 @@ namespace glscene
 		- Reset this state upon being finished. If you used primitive restarting in your rendering, turn it off.
 
 		\note Do not attempt to modify anything within the scene graph system when this function is called. So
-		if you have access to a non `const` Resources object, a Node, or whatever, do not call non `const`
+		if you have access to a non `const` Resources object, a NodeRef, or whatever, do not call non `const`
 		functions on it.
 
 		\param param An arbitrary string passed by the system. For glmesh::Mesh objects, it's the mesh variant
@@ -202,7 +202,7 @@ namespace glscene
 	resources are technically modifiable, but only by accessing the camera object directly through the
 	SceneGraph's API.
 	**/
-	class Resources
+	class ResourceRef
 	{
 	public:
 		/**
@@ -548,7 +548,7 @@ namespace glscene
 	private:
 		boost::reference_wrapper<ResourceData> m_data;
 
-		Resources(ResourceData &data) : m_data(data) {}
+		ResourceRef(ResourceData &data) : m_data(data) {}
 
 		friend class SceneGraph;
 	};

@@ -7,7 +7,7 @@
 #include <boost/foreach.hpp>
 #include <glload/gl_all.h>
 #include "glscene/SceneGraph.h"
-#include "glscene/Resources.h"
+#include "glscene/ResourceRef.h"
 #include "ResourceData.h"
 #include "TransformData.h"
 #include "NodeData.h"
@@ -91,12 +91,12 @@ namespace glscene
 	SceneGraph::~SceneGraph()
 	{}
 
-	Node SceneGraph::GetRootNode()
+	NodeRef SceneGraph::GetRootNode()
 	{
-		return Node(m_pData->rootNode);
+		return NodeRef(m_pData->rootNode);
 	}
 
-	glscene::Node SceneGraph::CreateChildNode( Node parent, boost::optional<boost::string_ref> name )
+	glscene::NodeRef SceneGraph::CreateChildNode( NodeRef parent, boost::optional<boost::string_ref> name )
 	{
 		boost::optional<IdString> nameId;
 		if(name)
@@ -111,9 +111,9 @@ namespace glscene
 		return parent.m_data.get().CreateChildNode(nameId);
 	}
 
-	Resources SceneGraph::GetResources()
+	ResourceRef SceneGraph::GetResources()
 	{
-		return Resources(m_pData->resources);
+		return ResourceRef(m_pData->resources);
 	}
 
 	int SceneGraph::GetLayerIndex( const std::string &layer ) const
@@ -125,16 +125,16 @@ namespace glscene
 		return (int)found->second;
 	}
 
-	boost::optional<Node> SceneGraph::FindNode( const boost::string_ref &name )
+	boost::optional<NodeRef> SceneGraph::FindNode( const boost::string_ref &name )
 	{
 		NodeData *pData = m_pData->rootNode.FindByName(name);
 		if(!pData)
 			return boost::none;
 
-		return Node(*pData);
+		return NodeRef(*pData);
 	}
 
-	void SceneGraph::DeleteNodeRecursive( Node nodeToDelete )
+	void SceneGraph::DeleteNodeRecursive( NodeRef nodeToDelete )
 	{
 		//Verify that it's not the root.
 		if(!nodeToDelete.GetParent())
@@ -147,10 +147,10 @@ namespace glscene
 		delete nodeToDelete.m_data.get_pointer();
 	}
 
-	void SceneGraph::DeleteNodeOnly( Node nodeToDelete )
+	void SceneGraph::DeleteNodeOnly( NodeRef nodeToDelete )
 	{
 		//Verify that it's not the root.
-		boost::optional<Node> optParent = nodeToDelete.GetParent();
+		boost::optional<NodeRef> optParent = nodeToDelete.GetParent();
 		if(!optParent)
 			throw CannotDeleteRootNodeException();
 

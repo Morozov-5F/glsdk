@@ -1,56 +1,56 @@
 
 
-#include "glscene/Node.h"
+#include "glscene/NodeRef.h"
 #include "NodeData.h"
 
 namespace glscene
 {
-	void Transform::SetTranslationDecomp( const glm::vec3 &translation )
+	void TransformRef::SetTranslationDecomp( const glm::vec3 &translation )
 	{
 		m_data.get().SetTranslationDecomp(translation);
 	}
 
-	void Transform::OffsetTranslationDecomp( const glm::vec3 &translation )
+	void TransformRef::OffsetTranslationDecomp( const glm::vec3 &translation )
 	{
 		m_data.get().OffsetTranslationDecomp(translation);
 	}
 
-	void Transform::SetOrientDecomp( const glm::quat &orientation )
+	void TransformRef::SetOrientDecomp( const glm::quat &orientation )
 	{
 		m_data.get().SetOrientDecomp(orientation);
 	}
 
-	void Transform::RightMultiplyOrientDecomp( const glm::quat &orientation )
+	void TransformRef::RightMultiplyOrientDecomp( const glm::quat &orientation )
 	{
 		m_data.get().RightMultiplyOrientDecomp(orientation);
 	}
 
-	void Transform::LeftMultiplyOrientDecomp( const glm::quat &orientation )
+	void TransformRef::LeftMultiplyOrientDecomp( const glm::quat &orientation )
 	{
 		m_data.get().LeftMultiplyOrientDecomp(orientation);
 	}
 
-	void Transform::SetScaleDecomp( const glm::vec3 &scale )
+	void TransformRef::SetScaleDecomp( const glm::vec3 &scale )
 	{
 		m_data.get().SetScaleDecomp(scale);
 	}
 
-	glm::vec3 Transform::GetTranslationDecomp() const
+	glm::vec3 TransformRef::GetTranslationDecomp() const
 	{
 		return m_data.get().GetTranslationDecomp();
 	}
 
-	glm::quat Transform::GetOrientDecomp() const
+	glm::quat TransformRef::GetOrientDecomp() const
 	{
 		return m_data.get().GetOrientDecomp();
 	}
 
-	glm::vec3 Transform::GetScaleDecomp() const
+	glm::vec3 TransformRef::GetScaleDecomp() const
 	{
 		return m_data.get().GetScaleDecomp();
 	}
 
-	void Transform::SetDecomposed( const glm::vec3 &translation,
+	void TransformRef::SetDecomposed( const glm::vec3 &translation,
 		const glm::quat &orientation, const glm::vec3 &scale )
 	{
 		DecomposedMatrix mat;
@@ -60,53 +60,53 @@ namespace glscene
 		m_data.get().SetDecomposed(mat);
 	}
 
-	glm::mat4 Transform::GetMatrix() const
+	glm::mat4 TransformRef::GetMatrix() const
 	{
 		return m_data.get().GetMatrix();
 	}
 
-	void Transform::Compose()
+	void TransformRef::Compose()
 	{
 		m_data.get().Compose();
 	}
 
-	void Transform::RightMultiplyCompose( const glm::mat4 &rhs )
+	void TransformRef::RightMultiplyCompose( const glm::mat4 &rhs )
 	{
 		m_data.get().RightMultiplyCompose(rhs);
 	}
 
-	void Transform::LeftMultiplyCompose( const glm::mat4 &lhs )
+	void TransformRef::LeftMultiplyCompose( const glm::mat4 &lhs )
 	{
 		m_data.get().LeftMultiplyCompose(lhs);
 	}
 
-	void Transform::SetMatrixCompose( const glm::mat4 &matrix )
+	void TransformRef::SetMatrixCompose( const glm::mat4 &matrix )
 	{
 		m_data.get().SetMatrixCompose(matrix);
 	}
 
-	bool Transform::IsDecomposed() const
+	bool TransformRef::IsDecomposed() const
 	{
 		return m_data.get().IsDecomposed();
 	}
 
-	Transform Node::GetNodeTM()
+	TransformRef NodeRef::GetNodeTM()
 	{
 		return m_data.get().GetNodeTM();
 	}
 
-	boost::string_ref Node::GetName() const
+	boost::string_ref NodeRef::GetName() const
 	{
 		return m_data.get().GetName();
 	}
 
-	boost::optional<Node> Node::GetParent()
+	boost::optional<NodeRef> NodeRef::GetParent()
 	{
 		NodeData *pNode = m_data.get().GetParent();
-		return pNode ? boost::optional<Node>(Node(*pNode)) : boost::none;
+		return pNode ? boost::optional<NodeRef>(NodeRef(*pNode)) : boost::none;
 	}
 
-	void Node::MakeChildOfNode( Node newParent )
+	void NodeRef::MakeChildOfNode( NodeRef newParent )
 	{
 		if(m_data.get_pointer() == newParent.m_data.get_pointer())
 			throw CannotMakeParentOfSelfException();

@@ -4,7 +4,7 @@
 
 /**
 \file
-\brief Includes the glscene::Node and glscene::Transform classes for the system.
+\brief Includes the NodeRef and associated classes.
 **/
 
 #include <string>
@@ -23,7 +23,7 @@ namespace glscene
 	///\addtogroup module_glscene_exceptions
 	///@{
 
-	///Base class for all Node-based exceptions.
+	///Base class for all NodeRef exceptions, or exceptions from NodeRef classes.
 	class NodeException : public std::runtime_error
 	{
 	public:
@@ -32,7 +32,7 @@ namespace glscene
 	private:
 	};
 
-	///Thrown by any `Transform::*Decomp` function if the transform is not decomposed.
+	///Thrown by any `TransformRef::*Decomp` function if the transform is not decomposed.
 	class TransformNotDecomposedException : public NodeException
 	{
 	public:
@@ -42,22 +42,22 @@ namespace glscene
 	private:
 	};
 
-	///Thrown by Node::MakeChildOfNode if the current node and the parent are the same node.
+	///Thrown by NodeRef::MakeChildOfNode if the current node and the parent are the same node.
 	class CannotMakeParentOfSelfException : public NodeException
 	{
 	public:
 		explicit CannotMakeParentOfSelfException()
-			: NodeException("A Node cannot be made the parent of itself.") {}
+			: NodeException("A NodeRef cannot be made the parent of itself.") {}
 
 	private:
 	};
 
-	///Thrown by Node::MakeChildOfNode if trying to reparent the root node.
+	///Thrown by NodeRef::MakeChildOfNode if trying to reparent the root node.
 	class CannotChangeTheRootParentException : public NodeException
 	{
 	public:
 		explicit CannotChangeTheRootParentException()
-			: NodeException("The root Node's parent cannot be changed.") {}
+			: NodeException("The root NodeRef's parent cannot be changed.") {}
 
 	private:
 	};
@@ -91,10 +91,10 @@ namespace glscene
 	Calling any function that ends on `Compose` or the Compose function itself, will convert the transform
 	to the composed form. Note that GetMatrix does *not* compose a decomposed matrix.
 
-	No functions in SceneGraph, Node, or any other scene graph class will do anything to change the
-	composed/decomposed status of the transform. Only your actions can cause a matrix to become decomposed.
+	No functions in SceneGraph, NodeRef, or any other scene graph class will do anything to change the
+	composed/decomposed status of the TransformRef. Only your actions can cause a matrix to become decomposed.
 	**/
-	class Transform
+	class TransformRef
 	{
 	public:
 		///Returns `true` if the transform is decomposed.
@@ -144,9 +144,9 @@ namespace glscene
 	private:
 		boost::reference_wrapper<TransformData> m_data;
 
-		Transform(TransformData &data) : m_data(data) {}
+		TransformRef(TransformData &data) : m_data(data) {}
 
-		friend class Node;
+		friend class NodeRef;
 	};
 
 	///@}
@@ -155,13 +155,13 @@ namespace glscene
 	\brief Represents a reference to a node in the scene graph.
 	
 	**/
-	class Node
+	class NodeRef
 	{
 	public:
-		///Gets the Node's [node transform](@ref module_glscene_core_transforms).
-		Transform GetNodeTM();
-		///Gets the Node's [object transform](@ref module_glscene_core_transforms).
-		Transform GetObjectTM();
+		///Gets the NodeRef's [node transform](@ref module_glscene_core_transforms).
+		TransformRef GetNodeTM();
+		///Gets the NodeRef's [object transform](@ref module_glscene_core_transforms).
+		TransformRef GetObjectTM();
 
 
 		/**
@@ -189,14 +189,14 @@ namespace glscene
 		/**
 		\brief Retrieves the identifier string given for the node's name at construction time.
 		
-		If the Node has no name, this will return an empty string.
+		If the NodeRef has no name, this will return an empty string.
 		**/
 		boost::string_ref GetName() const;
 
 		/**
 		\brief Retrieves the parent node, if the node is not the root.
 		**/
-		boost::optional<Node> GetParent();
+		boost::optional<NodeRef> GetParent();
 
 		/**
 		\brief Makes the given node the parent of this one.
@@ -205,12 +205,12 @@ namespace glscene
 		\throws CannotMakeParentOfSelfException If `*this` and \a newParent are the same node.
 		
 		**/
-		void MakeChildOfNode(Node newParent);
+		void MakeChildOfNode(NodeRef newParent);
 
 	private:
 		boost::reference_wrapper<NodeData> m_data;
 
-		Node(NodeData &data) : m_data(data) {}
+		NodeRef(NodeData &data) : m_data(data) {}
 
 		friend class SceneGraph;
 	};

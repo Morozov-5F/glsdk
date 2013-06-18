@@ -6,9 +6,9 @@
 \brief Includes everything in the [GL Scene Graph library](@ref module_glscene).
 **/
 
-#include "Resources.h"
+#include "ResourceRef.h"
 #include "SceneGraph.h"
-#include "Node.h"
+#include "NodeRef.h"
 
 /**
 \brief The main namespace for the [GL Scene Graph library](@ref module_glscene). All GL Scene
