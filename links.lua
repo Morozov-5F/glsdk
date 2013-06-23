@@ -1,3 +1,5 @@
+dofile("boost_include.lua")
+
 local thisDirectory = os.getcwd();
 
 local LibDeps = 
