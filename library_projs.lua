@@ -6,7 +6,7 @@ local libPremakes =
 	"freeglut/freeglut.lua",
 	"glutil/glutil.lua",
 	"glmesh/glmesh.lua",
-	"glgraph/glgraph.lua",
+	"glscene/glscene.lua",
 }
 
 for i, luaPremake in ipairs(libPremakes) do

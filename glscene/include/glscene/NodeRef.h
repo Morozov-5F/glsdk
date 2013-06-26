@@ -19,6 +19,7 @@ namespace glscene
 {
 	class NodeData;
 	class TransformData;
+	struct VariantInfo;
 
 	///\addtogroup module_glscene_exceptions
 	///@{
@@ -149,7 +150,6 @@ namespace glscene
 		friend class NodeRef;
 	};
 
-	///@}
 
 	/**
 	\brief Represents a reference to a node in the scene graph.
@@ -214,6 +214,8 @@ namespace glscene
 
 		friend class SceneGraph;
 	};
+
+	///@}
 }
 
 

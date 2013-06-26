@@ -1,3 +1,28 @@
+General syntax:
+
+The syntax is effectively a list of the following constructs:
+
+* Keyword.
+* Bounded string.
+* Number.
+* Comments.
+
+Keywords come from a selection of pre-defined keywords.
+
+Numbers may be signed or unsigned, and they may be a scalar or vector of them, defined by a parenthesized list.
+
+Strings are bounded sequences of characters. Strings can be bounded by the following constructs, each with a different semantic meaning:
+
+* <>: A name used to identify elements defined in the scene graph itself. Stored as IdString
+* "": Filenames, or strings that will be assumed to be filenames.
+* '': Names of constructs within the graph.
+* []: An identifier for a GLSL variable or construct.
+* {}: An enumerator. These are defined for specific constructs, and each construct has its own list of valid enums.
+
+
+
+
+
 EBNF grammar (mostly)
 
 Tokens:
