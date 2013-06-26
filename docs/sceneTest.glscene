@@ -90,14 +90,7 @@ scene
 				mesh <ship_mesh> 'variantName'
 				texture 0 <ship_diffuse_tex> <aniso-repeat>
 			end
-			
-			variant <>
-				using <matrices>
-				using <common>
-				
-				program <shader>
-			end
-			
+
 			variant <test>
 				using <matrices>
 				using <common>
