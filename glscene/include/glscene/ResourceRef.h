@@ -3,9 +3,8 @@
 
 /**
 \file
-\brief Includes the glscene::Resources class. You must include an OpenGL header
+\brief Includes the glscene::Resources class. You must include a [GL Load header](@ref module_glload)
 before including this file.
-
 **/
 
 #include <string>

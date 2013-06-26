@@ -3,12 +3,14 @@
 
 /**
 \file
-\brief Includes everything in the [GL Scene Graph library](@ref module_glscene).
+\brief Includes everything in the [GL Scene Graph library](@ref module_glscene). You must include
+a [GL Load header](@ref module_glload) before including this file.
 **/
 
 #include "ResourceRef.h"
 #include "SceneGraph.h"
 #include "NodeRef.h"
+#include "Variant.h"
 
 /**
 \brief The main namespace for the [GL Scene Graph library](@ref module_glscene). All GL Scene
