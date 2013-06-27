@@ -274,76 +274,12 @@ struct ExpectedError
 
 boost::phoenix::function<ExpectedError> const ExpectError = ExpectedError();
 
-#ifdef USE_QI
-
-template <typename Iterator, typename Lexer>
-struct test_grammar	: qi::grammar<Iterator, qi::in_state_skipper<Lexer> >
-{
-	template<typename Tokens>
-	test_grammar(const Tokens &toks)
-		: test_grammar::base_type(root)
-	{
-		uniformResource = toks.keywordTokens[TOK_UNIFORM]
-			> toks.stringTokens[TOK_IDENTIFIER]
-			> toks.keywordTokens[TOK_TYPE]
-			> toks.stringTokens[TOK_ENUMERATOR];
-
-		resourceTypes = uniformResource;
-		resource = toks.keywordTokens[TOK_RESOURCES] >> +resourceTypes > toks.keywordTokens[TOK_END];
-		resourceList = +resource | (qi::eps[ExpectError("No resources listed.")] >> qi::eps(false));
-
-		root = resourceList;
-
-		cause_error = (qi::eps > qi::eps(false));
-
-		using qi::on_error;
-		using boost::phoenix::val;
-
-		BOOST_SPIRIT_DEBUG_NODE(root);
-		BOOST_SPIRIT_DEBUG_NODE(resource);
-		BOOST_SPIRIT_DEBUG_NODE(resourceList);
-		BOOST_SPIRIT_DEBUG_NODE(resourceTypes);
-		BOOST_SPIRIT_DEBUG_NODE(uniformResource);
-
-		qi::on_error<qi::fail>(resource, ExpectError(qi::_4));
-		qi::on_error<qi::fail>(resourceTypes, ExpectError(qi::_3));
-	}
-
-	qi::rule<Iterator, qi::in_state_skipper<Lexer> > root;
-	qi::rule<Iterator, qi::in_state_skipper<Lexer> > resource;
-	qi::rule<Iterator, qi::in_state_skipper<Lexer> > resourceList;
-	qi::rule<Iterator, qi::in_state_skipper<Lexer> > resourceTypes;
-	qi::rule<Iterator, qi::in_state_skipper<Lexer> > uniformResource;
-	qi::rule<Iterator, qi::in_state_skipper<Lexer> > cause_error;
-};
-
-typedef test_grammar<token_iterator, simple_lexer<lexer_type>::lexer_def> curr_grammar;
-
-template <typename Iterator, typename Lexer, typename ParserExpr, typename Skipper>
-inline bool tokenize_and_phrase_parse_proper(Iterator& first, Iterator last, Lexer const& lex,
-											 ParserExpr const& expr, Skipper const& skipper)
-{
-	try
-	{
-		return lex::tokenize_and_phrase_parse(first, last, lex, expr, skipper);
-	}
-	catch(qi::expectation_failure<Lexer::iterator_type> &)
-	{
-		return false;
-	}
-}
-
-#endif //USE_QI
-
 int main()
 {
 	std::ifstream loadFile("test.txt", std::ios::in | std::ios::binary);
 
 
 	simple_lexer<lexer_type> lexing;
-#ifdef USE_QI
-	curr_grammar gram(lexing);
-#endif //USE_QI
 
 	std::string txtFile((std::istreambuf_iterator<char>(loadFile)),
 		std::istreambuf_iterator<char>());
@@ -353,36 +289,30 @@ int main()
 	pos_iterator currIt((txtFile.begin()), txtFile.end());
 
 	errMessages.str(std::string());
-#ifdef USE_QI
-	bool r = tokenize_and_phrase_parse_proper(currIt, pos_iterator(), lexing, gram,
-		qi::in_state("Skip")[lexing.self]);
-#endif //USE_QI
 
 	token_range tokens(lexing.begin(currIt, pos_iterator(), NULL), lexing.end());
-	BOOST_FOREACH(token_type &tok, tokens)
+	PrintToks printer;
+	BOOST_FOREACH(const token_type &tok, tokens)
 	{
+		if(!token_is_valid(tok))
+		{
+			std::cout << "Malformed data!" << std::endl;
+
+			const classic::file_position_base<std::string> &pos = currIt.get_position();
+
+			std::cout <<
+				"In file \"" << pos.file <<
+				"\" line " << pos.line << " column " << pos.column << std::endl <<
+				"'" << currIt.get_currentline() << "'" << std::endl <<
+				std::setw(pos.column - 1) << " " << "^- here" << std::endl;
+
+			break;
+		}
+
+		printer(tok);
 	}
 
 //	bool r = lex::tokenize(currIt, pos_iterator(), lexing, PrintToks());
-
-#ifdef USE_QI
-	if(!r)
-	{
-		std::string fromError = errMessages.str();
-		if(fromError.empty())
-			std::cout << "ERROR: Parsing failed." << std::endl;
-		else
-			std::cout << fromError;
-
-		const classic::file_position_base<std::string> &pos = currIt.get_position();
-
-		std::cout <<
-			"In file \"" << pos.file <<
-			"\" line " << pos.line << " column " << pos.column << std::endl <<
-			"'" << currIt.get_currentline() << "'" << std::endl <<
-			std::setw(pos.column - 1) << " " << "^- here" << std::endl;
-	}
-#endif //USE_QI
 
 	return 0;
 }
