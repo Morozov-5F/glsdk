@@ -24,10 +24,13 @@
 #include <boost/any.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/utility/string_ref.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/optional.hpp>
 #include <boost/range.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/range/adaptors.hpp>
+#include <boost/container/flat_set.hpp>
+#include <boost/container/flat_map.hpp>
 
 #define BOOST_SPIRIT_USE_PHOENIX_V3 1
 

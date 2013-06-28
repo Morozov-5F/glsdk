@@ -14,6 +14,7 @@ resources
 		min{linear-mip-linear}
 	end
 	sampler <aniso-repeat>
+		compare{less}
 		mag{linear}
 		min{linear-mip-linear}
 		aniso 8

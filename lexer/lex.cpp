@@ -127,6 +127,14 @@ enum Keywords
 	TOK_RESOURCES,
 	TOK_UNIFORM,
 	TOK_TYPE,
+	TOK_SAMPLER,
+	TOK_COMPARE,
+	TOK_MAG,
+	TOK_MIN,
+	TOK_ANISO,
+	TOK_WRAP_S,
+	TOK_WRAP_T,
+	TOK_WRAP_R,
 	NUM_KEYWORD_TOKENS,
 };
 
@@ -136,6 +144,14 @@ static const char *g_keywordNames[] =
 	"resources",
 	"uniform",
 	"type",
+	"sampler",
+	"compare",
+	"mag",
+	"min",
+	"aniso",
+	"wrap_s",
+	"wrap_t",
+	"wrap_r",
 };
 
 BOOST_STATIC_ASSERT(ARRAY_COUNT(g_keywordNames) == NUM_KEYWORD_TOKENS);
@@ -175,9 +191,9 @@ enum StringTokens
 
 static const char *g_stringPatterns[] =
 {
-	"<\\w+>",
+	"<[a-zA-Z0-9_\\.\\-]+>",
 	"\\[[a-zA-Z_]\\w*\\]",
-	"\\{[a-zA-Z_]\\w*\\}",
+	"\\{[a-zA-Z_\\-]\\w*\\}",
 	"\\\"[^\\\"\\n\\t]+\\\"",
 	"\\\'[^\\\'\\n\\t]+\\\'",
 };
@@ -624,6 +640,25 @@ private:
 	}
 };
 
+class MultipleUseOfCommandError : public BaseParseError
+{
+public:
+	template<typename Token>
+	MultipleUseOfCommandError(const Token &t, size_t owningKeyword)
+		: BaseParseError(GetError(t, owningKeyword),
+		std::distance(t.value().begin(), t.value().end()))
+	{}
+
+
+private:
+	template<typename Token>
+	std::string GetError(const Token &t, size_t owningKeyword)
+	{
+		return "The '" + std::string(t.value().begin(), t.value().end()) +
+			"' command can only be used once within a '" + GetTokenErrorName(owningKeyword) + "' definition.";
+	}
+};
+
 template<typename Mapped>
 struct EnumData
 {
@@ -657,6 +692,47 @@ private:
 };
 
 const EnumData<void> g_uniformTypeEnumeration = {"enum", g_uniformTypeList};
+
+boost::string_ref g_magFilterEnumNames[] =
+{
+	"nearest",
+	"linear",
+};
+
+boost::string_ref g_minFilterEnumNames[] =
+{
+	"nearest",
+	"linear",
+	"nearest_mip_nearest",
+	"nearest_mip_linear",
+	"linear_mip_nearest",
+	"linear_mip_linear",
+};
+
+boost::string_ref g_wrapModeEnumNames[] =
+{
+	"edge_clamp",
+	"border_clamp",
+	"repeat",
+	"mirror_repeat",
+};
+
+boost::string_ref g_compareModeEnumNames[] =
+{
+	"less",
+	"less_equal",
+	"greater",
+	"greater_equal",
+	"equal",
+	"not_equal",
+	"pass",
+	"fail",
+};
+
+const EnumData<void> g_magFilterEnumeration = {"mag", g_magFilterEnumNames};
+const EnumData<void> g_minFilterEnumeration = {"min", g_minFilterEnumNames};
+const EnumData<void> g_wrapModeEnumeration = {"wrap", g_wrapModeEnumNames};
+const EnumData<void> g_compareModeEnumeration = {"compare", g_compareModeEnumNames};
 
 template<typename Range, typename Mapped>
 int ParseEnumerator(Range &rng, const EnumData<Mapped> &data)
@@ -1106,6 +1182,74 @@ UniformData ParseUniformData(Range &rng, int typeIx)
 		return CreateDefaultUniform(typeIx);
 }
 
+typedef boost::container::flat_set<size_t> TokenChecker;
+
+template<typename Token>
+void CheckMultipleKeyword(TokenChecker &hasBeenFound, const Token &tok, size_t owningId)
+{
+	if(hasBeenFound.find(tok.id()) != hasBeenFound.end())
+		throw MultipleUseOfCommandError(tok, owningId);
+	hasBeenFound.insert(tok.id());
+}
+
+static size_t g_validSamplerTokens[] =
+{
+	(TOK_MAG | KEYWORD_ID_PREFIX),
+	(TOK_MIN | KEYWORD_ID_PREFIX),
+	(TOK_COMPARE | KEYWORD_ID_PREFIX),
+	(TOK_WRAP_S | KEYWORD_ID_PREFIX),
+	(TOK_WRAP_T | KEYWORD_ID_PREFIX),
+	(TOK_WRAP_R | KEYWORD_ID_PREFIX),
+	(TOK_ANISO | KEYWORD_ID_PREFIX),
+};
+
+template<typename Range>
+void ParseSamplerData(Range &rng)
+{
+	ExpectToken(rng, TOK_SAMPLER | KEYWORD_ID_PREFIX);
+	rng.advance_begin(1);
+	ParseIdentifier(rng);
+
+	TokenChecker hasBeenFound;
+
+	while(!rng.empty() && rng.front().id() != (TOK_END | KEYWORD_ID_PREFIX))
+	{
+		ExpectCategory(rng.front(), KEYWORD_ID_PREFIX);
+		if(!HasTokenOneOfNoEmpty(rng, g_validSamplerTokens))
+			throw UnexpectedDataError(rng.front(), "a valid sampler parameter.", exp_message);
+		
+		typename Range::value_type tok = rng.front();
+		CheckMultipleKeyword(hasBeenFound, tok, (TOK_SAMPLER | KEYWORD_ID_PREFIX));
+
+		rng.advance_begin(1);
+		switch(tok.id() & ~PREFIX_MASK)
+		{
+		case TOK_MAG:
+			ParseEnumerator(rng, g_magFilterEnumeration);
+			break;
+		case TOK_MIN:
+			ParseEnumerator(rng, g_minFilterEnumeration);
+			break;
+		case TOK_COMPARE:
+			ParseEnumerator(rng, g_compareModeEnumeration);
+			break;
+		case TOK_WRAP_S:
+		case TOK_WRAP_T:
+		case TOK_WRAP_R:
+			ParseEnumerator(rng, g_wrapModeEnumeration);
+			break;
+		case TOK_ANISO:
+			{
+				ExpectCategory(rng, NUMBER_ID_PREFIX);
+				std::string theFloat(rng.front().value().begin(), rng.front().value().end());
+				boost::lexical_cast<float>(theFloat);
+				rng.advance_begin(1);
+			}
+			break;
+		}
+	}
+}
+
 
 template<typename Range>
 void ParseResources(Range &rng)
@@ -1128,6 +1272,9 @@ void ParseResources(Range &rng)
 				int uniformType = ParseEnumerator(rng, g_uniformTypeEnumeration);
 				UniformData data = ParseUniformData(rng, uniformType);
 			}
+			break;
+		case TOK_SAMPLER:
+			ParseSamplerData(rng);
 			break;
 		default:
 			throw UnexpectedDataError(rng.front(), "a valid resource.", exp_message);
@@ -1156,6 +1303,7 @@ int main()
 	std::string::const_iterator first = txtFile.begin();
 	std::string::const_iterator last = txtFile.end();
 	pos_iterator currIt((txtFile.begin()), txtFile.end());
+	currIt.set_tabchars(4);
 
 	try
 	{
@@ -1177,10 +1325,13 @@ int main()
 
 			size_t column = pos.column - e.GetSizeOfToken();
 
+			std::string line = currIt.get_currentline();
+			line = boost::algorithm::replace_all_copy(line, "\t", "    ");
+
 			std::cout <<
 				"In file \"" << pos.file <<
 				"\" line " << pos.line << " column " << column << std::endl <<
-				currIt.get_currentline() << std::endl;
+				line << std::endl;
 			if(column > 1)
 				std::cout << std::setw(column - 1) << " ";
 			std::cout << "^- here" << std::endl;

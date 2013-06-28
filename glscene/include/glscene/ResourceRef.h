@@ -1,9 +1,9 @@
-#ifndef GLSDK_GLSCENE_RESOURCES_H
-#define GLSDK_GLSCENE_RESOURCES_H
+#ifndef GLSDK_GLSCENE_RESOURCE_REF_H
+#define GLSDK_GLSCENE_RESOURCE_REF_H
 
 /**
 \file
-\brief Includes the glscene::Resources class. You must include a [GL Load header](@ref module_glload)
+\brief Includes the glscene::ResourceRef class. You must include a [GL Load header](@ref module_glload)
 before including this file.
 **/
 
@@ -37,7 +37,7 @@ namespace glscene
 	private:
 	};
 
-	///Thrown by any `Resources::Define*` function if the given resource name has already been used for a resource of that type.
+	///Thrown by any `ResourceRef::Define*` function if the given resource name has already been used for a resource of that type.
 	class ResourceMultiplyDefinedException : public ResourceException
 	{
 	public:
@@ -48,7 +48,7 @@ namespace glscene
 		static std::string GetErrorName(const std::string &resource, const std::string &resourceType);
 	};
 
-	///Thrown by any Resources access functions if the given resource name has not been defined for that resource type.
+	///Thrown by any ResourceRef access functions if the given resource name has not been defined for that resource type.
 	class ResourceNotFoundException : public ResourceException
 	{
 	public:
@@ -59,7 +59,7 @@ namespace glscene
 		static std::string GetErrorName(const std::string &resource, const std::string &resourceType);
 	};
 
-	///Thrown by any `Resources::SetUniform` function if the given data doesn't match the type of the input.
+	///Thrown by any `ResourceRef::SetUniform` function if the given data doesn't match the type of the input.
 	class UniformResourceTypeMismatchException : public ResourceException
 	{
 	public:
@@ -102,7 +102,7 @@ namespace glscene
 	This class provides a hook for the user to define their own meshes and provide them as resources. A
 	Drawable only needs to be able to render the mesh.
 
-	The Drawable you provide will be destroyed only if you told the Resources object to claim ownership of it.
+	The Drawable you provide will be destroyed only if you told the ResourceRef object to claim ownership of it.
 	This destruction will be managed by calling the Dispose function; `delete` will not be called directly.
 	This allows you to manage the memory for Drawable objects in your own way, such as by pool allocators
 	and the like.
@@ -129,7 +129,7 @@ namespace glscene
 		- Reset this state upon being finished. If you used primitive restarting in your rendering, turn it off.
 
 		\note Do not attempt to modify anything within the scene graph system when this function is called. So
-		if you have access to a non `const` Resources object, a NodeRef, or whatever, do not call non `const`
+		if you have access to a non `const` ResourceRef object, a NodeRef, or whatever, do not call non `const`
 		functions on it.
 
 		\param param An arbitrary string passed by the system. For glmesh::Mesh objects, it's the mesh variant
@@ -555,4 +555,4 @@ namespace glscene
 }
 
 
-#endif //GLSDK_GLSCENE_RESOURCES_H
+#endif //GLSDK_GLSCENE_RESOURCE_REF_H
