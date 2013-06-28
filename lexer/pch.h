@@ -10,6 +10,10 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <exception>
+#include <stdexcept>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/array.hpp>
@@ -20,6 +24,7 @@
 #include <boost/any.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/utility/string_ref.hpp>
+#include <boost/optional.hpp>
 #include <boost/range.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/range/adaptors.hpp>

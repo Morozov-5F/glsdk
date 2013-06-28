@@ -12,7 +12,7 @@ project "Lex"
 	language "c++"
 	includedirs { "../include" }
 	
-	UseLibs {"boost"}
+	UseLibs {"boost", "glm"}
 
 	files {"lex.cpp", "pch.h", "pch.cpp"}
 	
