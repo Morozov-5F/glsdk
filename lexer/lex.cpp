@@ -3,6 +3,80 @@
 
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
+template<typename T>
+class array_ref
+{
+public:
+	typedef T value_type;
+	typedef const T * pointer;
+	typedef const T & reference;
+	typedef const T & const_reference;
+	typedef const T * const_iterator;
+	typedef const_iterator iterator;
+	typedef std::reverse_iterator< const_iterator > const_reverse_iterator;
+	typedef const_reverse_iterator reverse_iterator;
+	typedef size_t size_type;
+	typedef ptrdiff_t difference_type;
+
+	// construct/copy
+	array_ref() : m_data(NULL), m_size(0) {}
+
+	array_ref(const T *arr, size_t length) : m_data(arr), m_size(length) {}
+	array_ref(const std::vector<T> & v) : m_data(&v[0]), m_size(v.size()) {}
+	template<size_t N>
+	array_ref(const T(&a)[N]) : m_data(a), m_size(N) {}
+	template<size_t N>
+	array_ref(const boost::array< T, N > & a) : m_data(a.data()), m_size(N) {}
+
+	const_iterator begin() const {return m_data;}
+	const_iterator end() const {return m_data + m_size;}
+	const_iterator cbegin() const {return m_data;}
+	const_iterator cend() const {return m_data + m_size;}
+	const_reverse_iterator rbegin() const {return const_reverse_iterator(end());}
+	const_reverse_iterator rend() const {return const_reverse_iterator(begin());}
+	const_reverse_iterator crbegin() const  {return const_reverse_iterator(cend());}
+	const_reverse_iterator crend() const {return const_reverse_iterator(cbegin());}
+
+	size_type size() const {return m_size;}
+	size_type max_size() const {return std::numeric_limits<size_type>::max();}
+	bool empty() const {return m_size == 0;}
+
+	const T & operator[](size_t i) const {return m_data[i];}
+	const T & at(size_t i) const
+	{
+		if(i >= m_size)
+			throw std::out_of_range();
+		return m_data[i];
+	}
+	const T & front() const {return m_data[0];}
+	const T & back() const {return m_data[m_size - 1];}
+	const T * data() const {return m_data;}
+
+	std::vector<T> vec() const {return std::vector<T>(m_data, m_data + m_size);}
+	std::basic_string<T> str() const {return std::basic_string<T>(m_data, m_data + m_size);}
+
+	void clear() {m_size = 0; m_data = NULL;}
+	void remove_prefix(size_type n)
+	{
+		m_data += n;
+		m_size -= n;
+		if(m_size <= 0)
+			clear();
+	}
+
+	void remove_suffix(size_type n)
+	{
+		m_size -= n;
+		if(m_size <= 0)
+			clear();
+	}
+
+	void pop_front() {remove_prefix(1);}
+	void pop_back() {remove_suffix(1);}
+private:
+	const T *m_data;
+	size_t m_size;
+};
 
 
 typedef boost::variant<float, glm::vec2, glm::vec3, glm::vec4> VectorTypes;
@@ -133,26 +207,30 @@ BOOST_STATIC_ASSERT(ARRAY_COUNT(g_stringFormNames) == NUM_STRING_TOKENS);
 
 enum NumberTokens
 {
-	TOK_INTEGER,
+	TOK_UNSIGNED_INTEGER,
+	TOK_SIGNED_INTEGER,
 	TOK_FLOAT,
 	NUM_NUMBER_TOKENS,
 };
 
 static const char *g_numberPatterns[] =
 {
-	"[\\+\\-]?\\d+",
+	"\\d+",
+	"\\-\\d+",
 	"[\\+\\-]?\\d+\\.\\d*",
 };
 
 static const char *g_debugNumberNames[] =
 {
+	"Signed Integer",
 	"Integer",
 	"Float",
 };
 
 static const char *g_numberFormNames[] =
 {
-	"an integer",
+	"an unsigned integer",
+	"a signed integer",
 	"a floating-point",
 };
 
@@ -473,24 +551,6 @@ std::string ExtractEnum(const token_type &tok)
 	return std::string(enumerator.begin() + 1, enumerator.end() - 1);
 }
 
-class IncorrectEnumError : public BaseParseError
-{
-public:
-	template<typename Token>
-	IncorrectEnumError(const Token &t, const std::string &enumeration)
-		: BaseParseError(GetError(t, enumeration),
-			std::distance(t.value().begin(), t.value().end()))
-	{}
-
-private:
-
-	template<typename Token>
-	std::string GetError(const Token &t, const std::string &enumeration)
-	{
-		return "The enumerator '" + ExtractEnum(t) + "' cannot be used with '" + enumeration + "'.";
-	}
-};
-
 class uniform_unsigned_mismatch_t {};
 class uniform_scalar_mismatch_t {};
 class uniform_float_mismatch_t {};
@@ -564,6 +624,57 @@ private:
 	}
 };
 
+template<typename Mapped>
+struct EnumData
+{
+	boost::string_ref enumName;
+	array_ref<boost::string_ref> enumerators;
+	array_ref<Mapped> mapping;
+};
+
+template<> struct EnumData<void>
+{
+	boost::string_ref enumName;
+	array_ref<boost::string_ref> enumerators;
+};
+
+class IncorrectEnumError : public BaseParseError
+{
+public:
+	template<typename Token, typename Mapped>
+	IncorrectEnumError(const Token &t, const EnumData<Mapped> &data)
+		: BaseParseError(GetError(t, data),
+		std::distance(t.value().begin(), t.value().end()))
+	{}
+
+private:
+	template<typename Token, typename Mapped>
+	std::string GetError(const Token &t, const EnumData<Mapped> &data)
+	{
+		std::string enumeration(data.enumName.begin(), data.enumName.end());
+		return "The enumerator '" + ExtractEnum(t) + "' cannot be used with '" + enumeration + "'.";
+	}
+};
+
+const EnumData<void> g_uniformTypeEnumeration = {"enum", g_uniformTypeList};
+
+template<typename Range, typename Mapped>
+int ParseEnumerator(Range &rng, const EnumData<Mapped> &data)
+{
+	ExpectToken(rng, (TOK_ENUMERATOR | STRING_ID_PREFIX));
+
+	std::string testEnum = ExtractEnum(rng.front());
+
+	const boost::string_ref *foundEnum = boost::find(data.enumerators, boost::string_ref(testEnum));
+	size_t enumIx = foundEnum - data.enumerators.data();
+	if(enumIx >= data.enumerators.size())
+		throw IncorrectEnumError(rng.front(), data);
+
+	rng.advance_begin(1);
+
+	return enumIx;
+}
+
 struct ThrowOnInvalid
 {
 	bool operator()(const token_type &tok) const
@@ -620,25 +731,6 @@ void ParseIdentifier(Range &rng)
 	rng.advance_begin(1);
 }
 
-template<typename Range>
-int ParseUniformType(Range &rng)
-{
-	ExpectToken(rng, (TOK_ENUMERATOR | STRING_ID_PREFIX));
-
-	std::string testEnum = ExtractEnum(rng.front());
-
-	const boost::string_ref *data = boost::find(g_uniformTypeList,
-		boost::string_ref(testEnum));
-
-	if(data - g_uniformTypeList < ARRAY_COUNT(g_uniformTypeList))
-	{
-		rng.advance_begin(1);
-		return data - g_uniformTypeList;
-	}
-
-	throw IncorrectEnumError(rng.front(), "enum");
-}
-
 UniformData CreateDefaultUniform(int typeIx)
 {
 	switch(typeIx)
@@ -685,6 +777,19 @@ bool HasTokenNoEmpty(Range &rng, size_t idExpected)
 {
 	BOOST_ASSERT(!rng.empty());
 	return HasToken(rng.front(), idExpected);
+}
+
+template<typename Range>
+bool HasTokenOneOfNoEmpty(Range &rng, array_ref<size_t> expecteds)
+{
+	BOOST_ASSERT(!rng.empty());
+	BOOST_FOREACH(size_t idExpected, expecteds)
+	{
+		if(HasToken(rng.front(), idExpected))
+			return true;
+	}
+
+	return false;
 }
 
 bool HasCategory(const token_type &tok, size_t prefix)
@@ -811,6 +916,9 @@ private:
 	int typeIx;
 };
 
+static size_t g_integerTokenIds[] =
+{(TOK_UNSIGNED_INTEGER | NUMBER_ID_PREFIX), (TOK_SIGNED_INTEGER | NUMBER_ID_PREFIX)};
+
 //Starts at the open paren, progresses to the token after the close paren.
 template<typename Range>
 std::vector<ParsedValue> ParseNumberList(Range &rng, int typeIx)
@@ -833,10 +941,10 @@ std::vector<ParsedValue> ParseNumberList(Range &rng, int typeIx)
 		if(expectedSize == count)
 			throw UniformTypeMismatchError(rng.front(), g_uniformTypeList[typeIx], expectedSize, true);
 
-		if(HasTokenNoEmpty(rng, (TOK_INTEGER | NUMBER_ID_PREFIX)))
+		if(HasTokenOneOfNoEmpty(rng, g_integerTokenIds))
 		{
 			//Starts with minus and the type should be unsigned.
-			if(IsUnifTypeUnsigned(typeIx) && *(rng.front().value().begin()) == '-')
+			if(IsUnifTypeUnsigned(typeIx) && HasToken(rng.front(), TOK_SIGNED_INTEGER))
 				throw UniformTypeMismatchError(rng.front(),
 				g_uniformTypeList[typeIx], unf_type_unsigned);
 
@@ -949,10 +1057,10 @@ UniformData ParseUniformData(Range &rng, int typeIx)
 			throw UniformTypeMismatchError(rng.front(),
 			g_uniformTypeList[typeIx], unif_type_scalar);
 
-		if(HasTokenNoEmpty(rng, (TOK_INTEGER | NUMBER_ID_PREFIX)))
+		if(HasTokenOneOfNoEmpty(rng, g_integerTokenIds))
 		{
 			//Starts with minus and the type should be unsigned.
-			if(IsUnifTypeUnsigned(typeIx) && *(rng.front().value().begin()) == '-')
+			if(IsUnifTypeUnsigned(typeIx) && HasToken(rng.front(), (TOK_SIGNED_INTEGER | NUM_NUMBER_TOKENS)))
 				throw UniformTypeMismatchError(rng.front(),
 				g_uniformTypeList[typeIx], unf_type_unsigned);
 
@@ -991,9 +1099,7 @@ UniformData ParseUniformData(Range &rng, int typeIx)
 		if(vals.size() == 1)
 			return boost::apply_visitor(UniformFromSingleValue(typeIx), vals[0]);
 		
-		
-
-		return CreateDefaultUniform(typeIx);
+		return BuildUniformData(vals, typeIx);
 	}
 	else
 		//Not a number, so let the next statement handle it.
@@ -1019,7 +1125,7 @@ void ParseResources(Range &rng)
 				ParseIdentifier(rng);
 				ExpectToken(rng, (TOK_TYPE | KEYWORD_ID_PREFIX));
 				rng.advance_begin(1);
-				int uniformType = ParseUniformType(rng);
+				int uniformType = ParseEnumerator(rng, g_uniformTypeEnumeration);
 				UniformData data = ParseUniformData(rng, uniformType);
 			}
 			break;

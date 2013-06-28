@@ -1,6 +1,7 @@
 
 resources
-  uniform <name> type{uvec3} (3)
+  uniform <name> type{uvec3} (3.32)
+  uniform <name> type{int} -3
 end
 
 
