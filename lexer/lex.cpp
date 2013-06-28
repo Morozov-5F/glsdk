@@ -110,7 +110,6 @@ const int NUM_INTEGER_INDICES = 8;
 bool IsUnifTypeUnsigned(int typeIx) {return typeIx < NUM_UNSIGNED_INDICES;}
 bool IsUnifTypeInteger(int typeIx) {return typeIx < NUM_INTEGER_INDICES;}
 
-
 namespace lex = boost::spirit::lex;
 namespace qi = boost::spirit::qi;
 
@@ -121,168 +120,57 @@ namespace qi = boost::spirit::qi;
 #define NUMBER_ID_PREFIX 0x4000
 #define SYMBOL_ID_PREFIX 0x5000
 
-enum Keywords
+enum AllTokens
 {
-	TOK_END,
-	TOK_RESOURCES,
-	TOK_UNIFORM,
-	TOK_TYPE,
-	TOK_SAMPLER,
-	TOK_COMPARE,
-	TOK_MAG,
-	TOK_MIN,
-	TOK_ANISO,
-	TOK_WRAP_S,
-	TOK_WRAP_T,
-	TOK_WRAP_R,
-	NUM_KEYWORD_TOKENS,
+#define MAC(name, pattern, debug_name, display_name) TOK_##name,
+	BEGIN_KEYWORDS = KEYWORD_ID_PREFIX - 1,
+#include "keywords.incl"
+	BEGIN_WHITESPACE = WHITESPACE_ID_PREFIX - 1,
+#include "whitespace.incl"
+	BEGIN_STRINGS = STRING_ID_PREFIX - 1,
+#include "strings.incl"
+	BEGIN_NUMBERS = NUMBER_ID_PREFIX - 1,
+#include "numbers.incl"
+	BEGIN_SYMBOLS = SYMBOL_ID_PREFIX - 1,
+#include "symbols.incl"
+#undef MAC
 };
 
-static const char *g_keywordNames[] =
+
+static const char *g_keywordStrings[][3] =
 {
-	"end",
-	"resources",
-	"uniform",
-	"type",
-	"sampler",
-	"compare",
-	"mag",
-	"min",
-	"aniso",
-	"wrap_s",
-	"wrap_t",
-	"wrap_r",
+#define MAC(name, pattern, debug_name, display_name) {pattern, pattern, pattern},
+#include "keywords.incl"
+#undef MAC
 };
 
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_keywordNames) == NUM_KEYWORD_TOKENS);
-
-enum Whitespace
+static const char *g_whitespaceStrings[][3] =
 {
-	TOK_SPACE,
-	TOK_CPP_COMMENT,
-	NUM_WHITESPACE_TOKENS,
+#define MAC(name, pattern, debug_name, display_name) {pattern, debug_name, display_name},
+#include "whitespace.incl"
+#undef MAC
 };
 
-static const char *g_whitespacePatterns[] =
+static const char *g_stringsStrings[][3] =
 {
-	"\\s+",
-	"\\/\\/[^\\n]*\\n",
+#define MAC(name, pattern, debug_name, display_name) {pattern, debug_name, display_name},
+#include "strings.incl"
+#undef MAC
 };
 
-static const char *g_debugWhitespaceNames[] =
+static const char *g_numbersStrings[][3] =
 {
-	"Space",
-	"Comment",
+#define MAC(name, pattern, debug_name, display_name) {pattern, debug_name, display_name},
+#include "numbers.incl"
+#undef MAC
 };
 
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_whitespacePatterns) == NUM_WHITESPACE_TOKENS);
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_debugWhitespaceNames) == NUM_WHITESPACE_TOKENS);
-
-
-enum StringTokens
+static const char *g_symbolStrings[][3] =
 {
-	TOK_IDENTIFIER,
-	TOK_GLSL_IDENT,
-	TOK_ENUMERATOR,
-	TOK_FILENAME,
-	TOK_STORE_NAME,
-	NUM_STRING_TOKENS,
+#define MAC(name, pattern, debug_name, display_name) {pattern, debug_name, display_name},
+#include "symbols.incl"
+#undef MAC
 };
-
-static const char *g_stringPatterns[] =
-{
-	"<[a-zA-Z0-9_\\.\\-]+>",
-	"\\[[a-zA-Z_]\\w*\\]",
-	"\\{[a-zA-Z_\\-]\\w*\\}",
-	"\\\"[^\\\"\\n\\t]+\\\"",
-	"\\\'[^\\\'\\n\\t]+\\\'",
-};
-
-static const char *g_debugStringNames[] =
-{
-	"Identifier",
-	"Shader Identifier",
-	"Enumerator",
-	"Filename",
-	"Stored Name",
-};
-
-static const char *g_stringFormNames[] =
-{
-	"<Identifier>",
-	"[Shader_Identifier]",
-	"{Enumerator}",
-	"\"Filename String\"",
-	"'Stored Name String'",
-};
-
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_stringPatterns) == NUM_STRING_TOKENS);
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_debugStringNames) == NUM_STRING_TOKENS);
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_stringFormNames) == NUM_STRING_TOKENS);
-
-
-enum NumberTokens
-{
-	TOK_UNSIGNED_INTEGER,
-	TOK_SIGNED_INTEGER,
-	TOK_FLOAT,
-	NUM_NUMBER_TOKENS,
-};
-
-static const char *g_numberPatterns[] =
-{
-	"\\d+",
-	"\\-\\d+",
-	"[\\+\\-]?\\d+\\.\\d*",
-};
-
-static const char *g_debugNumberNames[] =
-{
-	"Signed Integer",
-	"Integer",
-	"Float",
-};
-
-static const char *g_numberFormNames[] =
-{
-	"an unsigned integer",
-	"a signed integer",
-	"a floating-point",
-};
-
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_numberPatterns) == NUM_NUMBER_TOKENS);
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_debugNumberNames) == NUM_NUMBER_TOKENS);
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_numberFormNames) == NUM_NUMBER_TOKENS);
-
-
-enum SymbolTokens
-{
-	TOK_OPEN_PAREN,
-	TOK_CLOSE_PAREN,
-	NUM_SYMBOL_TOKENS,
-};
-
-static const char *g_symbolPatterns[] =
-{
-	"\\(",
-	"\\)",
-};
-
-static const char *g_debugSymbolNames[] =
-{
-	"Open Paren",
-	"Close Paren",
-};
-
-static const char *g_symbolFormNames[] =
-{
-	"(",
-	")",
-};
-
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_symbolPatterns) == NUM_SYMBOL_TOKENS);
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_debugSymbolNames) == NUM_SYMBOL_TOKENS);
-BOOST_STATIC_ASSERT(ARRAY_COUNT(g_symbolFormNames) == NUM_SYMBOL_TOKENS);
 
 
 template <typename Lexer>
@@ -290,29 +178,29 @@ struct simple_lexer : lex::lexer<Lexer>
 {
 	simple_lexer()
 	{
-		for(int loop = 0; loop < NUM_KEYWORD_TOKENS; ++loop)
+		for(size_t loop = 0; loop < boost::size(g_keywordStrings); ++loop)
 		{
-			this->self.add(g_keywordNames[loop], loop | KEYWORD_ID_PREFIX);
+			this->self.add(g_keywordStrings[loop][0], loop | KEYWORD_ID_PREFIX);
 		}
 
-		for(int loop = 0; loop < NUM_WHITESPACE_TOKENS; ++loop)
+		for(size_t loop = 0; loop < boost::size(g_whitespaceStrings); ++loop)
 		{
-			this->self.add(g_whitespacePatterns[loop], loop | WHITESPACE_ID_PREFIX);
+			this->self.add(g_whitespaceStrings[loop][0], loop | WHITESPACE_ID_PREFIX);
 		}
 
-		for(int loop = 0; loop < NUM_STRING_TOKENS; ++loop)
+		for(size_t loop = 0; loop < boost::size(g_stringsStrings); ++loop)
 		{
-			this->self.add(g_stringPatterns[loop], loop | STRING_ID_PREFIX);
+			this->self.add(g_stringsStrings[loop][0], loop | STRING_ID_PREFIX);
 		}
 
-		for(int loop = 0; loop < NUM_NUMBER_TOKENS; ++loop)
+		for(size_t loop = 0; loop < boost::size(g_numbersStrings); ++loop)
 		{
-			this->self.add(g_numberPatterns[loop], loop | NUMBER_ID_PREFIX);
+			this->self.add(g_numbersStrings[loop][0], loop | NUMBER_ID_PREFIX);
 		}
 
-		for(int loop = 0; loop < NUM_SYMBOL_TOKENS; ++loop)
+		for(size_t loop = 0; loop < boost::size(g_symbolStrings); ++loop)
 		{
-			this->self.add(g_symbolPatterns[loop], loop | SYMBOL_ID_PREFIX);
+			this->self.add(g_symbolStrings[loop][0], loop | SYMBOL_ID_PREFIX);
 		}
 
 		//Catch two keywords rammed together. Not a matched token, so it's bad.
@@ -353,15 +241,15 @@ std::string GetTokenName(size_t id)
 	switch(prefix)
 	{
 	case KEYWORD_ID_PREFIX:
-		return g_keywordNames[id & ~KEYWORD_ID_PREFIX];
+		return g_keywordStrings[id & ~KEYWORD_ID_PREFIX][1];
 	case WHITESPACE_ID_PREFIX:
-		return g_debugWhitespaceNames[id & ~WHITESPACE_ID_PREFIX];
+		return g_whitespaceStrings[id & ~WHITESPACE_ID_PREFIX][1];
 	case STRING_ID_PREFIX:
-		return g_debugStringNames[id & ~STRING_ID_PREFIX];
+		return g_stringsStrings[id & ~STRING_ID_PREFIX][1];
 	case NUMBER_ID_PREFIX:
-		return g_debugNumberNames[id & ~NUMBER_ID_PREFIX];
+		return g_numbersStrings[id & ~NUMBER_ID_PREFIX][1];
 	case SYMBOL_ID_PREFIX:
-		return g_debugSymbolNames[id & ~SYMBOL_ID_PREFIX];
+		return g_symbolStrings[id & ~SYMBOL_ID_PREFIX][1];
 	default:
 		return "UNKNOWN_TOKEN!";
 	}
@@ -373,15 +261,15 @@ std::string GetTokenErrorName(size_t id)
 	switch(prefix)
 	{
 	case KEYWORD_ID_PREFIX:
-		return g_keywordNames[id & ~KEYWORD_ID_PREFIX];
+		return g_keywordStrings[id & ~KEYWORD_ID_PREFIX][2];
 	case WHITESPACE_ID_PREFIX:
-		return g_debugWhitespaceNames[id & ~WHITESPACE_ID_PREFIX];
+		return g_whitespaceStrings[id & ~WHITESPACE_ID_PREFIX][2];
 	case STRING_ID_PREFIX:
-		return g_stringFormNames[id & ~STRING_ID_PREFIX];
+		return g_stringsStrings[id & ~STRING_ID_PREFIX][2];
 	case NUMBER_ID_PREFIX:
-		return g_numberFormNames[id & ~NUMBER_ID_PREFIX];
+		return g_numbersStrings[id & ~NUMBER_ID_PREFIX][2];
 	case SYMBOL_ID_PREFIX:
-		return g_symbolFormNames[id & ~SYMBOL_ID_PREFIX];
+		return g_symbolStrings[id & ~SYMBOL_ID_PREFIX][2];
 	default:
 		return "UNKNOWN_TOKEN!";
 	}
@@ -734,23 +622,6 @@ const EnumData<void> g_minFilterEnumeration = {"min", g_minFilterEnumNames};
 const EnumData<void> g_wrapModeEnumeration = {"wrap", g_wrapModeEnumNames};
 const EnumData<void> g_compareModeEnumeration = {"compare", g_compareModeEnumNames};
 
-template<typename Range, typename Mapped>
-int ParseEnumerator(Range &rng, const EnumData<Mapped> &data)
-{
-	ExpectToken(rng, (TOK_ENUMERATOR | STRING_ID_PREFIX));
-
-	std::string testEnum = ExtractEnum(rng.front());
-
-	const boost::string_ref *foundEnum = boost::find(data.enumerators, boost::string_ref(testEnum));
-	size_t enumIx = foundEnum - data.enumerators.data();
-	if(enumIx >= data.enumerators.size())
-		throw IncorrectEnumError(rng.front(), data);
-
-	rng.advance_begin(1);
-
-	return enumIx;
-}
-
 struct ThrowOnInvalid
 {
 	bool operator()(const token_type &tok) const
@@ -768,44 +639,6 @@ struct SkipWhitespace
 		return GetPrefixFromId(tok.id()) != WHITESPACE_ID_PREFIX;
 	}
 };
-
-void ExpectToken(const token_type &tok, size_t idExpected)
-{
-	if(tok.id() != idExpected)
-		throw UnexpectedDataError(idExpected, tok);
-}
-
-template<typename Range>
-void ExpectToken(Range &rng, size_t idExpected)
-{
-	if(rng.empty())
-		throw UnexpectedDataError(idExpected);
-	else
-		ExpectToken(rng.front(), idExpected);
-}
-
-void ExpectCategory(const token_type &tok, size_t prefix)
-{
-	if((tok.id() & PREFIX_MASK) != prefix)
-		throw UnexpectedDataError(prefix, tok, exp_cat);
-}
-
-template<typename Range>
-void ExpectCategory(Range &rng, size_t prefix)
-{
-	if(rng.empty())
-		throw UnexpectedDataError(prefix, exp_cat);
-	else
-		ExpectCategory(rng.front(), prefix);
-}
-
-template<typename Range>
-void ParseIdentifier(Range &rng)
-{
-	ExpectToken(rng, (TOK_IDENTIFIER | STRING_ID_PREFIX));
-
-	rng.advance_begin(1);
-}
 
 UniformData CreateDefaultUniform(int typeIx)
 {
@@ -832,62 +665,6 @@ UniformData CreateDefaultUniform(int typeIx)
 	}
 
 	return UniformData();
-}
-
-bool HasToken(const token_type &tok, size_t idExpected)
-{
-	return tok.id() == idExpected;
-}
-
-template<typename Range>
-boost::optional<bool> HasToken(Range &rng, size_t idExpected)
-{
-	if(rng.empty())
-		return boost::none;
-	else
-		return HasToken(rng.front(), idExpected);
-}
-
-template<typename Range>
-bool HasTokenNoEmpty(Range &rng, size_t idExpected)
-{
-	BOOST_ASSERT(!rng.empty());
-	return HasToken(rng.front(), idExpected);
-}
-
-template<typename Range>
-bool HasTokenOneOfNoEmpty(Range &rng, array_ref<size_t> expecteds)
-{
-	BOOST_ASSERT(!rng.empty());
-	BOOST_FOREACH(size_t idExpected, expecteds)
-	{
-		if(HasToken(rng.front(), idExpected))
-			return true;
-	}
-
-	return false;
-}
-
-bool HasCategory(const token_type &tok, size_t prefix)
-{
-	size_t t = tok.id() & PREFIX_MASK;
-	return (t) == prefix;
-}
-
-template<typename Range>
-boost::optional<bool> HasCategory(Range &rng, size_t prefix)
-{
-	if(rng.empty())
-		return boost::none;
-	else
-		return HasCategory(rng.front(), prefix);
-}
-
-template<typename Range>
-bool HasCategoryNoEmpty(Range &rng, size_t prefix)
-{
-	BOOST_ASSERT(!rng.empty());
-	return HasCategory(rng.front(), prefix);
 }
 
 template<typename T>
@@ -993,67 +770,7 @@ private:
 };
 
 static size_t g_integerTokenIds[] =
-{(TOK_UNSIGNED_INTEGER | NUMBER_ID_PREFIX), (TOK_SIGNED_INTEGER | NUMBER_ID_PREFIX)};
-
-//Starts at the open paren, progresses to the token after the close paren.
-template<typename Range>
-std::vector<ParsedValue> ParseNumberList(Range &rng, int typeIx)
-{
-	BOOST_ASSERT(HasTokenNoEmpty(rng, (TOK_OPEN_PAREN | SYMBOL_ID_PREFIX)));
-	rng.advance_begin(1); //The open paren.
-
-	const int expectedSize = GetUniformTypeLength(typeIx);
-
-	std::vector<ParsedValue> ret;
-	ret.reserve(16);
-
-	int count = 0;
-
-	for(;
-		!rng.empty() && !HasTokenNoEmpty(rng, (TOK_CLOSE_PAREN | SYMBOL_ID_PREFIX));
-		rng.advance_begin(1), ++count)
-	{
-		ExpectCategory(rng, NUMBER_ID_PREFIX);
-		if(expectedSize == count)
-			throw UniformTypeMismatchError(rng.front(), g_uniformTypeList[typeIx], expectedSize, true);
-
-		if(HasTokenOneOfNoEmpty(rng, g_integerTokenIds))
-		{
-			//Starts with minus and the type should be unsigned.
-			if(IsUnifTypeUnsigned(typeIx) && HasToken(rng.front(), TOK_SIGNED_INTEGER))
-				throw UniformTypeMismatchError(rng.front(),
-				g_uniformTypeList[typeIx], unf_type_unsigned);
-
-			std::string theInt(rng.front().value().begin(), rng.front().value().end());
-
-			if(theInt[0] == '-')
-				ret.push_back(boost::lexical_cast<int>(theInt));
-			else
-				ret.push_back(boost::lexical_cast<unsigned int>(theInt));
-		}
-		else
-		{
-			BOOST_ASSERT(HasTokenNoEmpty(rng, (TOK_FLOAT | NUMBER_ID_PREFIX)));
-			if(IsUnifTypeInteger(typeIx))
-				throw UniformTypeMismatchError(rng.front(),
-				g_uniformTypeList[typeIx], unf_type_float);
-
-			std::string theFloat(rng.front().value().begin(), rng.front().value().end());
-
-			ret.push_back(boost::lexical_cast<float>(theFloat));
-		}
-	}
-
-	//Throws if we hit the EOF first.
-	ExpectToken(rng, (TOK_CLOSE_PAREN | SYMBOL_ID_PREFIX));
-
-	//Throw if not enough parameters were provided. A count of 1 is always allowed.
-	if(expectedSize != count && count != 1)
-		throw UniformTypeMismatchError(rng.front(), g_uniformTypeList[typeIx], expectedSize, false);
-
-	rng.advance_begin(1); //The close paren.
-	return ret;
-}
+{TOK_UNSIGNED_INTEGER, TOK_SIGNED_INTEGER};
 
 template<typename Dest>
 struct ParseConvertVisit : public boost::static_visitor<Dest>
@@ -1117,71 +834,6 @@ UniformData BuildUniformData(const std::vector<ParsedValue> &parsed, int typeIx)
 		return MakeUniformData(ConvertParsedVector<float>(parsed), typeIx);
 }
 
-template<typename Range>
-UniformData ParseUniformData(Range &rng, int typeIx)
-{
-	boost::optional<bool> has_cat = HasCategory(rng, NUMBER_ID_PREFIX);
-
-	//Only returns this if there is no next token. It's an error, but it's someone else's error.
-	if(!has_cat)
-		return CreateDefaultUniform(typeIx);
-
-	if(has_cat.get())
-	{
-		//No parenthesis, so the type must be a scalar.
-		if(GetUniformTypeLength(typeIx) != 1)
-			throw UniformTypeMismatchError(rng.front(),
-			g_uniformTypeList[typeIx], unif_type_scalar);
-
-		if(HasTokenOneOfNoEmpty(rng, g_integerTokenIds))
-		{
-			//Starts with minus and the type should be unsigned.
-			if(IsUnifTypeUnsigned(typeIx) && HasToken(rng.front(), (TOK_SIGNED_INTEGER | NUM_NUMBER_TOKENS)))
-				throw UniformTypeMismatchError(rng.front(),
-				g_uniformTypeList[typeIx], unf_type_unsigned);
-
-			std::string theInt(rng.front().value().begin(), rng.front().value().end());
-
-			rng.advance_begin(1);
-
-			if(theInt[0] == '-')
-			{
-				int val = boost::lexical_cast<int>(theInt);
-				return ConstructFromSingleValue(val, typeIx);
-			}
-			else
-			{
-				unsigned int val = boost::lexical_cast<unsigned int>(theInt);
-				return ConstructFromSingleValue(val, typeIx);
-			}
-		}
-		else
-		{
-			BOOST_ASSERT(HasTokenNoEmpty(rng, (TOK_FLOAT | NUMBER_ID_PREFIX)));
-			if(IsUnifTypeInteger(typeIx))
-				throw UniformTypeMismatchError(rng.front(),
-				g_uniformTypeList[typeIx], unf_type_float);
-
-			std::string theFloat(rng.front().value().begin(), rng.front().value().end());
-
-			rng.advance_begin(1);
-			float val = boost::lexical_cast<float>(theFloat);
-			return ConstructFromSingleValue(val, typeIx);
-		}
-	}
-	else if(HasTokenNoEmpty(rng, (TOK_OPEN_PAREN | SYMBOL_ID_PREFIX)))
-	{
-		std::vector<ParsedValue> vals = ParseNumberList(rng, typeIx);
-		if(vals.size() == 1)
-			return boost::apply_visitor(UniformFromSingleValue(typeIx), vals[0]);
-		
-		return BuildUniformData(vals, typeIx);
-	}
-	else
-		//Not a number, so let the next statement handle it.
-		return CreateDefaultUniform(typeIx);
-}
-
 typedef boost::container::flat_set<size_t> TokenChecker;
 
 template<typename Token>
@@ -1194,102 +846,388 @@ void CheckMultipleKeyword(TokenChecker &hasBeenFound, const Token &tok, size_t o
 
 static size_t g_validSamplerTokens[] =
 {
-	(TOK_MAG | KEYWORD_ID_PREFIX),
-	(TOK_MIN | KEYWORD_ID_PREFIX),
-	(TOK_COMPARE | KEYWORD_ID_PREFIX),
-	(TOK_WRAP_S | KEYWORD_ID_PREFIX),
-	(TOK_WRAP_T | KEYWORD_ID_PREFIX),
-	(TOK_WRAP_R | KEYWORD_ID_PREFIX),
-	(TOK_ANISO | KEYWORD_ID_PREFIX),
+	TOK_MAG,
+	TOK_MIN,
+	TOK_COMPARE,
+	TOK_WRAP_S,
+	TOK_WRAP_T,
+	TOK_WRAP_R,
+	TOK_ANISO,
+};
+
+struct FilePosition
+{
+	std::string fileName;
+	int lineNumber;
+	int columnNumber;
+	std::string theLine;
 };
 
 template<typename Range>
-void ParseSamplerData(Range &rng)
+class SceneGraphParser
 {
-	ExpectToken(rng, TOK_SAMPLER | KEYWORD_ID_PREFIX);
-	rng.advance_begin(1);
-	ParseIdentifier(rng);
+public:
+	typedef typename Range::value_type Token;
 
-	TokenChecker hasBeenFound;
+	SceneGraphParser(pos_iterator &posIt, Range &rng)
+		: m_currIt(posIt)
+		, m_rng(rng)
+	{}
 
-	while(!rng.empty() && rng.front().id() != (TOK_END | KEYWORD_ID_PREFIX))
+	void ParseSceneGraph()
 	{
-		ExpectCategory(rng.front(), KEYWORD_ID_PREFIX);
-		if(!HasTokenOneOfNoEmpty(rng, g_validSamplerTokens))
-			throw UnexpectedDataError(rng.front(), "a valid sampler parameter.", exp_message);
-		
-		typename Range::value_type tok = rng.front();
-		CheckMultipleKeyword(hasBeenFound, tok, (TOK_SAMPLER | KEYWORD_ID_PREFIX));
-
-		rng.advance_begin(1);
-		switch(tok.id() & ~PREFIX_MASK)
-		{
-		case TOK_MAG:
-			ParseEnumerator(rng, g_magFilterEnumeration);
-			break;
-		case TOK_MIN:
-			ParseEnumerator(rng, g_minFilterEnumeration);
-			break;
-		case TOK_COMPARE:
-			ParseEnumerator(rng, g_compareModeEnumeration);
-			break;
-		case TOK_WRAP_S:
-		case TOK_WRAP_T:
-		case TOK_WRAP_R:
-			ParseEnumerator(rng, g_wrapModeEnumeration);
-			break;
-		case TOK_ANISO:
-			{
-				ExpectCategory(rng, NUMBER_ID_PREFIX);
-				std::string theFloat(rng.front().value().begin(), rng.front().value().end());
-				boost::lexical_cast<float>(theFloat);
-				rng.advance_begin(1);
-			}
-			break;
-		}
-	}
-}
-
-
-template<typename Range>
-void ParseResources(Range &rng)
-{
-	ExpectToken(rng, TOK_RESOURCES | KEYWORD_ID_PREFIX);
-	rng.advance_begin(1);
-
-	while(!rng.empty() && rng.front().id() != (TOK_END | KEYWORD_ID_PREFIX))
-	{
-		ExpectCategory(rng.front(), KEYWORD_ID_PREFIX);
-		typename Range::value_type tok = rng.front();
-		switch(tok.id() & ~PREFIX_MASK)
-		{
-		case TOK_UNIFORM:
-			{
-				rng.advance_begin(1);
-				ParseIdentifier(rng);
-				ExpectToken(rng, (TOK_TYPE | KEYWORD_ID_PREFIX));
-				rng.advance_begin(1);
-				int uniformType = ParseEnumerator(rng, g_uniformTypeEnumeration);
-				UniformData data = ParseUniformData(rng, uniformType);
-			}
-			break;
-		case TOK_SAMPLER:
-			ParseSamplerData(rng);
-			break;
-		default:
-			throw UnexpectedDataError(rng.front(), "a valid resource.", exp_message);
-		}
+		ParseResources();
 	}
 
-	ExpectToken(rng, TOK_END | KEYWORD_ID_PREFIX);
-	rng.advance_begin(1);
-}
+	void ParseResources()
+	{
+		ExpectToken(TOK_RESOURCES);
+		EatOneToken();
+
+		while(!m_rng.empty() && m_rng.front().id() != TOK_END)
+		{
+			ExpectCategory(m_rng.front(), KEYWORD_ID_PREFIX);
+			typename Range::value_type tok = m_rng.front();
+			switch(tok.id())
+			{
+			case TOK_UNIFORM:
+				{
+					EatOneToken();
+					ParseIdentifier();
+					ExpectAndEatToken(TOK_TYPE);
+					int uniformType = ParseEnumerator(g_uniformTypeEnumeration);
+					UniformData data = ParseUniformData(uniformType);
+				}
+				break;
+			case TOK_SAMPLER:
+				ParseSamplerData();
+				break;
+			default:
+				throw UnexpectedDataError(m_rng.front(), "a valid resource.", exp_message);
+			}
+		}
+
+		ExpectToken(TOK_END);
+		EatOneToken();
+	}
+
+private:
+	void EatOneToken() {m_rng.advance_begin(1);}
+
+	void ParseIdentifier()
+	{
+		ExpectToken(TOK_IDENTIFIER);
+
+		EatOneToken();
+	}
+
+	void ParseSamplerData()
+	{
+		ExpectAndEatToken(TOK_SAMPLER);
+		ParseIdentifier();
+
+		TokenChecker hasBeenFound;
+
+		while(!m_rng.empty() && m_rng.front().id() != TOK_END)
+		{
+			ExpectCategory(m_rng.front(), KEYWORD_ID_PREFIX);
+			if(!HasTokenOneOfNoEmpty(g_validSamplerTokens))
+				throw UnexpectedDataError(m_rng.front(), "a valid sampler parameter.", exp_message);
+
+			typename Range::value_type tok = m_rng.front();
+			CheckMultipleKeyword(hasBeenFound, tok, TOK_SAMPLER);
+			EatOneToken();
+
+			switch(tok.id())
+			{
+			case TOK_MAG:
+				ParseEnumerator(g_magFilterEnumeration);
+				break;
+			case TOK_MIN:
+				ParseEnumerator(g_minFilterEnumeration);
+				break;
+			case TOK_COMPARE:
+				ParseEnumerator(g_compareModeEnumeration);
+				break;
+			case TOK_WRAP_S:
+			case TOK_WRAP_T:
+			case TOK_WRAP_R:
+				ParseEnumerator(g_wrapModeEnumeration);
+				break;
+			case TOK_ANISO:
+				{
+					ExpectCategory(NUMBER_ID_PREFIX);
+					std::string theFloat(m_rng.front().value().begin(), m_rng.front().value().end());
+					boost::lexical_cast<float>(theFloat);
+					EatOneToken();
+				}
+				break;
+			}
+		}
+	}
+
+	UniformData ParseUniformData(int typeIx)
+	{
+		boost::optional<bool> has_cat = HasCategory(NUMBER_ID_PREFIX);
+
+		//Only returns this if there is no next token. It's an error, but it's someone else's error.
+		if(!has_cat)
+			return CreateDefaultUniform(typeIx);
+
+		if(has_cat.get())
+		{
+			//No parenthesis, so the type must be a scalar.
+			if(GetUniformTypeLength(typeIx) != 1)
+				throw UniformTypeMismatchError(m_rng.front(), g_uniformTypeList[typeIx], unif_type_scalar);
+
+			if(HasTokenOneOfNoEmpty(g_integerTokenIds))
+			{
+				//Starts with minus and the type should be unsigned.
+				if(IsUnifTypeUnsigned(typeIx) && HasTokenNoEmpty(TOK_SIGNED_INTEGER))
+					throw UniformTypeMismatchError(m_rng.front(), g_uniformTypeList[typeIx], unf_type_unsigned);
+
+				std::string theInt(m_rng.front().value().begin(), m_rng.front().value().end());
+				EatOneToken();
+
+				if(theInt[0] == '-')
+				{
+					int val = boost::lexical_cast<int>(theInt);
+					return ConstructFromSingleValue(val, typeIx);
+				}
+				else
+				{
+					unsigned int val = boost::lexical_cast<unsigned int>(theInt);
+					return ConstructFromSingleValue(val, typeIx);
+				}
+			}
+			else
+			{
+				BOOST_ASSERT(HasTokenNoEmpty(TOK_FLOAT));
+				if(IsUnifTypeInteger(typeIx))
+					throw UniformTypeMismatchError(m_rng.front(),
+					g_uniformTypeList[typeIx], unf_type_float);
+
+				std::string theFloat(m_rng.front().value().begin(), m_rng.front().value().end());
+
+				EatOneToken();
+				float val = boost::lexical_cast<float>(theFloat);
+				return ConstructFromSingleValue(val, typeIx);
+			}
+		}
+		else if(HasTokenNoEmpty(TOK_OPEN_PAREN))
+		{
+			std::vector<ParsedValue> vals = ParseNumberList(typeIx);
+			if(vals.size() == 1)
+				return boost::apply_visitor(UniformFromSingleValue(typeIx), vals[0]);
+
+			return BuildUniformData(vals, typeIx);
+		}
+		else
+			//Not a number, so let the next statement handle it.
+			return CreateDefaultUniform(typeIx);
+	}
+
+	std::vector<ParsedValue> ParseNumberList(int typeIx)
+	{
+		ExpectAndEatToken(TOK_OPEN_PAREN);
+
+		const int expectedSize = GetUniformTypeLength(typeIx);
+
+		std::vector<ParsedValue> ret;
+		ret.reserve(16);
+
+		int count = 0;
+
+		for(;
+			!m_rng.empty() && !HasTokenNoEmpty(TOK_CLOSE_PAREN);
+			EatOneToken(), ++count)
+		{
+			ExpectCategory(NUMBER_ID_PREFIX);
+			if(expectedSize == count)
+				throw UniformTypeMismatchError(m_rng.front(), g_uniformTypeList[typeIx], expectedSize, true);
+
+			if(HasTokenOneOfNoEmpty(g_integerTokenIds))
+			{
+				//Starts with minus and the type should be unsigned.
+				if(IsUnifTypeUnsigned(typeIx) && HasTokenNoEmpty(TOK_SIGNED_INTEGER))
+					throw UniformTypeMismatchError(m_rng.front(),
+					g_uniformTypeList[typeIx], unf_type_unsigned);
+
+				std::string theInt(m_rng.front().value().begin(), m_rng.front().value().end());
+
+				if(theInt[0] == '-')
+					ret.push_back(boost::lexical_cast<int>(theInt));
+				else
+					ret.push_back(boost::lexical_cast<unsigned int>(theInt));
+			}
+			else
+			{
+				BOOST_ASSERT(HasTokenNoEmpty(TOK_FLOAT));
+				if(IsUnifTypeInteger(typeIx))
+					throw UniformTypeMismatchError(m_rng.front(),
+					g_uniformTypeList[typeIx], unf_type_float);
+
+				std::string theFloat(m_rng.front().value().begin(), m_rng.front().value().end());
+
+				ret.push_back(boost::lexical_cast<float>(theFloat));
+			}
+		}
+
+		//Throws if we hit the EOF first.
+		ExpectToken(TOK_CLOSE_PAREN);
+
+		//Throw if not enough parameters were provided. A count of 1 is always allowed.
+		if(expectedSize != count && count != 1)
+			throw UniformTypeMismatchError(m_rng.front(), g_uniformTypeList[typeIx], expectedSize, false);
+
+		ExpectAndEatToken(TOK_CLOSE_PAREN);
+		return ret;
+	}
+
+	template<typename Mapped>
+	int ParseEnumerator(const EnumData<Mapped> &data)
+	{
+		ExpectToken(TOK_ENUMERATOR);
+
+		std::string testEnum = GetEnumFromToken(m_rng.front());
+
+		const boost::string_ref *foundEnum = boost::find(data.enumerators, boost::string_ref(testEnum));
+		size_t enumIx = foundEnum - data.enumerators.data();
+		if(enumIx >= data.enumerators.size())
+			throw IncorrectEnumError(m_rng.front(), data);
+
+		EatOneToken();
+
+		return enumIx;
+	}
+
+	std::string GetEnumFromToken(const Token &tok)
+	{
+		std::string enumerator(tok.value().begin(), tok.value().end());
+		return std::string(enumerator.begin() + 1, enumerator.end() - 1);
+	}
+
+	void ExpectAndEatToken(size_t idExpected)
+	{
+		if(m_rng.empty())
+			throw UnexpectedDataError(idExpected);
+		else
+		{
+			ExpectToken(m_rng.front(), idExpected);
+			EatOneToken();
+		}
+	}
+
+	void ExpectToken(size_t idExpected) const
+	{
+		if(m_rng.empty())
+			throw UnexpectedDataError(idExpected);
+		else
+			ExpectToken(m_rng.front(), idExpected);
+	}
+
+	void ExpectToken(const Token &tok, size_t idExpected) const
+	{
+		if(tok.id() != idExpected)
+			throw UnexpectedDataError(idExpected, tok);
+	}
+
+	void ExpectCategory(const Token &tok, size_t prefix) const
+	{
+		if((tok.id() & PREFIX_MASK) != prefix)
+			throw UnexpectedDataError(prefix, tok, exp_cat);
+	}
+
+	void ExpectCategory(size_t prefix) const
+	{
+		if(m_rng.empty())
+			throw UnexpectedDataError(prefix, exp_cat);
+		else
+			ExpectCategory(m_rng.front(), prefix);
+	}
+
+	bool HasToken(const Token &tok, size_t idExpected) const
+	{
+		return tok.id() == idExpected;
+	}
+
+	boost::optional<bool> HasToken(size_t idExpected) const
+	{
+		if(m_rng.empty())
+			return boost::none;
+		else
+			return HasToken(m_rng.front(), idExpected);
+	}
+
+	bool HasTokenNoEmpty(size_t idExpected) const
+	{
+		BOOST_ASSERT(!m_rng.empty());
+		return HasToken(m_rng.front(), idExpected);
+	}
+
+	bool HasTokenOneOfNoEmpty(array_ref<size_t> expecteds) const
+	{
+		BOOST_ASSERT(!m_rng.empty());
+		BOOST_FOREACH(size_t idExpected, expecteds)
+		{
+			if(HasToken(m_rng.front(), idExpected))
+				return true;
+		}
+
+		return false;
+	}
+
+	bool HasCategory(const token_type &tok, size_t prefix) const
+	{
+		size_t t = tok.id() & PREFIX_MASK;
+		return (t) == prefix;
+	}
+
+	boost::optional<bool> HasCategory(size_t prefix) const
+	{
+		if(m_rng.empty())
+			return boost::none;
+		else
+			return HasCategory(m_rng.front(), prefix);
+	}
+
+	bool HasCategoryNoEmpty(size_t prefix) const
+	{
+		BOOST_ASSERT(!m_rng.empty());
+		return HasCategory(m_rng.front(), prefix);
+	}
+
+
+	FilePosition GetPositionForCurrToken() const
+	{
+		FilePosition pos;
+		const classic::file_position_base<std::string> &itPos = m_currIt.get_position();
+
+		pos.fileName = itPos.file;
+		pos.lineNumber = itPos.line;
+		pos.columnNumber = itPos.column;
+		pos.theLine = boost::algorithm::replace_all_copy(m_currIt.get_currentline(), "\t", "    ");
+
+		if(token_is_valid(m_rng.front()))
+		{
+			//The token is valid, so the position iterator was advanced forward by the token's size.
+			int tokenSize = std::distance(t.value().begin(), t.value().end());
+			if(tokenSize > pos.columnNumber)
+				pos.columnNumber -= tokenSize;
+		}
+	}
+
+	pos_iterator &m_currIt;
+	Range &m_rng;
+};
 
 template<typename Range>
-void ParseSceneGraph(Range rng)
+SceneGraphParser<Range> MakeParser(pos_iterator &posIt, Range &rng)
 {
-	ParseResources(rng);
+	return SceneGraphParser<Range>(posIt, rng);
 }
+
+
 
 int main()
 {
@@ -1311,9 +1249,14 @@ int main()
 
 		token_range rng(lexing.begin(currIt, pos_iterator(), NULL), lexing.end());
 
+		MakeParser(currIt, rng
+			| boost::adaptors::filtered(ThrowOnInvalid())
+			| boost::adaptors::filtered(SkipWhitespace())).ParseSceneGraph();
+/*
 		ParseSceneGraph(rng
 			| boost::adaptors::filtered(ThrowOnInvalid())
 			| boost::adaptors::filtered(SkipWhitespace()));
+*/
 	}
 	catch(BaseParseError &e)
 	{

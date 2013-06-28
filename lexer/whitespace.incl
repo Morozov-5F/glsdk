@@ -1,0 +1,3 @@
+//	MAC(Macro suffix,	Pattern,			Debug name,		Display name)
+	MAC(SPACE,			"\\s+",				"Space",		"Space")
+	MAC(CPP_COMMENT,	"\\/\\/[^\\n]*\\n",	"Comment",		"Comment")

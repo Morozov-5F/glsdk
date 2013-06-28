@@ -14,7 +14,7 @@ project "Lex"
 	
 	UseLibs {"boost", "glm"}
 
-	files {"lex.cpp", "pch.h", "pch.cpp"}
+	files {"lex.cpp", "pch.h", "pch.cpp", "enums.h"}
 	
 	pchheader "pch.h"
 	pchsource "pch.cpp"

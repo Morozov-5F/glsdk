@@ -1,0 +1,4 @@
+//	MAC(Macro suffix,		Pattern,					Debug name,			Display name)
+	MAC(UNSIGNED_INTEGER,	"\\d+",						"Signed Integer",	"an unsigned integer")
+	MAC(SIGNED_INTEGER,		"\\-\\d+",					"Integer",			"a signed integer")
+	MAC(FLOAT,				"[\\+\\-]?\\d+\\.\\d*",		"Float",			"a floating-point")

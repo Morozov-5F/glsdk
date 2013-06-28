@@ -1,0 +1,3 @@
+//	MAC(Enum suffix,		Pattern,	Debug name,			Display name)
+	MAC(OPEN_PAREN,			"\\(",		"Open Paren",		"(")
+	MAC(CLOSE_PAREN,		"\\)",		"Close Paren",		")")
