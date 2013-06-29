@@ -157,7 +157,6 @@ namespace glscene
 			throw CannotDeleteRootNodeException();
 
 		//Re-parent all child nodes to this node's parent.
-		NodeData &parent = optParent->m_data.get();
 		NodeData &curr = nodeToDelete.m_data.get();
 
 		curr.ReparentChildrenToParent();

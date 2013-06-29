@@ -1,0 +1,16 @@
+
+resources
+	uniform <name> type{uint} 3
+	uniform <name> type{uvec3} (3)
+	sampler <aniso-r.peat>
+		mag{linear}
+		min{linear_mip_linear}
+		aniso 8
+		wrap_s{repeat}
+		wrap_t{repeat}
+		wrap_r{repeat}
+		compare{less}
+	end
+end
+
+

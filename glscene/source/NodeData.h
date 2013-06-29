@@ -21,8 +21,8 @@ namespace glscene
 		NodeData(const boost::optional<IdString> &name, NodeData *pParent, int numLayers);
 		~NodeData();
 
-		TransformData GetNodeTM();
-		TransformData GetObjectTM();
+		TransformData &GetNodeTM();
+		TransformData &GetObjectTM();
 
 		void AddToLayer(int layerIx);
 		void RemoveFromLayer(int layerIx);
