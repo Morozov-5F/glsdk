@@ -13,6 +13,7 @@
 #include <glutil/array_ref.h>
 #include <boost/utility/string_ref.hpp>
 #include <boost/optional.hpp>
+#include <boost/ref.hpp>
 #include "glscene/NodeRef.h"
 
 
@@ -110,27 +111,27 @@ namespace glscene
 		~SceneGraph();
 
 		///Retrieves the current root node.
-		NodeRef GetRootNode();
+		NodeData &GetRootNode();
 
 		///Finds the given node by its name.
-		boost::optional<NodeRef> FindNode(const boost::string_ref &name);
+		boost::optional<boost::reference_wrapper<NodeData> > FindNode(const boost::string_ref &name);
 
 		///Creates a new node that is the child of the given one.
-		NodeRef CreateChildNode(NodeRef parent, boost::optional<boost::string_ref> name = boost::none);
+		NodeData &CreateChildNode(NodeData &parent, boost::optional<boost::string_ref> name = boost::none);
 
 		/**
 		\brief Deletes the node and all of its child nodes.
 
 		\throws CannotDeleteRootNodeException If \a nodeToDelete is the root node.
 		**/
-		void DeleteNodeRecursive(NodeRef nodeToDelete);
+		void DeleteNodeRecursive(NodeData &nodeToDelete);
 
 		/**
 		\brief Deletes only the given node, making all of it's child nodes children of its direct parent.
 		
 		\throws CannotDeleteRootNodeException If \a nodeToDelete is the root node.
 		**/
-		void DeleteNodeOnly(NodeRef nodeToDelete);
+		void DeleteNodeOnly(NodeData &nodeToDelete);
 
 		/**
 		\brief Retrieves the index for the given layer name.

@@ -12,6 +12,7 @@
 #include <glscene/glscene.h>
 #include <glutil/Debug.h>
 #include <glmesh/glmesh.h>
+#include <boost/typeof/typeof.hpp>
 
 
 GLuint g_texture;
@@ -103,23 +104,23 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
-void PrintParent(glscene::NodeRef theNode)
+void PrintParent(const glscene::NodeData &theNode)
 {
-	boost::optional<glscene::NodeRef> par = theNode.GetParent();
+	boost::optional<boost::reference_wrapper<const glscene::NodeData> > par = GetParent(theNode);
 	if(par)
 	{
-		std::cout << "'" << par->GetName() << "'";
+		std::cout << "'" << GetName(par.get()) << "'";
 	}
 	else
 		std::cout << "Root";
 }
 
-void PrintNode(boost::optional<glscene::NodeRef> theNode)
+void PrintNode(boost::optional<boost::reference_wrapper<glscene::NodeData> > theNode)
 {
 	if(theNode)
 	{
 		PrintParent(theNode.get());
-		std::cout << " -> '" << theNode->GetName() << "'";
+		std::cout << " -> '" << GetName(theNode.get()) << "'";
 	}
 	else
 		std::cout << "No node";
@@ -163,13 +164,13 @@ int main(int argc, char** argv)
 			graph.GetResources().SetUniform("special", 5.0f);
 			graph.GetResources().DefineMesh("special", glmesh::gen::Icosahedron());
 
-			glscene::NodeRef testNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("test"));
-			glscene::NodeRef baseNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("base"));
-			glscene::NodeRef alphaNode = graph.CreateChildNode(baseNode, boost::string_ref("alpha"));
+			glscene::NodeData &testNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("test"));
+			glscene::NodeData &baseNode = graph.CreateChildNode(graph.GetRootNode(), boost::string_ref("base"));
+			glscene::NodeData &alphaNode = graph.CreateChildNode(baseNode, boost::string_ref("alpha"));
 
 			//graph.DeleteNodeRecursive(baseNode);
 
-			GetMatrix(testNode.GetNodeTMRef());
+			GetMatrix(GetNodeTM(testNode));
 
 			PrintNode(graph.FindNode(boost::string_ref("alpha")));
 		}

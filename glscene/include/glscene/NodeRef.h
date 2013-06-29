@@ -4,7 +4,7 @@
 
 /**
 \file
-\brief Includes the NodeRef and associated classes.
+\brief Includes the NodeData and associated classes.
 **/
 
 #include <string>
@@ -24,7 +24,7 @@ namespace glscene
 	///\addtogroup module_glscene_exceptions
 	///@{
 
-	///Base class for all NodeRef exceptions, or exceptions from NodeRef classes.
+	///Base class for all NodeData and TransformData classes.
 	class NodeException : public std::runtime_error
 	{
 	public:
@@ -33,7 +33,7 @@ namespace glscene
 	private:
 	};
 
-	///Thrown by any `TransformRef::*Decomp` function if the transform is not decomposed.
+	///Thrown by any `*Decomp` function if the TransformData object is not decomposed.
 	class TransformNotDecomposedException : public NodeException
 	{
 	public:
@@ -69,7 +69,7 @@ namespace glscene
 
 	/**
 	\class glscene::TransformData
-	\brief Represents one of the transforms on the node.
+	\brief One of the transforms on the node.
 
 	This is an opaque type; values of this type are only returned by reference (or `const&`),
 	so you may not manually construct them or copy them to other instances. You can only reference
@@ -101,8 +101,8 @@ namespace glscene
 	/**
 	\name TransformData Operations
 
-	TransformData& objects are operated on by these glscene functions. This global interface is
-	used to preserve const-correctness, which can't be done with C++ objects
+	TransformData objects are operated on by these glscene functions. This global interface is
+	used to preserve const-correctness, which can't be done with C++ value objects
 	(without having two distinct object types).
 
 	Remember that C++ provides argument dependent lookup. You can call these functions
@@ -156,71 +156,82 @@ namespace glscene
 	///@}
 
 	/**
-	\brief Represents a reference to a node in the scene graph.
-	
+	\class glscene::NodeData
+	\brief A node in the scene graph.
+
+	This is an opaque type; values of this type are only returned by reference (or `const&`),
+	so you may not manually construct them or copy them to other instances. You can only reference
+	a node within the SceneGraph.
 	**/
-	class NodeRef
-	{
-	public:
-		///Gets the NodeRef's [node transform](@ref module_glscene_node_transforms).
-		TransformData &GetNodeTMRef();
-		///Gets the NodeRef's [node transform](@ref module_glscene_node_transforms).
-		const TransformData &GetNodeTMRef() const;
 
-		///Gets the NodeRef's [object transform](@ref module_glscene_node_transforms).
-		TransformData &GetObjectTMRef();
-		///Gets the NodeRef's [object transform](@ref module_glscene_node_transforms).
-		const TransformData &GetObjectTMRef() const;
+	/**
+	\name NodeData Operations
 
-		/**
-		\brief Puts the node into the given layer by index.
+	NodeData objects are manipulated by these glscene functions. This global interface is
+	used to preserve const-correctness, which can't be done with C++ value objects
+	(without having two distinct object types).
 
-		If \a layerIx is out of bounds, this will not throw. It will just ignore the call.
-		**/
-		void AddToLayer(int layerIx);
+	Remember that C++ provides argument dependent lookup. You can call these functions
+	with just `AddToLayer(data)` without the `glscene` namespace qualifier.
+	**/
+	///@{
+	///Gets the NodeRef's [node transform](@ref module_glscene_node_transforms).
+	TransformData &GetNodeTM(NodeData &data);
+	///Gets the NodeRef's [node transform](@ref module_glscene_node_transforms).
+	const TransformData &GetNodeTM(const NodeData &data);
 
-		/**
-		\brief Removes the node from the given layer by index.
-		
-		If you remove the node from a layer it is not in, or if \a layerIx is out of bounds,
-		this will not throw. It will simply ignore the call.
-		**/
-		void RemoveFromLayer(int layerIx);
+	///Gets the NodeRef's [object transform](@ref module_glscene_node_transforms).
+	TransformData &GetObjectTM(NodeData &data);
+	///Gets the NodeRef's [object transform](@ref module_glscene_node_transforms).
+	const TransformData &GetObjectTM(const NodeData &data);
 
-		/**
-		\brief Tests whether the node is in the given layer by index.
+	/**
+	\brief Puts the node into the given layer by index.
 
-		If \a layerIx is out of bounds, this will not throw. It will return `false`.
-		**/
-		bool IsInLayer(int layerIx) const;
+	If \a layerIx is out of bounds, this will not throw. It will just ignore the call.
+	**/
+	void AddToLayer(NodeData &data, int layerIx);
 
-		/**
-		\brief Retrieves the identifier string given for the node's name at construction time.
-		
-		If the NodeRef has no name, this will return an empty string.
-		**/
-		boost::string_ref GetName() const;
+	/**
+	\brief Removes the node from the given layer by index.
+	
+	If you remove the node from a layer it is not in, or if \a layerIx is out of bounds,
+	this will not throw. It will simply ignore the call.
+	**/
+	void RemoveFromLayer(NodeData &data, int layerIx);
 
-		/**
-		\brief Retrieves the parent node, if the node is not the root.
-		**/
-		boost::optional<NodeRef> GetParent();
+	/**
+	\brief Tests whether the node is in the given layer by index.
 
-		/**
-		\brief Makes the given node the parent of this one.
+	If \a layerIx is out of bounds, this will not throw. It will return `false`.
+	**/
+	bool IsInLayer(const NodeData &data, int layerIx);
 
-		\throws CannotMakeParentOfSelfException If `*this` is the root node. The root node's parentage cannot be changed.
-		\throws CannotMakeParentOfSelfException If `*this` and \a newParent are the same node.
-		**/
-		void MakeChildOfNode(NodeRef newParent);
+	/**
+	\brief Retrieves the identifier string given for the node's name at construction time.
+	
+	If the NodeRef has no name, this will return an empty string.
+	**/
+	boost::string_ref GetName(const NodeData &data);
 
-	private:
-		boost::reference_wrapper<NodeData> m_data;
+	/**
+	\brief Retrieves the parent node, if the node is not the root.
+	**/
+	boost::optional<boost::reference_wrapper<NodeData> > GetParent(NodeData &data);
 
-		NodeRef(NodeData &data) : m_data(data) {}
+	/**
+	\brief Retrieves the parent node, if the node is not the root.
+	**/
+	boost::optional<boost::reference_wrapper<const NodeData> > GetParent(const NodeData &data);
 
-		friend class SceneGraph;
-	};
+	/**
+	\brief Makes the given node the parent of this one.
+
+	\throws CannotChangeTheRootParentException If `*this` is the root node. The root node's parentage cannot be changed.
+	\throws CannotMakeParentOfSelfException If `*this` and \a newParent are the same node.
+	**/
+	void MakeChildOfNode(NodeData &data, NodeData &newParent);
+	///@}
 
 	///@}
 }

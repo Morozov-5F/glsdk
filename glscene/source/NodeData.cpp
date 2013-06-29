@@ -36,16 +36,6 @@ namespace glscene
 		}
 	}
 
-	glscene::TransformData &NodeData::GetNodeTM()
-	{
-		return m_nodeTM;
-	}
-
-	glscene::TransformData &NodeData::GetObjectTM()
-	{
-		return m_objTM;
-	}
-
 	void NodeData::AddToLayer( int layerIx )
 	{
 		if(layerIx < (int)m_layers.size())

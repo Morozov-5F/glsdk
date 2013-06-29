@@ -6,45 +6,6 @@
 
 namespace glscene
 {
-	TransformData & NodeRef::GetNodeTMRef()
-	{
-		return m_data.get().GetNodeTM();
-	}
-
-	const TransformData & NodeRef::GetNodeTMRef() const
-	{
-		return m_data.get().GetNodeTM();
-	}
-
-	TransformData & NodeRef::GetObjectTMRef()
-	{
-		return m_data.get().GetObjectTM();
-	}
-
-	const TransformData & NodeRef::GetObjectTMRef() const
-	{
-		return m_data.get().GetObjectTM();
-	}
-
-	boost::string_ref NodeRef::GetName() const
-	{
-		return m_data.get().GetName();
-	}
-
-	boost::optional<NodeRef> NodeRef::GetParent()
-	{
-		NodeData *pNode = m_data.get().GetParent();
-		return pNode ? boost::optional<NodeRef>(NodeRef(*pNode)) : boost::none;
-	}
-
-	void NodeRef::MakeChildOfNode( NodeRef newParent )
-	{
-		if(m_data.get_pointer() == newParent.m_data.get_pointer())
-			throw CannotMakeParentOfSelfException();
-
-		m_data.get().MakeChildOfNode(newParent.m_data.get());
-	}
-
 	bool IsDecomposed( const TransformData &data )
 	{
 		return data.IsDecomposed();
@@ -127,5 +88,53 @@ namespace glscene
 	void SetMatrixCompose( TransformData &data, const glm::mat4 &matrix )
 	{
 		data.SetMatrixCompose(matrix);
+	}
+
+
+	TransformData &GetNodeTM(NodeData &data)
+	{
+		return data.GetNodeTM();
+	}
+
+	const TransformData &GetNodeTM(const NodeData &data)
+	{
+		return data.GetNodeTM();
+	}
+
+	TransformData &GetObjectTM(NodeData &data)
+	{
+		return data.GetObjectTM();
+	}
+
+	const TransformData &GetObjectTM(const NodeData &data)
+	{
+		return data.GetObjectTM();
+	}
+
+	boost::string_ref GetName(const NodeData &data)
+	{
+		return data.GetName();
+	}
+
+	boost::optional<boost::reference_wrapper<NodeData> > GetParent(NodeData &data)
+	{
+		NodeData *pNode = data.GetParent();
+		return pNode ?
+			boost::optional<boost::reference_wrapper<NodeData> >(boost::ref(*pNode)) : boost::none;
+	}
+
+	boost::optional<boost::reference_wrapper<const NodeData> > GetParent( const NodeData &data )
+	{
+		const NodeData *pNode = data.GetParent();
+		return pNode ?
+			boost::optional<boost::reference_wrapper<const NodeData> >(boost::ref(*pNode)) : boost::none;
+	}
+
+	void MakeChildOfNode(NodeData &data, NodeData &newParent)
+	{
+		if(&data == &newParent)
+			throw CannotMakeParentOfSelfException();
+
+		data.MakeChildOfNode(newParent);
 	}
 }

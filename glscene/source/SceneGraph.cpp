@@ -7,6 +7,7 @@
 #include <boost/container/flat_map.hpp>
 #include <boost/container/flat_set.hpp>
 #include <boost/foreach.hpp>
+#include <boost/typeof/typeof.hpp>
 #include <glload/gl_all.h>
 #include "glscene/SceneGraph.h"
 #include "glscene/ResourceRef.h"
@@ -14,7 +15,6 @@
 #include "TransformData.h"
 #include "NodeData.h"
 #include "IdString.h"
-
 
 namespace glscene
 {
@@ -93,12 +93,12 @@ namespace glscene
 	SceneGraph::~SceneGraph()
 	{}
 
-	NodeRef SceneGraph::GetRootNode()
+	NodeData &SceneGraph::GetRootNode()
 	{
-		return NodeRef(m_pData->rootNode);
+		return m_pData->rootNode;
 	}
 
-	glscene::NodeRef SceneGraph::CreateChildNode( NodeRef parent, boost::optional<boost::string_ref> name )
+	NodeData &SceneGraph::CreateChildNode( NodeData &parent, boost::optional<boost::string_ref> name )
 	{
 		boost::optional<IdString> nameId;
 		if(name)
@@ -110,7 +110,7 @@ namespace glscene
 			nameId = theId;
 		}
 
-		return parent.m_data.get().CreateChildNode(nameId);
+		return parent.CreateChildNode(nameId);
 	}
 
 	ResourceRef SceneGraph::GetResources()
@@ -127,45 +127,43 @@ namespace glscene
 		return (int)found->second;
 	}
 
-	boost::optional<NodeRef> SceneGraph::FindNode( const boost::string_ref &name )
+	boost::optional<boost::reference_wrapper<NodeData> >
+		SceneGraph::FindNode( const boost::string_ref &name )
 	{
 		NodeData *pData = m_pData->rootNode.FindByName(name);
-		if(!pData)
+		if(pData)
+			return boost::ref(*pData);
+		else
 			return boost::none;
-
-		return NodeRef(*pData);
 	}
 
-	void SceneGraph::DeleteNodeRecursive( NodeRef nodeToDelete )
+	void SceneGraph::DeleteNodeRecursive( NodeData &nodeToDelete )
 	{
 		//Verify that it's not the root.
 		if(!nodeToDelete.GetParent())
 			throw CannotDeleteRootNodeException();
 
 		//First, remove all of the nodes to delete from the node name list.
-		m_pData->RemoveNodeFromNameListRec(nodeToDelete.m_data.get());
+		m_pData->RemoveNodeFromNameListRec(nodeToDelete);
 
 		//Now, delete the node. The node's destructor will handle the recursion.
-		delete nodeToDelete.m_data.get_pointer();
+		delete &nodeToDelete;
 	}
 
-	void SceneGraph::DeleteNodeOnly( NodeRef nodeToDelete )
+	void SceneGraph::DeleteNodeOnly( NodeData &nodeToDelete )
 	{
 		//Verify that it's not the root.
-		boost::optional<NodeRef> optParent = nodeToDelete.GetParent();
-		if(!optParent)
+		if(!nodeToDelete.GetParent())
 			throw CannotDeleteRootNodeException();
 
 		//Re-parent all child nodes to this node's parent.
-		NodeData &curr = nodeToDelete.m_data.get();
+		nodeToDelete.ReparentChildrenToParent();
 
-		curr.ReparentChildrenToParent();
-
-		//Recursive is OK, since we don't have children.
-		m_pData->RemoveNodeFromNameListRec(nodeToDelete.m_data.get());
+		//Recursive is OK, since we don't have children anymore.
+		m_pData->RemoveNodeFromNameListRec(nodeToDelete);
 
 		//Now, delete the node. Recursion remains OK, since we still don't have children.
-		delete nodeToDelete.m_data.get_pointer();
+		delete &nodeToDelete;
 	}
 
 	void swap( SceneGraph &lhs, SceneGraph &rhs )

@@ -21,8 +21,11 @@ namespace glscene
 		NodeData(const boost::optional<IdString> &name, NodeData *pParent, int numLayers);
 		~NodeData();
 
-		TransformData &GetNodeTM();
-		TransformData &GetObjectTM();
+		TransformData &GetNodeTM() {return m_nodeTM;}
+		const TransformData &GetNodeTM() const {return m_nodeTM;}
+		TransformData &GetObjectTM() {return m_objTM;}
+		const TransformData &GetObjectTM() const {return m_objTM;}
+
 
 		void AddToLayer(int layerIx);
 		void RemoveFromLayer(int layerIx);
@@ -31,7 +34,7 @@ namespace glscene
 		NodeData *FindByName(const IdString &name);
 		void MakeChildOfNode(NodeData &newParent);
 
-		boost::string_ref GetName()
+		boost::string_ref GetName() const
 		{
 			return m_name ? boost::string_ref(m_name.get()) : boost::string_ref();
 		}
@@ -44,6 +47,7 @@ namespace glscene
 		void ReparentChildrenToParent();
 
 		NodeData *GetParent() {return m_pParent;}
+		const NodeData *GetParent() const {return m_pParent;}
 
 	private:
 		boost::optional<IdString> m_name;
