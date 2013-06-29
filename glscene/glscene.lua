@@ -1,4 +1,11 @@
 
+local function UsePch()
+	files {"pch.cpp"}
+	pchheader "source/pch.h"
+	pchsource "source/pch.cpp"
+	buildoptions {"-Zm384"};
+end
+
 project("glscene")
 	kind "StaticLib"
 	language "c++"
@@ -18,6 +25,13 @@ project("glscene")
 		"source/*.h",
 		"source/*.cpp",
 	}
+
+	configuration "vs2008"
+		UsePch()
+	configuration "vs2010"
+		UsePch()
+	configuration "vs2012"
+		UsePch()
 
 	configuration "windows"
 		defines {"WIN32"}

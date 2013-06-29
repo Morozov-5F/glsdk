@@ -1,4 +1,5 @@
 
+#include "pch.h"
 
 #include "glscene/NodeRef.h"
 #include "NodeData.h"

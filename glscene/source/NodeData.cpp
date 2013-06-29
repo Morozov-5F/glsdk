@@ -1,7 +1,8 @@
 
-#include <assert.h>
+#include "pch.h"
 #include <boost/foreach.hpp>
 #include <boost/range/algorithm.hpp>
+#include <boost/assert.hpp>
 #include "NodeData.h"
 
 
@@ -12,7 +13,7 @@ namespace glscene
 		, m_pParent(pParent)
 		, m_layers(numLayers)
 	{
-		assert(m_pParent);
+		BOOST_ASSERT(m_pParent);
 		m_pParent->m_children.push_back(this);
 	}
 
