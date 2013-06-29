@@ -62,18 +62,20 @@ All objects that end in `Info` have full value semantics. They are copyable and 
 \defgroup module_glscene_node Scene Graph Node
 \ingroup module_glscene
 
+blah
 
-### Transforms Node vs Object ###  {module_glscene_core_transforms}
+
+# Transforms Node vs Object #  {#module_glscene_node_transforms}
 
 Nodes in the graph have two separate transformation matrices: the node transform and the object transform.
 
-The node transforms for various nodes are propogated up the hierarchy of nodes within a scene. The object transforms *are not*; the only transform only applies to the mesh(es) being rendered on this node, in variants provided *by* this node. The object transform is applied before any parent node transforms. So it is right-multiplied onto the list of transforms.
+The node transforms for a node are propogated up the hierarchy of nodes within a scene. The object transforms *are not*; the transform only applies to the mesh(es) being rendered by variants within this node. The object transform is applied before any parent node transforms. So it is right-multiplied onto the list of transforms.
 
 So, for a node with 2 parent nodes, the full model-to-camera matrix for rendering variants on a node looks like this:
 
     model_to_camera = camera * root_node_tm * direct_parent_node_tm * current_node_tm * current_node_object_tm
 	
-The purpose of this distinction is to allow transformations, such as scaling, that don't apply to child nodes. This allows one to re-position or re-scale a mesh without accidentally modifying child nodes. It's easier to do it this way than to create a separate child node for the mesh. 
+The purpose of this distinction is to allow transformations, such as scaling, that should not be applied to child nodes. This allows one to re-position or re-scale a mesh without accidentally modifying child nodes. It's easier to do it this way than to create a separate child node for the mesh.
 **/
 
 
@@ -154,11 +156,15 @@ In a scene graph, a node represents a transform, as well as one or more things t
 could be rendered with that transform. Because nodes in the graph are inherited, the 
 transforms are *also* inherited. Each node's transform is relative to its parent node in the hierarchy.
 
-This is a very powerful concept in rendering. This allows objects to move relative to one another. You can have a world that is fixed with objects that move around within the world. You can then have a objects within a train move relative to a train that is moving relative to the world. The objects in the train are children of the train node, and the train node is a child of the root world node.
+This is a very powerful concept in rendering. This allows objects to move relative to one another. For example, consider a world with a train in it. The world is fixed, but the train itself moves around. You can put objects into the train, and they can have their own movements. Because these objects are children of the train node, they will automatically move relative to the train. When the train node moves around, so does its children. If the train turns, the objects in the train will turn with it.
 
-Depending on how the scene graph is structured, visible objects can either be specific (childless) nodes in the scene or they can be contents of nodes. The [GL Scene Graph][4] system makes the objects part of the contents of a node. The "contents" generally consist of some form of mesh coupled with information about how to render it (shaders, parameters for those shaders, textures, etc). Each node in scene graphs usually represents only a single mesh.
+Specific implementations have different restrictions and ideas about scene graphs. Some graphs dictate that all nodes with children cannot have visible objects, that a visible object must be a childless node.
 
-Some scene graph systems add an additional grouping classification to nodes: layers. Nodes can belong to layers. When rendering the scene graph, the user renders a particular layer. And the contents of a node are rendered only if it is part of the layer being rendered.
+The [GL Scene Graph][4] system does not impose this restriction; objects are part of the contents of a node. The "contents" generally consist of some form of mesh coupled with information about how to render it (shaders, parameters for those shaders, textures, etc). Each node in scene graphs usually represents only a single mesh.
+
+Some scene graph systems add an additional grouping classification to nodes: layers. A scene graph has some number of layers, and individual nodes belong to one or more layers (or no layers at all). When rendering the scene graph, the user specifies a layer to render. The contents of a node are rendered only if it is part of the layer being rendered.
+
+Layers often act separately from the node hierarchy. A child node does not *have* to inherit the layers of its parents. So you can render a layer that does not include some middle node, but that layer can still include any child nodes.
 
 
 [1]: http://en.wikipedia.org/wiki/Scene_graph

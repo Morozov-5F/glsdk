@@ -62,6 +62,13 @@ namespace glimg
 
 	This object uses reference semantics. Every copy of it will refer to the same image from the same
 	ImageSet.
+	
+	Though it references data in the ImageSet, you do
+	not need to take steps to ensure that the ImageSet object that stores the image
+	still exists while you have an image. Internally, the system uses reference-counting
+	to ensure that all SingleImage instances hold valid data. Of course, this also means
+	that the ImageSet storage will not be deleted *until* all SingleImage instances
+	referencing that storage are deleted.
 	**/
 	class SingleImage
 	{

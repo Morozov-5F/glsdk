@@ -169,6 +169,8 @@ int main(int argc, char** argv)
 
 			//graph.DeleteNodeRecursive(baseNode);
 
+			GetMatrix(testNode.GetNodeTMRef());
+
 			PrintNode(graph.FindNode(boost::string_ref("alpha")));
 		}
 		catch(glscene::UniformResourceTypeMismatchException &e)

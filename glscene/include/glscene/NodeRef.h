@@ -68,10 +68,12 @@ namespace glscene
 	///@{
 
 	/**
+	\class glscene::TransformData
 	\brief Represents one of the transforms on the node.
 
-	This object has reference semantics. Copies can be made, but you cannot copy-assign
-	an existing object; you must copy-construct them.
+	This is an opaque type; values of this type are only returned by reference (or `const&`),
+	so you may not manually construct them or copy them to other instances. You can only reference
+	a transform within a node.
 	
 	Transforms on a node can exist in one of two states: composed or decomposed. In the composed form,
 	the transform is just a matrix. In the decomposed form, it is represented as a
@@ -83,73 +85,75 @@ namespace glscene
 	existing scale. And so forth. Right-multiplication vs. left-multiplication can achieve some of these
 	effects, but that is not enough for some of these changes.
 
-	Any function that ends in `Decomp` will only work if IsDecomposed returns `true`. If it is `false`,
+	Any function that ends in `Decomp` will only work if glscene::IsDecomposed returns `true`. If it is `false`,
 	the function will throw TransformNotDecomposedException.
 
-	When creating a node, the transforms on that node will be decomposed. You can call SetDecomposed to
-	make the transform decomposed, but this requires resetting the translation/orientation/scale all at once.
+	When creating a node, the transforms on that node will be decomposed. You can call glscene::SetDecomposed to
+	make the transform decomposed, but this will reset all of the translation/orientation/scale in one call.
 
-	Calling any function that ends on `Compose` or the Compose function itself, will convert the transform
-	to the composed form. Note that GetMatrix does *not* compose a decomposed matrix.
+	Calling any function that ends on `Compose` or the glscene::Compose function itself, will convert the transform
+	to the composed form. Note that glscene::GetMatrix does *not* compose a decomposed matrix.
 
 	No functions in SceneGraph, NodeRef, or any other scene graph class will do anything to change the
-	composed/decomposed status of the TransformRef. Only your actions can cause a matrix to become decomposed.
+	composed/decomposed status of the TransformData. Only your actions can cause a matrix to become decomposed.
 	**/
-	class TransformRef
-	{
-	public:
-		///Returns `true` if the transform is decomposed.
-		bool IsDecomposed() const;
 
-		///Sets the translation of a decomposed transform, or throws TransformNotDecomposedException
-		void SetTranslationDecomp(const glm::vec3 &translation);
-		///Adds vector to the the translation of a decomposed transform, or throws TransformNotDecomposedException
-		void OffsetTranslationDecomp(const glm::vec3 &translation);
+	/**
+	\name TransformData Operations
 
-		///Sets the orientation of a decomposed transform, or throws TransformNotDecomposedException
-		void SetOrientDecomp(const glm::quat &orientation);
-		///Right-multiplies the quaternion to the orientation of a decomposed transform, or throws TransformNotDecomposedException
-		void RightMultiplyOrientDecomp(const glm::quat &orientation);
-		///Left-multiplies the quaternion to the orientation of a decomposed transform, or throws TransformNotDecomposedException
-		void LeftMultiplyOrientDecomp(const glm::quat &orientation);
+	TransformData& objects are operated on by these glscene functions. This global interface is
+	used to preserve const-correctness, which can't be done with C++ objects
+	(without having two distinct object types).
 
-		///Sets the scale of a decomposed transform, or throws TransformNotDecomposedException
-		void SetScaleDecomp(const glm::vec3 &scale);
+	Remember that C++ provides argument dependent lookup. You can call these functions
+	with just `IsDecomposed(data)` without the `glscene` namespace qualifier.
+	**/
+	///@{
 
-		///Gets the translation of a decomposed transform, or throws TransformNotDecomposedException
-		glm::vec3 GetTranslationDecomp() const;
-		///Gets the orientation of a decomposed transform, or throws TransformNotDecomposedException
-		glm::quat GetOrientDecomp() const;
-		///Gets the scale of a decomposed transform, or throws TransformNotDecomposedException
-		glm::vec3 GetScaleDecomp() const;
+	///Returns `true` if the transform is decomposed.
+	bool IsDecomposed(const TransformData &data);
 
-		///Sets the 3 decomposed values of the transform. The transform will be decomposed following this.
-		void SetDecomposed(const glm::vec3 &translation,
-			const glm::quat &orientation = glm::quat(),
-			const glm::vec3 &scale = glm::vec3(1.0f, 1.0f, 1.0f));
+	///Sets the translation of a decomposed transform, or throws TransformNotDecomposedException
+	void SetTranslationDecomp(TransformData &data, const glm::vec3 &translation);
+	///Adds vector to the the translation of a decomposed transform, or throws TransformNotDecomposedException
+	void OffsetTranslationDecomp(TransformData &data, const glm::vec3 &translation);
 
-		///Retrieves the matrix representing this transform.
-		glm::mat4 GetMatrix() const;
+	///Sets the orientation of a decomposed transform, or throws TransformNotDecomposedException
+	void SetOrientDecomp(TransformData &data, const glm::quat &orientation);
+	///Right-multiplies the quaternion to the orientation of a decomposed transform, or throws TransformNotDecomposedException
+	void RightMultiplyOrientDecomp(TransformData &data, const glm::quat &orientation);
+	///Left-multiplies the quaternion to the orientation of a decomposed transform, or throws TransformNotDecomposedException
+	void LeftMultiplyOrientDecomp(TransformData &data, const glm::quat &orientation);
 
-		///Causes the transform to become composed.
-		void Compose();
+	///Sets the scale of a decomposed transform, or throws TransformNotDecomposedException
+	void SetScaleDecomp(TransformData &data, const glm::vec3 &scale);
 
-		///Computes and stores current * \a rhs. Causes the transform to become composed.
-		void RightMultiplyCompose(const glm::mat4 &rhs);
-		///Computes and stores \a lhs * current. Causes the transform to become composed.
-		void LeftMultiplyCompose(const glm::mat4 &lhs);
+	///Gets the translation of a decomposed transform, or throws TransformNotDecomposedException
+	glm::vec3 GetTranslationDecomp(const TransformData &data);
+	///Gets the orientation of a decomposed transform, or throws TransformNotDecomposedException
+	glm::quat GetOrientDecomp(const TransformData &data);
+	///Gets the scale of a decomposed transform, or throws TransformNotDecomposedException
+	glm::vec3 GetScaleDecomp(const TransformData &data);
 
-		///Sets the current matrix to the given. Causes the transform to become composed.
-		void SetMatrixCompose(const glm::mat4 &matrix);
+	///Sets the 3 decomposed values of the transform. The transform will be decomposed following this.
+	void SetDecomposed(TransformData &data, const glm::vec3 &translation,
+		const glm::quat &orientation = glm::quat(),
+		const glm::vec3 &scale = glm::vec3(1.0f, 1.0f, 1.0f));
 
-	private:
-		boost::reference_wrapper<TransformData> m_data;
+	///Retrieves the matrix representing this transform.
+	glm::mat4 GetMatrix(const TransformData &data);
 
-		TransformRef(TransformData &data) : m_data(data) {}
+	///Causes the transform to become composed.
+	void Compose(TransformData &data);
 
-		friend class NodeRef;
-	};
+	///Computes and stores current * \a rhs. Causes the transform to become composed.
+	void RightMultiplyCompose(TransformData &data, const glm::mat4 &rhs);
+	///Computes and stores \a lhs * current. Causes the transform to become composed.
+	void LeftMultiplyCompose(TransformData &data, const glm::mat4 &lhs);
 
+	///Sets the current matrix to the given. Causes the transform to become composed.
+	void SetMatrixCompose(TransformData &data, const glm::mat4 &matrix);
+	///@}
 
 	/**
 	\brief Represents a reference to a node in the scene graph.
@@ -158,11 +162,15 @@ namespace glscene
 	class NodeRef
 	{
 	public:
-		///Gets the NodeRef's [node transform](@ref module_glscene_core_transforms).
-		TransformRef GetNodeTM();
-		///Gets the NodeRef's [object transform](@ref module_glscene_core_transforms).
-		TransformRef GetObjectTM();
+		///Gets the NodeRef's [node transform](@ref module_glscene_node_transforms).
+		TransformData &GetNodeTMRef();
+		///Gets the NodeRef's [node transform](@ref module_glscene_node_transforms).
+		const TransformData &GetNodeTMRef() const;
 
+		///Gets the NodeRef's [object transform](@ref module_glscene_node_transforms).
+		TransformData &GetObjectTMRef();
+		///Gets the NodeRef's [object transform](@ref module_glscene_node_transforms).
+		const TransformData &GetObjectTMRef() const;
 
 		/**
 		\brief Puts the node into the given layer by index.
@@ -203,7 +211,6 @@ namespace glscene
 
 		\throws CannotMakeParentOfSelfException If `*this` is the root node. The root node's parentage cannot be changed.
 		\throws CannotMakeParentOfSelfException If `*this` and \a newParent are the same node.
-		
 		**/
 		void MakeChildOfNode(NodeRef newParent);
 

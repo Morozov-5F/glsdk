@@ -143,7 +143,7 @@ Not every combination of ImageFormat parameters is considered valid. Some are fu
 	- The glimg::ComponentOrder *cannot* be `ORDER_COMPRESSED`.
 	- The glimg::Bitdepth *cannot* be `BD_COMPRESSED`.
  
-- If the glimg::PixelDataType is compressed format, then:
+- If the glimg::PixelDataType is a compressed format, then:
  
 	- The glimg::ComponentOrder *must* be `ORDER_COMPRESSED`.
 	- The glimg::Bitdepth *must* be `BD_COMPRESSED`.
@@ -156,7 +156,7 @@ Not every combination of ImageFormat parameters is considered valid. Some are fu
 
 	- If the glimg::PixelDataType uses BC5, signed or unsigned, then the glimg::PixelComponents must be `FMT_COLOR_RG`.
 	
-	- If the glimg::PixelDataType uses BC5, signed or unsigned, then the glimg::PixelComponents must be `FMT_COLOR_RGB`.
+	- If the glimg::PixelDataType uses BC6, signed or unsigned, then the glimg::PixelComponents must be `FMT_COLOR_RGB`.
 	
 - The glimg::PixelDataType `DT_SHARED_EXP_FLOAT` can only be used with The glimg::ComponentOrder of `ORDER_RGBE`, glimg::Bitdepth of `BD_PACKED_32_BIT_5999_REV`, and a glimg::PixelComponents of `FMT_COLOR_RGB`.
 
