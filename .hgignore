@@ -35,3 +35,4 @@ OpenGL32.dll
 glloadgen/*
 docs/docbook/*
 docs/glsdk_version.cfg
+*.pch
