@@ -92,7 +92,7 @@ namespace glscene
 
 	TransformRef NodeRef::GetNodeTM()
 	{
-		return m_data.get().GetNodeTM();
+		return TransformRef(m_data.get().GetNodeTM());
 	}
 
 	boost::string_ref NodeRef::GetName() const

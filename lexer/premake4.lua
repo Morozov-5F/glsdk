@@ -14,14 +14,23 @@ project "Lex"
 	
 	UseLibs {"boost", "glm"}
 
-	files {"lex.cpp", "pch.h", "pch.cpp", "enums.h"}
+	files {"pch.h", "lex.cpp"}
 	
-	pchheader "pch.h"
-	pchsource "pch.cpp"
-
-	configuration "windows"
+	configuration "vs2008"
+		files {"pch.cpp"}
+		pchheader "pch.h"
+		pchsource "pch.cpp"
 		buildoptions {"-Zm256"};
-
+	configuration "vs2010"
+		files {"pch.cpp"}
+		pchheader "pch.h"
+		pchsource "pch.cpp"
+		buildoptions {"-Zm256"};
+	configuration "vs2012"
+		files {"pch.cpp"}
+		pchheader "pch.h"
+		pchsource "pch.cpp"
+		buildoptions {"-Zm256"};
 
 	configuration "windows"
 		defines {"WIN32"}

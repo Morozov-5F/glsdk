@@ -35,12 +35,12 @@ namespace glscene
 		}
 	}
 
-	glscene::TransformData NodeData::GetNodeTM()
+	glscene::TransformData &NodeData::GetNodeTM()
 	{
 		return m_nodeTM;
 	}
 
-	glscene::TransformData NodeData::GetObjectTM()
+	glscene::TransformData &NodeData::GetObjectTM()
 	{
 		return m_objTM;
 	}

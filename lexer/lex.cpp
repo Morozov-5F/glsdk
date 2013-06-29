@@ -504,7 +504,7 @@ private:
 	}
 
 	template<typename Token>
-	std::string GetScalarError(const Token &t, const std::string &typeName)
+	std::string GetScalarError(const Token &, const std::string &typeName)
 	{
 		return "The vector uniform type '" + typeName + "' can only be constructed by vectors of values."
 			" You must surround a single value with `()` syntax.";
@@ -518,7 +518,7 @@ private:
 	}
 
 	template<typename Token>
-	std::string GetSizeError(const Token &t, const std::string &typeName,
+	std::string GetSizeError(const Token &, const std::string &typeName,
 		int expectedSize, bool overflow)
 	{
 		const char *manyFew = overflow ? "too many." : "too few.";
@@ -579,7 +579,7 @@ private:
 	}
 };
 
-const EnumData<void> g_uniformTypeEnumeration = {"enum", g_uniformTypeList};
+const EnumData<void> g_uniformTypeEnumeration = {"enum", array_ref<boost::string_ref>(g_uniformTypeList)};
 
 boost::string_ref g_magFilterEnumNames[] =
 {
@@ -617,10 +617,10 @@ boost::string_ref g_compareModeEnumNames[] =
 	"fail",
 };
 
-const EnumData<void> g_magFilterEnumeration = {"mag", g_magFilterEnumNames};
-const EnumData<void> g_minFilterEnumeration = {"min", g_minFilterEnumNames};
-const EnumData<void> g_wrapModeEnumeration = {"wrap", g_wrapModeEnumNames};
-const EnumData<void> g_compareModeEnumeration = {"compare", g_compareModeEnumNames};
+const EnumData<void> g_magFilterEnumeration = {"mag", array_ref<boost::string_ref>(g_magFilterEnumNames)};
+const EnumData<void> g_minFilterEnumeration = {"min", array_ref<boost::string_ref>(g_minFilterEnumNames)};
+const EnumData<void> g_wrapModeEnumeration = {"wrap", array_ref<boost::string_ref>(g_wrapModeEnumNames)};
+const EnumData<void> g_compareModeEnumeration = {"compare", array_ref<boost::string_ref>(g_compareModeEnumNames)};
 
 struct ThrowOnInvalid
 {
@@ -644,7 +644,7 @@ UniformData CreateDefaultUniform(int typeIx)
 {
 	switch(typeIx)
 	{
-	case 0: return UIntVectorTypes(unsigned int());
+	case 0: return UIntVectorTypes((unsigned int)0);
 	case 1: return UIntVectorTypes(glm::uvec2(0));
 	case 2: return UIntVectorTypes(glm::uvec3(0));
 	case 3: return UIntVectorTypes(glm::uvec4(0));
@@ -672,35 +672,7 @@ UniformData ConstructFromSingleValue(T val, int typeIx)
 {
 	switch(typeIx)
 	{
-	case 0: return UIntVectorTypes(unsigned int(val));
-	case 1: return UIntVectorTypes(glm::uvec2(val));
-	case 2: return UIntVectorTypes(glm::uvec3(val));
-	case 3: return UIntVectorTypes(glm::uvec4(val));
-
-	case 4: return IntVectorTypes(int(val));
-	case 5: return IntVectorTypes(glm::ivec2(val));
-	case 6: return IntVectorTypes(glm::ivec3(val));
-	case 7: return IntVectorTypes(glm::ivec4(val));
-
-	case 8: return VectorTypes(float(val));
-	case 9: return VectorTypes(glm::vec2(val));
-	case 10: return VectorTypes(glm::vec3(val));
-	case 11: return VectorTypes(glm::vec4(val));
-
-	case 12: return MatrixTypes(glm::mat2(val));
-	case 13: return MatrixTypes(glm::mat3(val));
-	case 14: return MatrixTypes(glm::mat4(val));
-	}
-
-	return UniformData();
-}
-
-template<typename T>
-UniformData ConstructFromArray(const std::vector<T> &val, int typeIx)
-{
-	switch(typeIx)
-	{
-	case 0: return UIntVectorTypes(unsigned int(val));
+	case 0: return UIntVectorTypes((unsigned int)(val));
 	case 1: return UIntVectorTypes(glm::uvec2(val));
 	case 2: return UIntVectorTypes(glm::uvec3(val));
 	case 3: return UIntVectorTypes(glm::uvec4(val));
@@ -782,7 +754,8 @@ struct ParseConvertVisit : public boost::static_visitor<Dest>
 template<typename Dest>
 std::vector<Dest> ConvertParsedVector(const std::vector<ParsedValue> &parsed)
 {
-	BOOST_AUTO(newData, parsed | boost::adaptors::transformed(boost::apply_visitor(ParseConvertVisit<Dest>())));
+	ParseConvertVisit<Dest> func;
+	BOOST_AUTO(newData, parsed | boost::adaptors::transformed(boost::apply_visitor(func)));
 	return std::vector<Dest>(newData.begin(), newData.end());
 }
 
@@ -792,7 +765,7 @@ UniformData MakeUniformData(const std::vector<T> &arr, int typeIx)
 	BOOST_ASSERT(arr.size() == GetUniformTypeLength(typeIx));
 	switch(typeIx)
 	{
-	case 0: return UIntVectorTypes(unsigned int(arr[0]));
+	case 0: return UIntVectorTypes((unsigned int)(arr[0]));
 	case 1: return UIntVectorTypes(glm::uvec2(arr[0], arr[1]));
 	case 2: return UIntVectorTypes(glm::uvec3(arr[0], arr[1], arr[2]));
 	case 3: return UIntVectorTypes(glm::uvec4(arr[0], arr[1], arr[2], arr[3]));
@@ -815,9 +788,9 @@ UniformData MakeUniformData(const std::vector<T> &arr, int typeIx)
 				 arr[0], arr[1], arr[2],
 				 arr[0], arr[1], arr[2]));
 	case 14: return MatrixTypes(glm::mat4(
-				 arr[0], arr[1], arr[2], arr[3], 
-				 arr[4], arr[5], arr[6], arr[7], 
-				 arr[8], arr[9], arr[10], arr[11], 
+				 arr[0], arr[1], arr[2], arr[3],
+				 arr[4], arr[5], arr[6], arr[7],
+				 arr[8], arr[9], arr[10], arr[11],
 				 arr[12], arr[13], arr[14], arr[15]));
 	}
 
@@ -869,7 +842,7 @@ class SceneGraphParser
 public:
 	typedef typename Range::value_type Token;
 
-	SceneGraphParser(pos_iterator &posIt, Range &rng)
+	SceneGraphParser(pos_iterator &posIt, const Range &rng)
 		: m_currIt(posIt)
 		, m_rng(rng)
 	{}
@@ -1211,22 +1184,23 @@ private:
 		if(token_is_valid(m_rng.front()))
 		{
 			//The token is valid, so the position iterator was advanced forward by the token's size.
-			int tokenSize = std::distance(t.value().begin(), t.value().end());
+			int tokenSize = std::distance(m_rng.front().value().begin(), m_rng.front().value().end());
 			if(tokenSize > pos.columnNumber)
 				pos.columnNumber -= tokenSize;
 		}
+
+		return pos;
 	}
 
 	pos_iterator &m_currIt;
-	Range &m_rng;
+	Range m_rng;
 };
 
 template<typename Range>
-SceneGraphParser<Range> MakeParser(pos_iterator &posIt, Range &rng)
+SceneGraphParser<Range> MakeParser(pos_iterator &posIt, const Range &rng)
 {
 	return SceneGraphParser<Range>(posIt, rng);
 }
-
 
 
 int main()
@@ -1249,9 +1223,11 @@ int main()
 
 		token_range rng(lexing.begin(currIt, pos_iterator(), NULL), lexing.end());
 
+		ThrowOnInvalid validity;
+		SkipWhitespace skipper;
 		MakeParser(currIt, rng
-			| boost::adaptors::filtered(ThrowOnInvalid())
-			| boost::adaptors::filtered(SkipWhitespace())).ParseSceneGraph();
+			| boost::adaptors::filtered(validity)
+			| boost::adaptors::filtered(skipper)).ParseSceneGraph();
 /*
 		ParseSceneGraph(rng
 			| boost::adaptors::filtered(ThrowOnInvalid())
