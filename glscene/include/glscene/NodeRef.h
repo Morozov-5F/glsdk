@@ -210,25 +210,25 @@ namespace glscene
 	/**
 	\brief Retrieves the identifier string given for the node's name at construction time.
 	
-	If the NodeRef has no name, this will return an empty string.
+	If the NodeData has no name, this will return an empty string.
 	**/
 	boost::string_ref GetName(const NodeData &data);
 
 	/**
-	\brief Retrieves the parent node, if the node is not the root.
+	\brief Retrieves the parent node; returns NULL if it is the root.
 	**/
-	boost::optional<boost::reference_wrapper<NodeData> > GetParent(NodeData &data);
+	NodeData *GetParent(NodeData &data);
 
 	/**
-	\brief Retrieves the parent node, if the node is not the root.
+	\brief Retrieves the parent node; returns NULL if it is the root.
 	**/
-	boost::optional<boost::reference_wrapper<const NodeData> > GetParent(const NodeData &data);
+	const NodeData *GetParent(const NodeData &data);
 
 	/**
 	\brief Makes the given node the parent of this one.
 
-	\throws CannotChangeTheRootParentException If `*this` is the root node. The root node's parentage cannot be changed.
-	\throws CannotMakeParentOfSelfException If `*this` and \a newParent are the same node.
+	\throws CannotChangeTheRootParentException If \a data is the root node. The root node's parentage cannot be changed.
+	\throws CannotMakeParentOfSelfException If `\a data and \a newParent are the same node.
 	**/
 	void MakeChildOfNode(NodeData &data, NodeData &newParent);
 	///@}

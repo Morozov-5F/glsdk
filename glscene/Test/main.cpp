@@ -106,21 +106,21 @@ void keyboard(unsigned char key, int x, int y)
 
 void PrintParent(const glscene::NodeData &theNode)
 {
-	boost::optional<boost::reference_wrapper<const glscene::NodeData> > par = GetParent(theNode);
+	const glscene::NodeData *par = GetParent(theNode);
 	if(par)
 	{
-		std::cout << "'" << GetName(par.get()) << "'";
+		std::cout << "'" << GetName(*par) << "'";
 	}
 	else
 		std::cout << "Root";
 }
 
-void PrintNode(boost::optional<boost::reference_wrapper<glscene::NodeData> > theNode)
+void PrintNode(const glscene::NodeData *theNode)
 {
 	if(theNode)
 	{
-		PrintParent(theNode.get());
-		std::cout << " -> '" << GetName(theNode.get()) << "'";
+		PrintParent(*theNode);
+		std::cout << " -> '" << GetName(*theNode) << "'";
 	}
 	else
 		std::cout << "No node";

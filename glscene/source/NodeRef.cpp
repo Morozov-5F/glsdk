@@ -116,18 +116,14 @@ namespace glscene
 		return data.GetName();
 	}
 
-	boost::optional<boost::reference_wrapper<NodeData> > GetParent(NodeData &data)
+	NodeData *GetParent(NodeData &data)
 	{
-		NodeData *pNode = data.GetParent();
-		return pNode ?
-			boost::optional<boost::reference_wrapper<NodeData> >(boost::ref(*pNode)) : boost::none;
+		return data.GetParent();
 	}
 
-	boost::optional<boost::reference_wrapper<const NodeData> > GetParent( const NodeData &data )
+	const NodeData *GetParent( const NodeData &data )
 	{
-		const NodeData *pNode = data.GetParent();
-		return pNode ?
-			boost::optional<boost::reference_wrapper<const NodeData> >(boost::ref(*pNode)) : boost::none;
+		return data.GetParent();
 	}
 
 	void MakeChildOfNode(NodeData &data, NodeData &newParent)

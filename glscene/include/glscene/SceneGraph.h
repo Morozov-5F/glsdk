@@ -114,7 +114,7 @@ namespace glscene
 		NodeData &GetRootNode();
 
 		///Finds the given node by its name.
-		boost::optional<boost::reference_wrapper<NodeData> > FindNode(const boost::string_ref &name);
+		NodeData *FindNode(const boost::string_ref &name);
 
 		///Creates a new node that is the child of the given one.
 		NodeData &CreateChildNode(NodeData &parent, boost::optional<boost::string_ref> name = boost::none);

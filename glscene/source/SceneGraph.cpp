@@ -127,14 +127,9 @@ namespace glscene
 		return (int)found->second;
 	}
 
-	boost::optional<boost::reference_wrapper<NodeData> >
-		SceneGraph::FindNode( const boost::string_ref &name )
+	NodeData *SceneGraph::FindNode( const boost::string_ref &name )
 	{
-		NodeData *pData = m_pData->rootNode.FindByName(name);
-		if(pData)
-			return boost::ref(*pData);
-		else
-			return boost::none;
+		return m_pData->rootNode.FindByName(name);
 	}
 
 	void SceneGraph::DeleteNodeRecursive( NodeData &nodeToDelete )
