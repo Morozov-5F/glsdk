@@ -43,7 +43,7 @@ namespace glscene
 	private:
 	};
 
-	///Thrown by NodeRef::MakeChildOfNode if the current node and the parent are the same node.
+	///Thrown by glscene::MakeChildOfNode if the current node and the parent are the same node.
 	class CannotMakeParentOfSelfException : public NodeException
 	{
 	public:
@@ -53,14 +53,38 @@ namespace glscene
 	private:
 	};
 
-	///Thrown by NodeRef::MakeChildOfNode if trying to reparent the root node.
+	///Thrown by glscene::MakeChildOfNode if trying to reparent the root node.
 	class CannotChangeTheRootParentException : public NodeException
 	{
 	public:
-		explicit CannotChangeTheRootParentException()
+		CannotChangeTheRootParentException()
 			: NodeException("The root NodeRef's parent cannot be changed.") {}
 
 	private:
+	};
+
+	///Thrown by SceneGraph::DefineNodeVariant if some bindings overlap.
+	class VariantMultipleBindingsException : public NodeException
+	{
+	public:
+		VariantMultipleBindingsException(const std::string &resourceId, const std::string &resourceType,
+			unsigned int bindingIndex)
+			: NodeException(GetErrorString(resourceId, resourceType, bindingIndex)) {}
+
+	private:
+		static std::string GetErrorString(const std::string &resourceId, const std::string &resourceType,
+			unsigned int bindingIndex);
+	};
+
+	///Thrown by glscene::DefineVariant if the given variant name already exists.
+	class VariantAlreadyExistsException : public NodeException
+	{
+	public:
+		explicit VariantAlreadyExistsException(const std::string &variantName)
+			: NodeException(GetErrorName(variantName)) {}
+
+	private:
+		static std::string GetErrorName(const std::string &variantName);
 	};
 	///@}
 
@@ -94,7 +118,7 @@ namespace glscene
 	Calling any function that ends on `Compose` or the glscene::Compose function itself, will convert the transform
 	to the composed form. Note that glscene::GetMatrix does *not* compose a decomposed matrix.
 
-	No functions in SceneGraph, NodeRef, or any other scene graph class will do anything to change the
+	No functions in SceneGraph or any other scene graph class will do anything to change the
 	composed/decomposed status of the TransformData. Only your actions can cause a matrix to become decomposed.
 	**/
 

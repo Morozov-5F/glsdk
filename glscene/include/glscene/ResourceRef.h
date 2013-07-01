@@ -41,33 +41,34 @@ namespace glscene
 	class ResourceMultiplyDefinedException : public ResourceException
 	{
 	public:
-		explicit ResourceMultiplyDefinedException(const std::string &resource, const std::string &resourceType)
-			: ResourceException(GetErrorName(resource, resourceType)) {}
+		explicit ResourceMultiplyDefinedException(const std::string &resourceId, const std::string &resourceType)
+			: ResourceException(GetErrorName(resourceId, resourceType)) {}
 
 	private:
-		static std::string GetErrorName(const std::string &resource, const std::string &resourceType);
+		static std::string GetErrorName(const std::string &resourceId, const std::string &resourceType);
 	};
 
 	///Thrown by any ResourceRef access functions if the given resource name has not been defined for that resource type.
 	class ResourceNotFoundException : public ResourceException
 	{
 	public:
-		explicit ResourceNotFoundException(const std::string &resource, const std::string &resourceType)
-			: ResourceException(GetErrorName(resource, resourceType)) {}
+		explicit ResourceNotFoundException(const std::string &resourceId, const std::string &resourceType)
+			: ResourceException(GetErrorName(resourceId, resourceType)) {}
 
 	private:
-		static std::string GetErrorName(const std::string &resource, const std::string &resourceType);
+		static std::string GetErrorName(const std::string &resourceId, const std::string &resourceType);
 	};
 
 	///Thrown by any `ResourceRef::SetUniform` function if the given data doesn't match the type of the input.
 	class UniformResourceTypeMismatchException : public ResourceException
 	{
 	public:
-		explicit UniformResourceTypeMismatchException(const std::string &resource,
+		explicit UniformResourceTypeMismatchException(const std::string &resourceId,
 			const std::string &uniformType, const std::string &givenType)
-			: ResourceException(GetErrorName(resource, uniformType, givenType)) {}
+			: ResourceException(GetErrorName(resourceId, uniformType, givenType)) {}
 
-		static std::string GetErrorName(const std::string &resource,
+	private:
+		static std::string GetErrorName(const std::string &resourceId,
 			const std::string &uniformType, const std::string &givenType);
 	};
 
@@ -215,21 +216,21 @@ namespace glscene
 		been defined.
 		**/
 		///@{
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, float data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::vec2 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::vec3 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::vec4 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, int data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::ivec2 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::ivec3 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::ivec4 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, unsigned int data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::uvec2 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::uvec3 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::uvec4 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::mat2 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::mat3 data);
-		void DefineUniform(const boost::string_ref &resource, const std::string &uniformName, glm::mat4 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, float data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::vec2 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::vec3 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::vec4 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, int data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::ivec2 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::ivec3 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::ivec4 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, unsigned int data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::uvec2 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::uvec3 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::uvec4 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::mat2 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::mat3 data);
+		void DefineUniform(const boost::string_ref &resourceId, const std::string &uniformName, glm::mat4 data);
 		///@}
 
 		/**
@@ -242,21 +243,21 @@ namespace glscene
 		\throws UniformResourceTypeMismatchException If \a data is not the same type as the original uniform definition.
 		**/
 		///@{
-		void SetUniform(const boost::string_ref &resource, float data);
-		void SetUniform(const boost::string_ref &resource, glm::vec2 data);
-		void SetUniform(const boost::string_ref &resource, glm::vec3 data);
-		void SetUniform(const boost::string_ref &resource, glm::vec4 data);
-		void SetUniform(const boost::string_ref &resource, int data);
-		void SetUniform(const boost::string_ref &resource, glm::ivec2 data);
-		void SetUniform(const boost::string_ref &resource, glm::ivec3 data);
-		void SetUniform(const boost::string_ref &resource, glm::ivec4 data);
-		void SetUniform(const boost::string_ref &resource, unsigned int data);
-		void SetUniform(const boost::string_ref &resource, glm::uvec2 data);
-		void SetUniform(const boost::string_ref &resource, glm::uvec3 data);
-		void SetUniform(const boost::string_ref &resource, glm::uvec4 data);
-		void SetUniform(const boost::string_ref &resource, glm::mat2 data);
-		void SetUniform(const boost::string_ref &resource, glm::mat3 data);
-		void SetUniform(const boost::string_ref &resource, glm::mat4 data);
+		void SetUniform(const boost::string_ref &resourceId, float data);
+		void SetUniform(const boost::string_ref &resourceId, glm::vec2 data);
+		void SetUniform(const boost::string_ref &resourceId, glm::vec3 data);
+		void SetUniform(const boost::string_ref &resourceId, glm::vec4 data);
+		void SetUniform(const boost::string_ref &resourceId, int data);
+		void SetUniform(const boost::string_ref &resourceId, glm::ivec2 data);
+		void SetUniform(const boost::string_ref &resourceId, glm::ivec3 data);
+		void SetUniform(const boost::string_ref &resourceId, glm::ivec4 data);
+		void SetUniform(const boost::string_ref &resourceId, unsigned int data);
+		void SetUniform(const boost::string_ref &resourceId, glm::uvec2 data);
+		void SetUniform(const boost::string_ref &resourceId, glm::uvec3 data);
+		void SetUniform(const boost::string_ref &resourceId, glm::uvec4 data);
+		void SetUniform(const boost::string_ref &resourceId, glm::mat2 data);
+		void SetUniform(const boost::string_ref &resourceId, glm::mat3 data);
+		void SetUniform(const boost::string_ref &resourceId, glm::mat4 data);
 		///@}
 
 		/**
@@ -271,7 +272,7 @@ namespace glscene
 		been defined with texture data. If it was defined with DefineTextureIncomplete, then this exception
 		will not be thrown.
 		**/
-		void DefineTexture(const boost::string_ref &resource, GLuint textureObj,
+		void DefineTexture(const boost::string_ref &resourceId, GLuint textureObj,
 			GLenum target, bool claimOwnership = true);
 
 		/**
@@ -282,7 +283,7 @@ namespace glscene
 		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
 		been defined.
 		**/
-		void DefineTextureIncomplete(const boost::string_ref &resource);
+		void DefineTextureIncomplete(const boost::string_ref &resourceId);
 
 		/**
 		\brief Creates a named sampler resource.
@@ -293,7 +294,7 @@ namespace glscene
 		\param resource The resource name for the sampler.
 		\param data The information about the sampler parameters. These parameters are immutable.
 		**/
-		void DefineSampler(const boost::string_ref &resource, const SamplerInfo &data);
+		void DefineSampler(const boost::string_ref &resourceId, const SamplerInfo &data);
 
 		/**
 		\brief Sets a floating-point border color for a sampler.
@@ -303,7 +304,7 @@ namespace glscene
 
 		\throws ResourceNotFoundException If \a resource is not a sampler resource.
 		**/
-		void SetSamplerBorderColor(const boost::string_ref &resource, const glm::vec4 &color);
+		void SetSamplerBorderColor(const boost::string_ref &resourceId, const glm::vec4 &color);
 
 		/**
 		\brief Sets an integer border color for a sampler.
@@ -313,7 +314,7 @@ namespace glscene
 
 		\throws ResourceNotFoundException If \a resource is not a sampler resource.
 		**/
-		void SetSamplerBorderColorI(const boost::string_ref &resource, const glm::ivec4 &color);
+		void SetSamplerBorderColorI(const boost::string_ref &resourceId, const glm::ivec4 &color);
 
 		/**
 		\brief Sets an integer border color for a sampler.
@@ -323,7 +324,7 @@ namespace glscene
 
 		\throws ResourceNotFoundException If \a resource is not a sampler resource.
 		**/
-		void SetSamplerBorderColorI(const boost::string_ref &resource, const glm::uvec4 &color);
+		void SetSamplerBorderColorI(const boost::string_ref &resourceId, const glm::uvec4 &color);
 
 		/**
 		\brief Sets the LOD bias for a sampler
@@ -333,7 +334,7 @@ namespace glscene
 
 		\throws ResourceNotFoundException If \a resource is not a sampler resource.
 		**/
-		void SetSamplerLODBias(const boost::string_ref &resource, float bias);
+		void SetSamplerLODBias(const boost::string_ref &resourceId, float bias);
 
 		/**
 		\brief Creates a named mesh, which may claim ownership of the mesh.
@@ -346,7 +347,7 @@ namespace glscene
 		been defined with mesh data. If it was previously defined with DefineMeshIncomplete, then this exception
 		will not be thrown.
 		**/
-		void DefineMesh(const boost::string_ref &resource, glmesh::Mesh *pMesh, bool claimOwnership = true);
+		void DefineMesh(const boost::string_ref &resourceId, glmesh::Mesh *pMesh, bool claimOwnership = true);
 
 		/**
 		\brief Creates a named, user-defined mesh, which may claim ownership of the mesh.
@@ -359,7 +360,7 @@ namespace glscene
 		been defined with mesh data. If it was previously defined with DefineMeshIncomplete, then this exception
 		will not be thrown.
 		**/
-		void DefineMesh(const boost::string_ref &resource, glscene::Drawable *pMesh, bool claimOwnership = true);
+		void DefineMesh(const boost::string_ref &resourceId, glscene::Drawable *pMesh, bool claimOwnership = true);
 
 		/**
 		\brief Creates a named mesh, which will be filled in with actual data later.
@@ -369,7 +370,7 @@ namespace glscene
 
 		\param resource The resource name for the mesh.
 		**/
-		void DefineMeshIncomplete(const boost::string_ref &resource);
+		void DefineMeshIncomplete(const boost::string_ref &resourceId);
 
 		/**
 		\brief Creates a named program object resource.
@@ -393,7 +394,7 @@ namespace glscene
 		\param programInfo Information about \a program.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the program.
 		**/
-		void DefineProgram(const boost::string_ref &resource, GLuint program, const ProgramInfo &programInfo,
+		void DefineProgram(const boost::string_ref &resourceId, GLuint program, const ProgramInfo &programInfo,
 			bool claimOwnership = true);
 
 		/**
@@ -418,7 +419,7 @@ namespace glscene
 		[1]: http://www.opengl.org/wiki/Uniform_Buffer_Object
 		[2]: http://www.opengl.org/wiki/GLAPI/glBindBufferRange
 		**/
-		void DefineUniformBufferBinding( const boost::string_ref &resource, GLuint bufferObject,
+		void DefineUniformBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
 			GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership );
 
 		/**
@@ -440,7 +441,7 @@ namespace glscene
 		resource that was not incompletely defined by a call to DefineUniformBufferBindingIncomplete, or
 		if the resource was previously defined by a call to this function.
 		**/
-		void DefineUniformBufferBinding(const boost::string_ref &resource, GLuint bufferObject,
+		void DefineUniformBufferBinding(const boost::string_ref &resourceId, GLuint bufferObject,
 			GLintptr offset, bool claimOwnership);
 
 		/**
@@ -457,7 +458,7 @@ namespace glscene
 		\throws ResourceMultiplyDefinedException If \a resource refers to a uniform buffer resource that has
 		already been defined.
 		**/
-		void DefineUniformBufferBindingIncomplete(const boost::string_ref &resource, GLuint bindPoint,
+		void DefineUniformBufferBindingIncomplete(const boost::string_ref &resourceId, GLuint bindPoint,
 			GLsizeiptr size);
 
 
@@ -483,7 +484,7 @@ namespace glscene
 		[1]: http://www.opengl.org/wiki/Shader_Storage_Uniform_Buffer_Object
 		[2]: http://www.opengl.org/wiki/GLAPI/glBindBufferRange
 		**/
-		void DefineStorageBufferBinding( const boost::string_ref &resource, GLuint bufferObject,
+		void DefineStorageBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
 			GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership );
 
 		/**
@@ -505,7 +506,7 @@ namespace glscene
 		resource that was not incompletely defined by a call to DefineStorageBufferBindingIncomplete, or
 		if the resource was previously defined by a call to this function.
 		**/
-		void DefineStorageBufferBinding(const boost::string_ref &resource, GLuint bufferObject,
+		void DefineStorageBufferBinding(const boost::string_ref &resourceId, GLuint bufferObject,
 			GLintptr offset, bool claimOwnership);
 
 		/**
@@ -522,7 +523,7 @@ namespace glscene
 		\throws ResourceMultiplyDefinedException If \a resource refers to a storage buffer resource that has
 		already been defined.
 		**/
-		void DefineStorageBufferBindingIncomplete(const boost::string_ref &resource, GLuint bindPoint,
+		void DefineStorageBufferBindingIncomplete(const boost::string_ref &resourceId, GLuint bindPoint,
 			GLsizeiptr size);
 
 
@@ -542,7 +543,7 @@ namespace glscene
 		\throws ResourceMultiplyDefinedException If \a resource refers to a camera resource that has
 		already been defined.
 		**/
-		void DefineCamera(const boost::string_ref &resource, const glutil::ViewData &initialView,
+		void DefineCamera(const boost::string_ref &resourceId, const glutil::ViewData &initialView,
 			const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls);
 	private:
 		boost::reference_wrapper<ResourceData> m_data;

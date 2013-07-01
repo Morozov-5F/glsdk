@@ -7,21 +7,21 @@
 namespace glscene
 {
 	std::string ResourceMultiplyDefinedException::GetErrorName(
-		const std::string &resource, const std::string &resourceType )
+		const std::string &resourceId, const std::string &resourceType )
 	{
-		return std::string("The resource '") + resource + "' is already in use in the '" + resourceType + "' system.";
+		return std::string("The resourceId '") + resourceId + "' is already in use in the '" + resourceType + "' system.";
 	}
 
-	std::string ResourceNotFoundException::GetErrorName( const std::string &resource,
+	std::string ResourceNotFoundException::GetErrorName( const std::string &resourceId,
 		const std::string &resourceType )
 	{
-		return std::string("The resource '") + resource + "' of type '" + resourceType + "' was not found.";
+		return std::string("The resourceId '") + resourceId + "' of type '" + resourceType + "' was not found.";
 	}
 
-	std::string UniformResourceTypeMismatchException::GetErrorName( const std::string &resource,
+	std::string UniformResourceTypeMismatchException::GetErrorName( const std::string &resourceId,
 		const std::string &uniformType, const std::string &givenType )
 	{
-		return std::string("Attempting to set the uniform resource '") + resource +
+		return std::string("Attempting to set the uniform resourceId '") + resourceId +
 			"', which is of type '" + uniformType + "', with a type of " + givenType + ".";
 	}
 
@@ -35,237 +35,237 @@ namespace glscene
 		, edgeFilterR(GL_CLAMP_TO_EDGE)
 	{}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, float data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, float data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, VectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, VectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::vec2 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::vec2 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, VectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, VectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::vec3 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::vec3 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, VectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, VectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::vec4 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::vec4 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, VectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, VectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, int data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, int data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, IntVectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, IntVectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::ivec2 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::ivec2 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, IntVectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, IntVectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::ivec3 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::ivec3 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, IntVectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, IntVectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::ivec4 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::ivec4 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, IntVectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, IntVectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, unsigned int data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, unsigned int data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, UIntVectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, UIntVectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::uvec2 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::uvec2 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, UIntVectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, UIntVectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::uvec3 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::uvec3 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, UIntVectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, UIntVectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::uvec4 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::uvec4 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, UIntVectorTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, UIntVectorTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::mat2 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::mat2 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, MatrixTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, MatrixTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::mat3 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::mat3 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, MatrixTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, MatrixTypes(data));
 	}
 
-	void ResourceRef::DefineUniform( const boost::string_ref &resource, const std::string &uniformName, glm::mat4 data )
+	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, glm::mat4 data )
 	{
-		m_data.get().DefineUniform(resource, uniformName, MatrixTypes(data));
+		m_data.get().DefineUniform(resourceId, uniformName, MatrixTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, float data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, float data )
 	{
-		m_data.get().SetUniform(resource, VectorTypes(data));
+		m_data.get().SetUniform(resourceId, VectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::vec2 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::vec2 data )
 	{
-		m_data.get().SetUniform(resource, VectorTypes(data));
+		m_data.get().SetUniform(resourceId, VectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::vec3 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::vec3 data )
 	{
-		m_data.get().SetUniform(resource, VectorTypes(data));
+		m_data.get().SetUniform(resourceId, VectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::vec4 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::vec4 data )
 	{
-		m_data.get().SetUniform(resource, VectorTypes(data));
+		m_data.get().SetUniform(resourceId, VectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, int data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, int data )
 	{
-		m_data.get().SetUniform(resource, IntVectorTypes(data));
+		m_data.get().SetUniform(resourceId, IntVectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::ivec2 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::ivec2 data )
 	{
-		m_data.get().SetUniform(resource, IntVectorTypes(data));
+		m_data.get().SetUniform(resourceId, IntVectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::ivec3 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::ivec3 data )
 	{
-		m_data.get().SetUniform(resource, IntVectorTypes(data));
+		m_data.get().SetUniform(resourceId, IntVectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::ivec4 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::ivec4 data )
 	{
-		m_data.get().SetUniform(resource, IntVectorTypes(data));
+		m_data.get().SetUniform(resourceId, IntVectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, unsigned int data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, unsigned int data )
 	{
-		m_data.get().SetUniform(resource, UIntVectorTypes(data));
+		m_data.get().SetUniform(resourceId, UIntVectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::uvec2 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::uvec2 data )
 	{
-		m_data.get().SetUniform(resource, UIntVectorTypes(data));
+		m_data.get().SetUniform(resourceId, UIntVectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::uvec3 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::uvec3 data )
 	{
-		m_data.get().SetUniform(resource, UIntVectorTypes(data));
+		m_data.get().SetUniform(resourceId, UIntVectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::uvec4 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::uvec4 data )
 	{
-		m_data.get().SetUniform(resource, UIntVectorTypes(data));
+		m_data.get().SetUniform(resourceId, UIntVectorTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::mat2 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::mat2 data )
 	{
-		m_data.get().SetUniform(resource, MatrixTypes(data));
+		m_data.get().SetUniform(resourceId, MatrixTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::mat3 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::mat3 data )
 	{
-		m_data.get().SetUniform(resource, MatrixTypes(data));
+		m_data.get().SetUniform(resourceId, MatrixTypes(data));
 	}
 
-	void ResourceRef::SetUniform( const boost::string_ref &resource, glm::mat4 data )
+	void ResourceRef::SetUniform( const boost::string_ref &resourceId, glm::mat4 data )
 	{
-		m_data.get().SetUniform(resource, MatrixTypes(data));
+		m_data.get().SetUniform(resourceId, MatrixTypes(data));
 	}
 
-	void ResourceRef::DefineTexture( const boost::string_ref &resource, GLuint textureObj, GLenum target,
+	void ResourceRef::DefineTexture( const boost::string_ref &resourceId, GLuint textureObj, GLenum target,
 		bool claimOwnership )
 	{
-		m_data.get().DefineTexture(resource, textureObj, target, claimOwnership);
+		m_data.get().DefineTexture(resourceId, textureObj, target, claimOwnership);
 	}
 
-	void ResourceRef::DefineTextureIncomplete( const boost::string_ref &resource )
+	void ResourceRef::DefineTextureIncomplete( const boost::string_ref &resourceId )
 	{
-		m_data.get().DefineTextureIncomplete(resource);
+		m_data.get().DefineTextureIncomplete(resourceId);
 	}
 
-	void ResourceRef::DefineSampler( const boost::string_ref &resource, const SamplerInfo &data )
+	void ResourceRef::DefineSampler( const boost::string_ref &resourceId, const SamplerInfo &data )
 	{
-		m_data.get().DefineSampler(resource, data);
+		m_data.get().DefineSampler(resourceId, data);
 	}
 
-	void ResourceRef::SetSamplerLODBias( const boost::string_ref &resource, float bias )
+	void ResourceRef::SetSamplerLODBias( const boost::string_ref &resourceId, float bias )
 	{
-		m_data.get().SetSamplerLODBias(resource, bias);
+		m_data.get().SetSamplerLODBias(resourceId, bias);
 	}
 
-	void ResourceRef::DefineMesh( const boost::string_ref &resource, glmesh::Mesh *pMesh, bool claimOwnership )
+	void ResourceRef::DefineMesh( const boost::string_ref &resourceId, glmesh::Mesh *pMesh, bool claimOwnership )
 	{
-		m_data.get().DefineMesh(resource, pMesh, claimOwnership);
+		m_data.get().DefineMesh(resourceId, pMesh, claimOwnership);
 	}
 
-	void ResourceRef::DefineMesh( const boost::string_ref &resource, glscene::Drawable *pMesh, bool claimOwnership /*= true*/ )
+	void ResourceRef::DefineMesh( const boost::string_ref &resourceId, glscene::Drawable *pMesh, bool claimOwnership /*= true*/ )
 	{
-		m_data.get().DefineMesh(resource, pMesh, claimOwnership);
+		m_data.get().DefineMesh(resourceId, pMesh, claimOwnership);
 	}
 
-	void ResourceRef::DefineMeshIncomplete( const boost::string_ref &resource )
+	void ResourceRef::DefineMeshIncomplete( const boost::string_ref &resourceId )
 	{
-		m_data.get().DefineMeshIncomplete(resource);
+		m_data.get().DefineMeshIncomplete(resourceId);
 	}
 
-	void ResourceRef::DefineProgram( const boost::string_ref &resource, GLuint program, const ProgramInfo &programInfo,
+	void ResourceRef::DefineProgram( const boost::string_ref &resourceId, GLuint program, const ProgramInfo &programInfo,
 		bool claimOwnership )
 	{
-		m_data.get().DefineProgram(resource, program, programInfo, claimOwnership);
+		m_data.get().DefineProgram(resourceId, program, programInfo, claimOwnership);
 	}
 
-	void ResourceRef::DefineUniformBufferBinding( const boost::string_ref &resource, GLuint bufferObject,
+	void ResourceRef::DefineUniformBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
 		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
-		m_data.get().DefineUniformBufferBinding(resource, bufferObject, bindPoint, offset, size, claimOwnership);
+		m_data.get().DefineUniformBufferBinding(resourceId, bufferObject, bindPoint, offset, size, claimOwnership);
 	}
 
-	void ResourceRef::DefineUniformBufferBinding( const boost::string_ref &resource, GLuint bufferObject,
+	void ResourceRef::DefineUniformBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
 		GLintptr offset, bool claimOwnership )
 	{
-		m_data.get().DefineUniformBufferBinding(resource, bufferObject, offset, claimOwnership);
+		m_data.get().DefineUniformBufferBinding(resourceId, bufferObject, offset, claimOwnership);
 	}
 
-	void ResourceRef::DefineUniformBufferBindingIncomplete( const boost::string_ref &resource, GLuint bindPoint,
+	void ResourceRef::DefineUniformBufferBindingIncomplete( const boost::string_ref &resourceId, GLuint bindPoint,
 		GLsizeiptr size )
 	{
-		m_data.get().DefineUniformBufferBindingIncomplete(resource, bindPoint, size);
+		m_data.get().DefineUniformBufferBindingIncomplete(resourceId, bindPoint, size);
 	}
 
-	void ResourceRef::DefineStorageBufferBinding( const boost::string_ref &resource, GLuint bufferObject,
+	void ResourceRef::DefineStorageBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
 		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
-		m_data.get().DefineStorageBufferBinding(resource, bufferObject, bindPoint, offset, size, claimOwnership);
+		m_data.get().DefineStorageBufferBinding(resourceId, bufferObject, bindPoint, offset, size, claimOwnership);
 	}
 
-	void ResourceRef::DefineStorageBufferBinding( const boost::string_ref &resource, GLuint bufferObject,
+	void ResourceRef::DefineStorageBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
 		GLintptr offset, bool claimOwnership )
 	{
-		m_data.get().DefineStorageBufferBinding(resource, bufferObject, offset, claimOwnership);
+		m_data.get().DefineStorageBufferBinding(resourceId, bufferObject, offset, claimOwnership);
 	}
 
-	void ResourceRef::DefineStorageBufferBindingIncomplete( const boost::string_ref &resource, GLuint bindPoint,
+	void ResourceRef::DefineStorageBufferBindingIncomplete( const boost::string_ref &resourceId, GLuint bindPoint,
 		GLsizeiptr size )
 	{
-		m_data.get().DefineStorageBufferBindingIncomplete(resource, bindPoint, size);
+		m_data.get().DefineStorageBufferBindingIncomplete(resourceId, bindPoint, size);
 	}
 
-	void ResourceRef::DefineCamera( const boost::string_ref &resource, const glutil::ViewData &initialView,
+	void ResourceRef::DefineCamera( const boost::string_ref &resourceId, const glutil::ViewData &initialView,
 		const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls )
 	{
-		m_data.get().DefineCamera(resource, initialView, viewScale, actionButton, bRightKeyboardCtrls);
+		m_data.get().DefineCamera(resourceId, initialView, viewScale, actionButton, bRightKeyboardCtrls);
 	}
 }

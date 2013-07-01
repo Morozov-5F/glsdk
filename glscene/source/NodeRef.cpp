@@ -6,6 +6,16 @@
 
 namespace glscene
 {
+	std::string VariantAlreadyExistsException::GetErrorName( const std::string &variantName )
+	{
+		return "The variant '" + variantName + "' is already defined on this node.";
+	}
+
+	std::string VariantMultipleBindingsException::GetErrorString( const std::string &resourceId, const std::string &resourceType, unsigned int bindingIndex )
+	{
+		return "A variant tried to set the resource '" + resourceId + "' of type '" + resourceType + "' to the same binding index as another resource on the same variant.";
+	}
+
 	bool IsDecomposed( const TransformData &data )
 	{
 		return data.IsDecomposed();

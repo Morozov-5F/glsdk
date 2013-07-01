@@ -3,7 +3,10 @@
 #include <boost/foreach.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/assert.hpp>
+#include <glload/gl_all.h>
+#include "glscene/Variant.h"
 #include "NodeData.h"
+#include "ResourceData.h"
 
 
 namespace glscene
@@ -111,5 +114,83 @@ namespace glscene
 	{
 		while(!m_children.empty())
 			m_children.front()->MakeChildOfNode(*m_pParent);
+	}
+
+	namespace
+	{
+		struct ProgDataExtraction : public boost::static_visitor<ProgramBindingData>
+		{
+			SingleProgramBindingData operator()(const SingleProgramBinding &binding) const
+			{
+				SingleProgramBindingData data(binding.programId);
+				data.uniformIds.reserve(binding.uniformIds.size());
+				BOOST_FOREACH(const std::string &uniformId, binding.uniformIds)
+				{
+					data.uniformIds.push_back(UniformBindingData(uniformId));
+				}
+
+				return data;
+			}
+
+			SeparableProgramBindingData operator()(const SeparableProgramBinding &binding) const
+			{
+				SeparableProgramBindingData data;
+				data.pipeline.reserve(binding.pipeline.size());
+				BOOST_FOREACH(const ProgramMask &prog, binding.pipeline)
+				{
+					data.pipeline.push_back(ProgramMaskData((*this)(prog.prog), prog.stages));
+				}
+				return data;
+			}
+		};
+	}
+
+	void NodeData::DefineVariant( const boost::string_ref &variantName, const VariantInfo &variant )
+	{
+		if(m_variants.find(variantName) != m_variants.end())
+			throw VariantAlreadyExistsException(std::string(variantName.begin(), variantName.end()));
+
+		m_variants.emplace(variantName, VariantData(variant.meshResourceId));
+		VariantData &data = m_variants.find(variantName)->second;
+
+		data.progBinding = boost::apply_visitor(ProgDataExtraction(), variant.progBinding);
+
+		data.textureBindings.reserve(variant.textureBindings.size());
+		BOOST_FOREACH(const TextureBinding &texBinding, variant.textureBindings)
+		{
+			TextureBindingData newBinding(texBinding.textureId, texBinding.samplerId);
+			data.textureBindings.emplace(texBinding.textureUnit, newBinding);
+		}
+
+		data.imageBindings.reserve(variant.imageBindings.size());
+		BOOST_FOREACH(const ImageBinding &imgBinding, variant.imageBindings)
+		{
+			ImageBindingData newBinding(imgBinding.textureId);
+			newBinding.mipmapLevel = imgBinding.mipmapLevel;
+			newBinding.arrayLayer = imgBinding.arrayLayer;
+			newBinding.access = imgBinding.access;
+			newBinding.format = imgBinding.format;
+			data.imageBindings.emplace(imgBinding.imageUnit, newBinding);
+		}
+
+		data.uniformBufferBindings.reserve(variant.uniformBufferBindings.size());
+		BOOST_FOREACH(const BufferInterfaceBinding &bufBinding, variant.uniformBufferBindings)
+		{
+			BufferInterfaceBindingData newBinding(bufBinding.bufferId);
+			newBinding.bindOffset = bufBinding.bindOffset;
+			data.uniformBufferBindings.push_back(newBinding);
+		}
+
+		data.storageBufferBindings.reserve(variant.storageBufferBindings.size());
+		BOOST_FOREACH(const BufferInterfaceBinding &bufBinding, variant.storageBufferBindings)
+		{
+			BufferInterfaceBindingData newBinding(bufBinding.bufferId);
+			newBinding.bindOffset = bufBinding.bindOffset;
+			data.storageBufferBindings.push_back(newBinding);
+		}
+		
+
+//		VariantData &data = m_variants[IdString(variantName)];
+
 	}
 }

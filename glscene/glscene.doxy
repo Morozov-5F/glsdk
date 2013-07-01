@@ -65,7 +65,7 @@ All objects that end in `Info` have full value semantics. They are copyable and 
 blah
 
 
-# Transforms Node vs Object #  {#module_glscene_node_transforms}
+# Transforms: Node vs Object #  {#module_glscene_node_transforms}
 
 Nodes in the graph have two separate transformation matrices: the node transform and the object transform.
 

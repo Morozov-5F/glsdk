@@ -21,6 +21,7 @@ namespace glscene
 {
 	class ResourceRef;
 	struct SceneGraphData;
+	struct VariantInfo;
 
 	///\addtogroup module_glscene_exceptions
 	///@{
@@ -142,6 +143,15 @@ namespace glscene
 
 		///Retrieves the Resources stored in the scene graph.
 		ResourceRef GetResources();
+
+		/**
+		\brief Sets variant data into a node.
+
+		\throws VariantAlreadyExistsException If \a variantId has already been defined.
+		\throws ResourceNotFoundException If any identifiers in the \a variant refer to resources that don't exist.
+		**/
+		void DefineNodeVariant(NodeData &node, const boost::string_ref variantId,
+			const VariantInfo &variant);
 
 	private:
 		boost::scoped_ptr<SceneGraphData> m_pData;

@@ -8,11 +8,89 @@
 #include <vector>
 #include <boost/dynamic_bitset.hpp>
 #include <boost/optional.hpp>
+#include <glload/gl_all.h>
 
 namespace glscene
 {
 	class NodeData;
+	class ResourceData;
 
+	struct TextureBindingData
+	{
+		TextureBindingData(boost::string_ref _textureId, boost::string_ref _samplerId)
+			: textureId(_textureId), samplerId(_samplerId) {}
+
+		IdString textureId;
+		IdString samplerId;
+	};
+
+	struct ImageBindingData
+	{
+		ImageBindingData(boost::string_ref _textureId)
+			: textureId(_textureId) {}
+
+		IdString textureId;
+		GLint mipmapLevel;
+		boost::optional<GLint> arrayLayer; ///<If set, then binds only that layer. If not set, then binds the whole array.
+		GLenum access;
+		GLenum format;
+	};
+
+	struct BufferInterfaceBindingData
+	{
+		BufferInterfaceBindingData(boost::string_ref _bufferId)
+			: bufferId(_bufferId) {}
+
+		IdString bufferId;
+		GLuint bindOffset;
+	};
+
+	struct UniformBindingData
+	{
+		UniformBindingData(boost::string_ref _uniformId)
+			: uniformId(_uniformId) {}
+
+		IdString uniformId;
+	};
+
+	struct SingleProgramBindingData
+	{
+		SingleProgramBindingData(boost::string_ref _programId)
+			: programId(_programId) {}
+
+		IdString programId;
+		std::vector<UniformBindingData> uniformIds;
+	};
+
+	struct ProgramMaskData
+	{
+		ProgramMaskData(const SingleProgramBindingData &_prog, GLuint _stages)
+			: prog(_prog), stages(_stages) {}
+
+		SingleProgramBindingData prog;
+		GLuint stages;			///<Stage bitmask, as would be used by [glUseProgramStages](http://www.opengl.org/wiki/GLAPI/glUseProgramStages).
+	};
+
+	struct SeparableProgramBindingData
+	{
+		std::vector<ProgramMaskData> pipeline;
+	};
+
+	typedef boost::variant<SeparableProgramBindingData, SingleProgramBindingData> ProgramBindingData;
+
+	struct VariantData
+	{
+		VariantData(boost::string_ref meshId) : meshResourceId(meshId) {}
+
+		IdString meshResourceId;
+		ProgramBindingData progBinding;
+		boost::container::flat_map<GLuint, TextureBindingData> textureBindings;
+		boost::container::flat_map<GLuint, ImageBindingData> imageBindings;
+		std::vector<BufferInterfaceBindingData> uniformBufferBindings;
+		std::vector<BufferInterfaceBindingData> storageBufferBindings;
+	};
+
+	typedef boost::container::flat_map<IdString, VariantData> VariantList;
 	typedef std::vector<NodeData*> NodeChildren;
 
 	class NodeData
@@ -25,7 +103,6 @@ namespace glscene
 		const TransformData &GetNodeTM() const {return m_nodeTM;}
 		TransformData &GetObjectTM() {return m_objTM;}
 		const TransformData &GetObjectTM() const {return m_objTM;}
-
 
 		void AddToLayer(int layerIx);
 		void RemoveFromLayer(int layerIx);
@@ -49,6 +126,8 @@ namespace glscene
 		NodeData *GetParent() {return m_pParent;}
 		const NodeData *GetParent() const {return m_pParent;}
 
+		void DefineVariant(const boost::string_ref &variantName, const VariantInfo &variant);
+
 	private:
 		boost::optional<IdString> m_name;
 		NodeData *m_pParent;
@@ -56,6 +135,7 @@ namespace glscene
 		TransformData m_nodeTM;
 		TransformData m_objTM;
 		boost::dynamic_bitset<> m_layers;
+		VariantList m_variants;
 
 		//Creates root node.
 		NodeData(int numLayers);

@@ -11,6 +11,7 @@
 #include <glload/gl_all.h>
 #include "glscene/SceneGraph.h"
 #include "glscene/ResourceRef.h"
+#include "glscene/Variant.h"
 #include "ResourceData.h"
 #include "TransformData.h"
 #include "NodeData.h"
@@ -159,6 +160,115 @@ namespace glscene
 
 		//Now, delete the node. Recursion remains OK, since we still don't have children.
 		delete &nodeToDelete;
+	}
+
+	namespace
+	{
+		struct VerifyProgramData : public boost::static_visitor<>
+		{
+			VerifyProgramData(const ResourceData &_resources) : resources(_resources) {}
+
+			void operator()(const SingleProgramBinding &binding) const
+			{
+				if(!resources.HasProgram(binding.programId))
+					throw ResourceNotFoundException(binding.programId, "program");
+
+				BOOST_FOREACH(const std::string &uniformId, binding.uniformIds)
+				{
+					if(!resources.HasUniform(uniformId))
+						throw ResourceNotFoundException(uniformId, "uniform");
+				}
+			}
+
+			void operator()(const SeparableProgramBinding &binding) const
+			{
+				BOOST_FOREACH(const ProgramMask &prog, binding.pipeline)
+				{
+					(*this)(prog.prog);
+				}
+			}
+
+			const ResourceData &resources;
+		};
+	}
+
+	void SceneGraph::DefineNodeVariant( NodeData &node, const boost::string_ref variantId,
+		const VariantInfo &variant )
+	{
+		const ResourceData &resources = m_pData->resources;
+
+		//First, verify the variant data against the resources.
+		//1:  Verify that the mesh is a real mesh.
+		if(!resources.HasMesh(variant.meshResourceId))
+			throw ResourceNotFoundException(variant.meshResourceId, "mesh");
+
+		//2:  Verify, for each program:
+		//2a:   that the program is a real program.
+		//2b:   that the uniforms are real uniforms.
+		boost::apply_visitor(VerifyProgramData(resources), variant.progBinding);
+
+		boost::container::flat_set<GLuint> uniqueBindings;
+
+		//3:  Verify, for each texture binding:
+		BOOST_FOREACH(const TextureBinding &texBind, variant.textureBindings)
+		{
+			//3a:   that the referenced texture is real.
+			if(!resources.HasMesh(texBind.textureId))
+				throw ResourceNotFoundException(texBind.textureId, "texture");
+			//3b:   that the referenced sampler is real.
+			if(!resources.HasMesh(texBind.samplerId))
+				throw ResourceNotFoundException(texBind.samplerId, "sampler");
+			//4:  Verify, for all texture bindings, that no two bindings bind to the same texture unit.
+			if(uniqueBindings.find(texBind.textureUnit) != uniqueBindings.end())
+				throw VariantMultipleBindingsException(texBind.textureId, "texture", (unsigned int)texBind.textureUnit);
+			else
+				uniqueBindings.insert(texBind.textureUnit);
+		}
+		uniqueBindings.clear();
+
+		//5:  Verify, for each image binding, that the referenced texture is real.
+		BOOST_FOREACH(const ImageBinding &imgBind, variant.imageBindings)
+		{
+			if(!resources.HasTexture(imgBind.textureId))
+				throw ResourceNotFoundException(imgBind.textureId, "texture");
+			//6:  Verify, for all image bindings, that no two bindings bind to the same image unit.
+			if(uniqueBindings.find(imgBind.imageUnit) != uniqueBindings.end())
+				throw VariantMultipleBindingsException(imgBind.textureId, "image", (unsigned int)imgBind.imageUnit);
+			else
+				uniqueBindings.insert(imgBind.imageUnit);
+		}
+		uniqueBindings.clear();
+
+		//7:  Verify, for each uniform buffer binding, that the referenced uniform buffer binding is real.
+		BOOST_FOREACH(const BufferInterfaceBinding &binding, variant.uniformBufferBindings)
+		{
+			if(!resources.HasUniformBufferBinding(binding.bufferId))
+				throw ResourceNotFoundException(binding.bufferId, "uniform buffer");
+			//8:  Verify, for all uniform buffer bindings, that no two binding resources bind to the same uniform buffer binding index.
+			GLuint bindPoint = resources.GetUniformBufferBindingIndex(binding.bufferId);
+			if(uniqueBindings.find(bindPoint) != uniqueBindings.end())
+				throw VariantMultipleBindingsException(binding.bufferId, "uniform buffer", (unsigned int)bindPoint);
+			else
+				uniqueBindings.insert(bindPoint);
+		}
+		uniqueBindings.clear();
+
+		//9:  Verify, for each storage buffer binding, that the referenced storage buffer binding is real.
+		BOOST_FOREACH(const BufferInterfaceBinding &binding, variant.storageBufferBindings)
+		{
+			if(!resources.HasStorageBufferBinding(binding.bufferId))
+				throw ResourceNotFoundException(binding.bufferId, "storage buffer");
+			//10: Verify, for all storage buffer bindings, that no two binding resources bind to the same storage buffer binding index.
+			GLuint bindPoint = resources.GetStorageBufferBindingIndex(binding.bufferId);
+			if(uniqueBindings.find(bindPoint) != uniqueBindings.end())
+				throw VariantMultipleBindingsException(binding.bufferId, "storage buffer", (unsigned int)bindPoint);
+			else
+				uniqueBindings.insert(bindPoint);
+		}
+		uniqueBindings.clear();
+
+		//Now that it's verified, set the data into the node.
+		node.DefineVariant(variantId, variant);
 	}
 
 	void swap( SceneGraph &lhs, SceneGraph &rhs )

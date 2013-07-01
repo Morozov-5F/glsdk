@@ -9,6 +9,7 @@
 #include <boost/optional.hpp>
 #include <glmesh/Mesh.h>
 #include <glutil/MousePoles.h>
+#include "glscene/ResourceRef.h"
 #include "IdString.h"
 
 namespace glscene
@@ -138,71 +139,91 @@ namespace glscene
 	class ResourceData
 	{
 	public:
-		void DefineUniform(const IdString &resource, const std::string &uniformName, UniformData data);
+		bool AreAnyIncomplete() const {return m_numIncomplete != 0;}
 
-		void SetUniform(const IdString &resource, UniformData data);
+		void DefineUniform(const IdString &resourceId, const std::string &uniformName, UniformData data);
+		bool HasUniform(const IdString &resourceId) const;
+		void SetUniform(const IdString &resourceId, UniformData data);
 
 		//Throws ResourceNotFoundException
-		GLint GetUniformLocation(GLuint program, const IdString &resource) const;
+		GLint GetUniformLocation(GLuint program, const IdString &resourceId) const;
 
 		//Sets the given uniform into the given program, via glUniform.
-		void ApplyUniform(const IdString &resource, GLint uniformLocation) const;
+		void ApplyUniform(const IdString &resourceId, GLint uniformLocation) const;
 		//Sets the given uniform into the given program, via glProgramUniform.
-		void ApplyUniform(GLuint program, const IdString &resource, GLint uniformLocation) const;
+		void ApplyUniform(GLuint program, const IdString &resourceId, GLint uniformLocation) const;
 
 
-		void DefineTexture(const IdString &resource, GLuint textureObj,
+		void DefineTexture(const IdString &resourceId, GLuint textureObj,
 			GLenum target, bool claimOwnership);
-		void DefineTextureIncomplete(const IdString &resource);
+		void DefineTextureIncomplete(const IdString &resourceId);
+		bool HasTexture(const IdString &resourceId) const;
+		//Will crash on a texture not found.
+		bool IsTextureComplete(const IdString &resourceId) const;
 
-		void BindTexture(const IdString &resource, GLuint textureUnit) const;
-		void BindImage(const IdString &resource, GLuint imageUnit, int mipmapLevel, int imageLayer,
+		void BindTexture(const IdString &resourceId, GLuint textureUnit) const;
+		void BindImage(const IdString &resourceId, GLuint imageUnit, int mipmapLevel, int imageLayer,
 			GLenum access, GLenum format, bool layered) const;
 
-		void DefineSampler(const IdString &resource, const SamplerInfo &sampler);
+		void DefineSampler(const IdString &resourceId, const SamplerInfo &sampler);
+		bool HasSampler(const IdString &resourceId) const;
 
-		void SetSamplerBorderColor(const IdString &resource, const glm::vec4 &color);
-		void SetSamplerBorderColorI(const IdString &resource, const glm::ivec4 &color);
-		void SetSamplerBorderColorI(const IdString &resource, const glm::uvec4 &color);
+		void SetSamplerBorderColor(const IdString &resourceId, const glm::vec4 &color);
+		void SetSamplerBorderColorI(const IdString &resourceId, const glm::ivec4 &color);
+		void SetSamplerBorderColorI(const IdString &resourceId, const glm::uvec4 &color);
 
-		void SetSamplerLODBias(const IdString &resource, float bias);
+		void SetSamplerLODBias(const IdString &resourceId, float bias);
 
-		void BindSampler(const IdString &resource, GLuint textureUnit) const;
+		void BindSampler(const IdString &resourceId, GLuint textureUnit) const;
 
-		void DefineMesh(const IdString &resource, glmesh::Mesh *pMesh, bool claimOwnership);
-		void DefineMesh(const IdString &resource, glscene::Drawable *pMesh, bool claimOwnership);
-		void DefineMeshIncomplete(const IdString &resource);
+		void DefineMesh(const IdString &resourceId, glmesh::Mesh *pMesh, bool claimOwnership);
+		void DefineMesh(const IdString &resourceId, glscene::Drawable *pMesh, bool claimOwnership);
+		void DefineMeshIncomplete(const IdString &resourceId);
+		bool HasMesh(const IdString &resourceId) const;
+		//Will crash on a texture not found.
+		bool IsMeshComplete(const IdString &resourceId) const;
 
-		void RenderMesh(const IdString &resource, const boost::optional<std::string> &variant) const;
+		void RenderMesh(const IdString &resourceId, const boost::optional<std::string> &variant) const;
 
-		void DefineProgram(const IdString &resource, GLuint program,
+		void DefineProgram(const IdString &resourceId, GLuint program,
 			const ProgramInfo &programInfo, bool claimOwnership);
+		bool HasProgram(const IdString &resourceId) const;
 
-		GLuint GetProgram(const IdString &resource);
+		GLuint GetProgram(const IdString &resourceId) const;
 
-		void DefineUniformBufferBinding(const IdString &resource, GLuint bufferObject, GLuint bindPoint,
+		void DefineUniformBufferBinding(const IdString &resourceId, GLuint bufferObject, GLuint bindPoint,
 			GLintptr offset, GLsizeiptr size, bool claimOwnership);
-		void DefineUniformBufferBinding(const IdString &resource, GLuint bufferObject,
+		void DefineUniformBufferBinding(const IdString &resourceId, GLuint bufferObject,
 			GLintptr offset, bool claimOwnership);
-		void DefineUniformBufferBindingIncomplete(const IdString &resource, GLuint bindPoint,
+		void DefineUniformBufferBindingIncomplete(const IdString &resourceId, GLuint bindPoint,
 			GLsizeiptr size);
+		bool HasUniformBufferBinding(const IdString &resourceId) const;
+		//Will crash on a texture not found.
+		bool IsUniformBufferBindingComplete(const IdString &resourceId) const;
 
-		void DefineStorageBufferBinding(const IdString &resource, GLuint bufferObject, GLuint bindPoint,
+		void DefineStorageBufferBinding(const IdString &resourceId, GLuint bufferObject, GLuint bindPoint,
 			GLintptr offset, GLsizeiptr size, bool claimOwnership);
-		void DefineStorageBufferBinding(const IdString &resource, GLuint bufferObject,
+		void DefineStorageBufferBinding(const IdString &resourceId, GLuint bufferObject,
 			GLintptr offset, bool claimOwnership);
-		void DefineStorageBufferBindingIncomplete(const IdString &resource, GLuint bindPoint,
+		void DefineStorageBufferBindingIncomplete(const IdString &resourceId, GLuint bindPoint,
 			GLsizeiptr size);
+		bool HasStorageBufferBinding(const IdString &resourceId) const;
+		//Will crash on a texture not found.
+		bool IsStorageBufferBindingComplete(const IdString &resourceId) const;
 
-		void BindUniformBuffer(const IdString &resource) const;
-		void BindStorageBuffer(const IdString &resource) const;
+		void BindUniformBuffer(const IdString &resourceId) const;
+		void BindStorageBuffer(const IdString &resourceId) const;
 
-		void DefineCamera(const IdString &resource, const glutil::ViewData &initialView,
+		GLuint GetUniformBufferBindingIndex(const IdString &resourceId) const;
+		GLuint GetStorageBufferBindingIndex(const IdString &resourceId) const;
+
+		void DefineCamera(const IdString &resourceId, const glutil::ViewData &initialView,
 			const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls);
 
-		glutil::ViewPole &GetCamera(const IdString &resource);
-		const glutil::ViewPole &GetCamera(const IdString &resource) const;
+		glutil::ViewPole &GetCamera(const IdString &resourceId);
+		const glutil::ViewPole &GetCamera(const IdString &resourceId) const;
 
+		ResourceData();
 		~ResourceData();
 
 	private:
@@ -214,6 +235,8 @@ namespace glscene
 		InterfaceBufferMap m_uniformBufferMap;
 		InterfaceBufferMap m_storageBufferMap;
 		CameraMap m_cameraMap;
+
+		int m_numIncomplete;
 	};
 }
 

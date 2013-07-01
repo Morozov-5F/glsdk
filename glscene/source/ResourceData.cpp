@@ -12,6 +12,10 @@
 
 namespace glscene
 {
+	ResourceData::ResourceData()
+		: m_numIncomplete(0)
+	{}
+
 	ResourceData::~ResourceData()
 	{
 		std::vector<GLuint> objectsToDelete;
@@ -250,26 +254,31 @@ namespace glscene
 		}
 	}
 
-	void ResourceData::DefineUniform( const IdString &resource, const std::string &uniformName, UniformData data )
+	void ResourceData::DefineUniform( const IdString &resourceId, const std::string &uniformName, UniformData data )
 	{
-		if(m_uniformMap.find(resource) != m_uniformMap.end())
-			throw ResourceMultiplyDefinedException(resource, "uniform");
+		if(m_uniformMap.find(resourceId) != m_uniformMap.end())
+			throw ResourceMultiplyDefinedException(resourceId, "uniform");
 
-		UniformValue &value = m_uniformMap[resource];
+		UniformValue &value = m_uniformMap[resourceId];
 		value.uniformName = uniformName;
 		value.data = data;
 	}
 
-	void ResourceData::SetUniform( const IdString &resource, UniformData data )
+	bool ResourceData::HasUniform( const IdString &resourceId ) const
 	{
-		UniformMap::iterator theVal = m_uniformMap.find(resource);
+		return m_uniformMap.find(resourceId) != m_uniformMap.end();
+	}
+
+	void ResourceData::SetUniform( const IdString &resourceId, UniformData data )
+	{
+		UniformMap::iterator theVal = m_uniformMap.find(resourceId);
 
 		if(theVal == m_uniformMap.end())
-			throw ResourceNotFoundException(resource, "uniform");
+			throw ResourceNotFoundException(resourceId, "uniform");
 
 		if(!boost::apply_visitor(UniformsAreSameTypeBinaryVisit(), theVal->second.data, data))
 		{
-			throw UniformResourceTypeMismatchException(resource,
+			throw UniformResourceTypeMismatchException(resourceId,
 				boost::apply_visitor(UniformTypenameVisit(), theVal->second.data),
 				boost::apply_visitor(UniformTypenameVisit(), data));
 		}
@@ -277,45 +286,48 @@ namespace glscene
 		theVal->second.data = data;
 	}
 
-	GLint ResourceData::GetUniformLocation( GLuint program, const IdString &resource ) const
+	GLint ResourceData::GetUniformLocation( GLuint program, const IdString &resourceId ) const
 	{
-		UniformMap::const_iterator theVal = m_uniformMap.find(resource);
+		UniformMap::const_iterator theVal = m_uniformMap.find(resourceId);
 
 		if(theVal == m_uniformMap.end())
-			throw ResourceNotFoundException(resource, "uniform");
+			throw ResourceNotFoundException(resourceId, "uniform");
 
 		GLint loc = gl::GetUniformLocation(program, theVal->second.uniformName.c_str());
 		return loc;
 	}
 
-	void ResourceData::ApplyUniform( const IdString &resource, GLint uniformLocation ) const
+	void ResourceData::ApplyUniform( const IdString &resourceId, GLint uniformLocation ) const
 	{
-		UniformMap::const_iterator theVal = m_uniformMap.find(resource);
+		UniformMap::const_iterator theVal = m_uniformMap.find(resourceId);
 
 		if(theVal == m_uniformMap.end())
-			throw ResourceNotFoundException(resource, "uniform");
+			throw ResourceNotFoundException(resourceId, "uniform");
 
 		boost::apply_visitor(UniformApplyBindVisit(uniformLocation), theVal->second.data);
 	}
 
-	void ResourceData::ApplyUniform( GLuint program, const IdString &resource, GLint uniformLocation ) const
+	void ResourceData::ApplyUniform( GLuint program, const IdString &resourceId, GLint uniformLocation ) const
 	{
-		UniformMap::const_iterator theVal = m_uniformMap.find(resource);
+		UniformMap::const_iterator theVal = m_uniformMap.find(resourceId);
 
 		if(theVal == m_uniformMap.end())
-			throw ResourceNotFoundException(resource, "uniform");
+			throw ResourceNotFoundException(resourceId, "uniform");
 
 		boost::apply_visitor(UniformApplyDSAVisit(program, uniformLocation), theVal->second.data);
 	}
 
-	void ResourceData::DefineTexture( const IdString &resource, GLuint textureObj,
+	void ResourceData::DefineTexture( const IdString &resourceId, GLuint textureObj,
 		GLenum target, bool claimOwnership )
 	{
-		TextureMap::iterator test_it = m_textureMap.find(resource);
+		TextureMap::iterator test_it = m_textureMap.find(resourceId);
 		if(test_it != m_textureMap.end())
 		{
 			if(test_it->second)
-				throw ResourceMultiplyDefinedException(resource, "texture");
+				throw ResourceMultiplyDefinedException(resourceId, "texture");
+
+			//Incomplete becomes complete.
+			m_numIncomplete--;
 		}
 
 		TextureData value;
@@ -323,162 +335,202 @@ namespace glscene
 		value.target = target;
 		value.textureObj = textureObj;
 
-		m_textureMap[resource] = value;
+		m_textureMap[resourceId] = value;
 	}
 
-	void ResourceData::DefineTextureIncomplete( const IdString &resource )
+	void ResourceData::DefineTextureIncomplete( const IdString &resourceId )
 	{
-		if(m_textureMap.find(resource) != m_textureMap.end())
-			throw ResourceMultiplyDefinedException(resource, "texture");
+		if(m_textureMap.find(resourceId) != m_textureMap.end())
+			throw ResourceMultiplyDefinedException(resourceId, "texture");
 
-		m_textureMap[resource] = boost::none;
+		m_textureMap[resourceId] = boost::none;
+		m_numIncomplete++;
 	}
 
-	void ResourceData::BindTexture( const IdString &resource, GLuint textureUnit ) const
+	bool ResourceData::HasTexture( const IdString &resourceId ) const
 	{
-		TextureMap::const_iterator theVal = m_textureMap.find(resource);
+		return m_textureMap.find(resourceId) != m_textureMap.end();
+	}
+
+	bool ResourceData::IsTextureComplete( const IdString &resourceId ) const
+	{
+		TextureMap::const_iterator theVal = m_textureMap.find(resourceId);
+		if(!theVal->second)
+			return false;
+		return true;
+	}
+
+	void ResourceData::BindTexture( const IdString &resourceId, GLuint textureUnit ) const
+	{
+		TextureMap::const_iterator theVal = m_textureMap.find(resourceId);
 
 		if(theVal == m_textureMap.end())
-			throw ResourceNotFoundException(resource, "texture");
+			throw ResourceNotFoundException(resourceId, "texture");
 
 		if(!theVal->second)
-			throw UsingIncompleteResourceException(resource, "texture");
+			throw UsingIncompleteResourceException(resourceId, "texture");
 
 		gl::ActiveTexture(gl::TEXTURE0 + textureUnit);
 		gl::BindTexture(theVal->second->target, theVal->second->textureObj);
 	}
 
-	void ResourceData::BindImage( const IdString &resource, GLuint imageUnit,
+	void ResourceData::BindImage( const IdString &resourceId, GLuint imageUnit,
 		int mipmapLevel, int imageLayer, GLenum access, GLenum format, bool layered ) const
 	{
-		TextureMap::const_iterator theVal = m_textureMap.find(resource);
+		TextureMap::const_iterator theVal = m_textureMap.find(resourceId);
 
 		if(theVal == m_textureMap.end())
-			throw ResourceNotFoundException(resource, "texture");
+			throw ResourceNotFoundException(resourceId, "texture");
 
 		if(!theVal->second)
-			throw UsingIncompleteResourceException(resource, "texture");
+			throw UsingIncompleteResourceException(resourceId, "texture");
 
 		gl::BindImageTexture(imageUnit, theVal->second->textureObj, mipmapLevel,
 			layered ? gl::TRUE_ : gl::FALSE_, imageLayer, access, format);
 	}
 
-	void ResourceData::DefineSampler( const IdString &resource, const SamplerInfo &data )
+	void ResourceData::DefineSampler( const IdString &resourceId, const SamplerInfo &data )
 	{
-		if(m_samplerMap.find(resource) != m_samplerMap.end())
-			throw ResourceMultiplyDefinedException(resource, "sampler");
+		if(m_samplerMap.find(resourceId) != m_samplerMap.end())
+			throw ResourceMultiplyDefinedException(resourceId, "sampler");
 
-		m_samplerMap[resource] = CreateSampler(data);
+		m_samplerMap[resourceId] = CreateSampler(data);
 	}
 
-	void ResourceData::SetSamplerBorderColor( const IdString &resource, const glm::vec4 &color )
+	bool ResourceData::HasSampler( const IdString &resourceId ) const
 	{
-		SamplerMap::iterator theVal = m_samplerMap.find(resource);
+		return m_samplerMap.find(resourceId) != m_samplerMap.end();
+	}
+
+	void ResourceData::SetSamplerBorderColor( const IdString &resourceId, const glm::vec4 &color )
+	{
+		SamplerMap::iterator theVal = m_samplerMap.find(resourceId);
 
 		if(theVal == m_samplerMap.end())
-			throw ResourceNotFoundException(resource, "sampler");
+			throw ResourceNotFoundException(resourceId, "sampler");
 
 		gl::SamplerParameterfv(theVal->second, gl::TEXTURE_BORDER_COLOR, glm::value_ptr(color));
 	}
 
-	void ResourceData::SetSamplerBorderColorI( const IdString &resource, const glm::ivec4 &color )
+	void ResourceData::SetSamplerBorderColorI( const IdString &resourceId, const glm::ivec4 &color )
 	{
-		SamplerMap::iterator theVal = m_samplerMap.find(resource);
+		SamplerMap::iterator theVal = m_samplerMap.find(resourceId);
 
 		if(theVal == m_samplerMap.end())
-			throw ResourceNotFoundException(resource, "sampler");
+			throw ResourceNotFoundException(resourceId, "sampler");
 
 		gl::SamplerParameterIiv(theVal->second, gl::TEXTURE_BORDER_COLOR, glm::value_ptr(color));
 	}
 
-	void ResourceData::SetSamplerBorderColorI( const IdString &resource, const glm::uvec4 &color )
+	void ResourceData::SetSamplerBorderColorI( const IdString &resourceId, const glm::uvec4 &color )
 	{
-		SamplerMap::iterator theVal = m_samplerMap.find(resource);
+		SamplerMap::iterator theVal = m_samplerMap.find(resourceId);
 
 		if(theVal == m_samplerMap.end())
-			throw ResourceNotFoundException(resource, "sampler");
+			throw ResourceNotFoundException(resourceId, "sampler");
 
 		gl::SamplerParameterIuiv(theVal->second, gl::TEXTURE_BORDER_COLOR, glm::value_ptr(color));
 	}
 
-	void ResourceData::SetSamplerLODBias( const IdString &resource, float bias )
+	void ResourceData::SetSamplerLODBias( const IdString &resourceId, float bias )
 	{
-		SamplerMap::iterator theVal = m_samplerMap.find(resource);
+		SamplerMap::iterator theVal = m_samplerMap.find(resourceId);
 
 		if(theVal == m_samplerMap.end())
-			throw ResourceNotFoundException(resource, "sampler");
+			throw ResourceNotFoundException(resourceId, "sampler");
 
 		gl::SamplerParameterf(theVal->second, gl::TEXTURE_LOD_BIAS, bias);
 	}
 
-	void ResourceData::BindSampler( const IdString &resource, GLuint textureUnit ) const
+	void ResourceData::BindSampler( const IdString &resourceId, GLuint textureUnit ) const
 	{
-		SamplerMap::const_iterator theVal = m_samplerMap.find(resource);
+		SamplerMap::const_iterator theVal = m_samplerMap.find(resourceId);
 
 		if(theVal == m_samplerMap.end())
-			throw ResourceNotFoundException(resource, "sampler");
+			throw ResourceNotFoundException(resourceId, "sampler");
 
 		gl::BindSampler(textureUnit, theVal->second);
 	}
 
-	void ResourceData::DefineMesh( const IdString &resource, glmesh::Mesh *pMesh, bool claimOwnership )
+	void ResourceData::DefineMesh( const IdString &resourceId, glmesh::Mesh *pMesh, bool claimOwnership )
 	{
-		MeshMap::iterator test_it = m_meshMap.find(resource);
+		MeshMap::iterator test_it = m_meshMap.find(resourceId);
 		if(test_it != m_meshMap.end())
 		{
 			if(test_it->second.pMesh)
-				throw ResourceMultiplyDefinedException(resource, "mesh");
+				throw ResourceMultiplyDefinedException(resourceId, "mesh");
+
+			//Incomplete becomes complete.
+			m_numIncomplete--;
 		}
 
-		MeshData &value = m_meshMap[resource];
+		MeshData &value = m_meshMap[resourceId];
 		value.owned = true;
 		value.pMesh = new MeshDrawable(pMesh, claimOwnership);
 	}
 
-	void ResourceData::DefineMesh( const IdString &resource, glscene::Drawable *pMesh, bool claimOwnership )
+	void ResourceData::DefineMesh( const IdString &resourceId, glscene::Drawable *pMesh, bool claimOwnership )
 	{
-		MeshMap::iterator test_it = m_meshMap.find(resource);
+		MeshMap::iterator test_it = m_meshMap.find(resourceId);
 		if(test_it != m_meshMap.end())
 		{
 			if(test_it->second.pMesh)
-				throw ResourceMultiplyDefinedException(resource, "mesh");
+				throw ResourceMultiplyDefinedException(resourceId, "mesh");
+
+			//Incomplete becomes complete.
+			m_numIncomplete--;
 		}
 
-		MeshData &value = m_meshMap[resource];
+		MeshData &value = m_meshMap[resourceId];
 		value.owned = claimOwnership;
 		value.pMesh = pMesh;
 	}
 
-	void ResourceData::DefineMeshIncomplete( const IdString &resource )
+	void ResourceData::DefineMeshIncomplete( const IdString &resourceId )
 	{
-		if(m_meshMap.find(resource) != m_meshMap.end())
-			throw ResourceMultiplyDefinedException(resource, "mesh");
+		if(m_meshMap.find(resourceId) != m_meshMap.end())
+			throw ResourceMultiplyDefinedException(resourceId, "mesh");
 
-		MeshData &value = m_meshMap[resource];
+		MeshData &value = m_meshMap[resourceId];
 		value.owned = false;
 		value.pMesh = NULL;
+
+		m_numIncomplete++;
 	}
 
-	void ResourceData::RenderMesh( const IdString &resource, const boost::optional<std::string> &variant ) const
+	bool ResourceData::HasMesh( const IdString &resourceId ) const
 	{
-		MeshMap::const_iterator theVal = m_meshMap.find(resource);
+		return m_meshMap.find(resourceId) != m_meshMap.end();
+	}
+
+	bool ResourceData::IsMeshComplete( const IdString &resourceId ) const
+	{
+		MeshMap::const_iterator theVal = m_meshMap.find(resourceId);
+		if(!theVal->second.pMesh)
+			return false;
+		return true;
+	}
+
+	void ResourceData::RenderMesh( const IdString &resourceId, const boost::optional<std::string> &variant ) const
+	{
+		MeshMap::const_iterator theVal = m_meshMap.find(resourceId);
 
 		if(theVal == m_meshMap.end())
-			throw ResourceNotFoundException(resource, "mesh");
+			throw ResourceNotFoundException(resourceId, "mesh");
 
 		if(!theVal->second.pMesh)
-			throw UsingIncompleteResourceException(resource, "mesh");
+			throw UsingIncompleteResourceException(resourceId, "mesh");
 
 		theVal->second.pMesh->Draw(variant);
 	}
 
-	void ResourceData::DefineProgram( const IdString &resource, GLuint program,
+	void ResourceData::DefineProgram( const IdString &resourceId, GLuint program,
 		const ProgramInfo &programInfo, bool claimOwnership )
 	{
-		if(m_programMap.find(resource) != m_programMap.end())
-			throw ResourceMultiplyDefinedException(resource, "program");
+		if(m_programMap.find(resourceId) != m_programMap.end())
+			throw ResourceMultiplyDefinedException(resourceId, "program");
 
-		ProgramData &progData = m_programMap[resource];
+		ProgramData &progData = m_programMap[resourceId];
 
 		progData.program = program;
 		progData.owned = claimOwnership;
@@ -527,24 +579,29 @@ namespace glscene
 		}
 	}
 
-	GLuint ResourceData::GetProgram( const IdString &resource )
+	bool ResourceData::HasProgram( const IdString &resourceId ) const
 	{
-		ProgramMap::const_iterator theVal = m_programMap.find(resource);
+		return m_programMap.find(resourceId) != m_programMap.end();
+	}
+
+	GLuint ResourceData::GetProgram( const IdString &resourceId ) const
+	{
+		ProgramMap::const_iterator theVal = m_programMap.find(resourceId);
 
 		if(theVal == m_programMap.end())
-			throw ResourceNotFoundException(resource, "program");
+			throw ResourceNotFoundException(resourceId, "program");
 
 		return theVal->second.program;
 	}
 
-	void ResourceData::DefineUniformBufferBinding( const IdString &resource, GLuint bufferObject,
+	void ResourceData::DefineUniformBufferBinding( const IdString &resourceId, GLuint bufferObject,
 		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
-		InterfaceBufferMap::iterator test_it = m_uniformBufferMap.find(resource);
+		InterfaceBufferMap::iterator test_it = m_uniformBufferMap.find(resourceId);
 		if(test_it != m_uniformBufferMap.end())
-			throw ResourceMultiplyDefinedException(resource, "uniform buffer");
+			throw ResourceMultiplyDefinedException(resourceId, "uniform buffer");
 
-		InterfaceBuffer &binding = m_uniformBufferMap[resource];
+		InterfaceBuffer &binding = m_uniformBufferMap[resourceId];
 		binding.bufferObject = bufferObject;
 		binding.owned = claimOwnership;
 		binding.bindPoint = bindPoint;
@@ -552,44 +609,64 @@ namespace glscene
 		binding.size = size;
 	}
 
-	void ResourceData::DefineUniformBufferBinding( const IdString &resource, GLuint bufferObject,
+	void ResourceData::DefineUniformBufferBinding( const IdString &resourceId, GLuint bufferObject,
 		GLintptr offset, bool claimOwnership )
 	{
-		InterfaceBufferMap::iterator test_it = m_uniformBufferMap.find(resource);
+		InterfaceBufferMap::iterator test_it = m_uniformBufferMap.find(resourceId);
 		if(test_it == m_uniformBufferMap.end())
-			throw ResourceNotFoundException(resource, "uniform buffer");
+			throw ResourceNotFoundException(resourceId, "uniform buffer");
 
 		InterfaceBuffer &binding = test_it->second;
 		if(binding.bufferObject)
-			throw ResourceMultiplyDefinedException(resource, "uniform buffer");
+			throw ResourceMultiplyDefinedException(resourceId, "uniform buffer");
+
+		//Incomplete becomes complete.
+		m_numIncomplete--;
 
 		binding.bufferObject = bufferObject;
 		binding.owned = claimOwnership;
 		binding.offset = offset;
 	}
 
-	void ResourceData::DefineUniformBufferBindingIncomplete( const IdString &resource, GLuint bindPoint,
+	void ResourceData::DefineUniformBufferBindingIncomplete( const IdString &resourceId, GLuint bindPoint,
 		GLsizeiptr size )
 	{
-		if(m_uniformBufferMap.find(resource) != m_uniformBufferMap.end())
-			throw ResourceMultiplyDefinedException(resource, "uniform buffer");
+		if(m_uniformBufferMap.find(resourceId) != m_uniformBufferMap.end())
+			throw ResourceMultiplyDefinedException(resourceId, "uniform buffer");
 
-		InterfaceBuffer &binding = m_uniformBufferMap[resource];
+		InterfaceBuffer &binding = m_uniformBufferMap[resourceId];
 		binding.bufferObject = boost::none;
 		binding.owned = false;
 		binding.bindPoint = bindPoint;
 		binding.offset = 0;
 		binding.size = size;
+
+		m_numIncomplete++;
 	}
 
-	void ResourceData::DefineStorageBufferBinding( const IdString &resource, GLuint bufferObject,
+	bool ResourceData::HasUniformBufferBinding( const IdString &resourceId ) const
+	{
+		return m_uniformBufferMap.find(resourceId) != m_uniformBufferMap.end();
+	}
+
+	bool ResourceData::IsUniformBufferBindingComplete( const IdString &resourceId ) const
+	{
+		InterfaceBufferMap::const_iterator theVal = m_uniformBufferMap.find(resourceId);
+
+		if(!theVal->second.bufferObject)
+			return false;
+		return true;
+
+	}
+
+	void ResourceData::DefineStorageBufferBinding( const IdString &resourceId, GLuint bufferObject,
 		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
-		InterfaceBufferMap::iterator test_it = m_storageBufferMap.find(resource);
+		InterfaceBufferMap::iterator test_it = m_storageBufferMap.find(resourceId);
 		if(test_it != m_storageBufferMap.end())
-			throw ResourceMultiplyDefinedException(resource, "storage buffer");
+			throw ResourceMultiplyDefinedException(resourceId, "storage buffer");
 
-		InterfaceBuffer &binding = m_storageBufferMap[resource];
+		InterfaceBuffer &binding = m_storageBufferMap[resourceId];
 		binding.bufferObject = bufferObject;
 		binding.owned = claimOwnership;
 		binding.bindPoint = bindPoint;
@@ -597,92 +674,125 @@ namespace glscene
 		binding.size = size;
 	}
 
-	void ResourceData::DefineStorageBufferBinding( const IdString &resource, GLuint bufferObject,
+	void ResourceData::DefineStorageBufferBinding( const IdString &resourceId, GLuint bufferObject,
 		GLintptr offset, bool claimOwnership )
 	{
-		InterfaceBufferMap::iterator test_it = m_storageBufferMap.find(resource);
+		InterfaceBufferMap::iterator test_it = m_storageBufferMap.find(resourceId);
 		if(test_it == m_storageBufferMap.end())
-			throw ResourceNotFoundException(resource, "storage buffer");
+			throw ResourceNotFoundException(resourceId, "storage buffer");
 
 		InterfaceBuffer &binding = test_it->second;
 		if(binding.bufferObject)
-			throw ResourceMultiplyDefinedException(resource, "storage buffer");
+			throw ResourceMultiplyDefinedException(resourceId, "storage buffer");
+
+		//Incomplete becomes complete.
+		m_numIncomplete--;
 
 		binding.bufferObject = bufferObject;
 		binding.owned = claimOwnership;
 		binding.offset = offset;
 	}
 
-	void ResourceData::DefineStorageBufferBindingIncomplete( const IdString &resource, GLuint bindPoint,
+	void ResourceData::DefineStorageBufferBindingIncomplete( const IdString &resourceId, GLuint bindPoint,
 		GLsizeiptr size )
 	{
-		if(m_storageBufferMap.find(resource) != m_storageBufferMap.end())
-			throw ResourceMultiplyDefinedException(resource, "storage buffer");
+		if(m_storageBufferMap.find(resourceId) != m_storageBufferMap.end())
+			throw ResourceMultiplyDefinedException(resourceId, "storage buffer");
 
-		InterfaceBuffer &binding = m_storageBufferMap[resource];
+		InterfaceBuffer &binding = m_storageBufferMap[resourceId];
 		binding.bufferObject = boost::none;
 		binding.owned = false;
 		binding.bindPoint = bindPoint;
 		binding.offset = 0;
 		binding.size = size;
+
+		m_numIncomplete++;
 	}
 
-	void ResourceData::BindUniformBuffer( const IdString &resource ) const
+	bool ResourceData::HasStorageBufferBinding( const IdString &resourceId ) const
 	{
-		InterfaceBufferMap::const_iterator theVal = m_uniformBufferMap.find(resource);
+		return m_storageBufferMap.find(resourceId) != m_storageBufferMap.end();
+	}
+
+	bool ResourceData::IsStorageBufferBindingComplete( const IdString &resourceId ) const
+	{
+		InterfaceBufferMap::const_iterator theVal = m_storageBufferMap.find(resourceId);
+
+		if(!theVal->second.bufferObject)
+			return false;
+		return true;
+	}
+
+	void ResourceData::BindUniformBuffer( const IdString &resourceId ) const
+	{
+		InterfaceBufferMap::const_iterator theVal = m_uniformBufferMap.find(resourceId);
 
 		if(theVal == m_uniformBufferMap.end())
-			throw ResourceNotFoundException(resource, "uniform buffer");
+			throw ResourceNotFoundException(resourceId, "uniform buffer");
 
 		const InterfaceBuffer &buf = theVal->second;
 
 		if(!buf.bufferObject)
-			throw UsingIncompleteResourceException(resource, "uniform buffer");
+			throw UsingIncompleteResourceException(resourceId, "uniform buffer");
 
 		gl::BindBufferRange(gl::UNIFORM_BUFFER, buf.bindPoint, buf.bufferObject.get(), buf.offset, buf.size);
 	}
 
-	void ResourceData::BindStorageBuffer( const IdString &resource ) const
+	void ResourceData::BindStorageBuffer( const IdString &resourceId ) const
 	{
-		InterfaceBufferMap::const_iterator theVal = m_storageBufferMap.find(resource);
+		InterfaceBufferMap::const_iterator theVal = m_storageBufferMap.find(resourceId);
 
 		if(theVal == m_storageBufferMap.end())
-			throw ResourceNotFoundException(resource, "storage buffer");
+			throw ResourceNotFoundException(resourceId, "storage buffer");
 
 		const InterfaceBuffer &buf = theVal->second;
 
 		if(!buf.bufferObject)
-			throw UsingIncompleteResourceException(resource, "storage buffer");
+			throw UsingIncompleteResourceException(resourceId, "storage buffer");
 
 		gl::BindBufferRange(gl::SHADER_STORAGE_BUFFER, buf.bindPoint, buf.bufferObject.get(), buf.offset, buf.size);
 	}
 
-	void ResourceData::DefineCamera( const IdString &resource, const glutil::ViewData &initialView,
+	GLuint ResourceData::GetUniformBufferBindingIndex( const IdString &resourceId ) const
+	{
+		InterfaceBufferMap::const_iterator theVal = m_uniformBufferMap.find(resourceId);
+		const InterfaceBuffer &buf = theVal->second;
+		return buf.bindPoint;
+	}
+
+	GLuint ResourceData::GetStorageBufferBindingIndex( const IdString &resourceId ) const
+	{
+		InterfaceBufferMap::const_iterator theVal = m_storageBufferMap.find(resourceId);
+		const InterfaceBuffer &buf = theVal->second;
+		return buf.bindPoint;
+	}
+
+	void ResourceData::DefineCamera( const IdString &resourceId, const glutil::ViewData &initialView,
 		const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls )
 	{
-		if(m_cameraMap.find(resource) != m_cameraMap.end())
-			throw ResourceMultiplyDefinedException(resource, "camera");
+		if(m_cameraMap.find(resourceId) != m_cameraMap.end())
+			throw ResourceMultiplyDefinedException(resourceId, "camera");
 
-		m_cameraMap.emplace(std::make_pair(resource,
+		m_cameraMap.emplace(std::make_pair(resourceId,
 			glutil::ViewPole(initialView, viewScale, actionButton, bRightKeyboardCtrls)));
 	}
 
-	glutil::ViewPole & ResourceData::GetCamera( const IdString &resource )
+	glutil::ViewPole & ResourceData::GetCamera( const IdString &resourceId )
 	{
-		CameraMap::iterator theVal = m_cameraMap.find(resource);
+		CameraMap::iterator theVal = m_cameraMap.find(resourceId);
 
 		if(theVal == m_cameraMap.end())
-			throw ResourceNotFoundException(resource, "camera");
+			throw ResourceNotFoundException(resourceId, "camera");
 
 		return theVal->second;
 	}
 
-	const glutil::ViewPole & ResourceData::GetCamera( const IdString &resource ) const
+	const glutil::ViewPole & ResourceData::GetCamera( const IdString &resourceId ) const
 	{
-		CameraMap::const_iterator theVal = m_cameraMap.find(resource);
+		CameraMap::const_iterator theVal = m_cameraMap.find(resourceId);
 
 		if(theVal == m_cameraMap.end())
-			throw ResourceNotFoundException(resource, "camera");
+			throw ResourceNotFoundException(resourceId, "camera");
 
 		return theVal->second;
 	}
