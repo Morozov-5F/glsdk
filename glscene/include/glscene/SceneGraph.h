@@ -15,13 +15,14 @@
 #include <boost/optional.hpp>
 #include <boost/ref.hpp>
 #include "glscene/NodeRef.h"
+#include <glm/glm.hpp>
 
 
 namespace glscene
 {
 	class ResourceRef;
 	struct SceneGraphData;
-	struct VariantInfo;
+	struct StyleInfo;
 
 	///\addtogroup module_glscene_exceptions
 	///@{
@@ -145,28 +146,36 @@ namespace glscene
 		ResourceRef GetResources();
 
 		/**
-		\brief Sets a named rendering variant into a node.
+		\brief Sets a named rendering style into a node.
 
 		If this function succeeds, the following OpenGL state will be changed:
 
-		- If you provide a VariantInfo that uses separable programs, the current program pipeline will be reset
+		- If you provide a StyleInfo that uses separable programs, the current program pipeline will be reset
 		to 0 by a call to `glBindProgramPipeline(0)`.
 
-		\throws VariantMultiplyDefinedException If \a variantId has already been defined.
-		\throws ResourceNotFoundException If any identifiers in the \a variant refer to resources that don't exist.
+		\param node The node to set the style on.
+		\param styleId Identifier string for the style to add.
+		\param style The style to set into the node.
+
+		\throws StyleMultiplyDefinedException If \a styleId has already been defined.
+		\throws StyleMultipleBindingsException If one of the binding points is used by multiple resources.
+		For example, two textures trying to bind to the same texture unit.
+		\throws ResourceNotFoundException If any identifiers in the \a style refer to resources that don't exist.
 		**/
-		void DefineNodeVariant(NodeData &node, const boost::string_ref variantId,
-			const VariantInfo &variant);
+		void DefineNodeStyle(NodeData &node, const boost::string_ref styleId,
+			const StyleInfo &style);
 
 		/**
-		\brief Renders the given layer of the scene, using the specific variant specified.
+		\brief Renders all nodes in given layer of the scene, using the specific style specified.
 
+		\param baseTransform A matrix to be left-multiplied with all transformation matrices before being passed
+		on to the program(s) being used. Usually represents the world-to-camera transform.
 		\param layerIx Specifies the layer of nodes to render. Only nodes that are part of the given layer
 		will be rendered. Transforms from nodes that are not part of the layer will still be computed.
-		\param variantId Specifies the variant that will be rendered. Nodes with a variant matching this name will
-		that variant rendered.
+		\param styleId Specifies the style that will be rendered. Nodes with a style matching this name will
+		that style rendered.
 		**/
-		void Render(int layerIx, boost::string_ref variantId) const;
+		void Render(const glm::mat4 &baseTransform, int layerIx, boost::string_ref styleId) const;
 
 	private:
 		boost::scoped_ptr<SceneGraphData> m_pData;

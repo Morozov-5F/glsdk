@@ -12,7 +12,7 @@
 #include <glload/gl_all.hpp>
 #include "glscene/SceneGraph.h"
 #include "glscene/ResourceRef.h"
-#include "glscene/Variant.h"
+#include "glscene/Style.h"
 #include "ResourceData.h"
 #include "TransformData.h"
 #include "NodeData.h"
@@ -193,25 +193,25 @@ namespace glscene
 		};
 	}
 
-	void SceneGraph::DefineNodeVariant( NodeData &node, const boost::string_ref variantId,
-		const VariantInfo &variant )
+	void SceneGraph::DefineNodeStyle( NodeData &node, const boost::string_ref styleId,
+		const StyleInfo &style )
 	{
 		const ResourceData &resources = m_pData->resources;
 
-		//First, verify the variant data against the resources.
+		//First, verify the style data against the resources.
 		//1:  Verify that the mesh is a real mesh.
-		if(!resources.HasMesh(variant.meshResourceId))
-			throw ResourceNotFoundException(variant.meshResourceId, "mesh");
+		if(!resources.HasMesh(style.meshResourceId))
+			throw ResourceNotFoundException(style.meshResourceId, "mesh");
 
 		//2:  Verify, for each program:
 		//2a:   that the program is a real program.
 		//2b:   that the uniforms are real uniforms.
-		boost::apply_visitor(VerifyProgramData(resources), variant.progBinding);
+		boost::apply_visitor(VerifyProgramData(resources), style.progBinding);
 
 		boost::container::flat_set<GLuint> uniqueBindings;
 
 		//3:  Verify, for each texture binding:
-		BOOST_FOREACH(const TextureBinding &texBind, variant.textureBindings)
+		BOOST_FOREACH(const TextureBinding &texBind, style.textureBindings)
 		{
 			//3a:   that the referenced texture is real.
 			if(!resources.HasMesh(texBind.textureId))
@@ -221,60 +221,60 @@ namespace glscene
 				throw ResourceNotFoundException(texBind.samplerId, "sampler");
 			//4:  Verify, for all texture bindings, that no two bindings bind to the same texture unit.
 			if(uniqueBindings.find(texBind.textureUnit) != uniqueBindings.end())
-				throw VariantMultipleBindingsException(texBind.textureId, "texture", (unsigned int)texBind.textureUnit);
+				throw StyleMultipleBindingsException(texBind.textureId, "texture", (unsigned int)texBind.textureUnit);
 			else
 				uniqueBindings.insert(texBind.textureUnit);
 		}
 		uniqueBindings.clear();
 
 		//5:  Verify, for each image binding, that the referenced texture is real.
-		BOOST_FOREACH(const ImageBinding &imgBind, variant.imageBindings)
+		BOOST_FOREACH(const ImageBinding &imgBind, style.imageBindings)
 		{
 			if(!resources.HasTexture(imgBind.textureId))
 				throw ResourceNotFoundException(imgBind.textureId, "texture");
 			//6:  Verify, for all image bindings, that no two bindings bind to the same image unit.
 			if(uniqueBindings.find(imgBind.imageUnit) != uniqueBindings.end())
-				throw VariantMultipleBindingsException(imgBind.textureId, "image", (unsigned int)imgBind.imageUnit);
+				throw StyleMultipleBindingsException(imgBind.textureId, "image", (unsigned int)imgBind.imageUnit);
 			else
 				uniqueBindings.insert(imgBind.imageUnit);
 		}
 		uniqueBindings.clear();
 
 		//7:  Verify, for each uniform buffer binding, that the referenced uniform buffer binding is real.
-		BOOST_FOREACH(const BufferInterfaceBinding &binding, variant.uniformBufferBindings)
+		BOOST_FOREACH(const BufferInterfaceBinding &binding, style.uniformBufferBindings)
 		{
 			if(!resources.HasUniformBufferBinding(binding.bufferId))
 				throw ResourceNotFoundException(binding.bufferId, "uniform buffer");
 			//8:  Verify, for all uniform buffer bindings, that no two binding resources bind to the same uniform buffer binding index.
 			GLuint bindPoint = resources.GetUniformBufferBindingIndex(binding.bufferId);
 			if(uniqueBindings.find(bindPoint) != uniqueBindings.end())
-				throw VariantMultipleBindingsException(binding.bufferId, "uniform buffer", (unsigned int)bindPoint);
+				throw StyleMultipleBindingsException(binding.bufferId, "uniform buffer", (unsigned int)bindPoint);
 			else
 				uniqueBindings.insert(bindPoint);
 		}
 		uniqueBindings.clear();
 
 		//9:  Verify, for each storage buffer binding, that the referenced storage buffer binding is real.
-		BOOST_FOREACH(const BufferInterfaceBinding &binding, variant.storageBufferBindings)
+		BOOST_FOREACH(const BufferInterfaceBinding &binding, style.storageBufferBindings)
 		{
 			if(!resources.HasStorageBufferBinding(binding.bufferId))
 				throw ResourceNotFoundException(binding.bufferId, "storage buffer");
 			//10: Verify, for all storage buffer bindings, that no two binding resources bind to the same storage buffer binding index.
 			GLuint bindPoint = resources.GetStorageBufferBindingIndex(binding.bufferId);
 			if(uniqueBindings.find(bindPoint) != uniqueBindings.end())
-				throw VariantMultipleBindingsException(binding.bufferId, "storage buffer", (unsigned int)bindPoint);
+				throw StyleMultipleBindingsException(binding.bufferId, "storage buffer", (unsigned int)bindPoint);
 			else
 				uniqueBindings.insert(bindPoint);
 		}
 		uniqueBindings.clear();
 
 		//Now that it's verified, set the data into the node.
-		node.DefineVariant(variantId, variant);
+		node.DefineStyle(styleId, style);
 	}
 
 	namespace
 	{
-		class VariantBinder
+		class BindStyleToOpenGL
 		{
 		public:
 			struct BindProgramVisitor : public boost::static_visitor<>
@@ -313,19 +313,19 @@ namespace glscene
 				}
 			};
 
-			VariantBinder(const VariantData &variant, const ResourceData &resources)
-				: m_variant(variant)
+			BindStyleToOpenGL(const StyleData &style, const ResourceData &resources)
+				: m_style(style)
 				, m_resources(resources)
 			{
-				boost::apply_visitor(BindProgramVisitor(m_resources), variant.progBinding);
+				boost::apply_visitor(BindProgramVisitor(m_resources), style.progBinding);
 
-				BOOST_FOREACH(const TextureBindingMap::value_type &texBindingPair, m_variant.textureBindings)
+				BOOST_FOREACH(const TextureBindingMap::value_type &texBindingPair, m_style.textureBindings)
 				{
 					m_resources.BindTexture(texBindingPair.second.textureId, texBindingPair.first);
 					m_resources.BindSampler(texBindingPair.second.samplerId, texBindingPair.first);
 				}
 
-				BOOST_FOREACH(const ImageBindingMap::value_type &imgBindingPair, m_variant.imageBindings)
+				BOOST_FOREACH(const ImageBindingMap::value_type &imgBindingPair, m_style.imageBindings)
 				{
 					const ImageBindingData &imgBinding = imgBindingPair.second;
 					m_resources.BindImage(
@@ -338,36 +338,36 @@ namespace glscene
 						imgBinding.arrayLayer);
 				}
 
-				BOOST_FOREACH(const BufferInterfaceBindingData &uniformBinding, m_variant.uniformBufferBindings)
+				BOOST_FOREACH(const BufferInterfaceBindingData &uniformBinding, m_style.uniformBufferBindings)
 				{
 					m_resources.BindUniformBuffer(uniformBinding.bufferId, uniformBinding.bindOffset);
 				}
 
-				BOOST_FOREACH(const BufferInterfaceBindingData &storageBinding, m_variant.storageBufferBindings)
+				BOOST_FOREACH(const BufferInterfaceBindingData &storageBinding, m_style.storageBufferBindings)
 				{
 					m_resources.BindStorageBuffer(storageBinding.bufferId, storageBinding.bindOffset);
 				}
 			}
 
-			~VariantBinder()
+			~BindStyleToOpenGL()
 			{
-				BOOST_FOREACH(const BufferInterfaceBindingData &storageBinding, m_variant.storageBufferBindings)
+				BOOST_FOREACH(const BufferInterfaceBindingData &storageBinding, m_style.storageBufferBindings)
 				{
 					m_resources.BindStorageBuffer(storageBinding.bufferId, storageBinding.bindOffset);
 				}
 
-				BOOST_FOREACH(const BufferInterfaceBindingData &uniformBinding, m_variant.uniformBufferBindings)
+				BOOST_FOREACH(const BufferInterfaceBindingData &uniformBinding, m_style.uniformBufferBindings)
 				{
 					m_resources.BindUniformBuffer(uniformBinding.bufferId, uniformBinding.bindOffset);
 				}
 
-				BOOST_FOREACH(const ImageBindingMap::value_type &imgBindingPair, m_variant.imageBindings)
+				BOOST_FOREACH(const ImageBindingMap::value_type &imgBindingPair, m_style.imageBindings)
 				{
 					gl::BindImageTexture(imgBindingPair.first, 0, 0, gl::FALSE_, 0, gl::READ_ONLY, gl::RGBA8);
 					const ImageBindingData &imgBinding = imgBindingPair.second;
 				}
 
-				BOOST_FOREACH(const TextureBindingMap::value_type &texBindingPair, m_variant.textureBindings)
+				BOOST_FOREACH(const TextureBindingMap::value_type &texBindingPair, m_style.textureBindings)
 				{
 					m_resources.UnbindTexture(texBindingPair.second.textureId, texBindingPair.first);
 					gl::BindSampler(texBindingPair.first, 0);
@@ -378,7 +378,7 @@ namespace glscene
 			}
 
 		private:
-			const VariantData &m_variant;
+			const StyleData &m_style;
 			const ResourceData &m_resources;
 		};
 	}

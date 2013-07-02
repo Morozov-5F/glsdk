@@ -19,7 +19,7 @@ namespace glscene
 {
 	class NodeData;
 	class TransformData;
-	struct VariantInfo;
+	struct StyleInfo;
 
 	///\addtogroup module_glscene_exceptions
 	///@{
@@ -63,11 +63,11 @@ namespace glscene
 	private:
 	};
 
-	///Thrown by SceneGraph::DefineNodeVariant if some bindings overlap.
-	class VariantMultipleBindingsException : public NodeException
+	///Thrown by SceneGraph::DefineNodeStyle if some bindings overlap in the style. That is, if you try to bind two different textures to the same unit.
+	class StyleMultipleBindingsException : public NodeException
 	{
 	public:
-		VariantMultipleBindingsException(const std::string &resourceId, const std::string &resourceType,
+		StyleMultipleBindingsException(const std::string &resourceId, const std::string &resourceType,
 			unsigned int bindingIndex)
 			: NodeException(GetErrorString(resourceId, resourceType, bindingIndex)) {}
 
@@ -76,15 +76,15 @@ namespace glscene
 			unsigned int bindingIndex);
 	};
 
-	///Thrown by glscene::DefineVariant if the given variant name already exists.
-	class VariantMultiplyDefinedException : public NodeException
+	///Thrown by glscene::DefineNodeStyle if the given style name already exists.
+	class StyleMultiplyDefinedException : public NodeException
 	{
 	public:
-		explicit VariantMultiplyDefinedException(const std::string &variantName)
-			: NodeException(GetErrorName(variantName)) {}
+		explicit StyleMultiplyDefinedException(const std::string &styleName)
+			: NodeException(GetErrorName(styleName)) {}
 
 	private:
-		static std::string GetErrorName(const std::string &variantName);
+		static std::string GetErrorName(const std::string &styleName);
 	};
 	///@}
 

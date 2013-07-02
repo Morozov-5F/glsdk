@@ -7,14 +7,16 @@
 
 namespace glscene
 {
-	std::string VariantMultiplyDefinedException::GetErrorName( const std::string &variantName )
+	std::string StyleMultiplyDefinedException::GetErrorName( const std::string &styleName )
 	{
-		return "The variant '" + variantName + "' is already defined on this node.";
+		return "The style '" + styleName + "' is already defined on this node.";
 	}
 
-	std::string VariantMultipleBindingsException::GetErrorString( const std::string &resourceId, const std::string &resourceType, unsigned int bindingIndex )
+	std::string StyleMultipleBindingsException::GetErrorString( const std::string &resourceId,
+		const std::string &resourceType, unsigned int bindingIndex )
 	{
-		return "A variant tried to set the resource '" + resourceId + "' of type '" + resourceType + "' to the same binding index as another resource on the same variant.";
+		return "A style tried to set the resource '" + resourceId + "' of type '"
+			+ resourceType + "' to the same binding index as another resource on the same style.";
 	}
 
 	bool IsDecomposed( const TransformData &data )

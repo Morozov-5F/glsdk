@@ -23,29 +23,33 @@ Most scene graphs do not handle these advanced features.
 
 \note While the scene graph API provides access to these features, *you* must verify that these features are available before actually using them. The API will *not* check to see if, for example, image load/store is available if you tell it to bind an image. If a node uses an image, then the graph assumes you're *serious* about that and that image load/store will be available. If it is not available, then badness will occur.
 
-Third, the scene graph system has multiple levels of rendering customization. Nodes in this graph contain the data to be rendered. However, the data that a node gets rendered with depends on two things: the layer and the variant.
+Third, the scene graph system has multiple levels of rendering customization. Nodes in this graph contain the data to be rendered. However, the data that a node gets rendered with depends on two things: the layer and the style.
 
 Nodes can be part of a layer. A node can be part of multiple layers. When you render the scene, you render a specific layer. If the node is not part of the layer being rendered, then it will not be rendered.
 
-Nodes have one or more variants, and the variants contain the meshes, shaders, and other parameters needed to render. When you render the scene, you render a specific variant. If the node does not have a variant that matches the one you requested, then it will not be rendered.
+Nodes have one or more styles. Styles contain the meshes, shaders, and other parameters needed to render. When you render the scene, you render with a specific style. If a particular node does not have a style that matches the one you requested, then it will not be rendered.
 
-Conceptually, "layer" specifies *what* you want to render; "variant" specifies *how* you want to render it.
+Conceptually, "layer" specifies *what* you want to render; "style" specifies *how* you want to render it.
 
-Note that the above applies only to *rendering*. The transfomrations up and down the node hierarchy remain the same no matter what layer or variant is being used. So a node that doesn't get rendered will still affect its child nodes.
+Note that the above applies only to *rendering*. The transformations up and down the node hierarchy remain the same no matter what layer or style is being used. So a node that doesn't get rendered will still affect its child nodes.
 
-When the scene is rendered, the nodes can be rendered either in an arbitrarr order or sorted back-to-front (coarsely by position, relative to the camera).  The latter mechanism allows for blending. Using variants, a non-blended variant can be rendered in the default order, then a blended variant can be used in the back-to-front order. Between these rendering calls, blending would be turned on. The meshes and shaders used in the blended variant could be different from those in the non-blended one.
+When the scene is rendered, the nodes can be rendered either in an arbitrarr order or sorted back-to-front (coarsely by position, relative to the camera).  The latter mechanism allows for blending. Using styles, a non-blended style can be rendered in the default order, then a blended style can be used in the back-to-front order. Between these rendering calls, blending would be turned on. The meshes and shaders used in the blended style could be different from those in the non-blended one.
 
 The scene graph does not cover framebuffer state, blending state, viewport state, or the like. The scene graph only handles the program, texture, image, uniform and storage buffer bindings.
 
-### Object naming and semantics ###
+### Object semantics ###
 
-Objects in the SceneGraph system come in three general varieties, and each has different semantics.
+Objects in the Scene Graph system come in three general varieties, and each has different semantics.
 
-The SceneGraph object itself has value semantics, but is non-copyable. It is [swappable](http://en.cppreference.com/w/cpp/concept/Swappable) however.
+The glscene::SceneGraph object itself has value semantics, but is non-copyable. It is [swappable](http://en.cppreference.com/w/cpp/concept/Swappable) however.
 
-All objects that end in `Ref` have reference semantics. This means that they refer to information stored in another object (the SceneGraph or one of its constituents). Copying them does not copy the data being referenced. Treat them like a pointer. And, like a pointer, if you cause the destruction of an object being referenced, you must stop using *any* `Ref` instance that refers to it.
+All objects that end in `Ref` have reference semantics. This means that they refer to information stored in another object (the glscene::SceneGraph or one of its constituents). Copying them does not copy the data being referenced. Treat them like a pointer. And, like a pointer, if you cause the destruction of an object being referenced, you must stop using *any* `Ref` instance that refers to it.
 
-All objects that end in `Info` have full value semantics. They are copyable and so forth. These are mostly used to provide information to create some object within the SceneGraph (hence the `Info` name).
+All other objects have full value semantics. They are copyable and so forth. These are mostly used to provide information to create some object within the SceneGraph (hence the `Info` name).
+
+The Scene Graph system also uses some incomplete types by reference or pointer. For example, the glscene::NodeData class cannot be directly instantiated by the user. The user can only get a reference or pointer to an existing one, and there are a number of non-member functions used to modify them or query data from them.
+
+Do not forget that C++ features argument-dependent lookup. This allows you to call these ::glscene-namespaced scoped functions as if they were in the global namespace; you don't have to qualify them with `glscene`.
 **/
 
 
@@ -69,9 +73,9 @@ blah
 
 Nodes in the graph have two separate transformation matrices: the node transform and the object transform.
 
-The node transforms for a node are propogated up the hierarchy of nodes within a scene. The object transforms *are not*; the transform only applies to the mesh(es) being rendered by variants within this node. The object transform is applied before any parent node transforms. So it is right-multiplied onto the list of transforms.
+The node transforms for a node are propogated up the hierarchy of nodes within a scene. The object transforms *are not*; the transform only applies to the mesh(es) being rendered by styles within this node. The object transform is applied before any parent node transforms. So it is right-multiplied onto the list of transforms.
 
-So, for a node with 2 parent nodes, the full model-to-camera matrix for rendering variants on a node looks like this:
+So, for a node with 2 parent nodes, the full model-to-camera matrix for rendering styles on a node looks like this:
 
     model_to_camera = camera * root_node_tm * direct_parent_node_tm * current_node_tm * current_node_object_tm
 	

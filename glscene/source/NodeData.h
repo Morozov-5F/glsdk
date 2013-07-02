@@ -80,9 +80,9 @@ namespace glscene
 	typedef boost::container::flat_map<GLuint, TextureBindingData> TextureBindingMap;
 	typedef boost::container::flat_map<GLuint, ImageBindingData> ImageBindingMap;
 
-	struct VariantData
+	struct StyleData
 	{
-		VariantData(boost::string_ref meshId) : meshResourceId(meshId) {}
+		StyleData(boost::string_ref meshId) : meshResourceId(meshId) {}
 
 		IdString meshResourceId;
 		boost::optional<std::string> meshVariantString;
@@ -93,7 +93,7 @@ namespace glscene
 		std::vector<BufferInterfaceBindingData> storageBufferBindings;
 	};
 
-	typedef boost::container::flat_map<IdString, VariantData> VariantList;
+	typedef boost::container::flat_map<IdString, StyleData> StyleList;
 	typedef std::vector<NodeData*> NodeChildren;
 
 	class NodeData
@@ -129,7 +129,7 @@ namespace glscene
 		NodeData *GetParent() {return m_pParent;}
 		const NodeData *GetParent() const {return m_pParent;}
 
-		void DefineVariant(const boost::string_ref &variantName, const VariantInfo &variant);
+		void DefineStyle(const boost::string_ref &styleName, const StyleInfo &style);
 
 	private:
 		boost::optional<IdString> m_name;
@@ -138,7 +138,7 @@ namespace glscene
 		TransformData m_nodeTM;
 		TransformData m_objTM;
 		boost::dynamic_bitset<> m_layers;
-		VariantList m_variants;
+		StyleList m_styles;
 
 		//Creates root node.
 		NodeData(int numLayers);

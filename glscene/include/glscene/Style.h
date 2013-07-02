@@ -1,10 +1,10 @@
-#ifndef GLSDK_GLSCENE_VARIANT_H
-#define GLSDK_GLSCENE_VARIANT_H
+#ifndef GLSDK_GLSCENE_STYLE_H
+#define GLSDK_GLSCENE_STYLE_H
 
 /**
 \file
-\brief Includes the data structures used to define node variants, via a call to
-SceneGraph::DefineNodeVariant. You must include a [GL Load header](@ref module_glload)
+\brief Includes the data structures used to define node styles, via a call to
+SceneGraph::DefineNodeStyle You must include a [GL Load header](@ref module_glload)
 before including this file.
 **/
 
@@ -76,8 +76,8 @@ namespace glscene
 	typedef boost::variant<SingleProgramBinding, SeparableProgramBinding> ProgramBinding;
 
 
-	///The data structure representing a full rendering command, with all of the information for rendering.
-	struct VariantInfo
+	///The data structure representing a full rendering style.
+	struct StyleInfo
 	{
 		std::string meshResourceId;									///<The resource name of the mesh to render.
 		boost::optional<std::string> meshVariantString;				///<The mesh variant string.
@@ -91,4 +91,4 @@ namespace glscene
 	///@}
 }
 
-#endif //GLSDK_GLSCENE_VARIANT_H
+#endif //GLSDK_GLSCENE_STYLE_H

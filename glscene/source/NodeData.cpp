@@ -4,7 +4,7 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/assert.hpp>
 #include <glload/gl_all.hpp>
-#include "glscene/Variant.h"
+#include "glscene/Style.h"
 #include "NodeData.h"
 #include "ResourceData.h"
 
@@ -51,9 +51,9 @@ namespace glscene
 			delete pChild;
 		}
 
-		BOOST_FOREACH(const VariantList::value_type &variantPair, m_variants)
+		BOOST_FOREACH(const StyleList::value_type &stylePair, m_styles)
 		{
-			boost::apply_visitor(DeletePipelineVisitor(), variantPair.second.progBinding);
+			boost::apply_visitor(DeletePipelineVisitor(), stylePair.second.progBinding);
 		}
 	}
 
@@ -167,26 +167,26 @@ namespace glscene
 		};
 	}
 
-	void NodeData::DefineVariant( const boost::string_ref &variantName, const VariantInfo &variant )
+	void NodeData::DefineStyle( const boost::string_ref &styleName, const StyleInfo &style )
 	{
-		if(m_variants.find(variantName) != m_variants.end())
-			throw VariantMultiplyDefinedException(std::string(variantName.begin(), variantName.end()));
+		if(m_styles.find(styleName) != m_styles.end())
+			throw StyleMultiplyDefinedException(std::string(styleName.begin(), styleName.end()));
 
-		m_variants.emplace(variantName, VariantData(variant.meshResourceId));
-		VariantData &data = m_variants.find(variantName)->second;
-		data.meshVariantString = variant.meshVariantString;
+		m_styles.emplace(styleName, StyleData(style.meshResourceId));
+		StyleData &data = m_styles.find(styleName)->second;
+		data.meshVariantString = style.meshVariantString;
 
-		data.progBinding = boost::apply_visitor(ProgDataExtraction(), variant.progBinding);
+		data.progBinding = boost::apply_visitor(ProgDataExtraction(), style.progBinding);
 
-		data.textureBindings.reserve(variant.textureBindings.size());
-		BOOST_FOREACH(const TextureBinding &texBinding, variant.textureBindings)
+		data.textureBindings.reserve(style.textureBindings.size());
+		BOOST_FOREACH(const TextureBinding &texBinding, style.textureBindings)
 		{
 			TextureBindingData newBinding(texBinding.textureId, texBinding.samplerId);
 			data.textureBindings.emplace(texBinding.textureUnit, newBinding);
 		}
 
-		data.imageBindings.reserve(variant.imageBindings.size());
-		BOOST_FOREACH(const ImageBinding &imgBinding, variant.imageBindings)
+		data.imageBindings.reserve(style.imageBindings.size());
+		BOOST_FOREACH(const ImageBinding &imgBinding, style.imageBindings)
 		{
 			ImageBindingData newBinding(imgBinding.textureId);
 			newBinding.mipmapLevel = imgBinding.mipmapLevel;
@@ -196,16 +196,16 @@ namespace glscene
 			data.imageBindings.emplace(imgBinding.imageUnit, newBinding);
 		}
 
-		data.uniformBufferBindings.reserve(variant.uniformBufferBindings.size());
-		BOOST_FOREACH(const BufferInterfaceBinding &bufBinding, variant.uniformBufferBindings)
+		data.uniformBufferBindings.reserve(style.uniformBufferBindings.size());
+		BOOST_FOREACH(const BufferInterfaceBinding &bufBinding, style.uniformBufferBindings)
 		{
 			BufferInterfaceBindingData newBinding(bufBinding.bufferId);
 			newBinding.bindOffset = bufBinding.bindOffset;
 			data.uniformBufferBindings.push_back(newBinding);
 		}
 
-		data.storageBufferBindings.reserve(variant.storageBufferBindings.size());
-		BOOST_FOREACH(const BufferInterfaceBinding &bufBinding, variant.storageBufferBindings)
+		data.storageBufferBindings.reserve(style.storageBufferBindings.size());
+		BOOST_FOREACH(const BufferInterfaceBinding &bufBinding, style.storageBufferBindings)
 		{
 			BufferInterfaceBindingData newBinding(bufBinding.bufferId);
 			newBinding.bindOffset = bufBinding.bindOffset;
