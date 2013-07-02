@@ -93,10 +93,40 @@ namespace glscene
 	///@{
 
 	/**
+	\brief Defines the order by which nodes are rendered.
+	
+	**/
+	enum NodeRenderingOrder
+	{
+		ORDER_ARBITRARY,		///<The nodes will be rendered without any specific order.
+		ORDER_FRONT_TO_BACK,	///<The nodes will be sorted front-to-back, based on the node transform's camera-space position. "Front" means larger Z values.
+		ORDER_BACK_TO_FRONT,	///<The nodes will be sorted back-to-front, based on the node transform's camera-space position. "Front" means larger Z values.
+	};
+
+	/**
 	\brief The class which represents a scene graph and all of its data.
 
-	This class is [swappable](http://en.cppreference.com/w/cpp/concept/Swappable) but not copyable.
+	The foundation of the Scene Graph system is this class. This object represents all of the
+	[nodes in the scene](\ref module_glscene_node) and the [resources](\ref module_glscene_resources)
+	being used by those nodes.
 
+	SceneGraph objects are created with a number of layers. Each NodeData that is created can be assigned
+	to one or more of these layers. When rendering a layer, only nodes within that layer are considered. This
+	makes it possible to assign each node to a different visibility set. For example, all nodes that cast
+	shadows can be assigned to a layer, thus allowing one to separate what causes shadows from what gets drawn.
+	They are also useful for blended rendering vs. non-blended rendering.
+
+	This class is not copyable. But it is [swappable](http://en.cppreference.com/w/cpp/concept/Swappable).
+	Destroying this object will destroy all of the owned resources and nodes that use it. So be careful not
+	to allow any ResourceRef, NodeData&, or any other objects that refer to data within the SceneGraph
+	to outlive the SceneGraph that created them.
+
+	SceneGraph objects are not unique. They are not singletons or anything of the like. You can freely create
+	(and destroy) as many of these as you see fit. You can render with multiple SceneGraphs to your heart's content.
+	Just make sure that any resources you share between them aren't owned by both of them.
+
+	That being said, due to the layer paradigm, rendering with multiple scene graphs is probably not
+	particularly useful. You can just use different layers of nodes; it would probably be much easier to work with.
 	**/
 	class SceneGraph : public boost::noncopyable
 	{
@@ -112,10 +142,28 @@ namespace glscene
 		SceneGraph(refs::array_ref<std::string> layerNames);
 		~SceneGraph();
 
-		///Retrieves the current root node.
+		/**
+		\brief Retrieves the index for the given layer name.
+
+		\throws UndefinedLayerException If \a layer is not the name of one of the layers.
+		**/
+		int GetLayerIndex(const std::string &layer) const;
+
+		///Retrieves the ResourceRef stored in the scene graph.
+		ResourceRef GetResources();
+
+
+		/**
+		\name NodeData Accessors and Modifiers
+		
+		The SceneGraph class owns all of the NodeData objects it manages. Therefore, all NodeData creation and
+		destruction goes through the SceneGraph class.
+		**/
+		///@{
+		///Retrieves the root node.
 		NodeData &GetRootNode();
 
-		///Finds the given node by its name.
+		///Finds the given node by its name. Returns NULL if no node with the given name is found.
 		NodeData *FindNode(const boost::string_ref &name);
 
 		///Creates a new node that is the child of the given one.
@@ -136,16 +184,6 @@ namespace glscene
 		void DeleteNodeOnly(NodeData &nodeToDelete);
 
 		/**
-		\brief Retrieves the index for the given layer name.
-
-		\throws UndefinedLayerException If \a layer is not the name of one of the layers.
-		**/
-		int GetLayerIndex(const std::string &layer) const;
-
-		///Retrieves the Resources stored in the scene graph.
-		ResourceRef GetResources();
-
-		/**
 		\brief Sets a named rendering style into a node.
 
 		If this function succeeds, the following OpenGL state will be changed:
@@ -164,18 +202,22 @@ namespace glscene
 		**/
 		void DefineNodeStyle(NodeData &node, const boost::string_ref styleId,
 			const StyleInfo &style);
+		///@}
 
 		/**
 		\brief Renders all nodes in given layer of the scene, using the specific style specified.
 
-		\param baseTransform A matrix to be left-multiplied with all transformation matrices before being passed
+		\param worldToCamera A matrix to be left-multiplied with all transformation matrices before being passed
 		on to the program(s) being used. Usually represents the world-to-camera transform.
+		\param eOrder The order used for node rendering operations. Nodes are ordered based on the camera-space
+		position of their [node transform, not their object transform](\ref module_glscene_node_transforms).
 		\param layerIx Specifies the layer of nodes to render. Only nodes that are part of the given layer
 		will be rendered. Transforms from nodes that are not part of the layer will still be computed.
 		\param styleId Specifies the style that will be rendered. Nodes with a style matching this name will
 		that style rendered.
 		**/
-		void Render(const glm::mat4 &baseTransform, int layerIx, boost::string_ref styleId) const;
+		void Render(const glm::mat4 &worldToCamera, NodeRenderingOrder eOrder,
+			int layerIx, boost::string_ref styleId) const;
 
 	private:
 		boost::scoped_ptr<SceneGraphData> m_pData;

@@ -183,9 +183,20 @@ namespace glscene
 	\class glscene::NodeData
 	\brief A node in the scene graph.
 
-	This is an opaque type; values of this type are only returned by reference (or `const&`),
+	NodeData is an opaque type; values of this type are only returned by reference or pointer,
 	so you may not manually construct them or copy them to other instances. You can only reference
 	a node within the SceneGraph.
+
+	Nodes have a [pair of transforms](\ref module_glscene_node_transforms) that determine the position of the
+	object and any child nodes. Nodes can also have a number of styles set on them, defined by the
+	SceneGraph::DefineNodeStyle function. Styles represent the visual element of a node, and each style has a name.
+
+	Nodes can also be members of layers in the SceneGraph. When the scene graph is rendered, if a node is not
+	part of the layer being rendered, the node is not drawn.
+
+	Because these are opaque types, the interface to accessing or modifying much of the information
+	for NodeData objects is part of a number of [free functions in this namespace](#ref module_glscene_node).
+	C++'s argument dependent lookup allows you to use these without namespace qualifiers.
 	**/
 
 	/**
