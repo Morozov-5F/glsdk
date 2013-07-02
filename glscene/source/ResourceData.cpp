@@ -374,6 +374,20 @@ namespace glscene
 		gl::BindTexture(theVal->second->target, theVal->second->textureObj);
 	}
 
+	void ResourceData::UnbindTexture( const IdString &resourceId, GLuint textureUnit ) const
+	{
+		TextureMap::const_iterator theVal = m_textureMap.find(resourceId);
+
+		if(theVal == m_textureMap.end())
+			throw ResourceNotFoundException(resourceId, "texture");
+
+		if(!theVal->second)
+			throw UsingIncompleteResourceException(resourceId, "texture");
+
+		gl::ActiveTexture(gl::TEXTURE0 + textureUnit);
+		gl::BindTexture(theVal->second->target, 0);
+	}
+
 	void ResourceData::BindImage( const IdString &resourceId, GLuint imageUnit,
 		int mipmapLevel, int imageLayer, GLenum access, GLenum format, bool layered ) const
 	{
@@ -564,17 +578,17 @@ namespace glscene
 
 		if(programInfo.modelToCameraMatrixUniformName)
 		{
-			progData.unifModelToCameraMatrix = gl::GetUniformLocation(program,
+			progData.matrices.unifModelToCamera = gl::GetUniformLocation(program,
 				programInfo.modelToCameraMatrixUniformName->c_str());
 		}
 		if(programInfo.normalModelToCameraMatrixUniformName)
 		{
-			progData.unifNormalModelToCameraMatrix = gl::GetUniformLocation(program,
+			progData.matrices.unifNormalModelToCamera = gl::GetUniformLocation(program,
 				programInfo.normalModelToCameraMatrixUniformName->c_str());
 		}
 		if(programInfo.normalCameraToModelMatrixUniformName)
 		{
-			progData.unifNormalCameraToModelMatrix = gl::GetUniformLocation(program,
+			progData.matrices.unifNormalCameraToModel = gl::GetUniformLocation(program,
 				programInfo.normalCameraToModelMatrixUniformName->c_str());
 		}
 	}
@@ -592,6 +606,16 @@ namespace glscene
 			throw ResourceNotFoundException(resourceId, "program");
 
 		return theVal->second.program;
+	}
+
+	ProgramMatrices ResourceData::GetProgramMatrices( const IdString &resourceId ) const
+	{
+		ProgramMap::const_iterator theVal = m_programMap.find(resourceId);
+
+		if(theVal == m_programMap.end())
+			throw ResourceNotFoundException(resourceId, "program");
+
+		return theVal->second.matrices;
 	}
 
 	void ResourceData::DefineUniformBufferBinding( const IdString &resourceId, GLuint bufferObject,
@@ -723,7 +747,7 @@ namespace glscene
 		return true;
 	}
 
-	void ResourceData::BindUniformBuffer( const IdString &resourceId ) const
+	void ResourceData::BindUniformBuffer( const IdString &resourceId, GLintptr offset ) const
 	{
 		InterfaceBufferMap::const_iterator theVal = m_uniformBufferMap.find(resourceId);
 
@@ -735,10 +759,11 @@ namespace glscene
 		if(!buf.bufferObject)
 			throw UsingIncompleteResourceException(resourceId, "uniform buffer");
 
-		gl::BindBufferRange(gl::UNIFORM_BUFFER, buf.bindPoint, buf.bufferObject.get(), buf.offset, buf.size);
+		gl::BindBufferRange(gl::UNIFORM_BUFFER, buf.bindPoint, buf.bufferObject.get(),
+			buf.offset + offset, buf.size);
 	}
 
-	void ResourceData::BindStorageBuffer( const IdString &resourceId ) const
+	void ResourceData::BindStorageBuffer( const IdString &resourceId, GLintptr offset ) const
 	{
 		InterfaceBufferMap::const_iterator theVal = m_storageBufferMap.find(resourceId);
 
@@ -750,7 +775,8 @@ namespace glscene
 		if(!buf.bufferObject)
 			throw UsingIncompleteResourceException(resourceId, "storage buffer");
 
-		gl::BindBufferRange(gl::SHADER_STORAGE_BUFFER, buf.bindPoint, buf.bufferObject.get(), buf.offset, buf.size);
+		gl::BindBufferRange(gl::SHADER_STORAGE_BUFFER, buf.bindPoint, buf.bufferObject.get(),
+			buf.offset + offset, buf.size);
 	}
 
 	GLuint ResourceData::GetUniformBufferBindingIndex( const IdString &resourceId ) const

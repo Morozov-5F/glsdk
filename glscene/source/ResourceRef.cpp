@@ -1,6 +1,6 @@
 
 #include "pch.h"
-#include <glload/gl_all.h>
+#include <glload/gl_all.hpp>
 #include "glscene/ResourceRef.h"
 #include "ResourceData.h"
 
@@ -26,13 +26,13 @@ namespace glscene
 	}
 
 	SamplerInfo::SamplerInfo()
-		: magFilter(GL_NEAREST)
-		, minFilter(GL_NEAREST)
+		: magFilter(gl::NEAREST)
+		, minFilter(gl::NEAREST)
 		, maxAniso(1.0f)
 		, compareFunc(boost::none)
-		, edgeFilterS(GL_CLAMP_TO_EDGE)
-		, edgeFilterT(GL_CLAMP_TO_EDGE)
-		, edgeFilterR(GL_CLAMP_TO_EDGE)
+		, edgeFilterS(gl::CLAMP_TO_EDGE)
+		, edgeFilterT(gl::CLAMP_TO_EDGE)
+		, edgeFilterR(gl::CLAMP_TO_EDGE)
 	{}
 
 	void ResourceRef::DefineUniform( const boost::string_ref &resourceId, const std::string &uniformName, float data )

@@ -8,7 +8,6 @@
 #include <vector>
 #include <boost/dynamic_bitset.hpp>
 #include <boost/optional.hpp>
-#include <glload/gl_all.h>
 
 namespace glscene
 {
@@ -42,7 +41,7 @@ namespace glscene
 			: bufferId(_bufferId) {}
 
 		IdString bufferId;
-		GLuint bindOffset;
+		GLintptr bindOffset;
 	};
 
 	struct UniformBindingData
@@ -74,18 +73,22 @@ namespace glscene
 	struct SeparableProgramBindingData
 	{
 		std::vector<ProgramMaskData> pipeline;
+		GLuint pipelineObj;
 	};
 
 	typedef boost::variant<SeparableProgramBindingData, SingleProgramBindingData> ProgramBindingData;
+	typedef boost::container::flat_map<GLuint, TextureBindingData> TextureBindingMap;
+	typedef boost::container::flat_map<GLuint, ImageBindingData> ImageBindingMap;
 
 	struct VariantData
 	{
 		VariantData(boost::string_ref meshId) : meshResourceId(meshId) {}
 
 		IdString meshResourceId;
+		boost::optional<std::string> meshVariantString;
 		ProgramBindingData progBinding;
-		boost::container::flat_map<GLuint, TextureBindingData> textureBindings;
-		boost::container::flat_map<GLuint, ImageBindingData> imageBindings;
+		TextureBindingMap textureBindings;
+		ImageBindingMap imageBindings;
 		std::vector<BufferInterfaceBindingData> uniformBufferBindings;
 		std::vector<BufferInterfaceBindingData> storageBufferBindings;
 	};

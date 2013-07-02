@@ -17,7 +17,7 @@ namespace glscene
 	the *original* string.
 	
 	So the only way for an accidental equivalence to occur would be for the two strings to
-	both generate the same has *and* still be similar enough that only the missing middle characters (if any)
+	both generate the same hash *and* still be similar enough that only the missing middle characters (if any)
 	are the only differences between them. This seems rather unlikely.
 
 	The ordering of this string is also designed for maximum efficiency. It compares the hashes first;

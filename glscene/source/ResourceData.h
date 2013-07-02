@@ -63,13 +63,18 @@ namespace glscene
 		bool owned;
 	};
 
+	struct ProgramMatrices
+	{
+		boost::optional<GLuint> unifModelToCamera;
+		boost::optional<GLuint> unifNormalModelToCamera;
+		boost::optional<GLuint> unifNormalCameraToModel;
+	};
+
 	struct ProgramData
 	{
 		GLuint program;
 		bool owned;
-		boost::optional<GLuint> unifModelToCameraMatrix;
-		boost::optional<GLuint> unifNormalModelToCameraMatrix;
-		boost::optional<GLuint> unifNormalCameraToModelMatrix;
+		ProgramMatrices matrices;
 	};
 
 	struct InterfaceBuffer
@@ -162,6 +167,7 @@ namespace glscene
 		bool IsTextureComplete(const IdString &resourceId) const;
 
 		void BindTexture(const IdString &resourceId, GLuint textureUnit) const;
+		void UnbindTexture(const IdString &resourceId, GLuint textureUnit) const;
 		void BindImage(const IdString &resourceId, GLuint imageUnit, int mipmapLevel, int imageLayer,
 			GLenum access, GLenum format, bool layered) const;
 
@@ -190,6 +196,7 @@ namespace glscene
 		bool HasProgram(const IdString &resourceId) const;
 
 		GLuint GetProgram(const IdString &resourceId) const;
+		ProgramMatrices GetProgramMatrices(const IdString &resourceId) const;
 
 		void DefineUniformBufferBinding(const IdString &resourceId, GLuint bufferObject, GLuint bindPoint,
 			GLintptr offset, GLsizeiptr size, bool claimOwnership);
@@ -211,8 +218,8 @@ namespace glscene
 		//Will crash on a texture not found.
 		bool IsStorageBufferBindingComplete(const IdString &resourceId) const;
 
-		void BindUniformBuffer(const IdString &resourceId) const;
-		void BindStorageBuffer(const IdString &resourceId) const;
+		void BindUniformBuffer(const IdString &resourceId, GLintptr offset = 0) const;
+		void BindStorageBuffer(const IdString &resourceId, GLintptr offset = 0) const;
 
 		GLuint GetUniformBufferBindingIndex(const IdString &resourceId) const;
 		GLuint GetStorageBufferBindingIndex(const IdString &resourceId) const;

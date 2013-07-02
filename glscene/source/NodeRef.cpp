@@ -2,6 +2,7 @@
 #include "pch.h"
 
 #include "glscene/NodeRef.h"
+#include <glload/gl_all.hpp>
 #include "NodeData.h"
 
 namespace glscene

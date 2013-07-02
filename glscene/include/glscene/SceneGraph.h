@@ -145,7 +145,12 @@ namespace glscene
 		ResourceRef GetResources();
 
 		/**
-		\brief Sets variant data into a node.
+		\brief Sets a named rendering variant into a node.
+
+		If this function succeeds, the following OpenGL state will be changed:
+
+		- If you provide a VariantInfo that uses separable programs, the current program pipeline will be reset
+		to 0 by a call to `glBindProgramPipeline(0)`.
 
 		\throws VariantAlreadyExistsException If \a variantId has already been defined.
 		\throws ResourceNotFoundException If any identifiers in the \a variant refer to resources that don't exist.

@@ -8,7 +8,8 @@
 #include <boost/container/flat_set.hpp>
 #include <boost/foreach.hpp>
 #include <boost/typeof/typeof.hpp>
-#include <glload/gl_all.h>
+#include <boost/range/adaptors.hpp>
+#include <glload/gl_all.hpp>
 #include "glscene/SceneGraph.h"
 #include "glscene/ResourceRef.h"
 #include "glscene/Variant.h"
@@ -269,6 +270,117 @@ namespace glscene
 
 		//Now that it's verified, set the data into the node.
 		node.DefineVariant(variantId, variant);
+	}
+
+	namespace
+	{
+		class VariantBinder
+		{
+		public:
+			struct BindProgramVisitor : public boost::static_visitor<>
+			{
+				BindProgramVisitor(const ResourceData &_resources)
+					: resources(_resources) {}
+				const ResourceData &resources;
+
+				void operator()(const SingleProgramBindingData &binding) const
+				{
+					GLuint prog = resources.GetProgram(binding.programId);
+					gl::UseProgram(prog);
+					BOOST_FOREACH(const UniformBindingData &unif, binding.uniformIds)
+					{
+						resources.ApplyUniform(unif.uniformId,
+							resources.GetUniformLocation(prog, unif.uniformId));
+					}
+				}
+
+				void operator()(const SeparableProgramBindingData &binding) const
+				{
+					gl::BindProgramPipeline(binding.pipelineObj);
+
+					BOOST_FOREACH(const ProgramMaskData &program, binding.pipeline)
+					{
+						if(!program.prog.uniformIds.empty())
+						{
+							GLuint prog = resources.GetProgram(program.prog.programId);
+							BOOST_FOREACH(const UniformBindingData &unif, program.prog.uniformIds)
+							{
+								resources.ApplyUniform(prog, unif.uniformId,
+									resources.GetUniformLocation(prog, unif.uniformId));
+							}
+						}
+					}
+				}
+			};
+
+			VariantBinder(const VariantData &variant, const ResourceData &resources)
+				: m_variant(variant)
+				, m_resources(resources)
+			{
+				boost::apply_visitor(BindProgramVisitor(m_resources), variant.progBinding);
+
+				BOOST_FOREACH(const TextureBindingMap::value_type &texBindingPair, m_variant.textureBindings)
+				{
+					m_resources.BindTexture(texBindingPair.second.textureId, texBindingPair.first);
+					m_resources.BindSampler(texBindingPair.second.samplerId, texBindingPair.first);
+				}
+
+				BOOST_FOREACH(const ImageBindingMap::value_type &imgBindingPair, m_variant.imageBindings)
+				{
+					const ImageBindingData &imgBinding = imgBindingPair.second;
+					m_resources.BindImage(
+						imgBinding.textureId,
+						imgBindingPair.first,
+						imgBinding.mipmapLevel,
+						imgBinding.arrayLayer ? imgBinding.arrayLayer.get() : 0,
+						imgBinding.access,
+						imgBinding.format,
+						imgBinding.arrayLayer);
+				}
+
+				BOOST_FOREACH(const BufferInterfaceBindingData &uniformBinding, m_variant.uniformBufferBindings)
+				{
+					m_resources.BindUniformBuffer(uniformBinding.bufferId, uniformBinding.bindOffset);
+				}
+
+				BOOST_FOREACH(const BufferInterfaceBindingData &storageBinding, m_variant.storageBufferBindings)
+				{
+					m_resources.BindStorageBuffer(storageBinding.bufferId, storageBinding.bindOffset);
+				}
+			}
+
+			~VariantBinder()
+			{
+				BOOST_FOREACH(const BufferInterfaceBindingData &storageBinding, m_variant.storageBufferBindings)
+				{
+					m_resources.BindStorageBuffer(storageBinding.bufferId, storageBinding.bindOffset);
+				}
+
+				BOOST_FOREACH(const BufferInterfaceBindingData &uniformBinding, m_variant.uniformBufferBindings)
+				{
+					m_resources.BindUniformBuffer(uniformBinding.bufferId, uniformBinding.bindOffset);
+				}
+
+				BOOST_FOREACH(const ImageBindingMap::value_type &imgBindingPair, m_variant.imageBindings)
+				{
+					gl::BindImageTexture(imgBindingPair.first, 0, 0, gl::FALSE_, 0, gl::READ_ONLY, gl::RGBA8);
+					const ImageBindingData &imgBinding = imgBindingPair.second;
+				}
+
+				BOOST_FOREACH(const TextureBindingMap::value_type &texBindingPair, m_variant.textureBindings)
+				{
+					m_resources.UnbindTexture(texBindingPair.second.textureId, texBindingPair.first);
+					gl::BindSampler(texBindingPair.first, 0);
+				}
+
+				gl::BindProgramPipeline(0);
+				gl::UseProgram(0);
+			}
+
+		private:
+			const VariantData &m_variant;
+			const ResourceData &m_resources;
+		};
 	}
 
 	void swap( SceneGraph &lhs, SceneGraph &rhs )

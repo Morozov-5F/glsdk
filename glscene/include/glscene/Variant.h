@@ -69,6 +69,7 @@ namespace glscene
 	struct VariantInfo
 	{
 		std::string meshResourceId;
+		boost::optional<std::string> meshVariantString;
 		ProgramBinding progBinding;
 		std::vector<TextureBinding> textureBindings;
 		std::vector<ImageBinding> imageBindings;

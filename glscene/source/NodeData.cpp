@@ -3,7 +3,7 @@
 #include <boost/foreach.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/assert.hpp>
-#include <glload/gl_all.h>
+#include <glload/gl_all.hpp>
 #include "glscene/Variant.h"
 #include "NodeData.h"
 #include "ResourceData.h"
@@ -25,6 +25,19 @@ namespace glscene
 		, m_layers(numLayers)
 	{}
 
+	namespace
+	{
+		struct DeletePipelineVisitor : public boost::static_visitor<>
+		{
+			void operator()(const SeparableProgramBindingData &sepData) const
+			{
+				gl::DeleteProgramPipelines(1, &sepData.pipelineObj);
+			}
+
+			void operator()(const SingleProgramBindingData &) const {}
+		};
+	}
+
 	NodeData::~NodeData()
 	{
 		//Remove from parent's list.
@@ -36,6 +49,11 @@ namespace glscene
 			//Stop his destructor from removing himself from my list while I'm iterating over it.
 			pChild->m_pParent = NULL;
 			delete pChild;
+		}
+
+		BOOST_FOREACH(const VariantList::value_type &variantPair, m_variants)
+		{
+			boost::apply_visitor(DeletePipelineVisitor(), variantPair.second.progBinding);
 		}
 	}
 
@@ -136,10 +154,14 @@ namespace glscene
 			{
 				SeparableProgramBindingData data;
 				data.pipeline.reserve(binding.pipeline.size());
+				gl::GenProgramPipelines(1, &data.pipelineObj);
+				gl::BindProgramPipeline(data.pipelineObj);
 				BOOST_FOREACH(const ProgramMask &prog, binding.pipeline)
 				{
 					data.pipeline.push_back(ProgramMaskData((*this)(prog.prog), prog.stages));
+
 				}
+				gl::BindProgramPipeline(0);
 				return data;
 			}
 		};
@@ -152,6 +174,7 @@ namespace glscene
 
 		m_variants.emplace(variantName, VariantData(variant.meshResourceId));
 		VariantData &data = m_variants.find(variantName)->second;
+		data.meshVariantString = variant.meshVariantString;
 
 		data.progBinding = boost::apply_visitor(ProgDataExtraction(), variant.progBinding);
 
@@ -188,9 +211,5 @@ namespace glscene
 			newBinding.bindOffset = bufBinding.bindOffset;
 			data.storageBufferBindings.push_back(newBinding);
 		}
-		
-
-//		VariantData &data = m_variants[IdString(variantName)];
-
 	}
 }
