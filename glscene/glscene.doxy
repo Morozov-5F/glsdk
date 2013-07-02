@@ -85,21 +85,21 @@ The purpose of this distinction is to allow transformations, such as scaling, th
 
 The SceneGraph class maintains a list of resources. When a node is rendered, it references these resources to get its textures, samplers, and so forth.
 
-The SceneGraph provides access to its internal resources via the Resources class, obtained with the SceneGraph::GetResources function. The Resources class uses reference semantics, so copies will all refer back to the same resources in the SceneGraph instance.
+The SceneGraph provides access to its internal resources via the ResourceRef class, obtained with the SceneGraph::GetResources function. The ResourceRef class uses reference semantics, so copies will all refer back to the same resources in the SceneGraph instance.
 
-All resources are named. The various different types of resources all have different namespaces, so it's perfectly valid to use the same name for a texture resource as a program resource. Though that might be confusing.
+All resources are named. The various different types of resources all have different namespaces. Therefore, it is perfectly valid to use the same name for a texture resource as a program resource. Note that resource names use [identifier strings](\ref page_glscene_identifier_strings).
 
-The Resources class maintains the following resources:
+The ResourceRef class maintains the following resources:
 
 - [Textures](http://www.opengl.org/wiki/Texture) (which can be used for samplers or [images](http://www.opengl.org/wiki/Image_Load_Store).)
 - [Sampler Objects](http://www.opengl.org/wiki/Sampler_Object). Most of their state is defined via the SamplerInfo object.
 - Programs, which have already been properly linked.
 - Drawable Meshes, either via the glmesh::Mesh class or a user-provided class derived from glscene::Drawable.
 - [Uniform](http://www.opengl.org/wiki/Uniform_Buffer_Object) and [Shader Storage buffer objects](http://www.opengl.org/wiki/Shader_Storage_Buffer_Object). These not only store the buffer but also the place it is bound to and the range. It effectively stores the data for a [glBindBufferRange](http://www.opengl.org/wiki/GLAPI/glBindBufferRange) call.
-- [Uniforms](http://www.opengl.org/wiki/Uniform_%28GLSL%29), which can be referenced by any program. The uniform stored in the Resources object therefore can be shared among a number of different programs. Changing it in one place changes it in all places.
+- [Uniforms](http://www.opengl.org/wiki/Uniform_%28GLSL%29), which can be referenced by any program. The uniform stored in the ResourceRef object therefore can be shared among a number of different programs. Changing it in one place changes it in all places.
 - Cameras, via the glutil::ViewPole class.
 
-The Resources class can be told to take ownership over any of the OpenGL objects it is given (as well as meshes). By claiming ownership, the Resources class (and therefore the SceneGraph that owns them) will destroy these objects when it is destroyed.
+The ResourceRef class can be told to take ownership over any of the OpenGL objects it is given (as well as meshes). By claiming ownership, the ResourceRef class (and therefore the SceneGraph that owns them) will destroy these objects when it is destroyed.
 
 Certain data stored by sampler objects can be modified in-situ, as can the value of particular uniforms.
 
@@ -114,23 +114,6 @@ To avoid forcing users to name their matrices a certain way, programs that conta
 Also, it is often convenient to establish a convention for the meaning of various context resources. For example, you could say that texture unit 0 is always the diffuse texture. So, rather than having to change the program's uniform state every time you want use a texture, you just set the program to use a known unit. At render-time, you bind the texture to that texture unit. 
 
 All of this information is provided through the ProgramInfo object.
-
-### Resource naming ###
-
-For the sake of efficiency, resource names are not internally stored as `std::string` objects. Instead, they are stored as a fixed-length hashed-string for faster lookup and less memory allocation overhead. Strings longer than the fixed-length are truncated from the middle.
-
-It is therefore possible to get a collision of string names in this system, where two different strings that you give the system actually map to the same name. This requires that the following to be true of *both* strings:
-
-- They are longer than the fixed-length (27 characters currently)
-- The truncated version of the strings resolves to the same 27-character sequence. Note that the truncation happens in the *middle*.
-- The full length strings happen to generate the same hashes
-- The names are used for the same type of resource (two textures, two uniforms, etc).
-
-*All of these* must happen to have a name collision.
-
-In practice, all of these are highly unlikely to happen. I have professionally seen the [djb2 hashing algorithm](http://www.cse.yorku.ca/~oz/hash.html) used in a purely hash-driven system. Even using a database of *tens* of thousands of strings (where we routinely scanned for hash collisions as an off-line process) we only got a collision *once*. And that was with a system were we stored *just* the hashes, not 27 other characters from the string.
-
-However, if this does concern you (and it shouldn't), you can ensure that there will be no problems by using resource names that are 27 characters or less. And 27 characters is plenty of room for an identifier string.
 **/
 
 
@@ -141,6 +124,27 @@ However, if this does concern you (and it shouldn't), you can ensure that there 
 \brief Exceptions thrown by the [GL Scene Graph](@ref module_glscene) classes and functions.
 
 stuff
+**/
+
+/**
+\page page_glscene_identifier_strings Identifier Strings
+
+For the sake of efficiency, many names that the user provides are not internally stored as `std::string` objects. Instead, they are stored as a fixed-length hashed identifier string for faster lookup and less memory allocation overhead. Strings longer than the fixed-length are truncated from the middle.
+
+You can tell which strings will be converted to these identifiers quite easily. Any parameter that ends in `Id` will be stored as an indentifier string.
+
+Due to the truncation to a fixed length, it is theoretically possible to get a collision of string names in this system, where two different strings that you give the system actually map to the same name. This requires that the following to be true of *both* strings:
+
+- They are longer than the fixed-length (27 characters currently).
+- The truncated version of the strings resolves to the same character sequence. Note that the truncation happens in the *middle*.
+- The full length strings happen to generate the same hashes.
+- The names are used for the same lookup (for [resource names](\ref module_glscene_resources), the two strings would both be refering to textures or both to uniforms, etc.).
+
+*All of these* must happen to have a name collision.
+
+In practice, all of these are highly unlikely to happen. I have professionally seen the [djb2 hashing algorithm](http://www.cse.yorku.ca/~oz/hash.html) used in a purely hash-driven system. Even using a database of *tens* of thousands of strings (where we routinely scanned for hash collisions as an off-line process) we only got a collision *once*. And that was with a system were we stored *just* the hashes, not 27 other characters from the string.
+
+However, if this does concern you (and it shouldn't), you can ensure that there will be no problems by using identifier strings that are 27 characters or less. And 27 characters is plenty of room for an identifier string.
 **/
 
 /**

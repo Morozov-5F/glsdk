@@ -170,7 +170,7 @@ namespace glscene
 	void NodeData::DefineVariant( const boost::string_ref &variantName, const VariantInfo &variant )
 	{
 		if(m_variants.find(variantName) != m_variants.end())
-			throw VariantAlreadyExistsException(std::string(variantName.begin(), variantName.end()));
+			throw VariantMultiplyDefinedException(std::string(variantName.begin(), variantName.end()));
 
 		m_variants.emplace(variantName, VariantData(variant.meshResourceId));
 		VariantData &data = m_variants.find(variantName)->second;

@@ -77,10 +77,10 @@ namespace glscene
 	};
 
 	///Thrown by glscene::DefineVariant if the given variant name already exists.
-	class VariantAlreadyExistsException : public NodeException
+	class VariantMultiplyDefinedException : public NodeException
 	{
 	public:
-		explicit VariantAlreadyExistsException(const std::string &variantName)
+		explicit VariantMultiplyDefinedException(const std::string &variantName)
 			: NodeException(GetErrorName(variantName)) {}
 
 	private:

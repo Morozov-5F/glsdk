@@ -152,11 +152,21 @@ namespace glscene
 		- If you provide a VariantInfo that uses separable programs, the current program pipeline will be reset
 		to 0 by a call to `glBindProgramPipeline(0)`.
 
-		\throws VariantAlreadyExistsException If \a variantId has already been defined.
+		\throws VariantMultiplyDefinedException If \a variantId has already been defined.
 		\throws ResourceNotFoundException If any identifiers in the \a variant refer to resources that don't exist.
 		**/
 		void DefineNodeVariant(NodeData &node, const boost::string_ref variantId,
 			const VariantInfo &variant);
+
+		/**
+		\brief Renders the given layer of the scene, using the specific variant specified.
+
+		\param layerIx Specifies the layer of nodes to render. Only nodes that are part of the given layer
+		will be rendered. Transforms from nodes that are not part of the layer will still be computed.
+		\param variantId Specifies the variant that will be rendered. Nodes with a variant matching this name will
+		that variant rendered.
+		**/
+		void Render(int layerIx, boost::string_ref variantId) const;
 
 	private:
 		boost::scoped_ptr<SceneGraphData> m_pData;

@@ -208,7 +208,7 @@ namespace glscene
 		/**
 		\name Creates a named uniform with the given type.
 		
-		\param resource The resource name for the uniform.
+		\param resourceId The resource name for the uniform.
 		\param uniformName The name of the uniform in GLSL.
 		\param data The value to set the uniform to.
 
@@ -236,7 +236,7 @@ namespace glscene
 		/**
 		\name Sets the value of an existing uniform.
 
-		\param resource The resource name for the uniform.
+		\param resourceId The resource name for the uniform.
 		\param data The value to set into the uniform.
 
 		\throws ResourceNotFoundException If \a resource is not a uniform resource.
@@ -263,7 +263,7 @@ namespace glscene
 		/**
 		\brief Creates a named texture resource, which may claim ownership of the texture.
 
-		\param resource The resource name for the texture.
+		\param resourceId The resource name for the texture.
 		\param textureObj The texture object to be stored.
 		\param target The target the texture is associated with.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the texture.
@@ -278,7 +278,7 @@ namespace glscene
 		/**
 		\brief Creates an incomplete named texture resource.
 
-		\param resource The resource name for the texture.
+		\param resourceId The resource name for the texture.
 
 		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
 		been defined.
@@ -291,7 +291,7 @@ namespace glscene
 		\throws ResourceMultiplyDefinedException If \a resource refers to a sampler resource that has already
 		been defined.
 
-		\param resource The resource name for the sampler.
+		\param resourceId The resource name for the sampler.
 		\param data The information about the sampler parameters. These parameters are immutable.
 		**/
 		void DefineSampler(const boost::string_ref &resourceId, const SamplerInfo &data);
@@ -299,7 +299,7 @@ namespace glscene
 		/**
 		\brief Sets a floating-point border color for a sampler.
 
-		\param resource The resource name for the sampler.
+		\param resourceId The resource name for the sampler.
 		\param color The color to set the border color to.
 
 		\throws ResourceNotFoundException If \a resource is not a sampler resource.
@@ -309,7 +309,7 @@ namespace glscene
 		/**
 		\brief Sets an integer border color for a sampler.
 
-		\param resource The resource name for the sampler.
+		\param resourceId The resource name for the sampler.
 		\param color The color to set the border color to.
 
 		\throws ResourceNotFoundException If \a resource is not a sampler resource.
@@ -319,7 +319,7 @@ namespace glscene
 		/**
 		\brief Sets an integer border color for a sampler.
 
-		\param resource The resource name for the sampler.
+		\param resourceId The resource name for the sampler.
 		\param color The color to set the border color to.
 
 		\throws ResourceNotFoundException If \a resource is not a sampler resource.
@@ -329,7 +329,7 @@ namespace glscene
 		/**
 		\brief Sets the LOD bias for a sampler
 
-		\param resource The resource name for the sampler.
+		\param resourceId The resource name for the sampler.
 		\param bias The LOD bias for the sampler.
 
 		\throws ResourceNotFoundException If \a resource is not a sampler resource.
@@ -339,7 +339,7 @@ namespace glscene
 		/**
 		\brief Creates a named mesh, which may claim ownership of the mesh.
 		
-		\param resource The resource name for the mesh.
+		\param resourceId The resource name for the mesh.
 		\param pMesh The mesh object to be stored.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the mesh.
 
@@ -352,7 +352,7 @@ namespace glscene
 		/**
 		\brief Creates a named, user-defined mesh, which may claim ownership of the mesh.
 		
-		\param resource The resource name for the mesh.
+		\param resourceId The resource name for the mesh.
 		\param pMesh The mesh object to be stored.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the mesh.
 
@@ -368,7 +368,7 @@ namespace glscene
 		\throws ResourceMultiplyDefinedException If \a resource refers to a mesh resource that has already
 		been defined.
 
-		\param resource The resource name for the mesh.
+		\param resourceId The resource name for the mesh.
 		**/
 		void DefineMeshIncomplete(const boost::string_ref &resourceId);
 
@@ -389,7 +389,7 @@ namespace glscene
 		- sets the current program (as defined by glUseProgram) to 0. It will not modify the current program, but
 		it may modify the given program's state.
 
-		\param resource The resource name for the program.
+		\param resourceId The resource name for the program.
 		\param program The fully linked (possibly separable) program to store in the resource.
 		\param programInfo Information about \a program.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the program.
@@ -404,7 +404,7 @@ namespace glscene
 		context. It effectively encapsulates a [glBindBufferRange(GL_UNIFORM_BUFFER)][2]
 		call.
 
-		\param resource The resource name of the uniform buffer binding.
+		\param resourceId The resource name of the uniform buffer binding.
 		\param bufferObject The OpenGL buffer object.
 		\param bindPoint The index to bind to. Must be less than `GL_MAX_UNIFORM_BUFFER_BINDINGS`.
 		\param offset The offset from the start of the buffer for the bind call. The offset must be
@@ -429,7 +429,7 @@ namespace glscene
 		incompletely defined with DefineUniformBufferBindingIncomplete. The bind point and range size
 		will remain the same; only the buffer object and the starting offset can be modified with this function.
 
-		\param resource The resource name of the uniform buffer binding.
+		\param resourceId The resource name of the uniform buffer binding.
 		\param bufferObject The OpenGL buffer object.
 		\param offset The offset from the start of the buffer for the bind call. The offset must be
 		a multiple of `GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT`
@@ -451,7 +451,7 @@ namespace glscene
 		data can be filled in with a call to DefineUniformBufferBinding(const std::string &, GLuint,
 		GLintptr, bool).
 
-		\param resource The resource name of the uniform buffer binding.
+		\param resourceId The resource name of the uniform buffer binding.
 		\param bindPoint The index to bind to. Must be less than `GL_MAX_UNIFORM_BUFFER_BINDINGS`.
 		\param size The size of the range to bind.
 		
@@ -469,7 +469,7 @@ namespace glscene
 		context. It effectively encapsulates a [glBindBufferRange(`GL_SHADER_STORAGE_BUFFER`)][2]
 		call.
 
-		\param resource The resource name of the storage buffer binding.
+		\param resourceId The resource name of the storage buffer binding.
 		\param bufferObject The OpenGL buffer object.
 		\param bindPoint The index to bind to. Must be less than `GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS`.
 		\param offset The offset from the start of the buffer for the bind call. The offset must be
@@ -494,7 +494,7 @@ namespace glscene
 		incompletely defined with DefineUniformBufferBindingIncomplete. The bind point and range size
 		will remain the same; only the buffer object and the starting offset can be modified with this function.
 
-		\param resource The resource name of the storage buffer binding.
+		\param resourceId The resource name of the storage buffer binding.
 		\param bufferObject The OpenGL buffer object.
 		\param offset The offset from the start of the buffer for the bind call. The offset must be
 		a multiple of `GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT`
@@ -516,7 +516,7 @@ namespace glscene
 		data can be filled in with a call to DefineStorageBufferBinding(const std::string &, GLuint,
 		GLintptr, bool).
 
-		\param resource The resource name of the storage buffer binding.
+		\param resourceId The resource name of the storage buffer binding.
 		\param bindPoint The index to bind to. Must be less than `GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS`.
 		\param size The size of the range to bind.
 		
@@ -534,7 +534,7 @@ namespace glscene
 		glutil::ViewPole class. Named cameras can be directly accessed by the user through the SceneGraph
 		class.
 
-		\param resource The resource name of the camera.
+		\param resourceId The resource name of the camera.
 		\param initialView The starting state of the view.
 		\param viewScale The viewport definition to use.
 		\param actionButton The mouse button to listen for. All other mouse buttons are ignored.

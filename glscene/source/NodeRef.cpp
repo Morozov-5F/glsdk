@@ -7,7 +7,7 @@
 
 namespace glscene
 {
-	std::string VariantAlreadyExistsException::GetErrorName( const std::string &variantName )
+	std::string VariantMultiplyDefinedException::GetErrorName( const std::string &variantName )
 	{
 		return "The variant '" + variantName + "' is already defined on this node.";
 	}
