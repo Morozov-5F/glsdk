@@ -51,7 +51,7 @@ namespace glscene
 			delete pChild;
 		}
 
-		BOOST_FOREACH(const StyleList::value_type &stylePair, m_styles)
+		BOOST_FOREACH(const StyleMap::value_type &stylePair, m_styles)
 		{
 			boost::apply_visitor(DeletePipelineVisitor(), stylePair.second.progBinding);
 		}
@@ -211,5 +211,11 @@ namespace glscene
 			newBinding.bindOffset = bufBinding.bindOffset;
 			data.storageBufferBindings.push_back(newBinding);
 		}
+	}
+
+	const StyleData * NodeData::FindStyle( const IdString &styleId ) const
+	{
+		StyleMap::const_iterator theIt = m_styles.find(styleId);
+		return theIt != m_styles.end() ? &theIt->second : NULL;
 	}
 }

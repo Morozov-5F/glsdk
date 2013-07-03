@@ -313,11 +313,88 @@ namespace glscene
 				}
 			};
 
+			struct SetUniformMatrices : public boost::static_visitor<>
+			{
+				SetUniformMatrices(const ResourceData &_resources,
+					const glm::mat4 &_objectToCamera)
+
+					: resources(_resources)
+					, objectToCamera(_objectToCamera)
+				{}
+
+				const ResourceData &resources;
+				const glm::mat4 &objectToCamera;
+
+				glm::mat3 CalcNormModelToCamera() const
+				{
+					glm::mat3 ret(objectToCamera);
+					return glm::inverse(glm::transpose(ret));
+				}
+
+				glm::mat3 CalcNormCameraToModel() const
+				{
+					return glm::inverse(CalcNormModelToCamera());
+				}
+
+				//Assumes it's the current program in use.
+				void operator()(const SingleProgramBindingData &binding) const
+				{
+					ProgramMatrices matrices = resources.GetProgramMatrices(binding.programId);
+
+					if(matrices.unifModelToCamera)
+					{
+						gl::UniformMatrix4fv(matrices.unifModelToCamera.get(), 1, gl::FALSE_,
+							glm::value_ptr(objectToCamera));
+					}
+
+					if(matrices.unifNormalModelToCamera)
+					{
+						gl::UniformMatrix3fv(matrices.unifNormalModelToCamera.get(), 1, gl::FALSE_,
+							glm::value_ptr(CalcNormModelToCamera()));
+					}
+
+					if(matrices.unifNormalCameraToModel)
+					{
+						gl::UniformMatrix3fv(matrices.unifNormalCameraToModel.get(), 1, gl::FALSE_,
+							glm::value_ptr(CalcNormCameraToModel()));
+					}
+				}
+
+				void operator()(const SeparableProgramBindingData &binding) const
+				{
+					gl::BindProgramPipeline(binding.pipelineObj);
+
+					BOOST_FOREACH(const ProgramMaskData &program, binding.pipeline)
+					{
+						GLuint prog = resources.GetProgram(program.prog.programId);
+						ProgramMatrices matrices = resources.GetProgramMatrices(program.prog.programId);
+
+						if(matrices.unifModelToCamera)
+						{
+							gl::ProgramUniformMatrix4fv(prog, matrices.unifModelToCamera.get(), 1,
+								gl::FALSE_, glm::value_ptr(objectToCamera));
+						}
+
+						if(matrices.unifNormalModelToCamera)
+						{
+							gl::ProgramUniformMatrix3fv(prog, matrices.unifNormalModelToCamera.get(), 1,
+								gl::FALSE_, glm::value_ptr(CalcNormModelToCamera()));
+						}
+
+						if(matrices.unifNormalCameraToModel)
+						{
+							gl::ProgramUniformMatrix3fv(prog, matrices.unifNormalCameraToModel.get(), 1,
+								gl::FALSE_, glm::value_ptr(CalcNormCameraToModel()));
+						}
+					}
+				}
+			};
+
 			BindStyleToOpenGL(const StyleData &style, const ResourceData &resources)
 				: m_style(style)
 				, m_resources(resources)
 			{
-				boost::apply_visitor(BindProgramVisitor(m_resources), style.progBinding);
+				boost::apply_visitor(BindProgramVisitor(m_resources), m_style.progBinding);
 
 				BOOST_FOREACH(const TextureBindingMap::value_type &texBindingPair, m_style.textureBindings)
 				{
@@ -377,10 +454,72 @@ namespace glscene
 				gl::UseProgram(0);
 			}
 
+			void ApplyMatrices(const glm::mat4 &objectToCamera) const
+			{
+				boost::apply_visitor(SetUniformMatrices(m_resources, objectToCamera),
+					m_style.progBinding);
+			}
+
 		private:
 			const StyleData &m_style;
 			const ResourceData &m_resources;
 		};
+
+		struct Renderable
+		{
+			const StyleData *pStyle;
+			glm::mat4 nodeToCamera;
+			glm::mat4 objectToCamera;
+		};
+
+		typedef std::vector<Renderable> RenderList;
+		void BuildRenderListRec(RenderList &renderables, const NodeData &currNode,
+			glm::mat4 nodeToCamera, int layerIx, const IdString &styleId)
+		{
+			nodeToCamera *= currNode.GetNodeTM().GetMatrix();
+
+			if(currNode.IsInLayer(layerIx))
+			{
+				const StyleData *pStyle = currNode.FindStyle(styleId);
+				if(pStyle)
+				{
+					renderables.push_back(Renderable());
+					renderables.back().pStyle = pStyle;
+					renderables.back().nodeToCamera = nodeToCamera;
+					renderables.back().objectToCamera = nodeToCamera * currNode.GetObjectTM().GetMatrix();
+				}
+			}
+
+			BOOST_FOREACH(const NodeData *pChild, currNode.GetChildRange())
+			{
+				BuildRenderListRec(renderables, *pChild, nodeToCamera, layerIx, styleId);
+			}
+		}
+
+		void SortRenderList(RenderList &renderables, NodeRenderingOrder eOrder)
+		{
+			
+		}
+	}
+
+	void SceneGraph::Render( const glm::mat4 &worldToCamera, NodeRenderingOrder eOrder,
+		int layerIx, boost::string_ref styleId ) const
+	{
+		//1: Collate all applicable renderables and build transforms.
+		RenderList renderList;
+		BuildRenderListRec(renderList, m_pData->rootNode, worldToCamera, layerIx, styleId);
+
+		//2: Sort the renderable list.
+		SortRenderList(renderList, eOrder);
+
+		//3: Render the renderables.
+		BOOST_FOREACH(const Renderable &obj, renderList)
+		{
+			BindStyleToOpenGL binder(*obj.pStyle, m_pData->resources);
+			binder.ApplyMatrices(obj.objectToCamera);
+
+			m_pData->resources.RenderMesh(obj.pStyle->meshResourceId, obj.pStyle->meshVariantString);
+		}
 	}
 
 	void swap( SceneGraph &lhs, SceneGraph &rhs )

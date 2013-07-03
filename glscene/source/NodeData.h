@@ -8,6 +8,7 @@
 #include <vector>
 #include <boost/dynamic_bitset.hpp>
 #include <boost/optional.hpp>
+#include <boost/range.hpp>
 
 namespace glscene
 {
@@ -93,7 +94,7 @@ namespace glscene
 		std::vector<BufferInterfaceBindingData> storageBufferBindings;
 	};
 
-	typedef boost::container::flat_map<IdString, StyleData> StyleList;
+	typedef boost::container::flat_map<IdString, StyleData> StyleMap;
 	typedef std::vector<NodeData*> NodeChildren;
 
 	class NodeData
@@ -131,6 +132,14 @@ namespace glscene
 
 		void DefineStyle(const boost::string_ref &styleName, const StyleInfo &style);
 
+		const StyleData *FindStyle(const IdString &styleId) const;
+
+		boost::iterator_range<NodeChildren::const_iterator> GetChildRange() const
+		{
+			return boost::iterator_range<NodeChildren::const_iterator>(
+				m_children.begin(), m_children.end());
+		}
+
 	private:
 		boost::optional<IdString> m_name;
 		NodeData *m_pParent;
@@ -138,7 +147,7 @@ namespace glscene
 		TransformData m_nodeTM;
 		TransformData m_objTM;
 		boost::dynamic_bitset<> m_layers;
-		StyleList m_styles;
+		StyleMap m_styles;
 
 		//Creates root node.
 		NodeData(int numLayers);
