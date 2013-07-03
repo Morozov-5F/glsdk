@@ -441,7 +441,6 @@ namespace glscene
 				BOOST_FOREACH(const ImageBindingMap::value_type &imgBindingPair, m_style.imageBindings)
 				{
 					gl::BindImageTexture(imgBindingPair.first, 0, 0, gl::FALSE_, 0, gl::READ_ONLY, gl::RGBA8);
-					const ImageBindingData &imgBinding = imgBindingPair.second;
 				}
 
 				BOOST_FOREACH(const TextureBindingMap::value_type &texBindingPair, m_style.textureBindings)

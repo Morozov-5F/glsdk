@@ -99,8 +99,8 @@ namespace glscene
 	enum NodeRenderingOrder
 	{
 		ORDER_ARBITRARY,		///<The nodes will be rendered without any specific order.
-		ORDER_FRONT_TO_BACK,	///<The nodes will be sorted front-to-back, based on the node transform's camera-space position. "Front" means larger Z values.
-		ORDER_BACK_TO_FRONT,	///<The nodes will be sorted back-to-front, based on the node transform's camera-space position. "Front" means larger Z values.
+//		ORDER_FRONT_TO_BACK,	///<The nodes will be sorted front-to-back, based on the node transform's camera-space position. "Front" means larger Z values.
+//		ORDER_BACK_TO_FRONT,	///<The nodes will be sorted back-to-front, based on the node transform's camera-space position. "Front" means larger Z values.
 	};
 
 	/**

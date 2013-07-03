@@ -4,6 +4,7 @@
 #include "glscene/NodeRef.h"
 #include <glload/gl_all.hpp>
 #include "NodeData.h"
+#include <boost/lexical_cast.hpp>
 
 namespace glscene
 {
@@ -16,7 +17,8 @@ namespace glscene
 		const std::string &resourceType, unsigned int bindingIndex )
 	{
 		return "A style tried to set the resource '" + resourceId + "' of type '"
-			+ resourceType + "' to the same binding index as another resource on the same style.";
+			+ resourceType + "' to the same binding index " + boost::lexical_cast<std::string>(bindingIndex)
+			+ " as another resource on the same style.";
 	}
 
 	bool IsDecomposed( const TransformData &data )
