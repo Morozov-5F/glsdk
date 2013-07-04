@@ -259,9 +259,9 @@ The include path you need to add to your build system for this library is <tt>"f
 
 You will also need to add some \#defines to your command line. These are:
 
-\li FREEGLUT_STATIC
-\li _LIB
-\li FREEGLUT_LIB_PRAGMAS=0
+- FREEGLUT_STATIC
+- _LIB
+- FREEGLUT_LIB_PRAGMAS=0
 
 \subsection page_use_native_boost Boost Linking
 
@@ -269,15 +269,16 @@ The only sections of Boost that are included are the header-only parts. So there
 
 You will also need to add some \#defines to your command line. These are:
 
-\li BOOST_ALL_NO_LIB
+- BOOST_ALL_NO_LIB
 
 \subsection page_use_native_deps SDK Dependencies
 
 One more thing. Some of the SDK libraries are dependent on other SDK libraries. You could just include them all and be done with it. But if you only want to include the bare minimum you need, here is the lsit of dependencies. Any library not mentioned has no dependencies:
 
-\li GL Util: Boost, GL Load (for some functions)
-\li GL Mesh: Boost, GL Util, GL Load, GLM
-\li GL Image: Boost, GL Load (for the texture upload functions)
+- GL Util: Boost, GL Load (for some functions)
+- GL Mesh: Boost, GL Util, GL Load, GLM
+- GL Image: Boost, GL Load (for the texture upload functions)
+- GL Scene: Boost, GLM, GL Load, GL Util, GL Image, GL Mesh (the last two only if you use the file format and default loading system)
 
 \section page_use_other Other Includes
 
@@ -287,21 +288,41 @@ Each platform has its own ways of dealing with OpenGL. In most cases, you will o
 
 For Windows, you will need to link to some of the following libraries. All of them come with your build tools (or you need to download the Windows Platform SDK):
 
-\li <tt>opengl32.lib</tt>: The basic Windows interface to OpenGL. If you are building a 64-bit application, it still links to <tt>opengl32.lib</tt>
-\li <tt>glu32.lib</tt>: An old utility library for OpenGL. Needed by FreeGLUT or older OpenGL applications.
-\li <tt>gdi32.lib</tt>: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
-\li <tt>winmm.lib</tt>: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
-\li <tt>user32.lib</tt>: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
+- `opengl32.lib`: The basic Windows interface to OpenGL. If you are building a 64-bit application, it still links to <tt>opengl32.lib</tt>
+- `glu32.lib`: An old utility library for OpenGL. Needed by FreeGLUT or older OpenGL applications.
+- `gdi32.lib`: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
+- `winmm.lib`: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
+- `user32.lib`: Needed by FreeGLUT. You do not have to link to this if you are not using FreeGLUT.
 
 For Linux, you will need to link to some of the following libraries. All of them come with your build tools or are otherwise a part of your system:
 
-\li <tt>libGL</tt>: OpenGL's interface on Linux.
-\li <tt>libGLU</tt>: An old utility library for OpenGL. Needed by FreeGLUT and GLFW on Linux.
-\li <tt>Xrandr</tt>: An X-Windows extension that allows accessing low-level screen behavior. Needed by GLFW for full-screening applications.
+- `libGL`: OpenGL's interface on Linux.
+- `libGLU`: An old utility library for OpenGL. Needed by FreeGLUT and GLFW on Linux.
+- `Xrandr`: An X-Windows extension that allows accessing low-level screen behavior. Needed by GLFW for full-screening applications.
+**/
+
+/**
+\page pg_dependencies Internal Dependency Graph
+
+SDK has no *external* dependencies that you must download. But the use of some libraries *within* the SDK will require you to include other libraries that are also part of the SDK. If you wish to be absolutely safe, you can always link to all of the SDK components. But if you want to be selective about what you link with, this page explains which libraries within the SDK require other SDK libraries.
+
+Note that GLM and Boost are header-only. So dependencies on them are just about the headers, not libraries.
+
+- GLFW, FreeGLUT, Boost, and GLM all have no dependencies on other SDK libraries.
+- GL Load has no dependencies.
+- GL Util depends on Boost and GLM.
+	- The parts of GL Util that directly interact with OpenGL rely on GL Load.
+- GL Image relies on Boost and GLM.
+	- The [texture creation functionality](\ref module_glimg_texture) relies on GL Load.
+- GL Mesh relies on GLM, Boost, GL Load and GL Util.
+- GL Scene relies on pretty much everything in the SDK, except GLFW and FreeGLUT.
 **/
 
 /**
 \page pg_changelist Changelist
+
+Changes from 0.5.0:
+- Added [GL Scene Graph](\ref module_glscene) to the distribution.
 
 Changes from 0.4.4:
 <ul>

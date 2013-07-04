@@ -26,6 +26,14 @@ namespace glutil
 		, m_bIsDragging(false)
 	{}
 
+	void ObjectPole::SetLookatProvider( const ViewProvider *pLookatProvider )
+	{
+		if(m_bIsDragging)
+			return;
+
+		m_pView = pLookatProvider;
+	}
+
 	glm::mat4 ObjectPole::CalcMatrix() const
 	{
 		glm::mat4 translateMat(1.0f);

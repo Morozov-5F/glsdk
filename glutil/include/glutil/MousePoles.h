@@ -96,6 +96,13 @@ namespace glutil
 		ObjectPole(const ObjectData &initialData, float rotateScale,
 			MouseButtons actionButton, const ViewProvider *pLookatProvider);
 
+		/**
+		\brief Sets the lookat provider.
+		
+		If the ObjectPole is current being dragged, then the lookat provider will not be changed.
+		**/
+		void SetLookatProvider(const ViewProvider *pLookatProvider);
+
 		///Generates the local-to-world matrix for this object.
 		glm::mat4 CalcMatrix() const;
 
@@ -119,7 +126,7 @@ namespace glutil
 		\name Input Providers
 
 		These functions provide input, since Poles cannot get input for themselves. See
-		\ref module_glutil_poles "the Pole manual" for details.
+		[the Pole manual](\ref module_glutil_poles) for details.
 		**/
 		///@{
 

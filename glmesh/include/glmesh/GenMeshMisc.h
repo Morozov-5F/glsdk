@@ -74,6 +74,17 @@ namespace glmesh
 		Each cube is a cube of size 2. The entire array will be centered around it's centerpoint.
 		The array's length on one side will be `2 * (2n - 1)`, where `n` is the number of cubes on an edge.
 
+		So one side of the block generated will look like this, given a \a numCubesOnEdge of 3, where each
+		`*` is a cube:
+
+		\verbatim
+		* * *
+		 * *
+		* * *
+		 * *
+		* * *
+		\endverbatim
+
 		Available attributes:
 		\li normals
 		\li color, if you pass a non-empty \a colorSequence argument.
@@ -92,6 +103,16 @@ namespace glmesh
 		The entire array will be centered around its X/Z centerpoint, with the zero y at the base of the pyramid.
 		The height will be `2*n`, where `n` is the number of cubes in height. The width/depth will be
 		`2 * (2n - 1)`.
+
+		So one side of the pyramid generated will look like this, given a \a numCubesTall of 4, where each
+		`*` is a cube:
+
+		\verbatim
+		   *
+		  * *
+		 * * *
+		* * * *
+		\endverbatim
 
 		Available attributes:
 		\li normals

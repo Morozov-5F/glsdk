@@ -263,7 +263,7 @@ namespace glscene
 	\brief Makes the given node the parent of this one.
 
 	\throws CannotChangeTheRootParentException If \a data is the root node. The root node's parentage cannot be changed.
-	\throws CannotMakeParentOfSelfException If `\a data and \a newParent are the same node.
+	\throws CannotMakeParentOfSelfException If \a data and \a newParent are the same node.
 	**/
 	void MakeChildOfNode(NodeData &data, NodeData &newParent);
 	///@}

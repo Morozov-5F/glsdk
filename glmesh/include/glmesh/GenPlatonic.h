@@ -43,6 +43,8 @@ namespace glmesh
 		Available attributes:
 		\li normals
 		\li color, if you pass a non-empty \a colorSequence argument.
+
+		\param colorSequence Colors used to color the faces.
 		**/
 		Mesh *Tetrahedron(const ColorArray &colorSequence = ColorArray());
 
@@ -56,10 +58,11 @@ namespace glmesh
 		Available attributes:
 		\li normals
 		\li color, if you pass a non-empty \a colorSequence argument.
-
-		The order of the colors is such that, if you pass a 3 element list, then each pair of
-		faces on opposite sides of the cube will have the same color. The order of colors is:
-		+Y, +X, +Z, -Y, -X, -Z.
+		
+		\param colorSequence Colors used to color the faces. The order of the colors
+		is such that, if you pass a 3 element list,
+		then each pair of faces on opposite sides
+		of the cube will have the same color. The order of colors is: +Y, +X, +Z, -Y, -X, -Z.
 		**/
 		Mesh *Cube(const ColorArray &colorSequence = ColorArray());
 
@@ -70,12 +73,13 @@ namespace glmesh
 		in creating it are equilateral.
 
 		The octahedron's 6 vertices point in the axial directions. All of the points lie in [-1, 1],
-		and the 6 positions are all right on the border.
+		and the 6 positions are all at the far edges of this range.
 
 		Available attributes:
 		\li normals
 		\li color, if you pass a non-empty \a colorSequence argument.
 
+		\param colorSequence Colors used to color the faces.
 		**/
 		Mesh *Octahedron(const ColorArray &colorSequence = ColorArray());
 
@@ -101,6 +105,8 @@ namespace glmesh
 		starting from the one facing directly +X (with no Z in its facing). These proceed clockwise, as
 		seen when looking down at the dodecahedron. The other 6 faces are the opposing faces for those
 		faces.
+
+		\param colorSequence Colors used to color the faces.
 		**/
 		Mesh *Dodecahedron(const ColorArray &colorSequence = ColorArray());
 
@@ -110,12 +116,14 @@ namespace glmesh
 		An icosahedron is a 20-sided, triangular solid. It is regular in that all of the triangles
 		used in creating it are equilateral.
 
-		The icosahedron is oriented so that two opposite vertices are in the +Y and -Y axes.
+		The icosahedron is oriented so that two opposite vertices are in the +Y and -Y axes. This
+		means that it points straight up and down.
 
 		Available attributes:
 		\li normals
 		\li color, if you pass a non-empty \a colorSequence argument.
-		
+
+		\param colorSequence Colors used to color the faces.
 		**/
 		Mesh *Icosahedron(const ColorArray &colorSequence = ColorArray());
 
