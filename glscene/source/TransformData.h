@@ -18,9 +18,9 @@ namespace glscene
 		operator glm::mat4 () const
 		{
 			glm::mat4 ret(1.0f);
-			glm::translate(ret, translation);
+			ret = glm::translate(ret, translation);
 			ret = ret * glm::mat4_cast(orientation);
-			glm::scale(ret, scale);
+			ret = glm::scale(ret, scale);
 			return ret;
 		}
 
@@ -97,6 +97,7 @@ namespace glscene
 		void SetDecomposed(const DecomposedMatrix &decomp)
 		{
 			m_matrix = decomp;
+			glm::mat4 test = GetMatrix();
 		}
 
 

@@ -167,7 +167,7 @@ namespace glscene
 		BindingLocationMap uniformBlockBindings;	///<Binding locations for [uniform blocks](http://www.opengl.org/wiki/Uniform_Buffer_Object).
 		BindingLocationMap bufferVariableBindings;	///<Binding locations for [buffer variables](http://www.opengl.org/wiki/Shader_Storage_Buffer_Object).
 
-		boost::optional<std::string> modelToCameraMatrixUniformName;		///<The name of the shader's `mat4` model-to-camera transformation matrix uniform.
+		boost::optional<std::string> modelToCameraMatrixUniformName;			///<The name of the shader's `mat4` model-to-camera transformation matrix uniform.
 		boost::optional<std::string> normalModelToCameraMatrixUniformName;		///<The name of the shader's `mat3` model-to-camera transformation matrix uniform.
 		boost::optional<std::string> normalCameraToModelMatrixUniformName;		///<The name of the shader's `mat3` camera-to-model transformation matrix uniform.
 	};
@@ -212,7 +212,7 @@ namespace glscene
 		\param uniformName The name of the uniform in GLSL.
 		\param data The value to set the uniform to.
 
-		\throws ResourceMultiplyDefinedException If \a resource refers to a uniform resource that has already
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a uniform resource that has already
 		been defined.
 		**/
 		///@{
@@ -239,7 +239,7 @@ namespace glscene
 		\param resourceId The resource name for the uniform.
 		\param data The value to set into the uniform.
 
-		\throws ResourceNotFoundException If \a resource is not a uniform resource.
+		\throws ResourceNotFoundException If \a resourceId is not a uniform resource.
 		\throws UniformResourceTypeMismatchException If \a data is not the same type as the original uniform definition.
 		**/
 		///@{
@@ -268,7 +268,7 @@ namespace glscene
 		\param target The target the texture is associated with.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the texture.
 
-		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a texture resource that has already
 		been defined with texture data. If it was defined with DefineTextureIncomplete, then this exception
 		will not be thrown.
 		**/
@@ -280,7 +280,7 @@ namespace glscene
 
 		\param resourceId The resource name for the texture.
 
-		\throws ResourceMultiplyDefinedException If \a resource refers to a texture resource that has already
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a texture resource that has already
 		been defined.
 		**/
 		void DefineTextureIncomplete(const boost::string_ref &resourceId);
@@ -288,7 +288,7 @@ namespace glscene
 		/**
 		\brief Creates a named sampler resource.
 		
-		\throws ResourceMultiplyDefinedException If \a resource refers to a sampler resource that has already
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a sampler resource that has already
 		been defined.
 
 		\param resourceId The resource name for the sampler.
@@ -302,7 +302,7 @@ namespace glscene
 		\param resourceId The resource name for the sampler.
 		\param color The color to set the border color to.
 
-		\throws ResourceNotFoundException If \a resource is not a sampler resource.
+		\throws ResourceNotFoundException If \a resourceId is not a sampler resource.
 		**/
 		void SetSamplerBorderColor(const boost::string_ref &resourceId, const glm::vec4 &color);
 
@@ -312,7 +312,7 @@ namespace glscene
 		\param resourceId The resource name for the sampler.
 		\param color The color to set the border color to.
 
-		\throws ResourceNotFoundException If \a resource is not a sampler resource.
+		\throws ResourceNotFoundException If \a resourceId is not a sampler resource.
 		**/
 		void SetSamplerBorderColorI(const boost::string_ref &resourceId, const glm::ivec4 &color);
 
@@ -322,7 +322,7 @@ namespace glscene
 		\param resourceId The resource name for the sampler.
 		\param color The color to set the border color to.
 
-		\throws ResourceNotFoundException If \a resource is not a sampler resource.
+		\throws ResourceNotFoundException If \a resourceId is not a sampler resource.
 		**/
 		void SetSamplerBorderColorI(const boost::string_ref &resourceId, const glm::uvec4 &color);
 
@@ -332,7 +332,7 @@ namespace glscene
 		\param resourceId The resource name for the sampler.
 		\param bias The LOD bias for the sampler.
 
-		\throws ResourceNotFoundException If \a resource is not a sampler resource.
+		\throws ResourceNotFoundException If \a resourceId is not a sampler resource.
 		**/
 		void SetSamplerLODBias(const boost::string_ref &resourceId, float bias);
 
@@ -343,7 +343,7 @@ namespace glscene
 		\param pMesh The mesh object to be stored.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the mesh.
 
-		\throws ResourceMultiplyDefinedException If \a resource refers to a mesh resource that has already
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a mesh resource that has already
 		been defined with mesh data. If it was previously defined with DefineMeshIncomplete, then this exception
 		will not be thrown.
 		**/
@@ -356,7 +356,7 @@ namespace glscene
 		\param pMesh The mesh object to be stored.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the mesh.
 
-		\throws ResourceMultiplyDefinedException If \a resource refers to a mesh resource that has already
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a mesh resource that has already
 		been defined with mesh data. If it was previously defined with DefineMeshIncomplete, then this exception
 		will not be thrown.
 		**/
@@ -365,7 +365,7 @@ namespace glscene
 		/**
 		\brief Creates a named mesh, which will be filled in with actual data later.
 		
-		\throws ResourceMultiplyDefinedException If \a resource refers to a mesh resource that has already
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a mesh resource that has already
 		been defined.
 
 		\param resourceId The resource name for the mesh.
@@ -412,7 +412,7 @@ namespace glscene
 		\param size The size of the range to bind.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the buffer.
 
-		\throws ResourceMultiplyDefinedException If \a resource refers to a uniform buffer resource that has
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a uniform buffer resource that has
 		already been defined. This will still be thrown if you used DefineUniformBufferBindingIncomplete
 		to partially define the resource. In that case, you must use the other overload of this function.
 
@@ -435,9 +435,9 @@ namespace glscene
 		a multiple of `GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT`
 		\param claimOwnership Set to `true` if you want the scene graph to delete the buffer.
 
-		\throws ResourceNotFoundException If \a resource does not refer to an existing uniform buffer
+		\throws ResourceNotFoundException If \a resourceId does not refer to an existing uniform buffer
 		resource.
-		\throws ResourceMultiplyDefinedException If \a resource refers to an existing uniform buffer
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to an existing uniform buffer
 		resource that was not incompletely defined by a call to DefineUniformBufferBindingIncomplete, or
 		if the resource was previously defined by a call to this function.
 		**/
@@ -455,7 +455,7 @@ namespace glscene
 		\param bindPoint The index to bind to. Must be less than `GL_MAX_UNIFORM_BUFFER_BINDINGS`.
 		\param size The size of the range to bind.
 		
-		\throws ResourceMultiplyDefinedException If \a resource refers to a uniform buffer resource that has
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a uniform buffer resource that has
 		already been defined.
 		**/
 		void DefineUniformBufferBindingIncomplete(const boost::string_ref &resourceId, GLuint bindPoint,
@@ -477,7 +477,7 @@ namespace glscene
 		\param size The size of the range to bind.
 		\param claimOwnership Set to `true` if you want the scene graph to delete the buffer.
 
-		\throws ResourceMultiplyDefinedException If \a resource refers to a storage buffer resource that has
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a storage buffer resource that has
 		already been defined. This will still be thrown if you used DefineUniformBufferBindingIncomplete
 		to partially define the resource. In that case, you must use the other overload of this function.
 
@@ -500,9 +500,9 @@ namespace glscene
 		a multiple of `GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT`
 		\param claimOwnership Set to `true` if you want the scene graph to delete the buffer.
 
-		\throws ResourceNotFoundException If \a resource does not refer to an existing storage buffer
+		\throws ResourceNotFoundException If \a resourceId does not refer to an existing storage buffer
 		resource.
-		\throws ResourceMultiplyDefinedException If \a resource refers to an existing storage buffer
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to an existing storage buffer
 		resource that was not incompletely defined by a call to DefineStorageBufferBindingIncomplete, or
 		if the resource was previously defined by a call to this function.
 		**/
@@ -520,7 +520,7 @@ namespace glscene
 		\param bindPoint The index to bind to. Must be less than `GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS`.
 		\param size The size of the range to bind.
 		
-		\throws ResourceMultiplyDefinedException If \a resource refers to a storage buffer resource that has
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a storage buffer resource that has
 		already been defined.
 		**/
 		void DefineStorageBufferBindingIncomplete(const boost::string_ref &resourceId, GLuint bindPoint,
@@ -540,11 +540,18 @@ namespace glscene
 		\param actionButton The mouse button to listen for. All other mouse buttons are ignored.
 		\param bRightKeyboardCtrls If true, then it uses IJKLUO instead of WASDQE keys.
 
-		\throws ResourceMultiplyDefinedException If \a resource refers to a camera resource that has
+		\throws ResourceMultiplyDefinedException If \a resourceId refers to a camera resource that has
 		already been defined.
 		**/
 		void DefineCamera(const boost::string_ref &resourceId, const glutil::ViewData &initialView,
 			const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls);
+
+		/**
+		\brief Retrieves the named camera resource.
+		\throws ResourceNotFoundException If \a resourceId is not a previously defined camera resource.
+		**/
+		glutil::ViewPole &GetCamera(const boost::string_ref &resourceId);
+
 	private:
 		boost::reference_wrapper<ResourceData> m_data;
 

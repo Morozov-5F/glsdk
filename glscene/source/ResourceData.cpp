@@ -805,12 +805,8 @@ namespace glscene
 
 	glutil::ViewPole & ResourceData::GetCamera( const IdString &resourceId )
 	{
-		CameraMap::iterator theVal = m_cameraMap.find(resourceId);
-
-		if(theVal == m_cameraMap.end())
-			throw ResourceNotFoundException(resourceId, "camera");
-
-		return theVal->second;
+		return const_cast<glutil::ViewPole &>(
+			(const_cast<const ResourceData &>(*this)).GetCamera(resourceId));
 	}
 
 	const glutil::ViewPole & ResourceData::GetCamera( const IdString &resourceId ) const

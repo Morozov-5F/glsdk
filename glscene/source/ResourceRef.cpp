@@ -268,4 +268,9 @@ namespace glscene
 	{
 		m_data.get().DefineCamera(resourceId, initialView, viewScale, actionButton, bRightKeyboardCtrls);
 	}
+
+	glutil::ViewPole & ResourceRef::GetCamera( const boost::string_ref &resourceId )
+	{
+		return m_data.get().GetCamera(resourceId);
+	}
 }

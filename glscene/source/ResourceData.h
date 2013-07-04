@@ -27,7 +27,7 @@ namespace glscene
 
 		virtual void Draw(const boost::optional<std::string> &param) const
 		{
-			if(param)
+			if(!param)
 				pMesh->Render();
 			else
 				pMesh->Render(param.get());

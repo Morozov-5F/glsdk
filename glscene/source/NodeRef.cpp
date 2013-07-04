@@ -126,6 +126,21 @@ namespace glscene
 		return data.GetObjectTM();
 	}
 
+	void AddToLayer( NodeData &data, int layerIx )
+	{
+		data.AddToLayer(layerIx);
+	}
+
+	void RemoveFromLayer( NodeData &data, int layerIx )
+	{
+		data.RemoveFromLayer(layerIx);
+	}
+
+	bool IsInLayer( const NodeData &data, int layerIx )
+	{
+		return data.IsInLayer(layerIx);
+	}
+
 	boost::string_ref GetName(const NodeData &data)
 	{
 		return data.GetName();
