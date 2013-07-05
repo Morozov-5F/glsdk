@@ -7,6 +7,7 @@ local LibDeps =
 	glimage = {"boost"},
 	glmesh = {"boost", "glload", "glm"},
 	glutil = {"boost", "glm"},
+	glscene = {"boost", "glm", "glmesh", "glutil", "glimage",},
 }
 
 local LinkFuncs =
@@ -50,6 +51,16 @@ local LinkFuncs =
 
 		configuration "Release"
 			links {"glmesh"}
+	end,
+	glscene = function()
+		includedirs "glscene/include"
+		libdirs "glscene/lib"
+
+		configuration "Debug"
+			links {"glsceneD"}
+
+		configuration "Release"
+			links {"glscene"}
 	end,
 	glm = function()
 		includedirs "glm"

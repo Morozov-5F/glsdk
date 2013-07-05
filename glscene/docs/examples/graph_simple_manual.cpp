@@ -8,13 +8,12 @@
 #include <iostream>
 #include <fstream>
 #include <iterator>
-#include <glload/gl_3_3.h>
+#include <glload/gl_3_3_comp.h>
 #include <glload/gl_load.hpp>
 #include <GL/glfw.h>
 #include <glscene/glscene.h>
 #include <glutil/glutil.h>
 #include <glmesh/glmesh.h>
-#include <glimg/glimg.h>
 #include <boost/typeof/typeof.hpp>
 #include <boost/utility/string_ref.hpp>
 #include <glm/glm.hpp>
@@ -31,7 +30,6 @@ const boost::string_ref g_namePerspMat = "perspective matrix";
 const boost::string_ref g_nameCamera = "main-camera";
 const boost::string_ref g_nameGroundNode = "ground";
 const boost::string_ref g_nameObjectNode = "object";
-const boost::string_ref g_nameTexObjectNode = "texObject";
 const boost::string_ref g_nameMainStyle = "main";
 
 glm::vec3 g_objPos(0.0f, 3.0f, 0.0f);
@@ -54,7 +52,6 @@ void init()
 	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	glEnable(GL_CULL_FACE);
 }
 
 std::string LoadShaderFile(const std::string &filename)
@@ -84,55 +81,26 @@ void BuildGraph(glscene::SceneGraph &graph)
 		graph.GetResources().DefineMesh("ground", glmesh::gen::GroundPlane(2, 2));
 	}
 
-	graph.GetResources().DefineUniform(g_namePerspMat, "cameraToPerspective", glm::mat4(1.0f));
+	const std::string groundVertexShader = LoadShaderFile("ground.vert");
+	const std::string groundFragShader = LoadShaderFile("ground.frag");
+	GLuint prog = glutil::LinkProgram(groundVertexShader, groundFragShader);
 
 	{
-		GLuint prog = glutil::LinkProgram(
-			LoadShaderFile("ground.vert"),
-			LoadShaderFile("ground.frag"));
-
 		glscene::ProgramInfo progData;
 		progData.modelToCameraMatrixUniformName = std::string("modelToCamera");
 
 		graph.GetResources().DefineProgram("ground", prog, progData);
 	}
+	graph.GetResources().DefineUniform(g_namePerspMat, "cameraToPerspective", glm::mat4(1.0f));
 
+	const std::string objectVertexShader = LoadShaderFile("object.vert");
+	const std::string objectFragShader = LoadShaderFile("object.frag");
+	prog = glutil::LinkProgram(objectVertexShader, objectFragShader);
 	{
-		GLuint prog = glutil::LinkProgram(
-			LoadShaderFile("object.vert"),
-			LoadShaderFile("object.frag"));
-
 		glscene::ProgramInfo progData;
 		progData.modelToCameraMatrixUniformName = std::string("modelToCamera");
 
 		graph.GetResources().DefineProgram("object", prog, progData);
-	}
-
-	{
-		std::auto_ptr<glimg::ImageSet> pSet(glimg::loaders::stb::LoadFromFile("tex.png"));
-		GLuint texName = glimg::CreateTexture(pSet.get(), 0);
-		graph.GetResources().DefineTexture("tex", texName, glimg::GetTextureType(pSet.get(), 0));
-
-		glscene::SamplerInfo info;
-		info.edgeFilterS = GL_CLAMP_TO_EDGE;
-		info.edgeFilterT = GL_CLAMP_TO_EDGE;
-		info.edgeFilterR = GL_CLAMP_TO_EDGE;
-
-		info.magFilter = GL_LINEAR;
-		info.minFilter = GL_LINEAR;
-		graph.GetResources().DefineSampler("nearest", info);
-	}
-
-	{
-		GLuint prog = glutil::LinkProgram(
-			LoadShaderFile("texture.vert"),
-			LoadShaderFile("texture.frag"));
-
-		glscene::ProgramInfo progData;
-		progData.modelToCameraMatrixUniformName = std::string("modelToCamera");
-		progData.samplerBindings["image"] = 0;
-
-		graph.GetResources().DefineProgram("texture", prog, progData);
 	}
 
 	glscene::NodeData &ground = graph.CreateChildNode(graph.GetRootNode(), g_nameGroundNode);
@@ -140,7 +108,7 @@ void BuildGraph(glscene::SceneGraph &graph)
 
 	SetDecomposed(GetNodeTM(ground),
 		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::quat(0.707107f, -0.707107f, 0.0f, 0.0f));
+		glm::quat(0.707107f, 0.707107f, 0.0f, 0.0f));
 
 	SetDecomposed(GetObjectTM(ground),
 		glm::vec3(0.0f, 0.0f, 0.0f),
@@ -177,27 +145,6 @@ void BuildGraph(glscene::SceneGraph &graph)
 		style.progBinding = programBind;
 
 		graph.DefineNodeStyle(object, g_nameMainStyle, style);
-	}
-
-	glscene::NodeData &texObj = graph.CreateChildNode(graph.GetRootNode(), g_nameTexObjectNode);
-	AddToLayer(texObj, 0);
-
-	SetDecomposed(GetNodeTM(texObj), g_objPos);
-	SetDecomposed(GetObjectTM(texObj),
-		glm::vec3(0.0f, 2.5f, -5.0f));
-
-	{
-		glscene::StyleInfo style;
-		style.meshResourceId = "ground";
-		style.meshVariantString = std::string("lit-tex");
-		glscene::SingleProgramBinding programBind;
-		programBind.programId = "texture";
-		programBind.uniformIds.push_back(std::string(g_namePerspMat.data(), g_namePerspMat.size()));
-		style.progBinding = programBind;
-		glscene::TextureBinding tex = {0, "tex", "nearest"};
-		style.textureBindings.push_back(tex);
-
-		graph.DefineNodeStyle(texObj, g_nameMainStyle, style);
 	}
 }
 

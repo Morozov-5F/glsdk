@@ -126,7 +126,7 @@ namespace gen
 		const int numIndices = numRows * numXVerts * 2 + 1; //2 indices per row, +1 for the restart index.
 		std::vector<GLuint> indices;
 		indices.reserve(numIndices * 2); //Enough space for double-sided.
-		const GLuint restartIx = numIndices * 2;
+		const GLuint restartIx = numVerts;
 
 		//Top side.
 		for(int rowIx = 0; rowIx < numRows; ++rowIx)
@@ -147,8 +147,8 @@ namespace gen
 				for(int column = 0; column < numXVerts; ++column)
 				{
 					//Reversed from front side.
-					indices.push_back(((rowIx + 1) * numXVerts) + (column * 2));
-					indices.push_back((rowIx * numXVerts) + (column * 2));
+					indices.push_back(((rowIx + 1) * numXVerts) + column + (numVerts/2));
+					indices.push_back((rowIx * numXVerts) + column + (numVerts/2));
 				}
 
 				indices.push_back(restartIx);
@@ -187,7 +187,7 @@ namespace gen
 		if(bDoubleSided)
 		{
 			renderCmds.DrawElements(gl::TRIANGLE_STRIP, numIndices, gl::UNSIGNED_INT,
-				numIndices * sizeof(GLuint), numXVerts * numYVerts);
+				numIndices * sizeof(GLuint));
 		}
 		renderCmds.PrimitiveRestartIndex();
 

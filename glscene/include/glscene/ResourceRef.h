@@ -80,7 +80,6 @@ namespace glscene
 
 	/**
 	\brief Used to define a sampler resource.
-	
 	**/
 	struct SamplerInfo
 	{
@@ -88,7 +87,7 @@ namespace glscene
 		GLenum magFilter;		///<The `GL_TEXTURE_MAG_FILTER` parameter. Defaults to `GL_NEAREST`.
 		GLenum minFilter;		///<The `GL_TEXTURE_MIN_FILTER` parameter. Defaults to `GL_NEAREST`.
 		float maxAniso;			///<The maximum anisotropy. Defaults to 1.0f.
-		boost::optional<GLenum> compareFunc;	///<The `GL_TEXTURE_COMPARE_FUNC` parameter. If not present, then there is no depth comparison.
+		boost::optional<GLenum> compareFunc;	///<The `GL_TEXTURE_COMPARE_FUNC` parameter. If not present, then there is no depth comparison. Defaults to no comparison.
 
 		GLenum edgeFilterS;		///<The `GL_TEXTURE_WRAP_S` parameter. Defaults to `GL_CLAMP_TO_EDGE`.
 		GLenum edgeFilterT;		///<The `GL_TEXTURE_WRAP_T` parameter. Defaults to `GL_CLAMP_TO_EDGE`.

@@ -214,10 +214,10 @@ namespace glscene
 		BOOST_FOREACH(const TextureBinding &texBind, style.textureBindings)
 		{
 			//3a:   that the referenced texture is real.
-			if(!resources.HasMesh(texBind.textureId))
+			if(!resources.HasTexture(texBind.textureId))
 				throw ResourceNotFoundException(texBind.textureId, "texture");
 			//3b:   that the referenced sampler is real.
-			if(!resources.HasMesh(texBind.samplerId))
+			if(!resources.HasSampler(texBind.samplerId))
 				throw ResourceNotFoundException(texBind.samplerId, "sampler");
 			//4:  Verify, for all texture bindings, that no two bindings bind to the same texture unit.
 			if(uniqueBindings.find(texBind.textureUnit) != uniqueBindings.end())

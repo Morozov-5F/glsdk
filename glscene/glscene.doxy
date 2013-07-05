@@ -52,6 +52,9 @@ All other objects have full value semantics. They are copyable and so forth. The
 The Scene Graph system also uses some incomplete types by reference or pointer. For example, the glscene::NodeData class cannot be directly instantiated by the user. The user can only get a reference or pointer to an existing one, and there are a number of non-member functions used to modify them or query data from them.
 
 Do not forget that C++ features argument-dependent lookup. This allows you to call these ::glscene-namespaced scoped functions as if they were in the global namespace; you don't have to qualify them with `glscene`.
+
+# Examples #
+
 **/
 
 
@@ -191,4 +194,16 @@ Layers often act separately from the node hierarchy. A child node does not *have
 [2]: http://en.wikipedia.org/wiki/Graph_%28data_structure%29
 [3]: http://en.wikipedia.org/wiki/Tree_%28data_structure%29
 [4]: @ref module_glscene
+**/
+
+
+/**
+\page pg_example_scene_manual Scene Graph Simple Manual Example
+
+**/
+
+/**
+\example graph_simple_manual.cpp
+
+This is an example of how to use the [GL Scene Graph](\ref module_glscene) system.
 **/

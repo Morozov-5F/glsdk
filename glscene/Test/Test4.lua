@@ -6,7 +6,7 @@ project "Test"
 	includedirs { "../include", "../../glload/include" }
 	links {"glscene"}
 	
-	UseLibs {"glfw", "boost", "glm", "glutil", "glload", "glimg", "glmesh"}
+	UseLibs {"glfw", "boost", "glm", "glutil", "glload", "glimage", "glmesh"}
 
 	files {"main.cpp"}
 
