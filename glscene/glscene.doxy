@@ -55,6 +55,8 @@ Do not forget that C++ features argument-dependent lookup. This allows you to ca
 
 # Examples #
 
+- \ref page_examples_glscene_simple_manual
+
 **/
 
 
@@ -139,11 +141,22 @@ All of this information is provided through the ProgramInfo object.
 
 
 /**
+\defgroup module_glscene_parsing Scene Graph Parser
+\ingroup module_glscene
+
+Building a scene graph by hand is difficult. It involves the use of a lot of code, and it is not difficult to accidentally get the process wrong. So the GL Scene Graph system provides a faster, easier way to build scene graphs: using a [file format](\ref page_glscene_file_format).
+
+These functions and classes expose the means of creating a parser, either directly from a user-provided string or by loading a file. The file format is a fairly strict system, and care has been taken to provide error messages that are as meaningful and detailed as possible.
+**/
+
+
+/**
 \defgroup module_glscene_exceptions Scene Graph Exceptions
 \ingroup module_glscene
 
 \brief Exceptions thrown by the [GL Scene Graph](@ref module_glscene) classes and functions.
 **/
+
 
 /**
 \page page_glscene_identifier_strings Identifier Strings
@@ -196,14 +209,122 @@ Layers often act separately from the node hierarchy. A child node does not *have
 [4]: @ref module_glscene
 **/
 
-
 /**
-\page pg_example_scene_manual Scene Graph Simple Manual Example
-
-**/
-
-/**
-\example graph_simple_manual.cpp
+\page page_examples_glscene_simple_manual Manual Scene Graph Creation Example
 
 This is an example of how to use the [GL Scene Graph](\ref module_glscene) system.
+
+\include graph_simple_manual.cpp
 **/
+
+/**
+\page page_glscene_file_format GL Scene Graph File Format
+
+[TOC]
+
+The scene graph system's file format, exposed by the [parsing API](\ref module_glscene_parsing), is a fairly simple format.
+
+Files are expected to be UTF-8 text files. The line ending sytle doesn't matter; the parser can handle anything. Also, the format uses C++-style comments (ie: `//` syntax).
+
+# Basic Syntax # {#page_glscene_file_format_syntax}
+
+This system uses a very rigid, well-defined basic syntax. Any sequence of non-number characters that is not bracketed by one of the delimiters listed below is treated as a keyword.
+
+## Commands ## {#page_glscene_file_format_syntax_commands}
+
+The general syntax is a sequence of commands. Every command begins with a keyword. Following that keyword is a sequence of parameters to that command, which can include strings or numbers.
+
+In addition to parameters, some commands contain other commands; such commands are called "compound commands". Subcommands effectively define data within the compound command. A sequence of subcommands is terminated with the `end` keyword. Commands that cannot have subcommands do not use the `end` keyword.
+
+Parameters can only be [strings](\ref page_glscene_file_format_syntax_strings) or [numbers](\ref page_glscene_file_format_syntax_numbers); they cannot be keywords (with a very few exceptions). Therefore a keyword defines a new command. Whether that new command is a sub-command of the previous command or a sibling command that simply followed the last command depends entirely on the last command itself.
+
+Generally speaking, non-compound commands have at most 3 parameters. Commands with more complex data will be compound commands with sub-commands. This makes it easier to provide default values, as well as making the format more readable.
+
+Each compound command defines what commands may be sub-commands of it. They also define the expected sequence of these commands. Some commands are more rigid than others, specifying a strict order of sub-commands. Some commands allow more complex relationships between sub-commands, such that a sub-command can reference a previously-defined sub-command, much like C/C++ typenames and scoping.
+
+The general idea of the syntax looks like the following:
+
+~~~~~~~~~~
+command params
+  sub-command params
+  sub-command params
+  sub-command params
+    sub-sub-command params
+	sub-sub-command params
+  end
+end
+
+command params
+  sub-command params
+end
+~~~~~~~~~~
+
+## Strings ## {#page_glscene_file_format_syntax_strings}
+
+The system uses a number of different kinds of user-provided "strings", each one bounded by a different pair of delimiter characters. Each kind of string has a specific function in the grammar, and using one string type when another is expected will result in an error. The different types of strings have different sets of legal characters.
+
+The types of strings, and their delimiters, are:
+
+String Type       | Delimiter
+----------------- | ---------
+`Identifier`      | `<Text>`
+`Filename`        | `"Text"`
+`Graph Name`      | `'Text'`
+`GLSL Identifier` | `[Text]`
+`Enumerator`      | `{Text}`
+
+- `Identifier`: These strings are used as [identifier strings](\ref page_glscene_identifier_strings) within the scene graph. They name particular scene graph entities, like resources, nodes, and styles.
+
+    Identifier string names can only contain (English) letters, numbers, and the characters "_", ".", and "-". They cannot contain spaces. These are limitations of the parser, not of the Scene Graph's identifier string system.
+- `Filename`: These represent file names or strings to be passed to the parser's loader as filenames. They can contain any character except " (and end-line characters). Though if you want file loading to work, you should stick to characters that your file system can work with.
+
+	While the Scene Graph can be in UTF-8 format, it is completely blind to Unicode itself. It will make no special effort to use any Unicode-based file loading.
+- `Graph Name`: This is a string name to be used for a concept within a graph. These are specifically *not* [identifier strings](\ref page_glscene_identifier_strings), but they do represent concepts in the scene graph. Layer names and mesh variants are graph names.
+
+	Graph names can contain any character except ' (and end-line characters).
+- `GLSL Identifier`: These strings represent the name of an entity in a shader written in the OpenGL Shading Language. These are typically uniform names.
+
+	The valid characters here are the legal characters for a GLSL identifer. However, since uniforms can often include multiple identifiers, this set of characters also includes the characters . [ and ]. Therefore, `[unifName.member]` is a legal GLSL identifier even though technically it is not an "identifier" by GLSL's grammar.
+- `Enumerator`: These strings represent a selection from one of a finite set of named possibilities. Texture filtering modes are an example of an enumerator. Unlike all other strings, they are not user *defined*; you can only use the enumerators that a particular command allows. If you use the wrong enumerators, you get an error. And they are case-sensitive, however no enumerators use uppercase characters.
+
+## Numbers ## {#page_glscene_file_format_syntax_numbers}
+
+Some commands take numbers as parameters. In every case where a number is expected, that number is expected to conform to a specific type. The general types of numbers are:
+
+1. unsigned integer: an integer value without a leading - sign/
+2. signed integer: an integer value with a leading - sign
+3. floating-point value: any number with a decimal.
+
+The types can be promoted from lower types to higher ones. So a command that expects you to provide a signed integer can also take an unsigned one. A command that takes a floating-point type will take any kind of number.
+
+### Vectors and Matrices ### {#page_glscene_file_format_syntax_numbers_vectors}
+
+Some commands take vector or matrix types rather than a scalar. Such types must *always* be bounded by a pair of parenthesis, even if you are only passing one value.
+
+Vector and matrix types have an expected number of values. To initialize these types, you must provide the expected number of values in the parenthesis, separated by spaces. Note that you *do not use commas* to separate entires. So `(5, 3)` will result in an error; use `(5 3)` instead.
+
+Matrices in this system follow GLSL's conventions. They are *column major*; the first values are the first column of the matrix.
+
+You may also initialize a vector or matrix with one value (which again *must* be in parenthesis). Following GLSL conventions, vectors initialized with a single value will copy the value to all components. Matrices initialized to a value 
+
+Quaternions are a special form of vector value. A quaternion is expected to be normalized (though the system will normalize any you provide). As such, constructing them from a single value is pointless, unless that single value is 0.5, which represents a very specific orientiation. So for quaternions, you must provide 4 values.
+
+Also, note that quaternions in this system do *not* follow GLM's assanine 
+conventions. The W component comes *last*, not first.
+
+# Resources # {#page_glscene_file_format_resources}
+
+A scene graph file must contain one or more `resources` commands. This command has sub-commands, so it must be terminated by `end`. Each sub-command represents a [different kind of resource](\ref module_glscene_resources) to be stored in the resulting glscene::SceneGraph object.
+
+The sub-commands of a `resources` command can appear in any order and can appear multiple times. Each command defines a resource. All resource commands take, as their first parameter, an identifier string that represents the name of the resource being created. So they are all of the form: `command_name <resource_identifier>`. No two resources of the same type may use the same [identifier name](\ref page_glscene_identifier_strings).
+
+Different `resources` commands in the same scene graph file (or referenced by them) are *not* independent. They are all aggregated together into a single glscene::SceneGraph's resource. So if two resources of the same type use the same identifier, they will fail even if the two commands are in different `resources` commands.
+
+# Scene Graph # {#page_glscene_file_format_syntax_scene}
+
+The last command in a file must be a `scene` command. A file can only contain one `scene` command; it may not have more or fewer. And no `resources` commands may follow it.
+
+The `scene` command is a compound command, so it is terminated by `end`.
+
+**/
+

@@ -22,7 +22,7 @@ resources
 		wrap_t{repeat}
 		wrap_r{repeat}
 	end
-	mesh <ship_mesh> gen{octahedron}
+	mesh <ship_mesh> {octahedron} //Generate from enumerator.
 	program <shader>
 		vert "transform.vert"
 		frag "diffuse_reflect.frag"
@@ -53,18 +53,15 @@ resources
 		size 128
 		placeholder
 	end
-	uniform <num_lights> type{float} 5
-	uniform <test_value> type{vec3} (2.43 3.4 9.8)
+	uniform <num_lights> {float} 5
+	uniform <test_value> {vec3} (2.43 3.4 9.8)
 	camera <main>
 	end
 end
 
 scene
-	layers		//Defines all layers
-		'main'
-		'shadow1'
-		'shadow2'
-	end
+	//Defines all layers
+	layers 'main' 'shadow1' 'shadow2'
 
 	node <globals>
 		layer 'main' inherit	//Layer for the current node. All children will inherit.
@@ -76,15 +73,14 @@ scene
 		end
 		
 		node <ship>
-			layer 'shadow1'	//Adds 'shadow1' layer
-			layer -'main'	//Removes from 'main' layer inherited.
+			layer 'shadow1' -'main'	//Adds 'shadow1' layer and removes the inherited 'main' layer.
 			
 			node-tm
 				quaternion (0 0.707 0 0.707)
 				translation (0 5 0)
 			end
 			obj-tm
-				scale 2
+				scale (2)
 			end
 			
 			local <common>
@@ -93,12 +89,13 @@ scene
 			end
 
 			variant <test>
-				using <matrices>
-				using <common>
+				using <matrices> <common>
 
 				program <reflect_shader>
+					uniform <num_lights>
+				end
+
 				texture 4 <ship_reflect_tex> <trilinear-clamp>
-				uniform <num_lights>
 			end
 
 		end

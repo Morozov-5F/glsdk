@@ -361,3 +361,15 @@ Changes from 0.3.x:
 
 **/
 
+/**
+\page page_examples Documented Examples
+
+These are simple code examples that explain how to use certain elements of the SDK. This is not a description of the workings of the code in the `examples` directory.
+
+- \subpage page_examples_glload_usage_c
+- \subpage page_examples_glload_usage_cpp
+- \subpage page_examples_glscene_simple_manual
+
+**/
+
+

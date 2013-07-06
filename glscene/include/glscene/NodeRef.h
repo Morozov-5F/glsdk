@@ -104,6 +104,8 @@ namespace glscene
 	translation/orientation/scale. The orientation is stored as a quaternion. The decomposed rotations
 	are apply such that scale comes first, then orientation, then translation.
 
+	Newly created nodes put all of their transforms in the decomposed state.
+
 	The decomposed form makes it easy to modify, for example, the rotation without having it
 	affect or be affected by the existing translation. A translation can be applied without affecting the
 	existing scale. And so forth. Right-multiplication vs. left-multiplication can achieve some of these

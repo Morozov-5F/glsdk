@@ -14,6 +14,7 @@ project("glscene")
 		"source",
 		"../glload/include",
 		"../glutil/include",
+		"../glimg/include",
 		"../glmesh/include",
 		"../glm",
 		BoostDir()}
