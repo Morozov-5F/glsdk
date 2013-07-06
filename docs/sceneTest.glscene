@@ -1,4 +1,4 @@
-//Delimiters:
+﻿//Delimiters:
 //<>: Resource and node names. These will be converted to IdStrings.
 //"": Filenames, or string names that are construed as filenames.
 //'': Strings that will be stored and used in the graph.
@@ -7,55 +7,56 @@
 //(): lists of numbers, for things like vectors.
 
 resources
-	texture <ship_diffuse_tex> "diffuse_ship.dds"
-	texture <ship_reflect_tex> placeholder
-	sampler <trilinear-clamp>
-		mag{linear}
-		min{linear-mip-linear}
+	texture_res <ship_diffuse_tex> "diffuse_ship.dds"
+	texture_res <ship_reflect_tex> placeholder
+	sampler_res <trilinear-clamp>
+		mag[linear]
+		min[linear-mip-linear]
 	end
-	sampler <aniso-repeat>
-		compare{less}
-		mag{linear}
-		min{linear-mip-linear}
+	sampler_res <aniso-repeat>
+		compare[less]
+		mag[linear]
+		min[linear-mip-linear]
 		aniso 8
-		wrap_s{repeat}
-		wrap_t{repeat}
-		wrap_r{repeat}
+		wrap_s[repeat]
+		wrap_t[repeat]
+		wrap_r[repeat]
 	end
-	mesh <ship_mesh> {octahedron} //Generate from enumerator.
-	program <shader>
+	mesh_res <ship_mesh> [octahedron] //Generate from enumerator.
+	program_res <shader>
 		vert "transform.vert"
 		frag "diffuse_reflect.frag"
-		mtc [modelToCamera]
-		nmtc [normalModelToCamera]
-		sampler [diffuse_tex] 0
-		uniform_buffer [projection_matrix] 0
-		uniform_buffer [lights] 2
+		mtc {modelToCamera}
+		nmtc {normalModelToCamera}
+		sampler {diffuse_tex} 0
+		uniform_buffer {projection_matrix} 0
+		uniform_buffer {lights} 2
 	end
-	program <shader>
+	program_res <shader>
 		vert "transform.vert"
 		frag "diffuse_reflect.frag"
-		mtc [modelToCamera]
-		nmtc [normalModelToCamera]
-		sampler [diffuse_tex] 0
-		sampler [reflect_tex] 4
-		uniform_buffer [projection_matrix] 0
-		uniform_buffer [lights] 2
+		mtc {modelToCamera}
+		nmtc {normalModelToCamera}
+		sampler {diffuse_tex} 0
+		sampler {reflect_tex} 4
+		uniform_buffer {projection_matrix} 0
+		uniform_buffer {lights} 2
 	end
-	uniform_buffer <projection_matrix>
+	uniform_buffer_res <projection_matrix>
 		binding 0
 		size 64
 		offset 0
-		usage{stream-draw}
+		usage[stream-draw]
 	end
-	uniform_buffer <lights>
+	uniform_buffer_res <lights>
 		binding 2
 		size 128
 		placeholder
 	end
-	uniform <num_lights> {float} 5
-	uniform <test_value> {vec3} (2.43 3.4 9.8)
-	camera <main>
+	uniform_res <num_lights> [float] 5
+	uniform_res <test_value> [vec3] (2.43 3.4 9.8)
+	camera_res <main>
+		//Stuff
 	end
 end
 
@@ -64,7 +65,7 @@ scene
 	layers 'main' 'shadow1' 'shadow2'
 
 	node <globals>
-		layer 'main' inherit	//Layer for the current node. All children will inherit.
+		layer inherit 'main'	//Layer for the current node. All children will inherit these.
 		layer 'shadow1'			//Layer for the current node. Children will not inherit.
 
 		local <matrices>
@@ -75,11 +76,11 @@ scene
 		node <ship>
 			layer 'shadow1' -'main'	//Adds 'shadow1' layer and removes the inherited 'main' layer.
 			
-			node-tm
+			node_tm
 				quaternion (0 0.707 0 0.707)
 				translation (0 5 0)
 			end
-			obj-tm
+			obj_tm
 				scale (2)
 			end
 			

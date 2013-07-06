@@ -2,6 +2,7 @@
 #include "pch.h"
 
 #include <stdio.h>
+#include <stack>
 #include <algorithm>
 #include <iterator>
 #include <set>
@@ -350,6 +351,27 @@ namespace glscene
 		std::string theLine;
 	};
 
+	struct ParsedUniformDef
+	{
+		FilePosition pos;
+		UniformData data;
+	};
+
+	struct ParsedSamplerDef
+	{
+		FilePosition pos;
+		SamplerInfo sampler;
+	};
+
+	typedef boost::container::flat_map<IdString, ParsedUniformDef> ParsedUniformMap;
+	typedef boost::container::flat_map<IdString, ParsedSamplerDef> ParsedSamplerMap;
+
+	struct ParsedResources
+	{
+		ParsedUniformMap uniforms;
+		ParsedSamplerMap samplers;
+	};
+
 	template<typename Range>
 	class SceneGraphParser
 	{
@@ -368,16 +390,20 @@ namespace glscene
 
 		void ParseResources()
 		{
+			PosStackPusher push(*this);
+
 			ExpectToken(TOK_RESOURCES);
 			EatOneToken();
 
 			while(!m_rng.empty() && m_rng.front().id() != TOK_END)
 			{
+				PosStackPusher push(*this);
+
 				ExpectCategory(m_rng.front(), KEYWORD_ID_PREFIX);
 				typename Range::value_type tok = m_rng.front();
 				switch(tok.id())
 				{
-				case TOK_UNIFORM:
+				case TOK_UNIFORM_RES:
 					{
 						EatOneToken();
 						ParseIdentifier();
@@ -385,7 +411,7 @@ namespace glscene
 						UniformData data = ParseUniformData(uniformType);
 					}
 					break;
-				case TOK_SAMPLER:
+				case TOK_SAMPLER_RES:
 					ParseSamplerData();
 					break;
 				default:
@@ -409,7 +435,7 @@ namespace glscene
 
 		void ParseSamplerData()
 		{
-			ExpectAndEatToken(TOK_SAMPLER);
+			ExpectAndEatToken(TOK_SAMPLER_RES);
 			ParseIdentifier();
 
 			TokenChecker hasBeenFound;
@@ -421,7 +447,7 @@ namespace glscene
 					throw UnexpectedDataError(m_rng.front(), "a valid sampler parameter.", exp_message);
 
 				typename Range::value_type tok = m_rng.front();
-				CheckMultipleKeyword(hasBeenFound, tok, TOK_SAMPLER);
+				CheckMultipleKeyword(hasBeenFound, tok, TOK_SAMPLER_RES);
 				EatOneToken();
 
 				switch(tok.id())
@@ -443,8 +469,7 @@ namespace glscene
 				case TOK_ANISO:
 					{
 						ExpectCategory(NUMBER_ID_PREFIX);
-						std::string theFloat(m_rng.front().value().begin(), m_rng.front().value().end());
-						boost::lexical_cast<float>(theFloat);
+						boost::lexical_cast<float>(GetTokenString());
 						EatOneToken();
 					}
 					break;
@@ -472,7 +497,7 @@ namespace glscene
 					if(IsUnifTypeUnsigned(typeIx) && HasTokenNoEmpty(TOK_SIGNED_INTEGER))
 						throw UniformTypeMismatchError(m_rng.front(), g_uniformTypeList[typeIx], unf_type_unsigned);
 
-					std::string theInt(m_rng.front().value().begin(), m_rng.front().value().end());
+					std::string theInt(GetTokenString());
 					EatOneToken();
 
 					if(theInt[0] == '-')
@@ -493,7 +518,7 @@ namespace glscene
 						throw UniformTypeMismatchError(m_rng.front(),
 						g_uniformTypeList[typeIx], unf_type_float);
 
-					std::string theFloat(m_rng.front().value().begin(), m_rng.front().value().end());
+					std::string theFloat(GetTokenString());
 
 					EatOneToken();
 					float val = boost::lexical_cast<float>(theFloat);
@@ -539,7 +564,7 @@ namespace glscene
 						throw UniformTypeMismatchError(m_rng.front(),
 						g_uniformTypeList[typeIx], unf_type_unsigned);
 
-					std::string theInt(m_rng.front().value().begin(), m_rng.front().value().end());
+					std::string theInt(GetTokenString());
 
 					if(theInt[0] == '-')
 						ret.push_back(boost::lexical_cast<int>(theInt));
@@ -553,7 +578,7 @@ namespace glscene
 						throw UniformTypeMismatchError(m_rng.front(),
 						g_uniformTypeList[typeIx], unf_type_float);
 
-					std::string theFloat(m_rng.front().value().begin(), m_rng.front().value().end());
+					std::string theFloat(GetTokenString());
 
 					ret.push_back(boost::lexical_cast<float>(theFloat));
 				}
@@ -705,8 +730,34 @@ namespace glscene
 			return pos;
 		}
 
+		//Gets the current token as a std::string.
+		std::string GetTokenString() const
+		{
+			return std::string(m_rng.front().value().begin(), m_rng.front().value().end());
+		}
+
 		pos_iterator &m_currIt;
 		Range m_rng;
+		std::stack<FilePosition> m_posStack;
+		ParsedResources m_resources;
+
+		class PosStackPusher
+		{
+		public:
+			PosStackPusher(SceneGraphParser<Range> &parser)
+				: m_parser(parser)
+			{
+				m_parser.m_posStack.push(m_parser.GetPositionForCurrToken());
+			}
+
+			~PosStackPusher()
+			{
+				m_parser.m_posStack.pop();
+			}
+
+		private:
+			SceneGraphParser<Range> &m_parser;
+		};
 	};
 
 	template<typename Range>
@@ -741,6 +792,14 @@ namespace glscene
 		tex.texType = glimg::GetTextureType(pSet.get(), 0);
 
 		return tex;
+	}
+
+	std::string DefaultLoader::LoadShader( boost::string_ref basePath, boost::string_ref filename ) const
+	{
+		std::string file(filename.data(), filename.size());
+		std::ifstream loadFile(file.c_str(), std::ios::in | std::ios::binary);
+		return std::string((std::istreambuf_iterator<char>(loadFile)),
+			std::istreambuf_iterator<char>());
 	}
 
 	SceneGraph * ParseFromMemory( boost::string_ref graphString, const BaseLoader & loader )

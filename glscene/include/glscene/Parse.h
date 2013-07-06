@@ -62,6 +62,7 @@ namespace glscene
 	public:
 		virtual LoadedTexture LoadTexture(boost::string_ref basePath, boost::string_ref filename) const = 0;
 		virtual glmesh::Mesh *LoadMesh(boost::string_ref basePath, boost::string_ref filename) const = 0;
+		virtual std::string LoadShader(boost::string_ref basePath, boost::string_ref filename) const = 0;
 	};
 
 	/**
@@ -72,6 +73,7 @@ namespace glscene
 	public:
 		virtual LoadedTexture LoadTexture(boost::string_ref basePath, boost::string_ref filename) const;
 		virtual glmesh::Mesh *LoadMesh(boost::string_ref basePath, boost::string_ref filename) const;
+		virtual std::string LoadShader(boost::string_ref basePath, boost::string_ref filename) const;
 	};
 
 	/**

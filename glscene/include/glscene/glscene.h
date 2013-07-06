@@ -11,6 +11,7 @@ a [GL Load header](@ref module_glload) before including this file.
 #include "SceneGraph.h"
 #include "NodeRef.h"
 #include "Style.h"
+#include "Parse.h"
 
 /**
 \brief The main namespace for the [GL Scene Graph library](@ref module_glscene). All GL Scene
