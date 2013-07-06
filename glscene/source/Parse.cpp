@@ -363,6 +363,9 @@ namespace glscene
 		SamplerInfo sampler;
 	};
 
+	template<typename Def>
+	FilePosition GetPosFromDef(const Def &def) {return def.pos;}
+
 	typedef boost::container::flat_map<IdString, ParsedUniformDef> ParsedUniformMap;
 	typedef boost::container::flat_map<IdString, ParsedSamplerDef> ParsedSamplerMap;
 
@@ -397,22 +400,15 @@ namespace glscene
 
 			while(!m_rng.empty() && m_rng.front().id() != TOK_END)
 			{
-				PosStackPusher push(*this);
-
 				ExpectCategory(m_rng.front(), KEYWORD_ID_PREFIX);
 				typename Range::value_type tok = m_rng.front();
 				switch(tok.id())
 				{
 				case TOK_UNIFORM_RES:
-					{
-						EatOneToken();
-						ParseIdentifier();
-						int uniformType = ParseEnumerator(g_uniformTypeEnumeration);
-						UniformData data = ParseUniformData(uniformType);
-					}
+					ParseUniformDef();
 					break;
 				case TOK_SAMPLER_RES:
-					ParseSamplerData();
+					ParseSamplerDef();
 					break;
 				default:
 					throw UnexpectedDataError(m_rng.front(), "a valid resource.", exp_message);
@@ -426,17 +422,61 @@ namespace glscene
 	private:
 		void EatOneToken() {m_rng.advance_begin(1);}
 
-		void ParseIdentifier()
+		template<typename MapType>
+		IdString ParseIdentifier(const MapType &search, bool mustFind, size_t currentCmd)
 		{
 			ExpectToken(TOK_IDENTIFIER);
+			std::string idToken = GetTokenString();
+			IdString ident(string_ref(&idToken[0] + 1, idToken.size() - 2));
+
+			if(mustFind)
+			{
+				if(search.find(ident) == search.end())
+					FailedToFindIdentifier(idToken, currentCmd);
+			}
+			else
+			{
+				MapType::const_iterator foundIt = search.find(ident);
+				if(foundIt != search.end())
+					MultipleIdentifierOfSameType(idToken, currentCmd, GetPosFromDef(foundIt->second));
+			}
 
 			EatOneToken();
+			return ident;
 		}
 
-		void ParseSamplerData()
+		void FailedToFindIdentifier(const std::string &idToken, size_t currentCmd)
 		{
+			std::string msg = "The identifier name '" + idToken + "' refers to a " +
+				GetTokenErrorName(currentCmd) + " that has not been defined.";
+			throw BaseParseError(msg, idToken.size());
+		}
+
+		void MultipleIdentifierOfSameType(const std::string &idToken, size_t currentCmd,
+			const FilePosition &earlyDefPos)
+		{
+			std::stringstream str;
+			str << "The identifier name '" << idToken << "' has already been used in a ";
+			str << GetTokenErrorName(currentCmd) << " definition before. It may not be defined again." << std::endl;
+			str << "\tIt was defined in file '" << earlyDefPos.fileName << "' line ";
+			str << earlyDefPos.lineNumber << " column " << earlyDefPos.columnNumber << std::endl;
+			str << "\t" << earlyDefPos.theLine << std::endl;
+			str << "\t";
+			if(earlyDefPos.columnNumber > 1)
+				str << std::setw(earlyDefPos.columnNumber - 1) << " ";
+			str << "^- here" << std::endl;
+
+			throw BaseParseError(str.str(), idToken.size());			
+		}
+
+		void ParseSamplerDef()
+		{
+			PosStackPusher push(*this);
+
 			ExpectAndEatToken(TOK_SAMPLER_RES);
-			ParseIdentifier();
+			IdString ident = ParseIdentifier(m_resources.samplers, false, TOK_SAMPLER_RES);
+			ParsedSamplerDef &samplerData = m_resources.samplers[ident];
+			samplerData.pos = m_posStack.top();
 
 			TokenChecker hasBeenFound;
 
@@ -453,28 +493,52 @@ namespace glscene
 				switch(tok.id())
 				{
 				case TOK_MAG:
-					ParseEnumerator(g_magFilterEnumeration);
+					samplerData.sampler.magFilter = ParseEnumerator(g_magFilterEnumeration);
 					break;
 				case TOK_MIN:
-					ParseEnumerator(g_minFilterEnumeration);
+					samplerData.sampler.minFilter = ParseEnumerator(g_minFilterEnumeration);
 					break;
 				case TOK_COMPARE:
-					ParseEnumerator(g_compareModeEnumeration);
+					samplerData.sampler.compareFunc = ParseEnumerator(g_compareModeEnumeration);
 					break;
 				case TOK_WRAP_S:
+					samplerData.sampler.edgeFilterS = ParseEnumerator(g_wrapModeEnumeration);
+					break;
 				case TOK_WRAP_T:
+					samplerData.sampler.edgeFilterT = ParseEnumerator(g_wrapModeEnumeration);
+					break;
 				case TOK_WRAP_R:
-					ParseEnumerator(g_wrapModeEnumeration);
+					samplerData.sampler.edgeFilterR = ParseEnumerator(g_wrapModeEnumeration);
 					break;
 				case TOK_ANISO:
 					{
 						ExpectCategory(NUMBER_ID_PREFIX);
-						boost::lexical_cast<float>(GetTokenString());
+						samplerData.sampler.maxAniso = boost::lexical_cast<float>(GetTokenString());
+						if(samplerData.sampler.maxAniso < 1.0f)
+						{
+							std::string msg = "The maximum anisotropic filtering value must be 1.0 or greater.";
+							throw BaseParseError(msg, GetTokenString().size());
+						}
 						EatOneToken();
 					}
 					break;
 				}
 			}
+
+			ExpectAndEatToken(TOK_END);
+		}
+
+		void ParseUniformDef()
+		{
+			PosStackPusher push(*this);
+
+			ExpectAndEatToken(TOK_UNIFORM_RES);
+			IdString ident = ParseIdentifier(m_resources.uniforms, false, TOK_UNIFORM_RES);
+			ParsedUniformDef &uniformDef = m_resources.uniforms[ident];
+			uniformDef.pos = m_posStack.top();
+
+			int uniformType = ParseEnumerator(g_uniformTypeEnumeration);
+			uniformDef.data = ParseUniformData(uniformType);
 		}
 
 		UniformData ParseUniformData(int typeIx)
@@ -596,18 +660,33 @@ namespace glscene
 		}
 
 		template<typename Mapped>
-		int ParseEnumerator(const EnumData<Mapped> &data)
+		Mapped ParseEnumerator(const EnumData<Mapped> &data)
 		{
 			ExpectToken(TOK_ENUMERATOR);
+			size_t enumIx = GetEnumeratorIndex(data);
+			EatOneToken();
 
+			return data.mapping[enumIx];
+		}
+
+		size_t ParseEnumerator(const EnumData<void> &data)
+		{
+			ExpectToken(TOK_ENUMERATOR);
+			size_t enumIx = GetEnumeratorIndex(data);
+			EatOneToken();
+
+			return enumIx;
+		}
+
+		template<typename Mapped>
+		size_t GetEnumeratorIndex(const EnumData<Mapped> &data)
+		{
 			std::string testEnum = GetEnumFromToken(m_rng.front());
 
 			const boost::string_ref *foundEnum = boost::find(data.enumerators, boost::string_ref(testEnum));
 			size_t enumIx = foundEnum - data.enumerators.data();
 			if(enumIx >= data.enumerators.size())
 				throw IncorrectEnumError(m_rng.front(), data);
-
-			EatOneToken();
 
 			return enumIx;
 		}
@@ -723,7 +802,8 @@ namespace glscene
 			{
 				//The token is valid, so the position iterator was advanced forward by the token's size.
 				int tokenSize = std::distance(m_rng.front().value().begin(), m_rng.front().value().end());
-				if(tokenSize > pos.columnNumber)
+				//Will not become negative. That shouldn't be possible, since non-space tokens can't straddle lines.
+				if(tokenSize < pos.columnNumber)
 					pos.columnNumber -= tokenSize;
 			}
 
@@ -819,6 +899,8 @@ namespace glscene
 			MakeParser(currIt, rng
 				| boost::adaptors::filtered(validity)
 				| boost::adaptors::filtered(skipper)).ParseSceneGraph();
+
+			return NULL;
 		}
 		catch(BaseParseError &e)
 		{

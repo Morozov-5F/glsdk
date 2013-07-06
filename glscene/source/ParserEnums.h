@@ -141,6 +141,12 @@ namespace
 		"linear",
 	};
 
+	GLenum g_magFilterEnumerators[] =
+	{
+		gl::NEAREST,
+		gl::LINEAR,
+	};
+
 	string_ref g_minFilterEnumNames[] =
 	{
 		"nearest",
@@ -151,12 +157,30 @@ namespace
 		"linear_mip_linear",
 	};
 
+	GLenum g_minFilterEnumerators[] =
+	{
+		gl::NEAREST,
+		gl::LINEAR,
+		gl::NEAREST_MIPMAP_NEAREST,
+		gl::NEAREST_MIPMAP_LINEAR,
+		gl::LINEAR_MIPMAP_NEAREST,
+		gl::LINEAR_MIPMAP_LINEAR,
+	};
+
 	string_ref g_wrapModeEnumNames[] =
 	{
 		"edge_clamp",
 		"border_clamp",
 		"repeat",
 		"mirror_repeat",
+	};
+
+	GLenum g_wrapModeEnumerators[] =
+	{
+		gl::CLAMP_TO_EDGE,
+		gl::CLAMP_TO_BORDER,
+		gl::REPEAT,
+		gl::MIRRORED_REPEAT,
 	};
 
 	string_ref g_compareModeEnumNames[] =
@@ -171,10 +195,42 @@ namespace
 		"fail",
 	};
 
-	const EnumData<void> g_magFilterEnumeration = {"mag", refs::array_ref<string_ref>(g_magFilterEnumNames)};
-	const EnumData<void> g_minFilterEnumeration = {"min", refs::array_ref<string_ref>(g_minFilterEnumNames)};
-	const EnumData<void> g_wrapModeEnumeration = {"wrap", refs::array_ref<string_ref>(g_wrapModeEnumNames)};
-	const EnumData<void> g_compareModeEnumeration = {"compare", refs::array_ref<string_ref>(g_compareModeEnumNames)};
+	GLenum g_compareModeEnumerators[] =
+	{
+		gl::LESS,
+		gl::LEQUAL,
+		gl::GREATER,
+		gl::GEQUAL,
+		gl::EQUAL,
+		gl::NOTEQUAL,
+		gl::ALWAYS,
+		gl::NEVER,
+	};
+
+	const EnumData<GLenum> g_magFilterEnumeration =
+	{
+		"mag",
+		refs::array_ref<string_ref>(g_magFilterEnumNames),
+		refs::array_ref<GLenum>(g_magFilterEnumerators)
+	};
+	const EnumData<GLenum> g_minFilterEnumeration =
+	{
+		"min",
+		refs::array_ref<string_ref>(g_minFilterEnumNames),
+		refs::array_ref<GLenum>(g_minFilterEnumerators),
+	};
+	const EnumData<GLenum> g_wrapModeEnumeration =
+	{
+		"wrap",
+		refs::array_ref<string_ref>(g_wrapModeEnumNames),
+		refs::array_ref<GLenum>(g_wrapModeEnumerators),
+	};
+	const EnumData<GLenum> g_compareModeEnumeration =
+	{
+		"compare",
+		refs::array_ref<string_ref>(g_compareModeEnumNames),
+		refs::array_ref<GLenum>(g_compareModeEnumerators),
+	};
 
 
 }

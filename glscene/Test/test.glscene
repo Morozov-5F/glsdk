@@ -1,0 +1,12 @@
+
+resources
+	sampler_res <ident>
+		mag [linear]
+		compare [pass]
+		aniso 1
+	end
+	
+	uniform_res <ident> [vec3] (5.0)
+	uniform_res <ident> [vec2] (2.0)
+end
+
