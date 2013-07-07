@@ -237,7 +237,7 @@ The valid enumerator values for `how-to-create` are:
 ## Program Resource ## {#page_glscene_file_format_resources_program}
 
 \verbatim
-program_res <resource_id> [separate]
+program_res <resource_id> [separate]?
 //Commands
 end
 \endverbatim

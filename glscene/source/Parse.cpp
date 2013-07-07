@@ -799,8 +799,22 @@ namespace glscene
 			IdString ident = ParseIdentifier(m_resources.programs, false, TOK_PROGRAM_RES);
 			ParsedProgramDef &programDef = m_resources.programs[ident];
 			programDef.pos = m_posStack.top();
+			programDef.isSeparate = false;
 
 			TokenChecker hasBeenFound;
+
+			ExpectAToken();
+			if(HasTokenNoEmpty(TOK_ENUMERATOR))
+			{
+				std::string testEnum = GetEnumFromToken(m_rng.front());
+				if(testEnum != "separate")
+				{
+					throw BaseParseError("Program resources can only use the 'separate' enumerator.",
+						GetPositionForCurrToken());
+				}
+				EatOneToken();
+				programDef.isSeparate = true;
+			}
 
 			while(!m_rng.empty() && m_rng.front().id() != TOK_END)
 			{
