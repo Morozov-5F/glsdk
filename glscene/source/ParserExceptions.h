@@ -3,6 +3,7 @@
 
 #include "ParserUtils.h"
 #include "ParserEnums.h"
+#include <boost/optional.hpp>
 
 namespace glscene { namespace _detail
 {
@@ -27,12 +28,23 @@ namespace glscene { namespace _detail
 			, outOfData(_outOfData)
 		{}
 
+		BaseParseError(const std::string &desc, const FilePosition &pos)
+			: std::runtime_error(desc)
+			, tokenSize()
+			, outOfData(false)
+			, oPos(pos)
+		{}
+
 		ptrdiff_t GetSizeOfToken() const {return tokenSize;}
 		bool IsOutOfData() const {return outOfData;}
+
+		bool HasPosition() const {return oPos.is_initialized();}
+		const FilePosition &GetPosition() const {return oPos.get();}
 
 	private:
 		ptrdiff_t tokenSize;
 		bool outOfData;
+		boost::optional<FilePosition> oPos;
 	};
 
 	class BadTokenError : public BaseParseError

@@ -52,12 +52,20 @@ namespace glscene { namespace _detail
 	typedef boost::container::flat_set<size_t> TokenChecker;
 
 	template<typename Token>
-	void CheckMultipleKeyword(TokenChecker &hasBeenFound, const Token &tok, size_t owningId)
+	void CheckMultipleCommand(TokenChecker &hasBeenFound, const Token &tok, size_t owningId)
 	{
 		if(hasBeenFound.find(tok.id()) != hasBeenFound.end())
 			throw MultipleUseOfCommandError(tok, owningId);
 		hasBeenFound.insert(tok.id());
 	}
+
+	struct FilePosition
+	{
+		std::string fileName;
+		int lineNumber;
+		int columnNumber;
+		std::string theLine;
+	};
 }}
 
 #endif //GLSDK_GLSCENE_PARSER_UTILITIES_H

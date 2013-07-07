@@ -151,7 +151,7 @@ namespace
 	// Token string names.
 	static const char *g_keywordStrings[][3] =
 	{
-#define MAC(name, pattern, debug_name, display_name) {pattern, pattern, pattern},
+#define MAC(name, pattern, debug_name, display_name) {pattern, debug_name, display_name},
 #include "keywords.incl"
 #undef MAC
 	};
@@ -198,6 +198,26 @@ namespace
 		TOK_WRAP_T,
 		TOK_WRAP_R,
 		TOK_ANISO,
+	};
+
+	const size_t g_validCameraTokens[] =
+	{
+		TOK_TARGET,
+		TOK_ORIENT,
+		TOK_SPIN,
+		TOK_RADIUS,
+		TOK_RADIUS_DELTA,
+		TOK_POS_DELTA,
+		TOK_ROTATION_SCALE,
+	};
+
+	const size_t g_requiredCameraTokens[] =
+	{
+		TOK_TARGET,
+		TOK_RADIUS,
+		TOK_RADIUS_DELTA,
+		TOK_POS_DELTA,
+		TOK_ROTATION_SCALE,
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -343,14 +363,6 @@ namespace glscene
 	typedef simple_lexer<lexer_type>::iterator_type token_iterator;
 	typedef boost::iterator_range<token_iterator> token_range;
 
-	struct FilePosition
-	{
-		std::string fileName;
-		int lineNumber;
-		int columnNumber;
-		std::string theLine;
-	};
-
 	struct ParsedUniformDef
 	{
 		FilePosition pos;
@@ -363,16 +375,27 @@ namespace glscene
 		SamplerInfo sampler;
 	};
 
+	struct ParsedCameraDef
+	{
+		FilePosition pos;
+		glutil::ViewData view;
+		glutil::ViewScale scale;
+		glutil::MouseButtons actionButton;
+		bool bRightKeyboardCtrls;
+	};
+
 	template<typename Def>
 	FilePosition GetPosFromDef(const Def &def) {return def.pos;}
 
 	typedef boost::container::flat_map<IdString, ParsedUniformDef> ParsedUniformMap;
 	typedef boost::container::flat_map<IdString, ParsedSamplerDef> ParsedSamplerMap;
+	typedef boost::container::flat_map<IdString, ParsedCameraDef> ParsedCameraMap;
 
 	struct ParsedResources
 	{
 		ParsedUniformMap uniforms;
 		ParsedSamplerMap samplers;
+		ParsedCameraMap cameras;
 	};
 
 	template<typename Range>
@@ -409,6 +432,9 @@ namespace glscene
 					break;
 				case TOK_SAMPLER_RES:
 					ParseSamplerDef();
+					break;
+				case TOK_CAMERA_RES:
+					ParseCameraDef();
 					break;
 				default:
 					throw UnexpectedDataError(m_rng.front(), "a valid resource.", exp_message);
@@ -469,6 +495,31 @@ namespace glscene
 			throw BaseParseError(str.str(), idToken.size());			
 		}
 
+		void ThrowIfNotFound(const TokenChecker &hasBeenFound,
+			array_ref<size_t> expectedIds, const size_t mainId)
+		{
+			BOOST_FOREACH(size_t id, expectedIds)
+			{
+				if(hasBeenFound.find(id) == hasBeenFound.end())
+				{
+					const FilePosition &pos = m_posStack.top();
+
+					std::stringstream str;
+					str << "The command '" << GetTokenErrorName(mainId) << "' must have a ";
+					str << GetTokenErrorName(id) << " command within it." << std::endl;
+					str << "\tIt was defined in file '" << pos.fileName << "' line ";
+					str << pos.lineNumber << " column " << pos.columnNumber << std::endl;
+					str << "\t" << pos.theLine << std::endl;
+					str << "\t";
+					if(pos.columnNumber > 1)
+						str << std::setw(pos.columnNumber - 1) << " ";
+					str << "^- here" << std::endl;
+
+					throw BaseParseError(str.str());
+				}
+			}
+		}
+
 		void ParseSamplerDef()
 		{
 			PosStackPusher push(*this);
@@ -487,7 +538,7 @@ namespace glscene
 					throw UnexpectedDataError(m_rng.front(), "a valid sampler parameter.", exp_message);
 
 				typename Range::value_type tok = m_rng.front();
-				CheckMultipleKeyword(hasBeenFound, tok, TOK_SAMPLER_RES);
+				CheckMultipleCommand(hasBeenFound, tok, TOK_SAMPLER_RES);
 				EatOneToken();
 
 				switch(tok.id())
@@ -525,6 +576,124 @@ namespace glscene
 				}
 			}
 
+			ExpectAndEatToken(TOK_END);
+		}
+
+		void ParseCameraDef()
+		{
+			PosStackPusher push(*this);
+
+			ExpectAndEatToken(TOK_CAMERA_RES);
+			IdString ident = ParseIdentifier(m_resources.cameras, false, TOK_CAMERA_RES);
+			ParsedCameraDef &cameraData = m_resources.cameras[ident];
+			cameraData.pos = m_posStack.top();
+			
+			cameraData.actionButton = ParseEnumerator(g_cameraMouseButtonEnumeration);
+			cameraData.bRightKeyboardCtrls = ParseEnumerator(g_cameraKeyboardSideEnumeration);
+			cameraData.view.degSpinRotation = 0.0f;
+
+			TokenChecker hasBeenFound;
+
+			while(!m_rng.empty() && m_rng.front().id() != TOK_END)
+			{
+				ExpectCategory(m_rng.front(), KEYWORD_ID_PREFIX);
+				if(!HasTokenOneOfNoEmpty(g_validCameraTokens))
+					throw UnexpectedDataError(m_rng.front(), "a valid camera parameter.", exp_message);
+
+				const typename Range::value_type tok = m_rng.front();
+				CheckMultipleCommand(hasBeenFound, tok, TOK_CAMERA_RES);
+				EatOneToken();
+
+				FilePosition pos = GetPositionForCurrToken();
+				switch(tok.id())
+				{
+				case TOK_TARGET:
+					cameraData.view.targetPos = ParseVec3(tok, TOK_CAMERA_RES);
+					break;
+				case TOK_ORIENT:
+					cameraData.view.orient = ParseQuat(tok, TOK_CAMERA_RES);
+					break;
+				case TOK_SPIN:
+					cameraData.view.degSpinRotation = ParseSingleFloat(tok, TOK_CAMERA_RES);
+					if(cameraData.view.degSpinRotation < 0.0f)
+						throw BaseParseError("Spin angle must be greater than 0.", pos);
+					break;
+				case TOK_RADIUS:
+					{
+						float initRadius = ParseSingleFloat(tok, TOK_CAMERA_RES);
+						float minRadius = ParseSingleFloat(tok, TOK_CAMERA_RES);
+						float maxRadius = ParseSingleFloat(tok, TOK_CAMERA_RES);
+
+						if(minRadius < 0.0f)
+							throw BaseParseError("The minimum radius must be larger than 0.", pos);
+
+						if(maxRadius < 0.0f)
+							throw BaseParseError("The maximum radius must be larger than 0.", pos);
+
+						if(minRadius >= maxRadius)
+							throw BaseParseError("The minimum radius must be less than the maximum radius.", pos);
+
+						if(initRadius < minRadius)
+							throw BaseParseError("The initial radius must be larger than the minimum.", pos);
+
+						if(initRadius > maxRadius)
+							throw BaseParseError("The initial radius must be smaller than the maximum.", pos);
+
+						cameraData.view.radius = initRadius;
+						cameraData.scale.minRadius = minRadius;
+						cameraData.scale.maxRadius = maxRadius;
+					}
+					break;
+				case TOK_RADIUS_DELTA:
+					{
+						float smallRadius = ParseSingleFloat(tok, TOK_CAMERA_RES);
+						float largeRadius = ParseSingleFloat(tok, TOK_CAMERA_RES);
+
+						if(smallRadius < 0.0f)
+							throw BaseParseError("The small radius delta must be larger than 0.", pos);
+
+						if(largeRadius < 0.0f)
+							throw BaseParseError("The large radius delta must be larger than 0.", pos);
+
+						if(smallRadius >= largeRadius)
+							throw BaseParseError("The minimum radius delta must be less than the maximum.", pos);
+
+						cameraData.scale.smallRadiusDelta = smallRadius;
+						cameraData.scale.largeRadiusDelta = largeRadius;
+					}
+					break;
+				case TOK_POS_DELTA:
+					{
+						float smallDelta = ParseSingleFloat(tok, TOK_CAMERA_RES);
+						float largeDelta = ParseSingleFloat(tok, TOK_CAMERA_RES);
+
+						if(smallDelta < 0.0f)
+							throw BaseParseError("The small position delta must be larger than 0.", pos);
+
+						if(largeDelta < 0.0f)
+							throw BaseParseError("The large position delta must be larger than 0.", pos);
+
+						if(smallDelta >= largeDelta)
+							throw BaseParseError("The minimum position delta must be less than the maximum.", pos);
+
+						cameraData.scale.smallPosOffset = smallDelta;
+						cameraData.scale.largePosOffset = largeDelta;
+					}
+					break;
+				case TOK_ROTATION_SCALE:
+					{
+						float rotScale = ParseSingleFloat(tok, TOK_CAMERA_RES);
+
+						if(rotScale < 0.0f)
+							throw BaseParseError("The rotation scale must be larger than 0.", pos);
+
+						cameraData.scale.rotationScale = rotScale;
+					}
+					break;
+				}
+			}
+
+			ThrowIfNotFound(hasBeenFound, g_requiredCameraTokens, TOK_CAMERA_RES);
 			ExpectAndEatToken(TOK_END);
 		}
 
@@ -591,7 +760,7 @@ namespace glscene
 			}
 			else if(HasTokenNoEmpty(TOK_OPEN_PAREN))
 			{
-				std::vector<ParsedValue> vals = ParseNumberList(typeIx);
+				std::vector<ParsedValue> vals = ParseUniformNumberList(typeIx);
 				if(vals.size() == 1)
 					return boost::apply_visitor(UniformFromSingleValue(typeIx), vals[0]);
 
@@ -602,7 +771,7 @@ namespace glscene
 				return CreateDefaultUniform(typeIx);
 		}
 
-		std::vector<ParsedValue> ParseNumberList(int typeIx)
+		std::vector<ParsedValue> ParseUniformNumberList(int typeIx)
 		{
 			ExpectAndEatToken(TOK_OPEN_PAREN);
 
@@ -695,6 +864,94 @@ namespace glscene
 		{
 			std::string enumerator(tok.value().begin(), tok.value().end());
 			return std::string(enumerator.begin() + 1, enumerator.end() - 1);
+		}
+
+		glm::vec3 ParseVec3(const Token &owningTok, size_t owningId)
+		{
+			ExpectAndEatToken(TOK_OPEN_PAREN);
+
+			int count = 0;
+			glm::vec3 ret;
+
+			for(;
+				!m_rng.empty() && !HasTokenNoEmpty(TOK_CLOSE_PAREN);
+				EatOneToken(), ++count)
+			{
+				ExpectCategory(NUMBER_ID_PREFIX);
+				if(3 == count)
+				{
+					std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' only takes 3 numbers.";
+					throw BaseParseError(msg, GetTokenString().size());
+				}
+
+				ret[count] = boost::lexical_cast<float>(GetTokenString());
+			}
+
+			ExpectToken(TOK_CLOSE_PAREN);
+
+			if(3 != count && 1 != count)
+			{
+				std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' requires 3 numbers.";
+				throw BaseParseError(msg, GetTokenString().size());
+			}
+
+			if(1 == count)
+				ret = glm::vec3(ret.x);
+
+			ExpectAndEatToken(TOK_CLOSE_PAREN);
+			return ret;
+		}
+
+		glm::quat ParseQuat(const Token &owningTok, size_t owningId)
+		{
+			ExpectAndEatToken(TOK_OPEN_PAREN);
+
+			int count = 0;
+			glm::vec4 inputQuat;
+
+			for(;
+				!m_rng.empty() && !HasTokenNoEmpty(TOK_CLOSE_PAREN);
+				EatOneToken(), ++count)
+			{
+				ExpectCategory(NUMBER_ID_PREFIX);
+				if(4 == count)
+				{
+					std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' quaternion takes 4 numbers.";
+					throw BaseParseError(msg, GetTokenString().size());
+				}
+
+				inputQuat[count] = boost::lexical_cast<float>(GetTokenString());
+			}
+
+			ExpectToken(TOK_CLOSE_PAREN);
+
+			if(4 != count)
+			{
+				std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' quaternion requires 4 numbers.";
+				throw BaseParseError(msg, GetTokenString().size());
+			}
+
+			ExpectAndEatToken(TOK_CLOSE_PAREN);
+			return glm::normalize(glm::quat(inputQuat.w, inputQuat.x, inputQuat.y, inputQuat.z));
+		}
+
+		float ParseSingleFloat(const Token &owningTok, size_t owningId)
+		{
+			bool paren = false;
+			if(HasToken(m_rng.front(), TOK_OPEN_PAREN))
+			{
+				paren = true;
+				EatOneToken();
+			}
+
+			ExpectCategory(NUMBER_ID_PREFIX);
+			float ret = boost::lexical_cast<float>(GetTokenString());
+			EatOneToken();
+
+			if(paren)
+				ExpectAndEatToken(TOK_CLOSE_PAREN);
+
+			return ret;
 		}
 
 		void ExpectAndEatToken(size_t idExpected)
@@ -909,16 +1166,26 @@ namespace glscene
 
 			if(!e.IsOutOfData())
 			{
-				const classic::file_position_base<std::string> &pos = currIt.get_position();
+				FilePosition pos;
+				if(e.HasPosition())
+					pos = e.GetPosition();
+				else
+				{
+					const classic::file_position_base<std::string> &currPos = currIt.get_position();
+					pos.columnNumber = currPos.column;
+					pos.lineNumber = currPos.line;
+					pos.fileName = currPos.file;
+					pos.theLine = currIt.get_currentline();
+				}
 
-				size_t column = pos.column - e.GetSizeOfToken();
+				size_t column = pos.columnNumber - e.GetSizeOfToken();
 
-				std::string line = currIt.get_currentline();
+				std::string line = pos.theLine;
 				line = boost::algorithm::replace_all_copy(line, "\t", "    ");
 
 				str <<
-					"In file \"" << pos.file <<
-					"\" line " << pos.line << " column " << column << std::endl <<
+					"In file \"" << pos.fileName <<
+					"\" line " << pos.lineNumber << " column " << column << std::endl <<
 					line << std::endl;
 				if(column > 1)
 					str << std::setw(column - 1) << " ";

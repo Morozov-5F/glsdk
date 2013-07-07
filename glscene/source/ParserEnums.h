@@ -3,6 +3,7 @@
 
 #include <boost/utility/string_ref.hpp>
 #include "ResourceData.h"
+#include <glutil/MousePoles.h>
 
 
 namespace
@@ -232,7 +233,43 @@ namespace
 		refs::array_ref<GLenum>(g_compareModeEnumerators),
 	};
 
+	string_ref g_cameraMouseButtonEnumNames[] =
+	{
+		"left_btn",
+		"right_btn",
+	};
 
+	glutil::MouseButtons g_cameraMouseButtonEnumerators[] =
+	{
+		glutil::MB_LEFT_BTN,
+		glutil::MB_RIGHT_BTN,
+	};
+
+	string_ref g_cameraKeyboardSideEnumNames[] =
+	{
+		"left_kbd",
+		"right_kbd",
+	};
+
+	bool g_cameraKeyboardSideEnumerators[] =
+	{
+		false,
+		true,
+	};
+
+	const EnumData<glutil::MouseButtons> g_cameraMouseButtonEnumeration =
+	{
+		"camera button",
+		refs::array_ref<string_ref>(g_cameraMouseButtonEnumNames),
+		refs::array_ref<glutil::MouseButtons>(g_cameraMouseButtonEnumerators)
+	};
+
+	const EnumData<bool> g_cameraKeyboardSideEnumeration =
+	{
+		"camera keyboard",
+		refs::array_ref<string_ref>(g_cameraKeyboardSideEnumNames),
+		refs::array_ref<bool>(g_cameraKeyboardSideEnumerators)
+	};
 }
 
 #endif //GLSDK_GLSCENE_PARSER_ENUMS_H

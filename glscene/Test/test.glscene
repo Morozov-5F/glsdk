@@ -7,6 +7,15 @@ resources
 	end
 	
 	uniform_res <ident> [vec3] (5.0)
-	uniform_res <ident> [vec2] (2.0)
+	
+	camera_res <ident> [left_btn] [left_kbd]
+		target (0 5 0)
+		orient (0 0 0 1)
+		spin 0
+		radius 10 1 20
+		radius_delta 0.5 2.0
+		pos_delta 0.25 1.5
+		rotation_scale 0.36
+	end
 end
 

@@ -177,6 +177,39 @@ The valid subcommands are as follows:
 	- `mirror_repeat`
 - `aniso number`: Specifies the anisotropic filtering value. An unparethesized number is provided; the number may be any form of integer or float. However, numbers less than 0 will be rejected.
 
+## Camera Resource ## {#page_glscene_file_format_resources_camera}
+
+\verbatim
+camera_res <resource_id> [mouse_button] [keyboard_side]
+//Commands
+end
+\endverbatim
+
+The `camera_res` command creates a camera resource, as if by glscene::ResourceRef::DefineCamera. The `mouse_button` enum specifies which button is used by the camera. The `keyboard_side` enum specifies if the left or right side controls of the camera are used.
+
+The `mouse_button` enum must be one of the following:
+
+- `left_btn`: The camera is rotated by pressing the left mouse button.
+- `right_btn`: The camera is rotated by pressing the right mouse button.
+
+The `keyboard_side` enum must be one of the following:
+
+- `left_kbd`: The camera uses WASDQE to move.
+- `right_kbd`: The camera uses IJKLUO to move.
+
+The sub-commands of the camera resource define the contents of glutil::ViewData and glutil::ViewScale, to be passed to glutil::MousePole. They can be in any order, but most of them are required.
+
+The valid sub-commands are:
+
+- `target (position)`: **Required**. This defines the current look-at point of the camera, through glutil::ViewData::targetPos. `position` must be a vector of floats, so it must be in parentheses.
+- `orient (quaternion)`: This defines the current orientation of the camera, relative to the lookat point, through glutil::ViewData::orient. `quaternion` must be a vector of 4 floats, so it must be in parentheses. When not specified, it defaults to the identity quaternion.
+- `spin (initial spin)`: This defines the current spin orientation of the camera, through glutil::ViewData::degSpinRotation. `initial spin` must be a single float. When not specified, it defaults to 0.
+- `radius (initial) (minimum) (maximum)`: **Required**. This defines the starting distance from the look-at point, as well as the minimum and maximum distance values. The three values are a single float each. They must be larger than 0, the `minimum` must be smaller than the `maximum`, and the `initial` value must be between them.
+- `radius_delta (small) (large)`: **Required**. This defines the large and small changes in distance from the view target, as through by glutil::ViewScale::smallRadiusDelta and glutil::ViewScale::largeRadiusDelta respectively. These values are each a single float. They must be larger than 0, and the `small` value must be larger than the `large`.
+- `pos_delta (small) (large)`: **Required**. This defines the large and small changes in the camera view target position, as though by glutil::ViewScale::smallPosOffset and glutil::ViewScale::largePosOffset respectively. These values are each a single float. They must be larger than 0, and the `small` value must be larger than the `large`.
+- `rotation_scale (scale)`: **Required**. This defines the number of degrees to rotate the view per window space pixel the mouse moves when dragging, as if by glutil::ViewScale::rotationScale. This value is a single float and must be larger than 0.
+
+
 # Scene Graph # {#page_glscene_file_format_syntax_scene}
 
 ~~~~
