@@ -21,5 +21,13 @@ resources
 	uniform_buffer_res <ident> 64 [stream_draw]
 	storage_buffer_res <ident> 128 placeholder
 
+	program_res <ident>
+		vert "filename.vert"
+		nmtc {blah2}
+		sampler {foo} 0
+		sampler {false} 1
+		image {boo} 2
+		mtc {blah}
+	end
 end
 

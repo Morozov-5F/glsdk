@@ -234,6 +234,41 @@ The valid enumerator values for `how-to-create` are:
 <tr><td>`stream_draw`</td><td>`stream_read`</td><td>`stream_copy`</td></tr>
 </table>
 
+## Program Resource ## {#page_glscene_file_format_resources_program}
+
+\verbatim
+program_res <resource_id> [separate]
+//Commands
+end
+\endverbatim
+
+The `program_res` command defines a program resource, as if by glscene::ResourceRes::DefineProgram. The sub-commands define the parameters for glscene::ProgramInfo. They can be defined in any order.
+
+glscene::ResourceRes::DefineProgram takes a previously created program object. The scene graph file system takes a different approach. Individual shader files are specified, which it will load, compile, and link into a program. So `program_res` has a number of sub-commands for specifying shader files for the program.
+
+`separate` is an optional enumeration. If you provide it (and it can only be that value), then the program will be linked with the `GL_PROGRAM_SEPARATE` flag.
+
+The list of sub-commands must include at least one shader file specifier. The shader specifier sub-commands are as follows:
+
+- `vert`
+- `tess_ctrl`
+- `tess_eval`
+- `geom`
+- `frag`
+
+Following any of these specifiers is a filename string defining which shader to load. You may provide shaders of the same type multiple times. Each one will be used to generate a separate shader object, and they will all be linked together.
+
+The other sub-commands are as follows:
+
+- `mtc {uniform name}`: Specifies the name of a `mat4` uniform variable in the program that will be given the model-to-camera matrix by the scene graph system. This sub-command may only be specified once.
+- `nmtc {uniform name}`: Specifies the name of a `mat3` uniform variable in the program that will be given the normal`s model-to-camera matrix by the scene graph system. This sub-command may only be specified once.
+- `nctm {uniform name}`: Specifies the name of a `mat3` uniform variable in the program that will be given the normal`s camera-to-model matrix by the scene graph system. This sub-command may only be specified once.
+- `sampler {uniform name} (texture unit)`: Specifies the name of a uniform variable of a sampler type which will be assigned the value `texture unit`. `texture unit` is an unsigned integer.
+- `image {uniform name} (image unit)`: Specifies the name of a uniform variable of an image type which will be assigned the value `image unit`. `image unit` is an unsigned integer.
+- `uniform_buffer {block name} (block binding)`: Specifies that the uniform block named `block name` will be assigned the binding point `block binding`, which is an unsigned integer.
+- `storage_buffer {block name} (block binding)`: Specifies that the shader storage block named `block name` will be assigned the binding point `block binding`, which is an unsigned integer.
+
+
 # Scene Graph # {#page_glscene_file_format_syntax_scene}
 
 ~~~~

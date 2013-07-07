@@ -220,6 +220,22 @@ namespace
 		TOK_ROTATION_SCALE,
 	};
 
+	const size_t g_requiredProgramTokens[] =
+	{
+		TOK_VERT,
+		TOK_TESS_CTRL,
+		TOK_TESS_EVAL,
+		TOK_GEOM,
+		TOK_FRAG,
+		TOK_MTC,
+		TOK_NMTC,
+		TOK_NCTM,
+		TOK_SAMPLER,
+		TOK_IMAGE,
+		TOK_UNIFORM_BUFFER,
+		TOK_STORAGE_BUFFER,
+	};
+
 	//////////////////////////////////////////////////////////////////////////
 	// The lexer.
 	template <typename Lexer>
@@ -391,6 +407,21 @@ namespace glscene
 		boost::optional<GLenum> creationUsage;
 	};
 
+	struct ParsedShader
+	{
+		FilePosition pos;
+		GLenum shaderType;
+		std::string filename;
+	};
+
+	struct ParsedProgramDef
+	{
+		FilePosition pos;
+		bool isSeparate;
+		std::vector<ParsedShader> shaders;
+		ProgramInfo info;
+	};
+
 	template<typename Def>
 	FilePosition GetPosFromDef(const Def &def) {return def.pos;}
 
@@ -398,6 +429,7 @@ namespace glscene
 	typedef boost::container::flat_map<IdString, ParsedSamplerDef> ParsedSamplerMap;
 	typedef boost::container::flat_map<IdString, ParsedCameraDef> ParsedCameraMap;
 	typedef boost::container::flat_map<IdString, ParsedBufferDef> ParsedBufferMap;
+	typedef boost::container::flat_map<IdString, ParsedProgramDef> ParsedProgramMap;
 
 	struct ParsedResources
 	{
@@ -406,6 +438,7 @@ namespace glscene
 		ParsedCameraMap cameras;
 		ParsedBufferMap uniformBuffers;
 		ParsedBufferMap storageBuffers;
+		ParsedProgramMap programs;
 	};
 
 	template<typename Range>
@@ -451,6 +484,9 @@ namespace glscene
 					break;
 				case TOK_STORAGE_BUFFER_RES:
 					ParseStorageBufferDef();
+					break;
+				case TOK_PROGRAM_RES:
+					ParseProgramDef();
 					break;
 				default:
 					throw UnexpectedDataError(m_rng.front(), "a valid resource.", exp_message);
@@ -551,7 +587,7 @@ namespace glscene
 			{
 				ExpectCategory(m_rng.front(), KEYWORD_ID_PREFIX);
 				if(!HasTokenOneOfNoEmpty(g_validSamplerTokens))
-					throw UnexpectedDataError(m_rng.front(), "a valid sampler parameter.", exp_message);
+					throw UnexpectedDataError(m_rng.front(), "a valid sampler command.", exp_message);
 
 				typename Range::value_type tok = m_rng.front();
 				CheckMultipleCommand(hasBeenFound, tok, TOK_SAMPLER_RES);
@@ -614,7 +650,7 @@ namespace glscene
 			{
 				ExpectCategory(m_rng.front(), KEYWORD_ID_PREFIX);
 				if(!HasTokenOneOfNoEmpty(g_validCameraTokens))
-					throw UnexpectedDataError(m_rng.front(), "a valid camera parameter.", exp_message);
+					throw UnexpectedDataError(m_rng.front(), "a valid camera command.", exp_message);
 
 				const typename Range::value_type tok = m_rng.front();
 				CheckMultipleCommand(hasBeenFound, tok, TOK_CAMERA_RES);
@@ -753,6 +789,100 @@ namespace glscene
 			{
 				bufferDef.creationUsage = ParseEnumerator(g_bufferUsageEnumeration);
 			}
+		}
+
+		void ParseProgramDef()
+		{
+			PosStackPusher push(*this);
+
+			ExpectAndEatToken(TOK_PROGRAM_RES);
+			IdString ident = ParseIdentifier(m_resources.programs, false, TOK_PROGRAM_RES);
+			ParsedProgramDef &programDef = m_resources.programs[ident];
+			programDef.pos = m_posStack.top();
+
+			TokenChecker hasBeenFound;
+
+			while(!m_rng.empty() && m_rng.front().id() != TOK_END)
+			{
+				ExpectCategory(m_rng.front(), KEYWORD_ID_PREFIX);
+				if(!HasTokenOneOfNoEmpty(g_requiredProgramTokens))
+					throw UnexpectedDataError(m_rng.front(), "a valid program command.", exp_message);
+
+				typename Range::value_type tok = m_rng.front();
+				FilePosition pos = GetPositionForCurrToken();
+				EatOneToken();
+
+				switch(tok.id())
+				{
+				case TOK_VERT:
+					programDef.shaders.push_back(ParseShader(gl::VERTEX_SHADER, pos));
+					break;
+				case TOK_TESS_CTRL:
+					programDef.shaders.push_back(ParseShader(gl::TESS_CONTROL_SHADER, pos));
+					break;
+				case TOK_TESS_EVAL:
+					programDef.shaders.push_back(ParseShader(gl::TESS_EVALUATION_SHADER, pos));
+					break;
+				case TOK_GEOM:
+					programDef.shaders.push_back(ParseShader(gl::GEOMETRY_SHADER, pos));
+					break;
+				case TOK_FRAG:
+					programDef.shaders.push_back(ParseShader(gl::FRAGMENT_SHADER, pos));
+					break;
+				case TOK_MTC:
+					CheckMultipleCommand(hasBeenFound, tok, TOK_PROGRAM_RES);
+					programDef.info.modelToCameraMatrixUniformName = ParseGlslIdentifier(tok);
+					break;
+				case TOK_NMTC:
+					CheckMultipleCommand(hasBeenFound, tok, TOK_PROGRAM_RES);
+					programDef.info.normalModelToCameraMatrixUniformName = ParseGlslIdentifier(tok);
+					break;
+				case TOK_NCTM:
+					CheckMultipleCommand(hasBeenFound, tok, TOK_PROGRAM_RES);
+					programDef.info.normalCameraToModelMatrixUniformName = ParseGlslIdentifier(tok);
+					break;
+				case TOK_SAMPLER:
+					{
+						std::string name = ParseGlslIdentifier(tok);
+						programDef.info.samplerBindings.emplace(name, ParseSingleUInt());
+					}
+					break;
+				case TOK_IMAGE:
+					{
+						std::string name = ParseGlslIdentifier(tok);
+						programDef.info.imageBindings.emplace(name, ParseSingleUInt());
+					}
+					break;
+				case TOK_UNIFORM_BUFFER:
+					{
+						std::string name = ParseGlslIdentifier(tok);
+						programDef.info.uniformBlockBindings.emplace(name, ParseSingleUInt());
+					}
+					break;
+				case TOK_STORAGE_BUFFER:
+					{
+						std::string name = ParseGlslIdentifier(tok);
+						programDef.info.bufferVariableBindings.emplace(name, ParseSingleUInt());
+					}
+					break;
+				}
+			}
+
+			ExpectAndEatEndToken();
+
+			if(programDef.shaders.empty())
+			{
+				throw BaseParseError("You must provide at least one shader file in a program resource.", m_posStack.top());
+			}
+		}
+
+		ParsedShader ParseShader(GLenum shaderType, FilePosition pos)
+		{
+			ParsedShader ret;
+			ret.filename = ParseFilename();
+			ret.shaderType = shaderType;
+			ret.pos = pos;
+			return ret;
 		}
 
 		void ParseUniformDef()
@@ -922,6 +1052,24 @@ namespace glscene
 		{
 			std::string enumerator(tok.value().begin(), tok.value().end());
 			return std::string(enumerator.begin() + 1, enumerator.end() - 1);
+		}
+
+		std::string ParseFilename()
+		{
+			ExpectToken(TOK_FILENAME);
+			std::string rawToken = GetTokenString();
+			EatOneToken();
+
+			return std::string(rawToken.begin() + 1, rawToken.end() - 1);
+		}
+
+		std::string ParseGlslIdentifier(const Token &owningTok)
+		{
+			ExpectToken(TOK_GLSL_IDENT);
+			std::string rawToken = GetTokenString();
+			EatOneToken();
+
+			return std::string(rawToken.begin() + 1, rawToken.end() - 1);
 		}
 
 		glm::vec3 ParseVec3(const Token &owningTok, size_t owningId)

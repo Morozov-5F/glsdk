@@ -42,6 +42,11 @@ resources
 		uniform_buffer {projection_matrix} 0
 		uniform_buffer {lights} 2
 	end
+	program_res <sep_shader> [separable]
+		frag "frag_shader.frag"
+		sampler {diffuse_tex} 0
+		uniform_buffer {projection_matrix} 0
+	end
 	uniform_buffer_res <projection_matrix> 64 [stream-draw]
 	uniform_buffer_res <lights> 128 placeholder
 	uniform_res <num_lights> [float] 5
