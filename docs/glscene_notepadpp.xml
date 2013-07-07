@@ -12,7 +12,7 @@
             <Keywords name="Numbers, suffixes" id="4"></Keywords>
             <Keywords name="Operators1" id="5"></Keywords>
             <Keywords name="Operators2" id="6"></Keywords>
-            <Keywords name="Folders in code1, open" id="7">resources sampler_res camera_res</Keywords>
+            <Keywords name="Folders in code1, open" id="7">resources sampler_res camera_res uniform_buffer_res storage_buffer_res</Keywords>
             <Keywords name="Folders in code1, middle" id="8"></Keywords>
             <Keywords name="Folders in code1, close" id="9">end</Keywords>
             <Keywords name="Folders in code2, open" id="10"></Keywords>
@@ -21,7 +21,7 @@
             <Keywords name="Folders in comment, open" id="13"></Keywords>
             <Keywords name="Folders in comment, middle" id="14"></Keywords>
             <Keywords name="Folders in comment, close" id="15"></Keywords>
-            <Keywords name="Keywords1" id="16">compare mag min aniso wrap_s wrap_t wrap_r target orient spin radius radius_delta pos_delta rotation_scale</Keywords>
+            <Keywords name="Keywords1" id="16">compare mag min aniso wrap_s wrap_t wrap_r target orient spin radius radius_delta pos_delta rotation_scale size placeholder create</Keywords>
             <Keywords name="Keywords2" id="17">uniform_res</Keywords>
             <Keywords name="Keywords3" id="18"></Keywords>
             <Keywords name="Keywords4" id="19"></Keywords>

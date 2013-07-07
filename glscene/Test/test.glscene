@@ -17,5 +17,9 @@ resources
 		pos_delta 0.25 1.5
 		rotation_scale 0.36
 	end
+	
+	uniform_buffer_res <ident> 64 [stream_draw]
+	storage_buffer_res <ident> 128 placeholder
+
 end
 

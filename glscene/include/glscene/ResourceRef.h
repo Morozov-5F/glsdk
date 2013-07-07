@@ -405,7 +405,6 @@ namespace glscene
 
 		\param resourceId The resource name of the uniform buffer binding.
 		\param bufferObject The OpenGL buffer object.
-		\param bindPoint The index to bind to. Must be less than `GL_MAX_UNIFORM_BUFFER_BINDINGS`.
 		\param offset The offset from the start of the buffer for the bind call. The offset must be
 		a multiple of `GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT`
 		\param size The size of the range to bind.
@@ -419,13 +418,13 @@ namespace glscene
 		[2]: http://www.opengl.org/wiki/GLAPI/glBindBufferRange
 		**/
 		void DefineUniformBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
-			GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership );
+			GLintptr offset, GLsizeiptr size, bool claimOwnership );
 
 		/**
 		\brief Completes the creation of a named uniform buffer that was started with DefineUniformBufferBindingIncomplete.
 
 		This call defines the buffer object and offset for a uniform buffer resource that was 
-		incompletely defined with DefineUniformBufferBindingIncomplete. The bind point and range size
+		incompletely defined with DefineUniformBufferBindingIncomplete. The range size
 		will remain the same; only the buffer object and the starting offset can be modified with this function.
 
 		\param resourceId The resource name of the uniform buffer binding.
@@ -446,18 +445,17 @@ namespace glscene
 		/**
 		\brief Incompletely creates a named uniform buffer binding resource.
 
-		This call defines the bind-point and byte size for a uniform buffer binding resource. The rest of the
+		This call defines the byte size for a uniform buffer binding resource. The rest of the
 		data can be filled in with a call to DefineUniformBufferBinding(const std::string &, GLuint,
 		GLintptr, bool).
 
 		\param resourceId The resource name of the uniform buffer binding.
-		\param bindPoint The index to bind to. Must be less than `GL_MAX_UNIFORM_BUFFER_BINDINGS`.
 		\param size The size of the range to bind.
 		
 		\throws ResourceMultiplyDefinedException If \a resourceId refers to a uniform buffer resource that has
 		already been defined.
 		**/
-		void DefineUniformBufferBindingIncomplete(const boost::string_ref &resourceId, GLuint bindPoint,
+		void DefineUniformBufferBindingIncomplete(const boost::string_ref &resourceId,
 			GLsizeiptr size);
 
 
@@ -470,7 +468,6 @@ namespace glscene
 
 		\param resourceId The resource name of the storage buffer binding.
 		\param bufferObject The OpenGL buffer object.
-		\param bindPoint The index to bind to. Must be less than `GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS`.
 		\param offset The offset from the start of the buffer for the bind call. The offset must be
 		a multiple of `GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT`
 		\param size The size of the range to bind.
@@ -484,13 +481,13 @@ namespace glscene
 		[2]: http://www.opengl.org/wiki/GLAPI/glBindBufferRange
 		**/
 		void DefineStorageBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
-			GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership );
+			GLintptr offset, GLsizeiptr size, bool claimOwnership );
 
 		/**
 		\brief Completes the creation of a named storage buffer that was started with DefineStorageBufferBindingIncomplete.
 
 		This call defines the buffer object and offset for a storage buffer resource that was 
-		incompletely defined with DefineUniformBufferBindingIncomplete. The bind point and range size
+		incompletely defined with DefineUniformBufferBindingIncomplete. The range size
 		will remain the same; only the buffer object and the starting offset can be modified with this function.
 
 		\param resourceId The resource name of the storage buffer binding.
@@ -511,18 +508,17 @@ namespace glscene
 		/**
 		\brief Incompletely creates a named storage buffer binding resource.
 
-		This call defines the bind-point and byte size for a storage buffer binding resource. The rest of the
+		This call defines the byte size for a storage buffer binding resource. The rest of the
 		data can be filled in with a call to DefineStorageBufferBinding(const std::string &, GLuint,
 		GLintptr, bool).
 
 		\param resourceId The resource name of the storage buffer binding.
-		\param bindPoint The index to bind to. Must be less than `GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS`.
 		\param size The size of the range to bind.
 		
 		\throws ResourceMultiplyDefinedException If \a resourceId refers to a storage buffer resource that has
 		already been defined.
 		**/
-		void DefineStorageBufferBindingIncomplete(const boost::string_ref &resourceId, GLuint bindPoint,
+		void DefineStorageBufferBindingIncomplete(const boost::string_ref &resourceId,
 			GLsizeiptr size);
 
 

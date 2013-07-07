@@ -246,7 +246,7 @@ namespace glscene
 			if(!resources.HasUniformBufferBinding(binding.bufferId))
 				throw ResourceNotFoundException(binding.bufferId, "uniform buffer");
 			//8:  Verify, for all uniform buffer bindings, that no two binding resources bind to the same uniform buffer binding index.
-			GLuint bindPoint = resources.GetUniformBufferBindingIndex(binding.bufferId);
+			GLuint bindPoint = binding.bindPoint;
 			if(uniqueBindings.find(bindPoint) != uniqueBindings.end())
 				throw StyleMultipleBindingsException(binding.bufferId, "uniform buffer", (unsigned int)bindPoint);
 			else
@@ -260,7 +260,7 @@ namespace glscene
 			if(!resources.HasStorageBufferBinding(binding.bufferId))
 				throw ResourceNotFoundException(binding.bufferId, "storage buffer");
 			//10: Verify, for all storage buffer bindings, that no two binding resources bind to the same storage buffer binding index.
-			GLuint bindPoint = resources.GetStorageBufferBindingIndex(binding.bufferId);
+			GLuint bindPoint = binding.bindPoint;
 			if(uniqueBindings.find(bindPoint) != uniqueBindings.end())
 				throw StyleMultipleBindingsException(binding.bufferId, "storage buffer", (unsigned int)bindPoint);
 			else
@@ -417,12 +417,12 @@ namespace glscene
 
 				BOOST_FOREACH(const BufferInterfaceBindingData &uniformBinding, m_style.uniformBufferBindings)
 				{
-					m_resources.BindUniformBuffer(uniformBinding.bufferId, uniformBinding.bindOffset);
+					m_resources.BindUniformBuffer(uniformBinding.bufferId, uniformBinding.bindPoint, uniformBinding.bindOffset);
 				}
 
 				BOOST_FOREACH(const BufferInterfaceBindingData &storageBinding, m_style.storageBufferBindings)
 				{
-					m_resources.BindStorageBuffer(storageBinding.bufferId, storageBinding.bindOffset);
+					m_resources.BindStorageBuffer(storageBinding.bufferId, storageBinding.bindPoint, storageBinding.bindOffset);
 				}
 			}
 
@@ -430,12 +430,12 @@ namespace glscene
 			{
 				BOOST_FOREACH(const BufferInterfaceBindingData &storageBinding, m_style.storageBufferBindings)
 				{
-					m_resources.BindStorageBuffer(storageBinding.bufferId, storageBinding.bindOffset);
+					gl::BindBufferRange(gl::SHADER_STORAGE_BUFFER, storageBinding.bindPoint, 0, 0, 0);
 				}
 
 				BOOST_FOREACH(const BufferInterfaceBindingData &uniformBinding, m_style.uniformBufferBindings)
 				{
-					m_resources.BindUniformBuffer(uniformBinding.bufferId, uniformBinding.bindOffset);
+					gl::BindBufferRange(gl::UNIFORM_BUFFER, uniformBinding.bindPoint, 0, 0, 0);
 				}
 
 				BOOST_FOREACH(const ImageBindingMap::value_type &imgBindingPair, m_style.imageBindings)

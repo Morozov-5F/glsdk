@@ -200,6 +200,7 @@ namespace glscene
 		BOOST_FOREACH(const BufferInterfaceBinding &bufBinding, style.uniformBufferBindings)
 		{
 			BufferInterfaceBindingData newBinding(bufBinding.bufferId);
+			newBinding.bindPoint = bufBinding.bindPoint;
 			newBinding.bindOffset = bufBinding.bindOffset;
 			data.uniformBufferBindings.push_back(newBinding);
 		}
@@ -208,6 +209,7 @@ namespace glscene
 		BOOST_FOREACH(const BufferInterfaceBinding &bufBinding, style.storageBufferBindings)
 		{
 			BufferInterfaceBindingData newBinding(bufBinding.bufferId);
+			newBinding.bindPoint = bufBinding.bindPoint;
 			newBinding.bindOffset = bufBinding.bindOffset;
 			data.storageBufferBindings.push_back(newBinding);
 		}

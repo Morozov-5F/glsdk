@@ -134,7 +134,7 @@ namespace
 		refs::array_ref<boost::string_ref> enumerators;
 	};
 
-	const EnumData<void> g_uniformTypeEnumeration = {"enum", refs::array_ref<string_ref>(g_uniformTypeList)};
+	const EnumData<void> g_uniformTypeEnumeration = {"uniform type", refs::array_ref<string_ref>(g_uniformTypeList)};
 
 	string_ref g_magFilterEnumNames[] =
 	{
@@ -269,6 +269,39 @@ namespace
 		"camera keyboard",
 		refs::array_ref<string_ref>(g_cameraKeyboardSideEnumNames),
 		refs::array_ref<bool>(g_cameraKeyboardSideEnumerators)
+	};
+
+	string_ref g_bufferUsageEnumNames[] =
+	{
+		"static_draw",
+		"static_read",
+		"static_copy",
+		"dynamic_draw",
+		"dynamic_read",
+		"dynamic_copy",
+		"stream_draw",
+		"stream_read",
+		"stream_copy",
+	};
+
+	GLenum g_bufferUsageEnumerators[] =
+	{
+		gl::STATIC_DRAW,
+		gl::STATIC_READ,
+		gl::STATIC_COPY,
+		gl::DYNAMIC_DRAW,
+		gl::DYNAMIC_READ,
+		gl::DYNAMIC_COPY,
+		gl::STREAM_DRAW,
+		gl::STREAM_READ,
+		gl::STREAM_COPY,
+	};
+
+	const EnumData<GLenum> g_bufferUsageEnumeration =
+	{
+		"create",
+		refs::array_ref<string_ref>(g_bufferUsageEnumNames),
+		refs::array_ref<GLenum>(g_bufferUsageEnumerators)
 	};
 }
 

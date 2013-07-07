@@ -18,3 +18,6 @@
 	MAC(RADIUS_DELTA,	"radius_delta",	"camera delta radius",	"camera delta radius")
 	MAC(POS_DELTA,		"pos_delta",	"camera delta position",	"camera delta position")
 	MAC(ROTATION_SCALE,	"rotation_scale",	"camera rotation scale",	"camera rotation scale")
+	MAC(UNIFORM_BUFFER_RES,	"uniform_buffer_res",	"uniform buffer resource",	"uniform buffer resource")
+	MAC(STORAGE_BUFFER_RES,	"storage_buffer_res",	"storage buffer resource",	"storage buffer resource")
+	MAC(PLACEHOLDER,	"placeholder",	"placeholder",		"placeholder")

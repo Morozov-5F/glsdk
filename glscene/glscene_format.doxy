@@ -72,8 +72,8 @@ String Type       | Delimiter
 
 Some commands take numbers as parameters. In every case where a number is expected, that number is expected to conform to a specific type. The general types of numbers are:
 
-1. unsigned integer: an integer value without a leading - sign/
-2. signed integer: an integer value with a leading - sign
+1. unsigned integer: an integer value without a leading "-" sign.
+2. signed integer: an integer value with a leading "-" sign.
 3. floating-point value: any number with a decimal.
 
 The types can be promoted from lower types to higher ones. So a command that expects you to provide a signed integer can also take an unsigned one. A command that takes a floating-point type will take any kind of number.
@@ -209,6 +209,30 @@ The valid sub-commands are:
 - `pos_delta (small) (large)`: **Required**. This defines the large and small changes in the camera view target position, as though by glutil::ViewScale::smallPosOffset and glutil::ViewScale::largePosOffset respectively. These values are each a single float. They must be larger than 0, and the `small` value must be larger than the `large`.
 - `rotation_scale (scale)`: **Required**. This defines the number of degrees to rotate the view per window space pixel the mouse moves when dragging, as if by glutil::ViewScale::rotationScale. This value is a single float and must be larger than 0.
 
+## Uniform and Storage Buffer Resource ## {#page_glscene_file_format_resources_buffer}
+
+\verbatim
+uniform_buffer_res <resource_id> (size) `how-to-create`
+storage_buffer_res <resource_id> (size) `how-to-create`
+\endverbatim
+
+Uniform buffer resources and shader storage buffer resources are defined in identical ways; the only difference is which keyword is used to create them: `uniform_buffer_res` or `storage_buffer_res`. They do have different namespaces, so a uniform buffer `resource_id` can match a storage buffer's id.
+
+The `size` is an unsigned integer that defines how many bytes to allocate. It is a single, unparenthesized value.
+
+`how-to-create` is a bit more complex. Buffer objects can either be created by the parsing system itself or by the user. To state that the system should created the buffer, `how-to-create` must be an enumeration that defines the usage hint for the buffer object. This usage will be used when creating the buffer.
+
+So the command `uniform_buffer_res <ident> 512 [static_draw]` will create a 512-byte buffer object, and who's usage is `GL_STATIC_DRAW`. Buffers created by the system will be owned by the scene graph. Also, the offset for these bindings will be 0, so that they always use the entire buffer.
+
+To state that a buffer object is to be created by the user, `how-to-create` must be the keyword `placeholder`. This will create the buffer resource as if by glscene::ResourceRes::DefineUniformBufferBindingIncomplete or glscene::ResourceRes::DefineStorageBufferBindingIncomplete. Therefore, you must, after the parser has generated the glscene::SceneGraph, complete the buffer binding by providing a buffer object and offset.
+
+The valid enumerator values for `how-to-create` are:
+
+<table>
+<tr><td>`static_draw`</td><td>`static_read`</td><td>`static_copy`</td></tr>
+<tr><td>`dynamic_draw`</td><td>`dynamic_read`</td><td>`dynamic_copy`</td></tr>
+<tr><td>`stream_draw`</td><td>`stream_read`</td><td>`stream_copy`</td></tr>
+</table>
 
 # Scene Graph # {#page_glscene_file_format_syntax_scene}
 

@@ -48,8 +48,9 @@ namespace glscene
 	///The binding for a uniform or shader storage buffer.
 	struct BufferInterfaceBinding
 	{
+		GLuint bindPoint;				///<The index to bind the buffer object to.
 		std::string bufferId;				///<The resource name of the uniform or storage buffer.
-		GLuint bindOffset;					///<An additional offset to be applied to the offset already specified by the resource.
+		GLuint bindOffset;					///<An additional offset to be applied to the offset already defined in the resource.
 	};
 
 	///The data for a single program. Includes the program resource and any uniform resources.

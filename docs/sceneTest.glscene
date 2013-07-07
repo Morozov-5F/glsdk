@@ -42,16 +42,8 @@ resources
 		uniform_buffer {projection_matrix} 0
 		uniform_buffer {lights} 2
 	end
-	uniform_buffer_res <projection_matrix>
-		binding 0
-		size 64
-		create [stream-draw]
-	end
-	uniform_buffer_res <lights>
-		binding 2
-		size 128
-		placeholder
-	end
+	uniform_buffer_res <projection_matrix> 64 [stream-draw]
+	uniform_buffer_res <lights> 128 placeholder
 	uniform_res <num_lights> [float] 5
 	uniform_res <test_value> [vec3] (2.43 3.4 9.8)
 	camera_res <main> [left-btn] [left-kbd]
@@ -74,8 +66,8 @@ scene
 		layer 'shadow1'			//Layer for the current node. Children will not inherit.
 
 		local <matrices>
-			uniform_buffer <projection_matrix>
-			uniform_buffer <lights>
+			uniform_buffer 0 <projection_matrix>
+			uniform_buffer 2 <lights>
 		end
 		
 		node <ship>

@@ -228,9 +228,9 @@ namespace glscene
 	}
 
 	void ResourceRef::DefineUniformBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
-		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
+		GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
-		m_data.get().DefineUniformBufferBinding(resourceId, bufferObject, bindPoint, offset, size, claimOwnership);
+		m_data.get().DefineUniformBufferBinding(resourceId, bufferObject, offset, size, claimOwnership);
 	}
 
 	void ResourceRef::DefineUniformBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
@@ -239,16 +239,16 @@ namespace glscene
 		m_data.get().DefineUniformBufferBinding(resourceId, bufferObject, offset, claimOwnership);
 	}
 
-	void ResourceRef::DefineUniformBufferBindingIncomplete( const boost::string_ref &resourceId, GLuint bindPoint,
+	void ResourceRef::DefineUniformBufferBindingIncomplete( const boost::string_ref &resourceId,
 		GLsizeiptr size )
 	{
-		m_data.get().DefineUniformBufferBindingIncomplete(resourceId, bindPoint, size);
+		m_data.get().DefineUniformBufferBindingIncomplete(resourceId, size);
 	}
 
 	void ResourceRef::DefineStorageBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
-		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
+		GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
-		m_data.get().DefineStorageBufferBinding(resourceId, bufferObject, bindPoint, offset, size, claimOwnership);
+		m_data.get().DefineStorageBufferBinding(resourceId, bufferObject, offset, size, claimOwnership);
 	}
 
 	void ResourceRef::DefineStorageBufferBinding( const boost::string_ref &resourceId, GLuint bufferObject,
@@ -257,10 +257,10 @@ namespace glscene
 		m_data.get().DefineStorageBufferBinding(resourceId, bufferObject, offset, claimOwnership);
 	}
 
-	void ResourceRef::DefineStorageBufferBindingIncomplete( const boost::string_ref &resourceId, GLuint bindPoint,
+	void ResourceRef::DefineStorageBufferBindingIncomplete( const boost::string_ref &resourceId,
 		GLsizeiptr size )
 	{
-		m_data.get().DefineStorageBufferBindingIncomplete(resourceId, bindPoint, size);
+		m_data.get().DefineStorageBufferBindingIncomplete(resourceId, size);
 	}
 
 	void ResourceRef::DefineCamera( const boost::string_ref &resourceId, const glutil::ViewData &initialView,

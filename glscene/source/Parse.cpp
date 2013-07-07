@@ -384,18 +384,28 @@ namespace glscene
 		bool bRightKeyboardCtrls;
 	};
 
+	struct ParsedBufferDef
+	{
+		FilePosition pos;
+		unsigned int size;
+		boost::optional<GLenum> creationUsage;
+	};
+
 	template<typename Def>
 	FilePosition GetPosFromDef(const Def &def) {return def.pos;}
 
 	typedef boost::container::flat_map<IdString, ParsedUniformDef> ParsedUniformMap;
 	typedef boost::container::flat_map<IdString, ParsedSamplerDef> ParsedSamplerMap;
 	typedef boost::container::flat_map<IdString, ParsedCameraDef> ParsedCameraMap;
+	typedef boost::container::flat_map<IdString, ParsedBufferDef> ParsedBufferMap;
 
 	struct ParsedResources
 	{
 		ParsedUniformMap uniforms;
 		ParsedSamplerMap samplers;
 		ParsedCameraMap cameras;
+		ParsedBufferMap uniformBuffers;
+		ParsedBufferMap storageBuffers;
 	};
 
 	template<typename Range>
@@ -436,12 +446,18 @@ namespace glscene
 				case TOK_CAMERA_RES:
 					ParseCameraDef();
 					break;
+				case TOK_UNIFORM_BUFFER_RES:
+					ParseUniformBufferDef();
+					break;
+				case TOK_STORAGE_BUFFER_RES:
+					ParseStorageBufferDef();
+					break;
 				default:
 					throw UnexpectedDataError(m_rng.front(), "a valid resource.", exp_message);
 				}
 			}
 
-			ExpectToken(TOK_END);
+			ExpectEndToken();
 			EatOneToken();
 		}
 
@@ -576,7 +592,7 @@ namespace glscene
 				}
 			}
 
-			ExpectAndEatToken(TOK_END);
+			ExpectAndEatEndToken();
 		}
 
 		void ParseCameraDef()
@@ -694,7 +710,49 @@ namespace glscene
 			}
 
 			ThrowIfNotFound(hasBeenFound, g_requiredCameraTokens, TOK_CAMERA_RES);
-			ExpectAndEatToken(TOK_END);
+			ExpectAndEatEndToken();
+		}
+
+		void ParseUniformBufferDef()
+		{
+			PosStackPusher push(*this);
+
+			ExpectAndEatToken(TOK_UNIFORM_BUFFER_RES);
+			IdString ident = ParseIdentifier(m_resources.uniformBuffers, false, TOK_UNIFORM_BUFFER_RES);
+			ParsedBufferDef &bufferDef = m_resources.uniformBuffers[ident];
+			bufferDef.pos = m_posStack.top();
+
+			ParseBufferDef(bufferDef, TOK_UNIFORM_BUFFER_RES);
+		}
+
+		void ParseStorageBufferDef()
+		{
+			PosStackPusher push(*this);
+
+			ExpectAndEatToken(TOK_STORAGE_BUFFER_RES);
+			IdString ident = ParseIdentifier(m_resources.storageBuffers, false, TOK_STORAGE_BUFFER_RES);
+			ParsedBufferDef &bufferDef = m_resources.storageBuffers[ident];
+			bufferDef.pos = m_posStack.top();
+
+			ParseBufferDef(bufferDef, TOK_STORAGE_BUFFER_RES);
+		}
+
+		void ParseBufferDef(ParsedBufferDef &bufferDef, size_t owningId)
+		{
+			bufferDef.size = ParseSingleUInt();
+			boost::optional<bool> test = HasToken(TOK_PLACEHOLDER);
+			if(!test)
+			{
+				throw BaseParseError("Ran out of data instead of finding a buffer `placeholder` or enumeration.", m_posStack.top());
+			}
+			else if(test.get())
+			{
+				EatOneToken();
+			}
+			else
+			{
+				bufferDef.creationUsage = ParseEnumerator(g_bufferUsageEnumeration);
+			}
 		}
 
 		void ParseUniformDef()
@@ -938,6 +996,7 @@ namespace glscene
 		float ParseSingleFloat(const Token &owningTok, size_t owningId)
 		{
 			bool paren = false;
+			ExpectAToken();
 			if(HasToken(m_rng.front(), TOK_OPEN_PAREN))
 			{
 				paren = true;
@@ -946,6 +1005,26 @@ namespace glscene
 
 			ExpectCategory(NUMBER_ID_PREFIX);
 			float ret = boost::lexical_cast<float>(GetTokenString());
+			EatOneToken();
+
+			if(paren)
+				ExpectAndEatToken(TOK_CLOSE_PAREN);
+
+			return ret;
+		}
+
+		unsigned int ParseSingleUInt()
+		{
+			bool paren = false;
+			ExpectAToken();
+			if(HasToken(m_rng.front(), TOK_OPEN_PAREN))
+			{
+				paren = true;
+				EatOneToken();
+			}
+
+			ExpectToken(TOK_UNSIGNED_INTEGER);
+			unsigned int ret = boost::lexical_cast<unsigned int>(GetTokenString());
 			EatOneToken();
 
 			if(paren)
@@ -965,6 +1044,12 @@ namespace glscene
 			}
 		}
 
+		void ExpectAndEatEndToken()
+		{
+			ExpectEndToken();
+			EatOneToken();
+		}
+
 		void ExpectToken(size_t idExpected) const
 		{
 			if(m_rng.empty())
@@ -977,6 +1062,25 @@ namespace glscene
 		{
 			if(tok.id() != idExpected)
 				throw UnexpectedDataError(idExpected, tok);
+		}
+
+		//Provides a special error message.
+		void ExpectEndToken() const
+		{
+			if(m_rng.empty())
+				throw BaseParseError("This compound command needs an 'end' token.", m_posStack.top());
+			else
+			{
+				if(m_rng.front().id() != TOK_END)
+					throw BaseParseError("This compound command needs an 'end' token.", m_posStack.top());
+			}
+		}
+
+		//Throws if empty.
+		void ExpectAToken() const
+		{
+			if(m_rng.empty())
+				throw BaseParseError("Unexpected end of data.", 0, true);
 		}
 
 		void ExpectCategory(const Token &tok, size_t prefix) const

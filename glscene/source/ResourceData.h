@@ -81,7 +81,6 @@ namespace glscene
 	{
 		boost::optional<GLuint> bufferObject;
 		bool owned;
-		GLuint bindPoint;
 		GLintptr offset;
 		GLsizeiptr size;
 	};
@@ -198,31 +197,28 @@ namespace glscene
 		GLuint GetProgram(const IdString &resourceId) const;
 		ProgramMatrices GetProgramMatrices(const IdString &resourceId) const;
 
-		void DefineUniformBufferBinding(const IdString &resourceId, GLuint bufferObject, GLuint bindPoint,
+		void DefineUniformBufferBinding(const IdString &resourceId, GLuint bufferObject,
 			GLintptr offset, GLsizeiptr size, bool claimOwnership);
 		void DefineUniformBufferBinding(const IdString &resourceId, GLuint bufferObject,
 			GLintptr offset, bool claimOwnership);
-		void DefineUniformBufferBindingIncomplete(const IdString &resourceId, GLuint bindPoint,
+		void DefineUniformBufferBindingIncomplete(const IdString &resourceId,
 			GLsizeiptr size);
 		bool HasUniformBufferBinding(const IdString &resourceId) const;
 		//Will crash on a texture not found.
 		bool IsUniformBufferBindingComplete(const IdString &resourceId) const;
 
-		void DefineStorageBufferBinding(const IdString &resourceId, GLuint bufferObject, GLuint bindPoint,
+		void DefineStorageBufferBinding(const IdString &resourceId, GLuint bufferObject,
 			GLintptr offset, GLsizeiptr size, bool claimOwnership);
 		void DefineStorageBufferBinding(const IdString &resourceId, GLuint bufferObject,
 			GLintptr offset, bool claimOwnership);
-		void DefineStorageBufferBindingIncomplete(const IdString &resourceId, GLuint bindPoint,
+		void DefineStorageBufferBindingIncomplete(const IdString &resourceId,
 			GLsizeiptr size);
 		bool HasStorageBufferBinding(const IdString &resourceId) const;
 		//Will crash on a texture not found.
 		bool IsStorageBufferBindingComplete(const IdString &resourceId) const;
 
-		void BindUniformBuffer(const IdString &resourceId, GLintptr offset = 0) const;
-		void BindStorageBuffer(const IdString &resourceId, GLintptr offset = 0) const;
-
-		GLuint GetUniformBufferBindingIndex(const IdString &resourceId) const;
-		GLuint GetStorageBufferBindingIndex(const IdString &resourceId) const;
+		void BindUniformBuffer(const IdString &resourceId, GLuint bindPoint, GLintptr offset = 0) const;
+		void BindStorageBuffer(const IdString &resourceId, GLuint bindPoint, GLintptr offset = 0) const;
 
 		void DefineCamera(const IdString &resourceId, const glutil::ViewData &initialView,
 			const glutil::ViewScale &viewScale, glutil::MouseButtons actionButton, bool bRightKeyboardCtrls);

@@ -619,7 +619,7 @@ namespace glscene
 	}
 
 	void ResourceData::DefineUniformBufferBinding( const IdString &resourceId, GLuint bufferObject,
-		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
+		GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
 		InterfaceBufferMap::iterator test_it = m_uniformBufferMap.find(resourceId);
 		if(test_it != m_uniformBufferMap.end())
@@ -628,7 +628,6 @@ namespace glscene
 		InterfaceBuffer &binding = m_uniformBufferMap[resourceId];
 		binding.bufferObject = bufferObject;
 		binding.owned = claimOwnership;
-		binding.bindPoint = bindPoint;
 		binding.offset = offset;
 		binding.size = size;
 	}
@@ -652,7 +651,7 @@ namespace glscene
 		binding.offset = offset;
 	}
 
-	void ResourceData::DefineUniformBufferBindingIncomplete( const IdString &resourceId, GLuint bindPoint,
+	void ResourceData::DefineUniformBufferBindingIncomplete( const IdString &resourceId,
 		GLsizeiptr size )
 	{
 		if(m_uniformBufferMap.find(resourceId) != m_uniformBufferMap.end())
@@ -661,7 +660,6 @@ namespace glscene
 		InterfaceBuffer &binding = m_uniformBufferMap[resourceId];
 		binding.bufferObject = boost::none;
 		binding.owned = false;
-		binding.bindPoint = bindPoint;
 		binding.offset = 0;
 		binding.size = size;
 
@@ -684,7 +682,7 @@ namespace glscene
 	}
 
 	void ResourceData::DefineStorageBufferBinding( const IdString &resourceId, GLuint bufferObject,
-		GLuint bindPoint, GLintptr offset, GLsizeiptr size, bool claimOwnership )
+		GLintptr offset, GLsizeiptr size, bool claimOwnership )
 	{
 		InterfaceBufferMap::iterator test_it = m_storageBufferMap.find(resourceId);
 		if(test_it != m_storageBufferMap.end())
@@ -693,7 +691,6 @@ namespace glscene
 		InterfaceBuffer &binding = m_storageBufferMap[resourceId];
 		binding.bufferObject = bufferObject;
 		binding.owned = claimOwnership;
-		binding.bindPoint = bindPoint;
 		binding.offset = offset;
 		binding.size = size;
 	}
@@ -717,8 +714,7 @@ namespace glscene
 		binding.offset = offset;
 	}
 
-	void ResourceData::DefineStorageBufferBindingIncomplete( const IdString &resourceId, GLuint bindPoint,
-		GLsizeiptr size )
+	void ResourceData::DefineStorageBufferBindingIncomplete( const IdString &resourceId, GLsizeiptr size )
 	{
 		if(m_storageBufferMap.find(resourceId) != m_storageBufferMap.end())
 			throw ResourceMultiplyDefinedException(resourceId, "storage buffer");
@@ -726,7 +722,6 @@ namespace glscene
 		InterfaceBuffer &binding = m_storageBufferMap[resourceId];
 		binding.bufferObject = boost::none;
 		binding.owned = false;
-		binding.bindPoint = bindPoint;
 		binding.offset = 0;
 		binding.size = size;
 
@@ -747,7 +742,7 @@ namespace glscene
 		return true;
 	}
 
-	void ResourceData::BindUniformBuffer( const IdString &resourceId, GLintptr offset ) const
+	void ResourceData::BindUniformBuffer( const IdString &resourceId, GLuint bindPoint, GLintptr offset ) const
 	{
 		InterfaceBufferMap::const_iterator theVal = m_uniformBufferMap.find(resourceId);
 
@@ -759,11 +754,11 @@ namespace glscene
 		if(!buf.bufferObject)
 			throw UsingIncompleteResourceException(resourceId, "uniform buffer");
 
-		gl::BindBufferRange(gl::UNIFORM_BUFFER, buf.bindPoint, buf.bufferObject.get(),
+		gl::BindBufferRange(gl::UNIFORM_BUFFER, bindPoint, buf.bufferObject.get(),
 			buf.offset + offset, buf.size);
 	}
 
-	void ResourceData::BindStorageBuffer( const IdString &resourceId, GLintptr offset ) const
+	void ResourceData::BindStorageBuffer( const IdString &resourceId, GLuint bindPoint, GLintptr offset ) const
 	{
 		InterfaceBufferMap::const_iterator theVal = m_storageBufferMap.find(resourceId);
 
@@ -775,22 +770,8 @@ namespace glscene
 		if(!buf.bufferObject)
 			throw UsingIncompleteResourceException(resourceId, "storage buffer");
 
-		gl::BindBufferRange(gl::SHADER_STORAGE_BUFFER, buf.bindPoint, buf.bufferObject.get(),
+		gl::BindBufferRange(gl::SHADER_STORAGE_BUFFER, bindPoint, buf.bufferObject.get(),
 			buf.offset + offset, buf.size);
-	}
-
-	GLuint ResourceData::GetUniformBufferBindingIndex( const IdString &resourceId ) const
-	{
-		InterfaceBufferMap::const_iterator theVal = m_uniformBufferMap.find(resourceId);
-		const InterfaceBuffer &buf = theVal->second;
-		return buf.bindPoint;
-	}
-
-	GLuint ResourceData::GetStorageBufferBindingIndex( const IdString &resourceId ) const
-	{
-		InterfaceBufferMap::const_iterator theVal = m_storageBufferMap.find(resourceId);
-		const InterfaceBuffer &buf = theVal->second;
-		return buf.bindPoint;
 	}
 
 	void ResourceData::DefineCamera( const IdString &resourceId, const glutil::ViewData &initialView,

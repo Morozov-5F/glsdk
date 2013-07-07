@@ -41,6 +41,7 @@ namespace glscene
 		BufferInterfaceBindingData(boost::string_ref _bufferId)
 			: bufferId(_bufferId) {}
 
+		GLuint bindPoint;
 		IdString bufferId;
 		GLintptr bindOffset;
 	};
