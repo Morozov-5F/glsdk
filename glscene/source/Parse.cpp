@@ -422,6 +422,21 @@ namespace glscene
 		ProgramInfo info;
 	};
 
+	typedef boost::variant<boost::blank, int, std::string> MeshType;
+
+	struct ParsedMeshDef
+	{
+		FilePosition pos;
+		MeshType generator;
+		std::vector<int> params;
+	};
+
+	struct ParsedTextureDef
+	{
+		FilePosition pos;
+		boost::optional<std::string> filename;
+	};
+
 	template<typename Def>
 	FilePosition GetPosFromDef(const Def &def) {return def.pos;}
 
@@ -430,6 +445,8 @@ namespace glscene
 	typedef boost::container::flat_map<IdString, ParsedCameraDef> ParsedCameraMap;
 	typedef boost::container::flat_map<IdString, ParsedBufferDef> ParsedBufferMap;
 	typedef boost::container::flat_map<IdString, ParsedProgramDef> ParsedProgramMap;
+	typedef boost::container::flat_map<IdString, ParsedMeshDef> ParsedMeshMap;
+	typedef boost::container::flat_map<IdString, ParsedTextureDef> ParsedTextureMap;
 
 	struct ParsedResources
 	{
@@ -439,6 +456,8 @@ namespace glscene
 		ParsedBufferMap uniformBuffers;
 		ParsedBufferMap storageBuffers;
 		ParsedProgramMap programs;
+		ParsedMeshMap meshes;
+		ParsedTextureMap textures;
 	};
 
 	template<typename Range>

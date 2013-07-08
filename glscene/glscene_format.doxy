@@ -147,7 +147,7 @@ sampler_res <resource_id>
 end
 \endverbatim
 
-The `sampler_res` command creates a sampler resource, as if by glscene::ResourceRef::DefineSampler. The subcommands of the sampler each represent a field in the glscene::SamplerInfo data structure. They can be defined in any order, but only one can appear in a particular `sampler_res` command. The default values from glscene::SamplerInfo will be used if you do not specify a value.
+The `sampler_res` command creates a sampler resource, as if by glscene::ResourceRef::DefineSampler(). The subcommands of the sampler each represent a field in the glscene::SamplerInfo data structure. They can be defined in any order, but only one can appear in a particular `sampler_res` command. The default values from glscene::SamplerInfo will be used if you do not specify a value.
 
 The valid subcommands are as follows:
 
@@ -185,7 +185,7 @@ camera_res <resource_id> [mouse_button] [keyboard_side]
 end
 \endverbatim
 
-The `camera_res` command creates a camera resource, as if by glscene::ResourceRef::DefineCamera. The `mouse_button` enum specifies which button is used by the camera. The `keyboard_side` enum specifies if the left or right side controls of the camera are used.
+The `camera_res` command creates a camera resource, as if by glscene::ResourceRef::DefineCamera(). The `mouse_button` enum specifies which button is used by the camera. The `keyboard_side` enum specifies if the left or right side controls of the camera are used.
 
 The `mouse_button` enum must be one of the following:
 
@@ -224,7 +224,7 @@ The `size` is an unsigned integer that defines how many bytes to allocate. It is
 
 So the command `uniform_buffer_res <ident> 512 [static_draw]` will create a 512-byte buffer object, and who's usage is `GL_STATIC_DRAW`. Buffers created by the system will be owned by the scene graph. Also, the offset for these bindings will be 0, so that they always use the entire buffer.
 
-To state that a buffer object is to be created by the user, `how-to-create` must be the keyword `placeholder`. This will create the buffer resource as if by glscene::ResourceRes::DefineUniformBufferBindingIncomplete or glscene::ResourceRes::DefineStorageBufferBindingIncomplete. Therefore, you must, after the parser has generated the glscene::SceneGraph, complete the buffer binding by providing a buffer object and offset.
+To state that a buffer object is to be created by the user, `how-to-create` must be the keyword `placeholder`. This will create the buffer resource as if by glscene::ResourceRes::DefineUniformBufferBindingIncomplete() or glscene::ResourceRes::DefineStorageBufferBindingIncomplete(). Therefore, you must, after the parser has generated the glscene::SceneGraph, complete the buffer binding by providing a buffer object and offset.
 
 The valid enumerator values for `how-to-create` are:
 
@@ -242,9 +242,9 @@ program_res <resource_id> [separate]?
 end
 \endverbatim
 
-The `program_res` command defines a program resource, as if by glscene::ResourceRes::DefineProgram. The sub-commands define the parameters for glscene::ProgramInfo. They can be defined in any order.
+The `program_res` command defines a program resource, as if by glscene::ResourceRes::DefineProgram(). The sub-commands define the parameters for glscene::ProgramInfo. They can be defined in any order.
 
-glscene::ResourceRes::DefineProgram takes a previously created program object. The scene graph file system takes a different approach. Individual shader files are specified, which it will load, compile, and link into a program. So `program_res` has a number of sub-commands for specifying shader files for the program.
+glscene::ResourceRes::DefineProgram() takes a previously created program object. The scene graph file system takes a different approach. Individual shader files are specified, which it will load, compile, and link into a program. So `program_res` has a number of sub-commands for specifying shader files for the program.
 
 `separate` is an optional enumeration. If you provide it (and it can only be that value), then the program will be linked with the `GL_PROGRAM_SEPARATE` flag.
 
@@ -267,6 +267,38 @@ The other sub-commands are as follows:
 - `image {uniform name} (image unit)`: Specifies the name of a uniform variable of an image type which will be assigned the value `image unit`. `image unit` is an unsigned integer.
 - `uniform_buffer {block name} (block binding)`: Specifies that the uniform block named `block name` will be assigned the binding point `block binding`, which is an unsigned integer.
 - `storage_buffer {block name} (block binding)`: Specifies that the shader storage block named `block name` will be assigned the binding point `block binding`, which is an unsigned integer.
+
+## Mesh Resource ## {#page_glscene_file_format_resources_mesh}
+
+~~~~
+mesh_res <resource_id> `creation` (param1) (param2)
+~~~~
+
+
+
+`creation` may be one of the following:
+
+- The `placeholder` keyword. This means that the user will define the mesh later with glscene::ResourceRef::DefineMesh().
+- A "" filename string. This is a filename that will be loaded by the loader.
+- An enumerator. This defines which mesh generator function to use. The generators can take up to two parameters. These parameters are unsigned integers. If you use the wrong number of parameters, an error will result. The available generators, with the number of parameters, are:
+	- `ground_plane numXVerts numYVerts`: Per glmesh::gen::GroundPlane()
+	- `axes`: Per glmesh::gen::Axes()
+	- `cube_block numCubesOnEdge`: Per glmesh::gen::CubeBlock()
+	- `cube_pyramid numCubesTall`: Per glmesh::gen::CubePyramid()
+	- `tetrahedron`: Per glmesh::gen::Tetrahedron()
+	- `cube`: Per glmesh::gen::Cube()
+	- `octahedron`: Per glmesh::gen::Octahedron()
+	- `dodecahedron`: Per glmesh::gen::Dodecahedron()
+	- `icosahedron`: Per glmesh::gen::Icosahedron()
+	- `unit_sphere numHorizSlices numVertSlices`: Per glmesh::gen::UnitSphere()
+
+## Texture Resource ## {#page_glscene_file_format_resources_texture}
+
+~~~~
+texture_res <resource_id> `creation`
+~~~~
+
+
 
 
 # Scene Graph # {#page_glscene_file_format_syntax_scene}

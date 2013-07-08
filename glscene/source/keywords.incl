@@ -34,3 +34,5 @@
 	MAC(IMAGE,			"image",		"image uniform",			"image uniform")
 	MAC(UNIFORM_BUFFER,	"uniform_buffer",	"uniform buffer",		"uniform buffer")
 	MAC(STORAGE_BUFFER,	"storage_buffer",	"storage buffer",		"storage buffer")
+	MAC(MESH_RES,		"mesh_res",		"mesh resource",			"texture resource")
+	MAC(TEXTURE_RES,	"texture_res",	"texture resource",			"mesh resource")
