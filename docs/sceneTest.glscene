@@ -64,7 +64,10 @@ end
 
 scene
 	//Defines all layers
-	layers 'main' 'shadow1' 'shadow2'
+	layer_defs 'main' 'shadow1' 'shadow2'
+	
+	//List of all legal variant names.
+	variant_check <test>
 
 	node <globals>
 		layer inherit 'main'	//Layer for the current node. All children will inherit these.

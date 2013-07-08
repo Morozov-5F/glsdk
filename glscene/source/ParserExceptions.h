@@ -141,7 +141,7 @@ namespace glscene { namespace _detail
 			switch(GetPrefixFromId(idExpected))
 			{
 			case KEYWORD_ID_PREFIX:
-				return std::string("Expected to find the keyword '") + GetTokenErrorName(idExpected) + "'. ";
+				return std::string("Expected to find the command name '") + GetTokenErrorName(idExpected) + "'. ";
 			case STRING_ID_PREFIX:
 				return std::string("Expected to find a ") + GetTokenErrorName(idExpected) + " style string. ";
 			case NUMBER_ID_PREFIX:

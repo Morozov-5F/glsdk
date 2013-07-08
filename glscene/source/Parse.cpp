@@ -151,7 +151,8 @@ namespace
 	// Token string names.
 	static const char *g_keywordStrings[][3] =
 	{
-#define MAC(name, pattern, debug_name, display_name) {pattern, debug_name, display_name},
+		//Use the keyword pattern as the display name.
+#define MAC(name, pattern, debug_name, display_name) {pattern, debug_name, pattern},
 #include "keywords.incl"
 #undef MAC
 	};
@@ -307,7 +308,7 @@ namespace glscene { namespace _detail {
 		size_t prefix = GetPrefixFromId(id);
 		switch(prefix)
 		{
-		case KEYWORD_ID_PREFIX:				return "Keyword";
+		case KEYWORD_ID_PREFIX:				return "Command";
 		case WHITESPACE_ID_PREFIX:			return "Whitespace";
 		case STRING_ID_PREFIX:				return "String";
 		case NUMBER_ID_PREFIX:				return "Number";
@@ -386,6 +387,11 @@ namespace glscene { namespace _detail {
 
 }}
 
+namespace
+{
+	struct throw_current_position_t{};
+	throw_current_position_t curr_throw;
+}
 
 namespace glscene
 {
@@ -479,6 +485,13 @@ namespace glscene
 		ParsedTextureMap textures;
 	};
 
+	struct ParsedSceneGraphDef
+	{
+		FilePosition pos;
+		std::vector<std::string> layers;
+		std::vector<IdString> variantChecks;
+	};
+
 	template<typename Range>
 	class SceneGraphParser
 	{
@@ -492,17 +505,21 @@ namespace glscene
 
 		void ParseSceneGraph()
 		{
-			ParseResources();
+			while(HasToken(TOK_RESOURCES).get_value_or(false))
+				ParseResources();
+			ExpectToken(TOK_SCENE);
+			ParseScene();
+			if(HasAToken())
+				ThrowParseError("Unexpected extra data found.", curr_throw);
 		}
 
 		void ParseResources()
 		{
 			PosStackPusher push(*this);
 
-			ExpectToken(TOK_RESOURCES);
-			EatOneToken();
+			ExpectAndEatToken(TOK_RESOURCES);
 
-			while(!m_rng.empty() && m_rng.front().id() != TOK_END)
+			while(!IsCurrToken(TOK_END))
 			{
 				ExpectCategory(m_rng.front(), KEYWORD_ID_PREFIX);
 				typename Range::value_type tok = m_rng.front();
@@ -537,12 +554,45 @@ namespace glscene
 				}
 			}
 
-			ExpectEndToken();
-			EatOneToken();
+			ExpectAndEatEndToken();
 		}
 
 	private:
 		void EatOneToken() {m_rng.advance_begin(1);}
+
+		void ParseScene()
+		{
+			PosStackPusher push(*this);
+
+			ExpectAndEatToken(TOK_SCENE);
+			m_scene.pos = m_posStack.top();
+
+			{
+				PosStackPusher push(*this);
+				ExpectAndEatToken(TOK_LAYER_DEFS);
+				while(IsCurrToken(TOK_GRAPH_NAME))
+				{
+					m_scene.layers.push_back(ParseGraphName());
+				}
+				if(m_scene.layers.empty())
+					ThrowParseError("You must provide at least one layer name in a `layer_defs`.");
+				if(!IsCurrTokenCategory(KEYWORD_ID_PREFIX))
+					ThrowParseError("`layer_defs` members must be '' strings.", curr_throw);
+			}
+
+			if(IsCurrToken(TOK_VARIANT_CHECK))
+			{
+				EatOneToken();
+				while(IsCurrToken(TOK_IDENTIFIER))
+				{
+					EatOneToken();
+				}
+				if(!IsCurrTokenCategory(KEYWORD_ID_PREFIX))
+					ThrowParseError("`variant_check` members must be identifier strings.", curr_throw);
+			}
+
+			ExpectAndEatEndToken();
+		}
 
 		template<typename MapType>
 		IdString ParseIdentifier(const MapType &search, bool mustFind, size_t currentCmd)
@@ -571,7 +621,7 @@ namespace glscene
 		{
 			std::string msg = "The identifier name '" + idToken + "' refers to a " +
 				GetTokenErrorName(currentCmd) + " that has not been defined.";
-			throw BaseParseError(msg, idToken.size());
+			ThrowParseError(msg, curr_throw);
 		}
 
 		void MultipleIdentifierOfSameType(const std::string &idToken, size_t currentCmd,
@@ -588,30 +638,21 @@ namespace glscene
 				str << std::setw(earlyDefPos.columnNumber - 1) << " ";
 			str << "^- here" << std::endl;
 
-			throw BaseParseError(str.str(), idToken.size());			
+			ThrowParseError(str.str(), curr_throw);			
 		}
 
+		//Expects the top of the stack to be the position of the containing command.
 		void ThrowIfNotFound(const TokenChecker &hasBeenFound,
-			array_ref<size_t> expectedIds, const size_t mainId)
+			array_ref<size_t> expectedIds, const size_t mainId) const
 		{
 			BOOST_FOREACH(size_t id, expectedIds)
 			{
 				if(hasBeenFound.find(id) == hasBeenFound.end())
 				{
-					const FilePosition &pos = m_posStack.top();
-
 					std::stringstream str;
 					str << "The command '" << GetTokenErrorName(mainId) << "' must have a ";
 					str << GetTokenErrorName(id) << " command within it." << std::endl;
-					str << "\tIt was defined in file '" << pos.fileName << "' line ";
-					str << pos.lineNumber << " column " << pos.columnNumber << std::endl;
-					str << "\t" << pos.theLine << std::endl;
-					str << "\t";
-					if(pos.columnNumber > 1)
-						str << std::setw(pos.columnNumber - 1) << " ";
-					str << "^- here" << std::endl;
-
-					throw BaseParseError(str.str());
+					ThrowParseError(str.str());
 				}
 			}
 		}
@@ -664,7 +705,7 @@ namespace glscene
 						if(samplerData.sampler.maxAniso < 1.0f)
 						{
 							std::string msg = "The maximum anisotropic filtering value must be 1.0 or greater.";
-							throw BaseParseError(msg, GetTokenString().size());
+							ThrowParseError(msg, curr_throw);
 						}
 						EatOneToken();
 					}
@@ -696,11 +737,12 @@ namespace glscene
 				if(!HasTokenOneOfNoEmpty(g_validCameraTokens))
 					throw UnexpectedDataError(m_rng.front(), "a valid camera command.", exp_message);
 
+				PosStackPusher push(*this);
 				const typename Range::value_type tok = m_rng.front();
 				CheckMultipleCommand(hasBeenFound, tok, TOK_CAMERA_RES);
 				EatOneToken();
 
-				FilePosition pos = GetPositionForCurrToken();
+//				FilePosition pos = GetPositionForCurrToken();
 				switch(tok.id())
 				{
 				case TOK_TARGET:
@@ -712,7 +754,7 @@ namespace glscene
 				case TOK_SPIN:
 					cameraData.view.degSpinRotation = ParseSingleFloat(tok, TOK_CAMERA_RES);
 					if(cameraData.view.degSpinRotation < 0.0f)
-						throw BaseParseError("Spin angle must be greater than 0.", pos);
+						ThrowParseError("Spin angle must be greater than 0.");
 					break;
 				case TOK_RADIUS:
 					{
@@ -721,19 +763,19 @@ namespace glscene
 						float maxRadius = ParseSingleFloat(tok, TOK_CAMERA_RES);
 
 						if(minRadius < 0.0f)
-							throw BaseParseError("The minimum radius must be larger than 0.", pos);
+							ThrowParseError("The minimum radius must be larger than 0.");
 
 						if(maxRadius < 0.0f)
-							throw BaseParseError("The maximum radius must be larger than 0.", pos);
+							ThrowParseError("The maximum radius must be larger than 0.");
 
 						if(minRadius >= maxRadius)
-							throw BaseParseError("The minimum radius must be less than the maximum radius.", pos);
+							ThrowParseError("The minimum radius must be less than the maximum radius.");
 
 						if(initRadius < minRadius)
-							throw BaseParseError("The initial radius must be larger than the minimum.", pos);
+							ThrowParseError("The initial radius must be larger than the minimum.");
 
 						if(initRadius > maxRadius)
-							throw BaseParseError("The initial radius must be smaller than the maximum.", pos);
+							ThrowParseError("The initial radius must be smaller than the maximum.");
 
 						cameraData.view.radius = initRadius;
 						cameraData.scale.minRadius = minRadius;
@@ -746,13 +788,13 @@ namespace glscene
 						float largeRadius = ParseSingleFloat(tok, TOK_CAMERA_RES);
 
 						if(smallRadius < 0.0f)
-							throw BaseParseError("The small radius delta must be larger than 0.", pos);
+							ThrowParseError("The small radius delta must be larger than 0.");
 
 						if(largeRadius < 0.0f)
-							throw BaseParseError("The large radius delta must be larger than 0.", pos);
+							ThrowParseError("The large radius delta must be larger than 0.");
 
 						if(smallRadius >= largeRadius)
-							throw BaseParseError("The minimum radius delta must be less than the maximum.", pos);
+							ThrowParseError("The minimum radius delta must be less than the maximum.");
 
 						cameraData.scale.smallRadiusDelta = smallRadius;
 						cameraData.scale.largeRadiusDelta = largeRadius;
@@ -764,13 +806,13 @@ namespace glscene
 						float largeDelta = ParseSingleFloat(tok, TOK_CAMERA_RES);
 
 						if(smallDelta < 0.0f)
-							throw BaseParseError("The small position delta must be larger than 0.", pos);
+							ThrowParseError("The small position delta must be larger than 0.");
 
 						if(largeDelta < 0.0f)
-							throw BaseParseError("The large position delta must be larger than 0.", pos);
+							ThrowParseError("The large position delta must be larger than 0.");
 
 						if(smallDelta >= largeDelta)
-							throw BaseParseError("The minimum position delta must be less than the maximum.", pos);
+							ThrowParseError("The minimum position delta must be less than the maximum.");
 
 						cameraData.scale.smallPosOffset = smallDelta;
 						cameraData.scale.largePosOffset = largeDelta;
@@ -781,7 +823,7 @@ namespace glscene
 						float rotScale = ParseSingleFloat(tok, TOK_CAMERA_RES);
 
 						if(rotScale < 0.0f)
-							throw BaseParseError("The rotation scale must be larger than 0.", pos);
+							ThrowParseError("The rotation scale must be larger than 0.");
 
 						cameraData.scale.rotationScale = rotScale;
 					}
@@ -823,7 +865,7 @@ namespace glscene
 			boost::optional<bool> test = HasToken(TOK_PLACEHOLDER);
 			if(!test)
 			{
-				throw BaseParseError("Ran out of data instead of finding a buffer `placeholder` or enumeration.", m_posStack.top());
+				ThrowParseError("Ran out of data instead of finding a buffer `placeholder` or enumeration.");
 			}
 			else if(test.get())
 			{
@@ -868,12 +910,12 @@ namespace glscene
 						{
 							meshDef.params.push_back(ParseSingleUInt());
 						}
-						catch(BaseParseError &e)
+						catch(BaseParseError &)
 						{
 							std::stringstream str;
 							str << "The mesh generator '" << g_meshCreateEnumeration.enumerators[generatorIx] <<
 								"' requires " << numParams << " parameters.";
-							throw BaseParseError(str.str(), m_posStack.top());
+							ThrowParseError(str.str());
 						}
 					}
 
@@ -882,7 +924,7 @@ namespace glscene
 						std::stringstream str;
 						str << "The mesh generator '" << g_meshCreateEnumeration.enumerators[generatorIx] <<
 							"' only takes " << numParams << " parameters.";
-						throw BaseParseError(str.str(), GetPositionForCurrToken());
+						ThrowParseError(str.str(), curr_throw);
 					}
 				}
 				break;
@@ -932,8 +974,7 @@ namespace glscene
 				std::string testEnum = GetEnumFromToken(m_rng.front());
 				if(testEnum != "separate")
 				{
-					throw BaseParseError("Program resources can only use the 'separate' enumerator.",
-						GetPositionForCurrToken());
+					ThrowParseError("Program resources can only use the 'separate' enumerator.", curr_throw);
 				}
 				EatOneToken();
 				programDef.isSeparate = true;
@@ -1009,7 +1050,7 @@ namespace glscene
 
 			if(programDef.shaders.empty())
 			{
-				throw BaseParseError("You must provide at least one shader file in a program resource.", m_posStack.top());
+				ThrowParseError("You must provide at least one shader file in a program resource.");
 			}
 		}
 
@@ -1209,6 +1250,15 @@ namespace glscene
 			return std::string(rawToken.begin() + 1, rawToken.end() - 1);
 		}
 
+		std::string ParseGraphName()
+		{
+			ExpectToken(TOK_GRAPH_NAME);
+			std::string rawToken = GetTokenString();
+			EatOneToken();
+
+			return std::string(rawToken.begin() + 1, rawToken.end() - 1);
+		}
+
 		glm::vec3 ParseVec3(const Token &owningTok, size_t owningId)
 		{
 			ExpectAndEatToken(TOK_OPEN_PAREN);
@@ -1224,7 +1274,7 @@ namespace glscene
 				if(3 == count)
 				{
 					std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' only takes 3 numbers.";
-					throw BaseParseError(msg, GetTokenString().size());
+					ThrowParseError(msg, curr_throw);
 				}
 
 				ret[count] = boost::lexical_cast<float>(GetTokenString());
@@ -1235,7 +1285,7 @@ namespace glscene
 			if(3 != count && 1 != count)
 			{
 				std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' requires 3 numbers.";
-				throw BaseParseError(msg, GetTokenString().size());
+				ThrowParseError(msg, curr_throw);
 			}
 
 			if(1 == count)
@@ -1260,7 +1310,7 @@ namespace glscene
 				if(4 == count)
 				{
 					std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' quaternion takes 4 numbers.";
-					throw BaseParseError(msg, GetTokenString().size());
+					ThrowParseError(msg, curr_throw);
 				}
 
 				inputQuat[count] = boost::lexical_cast<float>(GetTokenString());
@@ -1271,7 +1321,7 @@ namespace glscene
 			if(4 != count)
 			{
 				std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' quaternion requires 4 numbers.";
-				throw BaseParseError(msg, GetTokenString().size());
+				ThrowParseError(msg, curr_throw);
 			}
 
 			ExpectAndEatToken(TOK_CLOSE_PAREN);
@@ -1318,6 +1368,23 @@ namespace glscene
 			return ret;
 		}
 
+		//Returns true if the current token has the identifier. Returns false if not. *Throws* if no current token.
+		bool IsCurrToken(size_t idExpected)
+		{
+			if(m_rng.empty())
+				throw UnexpectedDataError(idExpected);
+			else
+				return HasTokenNoEmpty(idExpected);
+		}
+
+		bool IsCurrTokenCategory(size_t prefix)
+		{
+			if(m_rng.empty())
+				throw UnexpectedDataError(prefix, exp_cat);
+			else
+				return HasCategoryNoEmpty(prefix);
+		}
+
 		void ExpectAndEatToken(size_t idExpected)
 		{
 			if(m_rng.empty())
@@ -1353,11 +1420,11 @@ namespace glscene
 		void ExpectEndToken() const
 		{
 			if(m_rng.empty())
-				throw BaseParseError("This compound command needs an 'end' token.", m_posStack.top());
+				ThrowParseError("This compound command needs an 'end' token.");
 			else
 			{
 				if(m_rng.front().id() != TOK_END)
-					throw BaseParseError("This compound command needs an 'end' token.", m_posStack.top());
+					ThrowParseError("This compound command needs an 'end' token.");
 			}
 		}
 
@@ -1469,10 +1536,21 @@ namespace glscene
 			return std::string(m_rng.front().value().begin(), m_rng.front().value().end());
 		}
 
+		void ThrowParseError(const std::string &msg) const
+		{
+			throw BaseParseError(msg, m_posStack.top());
+		}
+
+		void ThrowParseError(const std::string &msg, throw_current_position_t) const
+		{
+			throw BaseParseError(msg, GetPositionForCurrToken());
+		}
+
 		pos_iterator &m_currIt;
 		Range m_rng;
 		std::stack<FilePosition> m_posStack;
 		ParsedResources m_resources;
+		ParsedSceneGraphDef m_scene;
 
 		class PosStackPusher
 		{

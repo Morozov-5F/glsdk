@@ -3,4 +3,4 @@
 	MAC(GLSL_IDENT,		"\\{[a-zA-Z_][a-zA-Z0-9_\\[\\]\\.]*\\}",		"Shader Identifier",	"{Shader.Identifier}")
 	MAC(ENUMERATOR,		"\\[[a-z0-9_\\-]+\\]",	"Enumerator",			"[Enumerator]")
 	MAC(FILENAME,		"\\\"[^\\\"\\n\\t]+\\\"",	"Filename",				"\"Filename String\"")
-	MAC(STORE_NAME,		"\\\'[^\\\'\\n\\t]+\\\'",	"Stored Name",			"'Stored Name String'")
+	MAC(GRAPH_NAME,		"\\\'[^\\\'\\n\\t]+\\\'",	"Graph Name",			"'Scene Graph Name'")

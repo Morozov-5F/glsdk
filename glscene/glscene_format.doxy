@@ -307,8 +307,6 @@ This creates a texture resource, as if by glscene::ResourceRef::DefineTexture().
 - The `placeholder` keyword. This causes the system to create an incomplete texture resource. So the user is expected to define the texture later with glscene::ResourceRef::DefineTexture().
 - A "" filename string. This is a filename that will be loaded by the loader.
 
-
-
 # Scene Graph # {#page_glscene_file_format_syntax_scene}
 
 ~~~~
@@ -317,8 +315,24 @@ scene
 end
 ~~~~
 
-The last command in a file must be a `scene` command. A file can only contain one `scene` command; it may not have more or fewer. And no `resources` commands may follow it.
+The last command in a file must be a `scene` command. A file can only contain one `scene` command; it may not have more or fewer. And no `resources` commands (or any other commands) may follow it. The `scene` command is a compound command.
 
-The `scene` command is a compound command, so it is terminated by `end`.
+The `scene` command is more rigidly structured in its content than the top-level `resources` command. The following commands must be provided, in order. Some of them are optional:
+
+- `layer_defs`: Required. The parameters to this command are a series of graph names. These represent the names of the layers, as provided to glscene::SceneGraph::SceneGraph(), and the order you place them in the list is the order that they will be provided in.
+- `variant_check`: Optional. The parameters to this command are a series of identifier strings. If you provide this command, the use of any variant names not listed here will result in a parse error.
+- One or more `node` commands, as described below.
+
+\par A Word on the Root Node
+The [GL Scene Graph](\ref module_glscene) has a root node. And glscene::SceneGraph freely allows you to fetch this node, add variants to it, change its transforms, and play with it as though it were any other node (mostly). However, the scene graph file format does not expose this functionality. You cannot set any of these things on the root node. This is quite deliberate.
+\par
+Becaue the root node is restricted in its functionality, such as re-parenting and deleting, the scene file format encourages you to create your own root. This makes it easier for you to move things around dynamically. It also makes it easier for you to change things later, since you can copy node definitions around more freely.
+
+## Scene Node ## {#page_glscene_file_format_syntax_scene_node}
+
 
 **/
+
+
+
+
