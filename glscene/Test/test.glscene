@@ -29,5 +29,8 @@ resources
 		image {boo} 2
 		mtc {blah}
 	end
+	
+	mesh_res <ident> [ground_plane] 3 20
+	texture_res <ident> "foo.file[ground_plane]"
 end
 

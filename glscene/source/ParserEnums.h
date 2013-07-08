@@ -299,10 +299,46 @@ namespace
 
 	const EnumData<GLenum> g_bufferUsageEnumeration =
 	{
-		"create",
+		"buffer create",
 		refs::array_ref<string_ref>(g_bufferUsageEnumNames),
 		refs::array_ref<GLenum>(g_bufferUsageEnumerators)
 	};
+
+	string_ref g_meshCreateEnumNames[] =
+	{
+		"ground_plane",
+		"unit_axes",
+		"cube_block",
+		"cube_pyramid",
+		"tetrahedron",
+		"cube",
+		"octahedron",
+		"dodecahedron",
+		"icosahedron",
+		"unit_sphere",
+	};
+
+	const int g_meshCreateNumParameters[] =
+	{
+		2,	//"ground_plane",
+		0,	//"unit_axes",
+		1,	//"cube_block",
+		1,	//"cube_pyramid",
+		0,	//"tetrahedron",
+		0,	//"cube",
+		0,	//"octahedron",
+		0,	//"dodecahedron",
+		0,	//"icosahedron",
+		2,	//"unit_sphere",
+	};
+
+	const EnumData<void> g_meshCreateEnumeration =
+	{
+		"mesh create",
+		refs::array_ref<string_ref>(g_meshCreateEnumNames),
+	};
+
+
 }
 
 #endif //GLSDK_GLSCENE_PARSER_ENUMS_H

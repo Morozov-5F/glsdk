@@ -57,14 +57,18 @@ String Type       | Delimiter
 - `Identifier`: These strings are used as [identifier strings](\ref page_glscene_identifier_strings) within the scene graph. They name particular scene graph entities, like resources, nodes, and styles.
 
     Identifier string names can only contain (English) letters, numbers, and the characters "_", ".", and "-". They cannot contain spaces. These are limitations of the parser, not of the Scene Graph's identifier string system.
+	
 - `Filename`: These represent file names or strings to be passed to the parser's loader as filenames. They can contain any character except " (and end-line characters). Though if you want file loading to work, you should stick to characters that your file system can work with.
 
 	While the Scene Graph can be in UTF-8 format, it is completely blind to Unicode itself. It will make no special effort to use any Unicode-based file loading.
+	
 - `GLSL Identifier`: These strings represent the name of an entity in a shader written in the OpenGL Shading Language. These are typically uniform names.
 
 	The valid characters here are the legal characters for a GLSL identifer. However, OpenGL uniform names can be aggregated into structs and arrays. So the name of a uniform often includes several identifers, separated by characters like "." and "[]". Therefore, `{unifName.member}` denotes a legal GLSL identifier by the scene graph format even though technically it is not an "identifier" by GLSL's grammar.
+	
 - `Enumerator`: These strings represent a selection from one of a finite set of named possibilities. Texture filtering modes are an example of an enumerator. Unlike all other strings, they are not user *defined*; you can only use the enumerators that a particular command allows. If you use the wrong enumerators, you get an error. And they are case-sensitive, however no enumerators use uppercase characters.
-- `Graph Name`: This is a string name to be used for a concept within a graph. These are specifically *not* [identifier strings](\ref page_glscene_identifier_strings), but they do represent concepts in the scene graph. Layer names and mesh variants are graph names.
+
+- `Graph Name`: This is a string name to be used for a concept within a graph. These are specifically *not* [identifier strings](\ref page_glscene_identifier_strings). They do represent concepts in the scene graph or associated objects. Examples of these are layer names and mesh variants.
 
 	Graph names can contain any character except ' (and end-line characters).
 
@@ -212,21 +216,21 @@ The valid sub-commands are:
 ## Uniform and Storage Buffer Resource ## {#page_glscene_file_format_resources_buffer}
 
 \verbatim
-uniform_buffer_res <resource_id> (size) `how-to-create`
-storage_buffer_res <resource_id> (size) `how-to-create`
+uniform_buffer_res <resource_id> (size) `creation`
+storage_buffer_res <resource_id> (size) `creation`
 \endverbatim
 
 Uniform buffer resources and shader storage buffer resources are defined in identical ways; the only difference is which keyword is used to create them: `uniform_buffer_res` or `storage_buffer_res`. They do have different namespaces, so a uniform buffer `resource_id` can match a storage buffer's id.
 
-The `size` is an unsigned integer that defines how many bytes to allocate. It is a single, unparenthesized value.
+The `size` is an unsigned integer that defines how many bytes will be in the bound buffer region. It is a single, unparenthesized value.
 
-`how-to-create` is a bit more complex. Buffer objects can either be created by the parsing system itself or by the user. To state that the system should created the buffer, `how-to-create` must be an enumeration that defines the usage hint for the buffer object. This usage will be used when creating the buffer.
+The `creation` parameter is a bit more complex. Buffer objects can either be created by the parsing system itself or by the user. To state that the system should created the buffer, `creation` must be an enumeration that defines the usage hint for the buffer object. This usage will be used when creating the buffer.
 
 So the command `uniform_buffer_res <ident> 512 [static_draw]` will create a 512-byte buffer object, and who's usage is `GL_STATIC_DRAW`. Buffers created by the system will be owned by the scene graph. Also, the offset for these bindings will be 0, so that they always use the entire buffer.
 
-To state that a buffer object is to be created by the user, `how-to-create` must be the keyword `placeholder`. This will create the buffer resource as if by glscene::ResourceRes::DefineUniformBufferBindingIncomplete() or glscene::ResourceRes::DefineStorageBufferBindingIncomplete(). Therefore, you must, after the parser has generated the glscene::SceneGraph, complete the buffer binding by providing a buffer object and offset.
+To state that a buffer object is to be created by the user, `creation` must be the keyword `placeholder`. This will create the buffer resource as if by glscene::ResourceRef::DefineUniformBufferBindingIncomplete() or glscene::ResourceRef::DefineStorageBufferBindingIncomplete(). Therefore, you must, after the parser has generated the glscene::SceneGraph, complete the buffer binding by providing a buffer object and offset.
 
-The valid enumerator values for `how-to-create` are:
+The valid enumerator values for `creation` are:
 
 <table>
 <tr><td>`static_draw`</td><td>`static_read`</td><td>`static_copy`</td></tr>
@@ -242,9 +246,9 @@ program_res <resource_id> [separate]?
 end
 \endverbatim
 
-The `program_res` command defines a program resource, as if by glscene::ResourceRes::DefineProgram(). The sub-commands define the parameters for glscene::ProgramInfo. They can be defined in any order.
+The `program_res` command defines a program resource, as if by glscene::ResourceRef::DefineProgram(). The sub-commands define the parameters for glscene::ProgramInfo. They can be defined in any order.
 
-glscene::ResourceRes::DefineProgram() takes a previously created program object. The scene graph file system takes a different approach. Individual shader files are specified, which it will load, compile, and link into a program. So `program_res` has a number of sub-commands for specifying shader files for the program.
+glscene::ResourceRef::DefineProgram() takes a previously created program object. The scene graph file system takes a different approach. Individual shader files are specified, which it will load, compile, and link into a program. So `program_res` has a number of sub-commands for specifying shader files for the program.
 
 `separate` is an optional enumeration. If you provide it (and it can only be that value), then the program will be linked with the `GL_PROGRAM_SEPARATE` flag.
 
@@ -274,15 +278,13 @@ The other sub-commands are as follows:
 mesh_res <resource_id> `creation` (param1) (param2)
 ~~~~
 
+This creates a mesh resource, as if by glscene::ResourceRef::DefineMesh(). The `creation` parameter may be one of the following:
 
-
-`creation` may be one of the following:
-
-- The `placeholder` keyword. This means that the user will define the mesh later with glscene::ResourceRef::DefineMesh().
+- The `placeholder` keyword. This causes the system to create an incomplete mesh resource. So the user is expected to define the mesh later with glscene::ResourceRef::DefineMesh().
 - A "" filename string. This is a filename that will be loaded by the loader.
-- An enumerator. This defines which mesh generator function to use. The generators can take up to two parameters. These parameters are unsigned integers. If you use the wrong number of parameters, an error will result. The available generators, with the number of parameters, are:
+- An enumerator. This defines which [GL Mesh mesh generator function](module_glmesh_mesh_generator) to use to generate the mesh. The generators can take up to two parameters. These parameters are unsigned integers. If you use the wrong number of parameters, an error will result. The available generators, with the number of parameters, are:
 	- `ground_plane numXVerts numYVerts`: Per glmesh::gen::GroundPlane()
-	- `axes`: Per glmesh::gen::Axes()
+	- `unit_axes`: Per glmesh::gen::Axes()
 	- `cube_block numCubesOnEdge`: Per glmesh::gen::CubeBlock()
 	- `cube_pyramid numCubesTall`: Per glmesh::gen::CubePyramid()
 	- `tetrahedron`: Per glmesh::gen::Tetrahedron()
@@ -292,12 +294,18 @@ mesh_res <resource_id> `creation` (param1) (param2)
 	- `icosahedron`: Per glmesh::gen::Icosahedron()
 	- `unit_sphere numHorizSlices numVertSlices`: Per glmesh::gen::UnitSphere()
 
+The two unsigned integer parameters can only be used with GL Mesh mesh generators.
+
 ## Texture Resource ## {#page_glscene_file_format_resources_texture}
 
 ~~~~
 texture_res <resource_id> `creation`
 ~~~~
 
+This creates a texture resource, as if by glscene::ResourceRef::DefineTexture(). The `creation` parameter may be one of the following:
+
+- The `placeholder` keyword. This causes the system to create an incomplete texture resource. So the user is expected to define the texture later with glscene::ResourceRef::DefineTexture().
+- A "" filename string. This is a filename that will be loaded by the loader.
 
 
 

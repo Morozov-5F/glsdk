@@ -236,6 +236,25 @@ namespace
 		TOK_STORAGE_BUFFER,
 	};
 
+	const size_t g_requiredMeshCreationTokens[] =
+	{
+		TOK_PLACEHOLDER,
+		TOK_FILENAME,
+		TOK_ENUMERATOR,
+	};
+
+	const size_t g_requiredTextureCreationTokens[] =
+	{
+		TOK_PLACEHOLDER,
+		TOK_FILENAME,
+	};
+
+	const size_t g_unsignedIntStartTokens[] =
+	{
+		TOK_OPEN_PAREN,
+		TOK_UNSIGNED_INTEGER,
+	};
+
 	//////////////////////////////////////////////////////////////////////////
 	// The lexer.
 	template <typename Lexer>
@@ -422,12 +441,12 @@ namespace glscene
 		ProgramInfo info;
 	};
 
-	typedef boost::variant<boost::blank, int, std::string> MeshType;
+	typedef boost::variant<boost::blank, int, std::string> MeshGenType;
 
 	struct ParsedMeshDef
 	{
 		FilePosition pos;
-		MeshType generator;
+		MeshGenType generator;
 		std::vector<int> params;
 	};
 
@@ -506,6 +525,12 @@ namespace glscene
 					break;
 				case TOK_PROGRAM_RES:
 					ParseProgramDef();
+					break;
+				case TOK_MESH_RES:
+					ParseMeshDef();
+					break;
+				case TOK_TEXTURE_RES:
+					ParseTextureDef();
 					break;
 				default:
 					throw UnexpectedDataError(m_rng.front(), "a valid resource.", exp_message);
@@ -807,6 +832,85 @@ namespace glscene
 			else
 			{
 				bufferDef.creationUsage = ParseEnumerator(g_bufferUsageEnumeration);
+			}
+		}
+
+		void ParseMeshDef()
+		{
+			PosStackPusher push(*this);
+
+			ExpectAndEatToken(TOK_MESH_RES);
+			IdString ident = ParseIdentifier(m_resources.meshes, false, TOK_MESH_RES);
+			ParsedMeshDef &meshDef = m_resources.meshes[ident];
+			meshDef.pos = m_posStack.top();
+
+			ExpectAToken();
+			if(!HasTokenOneOfNoEmpty(g_requiredMeshCreationTokens))
+				throw UnexpectedDataError(m_rng.front(), "a valid mesh creation parameter.", exp_message);
+
+			switch(m_rng.front().id())
+			{
+			case TOK_PLACEHOLDER:
+				meshDef.generator = boost::blank();
+				EatOneToken();
+				break;
+			case TOK_FILENAME:
+				meshDef.generator = ParseFilename();
+				break;
+			case TOK_ENUMERATOR:
+				{
+					int generatorIx = ParseEnumerator(g_meshCreateEnumeration);
+					meshDef.generator = generatorIx;
+					const int numParams = g_meshCreateNumParameters[generatorIx];
+					for(int param = 0; param < numParams; ++param)
+					{
+						try
+						{
+							meshDef.params.push_back(ParseSingleUInt());
+						}
+						catch(BaseParseError &e)
+						{
+							std::stringstream str;
+							str << "The mesh generator '" << g_meshCreateEnumeration.enumerators[generatorIx] <<
+								"' requires " << numParams << " parameters.";
+							throw BaseParseError(str.str(), m_posStack.top());
+						}
+					}
+
+					if(HasAToken() && HasTokenOneOfNoEmpty(g_unsignedIntStartTokens))
+					{
+						std::stringstream str;
+						str << "The mesh generator '" << g_meshCreateEnumeration.enumerators[generatorIx] <<
+							"' only takes " << numParams << " parameters.";
+						throw BaseParseError(str.str(), GetPositionForCurrToken());
+					}
+				}
+				break;
+			}
+		}
+
+		void ParseTextureDef()
+		{
+			PosStackPusher push(*this);
+
+			ExpectAndEatToken(TOK_TEXTURE_RES);
+			IdString ident = ParseIdentifier(m_resources.textures, false, TOK_TEXTURE_RES);
+			ParsedTextureDef &textureDef = m_resources.textures[ident];
+			textureDef.pos = m_posStack.top();
+
+			ExpectAToken();
+			if(!HasTokenOneOfNoEmpty(g_requiredTextureCreationTokens))
+				throw UnexpectedDataError(m_rng.front(), "a valid texture creation parameter.", exp_message);
+
+			switch(m_rng.front().id())
+			{
+			case TOK_PLACEHOLDER:
+				textureDef.filename = boost::none;
+				EatOneToken();
+				break;
+			case TOK_FILENAME:
+				textureDef.filename = ParseFilename();
+				break;
 			}
 		}
 
@@ -1276,6 +1380,13 @@ namespace glscene
 				throw UnexpectedDataError(prefix, exp_cat);
 			else
 				ExpectCategory(m_rng.front(), prefix);
+		}
+
+		bool HasAToken() const
+		{
+			if(m_rng.empty())
+				return false;
+			return true;
 		}
 
 		bool HasToken(const Token &tok, size_t idExpected) const
