@@ -665,14 +665,17 @@ namespace glscene
 			}
 		}
 
-		ParsedTransform ParseTransform()
+		ParsedTransformDef ParseTransform()
 		{
 			PosStackPusher push(*this);
+			ParsedTransformDef ret;
+			ret.pos = GetPositionForCurrToken();
+
 			size_t tokId = m_rng.front().id();
 			EatOneToken();
 
 			//Start decomposed.
-			ParsedTransform ret = ParsedDecomposedTransform();
+			ret.trans = ParsedDecomposedTransform();
 
 			while(IsCurrTokenOneOf(g_transformTokens))
 			{
@@ -681,23 +684,23 @@ namespace glscene
 				switch(tok.id())
 				{
 				case TOK_TRANSLATE:
-					ApplyTranslation(ret, ParseVec3(tok, tokId));
+					ApplyTranslation(ret.trans, ParseVec3(tok, tokId));
 					break;
 				case TOK_SCALE:
-					ApplyScale(ret, ParseVec3(tok, tokId));
+					ApplyScale(ret.trans, ParseVec3(tok, tokId));
 					break;
 				case TOK_ORIENTATION:
-					ApplyOrientation(ret, ParseQuat(tok, tokId));
+					ApplyOrientation(ret.trans, ParseQuat(tok, tokId));
 					break;
 				case TOK_ANGLE_AXIS:
 					{
 						float angle = ParseSingleFloat(tok, tokId);
 						glm::vec3 axis = ParseVec3(tok, tokId);
-						ApplyOrientation(ret, glm::angleAxis(angle, axis));
+						ApplyOrientation(ret.trans, glm::angleAxis(angle, axis));
 					}
 					break;
 				case TOK_MATRIX:
-					ApplyMatrix(ret, ParseMat4(tok, tokId));
+					ApplyMatrix(ret.trans, ParseMat4(tok, tokId));
 					break;
 				}
 			}

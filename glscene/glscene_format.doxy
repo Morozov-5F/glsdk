@@ -453,7 +453,7 @@ node_tm
 end
 ~~~~
 
-Even though the scale is an identity scale, it will still cause it to be composed.
+Even though the scale is an identity scale, putting the orientation afterwards will still cause it to be composed.
 
 **/
 

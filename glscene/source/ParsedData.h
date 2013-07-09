@@ -110,6 +110,12 @@ namespace glscene { namespace _detail {
 
 	typedef boost::variant<glm::mat4, ParsedDecomposedTransform> ParsedTransform;
 
+	struct ParsedTransformDef
+	{
+		FilePosition pos;
+		ParsedTransform trans;
+	};
+
 	inline void ApplyTranslation(ParsedTransform &tm, const glm::vec3 &translation)
 	{
 		if(tm.which() == 1)
@@ -182,8 +188,8 @@ namespace glscene { namespace _detail {
 		LayerSet layers;
 		std::vector<ParsedNodeDef*> childNodes;
 		ParsedNodeDef *pParent;
-		ParsedTransform nodeTM;
-		ParsedTransform objectTM;
+		ParsedTransformDef nodeTM;
+		ParsedTransformDef objectTM;
 
 		ParsedNodeDef& operator=(const ParsedNodeDef &other)
 		{
