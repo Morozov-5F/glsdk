@@ -181,7 +181,7 @@ The valid subcommands are as follows:
 	- `border_clamp`
 	- `repeat`
 	- `mirror_repeat`
-- `aniso number`: Specifies the anisotropic filtering value. An unparethesized number is provided; the number may be any form of integer or float. However, numbers less than 0 will be rejected.
+- `aniso (number)`: Specifies the anisotropic filtering value. An unparethesized number is provided; the number may be any form of integer or float. However, numbers less than 0 will be rejected.
 
 ## Camera Resource ## {#page_glscene_file_format_resources_camera}
 
@@ -345,6 +345,8 @@ The `node` command defines a child node in the scene graph system. It is the chi
 The contents of a node are rigidly ordered. The sub-commands must be provided in the following order:
 
 - `layers`: Optional. This provides a list of layers that the node is a member of. This list has some complexities to it, so there is [a section dedicated to them](\ref page_glscene_file_format_syntax_scene_node_layers).
+- `node_tm` and `object_tm`: Optional. The two commands can be in any order, but they can only be provided once and only before the next group of commands. These define the [node and object transforms](\ref module_glscene_node_transforms) for the node.
+- `node`: A child node of the current node. You may provide zero or more of them.
 
 ### Node Layers ### {#page_glscene_file_format_syntax_scene_node_layers}
 
@@ -394,6 +396,64 @@ layers +-'shadow' 'shadow'
 ~~~~
 
 This will put the current node in 'shadow', but all child nodes will not be in 'shadow'.
+
+###Node Transforms### {#page_glscene_file_format_syntax_scene_node_transform}
+
+\verbatim
+node_tm
+//Transforms
+end
+object_tm
+//Transforms
+end
+\endverbatim
+
+These two transform commands appear after the `layers` (if present). They can appear in either order, but they must not be defined more than once.
+
+The contents of the commands are a sequence of transformations, to be applied in the order provided, from top to bottom. Each new transform is right-multiplied against the previous ones. You may specify as many transform commands in any order you wish.
+
+The transformation commands are:
+
+- `scale (vec3)`: Provides a scaling transform. This is a 3-element floating-point vector, so the elements must be in parentheses.
+- `translate (vec3)`: Provides a translation transform.
+- `orientation (quaternion)`: Provides an orientation transform as a quaternion.
+- `angle_axis (angle) (axis)`: Provides an angle/axis rotation transform as an angle/axis. `axis` is a vec3, while `angle` is a float. `angle` is in *degrees*.
+- `matrix (mat4)`: Provides an arbitrary matrix transform. This is a full 16-float, column-major matrix.
+
+#### Composed and Decomposed ####
+
+The glscene::TransformData class can exist either as a decomposed transform or a composed one. The decomposed state is especially useful, as it allows the user to adjust the rotation without impacting any existing scales or translation, and vice-versa.
+
+When creating transforms through the parsing system, they will only be in the decomposed state if you follow these rules. First, never use the `matrix` transform command; that will automatically compose your transform regardless of the contents of the matrix.
+
+Next, you must specify your transformations in this order:
+
+1. Zero or more `translate` commands.
+2. Zero or more `orientation` or `angle_axis` commands.
+3. Zero or more `scale` commands.
+
+If you follow these rules, the transform will remain decomposed.
+
+This results in a decomposed transform:
+
+~~~~
+node_tm
+  translate (4 5 3.2)
+  orientation (0 0.707 0 0.707)
+  scale (1)
+end
+~~~~
+
+This will be a composed transform:
+~~~~
+node_tm
+  translate (4 5 3.2)
+  scale (1)
+  orientation (0 0.707 0 0.707)
+end
+~~~~
+
+Even though the scale is an identity scale, it will still cause it to be composed.
 
 **/
 

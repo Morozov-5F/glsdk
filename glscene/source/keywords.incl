@@ -41,4 +41,11 @@
 	MAC(VARIANT_CHECK,	"variant_check",	"variant checking",		"variant checking")
 	MAC(NODE,			"node",			"scene graph node",			"scene graph node")
 	MAC(LAYERS,			"layers",		"layer declaration",		"layer declaration")
+	MAC(NODE_TM,		"node_tm",		"node transform",			"node transform")
+	MAC(OBJECT_TM,		"object_tm",	"object transform",			"object transform")
+	MAC(TRANSLATE,		"translate",	"translate transform",		"translate transform")
+	MAC(SCALE,			"scale",		"scale transform",			"scale transform")
+	MAC(ORIENTATION,	"orientation",	"orientation transform",	"orientation transform")
+	MAC(ANGLE_AXIS,		"angle_axis",	"angle/axis transform",		"angle/axis transform")
+	MAC(MATRIX,			"matrix",		"matrix transform",			"matrix transform")
 	

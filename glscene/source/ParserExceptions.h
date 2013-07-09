@@ -52,7 +52,9 @@ namespace glscene { namespace _detail
 	public:
 		template<typename Token>
 		BadTokenError(const Token &t)
-			: BaseParseError(GetError(std::string(t.value().begin(), t.value().end())))
+			: BaseParseError(
+			GetError(std::string(t.value().begin(), t.value().end())),
+			std::distance(t.value().begin(), t.value().end()))
 		{}
 
 	private:

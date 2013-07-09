@@ -37,6 +37,7 @@
 #include "ParserUtils.h"
 #include "ParserExceptions.h"
 #include "ParserEnums.h"
+#include "ParsedData.h"
 
 namespace lex = boost::spirit::lex;
 namespace qi = boost::spirit::qi;
@@ -263,6 +264,21 @@ namespace
 		TOK_GRAPH_NAME,
 	};
 
+	const size_t g_nodeTransformTypesTokens[] =
+	{
+		TOK_NODE_TM,
+		TOK_OBJECT_TM,
+	};
+
+	const size_t g_transformTokens[] =
+	{
+		TOK_TRANSLATE,
+		TOK_SCALE,
+		TOK_ORIENTATION,
+		TOK_ANGLE_AXIS,
+		TOK_MATRIX,
+	};
+
 	//////////////////////////////////////////////////////////////////////////
 	// The lexer.
 	template <typename Lexer>
@@ -296,7 +312,7 @@ namespace
 			}
 
 			//Catch two keywords rammed together. Not a matched token, so it's bad.
-			this->self.add("[a-zA-Z]+", 0x0);
+			this->self.add("[a-zA-Z]+", 0x1);
 
 		}
 	};
@@ -379,6 +395,8 @@ namespace glscene { namespace _detail {
 		{
 			if(!token_is_valid(tok))
 				throw BadTokenError(tok);
+			if((tok.id() & PREFIX_MASK) == 0)
+				throw BadTokenError(tok);
 			return true;
 		}
 	};
@@ -410,128 +428,6 @@ namespace glscene
 
 	typedef simple_lexer<lexer_type>::iterator_type token_iterator;
 	typedef boost::iterator_range<token_iterator> token_range;
-
-	struct ParsedUniformDef
-	{
-		FilePosition pos;
-		UniformData data;
-	};
-
-	struct ParsedSamplerDef
-	{
-		FilePosition pos;
-		SamplerInfo sampler;
-	};
-
-	struct ParsedCameraDef
-	{
-		FilePosition pos;
-		glutil::ViewData view;
-		glutil::ViewScale scale;
-		glutil::MouseButtons actionButton;
-		bool bRightKeyboardCtrls;
-	};
-
-	struct ParsedBufferDef
-	{
-		FilePosition pos;
-		unsigned int size;
-		boost::optional<GLenum> creationUsage;
-	};
-
-	struct ParsedShader
-	{
-		FilePosition pos;
-		GLenum shaderType;
-		std::string filename;
-	};
-
-	struct ParsedProgramDef
-	{
-		FilePosition pos;
-		bool isSeparate;
-		std::vector<ParsedShader> shaders;
-		ProgramInfo info;
-	};
-
-	typedef boost::variant<boost::blank, int, std::string> MeshGenType;
-
-	struct ParsedMeshDef
-	{
-		FilePosition pos;
-		MeshGenType generator;
-		std::vector<int> params;
-	};
-
-	struct ParsedTextureDef
-	{
-		FilePosition pos;
-		boost::optional<std::string> filename;
-	};
-
-	template<typename Def>
-	FilePosition GetFilePosition(const Def &def) {return def.pos;}
-	FilePosition GetFilePosition(const FilePosition &pos) {return pos;}
-
-	template<typename Key, typename Def>
-	FilePosition GetPosFromDef(const std::pair<Key, Def> &pairDef) {return GetFilePosition(pairDef.second);}
-
-	typedef boost::container::flat_map<IdString, ParsedUniformDef> ParsedUniformMap;
-	typedef boost::container::flat_map<IdString, ParsedSamplerDef> ParsedSamplerMap;
-	typedef boost::container::flat_map<IdString, ParsedCameraDef> ParsedCameraMap;
-	typedef boost::container::flat_map<IdString, ParsedBufferDef> ParsedBufferMap;
-	typedef boost::container::flat_map<IdString, ParsedProgramDef> ParsedProgramMap;
-	typedef boost::container::flat_map<IdString, ParsedMeshDef> ParsedMeshMap;
-	typedef boost::container::flat_map<IdString, ParsedTextureDef> ParsedTextureMap;
-
-	struct ParsedResources
-	{
-		ParsedUniformMap uniforms;
-		ParsedSamplerMap samplers;
-		ParsedCameraMap cameras;
-		ParsedBufferMap uniformBuffers;
-		ParsedBufferMap storageBuffers;
-		ParsedProgramMap programs;
-		ParsedMeshMap meshes;
-		ParsedTextureMap textures;
-	};
-
-	typedef boost::container::flat_set<std::string> LayerSet;
-
-	struct ParsedNodeDef
-	{
-		FilePosition pos;
-		boost::optional<IdString> name;
-		LayerSet layers;
-		std::vector<int> childIndices;
-		int parentIx;
-
-		ParsedNodeDef& operator=(const ParsedNodeDef &other)
-		{
-			pos = other.pos;
-			name = other.name;
-			layers = other.layers;
-			return *this;
-		}
-	};
-
-	struct InheritedNodeData
-	{
-		int parentIx;
-		LayerSet layers;
-
-		InheritedNodeData() : parentIx(-1) {}
-	};
-
-	struct ParsedSceneGraphDef
-	{
-		FilePosition pos;
-		LayerSet layers;
-		std::vector<std::string> layerOrder;
-		boost::container::flat_set<IdString> variantChecks;
-		boost::container::flat_map<IdString, FilePosition> nodeNamePositions;
-		std::vector<ParsedNodeDef> nodes;
-	};
 
 	template<typename Range>
 	class SceneGraphParser
@@ -653,93 +549,53 @@ namespace glscene
 			ExpectAndEatEndToken();
 		}
 
-		int ParseNode(const InheritedNodeData &inherit)
+		ParsedNodeDef *ParseNode(const InheritedNodeData &inherit)
 		{
 			ExpectToken(TOK_NODE);
 			PosStackPusher push(*this);
 			EatOneToken();
 
-			m_scene.nodes.push_back(ParsedNodeDef());
-			const int nodeIx = int(m_scene.nodes.size());
+			m_scene.nodes.emplace_back();
+
+			//Note: this is fine because `m_scene.nodes` is a stable_vector.
+			size_t size = m_scene.nodes.size();
+			ParsedNodeDef &node = m_scene.nodes[m_scene.nodes.size() - 1];	//stable_vector.back doesn't work.
+			node.pParent = inherit.pParent;
+			node.layers = inherit.layers;
+
 			InheritedNodeData myData = inherit;
-			myData.parentIx = nodeIx;
+			myData.pParent = &node;
 
+			if(IsCurrToken(TOK_IDENTIFIER))
 			{
-
-				ParsedNodeDef &node = m_scene.nodes.back();
-				node.layers = inherit.layers;
-				node.parentIx = inherit.parentIx;
-
-				if(IsCurrToken(TOK_IDENTIFIER))
-				{
-					IdString nodeId = ParseIdentifier(m_scene.nodeNamePositions, false, TOK_NODE);
-					m_scene.nodeNamePositions[nodeId] = m_posStack.top();
-					node.name = nodeId;
-				}
-
-				ExpectCategory(KEYWORD_ID_PREFIX);
-
-				if(IsCurrToken(TOK_LAYERS))
-				{
-					PosStackPusher push(*this);
-					EatOneToken();
-
-					while(!IsCurrTokenCategory(KEYWORD_ID_PREFIX))
-					{
-						bool layerInherit = false;
-						bool layerRemove = false;
-
-						if(IsCurrToken(TOK_PLUS_SIGN))
-						{
-							EatOneToken();
-							layerInherit = true;
-						}
-
-						if(IsCurrToken(TOK_MINUS_SIGN))
-						{
-							EatOneToken();
-							layerRemove = true;
-						}
-
-						try
-						{
-							ExpectToken(TOK_GRAPH_NAME);
-						}
-						catch(BaseParseError &)
-						{
-							if(IsCurrToken(TOK_PLUS_SIGN))
-								ThrowParseError("The `+` sign must always come before the `-` sign.", curr_throw);
-							else
-								ThrowParseError("Members of a `layers` list must be graph names, `+`, or `-`", curr_throw);
-						}
-						std::string layerName = GetStringTokenData();
-						if(m_scene.layers.find(layerName) == m_scene.layers.end())
-							ThrowParseError("The layer '" + layerName + "' was not listed in the scene graph `layer_defs`.", curr_throw);
-						EatOneToken();
-
-						if(layerRemove)
-							node.layers.erase(layerName);
-						else
-							node.layers.insert(layerName);
-
-						if(layerInherit)
-						{
-							if(layerRemove)
-								myData.layers.erase(layerName);
-							else
-								myData.layers.insert(layerName);
-						}
-					}
-				}
-
-				ExpectCategory(KEYWORD_ID_PREFIX);
+				IdString nodeId = ParseIdentifier(m_scene.nodeNamePositions, false, TOK_NODE);
+				m_scene.nodeNamePositions[nodeId] = m_posStack.top();
+				node.name = nodeId;
 			}
+
+			ExpectCategory(KEYWORD_ID_PREFIX);
+
+			if(IsCurrToken(TOK_LAYERS))
+			{
+				ParseNodeLayers(node, myData);
+			}
+
+			ExpectCategory(KEYWORD_ID_PREFIX);
+
+			TokenChecker hasBeenFound;
+			while(IsCurrTokenOneOf(g_nodeTransformTypesTokens))
+			{
+				CheckMultipleCommand(hasBeenFound, m_rng.front(), TOK_NODE);
+				if(IsCurrToken(TOK_NODE_TM))
+					node.nodeTM = ParseTransform();
+				else
+					node.objectTM = ParseTransform();
+			}
+
+			ExpectCategory(KEYWORD_ID_PREFIX);
 
 			while(IsCurrToken(TOK_NODE))
-			{
-				int childIx = ParseNode(myData);
-				m_scene.nodes[nodeIx].childIndices.push_back(childIx);
-			}
+				node.childNodes.push_back(ParseNode(myData));
 
 			try
 			{
@@ -753,7 +609,102 @@ namespace glscene
 					throw;
 			}
 
-			return nodeIx;
+			return &node;
+		}
+
+		void ParseNodeLayers(ParsedNodeDef &node, InheritedNodeData &myData)
+		{
+			PosStackPusher push(*this);
+			EatOneToken();
+
+			while(!IsCurrTokenCategory(KEYWORD_ID_PREFIX))
+			{
+				bool layerInherit = false;
+				bool layerRemove = false;
+
+				if(IsCurrToken(TOK_PLUS_SIGN))
+				{
+					EatOneToken();
+					layerInherit = true;
+				}
+
+				if(IsCurrToken(TOK_MINUS_SIGN))
+				{
+					EatOneToken();
+					layerRemove = true;
+				}
+
+				try
+				{
+					ExpectToken(TOK_GRAPH_NAME);
+				}
+				catch(BaseParseError &)
+				{
+					if(IsCurrToken(TOK_PLUS_SIGN))
+						ThrowParseError("The `+` sign must always come before the `-` sign.", curr_throw);
+					else
+						ThrowParseError("Members of a `layers` list must be graph names, `+`, or `-`", curr_throw);
+				}
+				std::string layerName = GetStringTokenData();
+				if(m_scene.layers.find(layerName) == m_scene.layers.end())
+					ThrowParseError("The layer '" + layerName + "' was not listed in the scene graph `layer_defs`.", curr_throw);
+				EatOneToken();
+
+				if(layerRemove)
+					node.layers.erase(layerName);
+				else
+					node.layers.insert(layerName);
+
+				if(layerInherit)
+				{
+					if(layerRemove)
+						myData.layers.erase(layerName);
+					else
+						myData.layers.insert(layerName);
+				}
+			}
+		}
+
+		ParsedTransform ParseTransform()
+		{
+			PosStackPusher push(*this);
+			size_t tokId = m_rng.front().id();
+			EatOneToken();
+
+			//Start decomposed.
+			ParsedTransform ret = ParsedDecomposedTransform();
+
+			while(IsCurrTokenOneOf(g_transformTokens))
+			{
+				typename Range::value_type tok = m_rng.front();
+				EatOneToken();
+				switch(tok.id())
+				{
+				case TOK_TRANSLATE:
+					ApplyTranslation(ret, ParseVec3(tok, tokId));
+					break;
+				case TOK_SCALE:
+					ApplyScale(ret, ParseVec3(tok, tokId));
+					break;
+				case TOK_ORIENTATION:
+					ApplyOrientation(ret, ParseQuat(tok, tokId));
+					break;
+				case TOK_ANGLE_AXIS:
+					{
+						float angle = ParseSingleFloat(tok, tokId);
+						glm::vec3 axis = ParseVec3(tok, tokId);
+						ApplyOrientation(ret, glm::angleAxis(angle, axis));
+					}
+					break;
+				case TOK_MATRIX:
+					ApplyMatrix(ret, ParseMat4(tok, tokId));
+					break;
+				}
+			}
+
+			ExpectAndEatEndToken();
+
+			return ret;
 		}
 
 		template<typename MapType>
@@ -1421,6 +1372,44 @@ namespace glscene
 			return std::string(rawToken.begin() + 1, rawToken.end() - 1);
 		}
 
+		glm::mat4 ParseMat4(const Token &owningTok, size_t owningId)
+		{
+			ExpectAndEatToken(TOK_OPEN_PAREN);
+
+			int count = 0;
+			glm::mat4 ret;
+
+			for(;
+				!m_rng.empty() && !HasTokenNoEmpty(TOK_CLOSE_PAREN);
+				EatOneToken(), ++count)
+			{
+				ExpectCategory(NUMBER_ID_PREFIX);
+				if(3 == count)
+				{
+					std::string msg = "The '" + GetTokenErrorName(owningTok.id()) +
+						"' mat4 only takes 16 numbers.";
+					ThrowParseError(msg, curr_throw);
+				}
+
+				ret[count / 4][count % 4] = boost::lexical_cast<float>(GetTokenText());
+			}
+
+			ExpectToken(TOK_CLOSE_PAREN);
+
+			if(3 != count && 1 != count)
+			{
+				std::string msg = "The '" + GetTokenErrorName(owningTok.id()) +
+					"' mat4 requires 16 numbers.";
+				ThrowParseError(msg, curr_throw);
+			}
+
+			if(1 == count)
+				ret = glm::mat4(ret[0][0]);
+
+			ExpectAndEatToken(TOK_CLOSE_PAREN);
+			return ret;
+		}
+
 		glm::vec3 ParseVec3(const Token &owningTok, size_t owningId)
 		{
 			ExpectAndEatToken(TOK_OPEN_PAREN);
@@ -1435,7 +1424,7 @@ namespace glscene
 				ExpectCategory(NUMBER_ID_PREFIX);
 				if(3 == count)
 				{
-					std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' only takes 3 numbers.";
+					std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' vec3 only takes 3 numbers.";
 					ThrowParseError(msg, curr_throw);
 				}
 
@@ -1446,7 +1435,7 @@ namespace glscene
 
 			if(3 != count && 1 != count)
 			{
-				std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' requires 3 numbers.";
+				std::string msg = "The '" + GetTokenErrorName(owningTok.id()) + "' vec3 requires 3 numbers.";
 				ThrowParseError(msg, curr_throw);
 			}
 
@@ -1537,6 +1526,21 @@ namespace glscene
 				throw UnexpectedDataError(idExpected);
 			else
 				return HasTokenNoEmpty(idExpected);
+		}
+
+		bool IsCurrTokenOneOf(array_ref<size_t> expecteds)
+		{
+			if(m_rng.empty())
+				throw UnexpectedDataError(expecteds[0]);
+
+			const Token &tok = m_rng.front();
+			BOOST_FOREACH(size_t idExpected, expecteds)
+			{
+				if(HasToken(tok, idExpected))
+					return true;
+			}
+
+			return false;
 		}
 
 		bool IsCurrTokenCategory(size_t prefix)
