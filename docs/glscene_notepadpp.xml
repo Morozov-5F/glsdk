@@ -15,7 +15,7 @@
             <Keywords name="Numbers, range"></Keywords>
             <Keywords name="Operators1"></Keywords>
             <Keywords name="Operators2"></Keywords>
-            <Keywords name="Folders in code1, open">resources sampler_res camera_res program_res scene</Keywords>
+            <Keywords name="Folders in code1, open">resources sampler_res camera_res program_res scene node</Keywords>
             <Keywords name="Folders in code1, middle"></Keywords>
             <Keywords name="Folders in code1, close">end</Keywords>
             <Keywords name="Folders in code2, open"></Keywords>
@@ -24,7 +24,7 @@
             <Keywords name="Folders in comment, open"></Keywords>
             <Keywords name="Folders in comment, middle"></Keywords>
             <Keywords name="Folders in comment, close"></Keywords>
-            <Keywords name="Keywords1">compare mag min aniso wrap_s wrap_t wrap_r target orient spin radius radius_delta pos_delta rotation_scale placeholder vert tess_ctrl tess_eval geom frag mtc nmtc nctm sampler image uniform_buffer storage_buffer layer_defs variant_check</Keywords>
+            <Keywords name="Keywords1">compare mag min aniso wrap_s wrap_t wrap_r target orient spin radius radius_delta pos_delta rotation_scale placeholder vert tess_ctrl tess_eval geom frag mtc nmtc nctm sampler image uniform_buffer storage_buffer layer_defs variant_check layers</Keywords>
             <Keywords name="Keywords2">uniform_res uniform_buffer_res storage_buffer_res texture_res mesh_res</Keywords>
             <Keywords name="Keywords3"></Keywords>
             <Keywords name="Keywords4"></Keywords>

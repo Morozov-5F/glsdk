@@ -25,6 +25,7 @@ project("glscene")
 		"include/glscene/*.h",
 		"source/*.h",
 		"source/*.cpp",
+		"source/*.incl",
 	}
 
 	configuration "vs2008"

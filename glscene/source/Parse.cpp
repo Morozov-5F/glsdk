@@ -256,6 +256,13 @@ namespace
 		TOK_UNSIGNED_INTEGER,
 	};
 
+	const size_t g_layersTokens[] =
+	{
+		TOK_MINUS_SIGN,
+		TOK_PLUS_SIGN,
+		TOK_GRAPH_NAME,
+	};
+
 	//////////////////////////////////////////////////////////////////////////
 	// The lexer.
 	template <typename Lexer>
@@ -463,7 +470,11 @@ namespace glscene
 	};
 
 	template<typename Def>
-	FilePosition GetPosFromDef(const Def &def) {return def.pos;}
+	FilePosition GetFilePosition(const Def &def) {return def.pos;}
+	FilePosition GetFilePosition(const FilePosition &pos) {return pos;}
+
+	template<typename Key, typename Def>
+	FilePosition GetPosFromDef(const std::pair<Key, Def> &pairDef) {return GetFilePosition(pairDef.second);}
 
 	typedef boost::container::flat_map<IdString, ParsedUniformDef> ParsedUniformMap;
 	typedef boost::container::flat_map<IdString, ParsedSamplerDef> ParsedSamplerMap;
@@ -485,11 +496,41 @@ namespace glscene
 		ParsedTextureMap textures;
 	};
 
+	typedef boost::container::flat_set<std::string> LayerSet;
+
+	struct ParsedNodeDef
+	{
+		FilePosition pos;
+		boost::optional<IdString> name;
+		LayerSet layers;
+		std::vector<int> childIndices;
+		int parentIx;
+
+		ParsedNodeDef& operator=(const ParsedNodeDef &other)
+		{
+			pos = other.pos;
+			name = other.name;
+			layers = other.layers;
+			return *this;
+		}
+	};
+
+	struct InheritedNodeData
+	{
+		int parentIx;
+		LayerSet layers;
+
+		InheritedNodeData() : parentIx(-1) {}
+	};
+
 	struct ParsedSceneGraphDef
 	{
 		FilePosition pos;
-		std::vector<std::string> layers;
-		std::vector<IdString> variantChecks;
+		LayerSet layers;
+		std::vector<std::string> layerOrder;
+		boost::container::flat_set<IdString> variantChecks;
+		boost::container::flat_map<IdString, FilePosition> nodeNamePositions;
+		std::vector<ParsedNodeDef> nodes;
 	};
 
 	template<typename Range>
@@ -572,7 +613,12 @@ namespace glscene
 				ExpectAndEatToken(TOK_LAYER_DEFS);
 				while(IsCurrToken(TOK_GRAPH_NAME))
 				{
-					m_scene.layers.push_back(ParseGraphName());
+					std::string layerName = GetStringTokenData();
+					if(m_scene.layers.find(layerName) != m_scene.layers.end())
+						ThrowParseError("The layer '" + layerName + "' has already been defined.", curr_throw);
+					m_scene.layers.insert(layerName);
+					m_scene.layerOrder.push_back(layerName);
+					EatOneToken();
 				}
 				if(m_scene.layers.empty())
 					ThrowParseError("You must provide at least one layer name in a `layer_defs`.");
@@ -585,20 +631,136 @@ namespace glscene
 				EatOneToken();
 				while(IsCurrToken(TOK_IDENTIFIER))
 				{
+					std::string variantName = GetStringTokenData();
+					IdString variantId = variantName;
+					if(m_scene.variantChecks.find(variantId) != m_scene.variantChecks.end())
+						ThrowParseError("The variant check '" + variantName + "' has already been defined.", curr_throw);
+					m_scene.variantChecks.insert(variantId);
 					EatOneToken();
 				}
 				if(!IsCurrTokenCategory(KEYWORD_ID_PREFIX))
 					ThrowParseError("`variant_check` members must be identifier strings.", curr_throw);
 			}
 
+			if(!IsCurrToken(TOK_NODE))
+				ThrowParseError("The `scene` command must have at least 1 `node` sub-command.");
+
+			do
+			{
+				ParseNode(InheritedNodeData());
+			} while (IsCurrToken(TOK_NODE));
+
 			ExpectAndEatEndToken();
+		}
+
+		int ParseNode(const InheritedNodeData &inherit)
+		{
+			ExpectToken(TOK_NODE);
+			PosStackPusher push(*this);
+			EatOneToken();
+
+			m_scene.nodes.push_back(ParsedNodeDef());
+			const int nodeIx = int(m_scene.nodes.size());
+			InheritedNodeData myData = inherit;
+			myData.parentIx = nodeIx;
+
+			{
+
+				ParsedNodeDef &node = m_scene.nodes.back();
+				node.layers = inherit.layers;
+				node.parentIx = inherit.parentIx;
+
+				if(IsCurrToken(TOK_IDENTIFIER))
+				{
+					IdString nodeId = ParseIdentifier(m_scene.nodeNamePositions, false, TOK_NODE);
+					m_scene.nodeNamePositions[nodeId] = m_posStack.top();
+					node.name = nodeId;
+				}
+
+				ExpectCategory(KEYWORD_ID_PREFIX);
+
+				if(IsCurrToken(TOK_LAYERS))
+				{
+					PosStackPusher push(*this);
+					EatOneToken();
+
+					while(!IsCurrTokenCategory(KEYWORD_ID_PREFIX))
+					{
+						bool layerInherit = false;
+						bool layerRemove = false;
+
+						if(IsCurrToken(TOK_PLUS_SIGN))
+						{
+							EatOneToken();
+							layerInherit = true;
+						}
+
+						if(IsCurrToken(TOK_MINUS_SIGN))
+						{
+							EatOneToken();
+							layerRemove = true;
+						}
+
+						try
+						{
+							ExpectToken(TOK_GRAPH_NAME);
+						}
+						catch(BaseParseError &)
+						{
+							if(IsCurrToken(TOK_PLUS_SIGN))
+								ThrowParseError("The `+` sign must always come before the `-` sign.", curr_throw);
+							else
+								ThrowParseError("Members of a `layers` list must be graph names, `+`, or `-`", curr_throw);
+						}
+						std::string layerName = GetStringTokenData();
+						if(m_scene.layers.find(layerName) == m_scene.layers.end())
+							ThrowParseError("The layer '" + layerName + "' was not listed in the scene graph `layer_defs`.", curr_throw);
+						EatOneToken();
+
+						if(layerRemove)
+							node.layers.erase(layerName);
+						else
+							node.layers.insert(layerName);
+
+						if(layerInherit)
+						{
+							if(layerRemove)
+								myData.layers.erase(layerName);
+							else
+								myData.layers.insert(layerName);
+						}
+					}
+				}
+
+				ExpectCategory(KEYWORD_ID_PREFIX);
+			}
+
+			while(IsCurrToken(TOK_NODE))
+			{
+				int childIx = ParseNode(myData);
+				m_scene.nodes[nodeIx].childIndices.push_back(childIx);
+			}
+
+			try
+			{
+				ExpectAndEatEndToken();
+			}
+			catch(BaseParseError &)
+			{
+				if(IsCurrTokenCategory(KEYWORD_ID_PREFIX))
+					ThrowParseError("Incorrect command or command out of order in `node`.\n`layers` comes first, then transforms, `local`s, `variant`s, and lastly `node`s.", curr_throw);
+				else
+					throw;
+			}
+
+			return nodeIx;
 		}
 
 		template<typename MapType>
 		IdString ParseIdentifier(const MapType &search, bool mustFind, size_t currentCmd)
 		{
 			ExpectToken(TOK_IDENTIFIER);
-			std::string idToken = GetTokenString();
+			std::string idToken = GetTokenText();
 			IdString ident(string_ref(&idToken[0] + 1, idToken.size() - 2));
 
 			if(mustFind)
@@ -610,7 +772,7 @@ namespace glscene
 			{
 				MapType::const_iterator foundIt = search.find(ident);
 				if(foundIt != search.end())
-					MultipleIdentifierOfSameType(idToken, currentCmd, GetPosFromDef(foundIt->second));
+					MultipleIdentifierOfSameType(idToken, currentCmd, GetPosFromDef(*foundIt));
 			}
 
 			EatOneToken();
@@ -638,7 +800,7 @@ namespace glscene
 				str << std::setw(earlyDefPos.columnNumber - 1) << " ";
 			str << "^- here" << std::endl;
 
-			ThrowParseError(str.str(), curr_throw);			
+			ThrowParseError(str.str(), curr_throw);
 		}
 
 		//Expects the top of the stack to be the position of the containing command.
@@ -701,7 +863,7 @@ namespace glscene
 				case TOK_ANISO:
 					{
 						ExpectCategory(NUMBER_ID_PREFIX);
-						samplerData.sampler.maxAniso = boost::lexical_cast<float>(GetTokenString());
+						samplerData.sampler.maxAniso = boost::lexical_cast<float>(GetTokenText());
 						if(samplerData.sampler.maxAniso < 1.0f)
 						{
 							std::string msg = "The maximum anisotropic filtering value must be 1.0 or greater.";
@@ -1096,7 +1258,7 @@ namespace glscene
 					if(IsUnifTypeUnsigned(typeIx) && HasTokenNoEmpty(TOK_SIGNED_INTEGER))
 						throw UniformTypeMismatchError(m_rng.front(), g_uniformTypeList[typeIx], unf_type_unsigned);
 
-					std::string theInt(GetTokenString());
+					std::string theInt(GetTokenText());
 					EatOneToken();
 
 					if(theInt[0] == '-')
@@ -1117,7 +1279,7 @@ namespace glscene
 						throw UniformTypeMismatchError(m_rng.front(),
 						g_uniformTypeList[typeIx], unf_type_float);
 
-					std::string theFloat(GetTokenString());
+					std::string theFloat(GetTokenText());
 
 					EatOneToken();
 					float val = boost::lexical_cast<float>(theFloat);
@@ -1163,7 +1325,7 @@ namespace glscene
 						throw UniformTypeMismatchError(m_rng.front(),
 						g_uniformTypeList[typeIx], unf_type_unsigned);
 
-					std::string theInt(GetTokenString());
+					std::string theInt(GetTokenText());
 
 					if(theInt[0] == '-')
 						ret.push_back(boost::lexical_cast<int>(theInt));
@@ -1177,7 +1339,7 @@ namespace glscene
 						throw UniformTypeMismatchError(m_rng.front(),
 						g_uniformTypeList[typeIx], unf_type_float);
 
-					std::string theFloat(GetTokenString());
+					std::string theFloat(GetTokenText());
 
 					ret.push_back(boost::lexical_cast<float>(theFloat));
 				}
@@ -1235,7 +1397,7 @@ namespace glscene
 		std::string ParseFilename()
 		{
 			ExpectToken(TOK_FILENAME);
-			std::string rawToken = GetTokenString();
+			std::string rawToken = GetTokenText();
 			EatOneToken();
 
 			return std::string(rawToken.begin() + 1, rawToken.end() - 1);
@@ -1244,7 +1406,7 @@ namespace glscene
 		std::string ParseGlslIdentifier(const Token &owningTok)
 		{
 			ExpectToken(TOK_GLSL_IDENT);
-			std::string rawToken = GetTokenString();
+			std::string rawToken = GetTokenText();
 			EatOneToken();
 
 			return std::string(rawToken.begin() + 1, rawToken.end() - 1);
@@ -1253,7 +1415,7 @@ namespace glscene
 		std::string ParseGraphName()
 		{
 			ExpectToken(TOK_GRAPH_NAME);
-			std::string rawToken = GetTokenString();
+			std::string rawToken = GetTokenText();
 			EatOneToken();
 
 			return std::string(rawToken.begin() + 1, rawToken.end() - 1);
@@ -1277,7 +1439,7 @@ namespace glscene
 					ThrowParseError(msg, curr_throw);
 				}
 
-				ret[count] = boost::lexical_cast<float>(GetTokenString());
+				ret[count] = boost::lexical_cast<float>(GetTokenText());
 			}
 
 			ExpectToken(TOK_CLOSE_PAREN);
@@ -1313,7 +1475,7 @@ namespace glscene
 					ThrowParseError(msg, curr_throw);
 				}
 
-				inputQuat[count] = boost::lexical_cast<float>(GetTokenString());
+				inputQuat[count] = boost::lexical_cast<float>(GetTokenText());
 			}
 
 			ExpectToken(TOK_CLOSE_PAREN);
@@ -1339,7 +1501,7 @@ namespace glscene
 			}
 
 			ExpectCategory(NUMBER_ID_PREFIX);
-			float ret = boost::lexical_cast<float>(GetTokenString());
+			float ret = boost::lexical_cast<float>(GetTokenText());
 			EatOneToken();
 
 			if(paren)
@@ -1359,7 +1521,7 @@ namespace glscene
 			}
 
 			ExpectToken(TOK_UNSIGNED_INTEGER);
-			unsigned int ret = boost::lexical_cast<unsigned int>(GetTokenString());
+			unsigned int ret = boost::lexical_cast<unsigned int>(GetTokenText());
 			EatOneToken();
 
 			if(paren)
@@ -1531,9 +1693,16 @@ namespace glscene
 		}
 
 		//Gets the current token as a std::string.
-		std::string GetTokenString() const
+		std::string GetTokenText() const
 		{
 			return std::string(m_rng.front().value().begin(), m_rng.front().value().end());
+		}
+
+		//Assuming the current token is a string token, constructs a std::string from the contents.
+		std::string GetStringTokenData() const
+		{
+			std::string rawToken = GetTokenText();
+			return std::string(++rawToken.begin(), --rawToken.end());
 		}
 
 		void ThrowParseError(const std::string &msg) const

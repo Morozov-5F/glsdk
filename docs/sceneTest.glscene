@@ -64,14 +64,15 @@ end
 
 scene
 	//Defines all layers
-	layer_defs 'main' 'shadow1' 'shadow2'
+	layer_defs 'main' 'shadow1' 'shadow2' 'alt'
 	
 	//List of all legal variant names.
 	variant_check <test>
 
 	node <globals>
-		layer inherit 'main'	//Layer for the current node. All children will inherit these.
-		layer 'shadow1'			//Layer for the current node. Children will not inherit.
+		//Layer for the current node.
+		//Children will inherit 'main' and 'alt', but not 'shadow1'.
+		layers 'shadow1' +'main' +'alt'
 
 		local <matrices>
 			uniform_buffer 0 <projection_matrix>
@@ -79,7 +80,11 @@ scene
 		end
 		
 		node <ship>
-			layer 'shadow1' -'main'	//Adds 'shadow1' layer and removes the inherited 'main' layer.
+			//Adds 'shadow1' layer.
+			//Removes the inherited 'main' and 'alt' layers.
+			//Children will still inherit 'main', but they will *not* inherit 'alt'.
+			//That is, they inherit the *lack* of alt.
+			layers 'shadow1' -'main' +-'alt'
 			
 			node_tm
 				quaternion (0 0.707 0 0.707)

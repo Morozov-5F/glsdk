@@ -36,5 +36,12 @@ end
 
 scene
 	layer_defs 'foo' 'bar'
-//	variant_check <bla> <blabal>
+	variant_check <bla> <blabal> <bol>
+	
+	node <foo>
+		layers 'foo' -'bar' +'bar' +-'foo'
+		node <ident>
+			
+		end
+	end
 end

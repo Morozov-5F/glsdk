@@ -78,9 +78,11 @@ Some commands take numbers as parameters. In every case where a number is expect
 
 1. unsigned integer: an integer value without a leading "-" sign.
 2. signed integer: an integer value with a leading "-" sign.
-3. floating-point value: any number with a decimal.
+3. floating-point value: any number with a decimal, which may have a leading "-" or "+" sign. Note that scientific notation (1.0+e5) is not allowed. Also, note that there must be a digit before the decimal. `.5` is not a valid floating-point number; it must be `0.5`
 
 The types can be promoted from lower types to higher ones. So a command that expects you to provide a signed integer can also take an unsigned one. A command that takes a floating-point type will take any kind of number.
+
+Note that the leading "-" sign must be directly adjacent to the numeral. So "- 5" is not the number -5; it's a minus sign followed by the unsigned integer 5.
 
 ### Vectors and Matrices ### {#page_glscene_file_format_syntax_numbers_vectors}
 
@@ -321,15 +323,77 @@ The `scene` command is more rigidly structured in its content than the top-level
 
 - `layer_defs`: Required. The parameters to this command are a series of graph names. These represent the names of the layers, as provided to glscene::SceneGraph::SceneGraph(), and the order you place them in the list is the order that they will be provided in.
 - `variant_check`: Optional. The parameters to this command are a series of identifier strings. If you provide this command, the use of any variant names not listed here will result in a parse error.
-- One or more `node` commands, as described below.
+- One or more `node` commands, [as described below](\ref page_glscene_file_format_syntax_scene_node).
 
 \par A Word on the Root Node
 The [GL Scene Graph](\ref module_glscene) has a root node. And glscene::SceneGraph freely allows you to fetch this node, add variants to it, change its transforms, and play with it as though it were any other node (mostly). However, the scene graph file format does not expose this functionality. You cannot set any of these things on the root node. This is quite deliberate.
 \par
-Becaue the root node is restricted in its functionality, such as re-parenting and deleting, the scene file format encourages you to create your own root. This makes it easier for you to move things around dynamically. It also makes it easier for you to change things later, since you can copy node definitions around more freely.
+Becaue the root node is restricted in its functionality, such as re-parenting, deleting, and querying-by-name, the scene file format encourages you to create your own root. This makes it easier for you to move things around dynamically. It also makes it easier for you to change things later, since you can copy node definitions around more freely.
 
-## Scene Node ## {#page_glscene_file_format_syntax_scene_node}
+## Node ## {#page_glscene_file_format_syntax_scene_node}
 
+\verbatim
+node <node_id>?
+//Commands
+end
+\endverbatim
+
+The `node` command defines a child node in the scene graph system. It is the child of whatever node it is defined in; if it is defined in the `scene` command, then it is a child of the root.
+
+`node_id` is optional. If a node does not have one, then you cannot query the node by name in the glscene::SceneGraph. If you do provide a `node_id` name, it *must* be unique; no other node can have the same identifier.
+
+The contents of a node are rigidly ordered. The sub-commands must be provided in the following order:
+
+- `layers`: Optional. This provides a list of layers that the node is a member of. This list has some complexities to it, so there is [a section dedicated to them](\ref page_glscene_file_format_syntax_scene_node_layers).
+
+### Node Layers ### {#page_glscene_file_format_syntax_scene_node_layers}
+
+~~~~
+layers 'layer_to_add' +'layer_to_inherit' -'layer_to_remove' +-'layer_to_remove_and_inherit_removal'
+~~~~
+
+The parameters of `layers` is a list of graph names that define which layers this node is associated with. They can also be inherited, such that child nodes will be members of those layers without a `layers` command mentioning that layer.
+
+It is an error to specify a layer name that is not mentioned in the `layer_defs` list in the `scene` node.
+
+Each layer name in the list can be prefixed. The prefixes mean the following:
+
+- No prefix: The current node will be a member of that layer. Child node layers are unaffected.
+- `+`: The current node will be a member of that layer. All child nodes will also be a member of that layer.
+- `-`: The current node will not be a member of that layer. Useful for removing an inherited layer. Child node layers are unaffected.
+- `+-`: The current node will not be a member of that layer. All child nodes will also *not* be a member of that layer.
+
+Note that `-+` is not a valid prefix. The `+` must always come first.
+
+All layer additions are processed in order, with latter commands overriding previous ones. For example:
+
+~~~~
+layers 'shadow' 'main' -'shadow'
+~~~~
+
+The node with this command will be a member of 'main' and any inherited layers. The `-'shadow'` layer overrides the first one because it came last. Similarly:
+
+~~~~
+layers -'shadow' 'main' 'shadow'
+~~~~
+
+This will put the node in 'main' and 'shadow', in addition to any inherited layers.
+
+You can do even more complex things through this with inheritance:
+
+~~~~
+layers 'main' +'shadow' -'shadow'
+~~~~
+
+The current node will only have 'main' (and any inherited). It's children will inherit 'shadow'. The `-'shadow'` parameter is what causes the current node to no longer be in 'shadow', but the `-` prefix *does not affect inheritance*.
+
+Similarly:
+
+~~~~
+layers +-'shadow' 'shadow'
+~~~~
+
+This will put the current node in 'shadow', but all child nodes will not be in 'shadow'.
 
 **/
 
