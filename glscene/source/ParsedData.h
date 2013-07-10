@@ -182,6 +182,50 @@ namespace glscene { namespace _detail {
 
 	typedef boost::container::flat_set<std::string> LayerSet;
 
+	struct ParsedStyleData
+	{
+		
+	};
+
+	struct ParsedLocalDef
+	{
+		FilePosition pos;
+		IdString name;
+		ParsedStyleData data;
+
+		ParsedLocalDef(const IdString &_name) : name(_name) {}
+	};
+
+	struct ParsedStyleDef
+	{
+		FilePosition pos;
+		std::vector<const ParsedLocalDef*> includes;
+		ParsedStyleData data;
+	};
+
+	typedef boost::container::flat_map<IdString, ParsedStyleDef> ParsedStyleMap;
+
+	class LocalsInScope
+	{
+	public:
+		void AddToScope(const ParsedLocalDef &local)
+		{
+			m_scope[local.name] = &local;
+		}
+
+		const ParsedLocalDef *IncludeLocal(const IdString &name) const
+		{
+			LocalScope::const_iterator theIt = m_scope.find(name);
+			if(theIt == m_scope.end())
+				return NULL;
+			return theIt->second;
+		}
+
+	private:
+		typedef boost::container::flat_map<IdString, const ParsedLocalDef *> LocalScope;
+		LocalScope m_scope;
+	};
+
 	struct ParsedNodeDef
 	{
 		FilePosition pos;
@@ -191,6 +235,8 @@ namespace glscene { namespace _detail {
 		ParsedNodeDef *pParent;
 		ParsedTransformDef nodeTM;
 		ParsedTransformDef objectTM;
+		ParsedStyleMap styles;
+		boost::container::flat_map<IdString, FilePosition> localPositions;
 
 		ParsedNodeDef& operator=(const ParsedNodeDef &other)
 		{
@@ -201,6 +247,8 @@ namespace glscene { namespace _detail {
 			pParent = other.pParent;
 			nodeTM = other.nodeTM;
 			objectTM = other.objectTM;
+			styles = other.styles;
+			localPositions = other.localPositions;
 			return *this;
 		}
 	};
@@ -209,6 +257,7 @@ namespace glscene { namespace _detail {
 	{
 		ParsedNodeDef *pParent;
 		LayerSet layers;
+		LocalsInScope scope;
 
 		InheritedNodeData() : pParent() {}
 	};
@@ -221,6 +270,7 @@ namespace glscene { namespace _detail {
 		boost::container::flat_set<IdString> styleChecks;
 		boost::container::flat_map<IdString, FilePosition> nodeNamePositions;
 		boost::container::stable_vector<ParsedNodeDef> nodes;
+		boost::container::stable_vector<ParsedLocalDef> allLocals;
 	};
 }}
 

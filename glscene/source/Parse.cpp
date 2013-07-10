@@ -530,12 +530,12 @@ namespace glscene
 					std::string styleName = GetStringTokenData();
 					IdString styleId = styleName;
 					if(m_scene.styleChecks.find(styleId) != m_scene.styleChecks.end())
-						ThrowParseError("The style check '" + styleName + "' has already been defined.", curr_throw);
+						ThrowParseError("The check style '" + styleName + "' has already been defined.", curr_throw);
 					m_scene.styleChecks.insert(styleId);
 					EatOneToken();
 				}
 				if(!IsCurrTokenCategory(KEYWORD_ID_PREFIX))
-					ThrowParseError("`style_check` members must be identifier strings.", curr_throw);
+					ThrowParseError("`check_style` members must be identifier strings.", curr_throw);
 			}
 
 			if(!IsCurrToken(TOK_NODE))
@@ -591,6 +591,16 @@ namespace glscene
 				else
 					node.objectTM = ParseTransform();
 			}
+
+			ExpectCategory(KEYWORD_ID_PREFIX);
+
+			while(IsCurrToken(TOK_LOCAL))
+				ParseLocalDef(node, myData);
+
+			ExpectCategory(KEYWORD_ID_PREFIX);
+
+			while(IsCurrToken(TOK_STYLE))
+				ParseStyleDef(node, myData);
 
 			ExpectCategory(KEYWORD_ID_PREFIX);
 
@@ -710,6 +720,79 @@ namespace glscene
 			return ret;
 		}
 
+		void ParseLocalDef(ParsedNodeDef &node, InheritedNodeData &dest)
+		{
+			ExpectToken(TOK_LOCAL);
+			PosStackPusher push(*this);
+			EatOneToken();
+
+			IdString id = ParseIdentifier(node.localPositions, false, TOK_LOCAL);
+			m_scene.allLocals.emplace_back(id);
+			ParsedLocalDef &local = m_scene.allLocals[m_scene.allLocals.size() - 1];
+			local.pos = m_posStack.top();
+			node.localPositions[id] = local.pos;
+
+			dest.scope.AddToScope(local);
+
+			ParseStyleData(local.data);
+
+			ExpectAndEatEndToken();
+		}
+
+		void ParseStyleDef(ParsedNodeDef &node, const InheritedNodeData &dest)
+		{
+			ExpectToken(TOK_STYLE);
+			PosStackPusher push(*this);
+			EatOneToken();
+
+			ExpectToken(TOK_IDENTIFIER);
+			IdString id(GetStringTokenData());
+			if(node.styles.find(id) != node.styles.end())
+				MultipleIdentifierOfSameType(GetStringTokenData(), TOK_STYLE, GetPosFromDef(*node.styles.find(id)));
+			if(!m_scene.styleChecks.empty())
+			{
+				if(m_scene.styleChecks.find(id) == m_scene.styleChecks.end())
+				{
+					ThrowParseError("The style '" + GetStringTokenData() + "' was not listed in the check styles.",
+						curr_throw);
+				}
+			}
+			EatOneToken();
+
+			ParsedStyleDef &style = node.styles[id];
+			style.pos = m_posStack.top();
+
+			if(IsCurrToken(TOK_USING))
+			{
+				EatOneToken();
+				while(IsCurrToken(TOK_IDENTIFIER))
+				{
+					IdString usingId((GetStringTokenData()));
+					const ParsedLocalDef *pLocal = dest.scope.IncludeLocal(usingId);
+					if(!pLocal)
+					{
+						std::string msg = "The identifier name '" + std::string(usingId) +
+							"' refers to a local definition that is not in scope at this point.";
+						ThrowParseError(msg, curr_throw);
+					}
+
+					style.includes.push_back(pLocal);
+					EatOneToken();
+				}
+				if(!IsCurrTokenCategory(KEYWORD_ID_PREFIX))
+					ThrowParseError("`using` members must be identifier strings.", curr_throw);
+			}
+
+			ParseStyleData(style.data);
+
+			ExpectAndEatEndToken();
+		}
+
+		void ParseStyleData(ParsedStyleData &data)
+		{
+
+		}
+
 		template<typename MapType>
 		IdString ParseIdentifier(const MapType &search, bool mustFind, size_t currentCmd)
 		{
@@ -746,7 +829,7 @@ namespace glscene
 			std::stringstream str;
 			str << "The identifier name '" << idToken << "' has already been used in a ";
 			str << GetTokenErrorName(currentCmd) << " definition before. It may not be defined again." << std::endl;
-			str << "\tIt was defined in file '" << earlyDefPos.fileName << "' line ";
+			str << "\tIt was first defined in file '" << earlyDefPos.fileName << "' line ";
 			str << earlyDefPos.lineNumber << " column " << earlyDefPos.columnNumber << std::endl;
 			str << "\t" << earlyDefPos.theLine << std::endl;
 			str << "\t";

@@ -48,4 +48,7 @@
 	MAC(ORIENTATION,	"orientation",	"orientation transform",	"orientation transform")
 	MAC(ANGLE_AXIS,		"angle_axis",	"angle/axis transform",		"angle/axis transform")
 	MAC(MATRIX,			"matrix",		"matrix transform",			"matrix transform")
+	MAC(LOCAL,			"local",		"local declaration",		"local declaration")
+	MAC(STYLE,			"style",		"style declaration",		"style declaration")
+	MAC(USING,			"using",		"using inclusion",			"using inclusion")
 	

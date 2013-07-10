@@ -36,7 +36,7 @@ end
 
 scene
 	layer_defs 'foo' 'bar'
-	style_check <bla> <blabal> <bol>
+	style_check <id> <blabal> <bol>
 	
 	node <foo>
 		layers 'foo' -'bar' +'bar' +-'foo'
@@ -48,8 +48,24 @@ scene
 			matrix (1)
 		end
 		
+		local <ident>
+		end
+		
+		style <id>
+		end
+		
 		node <ident>
-			
+			local <ident2>
+			end
+
+			style <id>
+				using <ident2>
+			end
+		end
+		
+		node
+			style <id>
+			end
 		end
 	end
 end
