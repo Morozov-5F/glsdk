@@ -49,8 +49,8 @@ resources
 	end
 	uniform_buffer_res <projection_matrix> 64 [stream-draw]
 	uniform_buffer_res <lights> 128 placeholder
-	uniform_res <num_lights> [float] 5
-	uniform_res <test_value> [vec3] (2.43 3.4 9.8)
+	uniform_res <num_lights> {lights.numLights} [float] 5
+	uniform_res <test_value> {test} [vec3] (2.43 3.4 9.8)
 	camera_res <main> [left-btn] [left-kbd]
 		target ()
 		orient (quat)
@@ -66,8 +66,8 @@ scene
 	//Defines all layers
 	layer_defs 'main' 'shadow1' 'shadow2' 'alt'
 	
-	//List of all legal variant names.
-	variant_check <test>
+	//List of all legal style names.
+	style_check <test>
 
 	node <globals>
 		//Layer for the current node.
@@ -87,10 +87,10 @@ scene
 			layers 'shadow1' -'main' +-'alt'
 			
 			node_tm
-				quaternion (0 0.707 0 0.707)
-				translation (0 5 0)
+				orientation (0 0.707 0 0.707)
+				translate (0 5 0)
 			end
-			obj_tm
+			object_tm
 				scale (2)
 			end
 			
@@ -99,7 +99,7 @@ scene
 				texture 0 <ship_diffuse_tex> <aniso-repeat>
 			end
 
-			variant <test>
+			style <test>
 				using <matrices> <common>
 
 				program <reflect_shader>

@@ -522,20 +522,20 @@ namespace glscene
 					ThrowParseError("`layer_defs` members must be '' strings.", curr_throw);
 			}
 
-			if(IsCurrToken(TOK_VARIANT_CHECK))
+			if(IsCurrToken(TOK_STYLE_CHECK))
 			{
 				EatOneToken();
 				while(IsCurrToken(TOK_IDENTIFIER))
 				{
-					std::string variantName = GetStringTokenData();
-					IdString variantId = variantName;
-					if(m_scene.variantChecks.find(variantId) != m_scene.variantChecks.end())
-						ThrowParseError("The variant check '" + variantName + "' has already been defined.", curr_throw);
-					m_scene.variantChecks.insert(variantId);
+					std::string styleName = GetStringTokenData();
+					IdString styleId = styleName;
+					if(m_scene.styleChecks.find(styleId) != m_scene.styleChecks.end())
+						ThrowParseError("The style check '" + styleName + "' has already been defined.", curr_throw);
+					m_scene.styleChecks.insert(styleId);
 					EatOneToken();
 				}
 				if(!IsCurrTokenCategory(KEYWORD_ID_PREFIX))
-					ThrowParseError("`variant_check` members must be identifier strings.", curr_throw);
+					ThrowParseError("`style_check` members must be identifier strings.", curr_throw);
 			}
 
 			if(!IsCurrToken(TOK_NODE))
@@ -604,7 +604,7 @@ namespace glscene
 			catch(BaseParseError &)
 			{
 				if(IsCurrTokenCategory(KEYWORD_ID_PREFIX))
-					ThrowParseError("Incorrect command or command out of order in `node`.\n`layers` comes first, then transforms, `local`s, `variant`s, and lastly `node`s.", curr_throw);
+					ThrowParseError("Incorrect command or command out of order in `node`.\n`layers` comes first, then transforms, `local`s, `style`s, and lastly `node`s.", curr_throw);
 				else
 					throw;
 			}
@@ -1188,6 +1188,7 @@ namespace glscene
 			ParsedUniformDef &uniformDef = m_resources.uniforms[ident];
 			uniformDef.pos = m_posStack.top();
 
+			uniformDef.glslUniformName = ParseGlslIdentifier();
 			int uniformType = ParseEnumerator(g_uniformTypeEnumeration);
 			uniformDef.data = ParseUniformData(uniformType);
 		}
@@ -1358,6 +1359,11 @@ namespace glscene
 		}
 
 		std::string ParseGlslIdentifier(const Token &owningTok)
+		{
+			return ParseGlslIdentifier();
+		}
+
+		std::string ParseGlslIdentifier()
 		{
 			ExpectToken(TOK_GLSL_IDENT);
 			std::string rawToken = GetTokenText();

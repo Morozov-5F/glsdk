@@ -6,7 +6,7 @@ resources
 		aniso 1
 	end
 	
-	uniform_res <ident> [vec3] (-5.0)
+	uniform_res <ident> {uniformName} [vec3] (-5.0)
 	
 	camera_res <ident> [left_btn] [left_kbd]
 		target (0 -5 0)
@@ -36,7 +36,7 @@ end
 
 scene
 	layer_defs 'foo' 'bar'
-	variant_check <bla> <blabal> <bol>
+	style_check <bla> <blabal> <bol>
 	
 	node <foo>
 		layers 'foo' -'bar' +'bar' +-'foo'

@@ -99,6 +99,31 @@ Quaternions are a special form of vector value. A quaternion is expected to be n
 Also, note that quaternions in this system do *not* follow GLM's asinine 
 conventions. The W component comes *last*, not first.
 
+# Specification # {#page_glscene_file_format_spec}
+
+Below, commands will be described using the following syntax. For non-compound commands, they will be described as follows:
+
+~~~~
+command param1 param2
+~~~~
+
+The expected type of each `param` is based on what the parameter name is surrounded by. The use of the string qualifiers means that the `param` is a string of that type. So if it is specified as `[param1]`, then `param1` must be an enumerator. The valid enumerant values will be explained in descriptive text.
+
+If a parameter is surrounded by `()`, then it must be a number. These can be a scalar, vector, or matrix; the specific type will be explained in the descriptive text.
+
+Parameter names surrounded with "\`" characters have special types or rules associated with them. These generally can be of multiple types, where each valid type changes what the parameter means.
+
+If a parameter ends with "?", then the parameter is optional. The use of "..." after a parameter name represents a series of parameters of the same type of arbitrary length. Whether the number of such parameters can be 0 or not will be explained in the descriptive text.
+
+Compound commands are denoted by using the `end` keyword, as follows:
+
+\verbatim
+compound param1 param2
+end
+\endverbatim
+
+The valid subcommands of the command will be detailed below, as well as the expected order of such commands.
+
 # Resources # {#page_glscene_file_format_resources}
 
 \verbatim
@@ -116,10 +141,10 @@ Different `resources` commands in the same scene graph file (or referenced by th
 ## Uniform Resource ## {#page_glscene_file_format_resources_uniform}
 
 ~~~~
-uniform_res <resource_id> [type] (initial values)?
+uniform_res <resource_id> {uniform name} [type] (initial values)?
 ~~~~
 
-The `uniform_res` command defines a uniform resource, as though by `ResourceRef::DefineUniform`. The resource name defines the 
+The `uniform_res` command defines a uniform resource, as though by `ResourceRef::DefineUniform`. The `resource_id` is the identifier string used to name the uniform. `uniform name` is the GLSL name for the uniform, as to be passed to `glGetUniformLocation` and similar OpenGL functions.
 
 The `type` defines how to interpret the `initial values` part. If the type is a scalar type, then the initial values must be a single number, though it may be in parentheses. If `type` is a vector or matrix type, then the initial values must be a parenthesized list of either a single number or the required number of values.
 
@@ -269,10 +294,14 @@ The other sub-commands are as follows:
 - `mtc {uniform name}`: Specifies the name of a `mat4` uniform variable in the program that will be given the model-to-camera matrix by the scene graph system. This sub-command may only be specified once.
 - `nmtc {uniform name}`: Specifies the name of a `mat3` uniform variable in the program that will be given the normal`s model-to-camera matrix by the scene graph system. This sub-command may only be specified once.
 - `nctm {uniform name}`: Specifies the name of a `mat3` uniform variable in the program that will be given the normal`s camera-to-model matrix by the scene graph system. This sub-command may only be specified once.
-- `sampler {uniform name} (texture unit)`: Specifies the name of a uniform variable of a sampler type which will be assigned the value `texture unit`. `texture unit` is an unsigned integer.
-- `image {uniform name} (image unit)`: Specifies the name of a uniform variable of an image type which will be assigned the value `image unit`. `image unit` is an unsigned integer.
+- `sampler {uniform name} (texture unit)`: Specifies the name of a uniform variable of a sampler type which will be assigned the value `texture unit`.
+	- `texture unit`: An unsigned integer texture image unit to associate the uniform with.
+- `image {uniform name} (image unit)`: Specifies the name of a uniform variable of an image type which will be assigned the value `image unit`.
+	- `image unit`: An unsigned integer image unit to associate the uniform with.
 - `uniform_buffer {block name} (block binding)`: Specifies that the uniform block named `block name` will be assigned the binding point `block binding`, which is an unsigned integer.
+	- `block binding`: An unsigned integer uniform buffer binding point to assign the named uniform block with.
 - `storage_buffer {block name} (block binding)`: Specifies that the shader storage block named `block name` will be assigned the binding point `block binding`, which is an unsigned integer.
+	- `block binding`: An unsigned integer shader storage buffer binding point to assign the named storage block with.
 
 ## Mesh Resource ## {#page_glscene_file_format_resources_mesh}
 
@@ -322,11 +351,11 @@ The last command in a file must be a `scene` command. A file can only contain on
 The `scene` command is more rigidly structured in its content than the top-level `resources` command. The following commands must be provided, in order. Some of them are optional:
 
 - `layer_defs`: Required. The parameters to this command are a series of graph names. These represent the names of the layers, as provided to glscene::SceneGraph::SceneGraph(), and the order you place them in the list is the order that they will be provided in.
-- `variant_check`: Optional. The parameters to this command are a series of identifier strings. If you provide this command, the use of any variant names not listed here will result in a parse error.
+- `style_check`: Optional. The parameters to this command are a series of identifier strings. If you provide this command, the use of any style names not listed here will result in a parse error.
 - One or more `node` commands, [as described below](\ref page_glscene_file_format_syntax_scene_node).
 
 \par A Word on the Root Node
-The [GL Scene Graph](\ref module_glscene) has a root node. And glscene::SceneGraph freely allows you to fetch this node, add variants to it, change its transforms, and play with it as though it were any other node (mostly). However, the scene graph file format does not expose this functionality. You cannot set any of these things on the root node. This is quite deliberate.
+The [GL Scene Graph](\ref module_glscene) has a root node. And glscene::SceneGraph freely allows you to fetch this node, add styles to it, change its transforms, and play with it as though it were any other node (mostly). However, the scene graph file format does not expose this functionality. You cannot set any of these things on the root node. This is quite deliberate.
 \par
 Becaue the root node is restricted in its functionality, such as re-parenting, deleting, and querying-by-name, the scene file format encourages you to create your own root. This makes it easier for you to move things around dynamically. It also makes it easier for you to change things later, since you can copy node definitions around more freely.
 
@@ -344,8 +373,10 @@ The `node` command defines a child node in the scene graph system. It is the chi
 
 The contents of a node are rigidly ordered. The sub-commands must be provided in the following order:
 
-- `layers`: Optional. This provides a list of layers that the node is a member of. This list has some complexities to it, so there is [a section dedicated to them](\ref page_glscene_file_format_syntax_scene_node_layers).
+- `layers`: Optional. This provides a list of layers that the node is a member of. This list has some complex features in it, so there is [a section dedicated to them](\ref page_glscene_file_format_syntax_scene_node_layers).
 - `node_tm` and `object_tm`: Optional. The two commands can be in any order, but they can only be provided once and only before the next group of commands. These define the [node and object transforms](\ref module_glscene_node_transforms) for the node.
+- `local`: A local list of node style commands. These make it easy to have multiple styles and nodes use similar style commands. You may provide zero or more of these.
+- `style`: A style definition. You may provide zero or more of these.
 - `node`: A child node of the current node. You may provide zero or more of them.
 
 ### Node Layers ### {#page_glscene_file_format_syntax_scene_node_layers}
@@ -417,7 +448,9 @@ The transformation commands are:
 - `scale (vec3)`: Provides a scaling transform. This is a 3-element floating-point vector, so the elements must be in parentheses.
 - `translate (vec3)`: Provides a translation transform.
 - `orientation (quaternion)`: Provides an orientation transform as a quaternion.
-- `angle_axis (angle) (axis)`: Provides an angle/axis rotation transform as an angle/axis. `axis` is a vec3, while `angle` is a float. `angle` is in *degrees*.
+- `angle_axis (angle) (axis)`: Provides an angle/axis rotation transform as an angle/axis.
+	- `angle`: A floating point angle, in *degrees*.
+	- `axis`: A vec3 axis. It does not need to be normalized.
 - `matrix (mat4)`: Provides an arbitrary matrix transform. This is a full 16-float, column-major matrix.
 
 #### Composed and Decomposed ####
@@ -454,6 +487,102 @@ end
 ~~~~
 
 Even though the scale is an identity scale, putting the orientation afterwards will still cause it to be composed.
+
+### Style and Locals ### {#page_glscene_file_format_syntax_scene_node_style}
+
+\verbatim
+local <local_name>
+//definitions
+end
+
+style <style_name>
+//local inclusions
+
+//definitions
+end
+\endverbatim
+
+The `local` and `style` commands have almost identical content, though not identical meaning.
+
+`local` commands create a set of commands that can be included by `style` commands. This helps cut down on the amount of duplication in writing similar `style`s.
+
+The `local_name` and `style_name` are identifier strings. Both identifiers must be unique within the same node, but they have different namespaces. So a `local` and `style` can have the same name within the node. If the scene graph has a `style_check` command, then the `style_name` must be one of the listed styles.
+
+The only difference (in syntax) between the definition of `local` and `style` are that `style` can have a `using` command. If it is present, it must be the first command.
+
+The commands available for `local` and `style` are as follows. They can be in any order, except for `using`, which can only be on `style` and if it is present, it must be the first command. All resource identifier names must have resources of the corresponding type defined by prior `resources` commands.
+
+- `using <local1> <local2> ...`: Optional, and only available for `style`. This defines the list of locals who's commands will be included in this `style`.
+- `mesh <mesh_resource_name> 'mesh_variant_name'`: Optional, and only one can be provided. This defines the mesh resource to use in the `style`/`local`. If `mesh_resource_name` is not a mesh resource name previously defined by the scene graph, this will error.
+	- `mesh_variant_name`: The mesh's variant name. Optional.
+- `program` or `pipeline`: Optional, and only one can be provided. [These commands](\ref page_glscene_file_format_syntax_scene_node_program) set up the program resource(s) to use, as well as any global uniform resources to use with the program. `pipeline` sets up a separable program pipeline.
+- `texture (unit) <texture_resource> <sampler_resource>`: Optional. Multiple `texture`s may be provided. This represents the binding of a texture and sampler object to the given texture image unit.
+	- `unit`: An unsigned integer, and the two resources must name actual resources previously established.
+- `uniform_buffer (binding) <uniform_buffer_resource> (offset)?`: Optional. Multiple `uniform_buffer`s may be provided. This represents the binding of a uniform buffer resource to the given buffer object binding point.
+	- `binding`: An unsigned integer representing the binding point.
+	- `offset`: An optional unsigned integer byte offset for the binding.
+- `storage_buffer (binding) <storage_buffer_resource> (offset)?`: Optional. Multiple `storage_buffer`s may be provided. This represents the binding of a shader storage buffer resource to the given buffer object binding point.
+	- `binding`: An unsigned integer representing the binding point.
+	- `offset`: An optional unsigned integer byte offset for the binding.
+
+#### Style Validity ####
+
+The inclusion mechanism for styles, the ability for a `style` command to include the sub-commands of one or more `local` commands creates a separation between the syntax of a `style` and the semantics of it. Therefore, there are a number of additional rules surrounding styles that must be followed; failure to do so will result in a parse-time error.
+
+Every style must provide a `mesh` and a `program` or `pipeline` command, either directly or indirectly via inclusion. In order to allow inclusions to include these definitions, the `style` command is not required to have one of these. However, a style must define one or include a local that does define one.
+
+Also, a style must not provide more than one `mesh` command, nor may it provide more than one `program` or `pipeline`. And it cannot provide both a `program` or `pipeline` command. The `style` and `local` commands are syntactically prevented from providing multiple commands, but inclusions still make it possible.
+
+A style must not include any two resource binding commands that bind to the same binding point. So if you have multiple texture bindings, eitehr directly or via inclusion, they must all bind to different texture units.
+
+The system will detect these automatically and generate errors for violating these conditions.
+
+#### Inclusion Scoping ####
+
+Styles can include locals defined in the node that the style is defined in. But they can also include locals from *parent* nodes. Indeed, the style's `using` command can include any local from any parent.
+
+Scoping works like C/C++ scoping. So first the current node's is checked, then each parent node from most recent to the farthest, until a match is found. This means that more recent `local`s that use the same name will shadow less recent ones. Consider the following:
+
+\verbatim
+node
+ local <foo>
+  //Stuff
+ end
+ node
+  local <foo>
+  end
+  style <bar>
+   using <foo>
+  end
+ end
+end
+\endverbatim
+
+The `using` command will include the local `<foo>` declared in the current node, not the one declared by the parent.
+
+### Programs and Pipelines ### {#page_glscene_file_format_syntax_scene_node_program}
+
+\verbatim
+program <program_resource>
+  //Uniform commands
+end
+pipeline
+  program <program_resource> [stage1] [stage2]...
+  //Uniform commands
+  end
+end
+\endverbatim
+
+`program` and `pipeline` are subcommands of `local` and `style`. They define a program resource or program pipeline to build for a style, as well as any global uniforms associated with them. The `program_resource` parameter used in these commands must be a previously defined resource.
+
+The `program` command causes the style to use a specific, single program which contains all of the code for all applicable shader stages. The `pipeline` command builds a program pipeline object out of a number of different programs. A `style` or `local` can only define one or the other of these commands, and they cannot have more than one.
+
+The `pipeline` subcommand `program` works almost identically to the higher-level `program` command, except that the `program_resource` is followed by a sequence of `[stage]` enumerators. These enumerators define which stages the given program affects; they are a list and at least one stage must be specified. Multiple `program` subcommands can be listed, but the same stage cannot be specified multiple times. Also, the same `program` subcommand cannot use the same stage twice.
+
+The `program` command (whether within `pipeline` or not) has only one sub-command. It can appear 0 or more times:
+
+- `uniform <uniform_resource>`: Defines a global uniform resource to be used by the program object.
+
 
 **/
 

@@ -17,6 +17,7 @@ namespace glscene { namespace _detail {
 	struct ParsedUniformDef
 	{
 		FilePosition pos;
+		std::string glslUniformName;
 		UniformData data;
 	};
 
@@ -217,7 +218,7 @@ namespace glscene { namespace _detail {
 		FilePosition pos;
 		LayerSet layers;
 		std::vector<std::string> layerOrder;
-		boost::container::flat_set<IdString> variantChecks;
+		boost::container::flat_set<IdString> styleChecks;
 		boost::container::flat_map<IdString, FilePosition> nodeNamePositions;
 		boost::container::stable_vector<ParsedNodeDef> nodes;
 	};
