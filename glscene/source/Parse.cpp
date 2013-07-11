@@ -283,6 +283,8 @@ namespace
 	{
 		TOK_MESH,
 		TOK_TEXTURE,
+		TOK_UNIFORM_BUFFER,
+		TOK_STORAGE_BUFFER,
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -823,6 +825,32 @@ namespace glscene
 						data.textures.push_back(ParsedTextureRefDef(textureId, samplerId));
 						data.textures.back().pos = pos;
 						data.textures.back().texUnit = texUnit;
+					}
+					break;
+				case TOK_UNIFORM_BUFFER:
+					{
+						EatOneToken();
+						unsigned int binding = ParseSingleUInt();
+						IdString bufferId = ParseIdentifier(m_resources.uniformBuffers, true, tok.id());
+						data.uniformBuffers.push_back(ParsedBufferRefDef(bufferId));
+						ParsedBufferRefDef &bufferDef = data.uniformBuffers.back();
+						bufferDef.pos = pos;
+						bufferDef.buffBinding = binding;
+						if(IsCurrTokenOneOf(g_unsignedIntStartTokens))
+							bufferDef.offset = ParseSingleUInt();
+					}
+					break;
+				case TOK_STORAGE_BUFFER:
+					{
+						EatOneToken();
+						unsigned int binding = ParseSingleUInt();
+						IdString bufferId = ParseIdentifier(m_resources.storageBuffers, true, tok.id());
+						data.storageBuffers.push_back(ParsedBufferRefDef(bufferId));
+						ParsedBufferRefDef &bufferDef = data.storageBuffers.back();
+						bufferDef.pos = pos;
+						bufferDef.buffBinding = binding;
+						if(IsCurrTokenOneOf(g_unsignedIntStartTokens))
+							bufferDef.offset = ParseSingleUInt();
 					}
 					break;
 				}

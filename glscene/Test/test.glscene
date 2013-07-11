@@ -18,8 +18,8 @@ resources
 		rotation_scale 0.36
 	end
 	
-	uniform_buffer_res <ident> 64 [stream_draw]
-	storage_buffer_res <ident> 128 placeholder
+	uniform_buffer_res <ubuff> 64 [stream_draw]
+	storage_buffer_res <sbuff> 128 placeholder
 
 	program_res <ident>
 		vert "filename.vert"
@@ -63,6 +63,9 @@ scene
 				
 				mesh <ident>
 				texture 0 <tex> <spl>
+				uniform_buffer 0 <ubuff>
+				uniform_buffer 1 <ubuff> 32
+				storage_buffer 0 <ubuff>
 			end
 		end
 		

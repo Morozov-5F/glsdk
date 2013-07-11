@@ -204,10 +204,22 @@ namespace glscene { namespace _detail {
 		{}
 	};
 
+	struct ParsedBufferRefDef
+	{
+		FilePosition pos;
+		unsigned int buffBinding;
+		IdString bufferId;
+		unsigned int offset;
+
+		ParsedBufferRefDef(const IdString &_bufferId) : bufferId(_bufferId), offset(0) {}
+	};
+
 	struct ParsedStyleData
 	{
 		boost::optional<ParsedMeshRefDef> mesh;
 		std::vector<ParsedTextureRefDef> textures;
+		std::vector<ParsedBufferRefDef> uniformBuffers;
+		std::vector<ParsedBufferRefDef> storageBuffers;
 	};
 
 	struct ParsedLocalDef
