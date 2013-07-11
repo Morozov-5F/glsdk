@@ -1,6 +1,6 @@
 
 resources
-	sampler_res <ident>
+	sampler_res <spl>
 		mag [linear]
 		compare [pass]
 		aniso 1
@@ -31,7 +31,7 @@ resources
 	end
 	
 	mesh_res <ident> [ground_plane] 3 20
-	texture_res <ident> "foo.file[ground_plane]"
+	texture_res <tex> "foo.file[ground_plane]"
 end
 
 scene
@@ -60,6 +60,9 @@ scene
 
 			style <id>
 				using <ident2>
+				
+				mesh <ident>
+				texture 0 <tex> <spl>
 			end
 		end
 		

@@ -182,9 +182,32 @@ namespace glscene { namespace _detail {
 
 	typedef boost::container::flat_set<std::string> LayerSet;
 
+	struct ParsedMeshRefDef
+	{
+		FilePosition pos;
+		IdString meshId;
+		boost::optional<std::string> variant;
+
+		ParsedMeshRefDef(const IdString &_id) : meshId(_id) {}
+	};
+
+	struct ParsedTextureRefDef
+	{
+		FilePosition pos;
+		unsigned int texUnit;
+		IdString textureId;
+		IdString samplerId;
+
+		ParsedTextureRefDef(const IdString &_textureId, const IdString &_samplerId)
+			: textureId(_textureId)
+			, samplerId(_samplerId)
+		{}
+	};
+
 	struct ParsedStyleData
 	{
-		
+		boost::optional<ParsedMeshRefDef> mesh;
+		std::vector<ParsedTextureRefDef> textures;
 	};
 
 	struct ParsedLocalDef

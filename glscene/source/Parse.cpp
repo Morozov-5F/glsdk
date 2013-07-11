@@ -279,6 +279,12 @@ namespace
 		TOK_MATRIX,
 	};
 
+	const size_t g_legalStyleTokens[] =
+	{
+		TOK_MESH,
+		TOK_TEXTURE,
+	};
+
 	//////////////////////////////////////////////////////////////////////////
 	// The lexer.
 	template <typename Lexer>
@@ -734,7 +740,7 @@ namespace glscene
 
 			dest.scope.AddToScope(local);
 
-			ParseStyleData(local.data);
+			ParseStyleData(local.data, TOK_LOCAL);
 
 			ExpectAndEatEndToken();
 		}
@@ -783,14 +789,44 @@ namespace glscene
 					ThrowParseError("`using` members must be identifier strings.", curr_throw);
 			}
 
-			ParseStyleData(style.data);
+			ParseStyleData(style.data, TOK_STYLE);
 
 			ExpectAndEatEndToken();
 		}
 
-		void ParseStyleData(ParsedStyleData &data)
+		void ParseStyleData(ParsedStyleData &data, size_t owningId)
 		{
-
+			while(IsCurrTokenOneOf(g_legalStyleTokens))
+			{
+				FilePosition pos = GetPositionForCurrToken();
+				typename Range::value_type tok = m_rng.front();
+				switch(tok.id())
+				{
+				case TOK_MESH:
+					{
+						if(data.mesh.is_initialized())
+							throw MultipleUseOfCommandError(tok, owningId);
+						EatOneToken();
+						data.mesh = ParsedMeshRefDef(ParseIdentifier(m_resources.meshes, true, tok.id()));
+						ParsedMeshRefDef &def = data.mesh.get();
+						def.pos = pos;
+						if(IsCurrToken(TOK_GRAPH_NAME))
+							def.variant = ParseGraphName();
+					}
+					break;
+				case TOK_TEXTURE:
+					{
+						EatOneToken();
+						unsigned int texUnit = ParseSingleUInt();
+						IdString textureId = ParseIdentifier(m_resources.textures, true, tok.id());
+						IdString samplerId = ParseIdentifier(m_resources.samplers, true, TOK_SAMPLER_RES);
+						data.textures.push_back(ParsedTextureRefDef(textureId, samplerId));
+						data.textures.back().pos = pos;
+						data.textures.back().texUnit = texUnit;
+					}
+					break;
+				}
+			}
 		}
 
 		template<typename MapType>

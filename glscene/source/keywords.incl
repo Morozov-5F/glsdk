@@ -51,4 +51,9 @@
 	MAC(LOCAL,			"local",		"local declaration",		"local declaration")
 	MAC(STYLE,			"style",		"style declaration",		"style declaration")
 	MAC(USING,			"using",		"using inclusion",			"using inclusion")
+	MAC(MESH,			"mesh",			"mesh reference",			"mesh reference")
+	MAC(PROGRAM,		"program",		"program reference",		"program reference")
+	MAC(PIPELINE,		"pipeline",		"pipeline reference",		"pipeline reference")
+	MAC(TEXTURE,		"texture",		"texture reference",		"texture reference")
+	MAC(UNIFORM,		"uniform",		"uniform reference",		"uniform reference")
 	
