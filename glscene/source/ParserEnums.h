@@ -338,7 +338,30 @@ namespace
 		refs::array_ref<string_ref>(g_meshCreateEnumNames),
 	};
 
+	string_ref g_programStageEnumNames[] =
+	{
+		"vert",
+		"tess_control",
+		"tess_eval",
+		"geom",
+		"frag",
+	};
 
+	GLenum g_programStageEnumerators[] =
+	{
+		gl::VERTEX_SHADER_BIT,
+		gl::TESS_CONTROL_SHADER_BIT,
+		gl::TESS_EVALUATION_SHADER_BIT,
+		gl::GEOMETRY_SHADER_BIT,
+		gl::FRAGMENT_SHADER_BIT,
+	};
+
+	const EnumData<GLenum> g_programStageEnumeration =
+	{
+		"program stage",
+		refs::array_ref<string_ref>(g_programStageEnumNames),
+		refs::array_ref<GLenum>(g_programStageEnumerators),
+	};
 }
 
 #endif //GLSDK_GLSCENE_PARSER_ENUMS_H

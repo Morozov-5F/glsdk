@@ -65,7 +65,7 @@ scene
 				texture 0 <tex> <spl>
 				uniform_buffer 0 <ubuff>
 				uniform_buffer 1 <ubuff> 32
-				storage_buffer 0 <ubuff>
+				storage_buffer 0 <sbuff>
 			end
 		end
 		

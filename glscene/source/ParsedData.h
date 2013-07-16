@@ -14,6 +14,29 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace glscene { namespace _detail {
+
+	class ParsedIdentifier
+	{
+	public:
+		explicit ParsedIdentifier(boost::string_ref idName)
+			: m_id(idName)
+			, m_fullName(idName.data(), idName.size())
+		{}
+
+		operator IdString() const {return m_id;}
+		boost::string_ref ref() const {return m_fullName;}
+		const std::string &str() const {return m_fullName;}
+
+		bool operator<(const ParsedIdentifier &rhs) const {return m_id < rhs.m_id;}
+
+		bool operator==(const ParsedIdentifier &rhs) const {return m_id == rhs.m_id;}
+		bool operator!=(const ParsedIdentifier &rhs) const {return m_id != rhs.m_id;}
+
+	private:
+		IdString m_id;
+		std::string m_fullName;
+	};
+
 	struct ParsedUniformDef
 	{
 		FilePosition pos;
@@ -80,13 +103,13 @@ namespace glscene { namespace _detail {
 	template<typename Key, typename Def>
 	FilePosition GetPosFromDef(const std::pair<Key, Def> &pairDef) {return GetFilePosition(pairDef.second);}
 
-	typedef boost::container::flat_map<IdString, ParsedUniformDef> ParsedUniformMap;
-	typedef boost::container::flat_map<IdString, ParsedSamplerDef> ParsedSamplerMap;
-	typedef boost::container::flat_map<IdString, ParsedCameraDef> ParsedCameraMap;
-	typedef boost::container::flat_map<IdString, ParsedBufferDef> ParsedBufferMap;
-	typedef boost::container::flat_map<IdString, ParsedProgramDef> ParsedProgramMap;
-	typedef boost::container::flat_map<IdString, ParsedMeshDef> ParsedMeshMap;
-	typedef boost::container::flat_map<IdString, ParsedTextureDef> ParsedTextureMap;
+	typedef boost::container::flat_map<ParsedIdentifier, ParsedUniformDef> ParsedUniformMap;
+	typedef boost::container::flat_map<ParsedIdentifier, ParsedSamplerDef> ParsedSamplerMap;
+	typedef boost::container::flat_map<ParsedIdentifier, ParsedCameraDef> ParsedCameraMap;
+	typedef boost::container::flat_map<ParsedIdentifier, ParsedBufferDef> ParsedBufferMap;
+	typedef boost::container::flat_map<ParsedIdentifier, ParsedProgramDef> ParsedProgramMap;
+	typedef boost::container::flat_map<ParsedIdentifier, ParsedMeshDef> ParsedMeshMap;
+	typedef boost::container::flat_map<ParsedIdentifier, ParsedTextureDef> ParsedTextureMap;
 
 	struct ParsedResources
 	{
@@ -185,20 +208,20 @@ namespace glscene { namespace _detail {
 	struct ParsedMeshRefDef
 	{
 		FilePosition pos;
-		IdString meshId;
+		ParsedIdentifier meshId;
 		boost::optional<std::string> variant;
 
-		ParsedMeshRefDef(const IdString &_id) : meshId(_id) {}
+		ParsedMeshRefDef(const ParsedIdentifier &_id) : meshId(_id) {}
 	};
 
 	struct ParsedTextureRefDef
 	{
 		FilePosition pos;
 		unsigned int texUnit;
-		IdString textureId;
-		IdString samplerId;
+		ParsedIdentifier textureId;
+		ParsedIdentifier samplerId;
 
-		ParsedTextureRefDef(const IdString &_textureId, const IdString &_samplerId)
+		ParsedTextureRefDef(const ParsedIdentifier &_textureId, const ParsedIdentifier &_samplerId)
 			: textureId(_textureId)
 			, samplerId(_samplerId)
 		{}
@@ -208,10 +231,17 @@ namespace glscene { namespace _detail {
 	{
 		FilePosition pos;
 		unsigned int buffBinding;
-		IdString bufferId;
+		ParsedIdentifier bufferId;
 		unsigned int offset;
 
-		ParsedBufferRefDef(const IdString &_bufferId) : bufferId(_bufferId), offset(0) {}
+		ParsedBufferRefDef(const ParsedIdentifier &_bufferId) : bufferId(_bufferId), offset(0) {}
+	};
+
+	struct ParsedSingleProgramDef
+	{
+		FilePosition pos;
+		ParsedIdentifier programId;
+		std::vector<ParsedIdentifier> uniformReferences;
 	};
 
 	struct ParsedStyleData
@@ -225,10 +255,10 @@ namespace glscene { namespace _detail {
 	struct ParsedLocalDef
 	{
 		FilePosition pos;
-		IdString name;
+		ParsedIdentifier name;
 		ParsedStyleData data;
 
-		ParsedLocalDef(const IdString &_name) : name(_name) {}
+		ParsedLocalDef(const ParsedIdentifier &_name) : name(_name) {}
 	};
 
 	struct ParsedStyleDef
@@ -238,7 +268,7 @@ namespace glscene { namespace _detail {
 		ParsedStyleData data;
 	};
 
-	typedef boost::container::flat_map<IdString, ParsedStyleDef> ParsedStyleMap;
+	typedef boost::container::flat_map<ParsedIdentifier, ParsedStyleDef> ParsedStyleMap;
 
 	class LocalsInScope
 	{
@@ -248,7 +278,7 @@ namespace glscene { namespace _detail {
 			m_scope[local.name] = &local;
 		}
 
-		const ParsedLocalDef *IncludeLocal(const IdString &name) const
+		const ParsedLocalDef *IncludeLocal(const ParsedIdentifier &name) const
 		{
 			LocalScope::const_iterator theIt = m_scope.find(name);
 			if(theIt == m_scope.end())
@@ -257,21 +287,21 @@ namespace glscene { namespace _detail {
 		}
 
 	private:
-		typedef boost::container::flat_map<IdString, const ParsedLocalDef *> LocalScope;
+		typedef boost::container::flat_map<ParsedIdentifier, const ParsedLocalDef *> LocalScope;
 		LocalScope m_scope;
 	};
 
 	struct ParsedNodeDef
 	{
 		FilePosition pos;
-		boost::optional<IdString> name;
+		boost::optional<ParsedIdentifier> name;
 		LayerSet layers;
 		std::vector<ParsedNodeDef*> childNodes;
 		ParsedNodeDef *pParent;
 		ParsedTransformDef nodeTM;
 		ParsedTransformDef objectTM;
 		ParsedStyleMap styles;
-		boost::container::flat_map<IdString, FilePosition> localPositions;
+		boost::container::flat_map<ParsedIdentifier, FilePosition> localPositions;
 
 		ParsedNodeDef& operator=(const ParsedNodeDef &other)
 		{
@@ -302,8 +332,8 @@ namespace glscene { namespace _detail {
 		FilePosition pos;
 		LayerSet layers;
 		std::vector<std::string> layerOrder;
-		boost::container::flat_set<IdString> styleChecks;
-		boost::container::flat_map<IdString, FilePosition> nodeNamePositions;
+		boost::container::flat_set<ParsedIdentifier> styleChecks;
+		boost::container::flat_map<ParsedIdentifier, FilePosition> nodeNamePositions;
 		boost::container::stable_vector<ParsedNodeDef> nodes;
 		boost::container::stable_vector<ParsedLocalDef> allLocals;
 	};

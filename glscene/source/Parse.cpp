@@ -536,7 +536,7 @@ namespace glscene
 				while(IsCurrToken(TOK_IDENTIFIER))
 				{
 					std::string styleName = GetStringTokenData();
-					IdString styleId = styleName;
+					ParsedIdentifier styleId(styleName);
 					if(m_scene.styleChecks.find(styleId) != m_scene.styleChecks.end())
 						ThrowParseError("The check style '" + styleName + "' has already been defined.", curr_throw);
 					m_scene.styleChecks.insert(styleId);
@@ -576,7 +576,7 @@ namespace glscene
 
 			if(IsCurrToken(TOK_IDENTIFIER))
 			{
-				IdString nodeId = ParseIdentifier(m_scene.nodeNamePositions, false, TOK_NODE);
+				ParsedIdentifier nodeId = ParseIdentifier(m_scene.nodeNamePositions, false, TOK_NODE);
 				m_scene.nodeNamePositions[nodeId] = m_posStack.top();
 				node.name = nodeId;
 			}
@@ -734,7 +734,7 @@ namespace glscene
 			PosStackPusher push(*this);
 			EatOneToken();
 
-			IdString id = ParseIdentifier(node.localPositions, false, TOK_LOCAL);
+			ParsedIdentifier id = ParseIdentifier(node.localPositions, false, TOK_LOCAL);
 			m_scene.allLocals.emplace_back(id);
 			ParsedLocalDef &local = m_scene.allLocals[m_scene.allLocals.size() - 1];
 			local.pos = m_posStack.top();
@@ -754,9 +754,9 @@ namespace glscene
 			EatOneToken();
 
 			ExpectToken(TOK_IDENTIFIER);
-			IdString id(GetStringTokenData());
+			ParsedIdentifier id(GetStringTokenData());
 			if(node.styles.find(id) != node.styles.end())
-				MultipleIdentifierOfSameType(GetStringTokenData(), TOK_STYLE, GetPosFromDef(*node.styles.find(id)));
+				MultipleIdentifierOfSameType(id, TOK_STYLE, GetPosFromDef(*node.styles.find(id)));
 			if(!m_scene.styleChecks.empty())
 			{
 				if(m_scene.styleChecks.find(id) == m_scene.styleChecks.end())
@@ -775,11 +775,11 @@ namespace glscene
 				EatOneToken();
 				while(IsCurrToken(TOK_IDENTIFIER))
 				{
-					IdString usingId((GetStringTokenData()));
+					ParsedIdentifier usingId((GetStringTokenData()));
 					const ParsedLocalDef *pLocal = dest.scope.IncludeLocal(usingId);
 					if(!pLocal)
 					{
-						std::string msg = "The identifier name '" + std::string(usingId) +
+						std::string msg = "The identifier name '" + usingId.str() +
 							"' refers to a local definition that is not in scope at this point.";
 						ThrowParseError(msg, curr_throw);
 					}
@@ -820,8 +820,8 @@ namespace glscene
 					{
 						EatOneToken();
 						unsigned int texUnit = ParseSingleUInt();
-						IdString textureId = ParseIdentifier(m_resources.textures, true, tok.id());
-						IdString samplerId = ParseIdentifier(m_resources.samplers, true, TOK_SAMPLER_RES);
+						ParsedIdentifier textureId = ParseIdentifier(m_resources.textures, true, tok.id());
+						ParsedIdentifier samplerId = ParseIdentifier(m_resources.samplers, true, TOK_SAMPLER_RES);
 						data.textures.push_back(ParsedTextureRefDef(textureId, samplerId));
 						data.textures.back().pos = pos;
 						data.textures.back().texUnit = texUnit;
@@ -831,7 +831,7 @@ namespace glscene
 					{
 						EatOneToken();
 						unsigned int binding = ParseSingleUInt();
-						IdString bufferId = ParseIdentifier(m_resources.uniformBuffers, true, tok.id());
+						ParsedIdentifier bufferId = ParseIdentifier(m_resources.uniformBuffers, true, tok.id());
 						data.uniformBuffers.push_back(ParsedBufferRefDef(bufferId));
 						ParsedBufferRefDef &bufferDef = data.uniformBuffers.back();
 						bufferDef.pos = pos;
@@ -844,7 +844,7 @@ namespace glscene
 					{
 						EatOneToken();
 						unsigned int binding = ParseSingleUInt();
-						IdString bufferId = ParseIdentifier(m_resources.storageBuffers, true, tok.id());
+						ParsedIdentifier bufferId = ParseIdentifier(m_resources.storageBuffers, true, tok.id());
 						data.storageBuffers.push_back(ParsedBufferRefDef(bufferId));
 						ParsedBufferRefDef &bufferDef = data.storageBuffers.back();
 						bufferDef.pos = pos;
@@ -858,40 +858,40 @@ namespace glscene
 		}
 
 		template<typename MapType>
-		IdString ParseIdentifier(const MapType &search, bool mustFind, size_t currentCmd)
+		ParsedIdentifier ParseIdentifier(const MapType &search, bool mustFind, size_t currentCmd)
 		{
 			ExpectToken(TOK_IDENTIFIER);
 			std::string idToken = GetTokenText();
-			IdString ident(string_ref(&idToken[0] + 1, idToken.size() - 2));
+			ParsedIdentifier ident(string_ref(&idToken[0] + 1, idToken.size() - 2));
 
 			if(mustFind)
 			{
 				if(search.find(ident) == search.end())
-					FailedToFindIdentifier(idToken, currentCmd);
+					FailedToFindIdentifier(ident, currentCmd);
 			}
 			else
 			{
 				MapType::const_iterator foundIt = search.find(ident);
 				if(foundIt != search.end())
-					MultipleIdentifierOfSameType(idToken, currentCmd, GetPosFromDef(*foundIt));
+					MultipleIdentifierOfSameType(ident, currentCmd, GetPosFromDef(*foundIt));
 			}
 
 			EatOneToken();
 			return ident;
 		}
 
-		void FailedToFindIdentifier(const std::string &idToken, size_t currentCmd)
+		void FailedToFindIdentifier(const ParsedIdentifier &ident, size_t currentCmd)
 		{
-			std::string msg = "The identifier name '" + idToken + "' refers to a " +
+			std::string msg = "The identifier name '" + ident.str() + "' refers to a " +
 				GetTokenErrorName(currentCmd) + " that has not been defined.";
 			ThrowParseError(msg, curr_throw);
 		}
 
-		void MultipleIdentifierOfSameType(const std::string &idToken, size_t currentCmd,
+		void MultipleIdentifierOfSameType(const ParsedIdentifier &ident, size_t currentCmd,
 			const FilePosition &earlyDefPos)
 		{
 			std::stringstream str;
-			str << "The identifier name '" << idToken << "' has already been used in a ";
+			str << "The identifier name '" << ident.str() << "' has already been used in a ";
 			str << GetTokenErrorName(currentCmd) << " definition before. It may not be defined again." << std::endl;
 			str << "\tIt was first defined in file '" << earlyDefPos.fileName << "' line ";
 			str << earlyDefPos.lineNumber << " column " << earlyDefPos.columnNumber << std::endl;
@@ -925,7 +925,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_SAMPLER_RES);
-			IdString ident = ParseIdentifier(m_resources.samplers, false, TOK_SAMPLER_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.samplers, false, TOK_SAMPLER_RES);
 			ParsedSamplerDef &samplerData = m_resources.samplers[ident];
 			samplerData.pos = m_posStack.top();
 
@@ -984,7 +984,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_CAMERA_RES);
-			IdString ident = ParseIdentifier(m_resources.cameras, false, TOK_CAMERA_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.cameras, false, TOK_CAMERA_RES);
 			ParsedCameraDef &cameraData = m_resources.cameras[ident];
 			cameraData.pos = m_posStack.top();
 			
@@ -1103,7 +1103,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_UNIFORM_BUFFER_RES);
-			IdString ident = ParseIdentifier(m_resources.uniformBuffers, false, TOK_UNIFORM_BUFFER_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.uniformBuffers, false, TOK_UNIFORM_BUFFER_RES);
 			ParsedBufferDef &bufferDef = m_resources.uniformBuffers[ident];
 			bufferDef.pos = m_posStack.top();
 
@@ -1115,7 +1115,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_STORAGE_BUFFER_RES);
-			IdString ident = ParseIdentifier(m_resources.storageBuffers, false, TOK_STORAGE_BUFFER_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.storageBuffers, false, TOK_STORAGE_BUFFER_RES);
 			ParsedBufferDef &bufferDef = m_resources.storageBuffers[ident];
 			bufferDef.pos = m_posStack.top();
 
@@ -1145,7 +1145,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_MESH_RES);
-			IdString ident = ParseIdentifier(m_resources.meshes, false, TOK_MESH_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.meshes, false, TOK_MESH_RES);
 			ParsedMeshDef &meshDef = m_resources.meshes[ident];
 			meshDef.pos = m_posStack.top();
 
@@ -1199,7 +1199,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_TEXTURE_RES);
-			IdString ident = ParseIdentifier(m_resources.textures, false, TOK_TEXTURE_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.textures, false, TOK_TEXTURE_RES);
 			ParsedTextureDef &textureDef = m_resources.textures[ident];
 			textureDef.pos = m_posStack.top();
 
@@ -1224,7 +1224,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_PROGRAM_RES);
-			IdString ident = ParseIdentifier(m_resources.programs, false, TOK_PROGRAM_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.programs, false, TOK_PROGRAM_RES);
 			ParsedProgramDef &programDef = m_resources.programs[ident];
 			programDef.pos = m_posStack.top();
 			programDef.isSeparate = false;
@@ -1331,7 +1331,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_UNIFORM_RES);
-			IdString ident = ParseIdentifier(m_resources.uniforms, false, TOK_UNIFORM_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.uniforms, false, TOK_UNIFORM_RES);
 			ParsedUniformDef &uniformDef = m_resources.uniforms[ident];
 			uniformDef.pos = m_posStack.top();
 
