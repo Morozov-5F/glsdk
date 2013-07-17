@@ -566,7 +566,6 @@ namespace glscene
 			m_scene.nodes.emplace_back();
 
 			//Note: this is fine because `m_scene.nodes` is a stable_vector.
-			size_t size = m_scene.nodes.size();
 			ParsedNodeDef &node = m_scene.nodes[m_scene.nodes.size() - 1];	//stable_vector.back doesn't work.
 			node.pParent = inherit.pParent;
 			node.layers = inherit.layers;

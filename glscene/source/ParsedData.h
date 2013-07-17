@@ -220,6 +220,8 @@ namespace glscene { namespace _detail {
 		std::vector<ParsedTextureRefDef> textures;
 		std::vector<ParsedBufferRefDef> uniformBuffers;
 		std::vector<ParsedBufferRefDef> storageBuffers;
+
+		bool HasMesh() {return mesh.is_initialized();}
 	};
 
 	struct ParsedLocalDef

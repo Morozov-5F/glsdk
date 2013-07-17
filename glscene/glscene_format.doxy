@@ -1,15 +1,15 @@
 /**
-\page page_glscene_file_format GL Scene Graph File Format
+\page page_glscene_file_format Scene Graph File Format
 
 [TOC]
 
 The scene graph system's file format, exposed by the [parsing API](\ref module_glscene_parsing), is a fairly simple format.
 
-Files are expected to be UTF-8 text files. The line ending sytle doesn't matter; the parser can handle anything. Also, the format uses C++-style comments (ie: `//` syntax).
+Files are expected to be UTF-8 text files. The line ending sytle doesn't matter; the parser can handle anything. Also, the format uses C++-style comments (ie: `//` syntax), but *not* C-style comments.
 
 # Basic Syntax # {#page_glscene_file_format_syntax}
 
-This system uses a very rigid, well-defined basic syntax. Any sequence of non-number characters that is not bracketed by one of the delimiters listed below is treated as a keyword.
+This system uses a very rigid, well-defined syntax. Any sequence of non-number characters that is not bracketed by one of the delimiters listed below is treated as a keyword.
 
 ## Commands ## {#page_glscene_file_format_syntax_commands}
 
@@ -17,9 +17,9 @@ The general syntax is a sequence of commands. Every command begins with a keywor
 
 In addition to parameters, some commands contain other commands; such commands are called "compound commands". Subcommands effectively define data within the compound command. A sequence of subcommands is terminated with the `end` keyword. Commands that cannot have subcommands do not use the `end` keyword.
 
-Parameters can only be [strings](\ref page_glscene_file_format_syntax_strings) or [numbers](\ref page_glscene_file_format_syntax_numbers); they cannot be keywords (with a very few exceptions). Therefore a keyword defines a new command. Whether that new command is a sub-command of the previous command or a sibling command that simply followed the last command depends entirely on the last command itself.
+Parameters can only be [strings](\ref page_glscene_file_format_syntax_strings) or [numbers](\ref page_glscene_file_format_syntax_numbers); with a very few exceptions, keywords are not parameters. Therefore a keyword almost always defines a new command. Whether that new command is a sub-command of the previous command or a sibling command that simply followed the last command depends entirely on the last command itself.
 
-Generally speaking, non-compound commands have at most 3 parameters. Commands with more complex data will be compound commands with sub-commands. This makes it easier to provide default values, as well as making the format more readable.
+Generally speaking, non-compound commands will have a relatively small number of commands. Commands that need more complex data will be compound commands with sub-commands. This makes it easier to provide default values, as well as making the format more readable.
 
 Each compound command defines what commands may be sub-commands of it. They also define the expected sequence of these commands. Some commands are more rigid than others, specifying a strict order of sub-commands. Some commands allow more complex relationships between sub-commands, such that a sub-command can reference a previously-defined sub-command, much like C/C++ typenames and scoping.
 
@@ -48,25 +48,25 @@ The types of strings, and their delimiters, are:
 
 String Type       | Delimiter
 ----------------- | ---------
-`Identifier`      | `<Text>`
-`Filename`        | `"Text"`
-`GLSL Identifier` | `{Text}`
-`Enumerator`      | `[Text]`
-`Graph Name`      | `'Text'`
+`Identifier`      | `<string>`
+`Filename`        | `"string"`
+`GLSL Identifier` | `{string}`
+`Enumerator`      | `[string]`
+`Graph Name`      | `'string'`
 
 - `Identifier`: These strings are used as [identifier strings](\ref page_glscene_identifier_strings) within the scene graph. They name particular scene graph entities, like resources, nodes, and styles.
 
-    Identifier string names can only contain (English) letters, numbers, and the characters "_", ".", and "-". They cannot contain spaces. These are limitations of the parser, not of the Scene Graph's identifier string system.
+    Identifier string names can only contain (English) letters, numbers, and the characters "_", ".", and "-". They cannot contain spaces. These are (deliberate) limitations of the parser, not of the Scene Graph's identifier string system (which can accept any character).
 	
-- `Filename`: These represent file names or strings to be passed to the parser's loader as filenames. They can contain any character except " (and end-line characters). Though if you want file loading to work, you should stick to characters that your file system can work with.
+- `Filename`: These represent file names or strings to be passed to the loader given to the parser. These are generally considered filenames, though you can use them to mean whatever you want via a user-specified loader. They can contain any character except " (and end-line characters). Though your loader will probably define what are valid characters for a particular filename string.
 
-	While the Scene Graph can be in UTF-8 format, it is completely blind to Unicode itself. It will make no special effort to use any Unicode-based file loading.
-	
+	While the Scene Graph is in the UTF-8 encoding, it is completely blind to Unicode itself. The default loader will make no special effort to use any Unicode-based file loading APIs.
+
 - `GLSL Identifier`: These strings represent the name of an entity in a shader written in the OpenGL Shading Language. These are typically uniform names.
 
-	The valid characters here are the legal characters for a GLSL identifer. However, OpenGL uniform names can be aggregated into structs and arrays. So the name of a uniform often includes several identifers, separated by characters like "." and "[]". Therefore, `{unifName.member}` denotes a legal GLSL identifier by the scene graph format even though technically it is not an "identifier" by GLSL's grammar.
+	The valid characters here are the legal characters for a GLSL identifer. However, OpenGL uniform names can be aggregated into structs and arrays. So the name of a uniform often includes several identifers by GLSL reckoning, separated by characters like "." and "[]". Therefore, `{unifName.member}` denotes a legal GLSL identifier by the scene graph format even though technically it is not an "identifier" by GLSL's grammar.
 	
-- `Enumerator`: These strings represent a selection from one of a finite set of named possibilities. Texture filtering modes are an example of an enumerator. Unlike all other strings, they are not user *defined*; you can only use the enumerators that a particular command allows. If you use the wrong enumerators, you get an error. And they are case-sensitive, however no enumerators use uppercase characters.
+- `Enumerator`: These strings represent a selection from one of a finite set of named possibilities. Texture filtering modes are an example of an enumerator. Unlike all other strings, they are not user *defined*; you can only use the enumerators that a particular command allows. If you use the wrong enumerators, you get an error. All enumerators are lower-case, and you cannot use upper-case characters in a "[]" string.
 
 - `Graph Name`: This is a string name to be used for a concept within a graph. These are specifically *not* [identifier strings](\ref page_glscene_identifier_strings). They do represent concepts in the scene graph or associated objects. Examples of these are layer names and mesh variants.
 
@@ -92,7 +92,7 @@ Vector and matrix types have an expected number of values. To initialize these t
 
 Matrices in this system follow GLSL's conventions. They are *column major*; the first values are the first column of the matrix.
 
-You may also initialize a vector or matrix with one value (which again *must* be in parenthesis). Following GLSL conventions, vectors initialized with a single value will copy the value to all components. Matrices initialized to a value 
+You may also initialize a vector or matrix with one value (which again *must* be in parenthesis). Following GLSL conventions, vectors initialized with a single value will copy the value to all components. Matrices initialized with a single value will copy that value to the diagonal. So using `(1.0)` will result in the identity matrix.
 
 Quaternions are a special form of vector value. A quaternion is expected to be normalized (though the system will normalize any you provide). As such, constructing them from a single value is pointless, unless that single value is 0.5, which represents a very specific orientiation. So for quaternions, you must provide 4 values.
 
@@ -348,16 +348,16 @@ end
 
 The last command in a file must be a `scene` command. A file can only contain one `scene` command; it may not have more or fewer. And no `resources` commands (or any other commands) may follow it. The `scene` command is a compound command.
 
-The `scene` command is more rigidly structured in its content than the top-level `resources` command. The following commands must be provided, in order. Some of them are optional:
+The `scene` command is more rigidly structured in its content than the top-level `resources` command. The following commands must be provided in the given order. Some of them are optional:
 
-- `layer_defs`: Required. The parameters to this command are a series of graph names. These represent the names of the layers, as provided to glscene::SceneGraph::SceneGraph(), and the order you place them in the list is the order that they will be provided in.
-- `style_check`: Optional. The parameters to this command are a series of identifier strings. If you provide this command, the use of any style names not listed here will result in a parse error.
-- One or more `node` commands, [as described below](\ref page_glscene_file_format_syntax_scene_node).
+1. `layer_defs &apos;layer_names&apos; ...`: Required. The parameters to this command are a series of graph names. These represent the names of the layers, as provided to glscene::SceneGraph::SceneGraph(), and the order you place them in the list is the order that they will be provided in.
+2. `style_check <style_names> ...`: Optional. The parameters to this command are a series of identifier strings. If you provide this command, the use of any style names not listed here will result in a parse error.
+3. One or more `node` commands, [as described below](\ref page_glscene_file_format_syntax_scene_node).
 
 \par A Word on the Root Node
 The [GL Scene Graph](\ref module_glscene) has a root node. And glscene::SceneGraph freely allows you to fetch this node, add styles to it, change its transforms, and play with it as though it were any other node (mostly). However, the scene graph file format does not expose this functionality. You cannot set any of these things on the root node. This is quite deliberate.
 \par
-Becaue the root node is restricted in its functionality, such as re-parenting, deleting, and querying-by-name, the scene file format encourages you to create your own root. This makes it easier for you to move things around dynamically. It also makes it easier for you to change things later, since you can copy node definitions around more freely.
+Becaue the root node is restricted in its functionality (no re-parenting, deletion, querying by name, etc) the scene file format encourages you to create your own root. This makes it easier for you to move things around dynamically. It also makes it easier for you to change things later, since you can copy node definitions around more freely.
 
 ## Node ## {#page_glscene_file_format_syntax_scene_node}
 
@@ -373,16 +373,16 @@ The `node` command defines a child node in the scene graph system. It is the chi
 
 The contents of a node are rigidly ordered. The sub-commands must be provided in the following order:
 
-- `layers`: Optional. This provides a list of layers that the node is a member of. This list has some complex features in it, so there is [a section dedicated to them](\ref page_glscene_file_format_syntax_scene_node_layers).
-- `node_tm` and `object_tm`: Optional. The two commands can be in any order, but they can only be provided once and only before the next group of commands. These define the [node and object transforms](\ref module_glscene_node_transforms) for the node.
-- `local`: A local list of node style commands. These make it easy to have multiple styles and nodes use similar style commands. You may provide zero or more of these.
-- `style`: A style definition. You may provide zero or more of these.
-- `node`: A child node of the current node. You may provide zero or more of them.
+1. `layers`: Optional. This provides a list of layers that the node is a member of. This list has some complex features in it, so there is [a section dedicated to them](\ref page_glscene_file_format_syntax_scene_node_layers).
+2. `node_tm` and `object_tm`: Optional. The two commands can be in any order, but they can only be provided once each and only before the next group of commands. These define the [node and object transforms](\ref module_glscene_node_transforms) for the node.
+3. `local`: A local list of node style commands. These make it easy to have multiple styles and nodes use similar style commands. You may provide zero or more of these.
+4. `style`: A style definition. You may provide zero or more of these.
+5. `node`: A child node of the current node. You may provide zero or more of them.
 
 ### Node Layers ### {#page_glscene_file_format_syntax_scene_node_layers}
 
 ~~~~
-layers 'layer_to_add' +'layer_to_inherit' -'layer_to_remove' +-'layer_to_remove_and_inherit_removal'
+layers 'layer_to_add' +'layer_to_inherit' -'layer_to_remove' +-'layer_to_remove_and_inherit_removal'...
 ~~~~
 
 The parameters of `layers` is a list of graph names that define which layers this node is associated with. They can also be inherited, such that child nodes will be members of those layers without a `layers` command mentioning that layer.
@@ -453,7 +453,7 @@ The transformation commands are:
 	- `axis`: A vec3 axis. It does not need to be normalized.
 - `matrix (mat4)`: Provides an arbitrary matrix transform. This is a full 16-float, column-major matrix.
 
-#### Composed and Decomposed ####
+#### Composition ####
 
 The glscene::TransformData class can exist either as a decomposed transform or a composed one. The decomposed state is especially useful, as it allows the user to adjust the rotation without impacting any existing scales or translation, and vice-versa.
 
@@ -512,7 +512,7 @@ The only difference (in syntax) between the definition of `local` and `style` ar
 
 The commands available for `local` and `style` are as follows. They can be in any order, except for `using`, which can only be on `style` and if it is present, it must be the first command. All resource identifier names must have resources of the corresponding type defined by prior `resources` commands.
 
-- `using <local1> <local2> ...`: Optional, and only available for `style`. This defines the list of locals who's commands will be included in this `style`.
+- `using <locals>...`: Optional, and only available for `style`. This defines the list of `local`s who's commands will be included in this `style`.
 - `mesh <mesh_resource_name> 'mesh_variant_name'`: Optional, and only one can be provided. This defines the mesh resource to use in the `style`/`local`. If `mesh_resource_name` is not a mesh resource name previously defined by the scene graph, this will error.
 	- `mesh_variant_name`: The mesh's variant name. Optional.
 - `program` or `pipeline`: Optional, and only one can be provided. [These commands](\ref page_glscene_file_format_syntax_scene_node_program) set up the program resource(s) to use, as well as any global uniform resources to use with the program. `pipeline` sets up a separable program pipeline.
@@ -527,11 +527,11 @@ The commands available for `local` and `style` are as follows. They can be in an
 
 #### Style Validity ####
 
-The inclusion mechanism for styles, the ability for a `style` command to include the sub-commands of one or more `local` commands creates a separation between the syntax of a `style` and the semantics of it. Therefore, there are a number of additional rules surrounding styles that must be followed; failure to do so will result in a parse-time error.
+The inclusion mechanism for styles, the ability for a `style` command to include the sub-commands of one or more `local` commands, creates a separation between the syntax of a `style` and the semantics of it. Therefore, there are a number of additional rules surrounding styles that must be followed; failure to do so will result in a parse-time error.
 
 Every style must provide a `mesh` and a `program` or `pipeline` command, either directly or indirectly via inclusion. In order to allow inclusions to include these definitions, the `style` command is not required to have one of these. However, a style must define one or include a local that does define one.
 
-Also, a style must not provide more than one `mesh` command, nor may it provide more than one `program` or `pipeline`. And it cannot provide both a `program` or `pipeline` command. The `style` and `local` commands are syntactically prevented from providing multiple commands, but inclusions still make it possible.
+Also, a style must not provide more than one `mesh` command, nor may it provide more than one `program` or `pipeline`. And it cannot provide both a `program` and `pipeline` command. Individual `style` and `local` commands are syntactically prevented from providing multiple commands, but inclusion still makes this possible.
 
 A style must not include any two resource binding commands that bind to the same binding point. So if you have multiple texture bindings, eitehr directly or via inclusion, they must all bind to different texture units.
 
