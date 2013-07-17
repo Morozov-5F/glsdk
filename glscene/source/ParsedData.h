@@ -242,11 +242,40 @@ namespace glscene { namespace _detail {
 		FilePosition pos;
 		ParsedIdentifier programId;
 		std::vector<ParsedIdentifier> uniformReferences;
+
+		ParsedSingleProgramDef(const ParsedIdentifier &_programId) : programId(_programId) {}
 	};
+
+	struct ParsedProgramMask
+	{
+		ParsedSingleProgramDef prog;
+		unsigned int stages;
+
+		ParsedProgramMask(const ParsedIdentifier &_programId) : prog(_programId) {}
+	};
+
+	struct ParsedPipelineDef
+	{
+		FilePosition pos;
+		std::vector<ParsedProgramMask> progs;
+	};
+
+	typedef boost::variant<ParsedPipelineDef, ParsedSingleProgramDef> ParsedProgramVariantDef;
+
+	struct ProgramVariantDefVisit : public boost::static_visitor<FilePosition>
+	{
+		template<typename T> FilePosition operator()(const T& t) const {return t.pos;}
+	};
+
+	FilePosition GetFilePosition(const ParsedProgramVariantDef &def)
+	{
+		return boost::apply_visitor(ProgramVariantDefVisit(), def);
+	}
 
 	struct ParsedStyleData
 	{
 		boost::optional<ParsedMeshRefDef> mesh;
+		boost::optional<ParsedProgramVariantDef> prog;
 		std::vector<ParsedTextureRefDef> textures;
 		std::vector<ParsedBufferRefDef> uniformBuffers;
 		std::vector<ParsedBufferRefDef> storageBuffers;

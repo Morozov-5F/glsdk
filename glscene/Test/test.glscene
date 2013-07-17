@@ -66,6 +66,14 @@ scene
 				uniform_buffer 0 <ubuff>
 				uniform_buffer 1 <ubuff> 32
 				storage_buffer 0 <sbuff>
+				
+//				program <ident>
+//				end
+				
+				pipeline
+					program <ident> [vert] [frag] end
+					program <ident> [geom] end
+				end
 			end
 		end
 		

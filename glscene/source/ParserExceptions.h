@@ -3,7 +3,10 @@
 
 #include "ParserUtils.h"
 #include "ParserEnums.h"
+#include <sstream>
 #include <boost/optional.hpp>
+#include <boost/foreach.hpp>
+
 
 namespace glscene { namespace _detail
 {
@@ -263,7 +266,14 @@ namespace glscene { namespace _detail
 		std::string GetError(const Token &t, const EnumData<Mapped> &data)
 		{
 			std::string enumeration(data.enumName.begin(), data.enumName.end());
-			return "The enumerator '" + ExtractEnum(t) + "' cannot be used with '" + enumeration + "'.";
+			std::stringstream str;
+			str << "The enumerator '" << ExtractEnum(t) << "' cannot be used with the '" << enumeration << "' enumeration." << std::endl;
+			str << "Valid enumerators for this enumeration are: ";
+			BOOST_FOREACH(boost::string_ref theEnum, data.enumerators)
+			{
+				str << "\n\t'" << std::string(theEnum.begin(), theEnum.size()) << "'";
+			}
+			return str.str();
 		}
 	};
 

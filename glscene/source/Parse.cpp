@@ -282,6 +282,8 @@ namespace
 	const size_t g_legalStyleTokens[] =
 	{
 		TOK_MESH,
+		TOK_PROGRAM,
+		TOK_PIPELINE,
 		TOK_TEXTURE,
 		TOK_UNIFORM_BUFFER,
 		TOK_STORAGE_BUFFER,
@@ -796,6 +798,77 @@ namespace glscene
 			ExpectAndEatEndToken();
 		}
 
+		ParsedSingleProgramDef ParseSingleProgramDef()
+		{
+			PosStackPusher push(*this);
+			ExpectAndEatToken(TOK_PROGRAM);
+			
+			ParsedSingleProgramDef ret(ParseIdentifier(m_resources.programs, true, TOK_PROGRAM));
+			ret.pos = m_posStack.top();
+
+			if(IsCurrToken(TOK_ENUMERATOR))
+				ThrowParseError("Only 'program' commands in 'pipeline' can use stage names.", curr_throw);
+
+			while(IsCurrToken(TOK_UNIFORM))
+			{
+				EatOneToken();
+				ret.uniformReferences.push_back(ParseIdentifier(m_resources.uniforms, true, TOK_UNIFORM));
+			}
+
+			ExpectAndEatEndToken();
+
+			return ret;
+		}
+
+		ParsedProgramMask ParseProgramMask(boost::container::flat_map<GLenum, FilePosition> &priorPos)
+		{
+			PosStackPusher push(*this);
+			ExpectAndEatToken(TOK_PROGRAM);
+
+			ParsedProgramMask ret(ParseIdentifier(m_resources.programs, true, TOK_PROGRAM));
+			ret.prog.pos = m_posStack.top();
+			ret.stages = 0;
+
+			while(IsCurrToken(TOK_ENUMERATOR))
+			{
+				FilePosition pos = GetPositionForCurrToken();
+				GLenum stage = ParseEnumerator(g_programStageEnumeration);
+				if(priorPos.find(stage) != priorPos.end())
+				{
+					const FilePosition &oldPos = priorPos.find(stage)->second;
+					std::stringstream str;
+					str << "The stage name has already been used in a 'program' command ";
+					str << "in this 'pipeline' before. It may not be defined again." << std::endl;
+					str << "\tIt was first defined in file " << oldPos << std::endl;
+					str << "\t" << oldPos.theLine << std::endl;
+					str << "\t";
+					if(oldPos.columnNumber > 1)
+						str << std::setw(oldPos.columnNumber - 1) << " ";
+					str << "^- here" << std::endl;
+
+					throw BaseParseError(str.str(), pos);
+				}
+				priorPos.emplace(stage, pos);
+
+				ret.stages |= stage;
+			}
+
+			if(ret.stages == 0)
+				ThrowParseError("A 'program' subcommand of a 'pipeline' command must name at least one shader stage enumerator.");
+
+			while(IsCurrToken(TOK_UNIFORM))
+			{
+				EatOneToken();
+				ret.prog.uniformReferences.push_back(
+					ParseIdentifier(m_resources.uniforms, true, TOK_UNIFORM));
+			}
+
+			ExpectAndEatEndToken();
+
+			return ret;
+			
+		}
+
 		void ParseStyleData(ParsedStyleData &data, size_t owningId)
 		{
 			while(IsCurrTokenOneOf(g_legalStyleTokens))
@@ -814,6 +887,50 @@ namespace glscene
 						def.pos = pos;
 						if(IsCurrToken(TOK_GRAPH_NAME))
 							def.variant = ParseGraphName();
+					}
+					break;
+				case TOK_PROGRAM:
+					{
+						if(data.prog.is_initialized())
+							throw MultipleUseOfCommandError(tok, owningId);
+						data.prog = ParseSingleProgramDef();
+					}
+					break;
+				case TOK_PIPELINE:
+					{
+						PosStackPusher push(*this);
+						if(data.prog.is_initialized())
+							throw MultipleUseOfCommandError(tok, owningId);
+						data.prog = ParsedPipelineDef();
+						ParsedPipelineDef &pipeline = boost::get<ParsedPipelineDef>(data.prog.get());
+						pipeline.pos = GetPositionForCurrToken();
+						EatOneToken();
+						boost::container::flat_map<GLenum, FilePosition> priorPos;
+						while(IsCurrToken(TOK_PROGRAM))
+						{
+							pipeline.progs.push_back(ParseProgramMask(priorPos));
+							BOOST_FOREACH(const ParsedProgramMask &prog, boost::make_iterator_range(pipeline.progs, 0, -1))
+							{
+								if(prog.prog.programId == pipeline.progs.back().prog.programId)
+								{
+									const FilePosition &oldPos = prog.prog.pos;
+									std::stringstream str;
+									str << "The program identifier '" << prog.prog.programId.str() << "' has been used in this 'pipeline' before. ";
+									str << "A program can only be specified in one 'program' subcommand of a 'pipeline'." << std::endl;
+									str << "\tIt was first defined in file " << oldPos << std::endl;
+									str << "\t" << oldPos.theLine << std::endl;
+									str << "\t";
+									if(oldPos.columnNumber > 1)
+										str << std::setw(oldPos.columnNumber - 1) << " ";
+									str << "^- here" << std::endl;
+
+									throw BaseParseError(str.str(), pipeline.progs.back().prog.pos);
+								}
+							}
+						}
+						if(pipeline.progs.empty())
+							ThrowParseError("A 'pipeline' command must have at least one 'program' subcommand.");
+						ExpectAndEatEndToken();
 					}
 					break;
 				case TOK_TEXTURE:
@@ -1965,7 +2082,6 @@ namespace glscene
 		catch(BaseParseError &e)
 		{
 			std::stringstream str;
-			str << e.what() << std::endl;
 
 			if(!e.IsOutOfData())
 			{
@@ -1986,13 +2102,17 @@ namespace glscene
 				std::string line = pos.theLine;
 				line = boost::algorithm::replace_all_copy(line, "\t", "    ");
 
-				str <<
-					"In file \"" << pos.fileName <<
-					"\" line " << pos.lineNumber << " column " << column << std::endl <<
-					line << std::endl;
+				str << pos << e.what() << std::endl;
+//				str << e.what() << std::endl;
+				str << line << std::endl;
+
 				if(column > 1)
 					str << std::setw(column - 1) << " ";
 				str << "^- here" << std::endl;
+			}
+			else
+			{
+				str << e.what() << std::endl;
 			}
 
 			throw MalformedSceneFile(str.str());
