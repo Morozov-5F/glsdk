@@ -13,6 +13,7 @@
 #include <boost/variant.hpp>
 #include <boost/container/flat_set.hpp>
 #include "ResourceData.h"
+#include <ostream>
 
 namespace glscene { namespace _detail
 {
@@ -66,6 +67,12 @@ namespace glscene { namespace _detail
 		int columnNumber;
 		std::string theLine;
 	};
+
+	std::ostream &operator <<(std::ostream &out, const FilePosition &pos)
+	{
+		out << "'" << pos.fileName << "' (" << pos.lineNumber << ") : ";
+		return out;
+	}
 }}
 
 #endif //GLSDK_GLSCENE_PARSER_UTILITIES_H

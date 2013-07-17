@@ -282,6 +282,8 @@ namespace
 	const size_t g_legalStyleTokens[] =
 	{
 		TOK_MESH,
+		TOK_PROGRAM,
+		TOK_PIPELINE,
 		TOK_TEXTURE,
 		TOK_UNIFORM_BUFFER,
 		TOK_STORAGE_BUFFER,
@@ -536,7 +538,7 @@ namespace glscene
 				while(IsCurrToken(TOK_IDENTIFIER))
 				{
 					std::string styleName = GetStringTokenData();
-					IdString styleId = styleName;
+					ParsedIdentifier styleId(styleName);
 					if(m_scene.styleChecks.find(styleId) != m_scene.styleChecks.end())
 						ThrowParseError("The check style '" + styleName + "' has already been defined.", curr_throw);
 					m_scene.styleChecks.insert(styleId);
@@ -575,7 +577,7 @@ namespace glscene
 
 			if(IsCurrToken(TOK_IDENTIFIER))
 			{
-				IdString nodeId = ParseIdentifier(m_scene.nodeNamePositions, false, TOK_NODE);
+				ParsedIdentifier nodeId = ParseIdentifier(m_scene.nodeNamePositions, false, TOK_NODE);
 				m_scene.nodeNamePositions[nodeId] = m_posStack.top();
 				node.name = nodeId;
 			}
@@ -733,7 +735,7 @@ namespace glscene
 			PosStackPusher push(*this);
 			EatOneToken();
 
-			IdString id = ParseIdentifier(node.localPositions, false, TOK_LOCAL);
+			ParsedIdentifier id = ParseIdentifier(node.localPositions, false, TOK_LOCAL);
 			m_scene.allLocals.emplace_back(id);
 			ParsedLocalDef &local = m_scene.allLocals[m_scene.allLocals.size() - 1];
 			local.pos = m_posStack.top();
@@ -753,9 +755,9 @@ namespace glscene
 			EatOneToken();
 
 			ExpectToken(TOK_IDENTIFIER);
-			IdString id(GetStringTokenData());
+			ParsedIdentifier id(GetStringTokenData());
 			if(node.styles.find(id) != node.styles.end())
-				MultipleIdentifierOfSameType(GetStringTokenData(), TOK_STYLE, GetPosFromDef(*node.styles.find(id)));
+				MultipleIdentifierOfSameType(id, TOK_STYLE, GetPosFromDef(*node.styles.find(id)));
 			if(!m_scene.styleChecks.empty())
 			{
 				if(m_scene.styleChecks.find(id) == m_scene.styleChecks.end())
@@ -774,11 +776,11 @@ namespace glscene
 				EatOneToken();
 				while(IsCurrToken(TOK_IDENTIFIER))
 				{
-					IdString usingId((GetStringTokenData()));
+					ParsedIdentifier usingId((GetStringTokenData()));
 					const ParsedLocalDef *pLocal = dest.scope.IncludeLocal(usingId);
 					if(!pLocal)
 					{
-						std::string msg = "The identifier name '" + std::string(usingId) +
+						std::string msg = "The identifier name '" + usingId.str() +
 							"' refers to a local definition that is not in scope at this point.";
 						ThrowParseError(msg, curr_throw);
 					}
@@ -793,6 +795,77 @@ namespace glscene
 			ParseStyleData(style.data, TOK_STYLE);
 
 			ExpectAndEatEndToken();
+		}
+
+		ParsedSingleProgramDef ParseSingleProgramDef()
+		{
+			PosStackPusher push(*this);
+			ExpectAndEatToken(TOK_PROGRAM);
+			
+			ParsedSingleProgramDef ret(ParseIdentifier(m_resources.programs, true, TOK_PROGRAM));
+			ret.pos = m_posStack.top();
+
+			if(IsCurrToken(TOK_ENUMERATOR))
+				ThrowParseError("Only 'program' commands in 'pipeline' can use stage names.", curr_throw);
+
+			while(IsCurrToken(TOK_UNIFORM))
+			{
+				EatOneToken();
+				ret.uniformReferences.push_back(ParseIdentifier(m_resources.uniforms, true, TOK_UNIFORM));
+			}
+
+			ExpectAndEatEndToken();
+
+			return ret;
+		}
+
+		ParsedProgramMask ParseProgramMask(boost::container::flat_map<GLenum, FilePosition> &priorPos)
+		{
+			PosStackPusher push(*this);
+			ExpectAndEatToken(TOK_PROGRAM);
+
+			ParsedProgramMask ret(ParseIdentifier(m_resources.programs, true, TOK_PROGRAM));
+			ret.prog.pos = m_posStack.top();
+			ret.stages = 0;
+
+			while(IsCurrToken(TOK_ENUMERATOR))
+			{
+				FilePosition pos = GetPositionForCurrToken();
+				GLenum stage = ParseEnumerator(g_programStageEnumeration);
+				if(priorPos.find(stage) != priorPos.end())
+				{
+					const FilePosition &oldPos = priorPos.find(stage)->second;
+					std::stringstream str;
+					str << "The stage name has already been used in a 'program' command ";
+					str << "in this 'pipeline' before. It may not be defined again." << std::endl;
+					str << "\tIt was first defined in file " << oldPos << std::endl;
+					str << "\t" << oldPos.theLine << std::endl;
+					str << "\t";
+					if(oldPos.columnNumber > 1)
+						str << std::setw(oldPos.columnNumber - 1) << " ";
+					str << "^- here" << std::endl;
+
+					throw BaseParseError(str.str(), pos);
+				}
+				priorPos.emplace(stage, pos);
+
+				ret.stages |= stage;
+			}
+
+			if(ret.stages == 0)
+				ThrowParseError("A 'program' subcommand of a 'pipeline' command must name at least one shader stage enumerator.");
+
+			while(IsCurrToken(TOK_UNIFORM))
+			{
+				EatOneToken();
+				ret.prog.uniformReferences.push_back(
+					ParseIdentifier(m_resources.uniforms, true, TOK_UNIFORM));
+			}
+
+			ExpectAndEatEndToken();
+
+			return ret;
+			
 		}
 
 		void ParseStyleData(ParsedStyleData &data, size_t owningId)
@@ -815,12 +888,56 @@ namespace glscene
 							def.variant = ParseGraphName();
 					}
 					break;
+				case TOK_PROGRAM:
+					{
+						if(data.prog.is_initialized())
+							throw MultipleUseOfCommandError(tok, owningId);
+						data.prog = ParseSingleProgramDef();
+					}
+					break;
+				case TOK_PIPELINE:
+					{
+						PosStackPusher push(*this);
+						if(data.prog.is_initialized())
+							throw MultipleUseOfCommandError(tok, owningId);
+						data.prog = ParsedPipelineDef();
+						ParsedPipelineDef &pipeline = boost::get<ParsedPipelineDef>(data.prog.get());
+						pipeline.pos = GetPositionForCurrToken();
+						EatOneToken();
+						boost::container::flat_map<GLenum, FilePosition> priorPos;
+						while(IsCurrToken(TOK_PROGRAM))
+						{
+							pipeline.progs.push_back(ParseProgramMask(priorPos));
+							BOOST_FOREACH(const ParsedProgramMask &prog, boost::make_iterator_range(pipeline.progs, 0, -1))
+							{
+								if(prog.prog.programId == pipeline.progs.back().prog.programId)
+								{
+									const FilePosition &oldPos = prog.prog.pos;
+									std::stringstream str;
+									str << "The program identifier '" << prog.prog.programId.str() << "' has been used in this 'pipeline' before. ";
+									str << "A program can only be specified in one 'program' subcommand of a 'pipeline'." << std::endl;
+									str << "\tIt was first defined in file " << oldPos << std::endl;
+									str << "\t" << oldPos.theLine << std::endl;
+									str << "\t";
+									if(oldPos.columnNumber > 1)
+										str << std::setw(oldPos.columnNumber - 1) << " ";
+									str << "^- here" << std::endl;
+
+									throw BaseParseError(str.str(), pipeline.progs.back().prog.pos);
+								}
+							}
+						}
+						if(pipeline.progs.empty())
+							ThrowParseError("A 'pipeline' command must have at least one 'program' subcommand.");
+						ExpectAndEatEndToken();
+					}
+					break;
 				case TOK_TEXTURE:
 					{
 						EatOneToken();
 						unsigned int texUnit = ParseSingleUInt();
-						IdString textureId = ParseIdentifier(m_resources.textures, true, tok.id());
-						IdString samplerId = ParseIdentifier(m_resources.samplers, true, TOK_SAMPLER_RES);
+						ParsedIdentifier textureId = ParseIdentifier(m_resources.textures, true, tok.id());
+						ParsedIdentifier samplerId = ParseIdentifier(m_resources.samplers, true, TOK_SAMPLER_RES);
 						data.textures.push_back(ParsedTextureRefDef(textureId, samplerId));
 						data.textures.back().pos = pos;
 						data.textures.back().texUnit = texUnit;
@@ -830,7 +947,7 @@ namespace glscene
 					{
 						EatOneToken();
 						unsigned int binding = ParseSingleUInt();
-						IdString bufferId = ParseIdentifier(m_resources.uniformBuffers, true, tok.id());
+						ParsedIdentifier bufferId = ParseIdentifier(m_resources.uniformBuffers, true, tok.id());
 						data.uniformBuffers.push_back(ParsedBufferRefDef(bufferId));
 						ParsedBufferRefDef &bufferDef = data.uniformBuffers.back();
 						bufferDef.pos = pos;
@@ -843,7 +960,7 @@ namespace glscene
 					{
 						EatOneToken();
 						unsigned int binding = ParseSingleUInt();
-						IdString bufferId = ParseIdentifier(m_resources.storageBuffers, true, tok.id());
+						ParsedIdentifier bufferId = ParseIdentifier(m_resources.storageBuffers, true, tok.id());
 						data.storageBuffers.push_back(ParsedBufferRefDef(bufferId));
 						ParsedBufferRefDef &bufferDef = data.storageBuffers.back();
 						bufferDef.pos = pos;
@@ -857,40 +974,40 @@ namespace glscene
 		}
 
 		template<typename MapType>
-		IdString ParseIdentifier(const MapType &search, bool mustFind, size_t currentCmd)
+		ParsedIdentifier ParseIdentifier(const MapType &search, bool mustFind, size_t currentCmd)
 		{
 			ExpectToken(TOK_IDENTIFIER);
 			std::string idToken = GetTokenText();
-			IdString ident(string_ref(&idToken[0] + 1, idToken.size() - 2));
+			ParsedIdentifier ident(string_ref(&idToken[0] + 1, idToken.size() - 2));
 
 			if(mustFind)
 			{
 				if(search.find(ident) == search.end())
-					FailedToFindIdentifier(idToken, currentCmd);
+					FailedToFindIdentifier(ident, currentCmd);
 			}
 			else
 			{
 				MapType::const_iterator foundIt = search.find(ident);
 				if(foundIt != search.end())
-					MultipleIdentifierOfSameType(idToken, currentCmd, GetPosFromDef(*foundIt));
+					MultipleIdentifierOfSameType(ident, currentCmd, GetPosFromDef(*foundIt));
 			}
 
 			EatOneToken();
 			return ident;
 		}
 
-		void FailedToFindIdentifier(const std::string &idToken, size_t currentCmd)
+		void FailedToFindIdentifier(const ParsedIdentifier &ident, size_t currentCmd)
 		{
-			std::string msg = "The identifier name '" + idToken + "' refers to a " +
+			std::string msg = "The identifier name '" + ident.str() + "' refers to a " +
 				GetTokenErrorName(currentCmd) + " that has not been defined.";
 			ThrowParseError(msg, curr_throw);
 		}
 
-		void MultipleIdentifierOfSameType(const std::string &idToken, size_t currentCmd,
+		void MultipleIdentifierOfSameType(const ParsedIdentifier &ident, size_t currentCmd,
 			const FilePosition &earlyDefPos)
 		{
 			std::stringstream str;
-			str << "The identifier name '" << idToken << "' has already been used in a ";
+			str << "The identifier name '" << ident.str() << "' has already been used in a ";
 			str << GetTokenErrorName(currentCmd) << " definition before. It may not be defined again." << std::endl;
 			str << "\tIt was first defined in file '" << earlyDefPos.fileName << "' line ";
 			str << earlyDefPos.lineNumber << " column " << earlyDefPos.columnNumber << std::endl;
@@ -924,7 +1041,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_SAMPLER_RES);
-			IdString ident = ParseIdentifier(m_resources.samplers, false, TOK_SAMPLER_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.samplers, false, TOK_SAMPLER_RES);
 			ParsedSamplerDef &samplerData = m_resources.samplers[ident];
 			samplerData.pos = m_posStack.top();
 
@@ -983,7 +1100,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_CAMERA_RES);
-			IdString ident = ParseIdentifier(m_resources.cameras, false, TOK_CAMERA_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.cameras, false, TOK_CAMERA_RES);
 			ParsedCameraDef &cameraData = m_resources.cameras[ident];
 			cameraData.pos = m_posStack.top();
 			
@@ -1102,7 +1219,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_UNIFORM_BUFFER_RES);
-			IdString ident = ParseIdentifier(m_resources.uniformBuffers, false, TOK_UNIFORM_BUFFER_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.uniformBuffers, false, TOK_UNIFORM_BUFFER_RES);
 			ParsedBufferDef &bufferDef = m_resources.uniformBuffers[ident];
 			bufferDef.pos = m_posStack.top();
 
@@ -1114,7 +1231,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_STORAGE_BUFFER_RES);
-			IdString ident = ParseIdentifier(m_resources.storageBuffers, false, TOK_STORAGE_BUFFER_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.storageBuffers, false, TOK_STORAGE_BUFFER_RES);
 			ParsedBufferDef &bufferDef = m_resources.storageBuffers[ident];
 			bufferDef.pos = m_posStack.top();
 
@@ -1144,7 +1261,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_MESH_RES);
-			IdString ident = ParseIdentifier(m_resources.meshes, false, TOK_MESH_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.meshes, false, TOK_MESH_RES);
 			ParsedMeshDef &meshDef = m_resources.meshes[ident];
 			meshDef.pos = m_posStack.top();
 
@@ -1198,7 +1315,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_TEXTURE_RES);
-			IdString ident = ParseIdentifier(m_resources.textures, false, TOK_TEXTURE_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.textures, false, TOK_TEXTURE_RES);
 			ParsedTextureDef &textureDef = m_resources.textures[ident];
 			textureDef.pos = m_posStack.top();
 
@@ -1223,7 +1340,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_PROGRAM_RES);
-			IdString ident = ParseIdentifier(m_resources.programs, false, TOK_PROGRAM_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.programs, false, TOK_PROGRAM_RES);
 			ParsedProgramDef &programDef = m_resources.programs[ident];
 			programDef.pos = m_posStack.top();
 			programDef.isSeparate = false;
@@ -1330,7 +1447,7 @@ namespace glscene
 			PosStackPusher push(*this);
 
 			ExpectAndEatToken(TOK_UNIFORM_RES);
-			IdString ident = ParseIdentifier(m_resources.uniforms, false, TOK_UNIFORM_RES);
+			ParsedIdentifier ident = ParseIdentifier(m_resources.uniforms, false, TOK_UNIFORM_RES);
 			ParsedUniformDef &uniformDef = m_resources.uniforms[ident];
 			uniformDef.pos = m_posStack.top();
 
@@ -1964,7 +2081,6 @@ namespace glscene
 		catch(BaseParseError &e)
 		{
 			std::stringstream str;
-			str << e.what() << std::endl;
 
 			if(!e.IsOutOfData())
 			{
@@ -1985,13 +2101,17 @@ namespace glscene
 				std::string line = pos.theLine;
 				line = boost::algorithm::replace_all_copy(line, "\t", "    ");
 
-				str <<
-					"In file \"" << pos.fileName <<
-					"\" line " << pos.lineNumber << " column " << column << std::endl <<
-					line << std::endl;
+				str << pos << e.what() << std::endl;
+//				str << e.what() << std::endl;
+				str << line << std::endl;
+
 				if(column > 1)
 					str << std::setw(column - 1) << " ";
 				str << "^- here" << std::endl;
+			}
+			else
+			{
+				str << e.what() << std::endl;
 			}
 
 			throw MalformedSceneFile(str.str());

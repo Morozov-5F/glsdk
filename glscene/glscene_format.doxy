@@ -579,6 +579,14 @@ The `program` command causes the style to use a specific, single program which c
 
 The `pipeline` subcommand `program` works almost identically to the higher-level `program` command, except that the `program_resource` is followed by a sequence of `[stage]` enumerators. These enumerators define which stages the given program affects; they are a list and at least one stage must be specified. Multiple `program` subcommands can be listed, but the same stage cannot be specified multiple times. Also, the same `program` subcommand cannot use the same stage twice.
 
+The possible `[stage]` values are:
+
+- `vert`
+- `tess_control`
+- `tess_eval`
+- `geom`
+- `frag`
+
 The `program` command (whether within `pipeline` or not) has only one sub-command. It can appear 0 or more times:
 
 - `uniform <uniform_resource>`: Defines a global uniform resource to be used by the program object.
