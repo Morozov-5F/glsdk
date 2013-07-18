@@ -553,6 +553,7 @@ namespace glscene
 		ResourceRef(ResourceData &data) : m_data(data) {}
 
 		friend class SceneGraph;
+		friend ResourceData &GetResources(ResourceRef &refs);
 	};
 	///@}
 }

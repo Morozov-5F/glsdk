@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "glscene/Parse.h"
 
 namespace glscene { namespace _detail {
 
@@ -98,7 +99,7 @@ namespace glscene { namespace _detail {
 
 	template<typename Def>
 	FilePosition GetFilePosition(const Def &def) {return def.pos;}
-	FilePosition GetFilePosition(const FilePosition &pos) {return pos;}
+	inline FilePosition GetFilePosition(const FilePosition &pos) {return pos;}
 
 	template<typename Key, typename Def>
 	FilePosition GetPosFromDef(const std::pair<Key, Def> &pairDef) {return GetFilePosition(pairDef.second);}
@@ -267,7 +268,7 @@ namespace glscene { namespace _detail {
 		template<typename T> FilePosition operator()(const T& t) const {return t.pos;}
 	};
 
-	FilePosition GetFilePosition(const ParsedProgramVariantDef &def)
+	inline FilePosition GetFilePosition(const ParsedProgramVariantDef &def)
 	{
 		return boost::apply_visitor(ProgramVariantDefVisit(), def);
 	}
@@ -368,6 +369,9 @@ namespace glscene { namespace _detail {
 		boost::container::stable_vector<ParsedNodeDef> nodes;
 		boost::container::stable_vector<ParsedLocalDef> allLocals;
 	};
+
+	SceneGraph *CreateSceneGraph(const ParsedSceneGraphDef &graphData,
+		const ParsedResources &resources, const BaseLoader & loader);
 }}
 
 #endif //GLSDK_GLSCENE_PARSED_DATA_H

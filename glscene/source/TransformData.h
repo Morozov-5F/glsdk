@@ -128,6 +128,8 @@ namespace glscene
 			m_matrix = matrix;
 		}
 
+		void SetComposable(const ComposableMatrix &newMatrix) {m_matrix = newMatrix;}
+
 	private:
 		ComposableMatrix m_matrix;
 

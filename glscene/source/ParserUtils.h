@@ -68,7 +68,7 @@ namespace glscene { namespace _detail
 		std::string theLine;
 	};
 
-	std::ostream &operator <<(std::ostream &out, const FilePosition &pos)
+	inline std::ostream &operator <<(std::ostream &out, const FilePosition &pos)
 	{
 		out << "'" << pos.fileName << "' (" << pos.lineNumber << ") : ";
 		return out;

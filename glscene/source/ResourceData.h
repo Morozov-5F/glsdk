@@ -241,6 +241,11 @@ namespace glscene
 
 		int m_numIncomplete;
 	};
+
+	inline ResourceData &GetResources(ResourceRef &refs)
+	{
+		return refs.m_data.get();
+	}
 }
 
 

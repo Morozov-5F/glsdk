@@ -504,6 +504,9 @@ namespace glscene
 			ExpectAndEatEndToken();
 		}
 
+		const ParsedSceneGraphDef &GetSceneGraph() const {return m_scene;}
+		const ParsedResources &GetResources() const {return m_resources;}
+
 	private:
 		void EatOneToken() {m_rng.advance_begin(1);}
 
@@ -2058,9 +2061,10 @@ namespace glscene
 			std::istreambuf_iterator<char>());
 	}
 
-	SceneGraph * ParseFromMemory( boost::string_ref graphString, const BaseLoader & loader )
+	SceneGraph * ParseFromString( boost::string_ref graphString, std::string filename,
+		const BaseLoader & loader )
 	{
-		pos_iterator currIt((graphString.begin()), graphString.end());
+		pos_iterator currIt((graphString.begin()), graphString.end(), filename);
 		currIt.set_tabchars(4);
 		simple_lexer<lexer_type> lexing;
 
@@ -2072,11 +2076,13 @@ namespace glscene
 
 			ThrowOnInvalid validity;
 			SkipWhitespace skipper;
-			MakeParser(currIt, rng
-				| boost::adaptors::filtered(validity)
-				| boost::adaptors::filtered(skipper)).ParseSceneGraph();
 
-			return NULL;
+			BOOST_AUTO(parser, MakeParser(currIt, rng
+				| boost::adaptors::filtered(validity)
+				| boost::adaptors::filtered(skipper)));
+			parser.ParseSceneGraph();
+
+			return CreateSceneGraph(parser.GetSceneGraph(), parser.GetResources(), loader);
 		}
 		catch(BaseParseError &e)
 		{
@@ -2102,7 +2108,7 @@ namespace glscene
 				line = boost::algorithm::replace_all_copy(line, "\t", "    ");
 
 				str << pos << e.what() << std::endl;
-//				str << e.what() << std::endl;
+				//				str << e.what() << std::endl;
 				str << line << std::endl;
 
 				if(column > 1)
@@ -2116,6 +2122,11 @@ namespace glscene
 
 			throw MalformedSceneFile(str.str());
 		}
+	}
+
+	SceneGraph * ParseFromMemory( boost::string_ref graphString, const BaseLoader & loader )
+	{
+		return ParseFromString(graphString, "memory", loader);
 	}
 
 	SceneGraph * ParseFromFile( boost::string_ref filename, const BaseLoader & loader )
