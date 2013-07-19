@@ -24,6 +24,12 @@
 int g_width = 640;
 int g_height = 480;
 
+glscene::SceneGraph *g_pGraph = NULL;
+std::string g_nameCamera("main-camera");
+
+glutil::ObjectData g_objData = {glm::vec3(0, 3.0f, 0), glm::fquat(1.0f, 0.0f, 0.0f, 0.0f)};
+glutil::ObjectPole g_objectPole(g_objData, 90.0f/250.0f,
+								glutil::MB_RIGHT_BTN, NULL);
 
 void init()
 {
@@ -42,6 +48,13 @@ void display()
 {
 	glViewport(0, 0, g_width, g_height);						// Reset The Current Viewport
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear Screen And Depth Buffer
+
+	glm::mat4 persp = glm::perspective(45.0f, g_width/(float)g_height, 0.1f, 100.0f);
+	g_pGraph->GetResources().SetUniform("perspective_matrix", persp);
+	SetMatrixCompose(GetNodeTM(*g_pGraph->FindNode("object")),
+		g_objectPole.CalcMatrix());
+
+	g_pGraph->Render(g_pGraph->GetResources().GetCamera(g_nameCamera).CalcMatrix(), glscene::ORDER_ARBITRARY, 0, "main");
 
 	glfwSwapBuffers();
 }
@@ -88,22 +101,18 @@ void GLFWCALL mouse_button_callback(int button, int action)
 	case GLFW_MOUSE_BUTTON_RIGHT: poleButton = glutil::MB_RIGHT_BTN; break;
 	}
 
-/*
 	g_objectPole.MouseClick((glutil::MouseButtons)poleButton, action == GLFW_PRESS, modifiers, mousePos);
 
 	if(g_pGraph)
 		g_pGraph->GetResources().GetCamera(g_nameCamera).MouseClick(
 			(glutil::MouseButtons)poleButton, action == GLFW_PRESS, modifiers, mousePos);
-*/
 }
 
 void GLFWCALL mouse_move_callback(int x, int y)
 {
-/*
 	g_objectPole.MouseMove(glm::ivec2(x, y));
 	if(g_pGraph)
 		g_pGraph->GetResources().GetCamera(g_nameCamera).MouseMove(glm::ivec2(x, y));
-*/
 }
 
 void GLFWCALL mouse_wheel_callback(int pos)
@@ -116,11 +125,9 @@ void GLFWCALL mouse_wheel_callback(int pos)
 	glfwGetMousePos(&mousePos.x, &mousePos.y);
 	int modifiers = calc_glfw_modifiers();
 
-/*
 	g_objectPole.MouseWheel(delta, modifiers, mousePos);
 	if(g_pGraph)
 		g_pGraph->GetResources().GetCamera(g_nameCamera).MouseWheel(delta, modifiers, mousePos);
-*/
 
 	lastPos = pos;
 }
@@ -134,10 +141,8 @@ void GLFWCALL character_callback(int unicodePoint, int action)
 	if(unicodePoint > 127)
 		return;
 
-/*
 	if(g_pGraph)
 		g_pGraph->GetResources().GetCamera(g_nameCamera).CharPress((char)unicodePoint);
-*/
 }
 
 
@@ -176,14 +181,16 @@ int main(int argc, char** argv)
 	{
 		try
 		{
-			glscene::ParseFromFile("test.glscene");
+			g_pGraph = glscene::ParseFromFile("test.glscene");
+			g_objectPole.SetLookatProvider(&g_pGraph->GetResources().GetCamera(g_nameCamera));
 		}
 		catch(std::runtime_error &e)
 		{
 			printf("%s\n", e.what());
+			glfwTerminate();
+			return 0;
 		}
 
-/*
 		//Main loop
 		while(true)
 		{
@@ -194,7 +201,8 @@ int main(int argc, char** argv)
 
 			glfwSleep(0.005f);
 		}
-*/
+
+		delete g_pGraph;
 	}
 
 	glfwTerminate();

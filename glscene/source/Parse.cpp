@@ -2136,6 +2136,6 @@ namespace glscene
 		std::string txtFile((std::istreambuf_iterator<char>(loadFile)),
 			std::istreambuf_iterator<char>());
 
-		return ParseFromMemory(txtFile, loader);
+		return ParseFromString(txtFile, std::string(filename.data(), filename.size()), loader);
 	}
 }

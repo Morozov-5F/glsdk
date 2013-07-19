@@ -130,7 +130,10 @@ namespace glscene { namespace _detail {
 		bool hasOrientation;
 		bool hasScale;
 
-		ParsedDecomposedTransform() : hasOrientation(false), hasScale(false) {}
+		ParsedDecomposedTransform()
+			: mat(DecomposedMatrix::CreateDefault())
+			, hasOrientation(false)
+			, hasScale(false) {}
 	};
 
 	typedef boost::variant<glm::mat4, ParsedDecomposedTransform> ParsedTransform;
@@ -263,12 +266,12 @@ namespace glscene { namespace _detail {
 
 	typedef boost::variant<ParsedPipelineDef, ParsedSingleProgramDef> ParsedProgramVariantDef;
 
-	struct ProgramVariantDefVisit : public boost::static_visitor<FilePosition>
+	struct ProgramVariantDefVisit : public boost::static_visitor<const FilePosition &>
 	{
-		template<typename T> FilePosition operator()(const T& t) const {return t.pos;}
+		template<typename T> const FilePosition &operator()(const T& t) const {return t.pos;}
 	};
 
-	inline FilePosition GetFilePosition(const ParsedProgramVariantDef &def)
+	inline const FilePosition &GetFilePosition(const ParsedProgramVariantDef &def)
 	{
 		return boost::apply_visitor(ProgramVariantDefVisit(), def);
 	}

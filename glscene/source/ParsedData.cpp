@@ -1,6 +1,7 @@
 
 #include "pch.h"
 
+#include <sstream>
 #include <boost/container/flat_map.hpp>
 #include <boost/variant.hpp>
 #include "glscene/SceneGraph.h"
@@ -17,6 +18,8 @@
 #include "ParsedData.h"
 #include "glscene/Parse.h"
 #include "ParserEnums.h"
+#include "glscene/Style.h"
+#include "ParserExceptions.h"
 
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
@@ -268,6 +271,153 @@ namespace glscene { namespace _detail {
 		}
 	};
 
+	typedef boost::container::flat_map<unsigned int, const FilePosition *> UsedBindingMap;
+
+	struct UsedData
+	{
+		const FilePosition *pMeshPos;
+		const FilePosition *pProgramPos;
+		UsedBindingMap textures;
+		UsedBindingMap uniformBuffers;
+		UsedBindingMap storageBuffers;
+
+		UsedData() : pMeshPos(), pProgramPos() {}
+	};
+
+	void ThrowMultipleUseError(const std::string &name, const FilePosition &firstDef,
+		const FilePosition &currDef)
+	{
+		std::stringstream str;
+		str << "A " << name << " has already been imported into this style.\n";
+		str << "\tThe first " << name << " was defined here: " << firstDef << std::endl;
+		str << "\t" << firstDef.theLine << std::endl;
+		str << "\t";
+		if(firstDef.columnNumber > 1)
+			str << std::setw(firstDef.columnNumber - 1) << " ";
+		str << "^- here";
+
+		throw BaseParseError(str.str(), currDef);
+	}
+
+	void ThrowMultipleBindingError(boost::string_ref name, unsigned int bindingIx,
+		const FilePosition &firstDef, const FilePosition &currDef)
+	{
+		std::stringstream str;
+		str << "The " << name << " binding to " << bindingIx << " is already in use.\n";
+		str << "\tThe first " << name << " binding was defined here: " << firstDef << std::endl;
+		str << "\t" << firstDef.theLine << std::endl;
+		str << "\t";
+		if(firstDef.columnNumber > 1)
+			str << std::setw(firstDef.columnNumber - 1) << " ";
+		str << "^- here";
+
+		throw BaseParseError(str.str(), currDef);
+	}
+
+	struct FetchProgramStyle : public boost::static_visitor<ProgramBinding>
+	{
+		ProgramBinding operator()(const ParsedPipelineDef &pipeDef) const
+		{
+			SeparableProgramBinding ret;
+
+			ret.pipeline.reserve(pipeDef.progs.size());
+			BOOST_FOREACH(const ParsedProgramMask &mask, pipeDef.progs)
+			{
+				ret.pipeline.push_back(ProgramMask());
+				ProgramMask &newMask = ret.pipeline.back();
+				newMask.stages = mask.stages;
+				newMask.prog = GetBinding(mask.prog);
+			}
+
+			return ret;
+		}
+
+		ProgramBinding operator()(const ParsedSingleProgramDef &progDef) const
+		{
+			return GetBinding(progDef);
+		}
+
+		static SingleProgramBinding GetBinding(const ParsedSingleProgramDef &progDef)
+		{
+			SingleProgramBinding ret;
+
+			ret.programId = progDef.programId.str();
+
+			ret.uniformIds.reserve(progDef.uniformReferences.size());
+			BOOST_FOREACH(const ParsedIdentifier &id, progDef.uniformReferences)
+			{
+				ret.uniformIds.push_back(id.str());
+			}
+
+			return ret;
+		}
+	};
+
+	void ApplyStyleData(StyleInfo &info, UsedData &used, const ParsedStyleData &data)
+	{
+		if(data.mesh)
+		{
+			if(used.pMeshPos)
+				ThrowMultipleUseError("mesh", *used.pMeshPos, data.mesh->pos);
+			used.pMeshPos = &data.mesh->pos;
+			info.meshResourceId = data.mesh->meshId.str();
+			info.meshVariantString = data.mesh->variant;
+		}
+
+		if(data.prog)
+		{
+			if(used.pProgramPos)
+				ThrowMultipleUseError("program", *used.pProgramPos, GetFilePosition(data.prog.get()));
+			used.pProgramPos = &GetFilePosition(data.prog.get());
+			info.progBinding = boost::apply_visitor(FetchProgramStyle(), data.prog.get());
+		}
+
+		BOOST_FOREACH(const ParsedTextureRefDef &texDef, data.textures)
+		{
+			if(used.textures.find(texDef.texUnit) != used.textures.end())
+				ThrowMultipleBindingError("texture", texDef.texUnit, *used.textures[texDef.texUnit], texDef.pos);
+			used.textures[texDef.texUnit] = &texDef.pos;
+			info.textureBindings.push_back(TextureBinding());
+			TextureBinding &binding = info.textureBindings.back();
+			binding.textureUnit = texDef.texUnit;
+			binding.textureId = texDef.textureId.str();
+			binding.samplerId = texDef.samplerId.str();
+		}
+
+		BOOST_FOREACH(const ParsedBufferRefDef &bufDef, data.uniformBuffers)
+		{
+			if(used.uniformBuffers.find(bufDef.buffBinding) != used.uniformBuffers.end())
+				ThrowMultipleBindingError("uniform buffer", bufDef.buffBinding, *used.uniformBuffers[bufDef.buffBinding], bufDef.pos);
+			used.uniformBuffers[bufDef.buffBinding] = &bufDef.pos;
+			info.uniformBufferBindings.push_back(BufferInterfaceBinding());
+			BufferInterfaceBinding &binding = info.uniformBufferBindings.back();
+			binding.bindPoint = bufDef.buffBinding;
+			binding.bindOffset = bufDef.offset;
+			binding.bufferId = bufDef.bufferId.str();
+		}
+
+		BOOST_FOREACH(const ParsedBufferRefDef &bufDef, data.storageBuffers)
+		{
+			if(used.storageBuffers.find(bufDef.buffBinding) != used.storageBuffers.end())
+				ThrowMultipleBindingError("storage buffer", bufDef.buffBinding, *used.storageBuffers[bufDef.buffBinding], bufDef.pos);
+			used.storageBuffers[bufDef.buffBinding] = &bufDef.pos;
+			info.storageBufferBindings.push_back(BufferInterfaceBinding());
+			BufferInterfaceBinding &binding = info.storageBufferBindings.back();
+			binding.bindPoint = bufDef.buffBinding;
+			binding.bindOffset = bufDef.offset;
+			binding.bufferId = bufDef.bufferId.str();
+		}
+	}
+
+	void ValidateStyle(const ParsedStyleDef &styleDef, const StyleInfo &info, const UsedData &used)
+	{
+		if(!used.pMeshPos)
+			throw BaseParseError("This style does not define a mesh or include a 'local' that does.", styleDef.pos);
+
+		if(!used.pProgramPos)
+			throw BaseParseError("This style does not define a program or pipeline, or include a 'local' that does.", styleDef.pos);
+	}
+
 	void ApplyNode(NodeData &rootNode, SceneGraph &graph, const ParsedNodeDef &nodeDef,
 		const LayerToIndexMap &layerToIndex)
 	{
@@ -284,6 +434,21 @@ namespace glscene { namespace _detail {
 		node.GetObjectTM().SetComposable(boost::apply_visitor(ApplyTransform(), nodeDef.objectTM.trans));
 
 		//Set the styles.
+		BOOST_FOREACH(const ParsedStyleMap::value_type &stylePair, nodeDef.styles)
+		{
+			StyleInfo info;
+			UsedData used;
+			BOOST_FOREACH(const ParsedLocalDef *pLocalDef, stylePair.second.includes)
+			{
+				ApplyStyleData(info, used, pLocalDef->data);
+			}
+
+			ApplyStyleData(info, used, stylePair.second.data);
+
+			ValidateStyle(stylePair.second, info, used);
+
+			node.DefineStyle(stylePair.first.str(), info);
+		}
 
 
 		//Set the nodes.

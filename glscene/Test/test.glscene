@@ -1,85 +1,112 @@
 
 resources
-	sampler_res <spl>
-		mag [linear]
-		compare [pass]
-		aniso 1
-	end
-	
-	uniform_res <ident> {uniformName} [vec3] (-5.0)
-	
-	camera_res <ident> [left_btn] [left_kbd]
-		target (0 -5 0)
+	camera_res <main-camera> [left_btn] [left_kbd]
+		target (0 3.0 0)
 		orient (0 0 0 1)
 		spin 0
-		radius 10 1 20
-		radius_delta 0.5 2.0
-		pos_delta 0.25 1.5
+		radius 5 0.5 30
+		radius_delta 0.1 1.5
+		pos_delta 0.125 0.5
 		rotation_scale 0.36
 	end
 	
-	uniform_buffer_res <ubuff> 64 [stream_draw]
-	storage_buffer_res <sbuff> 128 placeholder
-
-	program_res <ident>
-		vert "filename.vert"
-		nmtc {blah2}
-		sampler {foo} 0
-		sampler {false} 1
-		image {boo} 2
-		mtc {blah}
+	mesh_res <object> [cube_pyramid] 2
+	mesh_res <ground> [ground_plane] 2 2
+	
+	texture_res <tex> "tex.png"
+	
+	sampler_res <nearest>
+		mag [linear]
+		min [linear]
+		wrap_s [edge_clamp]
+		wrap_t [edge_clamp]
+		wrap_r [edge_clamp]
 	end
 	
-	mesh_res <ident> [ground_plane] 3 20
-	texture_res <tex> "foo.file[ground_plane]"
+	uniform_res <perspective_matrix> {cameraToPerspective} [mat4] (1.0)
+	
+	program_res <ground>
+		vert "ground.vert"
+		frag "ground.frag"
+		mtc {modelToCamera}
+	end
+	
+	program_res <object>
+		vert "object.vert"
+		frag "object.frag"
+		mtc {modelToCamera}
+	end
+	
+	program_res <texture>
+		vert "texture.vert"
+		frag "texture.frag"
+		mtc {modelToCamera}
+		sampler {image} 0
+	end
 end
 
 scene
-	layer_defs 'foo' 'bar'
-	style_check <id> <blabal> <bol>
+	layer_defs 'main'
+	style_check <main>
 	
-	node <foo>
-		layers 'foo' -'bar' +'bar' +-'foo'
+	node <ground>
+		layers +'main'
+		
+		node_tm
+			orientation (-0.707 0 0 0.707)
+		end
 		
 		object_tm
-			translate (4)
-			scale (1)
-			orientation (0 0.707 0 0.707)
-			matrix (1)
+			scale (10)
 		end
 		
 		local <ident>
 		end
 		
-		style <id>
-		end
-		
-		node <ident>
-			local <ident2>
-			end
-
-			style <id>
-				using <ident2>
-				
-				mesh <ident>
-				texture 0 <tex> <spl>
-				uniform_buffer 0 <ubuff>
-				uniform_buffer 1 <ubuff> 32
-				storage_buffer 0 <sbuff>
-				
-//				program <ident>
-//				end
-				
-				pipeline
-					program <ident> [vert] [frag] end
-					program <ident> [geom] end
-				end
+		style <main>
+			mesh <ground>
+			program <ground>
+				uniform <perspective_matrix>
 			end
 		end
+	end
+	
+	node <object>
+		layers +'main'
 		
-		node
-			style <id>
+		node_tm
+			translate (0 3 0)
+		end
+		
+		object_tm
+			scale (0.1)
+		end
+		
+		style <main>
+			mesh <object> 'lit'
+			program <object>
+				uniform <perspective_matrix>
 			end
+		end
+	end
+	
+	node <texObject>
+		layers +'main'
+		
+		node_tm
+			translate (0 3 0)
+		end
+		
+		object_tm
+			translate (0 2.5 -5.0)
+		end
+		
+		style <main>
+			mesh <ground> 'lit-tex'
+			program <texture>
+				uniform <perspective_matrix>
+			end
+			texture 0 <tex> <nearest>
 		end
 	end
 end
