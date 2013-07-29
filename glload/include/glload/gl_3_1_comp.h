@@ -4,6 +4,8 @@
 #include "_int_gl_type.h"
 #include "_int_gl_exts.h"
 
+#include "_int_gl_1_0.h"
+#include "_int_gl_1_0_rem.h"
 #include "_int_gl_1_1.h"
 #include "_int_gl_1_1_rem.h"
 #include "_int_gl_1_2.h"

@@ -105,6 +105,8 @@ int glXext_ARB_fbconfig_float = 0;
 int glXext_ARB_framebuffer_sRGB = 0;
 int glXext_ARB_get_proc_address = 0;
 int glXext_ARB_multisample = 0;
+int glXext_ARB_robustness_application_isolation = 0;
+int glXext_ARB_robustness_share_group_isolation = 0;
 int glXext_ARB_vertex_buffer_object = 0;
 int glXext_EXT_buffer_age = 0;
 int glXext_EXT_create_context_es2_profile = 0;
@@ -129,17 +131,20 @@ int glXext_NV_multisample_coverage = 0;
 int glXext_NV_present_video = 0;
 int glXext_NV_swap_group = 0;
 int glXext_NV_video_capture = 0;
-int glXext_NV_video_out = 0;
+int glXext_NV_video_output = 0;
 int glXext_OML_swap_method = 0;
 int glXext_OML_sync_control = 0;
 int glXext_SGIS_blended_overlay = 0;
 int glXext_SGIS_multisample = 0;
 int glXext_SGIS_shared_multisample = 0;
+int glXext_SGIX_dmbuffer = 0;
 int glXext_SGIX_fbconfig = 0;
+int glXext_SGIX_hyperpipe = 0;
 int glXext_SGIX_pbuffer = 0;
 int glXext_SGIX_swap_barrier = 0;
 int glXext_SGIX_swap_group = 0;
 int glXext_SGIX_video_resize = 0;
+int glXext_SGIX_video_source = 0;
 int glXext_SGIX_visual_select_group = 0;
 int glXext_SGI_cushion = 0;
 int glXext_SGI_make_current_read = 0;
@@ -167,25 +172,25 @@ static int LoadExt_ARB_get_proc_address()
 	return numFailed;
 }
 
-PFNGLXGETCURRENTDISPLAYEXTPROC _funcptr_glXGetCurrentDisplayEXT = NULL;
-PFNGLXQUERYCONTEXTINFOEXTPROC _funcptr_glXQueryContextInfoEXT = NULL;
-PFNGLXGETCONTEXTIDEXTPROC _funcptr_glXGetContextIDEXT = NULL;
-PFNGLXIMPORTCONTEXTEXTPROC _funcptr_glXImportContextEXT = NULL;
 PFNGLXFREECONTEXTEXTPROC _funcptr_glXFreeContextEXT = NULL;
+PFNGLXGETCONTEXTIDEXTPROC _funcptr_glXGetContextIDEXT = NULL;
+PFNGLXGETCURRENTDISPLAYEXTPROC _funcptr_glXGetCurrentDisplayEXT = NULL;
+PFNGLXIMPORTCONTEXTEXTPROC _funcptr_glXImportContextEXT = NULL;
+PFNGLXQUERYCONTEXTINFOEXTPROC _funcptr_glXQueryContextInfoEXT = NULL;
 
 static int LoadExt_EXT_import_context()
 {
 	int numFailed = 0;
-	_funcptr_glXGetCurrentDisplayEXT = (PFNGLXGETCURRENTDISPLAYEXTPROC)IntGetProcAddress("glXGetCurrentDisplayEXT");
-	if(!_funcptr_glXGetCurrentDisplayEXT) ++numFailed;
-	_funcptr_glXQueryContextInfoEXT = (PFNGLXQUERYCONTEXTINFOEXTPROC)IntGetProcAddress("glXQueryContextInfoEXT");
-	if(!_funcptr_glXQueryContextInfoEXT) ++numFailed;
-	_funcptr_glXGetContextIDEXT = (PFNGLXGETCONTEXTIDEXTPROC)IntGetProcAddress("glXGetContextIDEXT");
-	if(!_funcptr_glXGetContextIDEXT) ++numFailed;
-	_funcptr_glXImportContextEXT = (PFNGLXIMPORTCONTEXTEXTPROC)IntGetProcAddress("glXImportContextEXT");
-	if(!_funcptr_glXImportContextEXT) ++numFailed;
 	_funcptr_glXFreeContextEXT = (PFNGLXFREECONTEXTEXTPROC)IntGetProcAddress("glXFreeContextEXT");
 	if(!_funcptr_glXFreeContextEXT) ++numFailed;
+	_funcptr_glXGetContextIDEXT = (PFNGLXGETCONTEXTIDEXTPROC)IntGetProcAddress("glXGetContextIDEXT");
+	if(!_funcptr_glXGetContextIDEXT) ++numFailed;
+	_funcptr_glXGetCurrentDisplayEXT = (PFNGLXGETCURRENTDISPLAYEXTPROC)IntGetProcAddress("glXGetCurrentDisplayEXT");
+	if(!_funcptr_glXGetCurrentDisplayEXT) ++numFailed;
+	_funcptr_glXImportContextEXT = (PFNGLXIMPORTCONTEXTEXTPROC)IntGetProcAddress("glXImportContextEXT");
+	if(!_funcptr_glXImportContextEXT) ++numFailed;
+	_funcptr_glXQueryContextInfoEXT = (PFNGLXQUERYCONTEXTINFOEXTPROC)IntGetProcAddress("glXQueryContextInfoEXT");
+	if(!_funcptr_glXQueryContextInfoEXT) ++numFailed;
 	return numFailed;
 }
 
@@ -272,39 +277,39 @@ static int LoadExt_NV_copy_image()
 	return numFailed;
 }
 
-PFNGLXENUMERATEVIDEODEVICESNVPROC _funcptr_glXEnumerateVideoDevicesNV = NULL;
 PFNGLXBINDVIDEODEVICENVPROC _funcptr_glXBindVideoDeviceNV = NULL;
+PFNGLXENUMERATEVIDEODEVICESNVPROC _funcptr_glXEnumerateVideoDevicesNV = NULL;
 
 static int LoadExt_NV_present_video()
 {
 	int numFailed = 0;
-	_funcptr_glXEnumerateVideoDevicesNV = (PFNGLXENUMERATEVIDEODEVICESNVPROC)IntGetProcAddress("glXEnumerateVideoDevicesNV");
-	if(!_funcptr_glXEnumerateVideoDevicesNV) ++numFailed;
 	_funcptr_glXBindVideoDeviceNV = (PFNGLXBINDVIDEODEVICENVPROC)IntGetProcAddress("glXBindVideoDeviceNV");
 	if(!_funcptr_glXBindVideoDeviceNV) ++numFailed;
+	_funcptr_glXEnumerateVideoDevicesNV = (PFNGLXENUMERATEVIDEODEVICESNVPROC)IntGetProcAddress("glXEnumerateVideoDevicesNV");
+	if(!_funcptr_glXEnumerateVideoDevicesNV) ++numFailed;
 	return numFailed;
 }
 
-PFNGLXJOINSWAPGROUPNVPROC _funcptr_glXJoinSwapGroupNV = NULL;
 PFNGLXBINDSWAPBARRIERNVPROC _funcptr_glXBindSwapBarrierNV = NULL;
-PFNGLXQUERYSWAPGROUPNVPROC _funcptr_glXQuerySwapGroupNV = NULL;
-PFNGLXQUERYMAXSWAPGROUPSNVPROC _funcptr_glXQueryMaxSwapGroupsNV = NULL;
+PFNGLXJOINSWAPGROUPNVPROC _funcptr_glXJoinSwapGroupNV = NULL;
 PFNGLXQUERYFRAMECOUNTNVPROC _funcptr_glXQueryFrameCountNV = NULL;
+PFNGLXQUERYMAXSWAPGROUPSNVPROC _funcptr_glXQueryMaxSwapGroupsNV = NULL;
+PFNGLXQUERYSWAPGROUPNVPROC _funcptr_glXQuerySwapGroupNV = NULL;
 PFNGLXRESETFRAMECOUNTNVPROC _funcptr_glXResetFrameCountNV = NULL;
 
 static int LoadExt_NV_swap_group()
 {
 	int numFailed = 0;
-	_funcptr_glXJoinSwapGroupNV = (PFNGLXJOINSWAPGROUPNVPROC)IntGetProcAddress("glXJoinSwapGroupNV");
-	if(!_funcptr_glXJoinSwapGroupNV) ++numFailed;
 	_funcptr_glXBindSwapBarrierNV = (PFNGLXBINDSWAPBARRIERNVPROC)IntGetProcAddress("glXBindSwapBarrierNV");
 	if(!_funcptr_glXBindSwapBarrierNV) ++numFailed;
-	_funcptr_glXQuerySwapGroupNV = (PFNGLXQUERYSWAPGROUPNVPROC)IntGetProcAddress("glXQuerySwapGroupNV");
-	if(!_funcptr_glXQuerySwapGroupNV) ++numFailed;
-	_funcptr_glXQueryMaxSwapGroupsNV = (PFNGLXQUERYMAXSWAPGROUPSNVPROC)IntGetProcAddress("glXQueryMaxSwapGroupsNV");
-	if(!_funcptr_glXQueryMaxSwapGroupsNV) ++numFailed;
+	_funcptr_glXJoinSwapGroupNV = (PFNGLXJOINSWAPGROUPNVPROC)IntGetProcAddress("glXJoinSwapGroupNV");
+	if(!_funcptr_glXJoinSwapGroupNV) ++numFailed;
 	_funcptr_glXQueryFrameCountNV = (PFNGLXQUERYFRAMECOUNTNVPROC)IntGetProcAddress("glXQueryFrameCountNV");
 	if(!_funcptr_glXQueryFrameCountNV) ++numFailed;
+	_funcptr_glXQueryMaxSwapGroupsNV = (PFNGLXQUERYMAXSWAPGROUPSNVPROC)IntGetProcAddress("glXQueryMaxSwapGroupsNV");
+	if(!_funcptr_glXQueryMaxSwapGroupsNV) ++numFailed;
+	_funcptr_glXQuerySwapGroupNV = (PFNGLXQUERYSWAPGROUPNVPROC)IntGetProcAddress("glXQuerySwapGroupNV");
+	if(!_funcptr_glXQuerySwapGroupNV) ++numFailed;
 	_funcptr_glXResetFrameCountNV = (PFNGLXRESETFRAMECOUNTNVPROC)IntGetProcAddress("glXResetFrameCountNV");
 	if(!_funcptr_glXResetFrameCountNV) ++numFailed;
 	return numFailed;
@@ -332,8 +337,33 @@ static int LoadExt_NV_video_capture()
 	return numFailed;
 }
 
-PFNGLXGETSYNCVALUESOMLPROC _funcptr_glXGetSyncValuesOML = NULL;
+PFNGLXBINDVIDEOIMAGENVPROC _funcptr_glXBindVideoImageNV = NULL;
+PFNGLXGETVIDEODEVICENVPROC _funcptr_glXGetVideoDeviceNV = NULL;
+PFNGLXGETVIDEOINFONVPROC _funcptr_glXGetVideoInfoNV = NULL;
+PFNGLXRELEASEVIDEODEVICENVPROC _funcptr_glXReleaseVideoDeviceNV = NULL;
+PFNGLXRELEASEVIDEOIMAGENVPROC _funcptr_glXReleaseVideoImageNV = NULL;
+PFNGLXSENDPBUFFERTOVIDEONVPROC _funcptr_glXSendPbufferToVideoNV = NULL;
+
+static int LoadExt_NV_video_output()
+{
+	int numFailed = 0;
+	_funcptr_glXBindVideoImageNV = (PFNGLXBINDVIDEOIMAGENVPROC)IntGetProcAddress("glXBindVideoImageNV");
+	if(!_funcptr_glXBindVideoImageNV) ++numFailed;
+	_funcptr_glXGetVideoDeviceNV = (PFNGLXGETVIDEODEVICENVPROC)IntGetProcAddress("glXGetVideoDeviceNV");
+	if(!_funcptr_glXGetVideoDeviceNV) ++numFailed;
+	_funcptr_glXGetVideoInfoNV = (PFNGLXGETVIDEOINFONVPROC)IntGetProcAddress("glXGetVideoInfoNV");
+	if(!_funcptr_glXGetVideoInfoNV) ++numFailed;
+	_funcptr_glXReleaseVideoDeviceNV = (PFNGLXRELEASEVIDEODEVICENVPROC)IntGetProcAddress("glXReleaseVideoDeviceNV");
+	if(!_funcptr_glXReleaseVideoDeviceNV) ++numFailed;
+	_funcptr_glXReleaseVideoImageNV = (PFNGLXRELEASEVIDEOIMAGENVPROC)IntGetProcAddress("glXReleaseVideoImageNV");
+	if(!_funcptr_glXReleaseVideoImageNV) ++numFailed;
+	_funcptr_glXSendPbufferToVideoNV = (PFNGLXSENDPBUFFERTOVIDEONVPROC)IntGetProcAddress("glXSendPbufferToVideoNV");
+	if(!_funcptr_glXSendPbufferToVideoNV) ++numFailed;
+	return numFailed;
+}
+
 PFNGLXGETMSCRATEOMLPROC _funcptr_glXGetMscRateOML = NULL;
+PFNGLXGETSYNCVALUESOMLPROC _funcptr_glXGetSyncValuesOML = NULL;
 PFNGLXSWAPBUFFERSMSCOMLPROC _funcptr_glXSwapBuffersMscOML = NULL;
 PFNGLXWAITFORMSCOMLPROC _funcptr_glXWaitForMscOML = NULL;
 PFNGLXWAITFORSBCOMLPROC _funcptr_glXWaitForSbcOML = NULL;
@@ -341,10 +371,10 @@ PFNGLXWAITFORSBCOMLPROC _funcptr_glXWaitForSbcOML = NULL;
 static int LoadExt_OML_sync_control()
 {
 	int numFailed = 0;
-	_funcptr_glXGetSyncValuesOML = (PFNGLXGETSYNCVALUESOMLPROC)IntGetProcAddress("glXGetSyncValuesOML");
-	if(!_funcptr_glXGetSyncValuesOML) ++numFailed;
 	_funcptr_glXGetMscRateOML = (PFNGLXGETMSCRATEOMLPROC)IntGetProcAddress("glXGetMscRateOML");
 	if(!_funcptr_glXGetMscRateOML) ++numFailed;
+	_funcptr_glXGetSyncValuesOML = (PFNGLXGETSYNCVALUESOMLPROC)IntGetProcAddress("glXGetSyncValuesOML");
+	if(!_funcptr_glXGetSyncValuesOML) ++numFailed;
 	_funcptr_glXSwapBuffersMscOML = (PFNGLXSWAPBUFFERSMSCOMLPROC)IntGetProcAddress("glXSwapBuffersMscOML");
 	if(!_funcptr_glXSwapBuffersMscOML) ++numFailed;
 	_funcptr_glXWaitForMscOML = (PFNGLXWAITFORMSCOMLPROC)IntGetProcAddress("glXWaitForMscOML");
@@ -354,36 +384,77 @@ static int LoadExt_OML_sync_control()
 	return numFailed;
 }
 
-PFNGLXGETFBCONFIGATTRIBSGIXPROC _funcptr_glXGetFBConfigAttribSGIX = NULL;
+PFNGLXASSOCIATEDMPBUFFERSGIXPROC _funcptr_glXAssociateDMPbufferSGIX = NULL;
+
+static int LoadExt_SGIX_dmbuffer()
+{
+	int numFailed = 0;
+	_funcptr_glXAssociateDMPbufferSGIX = (PFNGLXASSOCIATEDMPBUFFERSGIXPROC)IntGetProcAddress("glXAssociateDMPbufferSGIX");
+	if(!_funcptr_glXAssociateDMPbufferSGIX) ++numFailed;
+	return numFailed;
+}
+
 PFNGLXCHOOSEFBCONFIGSGIXPROC _funcptr_glXChooseFBConfigSGIX = NULL;
-PFNGLXCREATEGLXPIXMAPWITHCONFIGSGIXPROC _funcptr_glXCreateGLXPixmapWithConfigSGIX = NULL;
 PFNGLXCREATECONTEXTWITHCONFIGSGIXPROC _funcptr_glXCreateContextWithConfigSGIX = NULL;
-PFNGLXGETVISUALFROMFBCONFIGSGIXPROC _funcptr_glXGetVisualFromFBConfigSGIX = NULL;
+PFNGLXCREATEGLXPIXMAPWITHCONFIGSGIXPROC _funcptr_glXCreateGLXPixmapWithConfigSGIX = NULL;
+PFNGLXGETFBCONFIGATTRIBSGIXPROC _funcptr_glXGetFBConfigAttribSGIX = NULL;
 PFNGLXGETFBCONFIGFROMVISUALSGIXPROC _funcptr_glXGetFBConfigFromVisualSGIX = NULL;
+PFNGLXGETVISUALFROMFBCONFIGSGIXPROC _funcptr_glXGetVisualFromFBConfigSGIX = NULL;
 
 static int LoadExt_SGIX_fbconfig()
 {
 	int numFailed = 0;
-	_funcptr_glXGetFBConfigAttribSGIX = (PFNGLXGETFBCONFIGATTRIBSGIXPROC)IntGetProcAddress("glXGetFBConfigAttribSGIX");
-	if(!_funcptr_glXGetFBConfigAttribSGIX) ++numFailed;
 	_funcptr_glXChooseFBConfigSGIX = (PFNGLXCHOOSEFBCONFIGSGIXPROC)IntGetProcAddress("glXChooseFBConfigSGIX");
 	if(!_funcptr_glXChooseFBConfigSGIX) ++numFailed;
-	_funcptr_glXCreateGLXPixmapWithConfigSGIX = (PFNGLXCREATEGLXPIXMAPWITHCONFIGSGIXPROC)IntGetProcAddress("glXCreateGLXPixmapWithConfigSGIX");
-	if(!_funcptr_glXCreateGLXPixmapWithConfigSGIX) ++numFailed;
 	_funcptr_glXCreateContextWithConfigSGIX = (PFNGLXCREATECONTEXTWITHCONFIGSGIXPROC)IntGetProcAddress("glXCreateContextWithConfigSGIX");
 	if(!_funcptr_glXCreateContextWithConfigSGIX) ++numFailed;
-	_funcptr_glXGetVisualFromFBConfigSGIX = (PFNGLXGETVISUALFROMFBCONFIGSGIXPROC)IntGetProcAddress("glXGetVisualFromFBConfigSGIX");
-	if(!_funcptr_glXGetVisualFromFBConfigSGIX) ++numFailed;
+	_funcptr_glXCreateGLXPixmapWithConfigSGIX = (PFNGLXCREATEGLXPIXMAPWITHCONFIGSGIXPROC)IntGetProcAddress("glXCreateGLXPixmapWithConfigSGIX");
+	if(!_funcptr_glXCreateGLXPixmapWithConfigSGIX) ++numFailed;
+	_funcptr_glXGetFBConfigAttribSGIX = (PFNGLXGETFBCONFIGATTRIBSGIXPROC)IntGetProcAddress("glXGetFBConfigAttribSGIX");
+	if(!_funcptr_glXGetFBConfigAttribSGIX) ++numFailed;
 	_funcptr_glXGetFBConfigFromVisualSGIX = (PFNGLXGETFBCONFIGFROMVISUALSGIXPROC)IntGetProcAddress("glXGetFBConfigFromVisualSGIX");
 	if(!_funcptr_glXGetFBConfigFromVisualSGIX) ++numFailed;
+	_funcptr_glXGetVisualFromFBConfigSGIX = (PFNGLXGETVISUALFROMFBCONFIGSGIXPROC)IntGetProcAddress("glXGetVisualFromFBConfigSGIX");
+	if(!_funcptr_glXGetVisualFromFBConfigSGIX) ++numFailed;
+	return numFailed;
+}
+
+PFNGLXBINDHYPERPIPESGIXPROC _funcptr_glXBindHyperpipeSGIX = NULL;
+PFNGLXDESTROYHYPERPIPECONFIGSGIXPROC _funcptr_glXDestroyHyperpipeConfigSGIX = NULL;
+PFNGLXHYPERPIPEATTRIBSGIXPROC _funcptr_glXHyperpipeAttribSGIX = NULL;
+PFNGLXHYPERPIPECONFIGSGIXPROC _funcptr_glXHyperpipeConfigSGIX = NULL;
+PFNGLXQUERYHYPERPIPEATTRIBSGIXPROC _funcptr_glXQueryHyperpipeAttribSGIX = NULL;
+PFNGLXQUERYHYPERPIPEBESTATTRIBSGIXPROC _funcptr_glXQueryHyperpipeBestAttribSGIX = NULL;
+PFNGLXQUERYHYPERPIPECONFIGSGIXPROC _funcptr_glXQueryHyperpipeConfigSGIX = NULL;
+PFNGLXQUERYHYPERPIPENETWORKSGIXPROC _funcptr_glXQueryHyperpipeNetworkSGIX = NULL;
+
+static int LoadExt_SGIX_hyperpipe()
+{
+	int numFailed = 0;
+	_funcptr_glXBindHyperpipeSGIX = (PFNGLXBINDHYPERPIPESGIXPROC)IntGetProcAddress("glXBindHyperpipeSGIX");
+	if(!_funcptr_glXBindHyperpipeSGIX) ++numFailed;
+	_funcptr_glXDestroyHyperpipeConfigSGIX = (PFNGLXDESTROYHYPERPIPECONFIGSGIXPROC)IntGetProcAddress("glXDestroyHyperpipeConfigSGIX");
+	if(!_funcptr_glXDestroyHyperpipeConfigSGIX) ++numFailed;
+	_funcptr_glXHyperpipeAttribSGIX = (PFNGLXHYPERPIPEATTRIBSGIXPROC)IntGetProcAddress("glXHyperpipeAttribSGIX");
+	if(!_funcptr_glXHyperpipeAttribSGIX) ++numFailed;
+	_funcptr_glXHyperpipeConfigSGIX = (PFNGLXHYPERPIPECONFIGSGIXPROC)IntGetProcAddress("glXHyperpipeConfigSGIX");
+	if(!_funcptr_glXHyperpipeConfigSGIX) ++numFailed;
+	_funcptr_glXQueryHyperpipeAttribSGIX = (PFNGLXQUERYHYPERPIPEATTRIBSGIXPROC)IntGetProcAddress("glXQueryHyperpipeAttribSGIX");
+	if(!_funcptr_glXQueryHyperpipeAttribSGIX) ++numFailed;
+	_funcptr_glXQueryHyperpipeBestAttribSGIX = (PFNGLXQUERYHYPERPIPEBESTATTRIBSGIXPROC)IntGetProcAddress("glXQueryHyperpipeBestAttribSGIX");
+	if(!_funcptr_glXQueryHyperpipeBestAttribSGIX) ++numFailed;
+	_funcptr_glXQueryHyperpipeConfigSGIX = (PFNGLXQUERYHYPERPIPECONFIGSGIXPROC)IntGetProcAddress("glXQueryHyperpipeConfigSGIX");
+	if(!_funcptr_glXQueryHyperpipeConfigSGIX) ++numFailed;
+	_funcptr_glXQueryHyperpipeNetworkSGIX = (PFNGLXQUERYHYPERPIPENETWORKSGIXPROC)IntGetProcAddress("glXQueryHyperpipeNetworkSGIX");
+	if(!_funcptr_glXQueryHyperpipeNetworkSGIX) ++numFailed;
 	return numFailed;
 }
 
 PFNGLXCREATEGLXPBUFFERSGIXPROC _funcptr_glXCreateGLXPbufferSGIX = NULL;
 PFNGLXDESTROYGLXPBUFFERSGIXPROC _funcptr_glXDestroyGLXPbufferSGIX = NULL;
+PFNGLXGETSELECTEDEVENTSGIXPROC _funcptr_glXGetSelectedEventSGIX = NULL;
 PFNGLXQUERYGLXPBUFFERSGIXPROC _funcptr_glXQueryGLXPbufferSGIX = NULL;
 PFNGLXSELECTEVENTSGIXPROC _funcptr_glXSelectEventSGIX = NULL;
-PFNGLXGETSELECTEDEVENTSGIXPROC _funcptr_glXGetSelectedEventSGIX = NULL;
 
 static int LoadExt_SGIX_pbuffer()
 {
@@ -392,12 +463,12 @@ static int LoadExt_SGIX_pbuffer()
 	if(!_funcptr_glXCreateGLXPbufferSGIX) ++numFailed;
 	_funcptr_glXDestroyGLXPbufferSGIX = (PFNGLXDESTROYGLXPBUFFERSGIXPROC)IntGetProcAddress("glXDestroyGLXPbufferSGIX");
 	if(!_funcptr_glXDestroyGLXPbufferSGIX) ++numFailed;
+	_funcptr_glXGetSelectedEventSGIX = (PFNGLXGETSELECTEDEVENTSGIXPROC)IntGetProcAddress("glXGetSelectedEventSGIX");
+	if(!_funcptr_glXGetSelectedEventSGIX) ++numFailed;
 	_funcptr_glXQueryGLXPbufferSGIX = (PFNGLXQUERYGLXPBUFFERSGIXPROC)IntGetProcAddress("glXQueryGLXPbufferSGIX");
 	if(!_funcptr_glXQueryGLXPbufferSGIX) ++numFailed;
 	_funcptr_glXSelectEventSGIX = (PFNGLXSELECTEVENTSGIXPROC)IntGetProcAddress("glXSelectEventSGIX");
 	if(!_funcptr_glXSelectEventSGIX) ++numFailed;
-	_funcptr_glXGetSelectedEventSGIX = (PFNGLXGETSELECTEDEVENTSGIXPROC)IntGetProcAddress("glXGetSelectedEventSGIX");
-	if(!_funcptr_glXGetSelectedEventSGIX) ++numFailed;
 	return numFailed;
 }
 
@@ -426,9 +497,9 @@ static int LoadExt_SGIX_swap_group()
 
 PFNGLXBINDCHANNELTOWINDOWSGIXPROC _funcptr_glXBindChannelToWindowSGIX = NULL;
 PFNGLXCHANNELRECTSGIXPROC _funcptr_glXChannelRectSGIX = NULL;
-PFNGLXQUERYCHANNELRECTSGIXPROC _funcptr_glXQueryChannelRectSGIX = NULL;
-PFNGLXQUERYCHANNELDELTASSGIXPROC _funcptr_glXQueryChannelDeltasSGIX = NULL;
 PFNGLXCHANNELRECTSYNCSGIXPROC _funcptr_glXChannelRectSyncSGIX = NULL;
+PFNGLXQUERYCHANNELDELTASSGIXPROC _funcptr_glXQueryChannelDeltasSGIX = NULL;
+PFNGLXQUERYCHANNELRECTSGIXPROC _funcptr_glXQueryChannelRectSGIX = NULL;
 
 static int LoadExt_SGIX_video_resize()
 {
@@ -437,12 +508,25 @@ static int LoadExt_SGIX_video_resize()
 	if(!_funcptr_glXBindChannelToWindowSGIX) ++numFailed;
 	_funcptr_glXChannelRectSGIX = (PFNGLXCHANNELRECTSGIXPROC)IntGetProcAddress("glXChannelRectSGIX");
 	if(!_funcptr_glXChannelRectSGIX) ++numFailed;
-	_funcptr_glXQueryChannelRectSGIX = (PFNGLXQUERYCHANNELRECTSGIXPROC)IntGetProcAddress("glXQueryChannelRectSGIX");
-	if(!_funcptr_glXQueryChannelRectSGIX) ++numFailed;
-	_funcptr_glXQueryChannelDeltasSGIX = (PFNGLXQUERYCHANNELDELTASSGIXPROC)IntGetProcAddress("glXQueryChannelDeltasSGIX");
-	if(!_funcptr_glXQueryChannelDeltasSGIX) ++numFailed;
 	_funcptr_glXChannelRectSyncSGIX = (PFNGLXCHANNELRECTSYNCSGIXPROC)IntGetProcAddress("glXChannelRectSyncSGIX");
 	if(!_funcptr_glXChannelRectSyncSGIX) ++numFailed;
+	_funcptr_glXQueryChannelDeltasSGIX = (PFNGLXQUERYCHANNELDELTASSGIXPROC)IntGetProcAddress("glXQueryChannelDeltasSGIX");
+	if(!_funcptr_glXQueryChannelDeltasSGIX) ++numFailed;
+	_funcptr_glXQueryChannelRectSGIX = (PFNGLXQUERYCHANNELRECTSGIXPROC)IntGetProcAddress("glXQueryChannelRectSGIX");
+	if(!_funcptr_glXQueryChannelRectSGIX) ++numFailed;
+	return numFailed;
+}
+
+PFNGLXCREATEGLXVIDEOSOURCESGIXPROC _funcptr_glXCreateGLXVideoSourceSGIX = NULL;
+PFNGLXDESTROYGLXVIDEOSOURCESGIXPROC _funcptr_glXDestroyGLXVideoSourceSGIX = NULL;
+
+static int LoadExt_SGIX_video_source()
+{
+	int numFailed = 0;
+	_funcptr_glXCreateGLXVideoSourceSGIX = (PFNGLXCREATEGLXVIDEOSOURCESGIXPROC)IntGetProcAddress("glXCreateGLXVideoSourceSGIX");
+	if(!_funcptr_glXCreateGLXVideoSourceSGIX) ++numFailed;
+	_funcptr_glXDestroyGLXVideoSourceSGIX = (PFNGLXDESTROYGLXVIDEOSOURCESGIXPROC)IntGetProcAddress("glXDestroyGLXVideoSourceSGIX");
+	if(!_funcptr_glXDestroyGLXVideoSourceSGIX) ++numFailed;
 	return numFailed;
 }
 
@@ -456,16 +540,16 @@ static int LoadExt_SGI_cushion()
 	return numFailed;
 }
 
-PFNGLXMAKECURRENTREADSGIPROC _funcptr_glXMakeCurrentReadSGI = NULL;
 PFNGLXGETCURRENTREADDRAWABLESGIPROC _funcptr_glXGetCurrentReadDrawableSGI = NULL;
+PFNGLXMAKECURRENTREADSGIPROC _funcptr_glXMakeCurrentReadSGI = NULL;
 
 static int LoadExt_SGI_make_current_read()
 {
 	int numFailed = 0;
-	_funcptr_glXMakeCurrentReadSGI = (PFNGLXMAKECURRENTREADSGIPROC)IntGetProcAddress("glXMakeCurrentReadSGI");
-	if(!_funcptr_glXMakeCurrentReadSGI) ++numFailed;
 	_funcptr_glXGetCurrentReadDrawableSGI = (PFNGLXGETCURRENTREADDRAWABLESGIPROC)IntGetProcAddress("glXGetCurrentReadDrawableSGI");
 	if(!_funcptr_glXGetCurrentReadDrawableSGI) ++numFailed;
+	_funcptr_glXMakeCurrentReadSGI = (PFNGLXMAKECURRENTREADSGIPROC)IntGetProcAddress("glXMakeCurrentReadSGI");
+	if(!_funcptr_glXMakeCurrentReadSGI) ++numFailed;
 	return numFailed;
 }
 
@@ -511,7 +595,7 @@ typedef struct glx_StrToExtMap_s
 	PFN_LOADFUNCPOINTERS LoadExtension;
 } glx_StrToExtMap;
 
-static glx_StrToExtMap ExtensionTable[50] = {
+static glx_StrToExtMap ExtensionTable[55] = {
 	{"GLX_3DFX_multisample", &glXext_3DFX_multisample, NULL},
 	{"GLX_AMD_gpu_association", &glXext_AMD_gpu_association, NULL},
 	{"GLX_ARB_create_context", &glXext_ARB_create_context, LoadExt_ARB_create_context},
@@ -521,6 +605,8 @@ static glx_StrToExtMap ExtensionTable[50] = {
 	{"GLX_ARB_framebuffer_sRGB", &glXext_ARB_framebuffer_sRGB, NULL},
 	{"GLX_ARB_get_proc_address", &glXext_ARB_get_proc_address, LoadExt_ARB_get_proc_address},
 	{"GLX_ARB_multisample", &glXext_ARB_multisample, NULL},
+	{"GLX_ARB_robustness_application_isolation", &glXext_ARB_robustness_application_isolation, NULL},
+	{"GLX_ARB_robustness_share_group_isolation", &glXext_ARB_robustness_share_group_isolation, NULL},
 	{"GLX_ARB_vertex_buffer_object", &glXext_ARB_vertex_buffer_object, NULL},
 	{"GLX_EXT_buffer_age", &glXext_EXT_buffer_age, NULL},
 	{"GLX_EXT_create_context_es2_profile", &glXext_EXT_create_context_es2_profile, NULL},
@@ -545,17 +631,20 @@ static glx_StrToExtMap ExtensionTable[50] = {
 	{"GLX_NV_present_video", &glXext_NV_present_video, LoadExt_NV_present_video},
 	{"GLX_NV_swap_group", &glXext_NV_swap_group, LoadExt_NV_swap_group},
 	{"GLX_NV_video_capture", &glXext_NV_video_capture, LoadExt_NV_video_capture},
-	{"GLX_NV_video_out", &glXext_NV_video_out, NULL},
+	{"GLX_NV_video_output", &glXext_NV_video_output, LoadExt_NV_video_output},
 	{"GLX_OML_swap_method", &glXext_OML_swap_method, NULL},
 	{"GLX_OML_sync_control", &glXext_OML_sync_control, LoadExt_OML_sync_control},
 	{"GLX_SGIS_blended_overlay", &glXext_SGIS_blended_overlay, NULL},
 	{"GLX_SGIS_multisample", &glXext_SGIS_multisample, NULL},
 	{"GLX_SGIS_shared_multisample", &glXext_SGIS_shared_multisample, NULL},
+	{"GLX_SGIX_dmbuffer", &glXext_SGIX_dmbuffer, LoadExt_SGIX_dmbuffer},
 	{"GLX_SGIX_fbconfig", &glXext_SGIX_fbconfig, LoadExt_SGIX_fbconfig},
+	{"GLX_SGIX_hyperpipe", &glXext_SGIX_hyperpipe, LoadExt_SGIX_hyperpipe},
 	{"GLX_SGIX_pbuffer", &glXext_SGIX_pbuffer, LoadExt_SGIX_pbuffer},
 	{"GLX_SGIX_swap_barrier", &glXext_SGIX_swap_barrier, LoadExt_SGIX_swap_barrier},
 	{"GLX_SGIX_swap_group", &glXext_SGIX_swap_group, LoadExt_SGIX_swap_group},
 	{"GLX_SGIX_video_resize", &glXext_SGIX_video_resize, LoadExt_SGIX_video_resize},
+	{"GLX_SGIX_video_source", &glXext_SGIX_video_source, LoadExt_SGIX_video_source},
 	{"GLX_SGIX_visual_select_group", &glXext_SGIX_visual_select_group, NULL},
 	{"GLX_SGI_cushion", &glXext_SGI_cushion, LoadExt_SGI_cushion},
 	{"GLX_SGI_make_current_read", &glXext_SGI_make_current_read, LoadExt_SGI_make_current_read},
@@ -564,7 +653,7 @@ static glx_StrToExtMap ExtensionTable[50] = {
 	{"GLX_SUN_get_transparent_index", &glXext_SUN_get_transparent_index, LoadExt_SUN_get_transparent_index},
 };
 
-static int g_extensionMapSize = 50;
+static int g_extensionMapSize = 55;
 
 static glx_StrToExtMap *FindExtEntry(const char *extensionName)
 {
@@ -590,6 +679,8 @@ static void ClearExtensionVars()
 	glXext_ARB_framebuffer_sRGB = 0;
 	glXext_ARB_get_proc_address = 0;
 	glXext_ARB_multisample = 0;
+	glXext_ARB_robustness_application_isolation = 0;
+	glXext_ARB_robustness_share_group_isolation = 0;
 	glXext_ARB_vertex_buffer_object = 0;
 	glXext_EXT_buffer_age = 0;
 	glXext_EXT_create_context_es2_profile = 0;
@@ -614,17 +705,20 @@ static void ClearExtensionVars()
 	glXext_NV_present_video = 0;
 	glXext_NV_swap_group = 0;
 	glXext_NV_video_capture = 0;
-	glXext_NV_video_out = 0;
+	glXext_NV_video_output = 0;
 	glXext_OML_swap_method = 0;
 	glXext_OML_sync_control = 0;
 	glXext_SGIS_blended_overlay = 0;
 	glXext_SGIS_multisample = 0;
 	glXext_SGIS_shared_multisample = 0;
+	glXext_SGIX_dmbuffer = 0;
 	glXext_SGIX_fbconfig = 0;
+	glXext_SGIX_hyperpipe = 0;
 	glXext_SGIX_pbuffer = 0;
 	glXext_SGIX_swap_barrier = 0;
 	glXext_SGIX_swap_group = 0;
 	glXext_SGIX_video_resize = 0;
+	glXext_SGIX_video_source = 0;
 	glXext_SGIX_visual_select_group = 0;
 	glXext_SGI_cushion = 0;
 	glXext_SGI_make_current_read = 0;

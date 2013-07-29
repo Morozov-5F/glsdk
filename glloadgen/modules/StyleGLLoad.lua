@@ -91,14 +91,14 @@ function ext_hdr.WriteEnumerator(hFile, enum, enumTable, spec, options)
 		common.ResolveEnumValue(enum, enumTable))
 end
 
-function ext_hdr.WriteFuncTypedef(hFile, func, typemap, spec, options)
+function ext_hdr.WriteFuncTypedef(hFile, func, spec, options)
 	hFile:fmt(glload.GetTypedefFormat(spec),
-		common.GetFuncReturnType(func, typemap),
+		common.GetFuncReturnType(func),
 		glload.GetFuncTypedefName(func, spec, options),
-		common.GetFuncParamList(func, typemap, true))
+		common.GetFuncParamList(func, true))
 end
 
-function ext_hdr.WriteFuncDecl(hFile, func, typemap, spec, options)
+function ext_hdr.WriteFuncDecl(hFile, func, spec, options)
 	hFile:fmt("extern %s %s;\n",
 		glload.GetFuncTypedefName(func, spec, options),
 		glload.GetFuncPtrName(func, spec, options))
@@ -156,14 +156,14 @@ function core_hdr.WriteEnumerator(hFile, enum, enumTable, spec, options)
 		common.ResolveEnumValue(enum, enumTable))
 end
 
-function core_hdr.WriteFuncTypedef(hFile, func, typemap, spec, options)
+function core_hdr.WriteFuncTypedef(hFile, func, spec, options)
 	hFile:fmt(glload.GetTypedefFormat(spec),
-		common.GetFuncReturnType(func, typemap),
+		common.GetFuncReturnType(func),
 		glload.GetFuncTypedefName(func, spec, options),
-		common.GetFuncParamList(func, typemap, true))
+		common.GetFuncParamList(func, true))
 end
 
-function core_hdr.WriteFuncDecl(hFile, func, typemap, spec, options)
+function core_hdr.WriteFuncDecl(hFile, func, spec, options)
 	hFile:fmt("extern %s %s;\n",
 		glload.GetFuncTypedefName(func, spec, options),
 		glload.GetFuncPtrName(func, spec, options))
@@ -305,15 +305,15 @@ function source.WriteExtVariable(hFile, extName, spec, options)
 		glload.GetExtVariableName(extName, spec, options))
 end
 
-function source.WriteFuncDef(hFile, func, typemap, spec, options)
-	hFile:fmt("%s %s = NULL;\n",
-		glload.GetFuncTypedefName(func, spec, options),
-		glload.GetFuncPtrName(func, spec, options))
+function source.WriteFuncDef(hFile, func, spec, options)
+		hFile:fmt("%s %s = NULL;\n",
+			glload.GetFuncTypedefName(func, spec, options),
+			glload.GetFuncPtrName(func, spec, options))
 end
 
-function source.WriteFuncDefCond(hFile, func, typemap, spec, options, funcSeen)
+function source.WriteFuncDefCond(hFile, func, spec, options, funcSeen)
 	if(not funcSeen[func.name]) then
-		source.WriteFuncDef(hFile, func, typemap, spec, options)
+		source.WriteFuncDef(hFile, func, spec, options)
 	end
 end
 
@@ -326,7 +326,7 @@ function source.WriteBlockEndLoadExtensionFuncs(hFile, extName, spec, options)
 	glload.WriteLoaderFuncEnd(hFile)
 end
 
-function source.WriteLoadFunction(hFile, func, typemap, spec, options)
+function source.WriteLoadFunction(hFile, func, spec, options)
 	hFile:fmt('%s = (%s)%s("%s");\n',
 		glload.GetFuncPtrName(func, spec, options),
 		glload.GetFuncTypedefName(func, spec, options),
@@ -354,7 +354,7 @@ function source.WriteBlockEndLoadCoreFuncsComp(hFile, version, spec, options)
 	glload.WriteLoaderFuncEnd(hFile)
 end
 
-function source.WriteLoadFunctionCore(hFile, func, typemap, spec, options)
+function source.WriteLoadFunctionCore(hFile, func, spec, options)
 	hFile:fmt('%s = (%s)%s("%s");\n',
 		glload.GetFuncPtrName(func, spec, options),
 		glload.GetFuncTypedefName(func, spec, options),
@@ -765,6 +765,12 @@ function cpp.ext_hdr.WriteBlockEndEnumerators(hFile, spec, options)
 end
 
 function cpp.ext_hdr.WriteEnumerator(hFile, enum, enumTable, spec, options, enumSeen)
+	--In C++, we can't put negative values in an enum with other large,
+	--positive values. So we need to cheat.
+	if(enum.value:match("^%-")) then
+		return
+	end
+	
 	if(enumSeen[enum.name]) then
 		hFile:fmt("//%s taken from %s\n",
 			enum.name,
@@ -786,6 +792,36 @@ function cpp.ext_hdr.WriteEnumerator(hFile, enum, enumTable, spec, options, enum
 	end
 end
 
+function cpp.ext_hdr.WriteNegativeEnums(hFile, negEnums_)
+	if(#negEnums_ > 0) then
+		hFile:write "\n"
+		hFile:write "enum\n"
+		hFile:write "{\n"
+		hFile:inc()
+		
+		for _, enum in ipairs(negEnums_) do
+			local enumName = glload.GetCppEnumName(enum)
+			local lenEnum = #enumName
+			local numIndent = 33
+			
+			local numSpaces = numIndent - lenEnum
+			if(numSpaces < 1) then
+				numSpaces = 1
+			end
+
+			hFile:fmt("%s%s= %s,\n",
+				enumName,
+				string.rep(" ", numSpaces),
+				common.ResolveEnumValue(enum, enumTable))
+
+		end
+		
+		hFile:dec()
+		hFile:write "};\n"
+
+	end
+end
+
 function cpp.ext_hdr.WriteBlockBeginFuncTypedefs(hFile, spec, options)
 	glload.WriteNamespaceBegin(hFile, glload.GetFuncPtrTypedefNamespace())
 end
@@ -794,7 +830,7 @@ function cpp.ext_hdr.WriteBlockEndFuncTypedefs(hFile, spec, options)
 	glload.WriteNamespaceEnd(hFile)
 end
 
-function cpp.ext_hdr.WriteFuncDecl(hFile, func, typemap, spec, options)
+function cpp.ext_hdr.WriteFuncDecl(hFile, func, spec, options)
 	hFile:fmt("extern %s::%s %s;\n",
 		glload.GetFuncPtrTypedefNamespace(),
 		glload.GetFuncTypedefName(func, spec, options),
@@ -807,6 +843,7 @@ cpp.core_hdr.WriteBlockEndExtern = cpp.ext_hdr.WriteBlockEndExtern
 cpp.core_hdr.WriteBlockBeginEnumerators = cpp.ext_hdr.WriteBlockBeginEnumerators
 cpp.core_hdr.WriteBlockEndEnumerators = cpp.ext_hdr.WriteBlockEndEnumerators
 cpp.core_hdr.WriteEnumerator = cpp.ext_hdr.WriteEnumerator
+cpp.core_hdr.NegativeEnums = cpp.ext_hdr.NegativeEnums
 
 cpp.core_hdr.WriteBlockBeginFuncTypedefs = cpp.ext_hdr.WriteBlockBeginFuncTypedefs
 cpp.core_hdr.WriteBlockEndFuncTypedefs = cpp.ext_hdr.WriteBlockEndFuncTypedefs
@@ -849,7 +886,7 @@ function cpp.source.WriteCExtVarDecl(hFile, extName, spec, options)
 		glload_c.GetExtVariableName(extName, spec, options))
 end
 
-function cpp.source.WriteCFuncDecl(hFile, func, typemap, spec, options)
+function cpp.source.WriteCFuncDecl(hFile, func, spec, options)
 	hFile:fmt("extern %s::%s::%s %s;\n",
 		spec.FuncNamePrefix(),
 		glload.GetFuncPtrTypedefNamespace(),
@@ -894,11 +931,17 @@ function cpp.source.WriteExtVariable(hFile, extName, spec, options)
 		glload.GetExtVariableName(extName, spec, options))
 end
 
-function cpp.source.WriteFuncDef(hFile, func, typemap, spec, options)
+function cpp.source.WriteFuncDef(hFile, func, spec, options)
 	hFile:fmt("%s::%s %s = 0;\n",
 		glload.GetFuncPtrTypedefNamespace(),
 		glload.GetFuncTypedefName(func, spec, options),
 		func.name)
+end
+
+function cpp.source.WriteFuncDefCond(hFile, func, spec, options, funcSeen)
+	if(not funcSeen[func.name]) then
+		cpp.source.WriteFuncDef(hFile, func, spec, options)
+	end
 end
 
 function cpp.source.WriteBlockBeginCopyExtVariables(hFile, spec, options)
@@ -933,7 +976,7 @@ function cpp.source.WriteBlockEndCopyFunctionPtrs(hFile, spec, options)
 	hFile:write("}\n")
 end
 
-function cpp.source.WriteCopyFunctionPtr(hFile, func, typemap, spec, options)
+function cpp.source.WriteCopyFunctionPtr(hFile, func, spec, options)
 	hFile:fmt("%s = %s;\n",
 		func.name,
 		glload_c.GetFuncPtrName(func, spec, options))
@@ -1011,14 +1054,18 @@ my_style =
 
 function my_style.FilterVersionHasRemoved(version, specData, spec, options)
 	for _, enum in ipairs(specData.coredefs[version].enums) do
-		if(enum.removed) then
-			return true
+		if(enum.core and not enum.extensions) then
+			if(enum.core[#enum.core][2] == "compatibility") then
+				return true
+			end
 		end
 	end
 	
 	for _, func in ipairs(specData.coredefs[version].funcs) do
-		if(func.deprecated) then
-			return true
+		if(func.core and not func.extensions) then
+			if(func.core[#func.core][2] == "compatibility") then
+				return true
+			end
 		end
 	end
 	
@@ -1027,14 +1074,18 @@ end
 
 function my_style.FilterVersionHasCore(version, specData, spec, options)
 	for _, enum in ipairs(specData.coredefs[version].enums) do
-		if(not enum.removed and not enum.extensions) then
-			return true
+		if(enum.core and not enum.extensions) then
+			if(enum.core[#enum.core][2] == "core") then
+				return true
+			end
 		end
 	end
 	
 	for _, func in ipairs(specData.coredefs[version].funcs) do
-		if(not func.deprecated) then
-			return true
+		if(func.core and not func.extensions) then
+			if(func.core[#func.core][2] == "core") then
+				return true
+			end
 		end
 	end
 	
@@ -1052,8 +1103,10 @@ end
 
 local function HasFunclistAnyCore(funcList)
 	for _, func in ipairs(funcList) do
-		if(not func.deprecated) then
-			return true
+		if(func.core and not func.extensions) then
+			if(func.core[#func.core][2] == "compatibility") then
+				return true
+			end
 		end
 	end
 	
@@ -1062,8 +1115,10 @@ end
 
 local function HasFunclistAnyComp(funcList)
 	for _, func in ipairs(funcList) do
-		if(func.deprecated) then
-			return true
+		if(func.core and not func.extensions) then
+			if(func.core[#func.core][2] == "compatibility") then
+				return true
+			end
 		end
 	end
 	
@@ -1072,8 +1127,10 @@ end
 
 function my_style.FilterVersionHasCoreEnums(version, specData, spec, options)
 	for _, enum in ipairs(specData.coredefs[version].enums) do
-		if(not enum.removed and not enum.extensions) then
-			return true
+		if(enum.core and not enum.extensions) then
+			if(enum.core[#enum.core][2] == "core") then
+				return true
+			end
 		end
 	end
 	
@@ -1082,8 +1139,10 @@ end
 
 function my_style.FilterVersionHasCompEnums(version, specData, spec, options)
 	for _, enum in ipairs(specData.coredefs[version].enums) do
-		if(enum.removed and not enum.extensions) then
-			return true
+		if(enum.core and not enum.extensions) then
+			if(enum.core[#enum.core][2] == "compatibility") then
+				return true
+			end
 		end
 	end
 	
@@ -1091,68 +1150,79 @@ function my_style.FilterVersionHasCompEnums(version, specData, spec, options)
 end
 
 function my_style.FilterVersionHasCoreFuncs(version, specData, spec, options)
-	local coreExtByVersion = spec.GetCoreExts()
-	if(not coreExtByVersion) then return end
-	
-	local coreExts = coreExtByVersion[version]
-	
-	if(coreExts) then
-		for _, extName in ipairs(coreExts) do
-			if(HasFunclistAnyCore(specData.extdefs[extName].funcs)) then
+	for _, func in ipairs(specData.coredefs[version].funcs) do
+		if(func.core and not func.extensions) then
+			if(func.core[#func.core][2] == "core") then
 				return true
 			end
 		end
-	end
-	
-	if(HasFunclistAnyCore(specData.coredefs[version].funcs)) then
-		return true
 	end
 	
 	return false
 end
 
 function my_style.FilterVersionHasCompFuncs(version, specData, spec, options)
-	local coreExtByVersion = spec.GetCoreExts()
-	if(not coreExtByVersion) then return end
-	
-	local coreExts = coreExtByVersion[version]
-	
-	if(coreExts) then
-		for _, extName in ipairs(coreExts) do
-			if(HasFunclistAnyComp(specData.extdefs[extName].funcs)) then
+	for _, func in ipairs(specData.coredefs[version].funcs) do
+		if(func.core and not func.extensions) then
+			if(func.core[#func.core][2] == "compatibility") then
 				return true
 			end
 		end
-	end
-	
-	if(HasFunclistAnyComp(specData.coredefs[version].funcs)) then
-		return true
 	end
 	
 	return false
 end
 
 function my_style.FilterCoreEnum(enum)
-	return not enum.removed and not enum.extensions
+	if(enum.extensions) then return false end
+	
+	if(enum.core) then
+		if(enum.core[#enum.core][2] == "core") then
+			return true
+		end
+	end
 end
 
 function my_style.FilterCompEnum(enum)
-	return enum.removed and not enum.extensions
+	if(enum.extensions) then return false end
+	
+	if(enum.core) then
+		if(enum.core[#enum.core][2] == "compatibility") then
+			return true
+		end
+	end
 end
 
 function my_style.FilterCoreFunc(func)
-	return not func.deprecated
+	if(func.core) then
+		if(func.core[#func.core][2] == "core") then
+			return true
+		end
+	end
 end
 
 function my_style.FilterCompFunc(func)
-	return func.deprecated
+	if(func.core) then
+		if(func.core[#func.core][2] == "compatibility") then
+			return true
+		end
+	end
 end
 
 function my_style.UpdateEnumSeen(enumSeen_, enum, value)
 	enumSeen_[enum.name] = value;
 end
 
+function my_style.UpdateNegEnum(negEnums_, enum)
+	--First character is a - sign
+	if(enum.value:match("^%s*%-")) then
+		negEnums_[#negEnums_ + 1] = enum
+	end
+end
+
 function my_style.StateEnumSeen() return {} end
+function my_style.StateNegEnums() return {} end
+function my_style.WriteNegativeEnums(hFile, negEnums_) end
 
 
 local function Create()
