@@ -17,7 +17,7 @@ function MakeProject(name, ...)
 			links {"glu32", "opengl32", "gdi32", "winmm", "user32"}
 
 		configuration "linux"
-			links { "GL" }
+			links { "GL", "X11", "Xrandr", "pthread" }
 		
 		configuration "Debug"
 			flags "Unicode";

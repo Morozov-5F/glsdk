@@ -1,4 +1,5 @@
 
+#include <string.h>
 #include <glload/gl_all.hpp>
 #include "glmesh/CpuDataWriter.h"
 
