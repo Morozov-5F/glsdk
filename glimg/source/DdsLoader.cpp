@@ -149,7 +149,7 @@ namespace dds
 				return UncheckedImageFormat();
 			}
 
-			for(int convIx = 0; convIx < ARRAY_COUNT(g_oldFmtConvert); convIx++)
+			for(size_t convIx = 0; convIx < ARRAY_COUNT(g_oldFmtConvert); convIx++)
 			{
 				if(DoesMatchFormat(g_oldFmtConvert[convIx].ddsFmt, header))
 					return g_oldFmtConvert[convIx].fmt;

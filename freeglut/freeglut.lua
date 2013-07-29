@@ -15,8 +15,12 @@ project "freeglut"
 	
 	configuration "windows"
 		defines "WIN32"
-		
+
 	configuration {"gmake", "linux or bsd"}
+        defines {"HAVE_CONFIG_H", }
+        includedirs {"."}
+
+	configuration {"linux or bsd"}
         defines {"HAVE_CONFIG_H", }
         includedirs {"."}
 		
