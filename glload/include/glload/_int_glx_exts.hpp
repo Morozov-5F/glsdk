@@ -48,14 +48,11 @@ namespace glX
 		extern glload::LoadTest var_SGIS_blended_overlay;
 		extern glload::LoadTest var_SGIS_multisample;
 		extern glload::LoadTest var_SGIS_shared_multisample;
-		extern glload::LoadTest var_SGIX_dmbuffer;
 		extern glload::LoadTest var_SGIX_fbconfig;
-		extern glload::LoadTest var_SGIX_hyperpipe;
 		extern glload::LoadTest var_SGIX_pbuffer;
 		extern glload::LoadTest var_SGIX_swap_barrier;
 		extern glload::LoadTest var_SGIX_swap_group;
 		extern glload::LoadTest var_SGIX_video_resize;
-		extern glload::LoadTest var_SGIX_video_source;
 		extern glload::LoadTest var_SGIX_visual_select_group;
 		extern glload::LoadTest var_SGI_cushion;
 		extern glload::LoadTest var_SGI_make_current_read;
@@ -195,7 +192,6 @@ namespace glX
 		SAMPLE_BUFFERS_SGIS              = 100000,
 		MULTISAMPLE_SUB_RECT_HEIGHT_SGIS = 0x8027,
 		MULTISAMPLE_SUB_RECT_WIDTH_SGIS  = 0x8026,
-		DIGITAL_MEDIA_PBUFFER_SGIX       = 0x8024,
 		COLOR_INDEX_BIT_SGIX             = 0x00000002,
 		COLOR_INDEX_TYPE_SGIX            = 0x8015,
 		DRAWABLE_TYPE_SGIX               = 0x8010,
@@ -207,16 +203,6 @@ namespace glX
 		//SCREEN_EXT taken from EXT_import_context
 		WINDOW_BIT_SGIX                  = 0x00000001,
 		X_RENDERABLE_SGIX                = 0x8012,
-		BAD_HYPERPIPE_CONFIG_SGIX        = 91,
-		BAD_HYPERPIPE_SGIX               = 92,
-		HYPERPIPE_DISPLAY_PIPE_SGIX      = 0x00000001,
-		HYPERPIPE_ID_SGIX                = 0x8030,
-		HYPERPIPE_PIPE_NAME_LENGTH_SGIX  = 80,
-		HYPERPIPE_PIXEL_AVERAGE_SGIX     = 0x00000004,
-		HYPERPIPE_RENDER_PIPE_SGIX       = 0x00000002,
-		HYPERPIPE_STEREO_SGIX            = 0x00000003,
-		PIPE_RECT_LIMITS_SGIX            = 0x00000002,
-		PIPE_RECT_SGIX                   = 0x00000001,
 		ACCUM_BUFFER_BIT_SGIX            = 0x00000080,
 		AUX_BUFFERS_BIT_SGIX             = 0x00000010,
 		BACK_LEFT_BUFFER_BIT_SGIX        = 0x00000004,
@@ -409,13 +395,6 @@ namespace glX
 	
 	namespace _detail
 	{
-		typedef Bool (CODEGEN_FUNCPTR * Proc_glXAssociateDMPbufferSGIX)(Display * dpy, GLXPbufferSGIX pbuffer, DMparams * params, DMbuffer dmbuffer);
-	}
-	
-	extern _detail::Proc_glXAssociateDMPbufferSGIX AssociateDMPbufferSGIX;
-	
-	namespace _detail
-	{
 		typedef GLXFBConfigSGIX * (CODEGEN_FUNCPTR * Proc_glXChooseFBConfigSGIX)(Display * dpy, int screen, int * attrib_list, int * nelements);
 		typedef GLXContext (CODEGEN_FUNCPTR * Proc_glXCreateContextWithConfigSGIX)(Display * dpy, GLXFBConfigSGIX config, int render_type, GLXContext share_list, Bool direct);
 		typedef GLXPixmap (CODEGEN_FUNCPTR * Proc_glXCreateGLXPixmapWithConfigSGIX)(Display * dpy, GLXFBConfigSGIX config, Pixmap pixmap);
@@ -430,27 +409,6 @@ namespace glX
 	extern _detail::Proc_glXGetFBConfigAttribSGIX GetFBConfigAttribSGIX;
 	extern _detail::Proc_glXGetFBConfigFromVisualSGIX GetFBConfigFromVisualSGIX;
 	extern _detail::Proc_glXGetVisualFromFBConfigSGIX GetVisualFromFBConfigSGIX;
-	
-	namespace _detail
-	{
-		typedef int (CODEGEN_FUNCPTR * Proc_glXBindHyperpipeSGIX)(Display * dpy, int hpId);
-		typedef int (CODEGEN_FUNCPTR * Proc_glXDestroyHyperpipeConfigSGIX)(Display * dpy, int hpId);
-		typedef int (CODEGEN_FUNCPTR * Proc_glXHyperpipeAttribSGIX)(Display * dpy, int timeSlice, int attrib, int size, void * attribList);
-		typedef int (CODEGEN_FUNCPTR * Proc_glXHyperpipeConfigSGIX)(Display * dpy, int networkId, int npipes, GLXHyperpipeConfigSGIX * cfg, int * hpId);
-		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryHyperpipeAttribSGIX)(Display * dpy, int timeSlice, int attrib, int size, void * returnAttribList);
-		typedef int (CODEGEN_FUNCPTR * Proc_glXQueryHyperpipeBestAttribSGIX)(Display * dpy, int timeSlice, int attrib, int size, void * attribList, void * returnAttribList);
-		typedef GLXHyperpipeConfigSGIX * (CODEGEN_FUNCPTR * Proc_glXQueryHyperpipeConfigSGIX)(Display * dpy, int hpId, int * npipes);
-		typedef GLXHyperpipeNetworkSGIX * (CODEGEN_FUNCPTR * Proc_glXQueryHyperpipeNetworkSGIX)(Display * dpy, int * npipes);
-	}
-	
-	extern _detail::Proc_glXBindHyperpipeSGIX BindHyperpipeSGIX;
-	extern _detail::Proc_glXDestroyHyperpipeConfigSGIX DestroyHyperpipeConfigSGIX;
-	extern _detail::Proc_glXHyperpipeAttribSGIX HyperpipeAttribSGIX;
-	extern _detail::Proc_glXHyperpipeConfigSGIX HyperpipeConfigSGIX;
-	extern _detail::Proc_glXQueryHyperpipeAttribSGIX QueryHyperpipeAttribSGIX;
-	extern _detail::Proc_glXQueryHyperpipeBestAttribSGIX QueryHyperpipeBestAttribSGIX;
-	extern _detail::Proc_glXQueryHyperpipeConfigSGIX QueryHyperpipeConfigSGIX;
-	extern _detail::Proc_glXQueryHyperpipeNetworkSGIX QueryHyperpipeNetworkSGIX;
 	
 	namespace _detail
 	{
@@ -497,15 +455,6 @@ namespace glX
 	extern _detail::Proc_glXChannelRectSyncSGIX ChannelRectSyncSGIX;
 	extern _detail::Proc_glXQueryChannelDeltasSGIX QueryChannelDeltasSGIX;
 	extern _detail::Proc_glXQueryChannelRectSGIX QueryChannelRectSGIX;
-	
-	namespace _detail
-	{
-		typedef GLXVideoSourceSGIX (CODEGEN_FUNCPTR * Proc_glXCreateGLXVideoSourceSGIX)(Display * display, int screen, VLServer server, VLPath path, int nodeClass, VLNode drainNode);
-		typedef void (CODEGEN_FUNCPTR * Proc_glXDestroyGLXVideoSourceSGIX)(Display * dpy, GLXVideoSourceSGIX glxvideosource);
-	}
-	
-	extern _detail::Proc_glXCreateGLXVideoSourceSGIX CreateGLXVideoSourceSGIX;
-	extern _detail::Proc_glXDestroyGLXVideoSourceSGIX DestroyGLXVideoSourceSGIX;
 	
 	namespace _detail
 	{

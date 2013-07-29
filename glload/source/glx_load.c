@@ -137,14 +137,11 @@ int glXext_OML_sync_control = 0;
 int glXext_SGIS_blended_overlay = 0;
 int glXext_SGIS_multisample = 0;
 int glXext_SGIS_shared_multisample = 0;
-int glXext_SGIX_dmbuffer = 0;
 int glXext_SGIX_fbconfig = 0;
-int glXext_SGIX_hyperpipe = 0;
 int glXext_SGIX_pbuffer = 0;
 int glXext_SGIX_swap_barrier = 0;
 int glXext_SGIX_swap_group = 0;
 int glXext_SGIX_video_resize = 0;
-int glXext_SGIX_video_source = 0;
 int glXext_SGIX_visual_select_group = 0;
 int glXext_SGI_cushion = 0;
 int glXext_SGI_make_current_read = 0;
@@ -384,16 +381,6 @@ static int LoadExt_OML_sync_control()
 	return numFailed;
 }
 
-PFNGLXASSOCIATEDMPBUFFERSGIXPROC _funcptr_glXAssociateDMPbufferSGIX = NULL;
-
-static int LoadExt_SGIX_dmbuffer()
-{
-	int numFailed = 0;
-	_funcptr_glXAssociateDMPbufferSGIX = (PFNGLXASSOCIATEDMPBUFFERSGIXPROC)IntGetProcAddress("glXAssociateDMPbufferSGIX");
-	if(!_funcptr_glXAssociateDMPbufferSGIX) ++numFailed;
-	return numFailed;
-}
-
 PFNGLXCHOOSEFBCONFIGSGIXPROC _funcptr_glXChooseFBConfigSGIX = NULL;
 PFNGLXCREATECONTEXTWITHCONFIGSGIXPROC _funcptr_glXCreateContextWithConfigSGIX = NULL;
 PFNGLXCREATEGLXPIXMAPWITHCONFIGSGIXPROC _funcptr_glXCreateGLXPixmapWithConfigSGIX = NULL;
@@ -416,37 +403,6 @@ static int LoadExt_SGIX_fbconfig()
 	if(!_funcptr_glXGetFBConfigFromVisualSGIX) ++numFailed;
 	_funcptr_glXGetVisualFromFBConfigSGIX = (PFNGLXGETVISUALFROMFBCONFIGSGIXPROC)IntGetProcAddress("glXGetVisualFromFBConfigSGIX");
 	if(!_funcptr_glXGetVisualFromFBConfigSGIX) ++numFailed;
-	return numFailed;
-}
-
-PFNGLXBINDHYPERPIPESGIXPROC _funcptr_glXBindHyperpipeSGIX = NULL;
-PFNGLXDESTROYHYPERPIPECONFIGSGIXPROC _funcptr_glXDestroyHyperpipeConfigSGIX = NULL;
-PFNGLXHYPERPIPEATTRIBSGIXPROC _funcptr_glXHyperpipeAttribSGIX = NULL;
-PFNGLXHYPERPIPECONFIGSGIXPROC _funcptr_glXHyperpipeConfigSGIX = NULL;
-PFNGLXQUERYHYPERPIPEATTRIBSGIXPROC _funcptr_glXQueryHyperpipeAttribSGIX = NULL;
-PFNGLXQUERYHYPERPIPEBESTATTRIBSGIXPROC _funcptr_glXQueryHyperpipeBestAttribSGIX = NULL;
-PFNGLXQUERYHYPERPIPECONFIGSGIXPROC _funcptr_glXQueryHyperpipeConfigSGIX = NULL;
-PFNGLXQUERYHYPERPIPENETWORKSGIXPROC _funcptr_glXQueryHyperpipeNetworkSGIX = NULL;
-
-static int LoadExt_SGIX_hyperpipe()
-{
-	int numFailed = 0;
-	_funcptr_glXBindHyperpipeSGIX = (PFNGLXBINDHYPERPIPESGIXPROC)IntGetProcAddress("glXBindHyperpipeSGIX");
-	if(!_funcptr_glXBindHyperpipeSGIX) ++numFailed;
-	_funcptr_glXDestroyHyperpipeConfigSGIX = (PFNGLXDESTROYHYPERPIPECONFIGSGIXPROC)IntGetProcAddress("glXDestroyHyperpipeConfigSGIX");
-	if(!_funcptr_glXDestroyHyperpipeConfigSGIX) ++numFailed;
-	_funcptr_glXHyperpipeAttribSGIX = (PFNGLXHYPERPIPEATTRIBSGIXPROC)IntGetProcAddress("glXHyperpipeAttribSGIX");
-	if(!_funcptr_glXHyperpipeAttribSGIX) ++numFailed;
-	_funcptr_glXHyperpipeConfigSGIX = (PFNGLXHYPERPIPECONFIGSGIXPROC)IntGetProcAddress("glXHyperpipeConfigSGIX");
-	if(!_funcptr_glXHyperpipeConfigSGIX) ++numFailed;
-	_funcptr_glXQueryHyperpipeAttribSGIX = (PFNGLXQUERYHYPERPIPEATTRIBSGIXPROC)IntGetProcAddress("glXQueryHyperpipeAttribSGIX");
-	if(!_funcptr_glXQueryHyperpipeAttribSGIX) ++numFailed;
-	_funcptr_glXQueryHyperpipeBestAttribSGIX = (PFNGLXQUERYHYPERPIPEBESTATTRIBSGIXPROC)IntGetProcAddress("glXQueryHyperpipeBestAttribSGIX");
-	if(!_funcptr_glXQueryHyperpipeBestAttribSGIX) ++numFailed;
-	_funcptr_glXQueryHyperpipeConfigSGIX = (PFNGLXQUERYHYPERPIPECONFIGSGIXPROC)IntGetProcAddress("glXQueryHyperpipeConfigSGIX");
-	if(!_funcptr_glXQueryHyperpipeConfigSGIX) ++numFailed;
-	_funcptr_glXQueryHyperpipeNetworkSGIX = (PFNGLXQUERYHYPERPIPENETWORKSGIXPROC)IntGetProcAddress("glXQueryHyperpipeNetworkSGIX");
-	if(!_funcptr_glXQueryHyperpipeNetworkSGIX) ++numFailed;
 	return numFailed;
 }
 
@@ -517,19 +473,6 @@ static int LoadExt_SGIX_video_resize()
 	return numFailed;
 }
 
-PFNGLXCREATEGLXVIDEOSOURCESGIXPROC _funcptr_glXCreateGLXVideoSourceSGIX = NULL;
-PFNGLXDESTROYGLXVIDEOSOURCESGIXPROC _funcptr_glXDestroyGLXVideoSourceSGIX = NULL;
-
-static int LoadExt_SGIX_video_source()
-{
-	int numFailed = 0;
-	_funcptr_glXCreateGLXVideoSourceSGIX = (PFNGLXCREATEGLXVIDEOSOURCESGIXPROC)IntGetProcAddress("glXCreateGLXVideoSourceSGIX");
-	if(!_funcptr_glXCreateGLXVideoSourceSGIX) ++numFailed;
-	_funcptr_glXDestroyGLXVideoSourceSGIX = (PFNGLXDESTROYGLXVIDEOSOURCESGIXPROC)IntGetProcAddress("glXDestroyGLXVideoSourceSGIX");
-	if(!_funcptr_glXDestroyGLXVideoSourceSGIX) ++numFailed;
-	return numFailed;
-}
-
 PFNGLXCUSHIONSGIPROC _funcptr_glXCushionSGI = NULL;
 
 static int LoadExt_SGI_cushion()
@@ -595,7 +538,7 @@ typedef struct glx_StrToExtMap_s
 	PFN_LOADFUNCPOINTERS LoadExtension;
 } glx_StrToExtMap;
 
-static glx_StrToExtMap ExtensionTable[55] = {
+static glx_StrToExtMap ExtensionTable[52] = {
 	{"GLX_3DFX_multisample", &glXext_3DFX_multisample, NULL},
 	{"GLX_AMD_gpu_association", &glXext_AMD_gpu_association, NULL},
 	{"GLX_ARB_create_context", &glXext_ARB_create_context, LoadExt_ARB_create_context},
@@ -637,14 +580,11 @@ static glx_StrToExtMap ExtensionTable[55] = {
 	{"GLX_SGIS_blended_overlay", &glXext_SGIS_blended_overlay, NULL},
 	{"GLX_SGIS_multisample", &glXext_SGIS_multisample, NULL},
 	{"GLX_SGIS_shared_multisample", &glXext_SGIS_shared_multisample, NULL},
-	{"GLX_SGIX_dmbuffer", &glXext_SGIX_dmbuffer, LoadExt_SGIX_dmbuffer},
 	{"GLX_SGIX_fbconfig", &glXext_SGIX_fbconfig, LoadExt_SGIX_fbconfig},
-	{"GLX_SGIX_hyperpipe", &glXext_SGIX_hyperpipe, LoadExt_SGIX_hyperpipe},
 	{"GLX_SGIX_pbuffer", &glXext_SGIX_pbuffer, LoadExt_SGIX_pbuffer},
 	{"GLX_SGIX_swap_barrier", &glXext_SGIX_swap_barrier, LoadExt_SGIX_swap_barrier},
 	{"GLX_SGIX_swap_group", &glXext_SGIX_swap_group, LoadExt_SGIX_swap_group},
 	{"GLX_SGIX_video_resize", &glXext_SGIX_video_resize, LoadExt_SGIX_video_resize},
-	{"GLX_SGIX_video_source", &glXext_SGIX_video_source, LoadExt_SGIX_video_source},
 	{"GLX_SGIX_visual_select_group", &glXext_SGIX_visual_select_group, NULL},
 	{"GLX_SGI_cushion", &glXext_SGI_cushion, LoadExt_SGI_cushion},
 	{"GLX_SGI_make_current_read", &glXext_SGI_make_current_read, LoadExt_SGI_make_current_read},
@@ -653,7 +593,7 @@ static glx_StrToExtMap ExtensionTable[55] = {
 	{"GLX_SUN_get_transparent_index", &glXext_SUN_get_transparent_index, LoadExt_SUN_get_transparent_index},
 };
 
-static int g_extensionMapSize = 55;
+static int g_extensionMapSize = 52;
 
 static glx_StrToExtMap *FindExtEntry(const char *extensionName)
 {
@@ -711,14 +651,11 @@ static void ClearExtensionVars()
 	glXext_SGIS_blended_overlay = 0;
 	glXext_SGIS_multisample = 0;
 	glXext_SGIS_shared_multisample = 0;
-	glXext_SGIX_dmbuffer = 0;
 	glXext_SGIX_fbconfig = 0;
-	glXext_SGIX_hyperpipe = 0;
 	glXext_SGIX_pbuffer = 0;
 	glXext_SGIX_swap_barrier = 0;
 	glXext_SGIX_swap_group = 0;
 	glXext_SGIX_video_resize = 0;
-	glXext_SGIX_video_source = 0;
 	glXext_SGIX_visual_select_group = 0;
 	glXext_SGI_cushion = 0;
 	glXext_SGI_make_current_read = 0;

@@ -46,14 +46,11 @@ extern int glXext_OML_sync_control;
 extern int glXext_SGIS_blended_overlay;
 extern int glXext_SGIS_multisample;
 extern int glXext_SGIS_shared_multisample;
-extern int glXext_SGIX_dmbuffer;
 extern int glXext_SGIX_fbconfig;
-extern int glXext_SGIX_hyperpipe;
 extern int glXext_SGIX_pbuffer;
 extern int glXext_SGIX_swap_barrier;
 extern int glXext_SGIX_swap_group;
 extern int glXext_SGIX_video_resize;
-extern int glXext_SGIX_video_source;
 extern int glXext_SGIX_visual_select_group;
 extern int glXext_SGI_cushion;
 extern int glXext_SGI_make_current_read;
@@ -375,13 +372,6 @@ extern PFNGLXWAITFORSBCOMLPROC _funcptr_glXWaitForSbcOML;
 #define GLX_MULTISAMPLE_SUB_RECT_HEIGHT_SGIS 0x8027
 #define GLX_MULTISAMPLE_SUB_RECT_WIDTH_SGIS 0x8026
 
-#define GLX_DIGITAL_MEDIA_PBUFFER_SGIX 0x8024
-
-typedef Bool (CODEGEN_FUNCPTR * PFNGLXASSOCIATEDMPBUFFERSGIXPROC)(Display * dpy, GLXPbufferSGIX pbuffer, DMparams * params, DMbuffer dmbuffer);
-
-extern PFNGLXASSOCIATEDMPBUFFERSGIXPROC _funcptr_glXAssociateDMPbufferSGIX;
-#define glXAssociateDMPbufferSGIX _funcptr_glXAssociateDMPbufferSGIX
-
 #define GLX_COLOR_INDEX_BIT_SGIX 0x00000002
 #define GLX_COLOR_INDEX_TYPE_SGIX 0x8015
 #define GLX_DRAWABLE_TYPE_SGIX 0x8010
@@ -413,43 +403,6 @@ extern PFNGLXGETFBCONFIGFROMVISUALSGIXPROC _funcptr_glXGetFBConfigFromVisualSGIX
 #define glXGetFBConfigFromVisualSGIX _funcptr_glXGetFBConfigFromVisualSGIX
 extern PFNGLXGETVISUALFROMFBCONFIGSGIXPROC _funcptr_glXGetVisualFromFBConfigSGIX;
 #define glXGetVisualFromFBConfigSGIX _funcptr_glXGetVisualFromFBConfigSGIX
-
-#define GLX_BAD_HYPERPIPE_CONFIG_SGIX 91
-#define GLX_BAD_HYPERPIPE_SGIX 92
-#define GLX_HYPERPIPE_DISPLAY_PIPE_SGIX 0x00000001
-#define GLX_HYPERPIPE_ID_SGIX 0x8030
-#define GLX_HYPERPIPE_PIPE_NAME_LENGTH_SGIX 80
-#define GLX_HYPERPIPE_PIXEL_AVERAGE_SGIX 0x00000004
-#define GLX_HYPERPIPE_RENDER_PIPE_SGIX 0x00000002
-#define GLX_HYPERPIPE_STEREO_SGIX 0x00000003
-#define GLX_PIPE_RECT_LIMITS_SGIX 0x00000002
-#define GLX_PIPE_RECT_SGIX 0x00000001
-
-typedef int (CODEGEN_FUNCPTR * PFNGLXBINDHYPERPIPESGIXPROC)(Display * dpy, int hpId);
-typedef int (CODEGEN_FUNCPTR * PFNGLXDESTROYHYPERPIPECONFIGSGIXPROC)(Display * dpy, int hpId);
-typedef int (CODEGEN_FUNCPTR * PFNGLXHYPERPIPEATTRIBSGIXPROC)(Display * dpy, int timeSlice, int attrib, int size, void * attribList);
-typedef int (CODEGEN_FUNCPTR * PFNGLXHYPERPIPECONFIGSGIXPROC)(Display * dpy, int networkId, int npipes, GLXHyperpipeConfigSGIX * cfg, int * hpId);
-typedef int (CODEGEN_FUNCPTR * PFNGLXQUERYHYPERPIPEATTRIBSGIXPROC)(Display * dpy, int timeSlice, int attrib, int size, void * returnAttribList);
-typedef int (CODEGEN_FUNCPTR * PFNGLXQUERYHYPERPIPEBESTATTRIBSGIXPROC)(Display * dpy, int timeSlice, int attrib, int size, void * attribList, void * returnAttribList);
-typedef GLXHyperpipeConfigSGIX * (CODEGEN_FUNCPTR * PFNGLXQUERYHYPERPIPECONFIGSGIXPROC)(Display * dpy, int hpId, int * npipes);
-typedef GLXHyperpipeNetworkSGIX * (CODEGEN_FUNCPTR * PFNGLXQUERYHYPERPIPENETWORKSGIXPROC)(Display * dpy, int * npipes);
-
-extern PFNGLXBINDHYPERPIPESGIXPROC _funcptr_glXBindHyperpipeSGIX;
-#define glXBindHyperpipeSGIX _funcptr_glXBindHyperpipeSGIX
-extern PFNGLXDESTROYHYPERPIPECONFIGSGIXPROC _funcptr_glXDestroyHyperpipeConfigSGIX;
-#define glXDestroyHyperpipeConfigSGIX _funcptr_glXDestroyHyperpipeConfigSGIX
-extern PFNGLXHYPERPIPEATTRIBSGIXPROC _funcptr_glXHyperpipeAttribSGIX;
-#define glXHyperpipeAttribSGIX _funcptr_glXHyperpipeAttribSGIX
-extern PFNGLXHYPERPIPECONFIGSGIXPROC _funcptr_glXHyperpipeConfigSGIX;
-#define glXHyperpipeConfigSGIX _funcptr_glXHyperpipeConfigSGIX
-extern PFNGLXQUERYHYPERPIPEATTRIBSGIXPROC _funcptr_glXQueryHyperpipeAttribSGIX;
-#define glXQueryHyperpipeAttribSGIX _funcptr_glXQueryHyperpipeAttribSGIX
-extern PFNGLXQUERYHYPERPIPEBESTATTRIBSGIXPROC _funcptr_glXQueryHyperpipeBestAttribSGIX;
-#define glXQueryHyperpipeBestAttribSGIX _funcptr_glXQueryHyperpipeBestAttribSGIX
-extern PFNGLXQUERYHYPERPIPECONFIGSGIXPROC _funcptr_glXQueryHyperpipeConfigSGIX;
-#define glXQueryHyperpipeConfigSGIX _funcptr_glXQueryHyperpipeConfigSGIX
-extern PFNGLXQUERYHYPERPIPENETWORKSGIXPROC _funcptr_glXQueryHyperpipeNetworkSGIX;
-#define glXQueryHyperpipeNetworkSGIX _funcptr_glXQueryHyperpipeNetworkSGIX
 
 #define GLX_ACCUM_BUFFER_BIT_SGIX 0x00000080
 #define GLX_AUX_BUFFERS_BIT_SGIX 0x00000010
@@ -526,14 +479,6 @@ extern PFNGLXQUERYCHANNELDELTASSGIXPROC _funcptr_glXQueryChannelDeltasSGIX;
 #define glXQueryChannelDeltasSGIX _funcptr_glXQueryChannelDeltasSGIX
 extern PFNGLXQUERYCHANNELRECTSGIXPROC _funcptr_glXQueryChannelRectSGIX;
 #define glXQueryChannelRectSGIX _funcptr_glXQueryChannelRectSGIX
-
-typedef GLXVideoSourceSGIX (CODEGEN_FUNCPTR * PFNGLXCREATEGLXVIDEOSOURCESGIXPROC)(Display * display, int screen, VLServer server, VLPath path, int nodeClass, VLNode drainNode);
-typedef void (CODEGEN_FUNCPTR * PFNGLXDESTROYGLXVIDEOSOURCESGIXPROC)(Display * dpy, GLXVideoSourceSGIX glxvideosource);
-
-extern PFNGLXCREATEGLXVIDEOSOURCESGIXPROC _funcptr_glXCreateGLXVideoSourceSGIX;
-#define glXCreateGLXVideoSourceSGIX _funcptr_glXCreateGLXVideoSourceSGIX
-extern PFNGLXDESTROYGLXVIDEOSOURCESGIXPROC _funcptr_glXDestroyGLXVideoSourceSGIX;
-#define glXDestroyGLXVideoSourceSGIX _funcptr_glXDestroyGLXVideoSourceSGIX
 
 #define GLX_VISUAL_SELECT_GROUP_SGIX 0x8028
 
