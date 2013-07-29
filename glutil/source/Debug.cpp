@@ -101,7 +101,7 @@ namespace glutil
 		}
 
 		void APIENTRY DebugFuncARBStdOut(GLenum source, GLenum type, GLuint id, GLenum severity,
-			GLsizei length, const GLchar* message, GLvoid* userParam)
+			GLsizei length, const GLchar* message, const GLvoid* userParam)
 		{
 			if(g_oldProcARB)
 				g_oldProcARB(source, type, id, severity, length, message, userParam);
@@ -115,7 +115,7 @@ namespace glutil
 		}
 
 		void APIENTRY DebugFuncARBStdErr(GLenum source, GLenum type, GLuint id, GLenum severity,
-			GLsizei length, const GLchar* message, GLvoid* userParam)
+			GLsizei length, const GLchar* message, const GLvoid* userParam)
 		{
 			if(g_oldProcARB)
 				g_oldProcARB(source, type, id, severity, length, message, userParam);
@@ -129,7 +129,7 @@ namespace glutil
 		}
 
 		void APIENTRY DebugFuncKHRStdOut(GLenum source, GLenum type, GLuint id, GLenum severity,
-			GLsizei length, const GLchar* message, GLvoid* userParam)
+			GLsizei length, const GLchar* message, const GLvoid* userParam)
 		{
 			if(g_oldProcKHR)
 				g_oldProcKHR(source, type, id, severity, length, message, userParam);

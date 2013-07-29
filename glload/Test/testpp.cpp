@@ -92,7 +92,7 @@ void init()
 
 	program = gl::CreateProgram();
 	gl::AttachShader(program, vertShader);
-	gl::AttachShader(program, fragShader);	
+	gl::AttachShader(program, fragShader);
 	gl::LinkProgram(program);
 
 	GLint status;
@@ -145,7 +145,7 @@ void reshape (int w, int h)
 
 //Called whenever a key on the keyboard was pressed.
 //The key is given by the ''key'' parameter, which is in ASCII.
-//It's often a good idea to have the escape key (ASCII value 27) call glutLeaveMainLoop() to 
+//It's often a good idea to have the escape key (ASCII value 27) call glutLeaveMainLoop() to
 //exit the program.
 void keyboard(unsigned char key, int x, int y)
 {
@@ -158,7 +158,7 @@ void keyboard(unsigned char key, int x, int y)
 }
 
 void APIENTRY DebugFunc(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
-						const GLchar* message, GLvoid* userParam)
+						const GLchar* message, const GLvoid* userParam)
 {
 	std::string srcName;
 	switch(source)
@@ -208,7 +208,7 @@ int main(int argc, char** argv)
 #ifdef DEBUG
 	glutInitContextFlags(GLUT_DEBUG);
 #endif
-	glutInitWindowSize (width, height); 
+	glutInitWindowSize (width, height);
 	glutInitWindowPosition (300, 200);
 	glutCreateWindow (argv[0]);
 
@@ -226,7 +226,7 @@ int main(int argc, char** argv)
 
 	init();
 
-	glutDisplayFunc(display); 
+	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();

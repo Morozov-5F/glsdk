@@ -36,11 +36,11 @@ local externals =
 	},
 
 	{
-		"glLoadGen 1.1.1",	--The name of the component.
+		"glLoadGen 2.0",	--The name of the component.
 		"glloadgen",		--The output directory to copy the component's data.
 		"glloadgen.7z",		--The filename that will be created in the download director.
-		"glLoadGen_1_1_1",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
-		[[https://downloads.sourceforge.net/project/glsdk/glLoadGen/glLoadGen_1_1_1.7z?r=&ts=1369510233&use_mirror=dfn]]
+		"glLoadGen_2_0_0rc1",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
+		[[https://downloads.sourceforge.net/project/glsdk/glLoadGen/glLoadGen_2_0_0rc1.7z?r=&ts=1374507793&use_mirror=superb-dca2]]
 	},
 }
 
