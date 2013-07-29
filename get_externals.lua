@@ -28,11 +28,11 @@ local externals =
 	},
 	
 	{
-		"GLM 0.9.4.0",	--The name of the component.
+		"GLM 0.9.4.3",	--The name of the component.
 		"glm",			--The output directory to copy the component's data.
 		"glm.7z",		--The filename that will be created in the download director.
 		"",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
-		[[https://downloads.sourceforge.net/project/ogl-math/glm-0.9.4.0/glm-0.9.4.0.7z?r=&ts=1354407389&use_mirror=iweb]]
+		[[https://downloads.sourceforge.net/project/ogl-math/glm-0.9.4.3/glm-0.9.4.3.zip?r=http%3A%2F%2Fglm.g-truc.net%2F&ts=1375100142&use_mirror=iweb]]
 	},
 
 	{
