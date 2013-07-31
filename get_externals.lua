@@ -9,6 +9,7 @@ require("ex")
 require "ufs"
 require "_FindFileInPath"
 
+singleExternal = ...
 
 local externals =
 {
@@ -31,7 +32,7 @@ local externals =
 		"GLM 0.9.4.3",	--The name of the component.
 		"glm",			--The output directory to copy the component's data.
 		"glm.7z",		--The filename that will be created in the download director.
-		"",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
+		"glm-0.9.4.3",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
 		[[https://downloads.sourceforge.net/project/ogl-math/glm-0.9.4.3/glm-0.9.4.3.zip?r=http%3A%2F%2Fglm.g-truc.net%2F&ts=1375100142&use_mirror=iweb]]
 	},
 
@@ -39,8 +40,8 @@ local externals =
 		"glLoadGen 2.0",	--The name of the component.
 		"glloadgen",		--The output directory to copy the component's data.
 		"glloadgen.7z",		--The filename that will be created in the download director.
-		"glLoadGen_2_0_1",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
-		[[https://downloads.sourceforge.net/project/glsdk/glLoadGen/glLoadGen_2_0_1.7z?r=&ts=1375099975&use_mirror=master]]
+		"glLoadGen_2_0_2",	--If the zip file has a base directory, then name it here. If it doesn't, then just use ""
+		[[https://downloads.sourceforge.net/project/glsdk/glLoadGen/glLoadGen_2_0_2.7z?r=&ts=1375308771&use_mirror=master]]
 	},
 }
 
@@ -71,48 +72,50 @@ local decompressDir = ".\\extract";
 ufs.create_directory(ufs.path(decompressDir));
 
 for i, ext in ipairs(externals) do
-	print("Downloading: " .. ext[1]);
-	
-	local compressFile = decompressDir .. "\\" .. ext[3];
-	
-	local hFile = assert(io.open(compressFile, "wb"));
-	http.request {url = ext[5], sink = ltn12.sink.file(hFile)}
-	
-	local unzipDir = decompressDir .. "\\dir" .. i;
-	ufs.create_directory(ufs.path(unzipDir));
-	
-	print("Extracting: " .. ext[1]);
-	if(ext[3]:match("%.tar%.gz$")) then
-		local proc = ex.spawn(zipFullName, {
-			args={"x", "-y", "-o" .. decompressDir, compressFile},
-			});
-			
-		local tarFile = compressFile:match("(.+)%.gz$");
-		proc:wait(proc);
+	if(not singleExternal or singleExternal == ext[2]) then
+		print("Downloading: " .. ext[1]);
+		
+		local compressFile = decompressDir .. "\\" .. ext[3];
+		
+		local hFile = assert(io.open(compressFile, "wb"));
+		http.request {url = ext[5], sink = ltn12.sink.file(hFile)}
+		
+		local unzipDir = decompressDir .. "\\dir" .. i;
+		ufs.create_directory(ufs.path(unzipDir));
+		
+		print("Extracting: " .. ext[1]);
+		if(ext[3]:match("%.tar%.gz$")) then
+			local proc = ex.spawn(zipFullName, {
+				args={"x", "-y", "-o" .. decompressDir, compressFile},
+				});
+				
+			local tarFile = compressFile:match("(.+)%.gz$");
+			proc:wait(proc);
 
-		proc = ex.spawn(zipFullName, {
-			args={"x", "-y", "-o" .. unzipDir, tarFile},
-			});
-		proc:wait(proc);
-	else
-		proc = ex.spawn(zipFullName, {
-			args={"x", "-y", "-o" .. unzipDir, compressFile},
-			});
-		proc:wait(proc);
-	end
-	
-	print("Copying: " .. ext[1]);
-	local pathSrc = ufs.path(unzipDir);
-	if(#ext[4] ~= 0) then
-		pathSrc = pathSrc / ext[4]
-	end
+			proc = ex.spawn(zipFullName, {
+				args={"x", "-y", "-o" .. unzipDir, tarFile},
+				});
+			proc:wait(proc);
+		else
+			proc = ex.spawn(zipFullName, {
+				args={"x", "-y", "-o" .. unzipDir, compressFile},
+				});
+			proc:wait(proc);
+		end
+		
+		print("Copying: " .. ext[1]);
+		local pathSrc = ufs.path(unzipDir);
+		if(#ext[4] ~= 0) then
+			pathSrc = pathSrc / ext[4]
+		end
 
-	local pathOut = ufs.path(".\\" .. ext[2]);
-	ufs.create_directory(pathOut);
-	if(not ufs.exists(pathSrc)) then
-		error("Unknown source directory: " .. tostring(pathSrc))
+		local pathOut = ufs.path(".\\" .. ext[2]);
+		ufs.create_directory(pathOut);
+		if(not ufs.exists(pathSrc)) then
+			error("Unknown source directory: " .. tostring(pathSrc))
+		end
+		RecursiveCopy(pathSrc, pathOut);
 	end
-	RecursiveCopy(pathSrc, pathOut);
 end
 
 ufs.remove_all(ufs.path(decompressDir));
