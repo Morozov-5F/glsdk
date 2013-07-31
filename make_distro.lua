@@ -20,7 +20,7 @@ if(#({...}) ~= 3) then
 	return
 end
 
-local buildDirname = "glsdk_" .. versionNum
+local buildDirname = "glsdk_" .. versionNum:gsub("%.", "_")
 
 lfs.mkdir(baseDir);
 local pathDestDir = ufs.path(baseDir) / buildDirname;
@@ -80,6 +80,8 @@ end
 local copyProc = ex.spawn(tostring(pathLua),
 	{args={luaCopyScriptName}});
 copyProc:wait(copyProc);
+
+error("good")
 
 ---------------------------------------------------------------
 -- Step 4: Install the dependencies.

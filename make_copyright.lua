@@ -103,10 +103,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]====]
 
---[[
 local hFile = io.open("MIT License.txt", "wt");
 hFile:write(copywriteText,
 	"\n\n",
 	MitLicenseText);
 hFile:close();
-]]
