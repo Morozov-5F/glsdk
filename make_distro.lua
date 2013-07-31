@@ -81,8 +81,6 @@ local copyProc = ex.spawn(tostring(pathLua),
 	{args={luaCopyScriptName}});
 copyProc:wait(copyProc);
 
-error("good")
-
 ---------------------------------------------------------------
 -- Step 4: Install the dependencies.
 local luaDepScriptName = "get_externals.lua"
