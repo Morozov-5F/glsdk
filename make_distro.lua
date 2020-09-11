@@ -8,13 +8,13 @@ Takes three parameters:
 
 require "lfs"
 
-local baseDir, hgChangelist, versionNum = ...
+local baseDir, gitChangelist, versionNum = ...
 
 if(#({...}) ~= 3) then
 	print("Not enough commandline parameters. You provided: " .. #({...}));
 	print("Paramters:")
 	print("\tDestination dir, relative to this path.")
-	print("\tMercurial revision to archive.")
+	print("\tGit revision to archive.")
 	print("\tVersion number of the SDK.")
 	return
 end
@@ -33,8 +33,8 @@ local pathBase = pathCurrent .. "/" .. baseDir;
 -----------------------------------------------------------
 -- Step 1: Copy the Mercurial repo number to the location.
 
-local clone = [[git archive --prefix "%s/" -o "%s.zip" HEAD]];
-clone = clone:format(buildDirname, destDir);
+local clone = [[git archive --prefix "%s/" -o "%s.zip" "%s"]];
+clone = clone:format(buildDirname, destDir, gitChangelist);
 
 print(clone);
 os.execute(clone);
