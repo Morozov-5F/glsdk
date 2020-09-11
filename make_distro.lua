@@ -7,7 +7,6 @@ Takes three parameters:
 ]]--
 
 require "lfs"
-require "_FindFileInPath"
 
 local baseDir, hgChangelist, versionNum = ...
 
@@ -23,75 +22,83 @@ end
 local buildDirname = "glsdk_" .. versionNum:gsub("%.", "_")
 
 lfs.mkdir(baseDir);
-local pathDestDir = ufs.path(baseDir) / buildDirname;
+local pathDestDir = baseDir .. "/" .. buildDirname;
 local destDir = tostring(pathDestDir);
 lfs.mkdir(destDir);
 
-local pathCurrent = ufs.current_path()
-local pathDest = pathCurrent / destDir;
-local pathBase = pathCurrent / baseDir;
+local pathCurrent = lfs.currentdir()
+local pathDest = pathCurrent .. "/" .. destDir;
+local pathBase = pathCurrent .. "/" .. baseDir;
 
 -----------------------------------------------------------
 -- Step 1: Copy the Mercurial repo number to the location.
 
-local clone = [[hg archive -r "%s" "%s"]];
-clone = clone:format(hgChangelist, destDir);
+local clone = [[git archive --prefix "%s/" -o "%s.zip" HEAD]];
+clone = clone:format(buildDirname, destDir);
 
 print(clone);
 os.execute(clone);
 
+lfs.chdir(baseDir);
+local archiveName = buildDirname .. ".zip";
+os.execute("7za x " .. archiveName);
+os.remove(archiveName)
+
 --------------------------------------------------------------
 -- Step 2: Build the Doxygen documentation.
-local pathDoxygen = pathDest / "docs";
-local doxygenFilename = "doxygen183.exe"
+local pathDoxygen = pathDest .. "/docs";
+local doxygenFilename = "doxygen"
 local doxygenCfgName = "glsdk_web.cfg"
 
-ufs.current_path(pathDoxygen);
-
-local pathDoxygen = ufs.path(FindFileInPath(doxygenFilename));
-if(pathDoxygen:empty()) then
-	print("Could not find Doxygen.");
-	return;
-end
+print(pathDoxygen);
+lfs.chdir(pathDoxygen);
 
 do
-	local hDoxyVersion = io.open("glsdk_version.cfg", "wt")
+	local hDoxyVersion = io.open("glsdk_version.cfg", "w+")
 	hDoxyVersion:write("PROJECT_NUMBER = ", versionNum, "\n")
 	hDoxyVersion:close()
 end
 
-local doxProc = ex.spawn(tostring(pathDoxygen),
-	{args={doxygenCfgName}});
-doxProc:wait(doxProc);
+os.execute(doxygenFilename .. " " .. doxygenCfgName);
 
 ---------------------------------------------------------------
 -- Step 3: Apply Copyright Info
-local luaFilename = "lua.exe"
-local pathLua = ufs.path(FindFileInPath(luaFilename))
+local luaFilename = "lua"
 local luaCopyScriptName = "make_copyright.lua"
 
-ufs.current_path(pathDest);
+lfs.chdir(pathDest);
 
-if(pathLua:empty()) then
-	print("Could not find Lua. Since this is a Lua script, that's kinda confusing...");
-	return;
-end
-
-local copyProc = ex.spawn(tostring(pathLua),
-	{args={luaCopyScriptName}});
-copyProc:wait(copyProc);
+os.execute(luaFilename .. " " .. luaCopyScriptName);
 
 ---------------------------------------------------------------
 -- Step 4: Install the dependencies.
 local luaDepScriptName = "get_externals.lua"
 
-ufs.current_path(pathDest);
+lfs.chdir(pathDest);
 
-local depProc = ex.spawn(tostring(pathLua),
-	{args={luaDepScriptName}});
-depProc:wait(depProc);
+os.execute(luaFilename .. " " .. luaDepScriptName);
 
 ------------------------------------------------------------
+local function RecursiveDelete(file)
+	print("deleting: ", file);
+	local attr = lfs.attributes(file);
+	if attr == nil then
+		print("warning: file doesn't exist; skipping");
+		return
+	end
+	if attr.mode == "file" then
+		os.remove(file);
+	end
+	if attr.mode == "directory" then
+		for entry in lfs.dir(file) do
+			if entry ~= "." and entry ~= ".." then
+				RecursiveDelete(file..'/'..entry);
+			end
+		end
+		lfs.rmdir(file);
+	end
+end
+
 -- Step 5: Delete select files from the destination location.
 local toDelete =
 {
@@ -101,7 +108,7 @@ local toDelete =
 	".hg_archival.txt",
 	"glimg/premake4.lua", "glload/premake4.lua",
 	"glutil/premake4.lua", "glmesh/premake4.lua",
-	"freeglut/premake4.lua", "glfw/premake4.lua",
+	"freeglut/premake4.lua", "glfw/premake4.lua", 
 	--directories
 	"glimg/Test", "glload/Test",
 	"glutil/Test", "glmesh/Test",
@@ -112,28 +119,20 @@ local toDelete =
 
 
 for i, filename in ipairs(toDelete) do
-	local pathFile = pathDest / filename;
+	local pathFile = pathDest .. "/" .. filename;
 	print("deleting:", pathFile);
-	ufs.remove_all(pathFile);
+	RecursiveDelete(pathFile);
 end
 
 ------------------------------------------------------------
 -- Step 6: Create Zip archive of the distro.
-local szFilename = "7z.exe"
+local szFilename = "7za"
 local archiveName = buildDirname .. ".7z"
-local pathSZ = ufs.path(FindFileInPath(szFilename))
 
-if(pathSZ:empty()) then
-	print("Could not find 7zip.");
-	return;
-end
+lfs.chdir(pathBase);
 
-ufs.current_path(pathBase);
-
-local depProc = ex.spawn(tostring(pathSZ),
-	{args={"a", "-r", archiveName, buildDirname}});
-depProc:wait(depProc);
+local depProc = os.execute(szFilename .. " a -r " .. archiveName .. " " .. buildDirname);
 
 ------------------------------------------------------------
 -- Step 7: Destroy the directory.
-ufs.remove_all(pathDest);
+RecursiveDelete(pathDest);
