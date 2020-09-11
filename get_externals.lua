@@ -5,11 +5,7 @@ This script downloads all of the external dependencies and unzips them to the pr
 local io = require("io")
 local http = require("socket.http")
 local ltn12 = require("ltn12")
-require("ex")
-require "ufs"
-require "_FindFileInPath"
-
-singleExternal = ...
+local lfs = require("lfs")
 
 local externals =
 {
@@ -45,79 +41,97 @@ local externals =
 	},
 }
 
-local zipFullName = FindFileInPath("7z.exe");
+local zipFullName = "7za"
 
-if(zipFullName == nil) then
-	return
+local function RecursiveDelete(file)
+	print("deleting: ", file);
+	local attr = lfs.attributes(file);
+	if attr == nil then
+		print("warning: file doesn't exist; skipping");
+		return
+	end
+	if attr.mode == "file" then
+		os.remove(file);
+	end
+	if attr.mode == "directory" then
+		for entry in lfs.dir(file) do
+			if entry ~= "." and entry ~= ".." then
+				RecursiveDelete(file..'/'..entry);
+			end
+		end
+		lfs.rmdir(file);
+	end
 end
 
 local function RecursiveCopy(fromDir, toDir)
-	for entry in ufs.directory_iterator(fromDir) do
-		local es = entry:status();
-		local srcPath = entry:path();
-		
-		local pathDestName = toDir / srcPath:filename();
-		if(ufs.is_regular_file(es)) then
-			ufs.copy_file(srcPath, pathDestName, ufs.copy_option_overwrite_if_exists);
-		end
-		
-		if(ufs.is_directory(es)) then
-			local bDidCreate, ec = ufs.create_directory(pathDestName);
-			RecursiveCopy(srcPath, pathDestName);
+	print(tostring(fromDir), tostring(toDir));
+	for entry in lfs.dir(fromDir) do
+		if entry ~= "." and entry ~= ".." then
+			local f = fromDir..'/'..entry;
+			local es = lfs.attributes(f)
+
+			local pathDestName = toDir..'/'..entry;
+			if (es.mode == "file") then
+				local i = io.open(f, "rb");
+				local o = io.open(pathDestName, "w+b");
+				o:write(i:read("*a"));
+				o:close();
+				i:close();
+			end
+
+			if (es.mode == "directory") then
+				lfs.mkdir(pathDestName);
+				RecursiveCopy(f, pathDestName);
+			end
 		end
 	end
 end
 
-local decompressDir = ".\\extract";
-ufs.create_directory(ufs.path(decompressDir));
+local decompressDir = "./extract";
+lfs.mkdir(decompressDir);
 
 for i, ext in ipairs(externals) do
-	if(not singleExternal or singleExternal == ext[2]) then
-		print("Downloading: " .. ext[1]);
-		
-		local compressFile = decompressDir .. "\\" .. ext[3];
-		
-		local hFile = assert(io.open(compressFile, "wb"));
-		http.request {url = ext[5], sink = ltn12.sink.file(hFile)}
-		
-		local unzipDir = decompressDir .. "\\dir" .. i;
-		ufs.create_directory(ufs.path(unzipDir));
-		
-		print("Extracting: " .. ext[1]);
-		if(ext[3]:match("%.tar%.gz$")) then
-			local proc = ex.spawn(zipFullName, {
-				args={"x", "-y", "-o" .. decompressDir, compressFile},
-				});
-				
-			local tarFile = compressFile:match("(.+)%.gz$");
-			proc:wait(proc);
+	print("Downloading: " .. ext[1]);
+	
+	local compressFile = decompressDir .. "/" .. ext[3];
+	
+	local hFile = assert(io.open(compressFile, "wb"));
+	http.request {url = ext[5], sink = ltn12.sink.file(hFile)}
+	
+	local unzipDir = decompressDir .. "/dir" .. i;
+	lfs.mkdir(unzipDir);
+	
+	print("Extracting: " .. ext[1]);
+	if(ext[3]:match("%.tar%.gz$")) then
+		os.execute(zipFullName .. " x -y -o" .. decompressDir .. " " .. compressFile)
+			
+		local tarFile = compressFile:match("(.+)%.gz$");
+		os.execute(zipFullName .. " x -y -o" .. unzipDir .. " " .. tarFile);
+	else
+		local s = zipFullName.." x -y -o" .. unzipDir .. " " .. compressFile;
+		print(s)
+		proc = os.execute(s);
+	end
+	
+	print("Copying: " .. ext[1]);
+	local pathSrc = unzipDir;
+	if(#ext[4] ~= 0) then
+		pathSrc = pathSrc..'/'..ext[4]
+	end
 
-			proc = ex.spawn(zipFullName, {
-				args={"x", "-y", "-o" .. unzipDir, tarFile},
-				});
-			proc:wait(proc);
-		else
-			proc = ex.spawn(zipFullName, {
-				args={"x", "-y", "-o" .. unzipDir, compressFile},
-				});
-			proc:wait(proc);
+	--Copy to final directory.
+	local pathOut = "./" .. ext[2];
+	lfs.mkdir(pathOut);
+	RecursiveCopy(pathSrc, pathOut);
+	
+	--Remove extraneous files/directories
+	if(ext[6]) then
+		for i, filename in ipairs(ext[6]) do
+			local pathFile = pathOut..'/'..filename;
+			print("deleting:", pathFile);
+			RecursiveDelete(pathFile);
 		end
-		
-		print("Copying: " .. ext[1]);
-		local pathSrc = ufs.path(unzipDir);
-		if(#ext[4] ~= 0) then
-			pathSrc = pathSrc / ext[4]
-		end
-
-		local pathOut = ufs.path(".\\" .. ext[2]);
-		ufs.create_directory(pathOut);
-		if(not ufs.exists(pathSrc)) then
-			error("Unknown source directory: " .. tostring(pathSrc))
-		end
-		RecursiveCopy(pathSrc, pathOut);
 	end
 end
 
-ufs.remove_all(ufs.path(decompressDir));
-
-
+RecursiveDelete(decompressDir);

@@ -1,7 +1,6 @@
 --The current directory should be the base SDK directory.
 
 require "lfs"
-require "ufs"
 
 local copywriteText = "Copyright (C) 2011-2013 by Jason L. McKesson";
 local licenseText = "This file is licensed by the MIT License."
@@ -20,11 +19,11 @@ local function CopywriteFile(filename)
 		end
 	end
 
-	local hInFile = io.open(filename, "rt");
+	local hInFile = io.open(filename, "r");
 	local fileData = hInFile:read("*a");
 	hInFile:close();
 
-	local hOutFile = io.open(filename, "wt");
+	local hOutFile = io.open(filename, "w");
 	if(filename:match("%.c$") or filename:match("%.h$")) then
 		hOutFile:write("/** ", copywriteText, " **/\n");
 		hOutFile:write("/** ", licenseText, " **/\n");
@@ -61,11 +60,12 @@ local acceptedExtensions = {"cpp", "c", "h", "hpp"}
 for i, testPath in ipairs(searchPathsToMarkup) do
 	local mode = lfs.attributes(testPath, "mode");
 	if(mode == "directory") then
-		local pathBase = ufs.path(testPath);
+		local pathBase = lfs.currentdir() .. "/" .. testPath;
+		print(testPath)
 		for file in lfs.dir(testPath) do
 			for i, testExt in ipairs(acceptedExtensions) do
 				if(file:match("%." .. testExt .. "$")) then
-					CopywriteFile(tostring(pathBase / file));
+					CopywriteFile(testPath .. "/" .. file);
 					break;
 				end
 			end
@@ -103,7 +103,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]====]
 
-local hFile = io.open("MIT License.txt", "wt");
+local hFile = io.open("MIT License.txt", "w");
 hFile:write(copywriteText,
 	"\n\n",
 	MitLicenseText);
